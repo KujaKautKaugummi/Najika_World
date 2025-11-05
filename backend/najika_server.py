@@ -54,6 +54,11 @@ except ImportError:
 # Import Enhanced Battle System
 from najika_battle import BATTLE_SYSTEM, SKILL_DB, ITEM_DB
 
+# Import Magic System (9 Schools + Skill-Weaving + Explosion)
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'game'))
+from magic_system import MAGIC_SYSTEM, SPELL_DB, EXPLOSION_SPELLS, WEAVE_COMBOS, MAGIC_SCHOOLS
+
 # Import Claude Code Integration (PRIORITÄT 1!)
 from najika_claude_code import call_ai_with_hierarchy, CLAUDE_CODE_INSTANCE
 
@@ -1463,6 +1468,123 @@ class Handler(SimpleHTTPRequestHandler):
             BATTLE_SYSTEM.reset_battle()
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok": True, "msg": "Battle Reset"}).encode()); return
+
+        # ===== MAGIC SYSTEM (9 SCHOOLS + SKILL-WEAVING + EXPLOSION) =====
+        if self.path=="/api/magic/learn":
+            # Lerne einen neuen Zauber
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")
+            data = json.loads(body_str)
+
+            spell_id = data.get("spell_id")
+            result = MAGIC_SYSTEM.learn_spell(spell_id)
+
+            # Persistiere gelernte Zauber
+            if result.get("ok"):
+                if "magic_spells" not in STATE["user"]:
+                    STATE["user"]["magic_spells"] = []
+                if spell_id not in STATE["user"]["magic_spells"]:
+                    STATE["user"]["magic_spells"].append(spell_id)
+                    save_state()
+                    log("INFO", f"Zauber gelernt: {spell_id}", "MAGIC")
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+
+        if self.path=="/api/magic/cast":
+            # Wirke einen Zauber
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")
+            data = json.loads(body_str)
+
+            spell_id = data.get("spell_id")
+            target_hp = data.get("target_hp", 100)
+            current_mp = STATE["najika"].get("mp", 100)
+            is_najika = data.get("is_najika", True)  # Im Server-Kontext ist es immer Najika
+
+            result = MAGIC_SYSTEM.cast_spell(spell_id, target_hp, current_mp, is_najika)
+
+            # Reduziere MP wenn erfolgreich
+            if result.get("ok"):
+                STATE["najika"]["mp"] = max(0, current_mp - result.get("mp_cost", 0))
+                save_state()
+                log("INFO", f"Zauber gewirkt: {result.get('spell_name')} - {result.get('damage')} DMG", "MAGIC")
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+
+        if self.path=="/api/magic/weave/load":
+            # Lade Element in Hand (LH oder RH)
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")
+            data = json.loads(body_str)
+
+            hand = data.get("hand")  # "left" or "right"
+            element = data.get("element")
+
+            result = MAGIC_SYSTEM.load_weave_hand(hand, element)
+            log("INFO", f"Element geladen: {element} in {hand} Hand", "MAGIC")
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+
+        if self.path=="/api/magic/weave/execute":
+            # Führe Skill-Weaving aus (kombiniere LH + RH)
+            current_mp = STATE["najika"].get("mp", 100)
+
+            result = MAGIC_SYSTEM.execute_weave(current_mp)
+
+            # Reduziere MP wenn erfolgreich
+            if result.get("ok"):
+                STATE["najika"]["mp"] = max(0, current_mp - result.get("mp_cost", 0))
+                save_state()
+                log("INFO", f"Combo gewirkt: {result.get('combo_name')} - {result.get('damage')} DMG", "MAGIC")
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+
+        if self.path=="/api/magic/stats":
+            # Gibt Magic-System Stats zurück
+            stats = MAGIC_SYSTEM.get_all_stats()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(stats).encode()); return
+
+        if self.path=="/api/magic/spells":
+            # Gibt alle verfügbaren Zauber zurück
+            all_spells = {
+                "regular": {k: v for k, v in SPELL_DB.items()},
+                "explosion": {k: v for k, v in EXPLOSION_SPELLS.items()},
+                "known_spells": MAGIC_SYSTEM.known_spells
+            }
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(all_spells).encode()); return
+
+        if self.path=="/api/magic/combos":
+            # Gibt alle verfügbaren Skill-Weaving Kombos zurück
+            combos_list = []
+            for combo_key, combo_data in WEAVE_COMBOS.items():
+                combos_list.append({
+                    "elements": list(combo_key),
+                    "name": combo_data["name"],
+                    "damage": combo_data["damage"],
+                    "mp_cost": combo_data["mp_cost"],
+                    "description": combo_data["description"]
+                })
+
+            result = {
+                "combos": combos_list,
+                "known_combos": len(MAGIC_SYSTEM.known_combos),
+                "total_available": len(WEAVE_COMBOS)
+            }
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
 
         # ===== TTS SYSTEM (VOICE) =====
         if self.path=="/api/tts":
