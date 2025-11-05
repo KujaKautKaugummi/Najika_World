@@ -78,6 +78,8 @@ backend/code_training_solutions/
 *.avi
 *.mkv
 *.pdf
+# Ausnahme: PDFs in "alles wissen" erlauben
+!alles\ wissen/**/*.pdf
 
 # 3D Assets (zu groß für GitHub)
 assets/
