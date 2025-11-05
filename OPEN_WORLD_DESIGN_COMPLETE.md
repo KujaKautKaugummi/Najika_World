@@ -30,7 +30,12 @@
 - Safe Zone (100% sicher) - aber Außenstehende wissen das nicht!
 - Najika's privates Refugium
 - "Verfluchter" Ort für NPCs (Gerüchte!)
-- Gothic-Horror-Ästhetik (wie Bloodborne/Dark Souls)
+- **Gothic-Horror-Ästhetik (wie Bloodborne/Dark Souls)**
+
+**WICHTIG - GOTHIC NUR HIER:**
+- ⚠️ Gothic-Horror = **NUR Black Windmill auf MINI Open World!**
+- ❌ **NICHT im großen Handyspiel!** (da normales Fantasy)
+- Diese Ästhetik ist **exklusiv für Najikas Zuhause** (Mini World)
 
 **Dezente Western-Akzente (minimal!):**
 - Altes Holz (verwittert)
@@ -269,48 +274,69 @@
 ---
 
 ### 2. **THE FORSAKEN INN** (Verlassenes Horror-Hotel)
-**Type:** Endgame Social Hub + Dungeon-Portal-Hub + Minigame Paradise
+**Type:** Roguelike Challenge Hub + Minigame Paradise + Fixed Dungeon Portal Hub
 **Inspiration:**
 - **Mortal Kombat (Krypt)** - Exploration + Unlocking + Secrets
-- **Mortal Kombat (Minigames)** - Test Your Might, Puzzle-Kombat style
-- **Digimon World (Secret Areas)** - Hidden rewards
+- **Dead Cells / Hades** - Jedes Mal neu durchkämpfen!
+- **Resident Evil** - Horror-Hotel Atmosphere
 **Location:** Between **SHADOWMIRE EXPANSE** + **VOIDFALL WASTES**
 
-**AUSSEN (Horror):**
-- Verfallenes Hotel
-- Zerbrochene Fenster
-- Ranken + Nebel
-- Gruselige Atmosphäre
-- Muss erkundet/erkämpft werden
+---
 
-**INNEN (Schick + Funktional):**
-- Vollständig renoviert (nach dem Freischalten!)
-- Bar/Lounge (Minigames!)
-- Casino-Bereich (Triple Triad, Würfelspiele)
+### **HOTEL STRUKTUR (3 Bereiche):**
+
+#### **BEREICH 1: AUßEN (Riesiges verfallenes Hotel)**
+- Verfallene Fassade (RIESIG!)
+- Zerbrochene Fenster, Ranken
+- Nebel, gruselige Atmosphäre
+- **JEDES MAL neu betreten!**
+
+#### **BEREICH 2: WEG ZUM KERN (Roguelike-Challenge)**
+- **Muss JEDES MAL durchkämpft/erschlichen werden!**
+- **NICHT permanent freigeschaltet!**
+- Combat ODER Stealth (Spieler-Wahl)
+- Kleine Rätsel auf dem Weg
+- Gegner respawnen bei jedem Besuch
+- **Wie Hades/Dead Cells:** Jeder Run ist neu!
+
+#### **BEREICH 3: KERN (Safe Zone - wenn erreicht!)**
+- **Neu, schick, gemütlich** (Kontrast!)
+- Bar/Lounge-Bereich
+- Casino mit Minigames
 - Zimmer zum Chillen
-- **PORTAL-TÜREN** → Führen zu festen Dungeons (Farming!)
+- **Portal-Türen zu festen Dungeons!**
 
-**Features:**
-- Muss "erobert" werden (Combat/Stealth) - **MK Krypt Style!**
-- Nach Freischaltung: Safe Zone
-- **Minigames (MK-inspired):**
+---
+
+### **FEATURES:**
+
+**Roguelike-Mechanik:**
+- ❌ **NICHT einmalig freischaltbar!**
+- ✅ **Jedes Mal neu durchkommen!**
+- Combat oder Stealth (beide Wege möglich)
+- Kleine Rätsel zwischen Eingang und Kern
+- Belohnung: Zugang zu Minigames + Portal-Dungeons
+
+**Im Kern (wenn erreicht):**
+- **Minigames:**
   - Test Your Might (Mortal Kombat) - Button-Mashing
   - Puzzle Kombat Style (Match-3 meets Combat)
   - Poker, Dice (Glücksspiel)
-  - **NICHT Triple Triad** (das ist weltweites Spiel, siehe unten!)
+- **Portal-Türen:**
+  - Führen zu **festen Dungeons**
+  - **Feste Bosse** (farmbar)
+  - **Feste Beute** (gezieltes Farming)
+  - Welt-Layout generiert trotzdem neu
 - Musik-Box (Jukebox)
 - NPC-Händler (rare Items)
-- Portal-Türen für Dungeon-Runs
-- **Krypt-Chests** (unlock mit Koins/Keys wie MK!)
-- Secret Areas (wie MK Krypt-Exploration)
+- Krypt-Chests (unlock mit Koins/Keys wie MK!)
 
-**WICHTIG - TRIPLE TRIAD:**
-- Triple Triad ist ein **weltweites Spiel** (wie in FF8!)
-- Spielbar in **ALLEN Städten/Dörfern/Tavernen**
-- NPCs überall spielen es
-- Karten sammelbar überall
-- Turniere in verschiedenen Städten
-- **NICHT exklusiv für Forsaken Inn!**
+**Design-Philosophie:**
+- Hotel = **Endgame Content**
+- Skill-Check: Muss durchgekommen werden
+- Belohnung: Minigames + Fixed Dungeon Farming
+- Roguelike-Feel: Jeder Run anders
+- **NICHT wie Safe-Hub**, sondern **Challenge-Hub!**
 
 **Western-Akzente:**
 - Saloon-Style Bar
@@ -372,17 +398,41 @@ ENDGAME: VOIDFALL WASTES (Dark Zone)
 
 ---
 
-## 🔮 DUNGEONS (Procedural, nicht fest auf Map!)
+## 🔮 DUNGEONS (2 VERSCHIEDENE SYSTEME!)
 
-**3 Dungeon-Typen:**
-1. **MEGA-DUNGEON 1**: Combat-fokussiert
-2. **MEGA-DUNGEON 2**: Exploration-fokussiert
-3. **NORMAL-DUNGEON**: Quick-Runs
+### **SYSTEM 1: MINI OPEN WORLD (Testing - 2400×2400)**
+**3 Dungeons FEST platziert als Objekte:**
+1. **MEGA-DUNGEON 1** (Combat-fokussiert)
+2. **MEGA-DUNGEON 2** (Exploration-fokussiert)
+3. **NORMAL-DUNGEON** (Quick-Runs)
 
-**Portale:**
-- Im Handyspiel: Procedurally generated
-- Auf Mini Open World: Feste Test-Objekte
-- Später: Portal-Türen im Forsaken Inn
+**Verhalten:**
+- Dungeons = **feste Objekte** auf der Map
+- Eingänge = **immer am selben Ort**
+- **Inhalt regeneriert sich** bei jedem Besuch!
+- Für Testing/Development gedacht
+
+---
+
+### **SYSTEM 2: HANDYSPIEL (Release - Großes Open World)**
+**Dungeons prozedural generiert:**
+- Entstehen **dynamisch** in der Spielwelt
+- Jedes Mal **neue Welt**
+- **Portale** erscheinen an zufälligen Orten
+- Endgame-Content
+
+**Später auch:** Portal-Türen im Forsaken Inn (siehe unten!)
+
+---
+
+### **SYSTEM 3: FESTE DUNGEONS (im Forsaken Inn)**
+**Portal-Türen im Hotel-Kern führen zu:**
+- **Feste Dungeons** mit festen Rewards
+- **Feste Bosse** (immer gleiche)
+- **Feste Beute** (farmbar!)
+- **ABER:** Welt-Layout generiert trotzdem neu!
+
+**Zweck:** Gezieltes Farmen von bestimmten Items/Bossen
 
 ---
 
