@@ -1,0 +1,302 @@
+================================================================================
+NAJIKA SMART EXTRACT FÜR CLAUDE
+================================================================================
+Extrahiert aus 489222 Zeichen, 1540 Absätzen
+================================================================================
+
+
+################################################################################
+SKILL-SYSTEME
+################################################################################
+
+[1] --------------------------------------------------------------------------------
+Datei: SLIME_CONTEXT.txt
+Keywords: skill, skyrim, use-based, feuer, feura, feuraga, weaving
+--------------------------------------------------------------------------------
+
+[2] 1. **Digimon World** - Anfeuern-System ✅
+2. **Dark Souls** - Stamina, Dodge, Parieren ✅  
+3. **Fortnite** - Movement, evtl. Bauen ✅
+4. **Skyrim** - Use-based Skill Progress ✅
+5. **Ragnarok** - Stat-System ✅
+...
+
+[3] --------------------------------------------------------------------------------
+Datei: NAJIKA_SEARCH_REQUEST.txt
+Keywords: skill, skyrim, use-based, weaving
+--------------------------------------------------------------------------------
+
+[4] - "Projekt" / "Project"
+- "Game Design" / "Spiel Design"
+- "Skill System" / "Skill-Weaving"
+- "Skyrim" / "Use-Based Learning"
+- "Kampfsystem" / "Combat System"
+...
+
+[5] - "Game Design" / "Spiel Design"
+- "Skill System" / "Skill-Weaving"
+- "Skyrim" / "Use-Based Learning"
+- "Kampfsystem" / "Combat System"
+- "Soulframe" / "Digimon World" / "Dark Souls"
+...
+
+
+################################################################################
+KAMPF-SYSTEME
+################################################################################
+
+[1] --------------------------------------------------------------------------------
+Datei: SLIME_CONTEXT.txt
+Keywords: soulframe, digimon world, dark souls, mortal kombat, anfeuern
+--------------------------------------------------------------------------------
+
+[2] 1. **Digimon World** - Anfeuern-System ✅
+2. **Dark Souls** - Stamina, Dodge, Parieren ✅  
+3. **Fortnite** - Movement, evtl. Bauen ✅
+4. **Skyrim** - Use-based Skill Progress ✅
+5. **Ragnarok** - Stat-System ✅
+...
+
+[3] - "Game Design" / "Spiel Design"
+- "Skill System" / "Skill-Weaving"
+- "Skyrim" / "Use-Based Learning"
+- "Kampfsystem" / "Combat System"
+- "Soulframe" / "Digimon World" / "Dark Souls"
+...
+
+[4] ```
+"Es gibt ein Kampfsystem mit Anfeuern: Ähnlich wie in Digimon World kann der
+Spieler seinem Begleiter im Kampf nur indirekt befehlen und durch Timing von 
+Anfeuerungs-Kommandos dessen Aktionen verstärken (z.B. Gutes Timing = Angriff 
+...
+
+[5] --------------------------------------------------------------------------------
+Datei: NAJIKA_SEARCH_REQUEST.txt
+Keywords: soulframe, digimon world, dark souls
+--------------------------------------------------------------------------------
+
+
+################################################################################
+WELT & GEBIETE
+################################################################################
+
+[1] --------------------------------------------------------------------------------
+Datei: SLIME_CONTEXT.txt
+Keywords: 8 gebiete, crimson desert, prozedural, oregon trail
+--------------------------------------------------------------------------------
+
+[2] Ich habe **KEIN vollständiges, dediziertes Game-Design-Dokument** mit den folgenden spezifischen Elementen gefunden:
+- ❌ **8 Gebiete System** (detailliert beschrieben)
+- ❌ **Skill-Weaving Mechanik** (vollständig ausgearbeitet)
+- ❌ **Fantasy Western Setting**
+- ❌ **Stadt-System** (feste Städte + prozeduraler Außenbereich)
+...
+
+[3] Ich habe **`NAJIKA_GAME_DESIGN_COMPLETE.md`** erstellt mit:
+- ✅ 8 Gebiete (Crimson Desert → Celestial Peaks)
+- ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+- ✅ Oregon Trail Events (überall aktiv!)
+...
+
+[4] --------------------------------------------------------------------------------
+Datei: NAJIKA_SCHRITT2_DETAILS.txt
+Keywords: 8 gebiete, prozedural, oregon trail
+--------------------------------------------------------------------------------
+
+[5] - ✅ 8 Gebiete (Crimson Desert → Celestial Peaks)
+- ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+- ✅ Oregon Trail Events (überall aktiv!)
+- ✅ Non-Combat Endgame (Farming, Fishing, Trading)
+...
+
+
+################################################################################
+FORTNITE INTEGRATION
+################################################################################
+
+[1] 3. **UEFN (Unreal Engine Fortnite)** - Langfrist-Ziel
+   - Verse Scripting ❌
+   - Asset-Konvertierung ❌
+   - Multiplayer-Anpassungen ❌
+
+[2] **Schritte:**
+1. Verse Scripting lernen (Unreal's Scripting Language)
+2. Python Server → Verse Server übersetzen
+3. KayKit Assets → UEFN Asset Format konvertieren
+4. Multiplayer Logic implementieren
+5. Fortnite Creative Mode veröffentlichen
+
+[3] gerne machen wir so wie due s empehlst . ergänzend dazu noch dies gerade installiert dokument das ich dir hinterlegt habe ist der jetzige zusantd . in dem ordner ist alles installiert C:\NajikaAI was muss gemacht werden . die ki najika muss fertiggestellt werden  dertzige zusatnd ist ich möchte sie nochmal etwas abändern bevor sie final aktiv wird die ki soll in das digivce intigriert werden alles was gesicherten bereich und schwarz mühle betrifft ist in das digivice zu übertragen danahc werden 
+    [...]
+
+[4] Projekt-Basiskern (vorrangig):
+1) KI_AI_Najika: übergeordnete KI-Ebene, Steuerlogik, Management. Kein direkter Digivice-/Modulbezug.
+2) Digivice_App: zentrales System. Erst Browser, später Handy-App (die App IST das Digivice). Enthält gesicherten Bereich und „schwarze Mühle“-Varianten.
+3) Module: alle Spiel-/Tool-Ideen als Module des Digivice. Großes Handyspiel = Großmodul; kleinere Spiele/Ideen = Unter-Module.
+4) Fortnite_UEFN: Fortnite/UEFN-Pläne, Karten, Assets, Skripte, Workflows.
+Regeln:
+- 
+    [...]
+
+[5] ich m√∂chte das du aus diesen unterlagen alles zum Thema KI AI Najika (dem gesicherten Bereich sowie der schwarzen Windm√ºhle/schwarze Holl√§ndische Windm√ºhle/schwarze M√ºhle dunkle M√ºhle ) sowie zum Thema digivice+app das was in klammern steht geh√∂rt nun auch zum thema digivice sowie zum Thema handyspiel+app erfasse dabei auch das die spiele nun module f√ºr das digivice sind sowie die pl√§ne f√ºr fortnite und UEFN die ist der aktuelle projekt stand NAJIKA COMPLETE FINAL EDITION v6.0 # Vollst
+    [...]
+
+
+################################################################################
+BEGLEITER & PETS
+################################################################################
+
+[1] --------------------------------------------------------------------------------
+Datei: SLIME_CONTEXT.txt
+Keywords: slime, begleiter, companion, pet
+--------------------------------------------------------------------------------
+
+[2] --------------------------------------------------------------------------------
+Datei: NAJIKA_SCHRITT2_DETAILS.txt
+Keywords: slime, begleiter, companion, pet
+--------------------------------------------------------------------------------
+
+[3] - "8 Gebiete" / "Städte" / "Cities"
+- "Crafting" / "Alchemie" / "Housing"
+- "Oregon Trail"
+- "Begleiter" / "Pet" / "Companion"
+- "Najika Spiel" / "Handy Spiel" / "Mobile Game"
+...
+
+[4] --------------------------------------------------------------------------------
+Datei: NAJIKA_SEARCH_REQUEST.txt
+Keywords: begleiter, companion, pet
+--------------------------------------------------------------------------------
+
+[5] - "Crafting" / "Alchemie" / "Housing"
+- "Oregon Trail"
+- "Begleiter" / "Pet" / "Companion"
+- "Najika Spiel" / "Handy Spiel" / "Mobile Game"
+
+
+################################################################################
+CRAFTING & NON-COMBAT
+################################################################################
+
+[1] Mechanics:
+  - Skill Weaving (Use-Based Progression)  # ← ERWÄHNT aber NICHT detailliert!
+  - Crafting, Fishing, Farming, Mining, Holzfällen
+
+[2] - "Skyrim" / "Use-Based Learning"
+- "Kampfsystem" / "Combat System"
+- "Soulframe" / "Digimon World" / "Dark Souls"
+- "8 Gebiete" / "Städte" / "Cities"
+- "Crafting" / "Alchemie" / "Housing"
+...
+
+[3] - "Kampfsystem" / "Combat System"
+- "Soulframe" / "Digimon World" / "Dark Souls"
+- "8 Gebiete" / "Städte" / "Cities"
+- "Crafting" / "Alchemie" / "Housing"
+- "Oregon Trail"
+...
+
+[4] - "8 Gebiete" / "Städte" / "Cities"
+- "Crafting" / "Alchemie" / "Housing"
+- "Oregon Trail"
+- "Begleiter" / "Pet" / "Companion"
+- "Najika Spiel" / "Handy Spiel" / "Mobile Game"
+...
+
+[5] - "Crafting" / "Alchemie" / "Housing"
+- "Oregon Trail"
+- "Begleiter" / "Pet" / "Companion"
+- "Najika Spiel" / "Handy Spiel" / "Mobile Game"
+
+
+################################################################################
+EQUIPMENT & LOOT
+################################################################################
+
+[1] #### **Equipment-Slots:**
+```yaml
+- Weapon (Main Hand)
+- Off-Hand (Shield/Dual-Wield)
+- Helmet
+- Chest Armor
+- Gloves
+- Pants
+- Boots
+- Ring (x2)
+- Amulet
+- Cape/Back
+
+[2] #### **1. CRIMSON DESERT (Starting Zone)**
+```yaml
+Level Range: 1-10
+Theme: Rote Wüste, Western-Town
+Stadt: "New Najika" (Tutorial-Town)
+  - Erstes Quest-Hub
+  - Basic Shop (Waffen Lvl 1-5)
+  - Training-Grounds
+  - Beginner-Dungeon: "Abandoned Mine"
+
+[3] #### **3. OBSIDIAN MOUNTAINS (Mining Zone)**
+```yaml
+Level Range: 15-30
+Theme: Dunkle Berge, Minen, Schmieden
+Stadt: "Ironforge Peak"
+  - Blacksmith Guild
+  - Gem-Cutter
+  - Mining Equipment Shop
+  - Dungeon Portal: "Deep Mines" (Lvl 20-25)
+
+[4] Besonderheit:
+  - HIGH RISK, HIGH REWARD
+  - Beste Loot-Drops
+  - Player-Fraktionen (Piraten vs. Marine)
+```
+
+[5] Megumin Ultimate:
+  - Einmal pro Stadt-Reset (alle 24h)
+  - Explosion = Kompletter Außenbereich wird gelöscht!
+  - Beim nächsten Betreten: Neu generiert mit Explosion-Kratern
+  - Bonus-Loot in den Kratern!
+```
+
+
+################################################################################
+KLASSEN
+################################################################################
+
+[1] - ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+- ✅ Oregon Trail Events (überall aktiv!)
+- ✅ Non-Combat Endgame (Farming, Fishing, Trading)
+- ✅ Megumin Explosion = Welt zerstören (Crimson Ruins)
+...
+
+[2] Ich habe **`NAJIKA_GAME_DESIGN_COMPLETE.md`** erstellt mit:
+- ✅ 8 Gebiete (Crimson Desert → Celestial Peaks)
+- ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+- ✅ Oregon Trail Events (überall aktiv!)
+...
+
+[3] Ich habe **`NAJIKA_GAME_DESIGN_COMPLETE.md`** erstellt mit:
+- ✅ 8 Gebiete (Crimson Desert → Celestial Peaks)
+- ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+...
+
+[4] - ✅ 8 Gebiete (Crimson Desert → Celestial Peaks)
+- ✅ Skill-Weaving (1 Skill = Boni, Rest = Mali)
+- ✅ 7 Klassen (Explosion Mage, Warrior, Ranger, Healer, Crafter, Farmer, Merchant)
+- ✅ Oregon Trail Events (überall aktiv!)
+- ✅ Non-Combat Endgame (Farming, Fishing, Trading)
+...
+
+[5] FORM-WECHSEL basierend auf:
+  1. Spieler-Klasse:
+     - Explosion Mage → Fire Slime (rot, explosion)
+     - Warrior → Armor Slime (metallisch)
+     - Healer → Light Slime (golden, heilt)
+...
+

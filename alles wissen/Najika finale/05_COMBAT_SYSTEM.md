@@ -1,0 +1,428 @@
+# 🎮 NAJIKA COMBAT SYSTEM - DESIGN DOKUMENT
+
+**Version:** V4 - Final
+**Datum:** 2025-10-25
+**Status:** Zur Implementierung bereit
+
+---
+
+## 📹 KAMERA-MODI & KAMPF-SYSTEME
+
+### **3 Kamera-Modi mit unterschiedlichen Kampf-Mechaniken:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  KAMERA-MODUS         │  KAMPF-SYSTEM        │  KONTROLLE   │
+├─────────────────────────────────────────────────────────────┤
+│  🎥 ORBIT CAM         │  Digimon World       │  Anfeuern    │
+│  (Standard)           │  Anfeuern-System     │  (Passiv)    │
+├─────────────────────────────────────────────────────────────┤
+│  👤 THIRD-PERSON      │  Soulframe +         │  Action      │
+│  (Über Schulter)      │  Skyrim Hybrid       │  (Aktiv)     │
+├─────────────────────────────────────────────────────────────┤
+│  👁️ FIRST-PERSON      │  Soulframe +         │  Action      │
+│  (Ego-Perspektive)    │  Skyrim Hybrid       │  (Aktiv)     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎯 MODUS 1: ORBIT CAM (Digimon World Anfeuern)
+
+### **Kamera:**
+- Frei drehbar um Najika
+- Zoom: 5-15m Distanz
+- Najika immer zentral im Fokus
+- Wie in Digimon World 1 (PS1)
+
+### **Kampf-System:**
+**Najika kämpft ALLEIN - Du feuerst an!**
+
+```
+Najika kämpft autonom ────► Du feuerst an im richtigen Moment
+                            │
+                            ├─ Perfektes Timing → +20% Stats, Cheer+20
+                            ├─ Gutes Timing → +10% Stats, Cheer+10
+                            └─ Schlechtes Timing → Najika genervt, Cheer-5
+```
+
+### **Anfeuern-Mechanik (EXAKT wie Digimon World):**
+
+#### **1. Timing ist ALLES:**
+```python
+class CheerSystem:
+    def on_cheer_input(self):
+        najika_state = get_najika_combat_state()
+
+        # PERFEKTES TIMING (während Angriff/Verteidigung)
+        if najika_state == "attacking" or najika_state == "dodging":
+            return {
+                "result": "PERFECT",
+                "stat_bonus": 0.20,  # +20% ATK/DEF
+                "cheer_meter": +20,
+                "najika_reaction": "Danke Kuja! Das hilft!",
+                "animation": "thumbs_up"
+            }
+
+        # GUTES TIMING (kurz davor/danach)
+        elif najika_state in ["preparing_attack", "recovering"]:
+            return {
+                "result": "GOOD",
+                "stat_bonus": 0.10,
+                "cheer_meter": +10,
+                "najika_reaction": "OK!",
+                "animation": "nod"
+            }
+
+        # SCHLECHTES TIMING (sie ist konzentriert/nichts passiert)
+        elif najika_state in ["focusing", "idle"]:
+            return {
+                "result": "BAD",
+                "stat_bonus": 0.0,
+                "cheer_meter": -5,
+                "najika_reaction": "Nicht jetzt! Ich muss mich konzentrieren!",
+                "animation": "annoyed_glance"
+            }
+
+        # SEHR SCHLECHTES TIMING (Najika wird getroffen)
+        elif najika_state == "taking_damage":
+            return {
+                "result": "TERRIBLE",
+                "stat_bonus": -0.05,  # NEGATIV!
+                "cheer_meter": -10,
+                "najika_reaction": "KUJA! Du lenkst mich ab!!",
+                "animation": "angry"
+            }
+```
+
+#### **2. Cheer-Meter (0-100):**
+```
+0-20:   ⚪⚪⚪⚪⚪  "Najika ist frustriert"
+20-40:  🟡⚪⚪⚪⚪  "Najika ist OK"
+40-60:  🟡🟡⚪⚪⚪  "Najika ist motiviert"
+60-80:  🟡🟡🟡⚪⚪  "Najika ist begeistert"
+80-100: 🟡🟡🟡🟡⚪  "Najika ist im Flow!"
+100:    🔥🔥🔥🔥🔥  "SPECIAL FINISHER UNLOCKED!"
+```
+
+**Bei 100% Cheer-Meter:**
+```python
+if cheer_meter >= 100:
+    unlock_special_finisher()
+    najika.say("KUJA! JETZT! GEMEINSAM!")
+    play_cinematic_finish()
+    # Combo-Angriff mit +300% Schaden
+```
+
+#### **3. Najika's Reaktionen (Digimon World Style):**
+
+**PERFEKTES TIMING:**
+```
+"Ja! Genau richtig!"
+"Das hilft, Kuja!"
+"Weiter so!"
+*Daumen hoch*
+*Lächelt*
+```
+
+**GUTES TIMING:**
+```
+"OK!"
+"Danke!"
+*Nickt*
+```
+
+**SCHLECHTES TIMING:**
+```
+"Nicht jetzt..."
+"Warte!"
+"Ich muss mich konzentrieren!"
+*Schaut genervt*
+```
+
+**SEHR SCHLECHTES TIMING:**
+```
+"KUJA! Du lenkst mich ab!!"
+"STOP! Ich kämpfe gerade!"
+"Das ist KEINE Hilfe!"
+*Wird wütend*
+*Ignoriert dich kurz*
+```
+
+**Bei zu viel schlechtem Anfeuern:**
+```python
+if bad_cheer_count >= 5:
+    najika.say("Kuja... lass mich das alleine machen.")
+    disable_cheer_temporarily(30)  # 30 Sekunden Cooldown
+    najika.affinity -= 0.02  # Affinity sinkt!
+```
+
+#### **4. UI für Orbit Cam:**
+```
+┌─────────────────────────────────────────────────────┐
+│                                                     │
+│              Najika kämpft                          │
+│                  ⚔️                                  │
+│                                                     │
+│  ┌─────────────────────────────┐                   │
+│  │ CHEER-METER: 65/100         │                   │
+│  │ 🟡🟡🟡⚪⚪                    │                   │
+│  └─────────────────────────────┘                   │
+│                                                     │
+│  ┌─────────────────────────────┐                   │
+│  │ 👏 ANFEUERN (SPACE)         │  ← Timing-Hint    │
+│  │    Perfect Window: [🔥]     │                   │
+│  └─────────────────────────────┘                   │
+│                                                     │
+│  Najika: "Danke Kuja!"                              │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+**Timing-Window Anzeige:**
+```javascript
+// Visueller Timing-Indikator (wie bei Rhythm-Games)
+function showTimingWindow() {
+    if (najika.state === "preparing_attack") {
+        // Zeige 0.5s vorher einen Kreis
+        showCircle({
+            position: "above_najika",
+            color: "yellow",
+            shrinking: true,
+            perfect_zone: 0.2  // 200ms perfektes Fenster
+        });
+    }
+}
+
+// User drückt SPACE während Kreis klein ist = PERFECT!
+```
+
+---
+
+## ⚔️ MODUS 2 & 3: THIRD/FIRST PERSON (Soulframe + Skyrim Hybrid)
+
+### **Kamera:**
+- **Third-Person:** Über Schulter, 2-3m hinter Spieler
+- **First-Person:** Ego-Perspektive, direkt aus Augen
+
+### **Kampf-System:**
+**DU kämpfst aktiv! (Soulframe + Skyrim Mischung)**
+
+**⚠️ WICHTIG: NICHT Souls-like (Dark Souls)! Sondern Soulframe (Digital Extremes)!**
+
+#### **Soulframe-Elemente:**
+- ✅ **Fluid Combat** (Schnell, fließend, akrobatisch)
+- ✅ **Stamina als Resource** (Nicht brutal wie Dark Souls!)
+- ✅ **Dodge/Roll** (Smooth, großzügige i-Frames)
+- ✅ **Combo-Flow** (Angriffe verketten sich natürlich)
+- ✅ **Environmental Interaction** (Nutze Umgebung im Kampf)
+
+#### **Skyrim-Elemente:**
+- ✅ **Dual-Wielding** (Zwei Waffen/Zauber gleichzeitig)
+- ✅ **Element-Weaving** (Zauber-Kombination beide Hände)
+- ✅ **Block mit Schild** (Simpel aber effektiv)
+- ✅ **Power-Angriffe** (Charge-Attacks, 30 Stamina)
+- ✅ **Finisher** (Cinematic Kills bei niedrigem HP)
+- ✅ **First-Person melee combat** (Optional)
+
+#### **Steuerung:**
+```
+WASD           - Bewegung
+Mouse          - Kamera
+LMB            - Light Attack
+RMB (Hold)     - Block
+RMB (Tap)      - Parry
+SPACE          - Dodge Roll
+SHIFT          - Sprint (10 Stamina/s)
+Q              - Element 1 (Linke Hand)
+E              - Element 2 (Rechte Hand)
+Q+E (Together) - Weave Combo
+R              - Heavy Attack (Charge)
+F              - Finisher (QTE)
+```
+
+#### **Combo-System:**
+```
+Light → Light → Light = Triple Strike (50 DMG)
+Light → Heavy = Smash (80 DMG)
+Parry → Heavy = Riposte (120 DMG)
+Dodge → Light = Counter (60 DMG)
+```
+
+---
+
+## 🔄 MODUS-WECHSEL (Später implementieren!)
+
+### **ZIEL: Kampf-Modi aus jeder Kamera wechselbar**
+
+```
+ORBIT CAM:
+├─ Standard: Anfeuern-Modus (Najika kämpft)
+└─ [TAB] drücken: Wechsel zu Action-Modus (Du kämpfst, Najika hilft)
+
+THIRD/FIRST PERSON:
+├─ Standard: Action-Modus (Du kämpfst)
+└─ [TAB] drücken: Wechsel zu Anfeuern-Modus (Najika übernimmt)
+```
+
+#### **Implementierung (Phase 2):**
+```python
+class CombatModeSwitch:
+    def __init__(self):
+        self.current_mode = "cheer"  # oder "action"
+        self.current_camera = "orbit"
+
+    def toggle_mode(self):
+        if self.current_mode == "cheer":
+            # Wechsel zu Action
+            self.current_mode = "action"
+            enable_player_controls()
+            najika.set_ai_mode("support")  # Najika hilft mit
+            ui.show_message("Du kämpfst jetzt! Najika unterstützt dich.")
+        else:
+            # Wechsel zu Cheer
+            self.current_mode = "cheer"
+            disable_player_controls()
+            najika.set_ai_mode("autonomous")  # Najika kämpft allein
+            ui.show_message("Najika übernimmt! Feuere sie an!")
+```
+
+**Najika als Support (Action-Modus):**
+```python
+class NajikaSupport:
+    """Najika wenn DU kämpfst"""
+    def support_actions(self):
+        actions = [
+            "heal_player",      # Heilt dich bei niedrigem HP
+            "buff_player",      # Gibt dir Buffs
+            "attack_enemy",     # Greift Gegner an (weniger Schaden)
+            "taunt_enemy",      # Zieht Aggro auf sich
+            "element_combo"     # Unterstützt deine Weaves
+        ]
+
+        # Najika entscheidet autonom basierend auf Situation
+        if player.hp < 0.3:
+            self.heal_player()
+        elif enemy.is_distracted:
+            self.attack_from_behind()
+        elif player.is_charging_spell:
+            self.support_weave()
+```
+
+---
+
+## 🎯 IMPLEMENTIERUNGS-PLAN
+
+### **PHASE 1: JETZT (Nach Installation)**
+1. ✅ **Orbit Cam** mit Digimon World Anfeuern
+   - Timing-System
+   - Cheer-Meter
+   - Najika Reaktionen (gut/schlecht)
+   - Special Finisher bei 100%
+
+2. ✅ **Third/First Person** mit Soulframe+Skyrim Combat
+   - Stamina-System
+   - Dodge/Parry/Block
+   - Element-Weaving
+   - Combo-System
+
+3. ⚠️ **NOCH NICHT:** Modus-Wechsel zwischen Kampf-Arten
+   - Erst in Phase 2
+   - Braucht mehr Testing
+
+### **PHASE 2: SPÄTER (Nächste Woche)**
+4. 🔄 **Modus-Wechsel** implementieren
+   - TAB-Toggle zwischen Cheer/Action
+   - Najika Support-AI (wenn du kämpfst)
+   - Fließende Übergänge
+
+---
+
+## 📊 TECHNISCHE SPECS
+
+### **Cheer-System (Orbit Cam):**
+```javascript
+const CHEER_TIMINGS = {
+    PERFECT: {
+        window: [0.0, 0.2],      // 0-200ms nach Aktion
+        stat_bonus: 0.20,
+        cheer_gain: 20,
+        cooldown: 2.0             // 2s bis nächstes Anfeuern
+    },
+    GOOD: {
+        window: [0.2, 0.5],      // 200-500ms
+        stat_bonus: 0.10,
+        cheer_gain: 10,
+        cooldown: 2.5
+    },
+    BAD: {
+        window: [0.5, Infinity],
+        stat_bonus: 0.0,
+        cheer_gain: -5,
+        cooldown: 3.0             // Länger warten nach Bad Timing
+    }
+};
+
+// Najika's Combat States für Timing
+const NAJIKA_STATES = {
+    ATTACKING: { perfect: true },
+    DODGING: { perfect: true },
+    BLOCKING: { perfect: true },
+    PREPARING: { good: true },
+    RECOVERING: { good: true },
+    IDLE: { bad: true },
+    FOCUSING: { bad: true },
+    TAKING_DAMAGE: { terrible: true }
+};
+```
+
+### **Action Combat (Third/First Person):**
+```javascript
+const STAMINA_COSTS = {
+    DODGE_ROLL: 20,
+    HEAVY_ATTACK: 30,
+    SPRINT_PER_SEC: 10,
+    BLOCK_PER_SEC: 15,
+    PARRY_ATTEMPT: 10,
+    WEAVE_CAST: 25
+};
+
+const PARRY_WINDOW = {
+    PERFECT: { start: 0.08, end: 0.12 },  // 80-120ms
+    GOOD: { start: 0.05, end: 0.20 },     // 50-200ms
+    MOBILE: { start: 0.10, end: 0.20 }    // Längeres Fenster für Touch
+};
+```
+
+---
+
+## 🎮 ZUSAMMENFASSUNG
+
+**ORBIT CAM (Digimon World):**
+- ✅ Najika kämpft ALLEIN
+- ✅ DU feuerst an (SPACE)
+- ✅ Timing = KRITISCH
+- ✅ Gutes Timing = Buffs + Cheer Meter
+- ✅ Schlechtes Timing = Najika genervt + Cheer sinkt
+- ✅ 100% Cheer = Special Finisher
+- ✅ EXAKT wie Digimon World 1
+
+**THIRD/FIRST PERSON (Soulframe + Skyrim Hybrid):**
+- ✅ DU kämpfst aktiv
+- ✅ Fluid & akrobatisch (Soulframe-Style)
+- ✅ Dual-Wielding & Element-Weaving (Skyrim-Style)
+- ✅ Stamina als Resource (NICHT brutal wie Dark Souls!)
+- ✅ Combo-Flow-System
+- ✅ Finisher QTE
+- ⚠️ KEIN Souls-like! (Nicht Dark Souls/Elden Ring)
+
+**SPÄTER (Phase 2):**
+- 🔄 Modus-Wechsel aus jeder Kamera
+- 🔄 Najika als Support wenn du kämpfst
+- 🔄 TAB-Toggle zwischen Modi
+
+---
+
+**BEREIT FÜR IMPLEMENTIERUNG!** 🚀
+
+Nach der Installation der Basis-Installer integrieren wir das Schritt für Schritt!

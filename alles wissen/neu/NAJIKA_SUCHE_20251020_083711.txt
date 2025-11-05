@@ -1,0 +1,609 @@
+================================================================================
+NAJIKA UNIVERSAL SEARCH - ERGEBNISSE
+================================================================================
+
+Datum: 2025-10-20 08:37:11
+Suchbegriffe: najika, ki, persöhnlichkeit
+Durchsuchte Ordner: claude
+Treffer gesamt: 15
+
+================================================================================
+
+## ORDNER: CLAUDE (15 Treffer)
+================================================================================
+
+[1] ...\C--NajikaCore\1889b0ea-948c-46e4-a65b-2edddfcc1b89.jsonl
+    Größe: 9741.7 KB | Geändert: 2025-10-16 22:10
+    Treffer: 147x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 113x
+      - ki: 68x
+    Messages (erste 5):
+      ASSISTANT | Zeile 39 | 2025-10-16T14:02:29
+      ...Ah verstehe! Es ging zuletzt um die Optimierung der KI Najika durch ein neues Llama-Lokalmodell. Lass mich die neuesten Konversationen besser durchsuchen:...
+
+      ASSISTANT | Zeile 63 | 2025-10-16T14:03:52
+      ...t. Lass mich zusammenfassen, was in den letzten 10-15 Minuten passiert ist:
+
+## Zusammenfassung der letzten Session:
+
+**Hauptthema**: Optimierung von Najika durch ein besseres lokales Llama-Modell
+
+**...
+
+      ASSISTANT | Zeile 67 | 2025-10-16T14:04:08
+      ...timierung für dein Setup** stehen geblieben!
+
+**Aktueller Stand:**
+- Dein Setup: Ryzen 7 5800 + RTX 3060 Ti (8GB VRAM) + 16GB RAM
+- Aktuelle Modelle: najika-local (llama3.2:3b - 2GB) für normal, najik...
+
+      ASSISTANT | Zeile 77 | 2025-10-16T14:06:04
+      ...en Modelle. **Interessant:**
+- `wizard-vicuna-uncensored` (3.8GB) ist schon da - ein uncensored Modell!
+- `dolphin-mistral` (4.1GB) wird aktuell für `najika-wizard` verwendet
+- `deepseek-coder-v2:16b`...
+
+      ASSISTANT | Zeile 93 | 2025-10-16T14:07:20
+      ...Perfekt! Download läuft (44 MB / 4.9 GB bei ~6.4 MB/s - dauert ~13 min). Ich habe **CLAUDE_MASTER_WORKINGDOC.md** gefunden - das könnte die Dokumentation vom anderen Modell sein!...
+
+--------------------------------------------------------------------------------
+
+[2] ...\C--NajikaCore\1e75a874-27fc-4133-a038-22081b5aae06.jsonl
+    Größe: 23744.5 KB | Geändert: 2025-10-18 20:02
+    Treffer: 102x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 70x
+      - ki: 64x
+    Messages (erste 5):
+      ASSISTANT | Zeile 2 | 2025-10-18T06:05:31
+      ...I'm Claude Code, Anthropic's official CLI for Claude, ready to help you search through and explore the NajikaCore codebase. I have access to the project context from CLAUDE.md, which describes a web-b...
+
+      USER | Zeile 5 | 2025-10-18T06:06:04
+      ...# Najika Update Command V2
+
+Smart Update System mit Task-Tracking und Auto-File-Detection.
+
+## PFLICHT-ABLAUF:
+
+1. `python C:/NajikaCore/najika_sm...
+
+      ASSISTANT | Zeile 6 | 2025-10-18T06:06:06
+      ...I'll run the Najika smart update system to get context about what we've been working on....
+
+      ASSISTANT | Zeile 131 | 2025-10-18T06:16:39
+      ...Since I cannot locate the exact .claude directory path, I'll create the statusLine script in your current working directory and provide you with instructions on where to place it. Let me create a Wind...
+
+      ASSISTANT | Zeile 134 | 2025-10-18T06:17:06
+      ...n in a git repository (skips optional locks)
+- **Model Name**: Displays the current Claude model you're using
+
+### Example Output:
+```
+14:35:22 | ...\NajikaCore | Claude 3.5 Sonnet
+14:35:22 | ...\my-p...
+
+--------------------------------------------------------------------------------
+
+[3] ...\C--NajikaCore\98473cf3-f761-415e-9d8d-c1ee8d37d31f.jsonl
+    Größe: 25637.5 KB | Geändert: 2025-10-16 15:55
+    Treffer: 85x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 77x
+      - ki: 29x
+    Messages (erste 5):
+      ASSISTANT | Zeile 6 | 2025-10-16T07:40:18
+      ...ich:
+1. Im `.claude`-Pfad nach dem aktuellsten Modell/Chat suche (wenige Minuten alt)
+2. Darin den Text "das ist das letzte" finde
+3. Das BAT-Script `NAJIKA_FEATURE_SEARCH.bat` analysiere und für die ...
+
+      ASSISTANT | Zeile 51 | 2025-10-16T07:42:08
+      ...Perfekt! **Ich habe das BAT-Script analysiert.** Hier sind die **kritischen Probleme**:
+
+## Identifizierte Fehler:
+
+1. **Performance-Killer:** Zeilen 166-177 - die verschachtelte Schleife liest bei je...
+
+      ASSISTANT | Zeile 71 | 2025-10-16T07:45:36
+      ...m Chat gefunden. Die wichtigsten Punkte:
+
+## Erkannte Anforderungen aus dem Chat:
+
+1. **"ai ki girlfriend und kuja ist das schwert und das schild und najika der kopf und das herz"** - Diese Beziehungs...
+
+      ASSISTANT | Zeile 83 | 2025-10-16T07:47:45
+      ...## ✅ Fertig! Ich habe das BAT-Script komplett überarbeitet und gefixed.
+
+### 📁 Erstellt: `NAJIKA_FEATURE_SEARCH_FINAL.bat`
+
+### Was wurde gefixed und verbessert:
+
+#### **Kritische Fixes:**
+1. ✅ **Perf...
+
+      ASSISTANT | Zeile 117 | 2025-10-16T08:02:57
+      ...## ✅ Fertig! `NAJIKA_COMPLETE_SEARCH.bat` erstellt!
+
+### Was drin ist - **ALLES**:
+
+**Gameplay-Mechaniken:**
+- ✅ Explosion-Klasse + alle anderen Klassen
+- ✅ Skill W...
+
+--------------------------------------------------------------------------------
+
+[4] ...\C--NajikaCore\1a601157-ca72-45d2-8e34-b4daa7fe080d.jsonl
+    Größe: 4712.6 KB | Geändert: 2025-10-19 10:40
+    Treffer: 79x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 76x
+      - ki: 24x
+    Messages (erste 5):
+      ASSISTANT | Zeile 6 | 2025-10-18T18:00:57
+      ...I'm ready to assist you with searching and analyzing the Najika codebase. I understand the project structure from the CLAUDE.md file and can help you efficiently locate files, search code, and analyze...
+
+      USER | Zeile 15 | 2025-10-18T18:01:41
+      ...# Najika Update Command V2
+
+Smart Update System mit Task-Tracking und Auto-File-Detection.
+
+## PFLICHT-ABLAUF:
+
+1. `python C:/NajikaCore/najika_sm...
+
+      ASSISTANT | Zeile 16 | 2025-10-18T18:01:44
+      ...I'll run the smart update system to get context about what we've been working on....
+
+      ASSISTANT | Zeile 23 | 2025-10-18T18:01:57
+      ...Das Update-System ist geladen. In der vorherigen Session wurde der `/najika-update` Befehl verwendet - es gibt keine erkannten offenen Aufgaben oder erwähnten Files ausser dem Update-Script selbst.
+
+W...
+
+      USER | Zeile 46 | 2025-10-18T18:03:45
+      ...# Najika Update Command V2
+
+Smart Update System mit Task-Tracking und Auto-File-Detection.
+
+## PFLICHT-ABLAUF:
+
+1. `python C:/NajikaCore/najika_sm...
+
+--------------------------------------------------------------------------------
+
+[5] ...\C--NajikaCore\88273849-2050-47d6-8464-e842f26dd45d.jsonl
+    Größe: 10996.0 KB | Geändert: 2025-10-14 01:18
+    Treffer: 53x | Begriffe: najika, ki
+    Vorkommen:
+      - ki: 38x
+      - najika: 26x
+    Messages (erste 5):
+      USER | Zeile 21 | 2025-10-13T17:07:41
+      ...you read.
+- Be sure to prefix the file with the following text:
+
+```
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+```...
+
+      ASSISTANT | Zeile 63 | 2025-10-13T17:10:19
+      ...I've successfully analyzed the Najika codebase and created a comprehensive CLAUDE.md file. Here's what I documented:
+
+**Key Architecture:**
+- **Backend**: Python HTTP server with Ol...
+
+      ASSISTANT | Zeile 91 | 2025-10-13T17:12:34
+      ...nistrator\\.claude\\statusline-command.ps1"
+  }
+}
+```
+
+### Example Output
+The status line will display something like:
+```
+Administrator@COMPUTERNAME NajikaCore (main) 14:30:25
+```
+
+---
+
+**Important N...
+
+      ASSISTANT | Zeile 93 | 2025-10-13T17:12:43
+      ..."}}catch{}};Write-Output \"$env:USERNAME@$env:COMPUTERNAME $n$b $t\"\""
+  }
+}
+```
+
+Die Statuszeile wird dann anzeigen:
+```
+Administrator@COMPUTERNAME NajikaCore (main) 14:30:25
+```
+
+Mit: Benutzername@...
+
+      ASSISTANT | Zeile 96 | 2025-10-13T17:13:20
+      ...Ich analysiere das NajikaCore-Projekt und die vorhandenen Daten, um mit den gewünschten Verbesserungen fortzufahren....
+
+--------------------------------------------------------------------------------
+
+[6] ...\C--NajikaCore\b24b9dd3-6cb4-479f-b8c1-5e18003c79f7.jsonl
+    Größe: 39843.6 KB | Geändert: 2025-10-16 09:25
+    Treffer: 53x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 48x
+      - ki: 17x
+    Messages (erste 5):
+      ASSISTANT | Zeile 9 | 2025-10-15T11:22:15
+      ...Hallo! Ich bin bereit zu helfen, aber ich habe keinen vorherigen Kontext darüber, was ich fortsetzen soll.
+
+Ich kann sehen, dass dies das **NajikaCore**-Projekt ist - eine virtuelle Begleiter-Anwendun...
+
+      ASSISTANT | Zeile 163 | 2025-10-15T11:40:52
+      ...Gute Idee! Ich füge das direkt in `najika_server.py` ein:...
+
+      ASSISTANT | Zeile 171 | 2025-10-15T11:41:21
+      ...Fertig! Jetzt startet `najika_server.py` automatisch und killt vorher alle alten Server-Prozesse.
+
+Teste es:...
+
+      ASSISTANT | Zeile 215 | 2025-10-15T11:44:15
+      ...Taskkill funktioniert nicht richtig. Ich nutze Python direkt um die Prozesse zu killen:...
+
+      ASSISTANT | Zeile 248 | 2025-10-15T11:45:36
+      ...ws-Ausgabe ist gefixt (nutzt jetzt `cp850` Codepage)
+- Server antwortet korrekt: `http://localhost:8000/health` → Status OK
+
+**Was wurde gefixt:**
+- `najika_server.py:458-493` - Robuste `kill_existing...
+
+--------------------------------------------------------------------------------
+
+[7] ...\C--NajikaCore\d486bb9f-1701-4eaa-89dd-2c049ae58258.jsonl
+    Größe: 1457.3 KB | Geändert: 2025-10-18 02:33
+    Treffer: 40x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 37x
+      - ki: 11x
+    Messages (erste 5):
+      ASSISTANT | Zeile 2 | 2025-10-17T23:01:51
+      ...I'm ready to assist you with searching and navigating the Najika codebase. I have reviewed the project instructions in CLAUDE.md and understand the architecture:
+
+- **Backend**: Python HTTP server (`n...
+
+      USER | Zeile 5 | 2025-10-17T23:01:59
+      ...# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py`...
+
+      ASSISTANT | Zeile 6 | 2025-10-17T23:02:03
+      ...Ich führe jetzt das Najika Auto-Sync System aus, um den aktuellen Stand zu erfassen....
+
+      ASSISTANT | Zeile 11 | 2025-10-17T23:02:20
+      ...## Najika Update - Zusammenfassung
+
+Das Auto-Sync System hat den aktuellen Stand erfasst. Hier die relevantesten Änderungen:
+
+### Wichtigste Erkenntnisse...
+
+      ASSISTANT | Zeile 69 | 2025-10-17T23:08:01
+      ...Hast du gerade die Datei geöffnet? Ich kann sie nicht bearbeiten weil sie als "modified" erkannt wird. 
+
+**Bitte schließe die Datei** `C:/NajikaCore/digivice/index.html` falls du sie in einem Editor o...
+
+--------------------------------------------------------------------------------
+
+[8] ...\C--NajikaCore\eb512a72-71ac-4153-ade9-12b678843326.jsonl
+    Größe: 4673.5 KB | Geändert: 2025-10-15 13:20
+    Treffer: 40x | Begriffe: najika, ki
+    Vorkommen:
+      - ki: 31x
+      - najika: 18x
+    Messages (erste 5):
+      ASSISTANT | Zeile 3 | 2025-10-14T17:57:30
+      ...Ich werde das NajikaCore-Projekt systematisch analysieren, um ein vollständiges Verständnis zu entwickeln....
+
+      ASSISTANT | Zeile 40 | 2025-10-14T17:59:52
+      ...Perfekt! Ich habe das gesamte NajikaCore-Projekt analysiert. Hier ist eine detaillierte Zusammenfassung:
+
+## NAJIKA - Projekt-Übersicht
+
+### Architektur-Übersicht
+NajikaCore ist ei...
+
+      ASSISTANT | Zeile 79 | 2025-10-14T18:08:06
+      ...kt analysiert. Hier ist meine professionelle Einschätzung:
+
+### **Technische Architektur (funktionierend):**
+
+**Was existiert und funktioniert:**
+```
+NajikaCore/
+├── najika_server.py (467 Zeilen) - Py...
+
+      ASSISTANT | Zeile 99 | 2025-10-14T18:09:56
+      ...GE PROJEKT-ANALYSE ABGESCHLOSSEN
+
+Ich habe jetzt **ALLE** Dokumente vollständig gelesen und verstanden. Hier ist das **KOMPLETTE Bild**:
+
+---
+
+## **🎯 NAJIKA PROJEKT - VOLLSTÄNDIGES VERSTÄNDNIS**
+
+### ...
+
+      ASSISTANT | Zeile 132 | 2025-10-14T18:12:34
+      ...derst es auf `true`** = Deine Verantwortung, nicht meine
+
+---
+
+## **🚀 WAS ICH JETZT MACHE:**
+
+Ich erstelle das **KOMPLETTE SYSTEM** mit:
+
+✅ **Server (najika_server.py):**
+- 4 Personas komplett impleme...
+
+--------------------------------------------------------------------------------
+
+[9] ...\C--NajikaCore\5793e9aa-04df-4868-b7d5-34134e4cd032.jsonl
+    Größe: 1998.5 KB | Geändert: 2025-10-14 16:29
+    Treffer: 22x | Begriffe: najika, ki
+    Vorkommen:
+      - ki: 16x
+      - najika: 9x
+    Messages (erste 5):
+      ASSISTANT | Zeile 45 | 2025-10-14T12:56:14
+      ...d die Execution Policy ist konfiguriert.
+
+Für dieses CLI-Tool (Claude Code) nutzen wir bereits automatisch `pwsh` wenn verfügbar. Jetzt können wir an Najika weiterarbeiten!
+
+Was möchten Sie als nächst...
+
+      ASSISTANT | Zeile 52 | 2025-10-14T12:57:04
+      ... alle `pwsh` Befehle, die ich ausführe, laufen bereits in PowerShell 7. Das ist die beste Methode für unsere Zusammenarbeit.
+
+**Wir sind jetzt im `C:\NajikaCore` Verzeichnis und können mit der Entwick...
+
+      ASSISTANT | Zeile 55 | 2025-10-14T12:57:54
+      ...zen jetzt PowerShell 7
+- Ich behalte den gesamten Kontext unserer Konversation - **nichts wird vergessen**
+- Das Arbeitsverzeichnis ist weiterhin `C:\NajikaCore`
+
+**Wenn Sie ein separates PowerShell-F...
+
+      ASSISTANT | Zeile 127 | 2025-10-14T13:03:25
+      ...Perfect! Der Najika-Server läuft jetzt erfolgreich! 🚀
+
+## ✅ Server Status:
+
+**URL:** http://localhost:8000/
+
+**Status:** 
+- Server: ✓ Running
+- AI Provider: Ollama...
+
+      ASSISTANT | Zeile 241 | 2025-10-14T13:30:36
+      ...I'll continue working on the Najika floor and positioning system. Based on the conversation summary, I just fixed the wall positioning in the dungeon (Keller) to push walls to the...
+
+--------------------------------------------------------------------------------
+
+[10] ...\C--NajikaCore\8ec7f58a-70f5-43bf-afe2-ae71019e28ca.jsonl
+    Größe: 986.5 KB | Geändert: 2025-10-20 08:28
+    Treffer: 18x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 17x
+      - ki: 5x
+    Messages (erste 5):
+      ASSISTANT | Zeile 2 | 2025-10-19T17:05:16
+      ...Hallo! Ich bin Claude Code und bereit, dir bei der Arbeit mit der Najika-Codebasis zu helfen.
+
+Ich habe die Anweisungen aus CLAUDE.md gelesen und verstanden:
+
+**Mein Verhalten:**
+- Ich werde **ZUERST*...
+
+      USER | Zeile 5 | 2025-10-19T17:05:48
+      ...# Najika Update Command V2
+
+Smart Update System mit Task-Tracking und Auto-File-Detection.
+
+## PFLICHT-ABLAUF:
+
+1. `python C:/NajikaCore/najika_sm...
+
+      ASSISTANT | Zeile 13 | 2025-10-19T17:06:08
+      ...Basierend auf dem Smart Update:
+
+**Offene Aufgaben aus vorheriger Session:**
+- ⏳ Lese 22.txt und 23.txt (Skill-Weaving) - **in Arbeit**
+- 📋 4 weitere Aufgaben offen (claude 1.txt, PDF, große .txt, .md...
+
+      ASSISTANT | Zeile 20 | 2025-10-19T17:06:44
+      ...STEM.json` - System-Konfiguration
+- `GELERNT_AUS_ALLEN_SESSIONS.md` - Session-Analyse
+- `GRUNDSTEIN_INVENTAR.md` - Feste Basis-Komponenten
+- Diverse `najika_*.py` Scripts für Training/Analyse
+
+**Größt...
+
+      ASSISTANT | Zeile 30 | 2025-10-19T17:08:03
+      ... Letzte User-Message: "[Request interrupted by user]"
+- Erkannte Aufgaben:
+  - Keine neuen Tasks erkannt (nur User-Interrupts)
+- Files zu lesen:
+  - `najika_smart_update_v2.py`
+
+**SCHRITT 3 - FILES GE...
+
+--------------------------------------------------------------------------------
+
+[11] ...\C--NajikaCore\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.jsonl
+    Größe: 254.0 KB | Geändert: 2025-10-18 00:58
+    Treffer: 11x | Begriffe: najika, ki
+    Vorkommen:
+      - najika: 11x
+      - ki: 3x
+    Messages (erste 5):
+      ASSISTANT | Zeile 4 | 2025-10-17T22:08:23
+      ...I'm ready to assist you with searching and exploring the NajikaCore codebase. I have reviewed the project instructions in CLAUDE.md and understand the architecture:
+
+- **Backend**: Python HTTP server ...
+
+      USER | Zeile 7 | 2025-10-17T22:08:26
+      ...# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py`...
+
+      ASSISTANT | Zeile 8 | 2025-10-17T22:08:29
+      ...Ich starte jetzt das Najika Auto-Sync System....
+
+      ASSISTANT | Zeile 32 | 2025-10-17T22:10:06
+      ...## Najika Sync abgeschlossen
+
+Der Auto-Sync hat erfolgreich neue Änderungen erkannt. Hier die wichtigsten Punkte:
+
+### Wichtigste Änderungen:
+
+**Neue Dat...
+
+      ASSISTANT | Zeile 38 | 2025-10-17T22:11:55
+      ...Perfekt! Jetzt lass uns das strukturiert durchgehen. Ich habe mehrere wichtige Fragen, bevor ich mit dem Code anfange:
+
+## 1. NAJIKA PERSÖNLICHKEIT BEI CODE/IDEEN - WICHTIGSTE FRAGE ZUERST
+
+Du hast me...
+
+--------------------------------------------------------------------------------
+
+[12] ...\C--NajikaCore\404441d9-d8c6-43cd-92af-d3858ab57c13.jsonl
+    Größe: 486.8 KB | Geändert: 2025-10-20 08:37
+    Treffer: 8x | Begriffe: najika
+    Vorkommen:
+      - najika: 8x
+    Messages (erste 5):
+      ASSISTANT | Zeile 4 | 2025-10-20T06:28:39
+      ...I understand. I'm Claude Code, a file search specialist for the Najika Core project. I'm ready to help you navigate and explore this codebase efficiently.
+
+I've reviewed the CLAUDE.md instructions, wh...
+
+      ASSISTANT | Zeile 7 | 2025-10-20T06:28:46
+      ...Ich führe jetzt `python najika_smart_update_v2.py` aus, um die aktuellsten Informationen zu erhalten, bevor ich `CLAUDE_SMART_UPDATE.md` lese....
+
+      ASSISTANT | Zeile 21 | 2025-10-20T06:29:41
+      ...Verstanden! Claude sollte eine **Suchfunktion für Najika** erstellen. Die Verwirrung mit "neu neu" ist geklärt - Ordner bleibt wie vorher, nur TXT-Dokumente für finale Zusammenfassung landen dort.
+
+Ic...
+
+      ASSISTANT | Zeile 38 | 2025-10-20T06:30:15
+      ...Perfekt! Ich sehe dass schon **2 Suchfunktionen** existieren:
+
+1. **`najika_universal_search.py`** - Durchsucht lokale Ordner (NajikaCore, Claude-Sessions, ZIP, NEU)
+2. **`najika_search.py`** - Web-Su...
+
+      ASSISTANT | Zeile 64 | 2025-10-20T06:31:40
+      ...Perfekt! **Ordner "neu" erfolgreich entfernt** aus `najika_universal_search.py`
+
+**Änderungen:**
+- ✅ `NEU_ORDNER` Variable entfernt (najika_universal_search.py:15)
+- ✅ Docstring aktualisiert - nur noc...
+
+--------------------------------------------------------------------------------
+
+[13] ...\C--NajikaCore\09314fe2-14b7-43a8-86ae-8153061888b3.jsonl
+    Größe: 29.8 KB | Geändert: 2025-10-18 08:04
+    Treffer: 3x | Begriffe: najika, ki
+    Vorkommen:
+      - ki: 3x
+      - najika: 1x
+    Messages (erste 5):
+      ASSISTANT | Zeile 5 | 2025-10-18T06:03:15
+      ...I'm ready to help with code search and file navigation tasks in the NajikaCore repository. I understand:
+
+**Key Context:**
+- This is a web-based virtual companion application (Najika)
+- Python backend...
+
+      ASSISTANT | Zeile 34 | 2025-10-18T06:04:10
+      ...stom shell PS1 configuration was found, I have a few options:
+
+**Option 1:** Create a default Windows-appropriate statusLine that shows:
+- Current working directory
+- Git branch (if in a git repo)
+- M...
+
+      ASSISTANT | Zeile 36 | 2025-10-18T06:04:14
+      ...ectory, git branch, etc.)
+
+Or if you'd prefer, I can create a default Windows-appropriate statusLine that shows useful information like:
+- Current working directory
+- Git branch (when in a repo)
+- Mod...
+
+--------------------------------------------------------------------------------
+
+[14] ...\C--NajikaCore\3479ecdc-f2e5-4c17-8885-9479f0a9f32b.jsonl
+    Größe: 3.3 KB | Geändert: 2025-10-17 11:44
+    Treffer: 1x | Begriffe: najika
+    Vorkommen:
+      - najika: 1x
+    Messages (erste 5):
+      USER | Zeile 5 | 2025-10-17T09:44:41
+      ...# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py`...
+
+--------------------------------------------------------------------------------
+
+[15] ...\C--NajikaCore\804a5508-04c2-4595-a68f-dc5dc1e87658.jsonl
+    Größe: 4.6 KB | Geändert: 2025-10-17 00:25
+    Treffer: 1x | Begriffe: najika
+    Vorkommen:
+      - najika: 1x
+    Messages (erste 5):
+      USER | Zeile 9 | 2025-10-16T22:25:54
+      ...# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py`...
+
+--------------------------------------------------------------------------------
+
+
+================================================================================
+ZUSAMMENFASSUNG
+================================================================================
+
+CLAUDE: 15 Treffer
+
+GESAMT: 15 Dateien/Sessions mit Treffern
+
+TOP 10 RELEVANTESTE DATEIEN:
+ 1. 1889b0ea-948c-46e4-a65b-2edddfcc1b89.jsonl (147x) - CLAUDE
+ 2. 1e75a874-27fc-4133-a038-22081b5aae06.jsonl (102x) - CLAUDE
+ 3. 98473cf3-f761-415e-9d8d-c1ee8d37d31f.jsonl (85x) - CLAUDE
+ 4. 1a601157-ca72-45d2-8e34-b4daa7fe080d.jsonl (79x) - CLAUDE
+ 5. 88273849-2050-47d6-8464-e842f26dd45d.jsonl (53x) - CLAUDE
+ 6. b24b9dd3-6cb4-479f-b8c1-5e18003c79f7.jsonl (53x) - CLAUDE
+ 7. d486bb9f-1701-4eaa-89dd-2c049ae58258.jsonl (40x) - CLAUDE
+ 8. eb512a72-71ac-4153-ade9-12b678843326.jsonl (40x) - CLAUDE
+ 9. 5793e9aa-04df-4868-b7d5-34134e4cd032.jsonl (22x) - CLAUDE
+10. 8ec7f58a-70f5-43bf-afe2-ae71019e28ca.jsonl (18x) - CLAUDE
+
+================================================================================

@@ -1,0 +1,259 @@
+Perfekt! Ich habe das gesamte NajikaCore-Projekt analysiert. Hier ist eine detaillierte Zusammenfassung:
+
+## NAJIKA - Projekt-Übersicht
+
+### Architektur-Übersicht
+NajikaCore ist eine **web-basierte virtuelle Companion-Anwendung** mit folgenden Komponenten:
+
+```
+┌─────────────────────────────────────────────┐
+│  Python HTTP Server (najika_server.py)     │
+│  - AI Integration (Ollama/Cloud)            │
+│  - State Management + Persistence           │
+│  - Battle/Minigame APIs                     │
+└──────────────┬──────────────────────────────┘
+               │
+               ▼
+┌─────────────────────────────────────────────┐
+│  Three.js 3D Frontend (digivice/)          │
+│  - 12 Räume mit KayKit Assets              │
+│  - 3 Kamera-Modi (Orbit/Third/First)       │
+│  - Character Controls (Skeleton Mage)       │
+│  - 7 Minigames                              │
+└─────────────────────────────────────────────┘
+```
+
+---
+
+## Backend: najika_server.py (467 Zeilen)
+
+### Server-Kern
+- **HTTP Server**: `ThreadingHTTPServer` für parallele Request-Verarbeitung
+- **Port**: 8000 (konfigurierbar via `.env`)
+- **CORS**: Vollständig aktiviert
+
+### AI-System
+**Persona**: Najika mit 4 Facetten (MEGUMIN, HARLEY, SHIRO, MELISSA)
+- **Primär**: Ollama local (`najika-local` model)
+- **NSFW Mode**: `najika-wizard` (Trigger: Keyword "kätzchen")
+- **Cloud Option**: OpenAI/Anthropic (PIN-geschützt)
+- **Response Caching**: LRU-Cache (100 Einträge, 1h TTL)
+- **Context Window**: Letzte 4 Messages
+
+### Persistence-System
+- **Auto-Save**: Alle 30 Sekunden
+- **Backup-Rotation**: 3 letzte Backups
+- **Save-Location**: `saves/najika_state.json`
+- **Gespeicherte Daten**: History, Battle-State, User-Stats, Progress
+
+### Battle-System
+- **HP**: 100 (Start)
+- **Wellenbasiert**: Gegner-Anzahl = 2 + wave
+- **Schadensberechnung**: damage = max(0, enemies - 1)
+- **Gegnertypen**: Rats, Skeletons, Slimes
+
+### API-Endpunkte (20+)
+```
+GET /health                  → Server-Status
+GET /api/rooms               → Raum-Liste
+GET /api/status              → State inkl. Private-Mode
+GET /api/status/stream       → SSE für Live-Updates
+GET /api/cache/stats         → Cache-Statistiken
+
+POST /api/chat               → AI-Nachricht senden
+POST /api/battle/start       → Kampf initialisieren
+POST /api/battle/attack      → Angriff ausführen
+POST /api/minigame/*         → Minigame-Scores
+POST /api/heal               → HP auf 100 setzen
+POST /api/user/update        → User-Stats speichern
+```
+
+---
+
+## Frontend: digivice/
+
+### 3D-Engine (3d_scene.js - 1037 Zeilen)
+
+**Kamera-Modi:**
+- **Orbit**: Frei drehbare Kamera um Character
+- **Third-Person**: Folgt Character von hinten
+- **First-Person**: Ego-Perspektive
+
+**Character-System:**
+- **Model**: Skeleton_Mage.glb (KayKit Skeletons Pack)
+- **Waffe**: Wand (procedural attached)
+- **Speed**: 7.5 units/s
+- **Controls**: WASD/Arrows
+
+**Room-Building:**
+- **Dynamic Loading**: KayKit GLTFs
+- **Floor/Wall/Props**: Modulares System
+- **Frustum Culling**: Optimierung für große Räume
+- **Fallback Mode**: Prozeduraler Raum wenn Assets fehlen
+
+**Lighting:**
+- Ambient + Directional + 2x Point Lights
+- Per-Room Color Palettes
+- Private-Mode Override (rotes Schema)
+
+### Room-System (12 Räume)
+
+Konfiguration via `room_config_detailed.json`:
+
+| Raum | Span | Features |
+|------|------|----------|
+| Wohnzimmer | 48 | Couch, Lampe, Kaktus |
+| Schlafzimmer | 48 | Doppelbett, Schrank |
+| Küche | 48 | Küchentheke, Herd |
+| Badezimmer | 48 | Waschbecken |
+| Garten | 48 | Bäume, Büsche |
+| Musikraum | 48 | Rhythmus-Spiel Props |
+| Medizin | 48 | Heiltrank-Raum |
+| Terminal | 48 | Cloud-Steuerung |
+| Studieren & Crafting | 48 | Tisch, Zauberbuch |
+| Trainingszimmer | 48 | Zielscheiben, Dummy |
+| Kampfarena | 48 | Säulen, Spikes |
+| **Schwarze Mühle – Keller** | 48 | **Prozedurales Dungeon (10 Levels)** |
+
+### Dungeon-Generator (dungeon_generator.js - 246 Zeilen)
+
+**Procedural Generation:**
+- **Seeded Random**: Reproduzierbare Dungeons
+- **Grid-System**: Kollisionsvermeidung
+- **Skalierung**: 10-30 Props, 3-13 Enemies, 2-7 Loot
+- **Level-Selector**: UI-Integration (1-10)
+
+**Prop-Pools:**
+- Obstacles: Coffins
+- Decorations: Lanterns, Pillars
+- Loot: Chests, Potions
+
+### Minigames (minigames.js - 920 Zeilen)
+
+**7 vollständige Minigames:**
+
+1. **Rhythmus-Spiel**: Note-Hitting (A/S/D Keys)
+2. **Garten-Spiel**: Whack-a-Mole mit Unkraut
+3. **Reflex-Spiel**: Reaktionszeit-Test (5 Runden)
+4. **Besen-Lieferung**: Canvas-basiertes Flugspiel (60s Timer)
+5. **Crafting-Workshop**: Rezept-Sequenz-Puzzle
+6. **Trainings-Dojō**: Click-Target-Spawner
+7. **Hexenküche**: Fruit-Ninja-Style mit Rezepten
+
+**Features:**
+- Modal Overlay-System
+- Score-Tracking
+- Canvas-Rendering (Broom, Cooking)
+- Touch-Support
+
+### Asset-Loading (kaykit_loader.js - 181 Zeilen)
+
+**Lazy Loading:**
+- Nur Startroom (Wohnzimmer) wird sofort geladen
+- Andere Räume on-demand
+- Model-Cache mit availability-checking
+- Event-System für Asset-Ready-Notifications
+
+**Verwendete Asset-Packs:**
+- KayKit DungeonRemastered
+- KayKit Furniture Bits
+- KayKit Restaurant Bits
+- KayKit HalloweenBits
+- KayKit Adventurers
+- KayKit Forest Nature Pack
+- KayKit Platformer Pack
+- KayKit Skeletons
+
+---
+
+## Konfiguration (.env)
+
+```env
+HOST=0.0.0.0
+PORT=8000
+AI_PROVIDER=ollama
+CLOUD_ENABLED=true
+NSFW_LOCAL=true
+OLLAMA_MODEL_ALIAS=najika-local
+GGUF_LLAMA=C:\Users\0KKK0\Desktop\Llama-3.2-8B-Instruct.Q4_K_M.gguf
+GGUF_WIZARD=C:\Users\0KKK0\Desktop\Wizard-Vicuna-7B-Uncensored.Q4_K_M.gguf
+```
+
+⚠️ **SECURITY WARNING**: Die `.env` enthält echte API-Keys (OpenAI, Anthropic) und sollte NICHT committed werden!
+
+---
+
+## Starten der Anwendung
+
+```batch
+START_NAJIKA.bat
+```
+
+**Start-Sequence:**
+1. Prüft Ollama-Verfügbarkeit
+2. Startet Python-Server auf Port 8000
+3. Lädt gespeicherten State (falls vorhanden)
+4. Initialisiert AI-Provider
+5. Frontend erreichbar unter `http://localhost:8000/`
+
+---
+
+## Technische Highlights
+
+### Performance-Optimierungen
+- **Frustum Culling**: Props >60 units werden ausgeblendet
+- **PixelRatio Cap**: Max 2x für mobile Devices
+- **Lazy Asset Loading**: Nur benötigte Räume
+- **Response Caching**: Reduziert AI-Calls
+
+### Robustheit
+- **Fallback Room**: Prozeduraler Raum wenn Assets fehlen
+- **Auto-Save**: Verhindert Datenverlust
+- **SSE Reconnection**: Automatisches Wiederverbinden
+- **Backup-Rotation**: Letzte 3 States erhalten
+
+### Features
+- **Private Mode**: Visuelle Indikation + Model-Switch
+- **Webcam Integration**: Optional aktivierbar
+- **Cloud AI Toggle**: PIN-geschützt
+- **Dungeon Levels**: 10 verschiedene Schwierigkeitsstufen
+
+---
+
+## Bekannte Issues (aus CLAUDE.md)
+
+1. ⚠️ **Security**: `.env` mit API-Keys committed
+2. Hardcoded Path in `najika_server.py:274` (`C:\NajikaCore`)
+3. Kein Git-Repository initialisiert
+4. Keine automatisierten Tests
+5. Battle-Balancing basic
+
+---
+
+## File-Struktur (Kompakt)
+
+```
+C:\NajikaCore\
+├── najika_server.py          # 467 Zeilen - Backend
+├── START_NAJIKA.bat           # Launcher
+├── .env                       # ⚠️ Credentials
+├── saves/                     # Persistenter State
+├── assets/
+│   ├── room_config_detailed.json  # Room-Definitions
+│   └── KayKit_*/              # 3D Assets (1000+ Models)
+└── digivice/
+    ├── index.html             # 889 Zeilen - UI
+    └── js/
+        ├── 3d_scene.js        # 1037 Zeilen - Rendering
+        ├── minigames.js       # 920 Zeilen - 7 Games
+        ├── kaykit_loader.js   # 181 Zeilen - Asset Management
+        ├── dungeon_generator.js # 246 Zeilen - Procedural
+        ├── private_mode.js    # 89 Zeilen - NSFW Detector
+        ├── battle_core.js     # 14 Zeilen - Combat Logic
+        ├── chat_ui.js         # UI Enhancements
+        └── touch_controls.js  # Mobile Support
+```
+
+---
+
+Das Projekt ist **funktional und gut strukturiert** mit einem klaren Fokus auf modulares Design und Erweiterbarkeit. Die Kombination aus prozeduraler Dungeon-Generation, vollständigem Minigame-System und AI-Integration macht es zu einer beeindruckenden Single-Developer-Anwendung! 🎮✨

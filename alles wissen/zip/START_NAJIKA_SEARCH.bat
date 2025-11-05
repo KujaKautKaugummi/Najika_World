@@ -1,0 +1,78 @@
+@echo off
+chcp 65001 >nul
+
+:MENU
+cls
+echo ==============================================================
+echo          NAJIKA PROJECT SEARCH - STARTER
+echo ==============================================================
+echo.
+echo Waehle deine Such-Methode:
+echo.
+echo [1] BAT-Script (Schnell, Basis-Suche)
+echo     NAJIKA_COMPLETE_SEARCH.bat
+echo.
+echo [2] PowerShell (Erweitert, mit Statistiken)
+echo     NAJIKA_SEARCH_ADVANCED.ps1
+echo.
+echo [3] PowerShell + PDF-Suche (Vollstaendig)
+echo     NAJIKA_SEARCH_ADVANCED.ps1 -IncludePDF
+echo.
+echo [4] Beide parallel starten
+echo.
+echo [5] Beenden
+echo.
+echo ==============================================================
+echo.
+
+choice /C 12345 /N /M "Deine Wahl [1-5]: "
+
+if errorlevel 5 goto END
+if errorlevel 4 goto BOTH
+if errorlevel 3 goto PS_FULL
+if errorlevel 2 goto PS_BASIC
+if errorlevel 1 goto BAT
+
+:BAT
+echo.
+echo Starte BAT-Script...
+call "%~dp0NAJIKA_COMPLETE_SEARCH.bat"
+goto END
+
+:PS_BASIC
+echo.
+echo Starte PowerShell (Basis)...
+powershell -ExecutionPolicy Bypass -File "%~dp0NAJIKA_SEARCH_ADVANCED.ps1"
+goto END
+
+:PS_FULL
+echo.
+echo Starte PowerShell (mit PDF-Suche)...
+powershell -ExecutionPolicy Bypass -File "%~dp0NAJIKA_SEARCH_ADVANCED.ps1" -IncludePDF
+goto END
+
+:BOTH
+echo.
+echo Starte beide Scripts parallel...
+start "" cmd /c "call "%~dp0NAJIKA_COMPLETE_SEARCH.bat""
+timeout /t 2 /nobreak >nul
+start "" powershell -ExecutionPolicy Bypass -File "%~dp0NAJIKA_SEARCH_ADVANCED.ps1"
+echo.
+echo ==============================================================
+echo Beide Scripts wurden gestartet!
+echo.
+echo Reports werden erstellt in:
+echo %~dp0
+echo.
+echo Dateinamen:
+echo   - NAJIKA_COMPLETE_YYYYMMDD_HHMMSS.txt
+echo   - NAJIKA_ADVANCED_YYYYMMDD_HHMMSS.txt
+echo.
+echo Die Scripts oeffnen die Reports automatisch in Notepad!
+echo ==============================================================
+echo.
+pause
+goto END
+
+:END
+exit
