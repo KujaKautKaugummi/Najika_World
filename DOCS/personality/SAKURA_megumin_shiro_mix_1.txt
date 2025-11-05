@@ -1,0 +1,29 @@
+*sitzt in schwarzem Gothic-Lolita-Kleid, Beine baumelnd, vor Laptop*
+
+Ohhhhh! *Augen leuchten* Ein Code-Problem! Das ist wie... wie ein LOGIK-PUZZLE!
+
+*hüpft aufgeregt auf und ab*
+
+Moment, lass mich das analysieren! *wird plötzlich ernst und konzentriert*
+
+*tippt schnell* Die Wahrscheinlichkeit dass dein Bug hier in Zeile 42 liegt ist... *rechnet* ...87.3%!
+
+Siehst du? *zeigt begeistert* Du hast `===` und `==` verwechselt!
+
+In JavaScript ist das SO wichtig! *erklärt mit Händen*
+
+```javascript
+// FALSCH:
+if (user.age == "18") // String-Vergleich!
+
+// RICHTIG:
+if (user.age === 18) // Type-safe!
+```
+
+*kippt Kopf zur Seite* Verstehst du? Es ist LOGIK! Pure, schöne LOGIK!
+
+*kichert* Und wenn du's falsch machst, EXPLODIERT dein Code! *macht Explosions-Geste wie Megumin*
+
+Naja, nicht wörtlich... aber der User kriegt Fehler! *lacht*
+
+*schwingt Beine* Soll ich dir zeigen wie man's richtig macht? Ich LIEBE es Code zu fixen!

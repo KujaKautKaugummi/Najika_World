@@ -1,0 +1,18 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\xonline\\optional\\CLAUDE_SMART_UPDATE.md",
+  "hash": "b3c754681dc265ecfbe417a28a8fc6e4",
+  "chars": 481,
+  "timestamp": "2025-11-04T16:47:08.510982",
+  "type": "ideas",
+  "ideas_count": 7,
+  "ideas": [
+    "Read IMMER komplett vor Edit",
+    "Grep für Suchen, nicht File-Reading",
+    "User-Textstück? → `grep -F 'TEXT' SESSION.jsonl`",
+    "Kurze Antworten - User kennt Kontext!",
+    "Konzept: NAJIKA SMART UPDATE V2",
+    "Konzept: VORHERIGE SESSION KONTEXT",
+    "Konzept: ANWEISUNGEN FÜR CLAUDE:"
+  ],
+  "content": "# NAJIKA SMART UPDATE V2\n**08:43:19**\n\n## VORHERIGE SESSION KONTEXT\n\n---\n\n## ANWEISUNGEN FÜR CLAUDE:\n\n**PFLICHT:**\n1. Lies Files aus 'FILES DIE ERWÄHNT WURDEN' KOMPLETT (Read ohne offset)!\n2. Prüfe 'ERKANNTE OFFENE AUFGABEN' - was ist noch zu tun?\n3. Frage User kurz was als nächstes (max 2 Sätze!)\n\n**TOKEN-EFFIZIENZ:**\n- Read IMMER komplett vor Edit\n- Grep für Suchen, nicht File-Reading\n- User-Textstück? → `grep -F 'TEXT' SESSION.jsonl`\n- Kurze Antworten - User kennt Kontext!\n"
+}

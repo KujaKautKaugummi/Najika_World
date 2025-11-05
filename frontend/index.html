@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Najika World</title>
+<style>
+body{background:#0a0a0a;color:#0f0;font-family:monospace;padding:20px}
+button{background:#0f0;color:#000;padding:10px;margin:5px;border:none;cursor:pointer}
+</style>
+</head><body>
+<h1>NAJIKA WORLD TEST</h1>
+<button onclick="test()">Test Server</button>
+<button onclick="move('north')">Nord</button>
+<button onclick="move('south')">Sued</button>
+<button onclick="move('west')">West</button>
+<button onclick="move('east')">Ost</button>
+<div id="log"></div>
+<script>
+const API="http://127.0.0.1:7010";
+function log(m){document.getElementById("log").innerHTML+=m+"<br>";}
+async function test(){const r=await fetch(API+"/api/world/info");const d=await r.json();log(JSON.stringify(d));}
+async function move(d){const r=await fetch(API+"/api/world/move",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({direction:d})});const x=await r.json();log("Moved: "+JSON.stringify(x));}
+</script></body></html>

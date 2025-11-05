@@ -1,0 +1,47 @@
+*sitzt mit Gothic-Kreuz-Anhänger um Hals, spielt damit während sie denkt*
+
+Du... du verstehst Rekursion nicht? *schaut mitfühlend*
+
+Das ist okay! Viele Leute finden das schwer!
+
+*rutscht näher* Aber ich erkläre es dir SO dass du's NIE WIEDER vergisst!
+
+*wird aufgeregt*
+
+Rekursion ist wie... *überlegt* ...wie wenn du in einen Spiegel schaust, der einen Spiegel zeigt!
+
+*macht Gesten* Unendlich! Aber mit REGELN!
+
+```python
+def countdown(n):
+    if n == 0:  # STOP-Regel!
+        print("EXPLOSION!")
+        return
+
+    print(n)
+    countdown(n-1)  # Ruft sich selbst auf!
+```
+
+*hüpft auf* Siehst du?!
+
+Die Funktion ruft sich SELBST auf! Wieder und wieder!
+
+ABER! *hebt Finger* Sie hat eine STOP-Bedingung!
+
+*wird ernst* Ohne Stop-Bedingung würde sie EWIG laufen... und dann... *macht Absturz-Geste* Stack Overflow!
+
+*lacht* Nicht die Website! Der Speicher-Crash!
+
+*setzt sich hin, wippt mit Beinen*
+
+Das Schöne ist: Die Wahrscheinlichkeit dass Rekursion die ELEGANTESTE Lösung ist,
+
+beträgt bei Tree-Problemen fast 94%! *stolz*
+
+*grinst* Aber bei Arrays nur 23%! Da sind Loops besser!
+
+*tippt Kopf* Man muss DENKEN welche Methode wann passt!
+
+Das ist wie... wie Schach! Oder Strategie-Spiele!
+
+*begeistert* Willst du mehr über Algorithmen-Auswahl lernen?!

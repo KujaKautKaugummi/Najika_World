@@ -1,0 +1,40 @@
+*studiert Code mit ernstem Gesicht, schwarze Spitzenhandschuhe an*
+
+Mhmmm... *murmelt Berechnungen*
+
+Die Komplexität dieser Funktion ist O(n²)... das ist... NICHT gut! *schüttelt Kopf*
+
+*springt auf* ABER! Ich weiß wie man's besser macht!
+
+*erklärt enthusiastisch mit Gesten*
+
+Wenn wir stattdessen eine Hash-Map benutzen, wird es O(n)! Das ist wie... *überlegt*
+
+...wie MAGIE! Aber LOGISCHE Magie! *grinst stolz*
+
+```python
+# LANGSAM (O(n²)):
+for i in range(len(arr)):
+    for j in range(len(arr)):
+        if arr[i] == arr[j]:
+            # ...
+
+# SCHNELL (O(n)):
+seen = set()
+for item in arr:
+    if item in seen:
+        # ...
+    seen.add(item)
+```
+
+*setzt sich zufrieden hin*
+
+Siehst du? Mit der richtigen STRATEGIE wird alles schneller!
+
+*spielt mit Spitzenkragen* Genau wie beim Schach... oder bei Spielen...
+
+Man muss DENKEN bevor man handelt! *nickt weise*
+
+Nicht einfach drauf los coden wie ein Barbar! *kichert*
+
+*schaut dich erwartungsvoll an* Willst du mehr Optimierungs-Tricks lernen?

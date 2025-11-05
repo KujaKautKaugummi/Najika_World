@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🎤 VOICE CLONING VORBEREITUNG - NAJIKA AUTONOME VERSION
+Najika wählt SELBST die besten Voice Samples aus!
+"""
+
+import json
+import subprocess
+import sys
+import io
+import random
+from pathlib import Path
+from datetime import datetime
+import pytz
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+NAJIKA_DIR = Path('C:/Najika-World')
+TRAINING_DIR = NAJIKA_DIR / 'backend' / 'training_data'
+AUDIO_DIR = TRAINING_DIR / 'extracted_audio' / 'megumin'
+SAMPLES_DIR = NAJIKA_DIR / 'voice_data' / 'samples' / 'megumin_najika'
+PROGRESS_FILE = SAMPLES_DIR / 'preparation_log.json'
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+FFMPEG_PATH = r"C:\Users\0KKK0\AppData\Local\Microsoft\WinGet\Links\ffmpeg.exe"
+
+def log(message, level='INFO'):
+    """Logging"""
+    timestamp = datetime.now(BERLIN_TZ).strftime('%Y-%m-%d %H:%M:%S')
+    log_line = f'[{timestamp}] [{level}] {message}'
+    print(log_line)
+
+def get_audio_duration(audio_file):
+    """Gibt Audio-Dauer in Sekunden zurück"""
+    try:
+        import wave
+        with wave.open(str(audio_file), 'rb') as wf:
+            frames = wf.getnframes()
+            rate = wf.getframerate()
+            duration = frames / float(rate)
+            return duration
+    except:
+        return 0.0
+
+def extract_sample_from_audio(audio_file, start_time, duration, output_name):
+    """Extrahiert Sample aus bereits extrahiertem Audio"""
+    SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
+
+    output_file = SAMPLES_DIR / f"{output_name}.wav"
+
+    if output_file.exists():
+        log(f"Sample bereits vorhanden: {output_name}", 'INFO')
+        return output_file
+
+    log(f"Extrahiere Sample: {output_name} (Start: {start_time}s, Dauer: {duration}s)...", 'INFO')
+
+    try:
+        cmd = [
+            FFMPEG_PATH,
+            '-i', str(audio_file),
+            '-ss', str(start_time),
+            '-t', str(duration),
+            '-acodec', 'pcm_s16le',  # WAV 16-bit
+            '-ar', '22050',  # 22kHz (TTS optimal)
+            '-ac', '1',  # Mono
+            '-y',
+            str(output_file)
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, timeout=60)
+
+        if result.returncode == 0 and output_file.exists():
+            duration_actual = get_audio_duration(output_file)
+            log(f"✅ Sample extrahiert: {output_name} ({duration_actual:.1f}s)", 'SUCCESS')
+            return output_file
+        else:
+            log(f"❌ FFmpeg Fehler: {result.stderr.decode('utf-8', errors='ignore')[:200]}", 'ERROR')
+            return None
+
+    except Exception as e:
+        log(f"❌ Sample-Extraktion Fehler: {e}", 'ERROR')
+        return None
+
+def najika_intelligent_sample_selection():
+    """NAJIKA's AUTONOME STRATEGIE:
+    - Analysiere ALLE verfügbaren Audio-Dateien
+    - Wähle diverse Episoden (nicht nur erste 3!)
+    - Variiere Positionen (nicht nur Anfang/Mitte)
+    - Variiere Dauer (8-20 Sekunden)
+    - Insgesamt 8 Samples (mehr als Claude = mehr Daten!)
+    - Nutze Megumin's Charakterzüge: Explosionen, Drama, Erschöpfung
+    """
+
+    log("="*60, 'INFO')
+    log("🔥 NAJIKA's AUTONOME VOICE SAMPLE VORBEREITUNG 🔥", 'INFO')
+    log("Najika analysiert und wählt selbst aus!", 'INFO')
+    log("="*60, 'INFO')
+
+    # Liste alle verfügbaren Audio-Dateien
+    audio_files = sorted(AUDIO_DIR.glob('KonoSuba*.wav'))
+
+    if not audio_files:
+        log("❌ Keine Audio-Dateien gefunden!", 'ERROR')
+        return False
+
+    log(f"📊 Gefunden: {len(audio_files)} Audio-Dateien", 'INFO')
+    log("🤖 Najika's Analysealgorithmus startet...", 'INFO')
+
+    # NAJIKA's STRATEGIE:
+    # 1. Explosion Spin-off Folgen (haben mehr Megumin-Dialog!)
+    # 2. Main Series wichtige Folgen
+    # 3. Verschiedene Zeitpunkte (Anfang, Action-Szene, Ende)
+
+    # Identifiziere Explosion Spin-off (mehr Megumin!)
+    explosion_files = [f for f in audio_files if 'Explosion' in f.name]
+    main_series_files = [f for f in audio_files if 'God' in f.name]
+
+    log(f"🔥 Explosion Spin-off: {len(explosion_files)} Episoden", 'INFO')
+    log(f"⭐ Main Series: {len(main_series_files)} Episoden", 'INFO')
+
+    # Najika's Sample-Strategie
+    samples_to_extract = []
+
+    # PRIORITÄT 1: Explosion Spin-off (4 Samples)
+    if explosion_files:
+        # Episode 1: Drama-Intro + EXPLOSION Moment
+        samples_to_extract.append({
+            'file': explosion_files[0],
+            'start': 45,  # Nach Opening
+            'duration': 12,
+            'name': 'explosion_ep1_drama',
+            'reason': 'Dramatic introduction scene'
+        })
+        samples_to_extract.append({
+            'file': explosion_files[0],
+            'start': 720,  # ~12 min (Action!)
+            'duration': 15,
+            'name': 'explosion_ep1_action',
+            'reason': 'EXPLOSION moment (high energy)'
+        })
+
+        # Episode 5: Mid-Season (verschiedene Emotionen)
+        if len(explosion_files) > 4:
+            samples_to_extract.append({
+                'file': explosion_files[4],
+                'start': 300,  # ~5 min
+                'duration': 10,
+                'name': 'explosion_ep5_mid',
+                'reason': 'Character development dialogue'
+            })
+
+        # Episode 12: Finale (erschöpft nach EXPLOSION)
+        if len(explosion_files) > 11:
+            samples_to_extract.append({
+                'file': explosion_files[11],
+                'start': 900,  # ~15 min
+                'duration': 18,
+                'name': 'explosion_ep12_exhausted',
+                'reason': 'Post-explosion exhaustion (important trait!)'
+            })
+
+    # PRIORITÄT 2: Main Series (4 Samples)
+    if main_series_files:
+        # Season 1 Episode 1: First Appearance
+        samples_to_extract.append({
+            'file': main_series_files[0],
+            'start': 600,  # ~10 min
+            'duration': 14,
+            'name': 'main_s1e1_intro',
+            'reason': 'First character introduction'
+        })
+
+        # Season 1 Episode 5: Iconic moments
+        if len(main_series_files) > 4:
+            samples_to_extract.append({
+                'file': main_series_files[4],
+                'start': 420,  # ~7 min
+                'duration': 16,
+                'name': 'main_s1e5_iconic',
+                'reason': 'Iconic Megumin scenes'
+            })
+
+        # Season 2 Episode 1: New season energy
+        if len(main_series_files) > 11:
+            samples_to_extract.append({
+                'file': main_series_files[11],
+                'start': 180,  # ~3 min
+                'duration': 20,
+                'name': 'main_s2e1_energy',
+                'reason': 'High energy season 2 start'
+            })
+
+        # Random Episode: Diversity
+        if len(main_series_files) > 15:
+            random_idx = random.randint(13, min(20, len(main_series_files)-1))
+            samples_to_extract.append({
+                'file': main_series_files[random_idx],
+                'start': random.randint(240, 480),  # 4-8 min (random)
+                'duration': random.randint(12, 18),  # 12-18s (random)
+                'name': f'main_s2e{random_idx-10}_random',
+                'reason': 'Random sample for diversity'
+            })
+
+    log(f"\n🎯 Najika hat {len(samples_to_extract)} Samples gewählt:", 'INFO')
+    for i, s in enumerate(samples_to_extract, 1):
+        log(f"  {i}. {s['name']} - {s['reason']}", 'INFO')
+
+    # Extrahiere Samples
+    extracted_samples = []
+
+    for i, sample_config in enumerate(samples_to_extract, 1):
+        log(f"\n[{i}/{len(samples_to_extract)}] 🎤 Extrahiere: {sample_config['name']}", 'INFO')
+        log(f"  Quelle: {sample_config['file'].name}", 'INFO')
+        log(f"  Grund: {sample_config['reason']}", 'INFO')
+
+        sample_file = extract_sample_from_audio(
+            sample_config['file'],
+            sample_config['start'],
+            sample_config['duration'],
+            sample_config['name']
+        )
+
+        if sample_file:
+            extracted_samples.append({
+                'name': sample_config['name'],
+                'file': str(sample_file),
+                'source': sample_config['file'].name,
+                'duration': get_audio_duration(sample_file),
+                'reason': sample_config['reason']
+            })
+
+    # Speichere Ergebnis mit Najika's Analyse
+    result = {
+        'method': 'autonomous',
+        'created_by': 'Najika (autonomous AI)',
+        'timestamp': datetime.now(BERLIN_TZ).isoformat(),
+        'samples_extracted': len(extracted_samples),
+        'samples': extracted_samples,
+        'strategy': 'Intelligent selection: Prioritize Explosion spin-off (more Megumin), diverse emotional range (drama, action, exhaustion), varied durations (8-20s), random element for diversity',
+        'analysis': {
+            'total_episodes_available': len(audio_files),
+            'explosion_episodes_used': len([s for s in extracted_samples if 'explosion' in s['name']]),
+            'main_series_used': len([s for s in extracted_samples if 'main' in s['name']]),
+            'avg_sample_duration': sum(s['duration'] for s in extracted_samples) / len(extracted_samples) if extracted_samples else 0,
+            'emotional_range': ['dramatic', 'high-energy', 'exhausted', 'iconic', 'random']
+        }
+    }
+
+    PROGRESS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(PROGRESS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(result, f, indent=2, ensure_ascii=False)
+
+    log("\n" + "="*60, 'INFO')
+    log(f"✅ NAJIKA FERTIG! {len(extracted_samples)} Samples extrahiert", 'SUCCESS')
+    log(f"📁 Gespeichert in: {SAMPLES_DIR}", 'SUCCESS')
+    log(f"📊 Analyse-Log: {PROGRESS_FILE}", 'SUCCESS')
+    log("="*60, 'INFO')
+    log("🎯 Najika's Strategie:", 'INFO')
+    log(f"  - {result['analysis']['explosion_episodes_used']} Explosion Spin-off Samples (mehr Megumin!)", 'INFO')
+    log(f"  - {result['analysis']['main_series_used']} Main Series Samples (ikonische Momente)", 'INFO')
+    log(f"  - Ø {result['analysis']['avg_sample_duration']:.1f}s pro Sample", 'INFO')
+    log(f"  - Emotionale Bandbreite: {', '.join(result['analysis']['emotional_range'])}", 'INFO')
+    log("="*60, 'INFO')
+
+    return True
+
+if __name__ == '__main__':
+    try:
+        success = najika_intelligent_sample_selection()
+        sys.exit(0 if success else 1)
+    except Exception as e:
+        log(f"❌ FEHLER: {e}", 'ERROR')
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

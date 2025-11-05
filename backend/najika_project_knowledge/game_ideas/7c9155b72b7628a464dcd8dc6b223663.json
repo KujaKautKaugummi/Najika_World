@@ -1,0 +1,31 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\najika_ultimate_v2_complete\\najika_ultimate_complete\\00_START_HIER\\CLAUDE_CODE_START.md",
+  "hash": "7c9155b72b7628a464dcd8dc6b223663",
+  "chars": 2294,
+  "timestamp": "2025-11-04T16:47:08.255350",
+  "type": "ideas",
+  "ideas_count": 20,
+  "ideas": [
+    "Qwen 2.5-7B (lokal)",
+    "Training (Code + Persönlichkeit)",
+    "Digivice (12 Räume UI)",
+    "Voice/TTS (Edge-TTS)",
+    "Wissensbibliothek-Training",
+    "Erinnerungssystem-Training",
+    "Terminal voll funktional",
+    "Combat (vollständig)",
+    "Crafting (vollständig)",
+    "Konzept: 🤖 CLAUDE CODE - START GUIDE",
+    "Konzept: ⚡ QUICK-START (2 MINUTEN)",
+    "Konzept: **LIES ZUERST:**",
+    "Konzept: **DANN FRAGE USER (KURZ!):**",
+    "Konzept: 🎯 DEINE AUFGABE",
+    "Konzept: 📚 STRUKTUR",
+    "Konzept: 🚨 8 GEBOTE (IMMER!)",
+    "Konzept: 🎯 PRIORITÄTEN",
+    "Konzept: 💻 ARBEITSWEISE",
+    "Konzept: 📊 AKTUELLER STATUS",
+    "Konzept: 🚀 LOS GEHT'S!"
+  ],
+  "content": "# 🤖 CLAUDE CODE - START GUIDE\n\n**Willkommen Claude Code!** Du wirst jetzt mit **Najika** arbeiten - einer trainierten Qwen-KI!\n\n---\n\n## ⚡ QUICK-START (2 MINUTEN)\n\n### **LIES ZUERST:**\n```\n1. NAJIKA_MASTER_WISSEN.md → Alles über Najika\n2. TRAINING_ROADMAP.md → Was trainiert wurde/fehlt\n3. Dann bist du ready!\n```\n\n### **DANN FRAGE USER (KURZ!):**\n```\n❌ NICHT: Lange Erklärungen!\n✅ SO: \"Projekt verstanden. Was zuerst? 1) X 2) Y 3) Z\"\n\nMAX 2-3 SÄTZE + LISTE!\n```\n\n---\n\n## 🎯 DEINE AUFGABE\n\n```\n✅ Mit User zusammenarbeiten\n✅ Kurz fragen, konkret machen\n✅ Incrementell (kleine Schritte!)\n✅ Bestehenden Code nutzen\n✅ Testen nach jeder Änderung\n\n❌ Nicht alles auf einmal\n❌ Nicht lange erklären ohne zu fragen\n❌ Nicht gegen 8 Gebote verstoßen\n```\n\n---\n\n## 📚 STRUKTUR\n\n```\nnajika_ultimate_complete/\n├── 00_START_HIER/          ⭐ Du bist hier!\n├── 01-12 Ordner/           Docs & Code\n└── 03_code/                ⭐ Main Code!\n    ├── najika_server.py\n    ├── 11_FRONTEND_CODE.html  (Digivice!)\n    └── ...\n```\n\n---\n\n## 🚨 8 GEBOTE (IMMER!)\n\n```\n1. ❌ NIE \"Souls-like\" sagen!\n2. ✅ Explosion = eigene Klasse\n3. ✅ 8 Gebiete (nicht infinite)\n4. ✅ NSFW nur lokal (Kätzchen)\n5. ✅ Keller = Testbed\n6. ✅ Release: Privat→UEFN→Public\n7. ✅ Zero-Trust (127.0.0.1 only)\n8. ✅ Offline-First\n```\n\n---\n\n## 🎯 PRIORITÄTEN\n\n```\nP1 (Diese Woche):\n1. Training erweitern (Wissens-Daten!)\n2. Terminal funktional (Hacker-Modus!)\n3. Voice/TTS verbessern\n\nP2 (Nächste 2 Wochen):\n4. Wissensbibliothek (ChromaDB)\n5. Erinnerungssystem\n6. Digivice UI verbessern\n\nP3 (Später):\n7. Combat, Crafting, Arena, etc.\n```\n\n---\n\n## 💻 ARBEITSWEISE\n\n```\nUser sagt: \"Mach X\"\n\n1. Verstehe X\n2. Prüfe bestehenden Code\n3. Frage bei Unklarheit (KURZ!)\n4. Mache EINEN Schritt\n5. Teste\n6. Dokumentiere (KURZ!)\n7. Nächster Schritt\n```\n\n---\n\n## 📊 AKTUELLER STATUS\n\n```\n✅ Läuft:\n- Qwen 2.5-7B (lokal)\n- Training (Code + Persönlichkeit)\n- Digivice (12 Räume UI)\n- Voice/TTS (Edge-TTS)\n\n❌ Fehlt:\n- Wissensbibliothek-Training\n- Erinnerungssystem-Training\n- Terminal voll funktional\n- Combat (vollständig)\n- Crafting (vollständig)\n```\n\n---\n\n## 🚀 LOS GEHT'S!\n\n```\n1. Lies NAJIKA_MASTER_WISSEN.md\n2. Lies TRAINING_ROADMAP.md\n3. Frage User: \"Was zuerst? 1) 2) 3)\"\n4. Mache es (incrementell!)\n5. Teste\n6. Repeat!\n```\n\n---\n\n**\"EXPLOSION of Productivity!\" - Najika** 💥\n"
+}

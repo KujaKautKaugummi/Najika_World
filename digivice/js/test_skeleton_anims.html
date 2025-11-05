@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Skeleton Animation Test</title></head>
+<body>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+
+const loader = new GLTFLoader();
+
+console.log('=== TESTE SKELETON_MAGE ===');
+loader.load('/assets/KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb', 
+    gltf => {
+        console.log('Skeleton_Mage Animationen:', gltf.animations.length);
+        gltf.animations.forEach(a => console.log('  -', a.name));
+    }
+);
+
+console.log('=== TESTE ANIMATED_CHARACTER ===');
+loader.load('/assets/KayKit Character Animations 1.2/Animations/gltf/KayKit_AnimatedCharacter_v1.2.glb',
+    gltf => {
+        console.log('AnimatedCharacter Animationen:', gltf.animations.length);
+        gltf.animations.forEach(a => console.log('  -', a.name));
+    }
+);
+</script>
+</body>
+</html>

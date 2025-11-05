@@ -1,0 +1,175 @@
+[
+  {
+    "session_start": "2025-11-05T00:02:17.855139",
+    "session_end": "2025-11-05T00:39:27.058353",
+    "total_hours": 0.619223115,
+    "completed_tasks": [
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 1/4",
+        "duration_minutes": 0.14914733568827312,
+        "status": "success",
+        "timestamp": "2025-11-05T00:02:26.804982"
+      },
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 2/4",
+        "duration_minutes": 0.15121708710988363,
+        "status": "success",
+        "timestamp": "2025-11-05T00:02:35.878008"
+      },
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 3/4",
+        "duration_minutes": 0.15729039907455444,
+        "status": "success",
+        "timestamp": "2025-11-05T00:02:45.316430"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.9808799306551615,
+        "status": "success",
+        "timestamp": "2025-11-05T00:33:44.244368"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.38015504280726115,
+        "status": "success",
+        "timestamp": "2025-11-05T00:34:07.053670"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.8754599968592326,
+        "status": "success",
+        "timestamp": "2025-11-05T00:34:59.581270"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.4312593062718709,
+        "status": "success",
+        "timestamp": "2025-11-05T00:35:25.456829"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 1.1174733956654868,
+        "status": "success",
+        "timestamp": "2025-11-05T00:36:32.505232"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.4260913610458374,
+        "status": "success",
+        "timestamp": "2025-11-05T00:36:58.071715"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.9305151104927063,
+        "status": "success",
+        "timestamp": "2025-11-05T00:37:53.904231"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.419261109828949,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:19.059897"
+      },
+      {
+        "script": "najika_create_advanced_training.py",
+        "description": "Advanced Problem Solving",
+        "duration_minutes": 0.000834349791208903,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:19.110959"
+      },
+      {
+        "script": "najika_create_coding_training.py",
+        "description": "Complex Coding Patterns",
+        "duration_minutes": 0.0007307410240173339,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:19.154803"
+      },
+      {
+        "script": "najika_create_complete_training.py",
+        "description": "Complete Training Suite",
+        "duration_minutes": 0.0011672536532084147,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:21.827758"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.26690946022669476,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:37.843325"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.2657872200012207,
+        "status": "success",
+        "timestamp": "2025-11-05T00:38:53.791560"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.2699401378631592,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:09.987968"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.27971430619557697,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:26.770826"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 0.0016240795453389485,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:26.868271"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 0.0010338226954142253,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:26.931300"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 0.0010255336761474609,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:26.994841"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 0.001041893164316813,
+        "status": "success",
+        "timestamp": "2025-11-05T00:39:27.057355"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_human_like_trainer.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika-World\\backend\\najika_human_like_trainer.py\", line 408, in <module>\n    trainer.run_all()\n  File \"C:\\Najika-World\\backend\\najika_human_like_trainer.py\", line 388, in run_all\n    total += self.add_sakura_personality()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NajikaHumanLikeTrainer' object has no attribute 'add_sakura_personality'\n",
+        "timestamp": "2025-11-05T00:38:21.757723"
+      }
+    ],
+    "stats": {
+      "success": 22,
+      "errors": 1,
+      "success_rate": 95.65217391304348
+    }
+  }
+]

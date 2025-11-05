@@ -1,0 +1,458 @@
+#!/usr/bin/env python3
+"""
+NAJIKA UNIVERSAL SEARCH
+Durchsucht NajikaCore, Claude-Sessions UND ZIP-Ordner nach Keywords
+Wie Windows-Suche aber besser!
+"""
+import json
+from pathlib import Path
+from datetime import datetime
+import sys
+
+# Ordner-Definitionen
+NAJIKACORE = Path('C:/NajikaCore')
+CLAUDE_SESSIONS = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
+ZIP_ORDNER = Path('C:/Users/0KKK0/Desktop/zip')
+
+# Output
+OUTPUT_DIR = Path('C:/Users/0KKK0/Desktop')
+
+class UniversalSearch:
+    def __init__(self, search_terms, folders):
+        """
+        search_terms: str oder list - Was suchen?
+        folders: list - Wo suchen? ['najikacore', 'claude', 'zip']
+        """
+        if isinstance(search_terms, str):
+            self.search_terms = [search_terms.lower()]
+        else:
+            self.search_terms = [term.lower() for term in search_terms]
+
+        self.folders = folders
+        self.results = []
+
+    def search_text_file(self, file_path):
+        """Durchsucht Text-Datei nach Keywords"""
+        try:
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
+            content_lower = content.lower()
+
+            # Prüfe ob IRGENDEIN Suchbegriff gefunden
+            found_terms = []
+            for term in self.search_terms:
+                if term in content_lower:
+                    found_terms.append(term)
+
+            if not found_terms:
+                return None
+
+            # Zähle Vorkommen pro Term
+            term_counts = {}
+            for term in found_terms:
+                term_counts[term] = content_lower.count(term)
+
+            # Extrahiere Kontext (erste 3 Treffer)
+            contexts = []
+            for term in found_terms[:3]:  # Max 3 Terms
+                idx = content_lower.find(term)
+                if idx != -1:
+                    start = max(0, idx - 100)
+                    end = min(len(content), idx + 100)
+                    context = content[start:end].strip()
+                    contexts.append({
+                        'term': term,
+                        'context': context
+                    })
+
+            return {
+                'file': str(file_path),
+                'size': file_path.stat().st_size,
+                'modified': datetime.fromtimestamp(file_path.stat().st_mtime).strftime('%Y-%m-%d %H:%M'),
+                'found_terms': found_terms,
+                'term_counts': term_counts,
+                'total_hits': sum(term_counts.values()),
+                'contexts': contexts[:3]  # Max 3 Kontexte
+            }
+
+        except Exception as e:
+            return None
+
+    def search_json_file(self, file_path):
+        """Durchsucht JSON-Datei"""
+        try:
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
+            content_lower = content.lower()
+
+            # Prüfe ob IRGENDEIN Suchbegriff gefunden
+            found_terms = []
+            for term in self.search_terms:
+                if term in content_lower:
+                    found_terms.append(term)
+
+            if not found_terms:
+                return None
+
+            # Zähle Vorkommen
+            term_counts = {}
+            for term in found_terms:
+                term_counts[term] = content_lower.count(term)
+
+            return {
+                'file': str(file_path),
+                'size': file_path.stat().st_size,
+                'modified': datetime.fromtimestamp(file_path.stat().st_mtime).strftime('%Y-%m-%d %H:%M'),
+                'found_terms': found_terms,
+                'term_counts': term_counts,
+                'total_hits': sum(term_counts.values()),
+                'contexts': []  # JSON-Kontext wäre zu komplex
+            }
+
+        except:
+            return None
+
+    def search_session_file(self, file_path):
+        """Durchsucht Claude Session (.jsonl)"""
+        try:
+            found_messages = []
+
+            with open(file_path, 'r', encoding='utf-8') as f:
+                line_num = 0
+                for line in f:
+                    line_num += 1
+                    try:
+                        entry = json.loads(line)
+
+                        if entry.get('type') not in ['user', 'assistant']:
+                            continue
+
+                        content = entry.get('message', {}).get('content', [])
+
+                        # Text extrahieren
+                        text_parts = []
+                        for item in content:
+                            if isinstance(item, dict) and item.get('type') == 'text':
+                                text_parts.append(item.get('text', ''))
+
+                        full_text = ' '.join(text_parts)
+                        text_lower = full_text.lower()
+
+                        # Prüfe Keywords
+                        found_terms = []
+                        for term in self.search_terms:
+                            if term in text_lower:
+                                found_terms.append(term)
+
+                        if found_terms:
+                            # Kontext extrahieren
+                            first_term = found_terms[0]
+                            idx = text_lower.find(first_term)
+                            start = max(0, idx - 150)
+                            end = min(len(full_text), idx + 150)
+                            context = full_text[start:end]
+
+                            found_messages.append({
+                                'line': line_num,
+                                'type': entry.get('type'),
+                                'terms': found_terms,
+                                'context': context,
+                                'timestamp': entry.get('timestamp', '')[:19]
+                            })
+                    except:
+                        continue
+
+            if not found_messages:
+                return None
+
+            # Zähle total hits
+            all_terms = []
+            for msg in found_messages:
+                all_terms.extend(msg['terms'])
+
+            term_counts = {}
+            for term in set(all_terms):
+                term_counts[term] = all_terms.count(term)
+
+            return {
+                'file': str(file_path),
+                'size': file_path.stat().st_size,
+                'modified': datetime.fromtimestamp(file_path.stat().st_mtime).strftime('%Y-%m-%d %H:%M'),
+                'found_terms': list(set(all_terms)),
+                'term_counts': term_counts,
+                'total_hits': len(found_messages),
+                'messages': found_messages[:10]  # Max 10 Messages zeigen
+            }
+
+        except:
+            return None
+
+    def search_folder(self, folder_path, folder_name):
+        """Durchsucht einen Ordner komplett"""
+        print(f'\n[INFO] Durchsuche {folder_name}...')
+        print(f'       Pfad: {folder_path}')
+
+        if not folder_path.exists():
+            print(f'       [SKIP] Ordner existiert nicht!')
+            return
+
+        # Datei-Typen
+        text_extensions = ['.txt', '.md', '.py', '.js', '.html', '.css', '.bat', '.sh', '.json']
+
+        file_count = 0
+        found_count = 0
+
+        # Bei Claude-Sessions: nur .jsonl
+        if folder_name == 'CLAUDE':
+            files = list(folder_path.glob('*.jsonl'))
+            print(f'       Sessions gefunden: {len(files)}')
+
+            for i, file in enumerate(files, 1):
+                print(f'       [{i}/{len(files)}] {file.name[:30]}... ', end='', flush=True)
+
+                result = self.search_session_file(file)
+
+                if result:
+                    result['folder'] = folder_name
+                    result['type'] = 'session'
+                    self.results.append(result)
+                    found_count += 1
+                    print(f'✓ {result["total_hits"]} Treffer')
+                else:
+                    print('—')
+
+                file_count += 1
+
+        else:
+            # Alle anderen Ordner: rekursiv durchsuchen
+            for file in folder_path.rglob('*'):
+                if not file.is_file():
+                    continue
+
+                if file.suffix.lower() not in text_extensions:
+                    continue
+
+                file_count += 1
+
+                if file.suffix == '.jsonl':
+                    result = self.search_session_file(file)
+                elif file.suffix == '.json':
+                    result = self.search_json_file(file)
+                else:
+                    result = self.search_text_file(file)
+
+                if result:
+                    result['folder'] = folder_name
+                    result['type'] = 'file'
+                    self.results.append(result)
+                    found_count += 1
+
+        print(f'       Dateien durchsucht: {file_count}')
+        print(f'       Treffer: {found_count}')
+
+    def run(self):
+        """Führt Suche durch"""
+        print('='*80)
+        print('NAJIKA UNIVERSAL SEARCH')
+        print('='*80)
+        print(f'\nSuchbegriffe: {", ".join(self.search_terms)}')
+        print(f'Ordner: {", ".join(self.folders)}')
+        print('')
+
+        # Durchsuche gewählte Ordner
+        if 'najikacore' in self.folders:
+            self.search_folder(NAJIKACORE, 'NAJIKACORE')
+
+        if 'claude' in self.folders:
+            self.search_folder(CLAUDE_SESSIONS, 'CLAUDE')
+
+        if 'zip' in self.folders:
+            self.search_folder(ZIP_ORDNER, 'ZIP')
+
+        # Sortiere Ergebnisse nach Relevanz (total_hits)
+        self.results.sort(key=lambda x: x['total_hits'], reverse=True)
+
+        return self.results
+
+    def generate_report(self, output_file=None):
+        """Generiert Report"""
+        if output_file is None:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            output_file = OUTPUT_DIR / f'NAJIKA_SUCHE_{timestamp}.txt'
+
+        lines = []
+        lines.append('='*80)
+        lines.append('NAJIKA UNIVERSAL SEARCH - ERGEBNISSE')
+        lines.append('='*80)
+        lines.append('')
+        lines.append(f'Datum: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+        lines.append(f'Suchbegriffe: {", ".join(self.search_terms)}')
+        lines.append(f'Durchsuchte Ordner: {", ".join(self.folders)}')
+        lines.append(f'Treffer gesamt: {len(self.results)}')
+        lines.append('')
+        lines.append('='*80)
+        lines.append('')
+
+        if not self.results:
+            lines.append('KEINE TREFFER GEFUNDEN!')
+            lines.append('')
+        else:
+            # Gruppiere nach Ordner
+            by_folder = {}
+            for result in self.results:
+                folder = result['folder']
+                if folder not in by_folder:
+                    by_folder[folder] = []
+                by_folder[folder].append(result)
+
+            # Pro Ordner
+            for folder, results in sorted(by_folder.items()):
+                lines.append(f'## ORDNER: {folder} ({len(results)} Treffer)')
+                lines.append('='*80)
+                lines.append('')
+
+                for i, result in enumerate(results, 1):
+                    # Kürze Pfad für Lesbarkeit
+                    file_path = Path(result['file'])
+                    rel_path = str(file_path).replace(str(file_path.parent.parent), '...')
+
+                    lines.append(f'[{i}] {rel_path}')
+                    lines.append(f'    Größe: {result["size"]/1024:.1f} KB | Geändert: {result["modified"]}')
+                    lines.append(f'    Treffer: {result["total_hits"]}x | Begriffe: {", ".join(result["found_terms"])}')
+
+                    # Term-Counts
+                    lines.append(f'    Vorkommen:')
+                    for term, count in sorted(result['term_counts'].items(), key=lambda x: x[1], reverse=True):
+                        lines.append(f'      - {term}: {count}x')
+
+                    # Kontext
+                    if result.get('contexts'):
+                        lines.append(f'    Kontext:')
+                        for ctx in result['contexts'][:2]:  # Max 2 Kontexte
+                            lines.append(f'      Term: "{ctx["term"]}"')
+                            lines.append(f'      ...{ctx["context"]}...')
+                            lines.append('')
+
+                    # Session-Messages
+                    if result.get('messages'):
+                        lines.append(f'    Messages (erste 5):')
+                        for msg in result['messages'][:5]:
+                            lines.append(f'      {msg["type"].upper()} | Zeile {msg["line"]} | {msg["timestamp"]}')
+                            lines.append(f'      ...{msg["context"][:200]}...')
+                            lines.append('')
+
+                    lines.append('-'*80)
+                    lines.append('')
+
+                lines.append('')
+
+        # Zusammenfassung
+        lines.append('='*80)
+        lines.append('ZUSAMMENFASSUNG')
+        lines.append('='*80)
+        lines.append('')
+
+        # Nach Ordner
+        for folder, results in sorted(by_folder.items()):
+            lines.append(f'{folder}: {len(results)} Treffer')
+
+        lines.append('')
+        lines.append(f'GESAMT: {len(self.results)} Dateien/Sessions mit Treffern')
+        lines.append('')
+
+        # Top 10 Files
+        lines.append('TOP 10 RELEVANTESTE DATEIEN:')
+        for i, result in enumerate(self.results[:10], 1):
+            file_path = Path(result['file'])
+            lines.append(f'{i:2d}. {file_path.name} ({result["total_hits"]}x) - {result["folder"]}')
+
+        lines.append('')
+        lines.append('='*80)
+
+        # Speichern
+        output_file = Path(output_file)
+        output_file.write_text('\n'.join(lines), encoding='utf-8')
+
+        return output_file
+
+def main():
+    print('='*80)
+    print('NAJIKA UNIVERSAL SEARCH')
+    print('='*80)
+    print('')
+
+    # Interaktiver Modus
+    if len(sys.argv) == 1:
+        print('WO SUCHST DU?')
+        print('  1 - NajikaCore (C:/NajikaCore)')
+        print('  2 - Claude Sessions')
+        print('  3 - ZIP-Ordner (Desktop/zip)')
+        print('  4 - ALLE Ordner')
+        print('')
+        choice = input('Wahl (1-4): ').strip()
+
+        folder_map = {
+            '1': ['najikacore'],
+            '2': ['claude'],
+            '3': ['zip'],
+            '4': ['najikacore', 'claude', 'zip']
+        }
+
+        folders = folder_map.get(choice, ['najikacore'])
+
+        print('')
+        print('WAS SUCHST DU?')
+        search_input = input('Suchbegriff(e) (mehrere mit Komma trennen): ').strip()
+
+        if ',' in search_input:
+            search_terms = [term.strip() for term in search_input.split(',')]
+        else:
+            search_terms = [search_input]
+
+    else:
+        # Kommandozeilen-Modus
+        # Verwendung: python najika_universal_search.py "keyword1,keyword2" najikacore,claude
+        if len(sys.argv) < 2:
+            print('Verwendung: python najika_universal_search.py "keyword" [folders]')
+            print('Folders: najikacore, claude, zip, all')
+            sys.exit(1)
+
+        search_input = sys.argv[1]
+        if ',' in search_input:
+            search_terms = [term.strip() for term in search_input.split(',')]
+        else:
+            search_terms = [search_input]
+
+        if len(sys.argv) >= 3:
+            folder_input = sys.argv[2].lower()
+            if folder_input == 'all':
+                folders = ['najikacore', 'claude', 'zip']
+            else:
+                folders = [f.strip() for f in folder_input.split(',')]
+        else:
+            folders = ['najikacore']
+
+    # Suche starten
+    search = UniversalSearch(search_terms, folders)
+    results = search.run()
+
+    # Report generieren
+    print('')
+    print('='*80)
+    print('ERGEBNISSE')
+    print('='*80)
+    print(f'\nTreffer: {len(results)} Dateien/Sessions')
+
+    if results:
+        # Top 5 anzeigen
+        print('\nTop 5 Treffer:')
+        for i, result in enumerate(results[:5], 1):
+            file_path = Path(result['file'])
+            print(f'{i}. {file_path.name} - {result["total_hits"]}x ({result["folder"]})')
+
+    # Report speichern
+    output_file = search.generate_report()
+
+    print(f'\n[OK] Report gespeichert: {output_file}')
+    print('')
+
+if __name__ == '__main__':
+    main()

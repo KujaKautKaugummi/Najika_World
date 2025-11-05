@@ -1,0 +1,267 @@
+#!/usr/bin/env python3
+"""
+NAJIKA TRAINING SCHEDULER
+Montag-Freitag, 9:00-14:00 Uhr (Berlin Zeit) = 5 Stunden täglich
+"""
+import json
+from pathlib import Path
+from datetime import datetime, time
+import pytz
+
+NAJIKA_DIR = Path('C:/NajikaCore')
+TRAINING_DIR = NAJIKA_DIR / 'training'
+SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
+CURRENT_SESSION_FILE = NAJIKA_DIR / 'NAJIKA_CURRENT_TRAINING.md'
+
+# Berlin Timezone
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+# Training-Zeiten - INTENSIV-MODUS (16h täglich!)
+TRAINING_START = time(8, 0)   # 08:00
+TRAINING_END = time(23, 59)   # 23:59 (kurz vor Mitternacht)
+TRAINING_DAYS = [0, 1, 2, 3, 4, 5, 6]  # Mo-So (JEDEN TAG!)
+
+# 16 Stunden = 16 Sessions à 1 Stunde (08:00-24:00)
+HOURLY_SCHEDULE = {
+    "08:00-09:00": {"focus": "Code-Kata Praxis 1", "tasks": ["1. Lese heutige Kata komplett", "2. Implementiere in Python", "3. Implementiere in Java", "4. Implementiere in Verse", "5. Vergleiche Lösungen"]},
+    "09:00-10:00": {"focus": "Code-Reading & Analyse 1", "tasks": ["1. Lese najika_server.py (100 Zeilen)", "2. Analysiere Struktur", "3. Finde 3 gute Patterns", "4. Finde 1 Verbesserung", "5. Dokumentiere"]},
+    "10:00-11:00": {"focus": "Refactoring 1", "tasks": ["1. Nimm alten Code", "2. Identifiziere Code-Smells", "3. Refactore", "4. Dokumentiere Änderungen", "5. Erkläre WARUM besser"]},
+    "11:00-12:00": {"focus": "Theory & Patterns 1", "tasks": ["1. Lese 1 Architecture Pattern", "2. Verstehe Anwendungsfall", "3. Implementiere Mini-Beispiel", "4. Finde Pattern in NajikaCore", "5. Vor-/Nachteile"]},
+    "12:00-13:00": {"focus": "Code-Kata Praxis 2", "tasks": ["1. Neue Kata oder Variante", "2. Implementiere in C#", "3. Implementiere in Rust", "4. Performance-Vergleich", "5. Best Solution dokumentieren"]},
+    "13:00-14:00": {"focus": "Code-Reading & Analyse 2", "tasks": ["1. Lese 3d_scene.js (100 Zeilen)", "2. Analysiere Frontend-Patterns", "3. Finde 3 gute Patterns", "4. Finde Verbesserungen", "5. Dokumentiere"]},
+    "14:00-15:00": {"focus": "Performance Optimization", "tasks": ["1. Lese PERFORMANCE_PATTERNS.md", "2. Finde Performance-Problem in Code", "3. Implementiere Optimierung", "4. Messe Verbesserung", "5. Dokumentiere Ergebnisse"]},
+    "15:00-16:00": {"focus": "Security & Best Practices", "tasks": ["1. Lese Security-Patterns", "2. Code-Review für Security", "3. Finde 2 Vulnerabilities", "4. Implementiere Fixes", "5. Dokumentiere"]},
+    "16:00-17:00": {"focus": "Testing & TDD", "tasks": ["1. Schreibe Tests für Feature", "2. Implementiere Feature (TDD)", "3. Refactore mit Tests", "4. Code Coverage prüfen", "5. Edge Cases testen"]},
+    "17:00-18:00": {"focus": "Database & Data Patterns", "tasks": ["1. Lese DB-Patterns", "2. Design Schema für Feature", "3. Implementiere Queries", "4. Optimiere Performance", "5. Dokumentiere Entscheidungen"]},
+    "18:00-19:00": {"focus": "API Design & REST", "tasks": ["1. Lese API-Design Patterns", "2. Design neue API Endpoints", "3. Implementiere mit Best Practices", "4. Teste API", "5. Dokumentiere"]},
+    "19:00-20:00": {"focus": "Frontend Architecture", "tasks": ["1. Lese Frontend-Patterns", "2. Analysiere Component-Struktur", "3. Refactore Component", "4. Optimiere Rendering", "5. Dokumentiere"]},
+    "20:00-21:00": {"focus": "DevOps & Deployment", "tasks": ["1. Lese DevOps-Patterns", "2. Optimiere Build-Process", "3. Setup CI/CD Step", "4. Teste Deployment", "5. Dokumentiere"]},
+    "21:00-22:00": {"focus": "Code-Kata Praxis 3", "tasks": ["1. Fortgeschrittene Kata", "2. Multiple Languages", "3. Performance-Optimierung", "4. Code Golf versuchen", "5. Dokumentiere Learnings"]},
+    "22:00-23:00": {"focus": "Review & Deep Dive", "tasks": ["1. Review alle Sessions heute", "2. Deep Dive in schwierigste Aufgabe", "3. Recherche zu offenem Thema", "4. Implementiere komplexes Pattern", "5. Dokumentiere Tag"]},
+    "23:00-24:00": {"focus": "Planning & Reflection", "tasks": ["1. Was heute gelernt?", "2. Dokumentiere 5 wichtigste Erkenntnisse", "3. Update Progress-Tracking", "4. Plan für morgen", "5. Setze Lernziele"]}
+}
+
+def get_berlin_time():
+    """Aktuelle Berlin Zeit"""
+    return datetime.now(BERLIN_TZ)
+
+def is_training_time():
+    """Prüft ob jetzt Trainingszeit ist"""
+    now = get_berlin_time()
+
+    # Wochentag prüfen (Mo-Fr)
+    if now.weekday() not in TRAINING_DAYS:
+        return False, f"Heute ist {now.strftime('%A')} - kein Trainingstag (nur Mo-Fr)"
+
+    # Uhrzeit prüfen (9-14 Uhr)
+    current_time = now.time()
+    if not (TRAINING_START <= current_time < TRAINING_END):
+        return False, f"Außerhalb Trainingszeit (08:00-24:00, jetzt: {current_time.strftime('%H:%M')})"
+
+    return True, "Trainingszeit!"
+
+def get_current_hour_block():
+    """Bestimmt aktuelle Stunden-Block"""
+    now = get_berlin_time()
+    hour = now.hour
+
+    if 8 <= hour < 9:
+        return "08:00-09:00"
+    elif 9 <= hour < 10:
+        return "09:00-10:00"
+    elif 10 <= hour < 11:
+        return "10:00-11:00"
+    elif 11 <= hour < 12:
+        return "11:00-12:00"
+    elif 12 <= hour < 13:
+        return "12:00-13:00"
+    elif 13 <= hour < 14:
+        return "13:00-14:00"
+    elif 14 <= hour < 15:
+        return "14:00-15:00"
+    elif 15 <= hour < 16:
+        return "15:00-16:00"
+    elif 16 <= hour < 17:
+        return "16:00-17:00"
+    elif 17 <= hour < 18:
+        return "17:00-18:00"
+    elif 18 <= hour < 19:
+        return "18:00-19:00"
+    elif 19 <= hour < 20:
+        return "19:00-20:00"
+    elif 20 <= hour < 21:
+        return "20:00-21:00"
+    elif 21 <= hour < 22:
+        return "21:00-22:00"
+    elif 22 <= hour < 23:
+        return "22:00-23:00"
+    elif 23 <= hour < 24:
+        return "23:00-24:00"
+    else:
+        return None
+
+def load_schedule():
+    """Lädt Training-Schedule"""
+    if SCHEDULE_FILE.exists():
+        try:
+            with open(SCHEDULE_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            pass
+
+    return {
+        "start_date": datetime.now(BERLIN_TZ).isoformat(),
+        "total_hours": 0,
+        "days_trained": 0,
+        "current_week": 1,
+        "completed_sessions": []
+    }
+
+def save_schedule(schedule):
+    """Speichert Schedule"""
+    TRAINING_DIR.mkdir(exist_ok=True)
+    with open(SCHEDULE_FILE, 'w', encoding='utf-8') as f:
+        json.dump(schedule, f, indent=2)
+
+def generate_current_session():
+    """Generiert aktuelle Training-Session"""
+    print('='*80)
+    print('NAJIKA TRAINING SCHEDULER')
+    print('='*80)
+
+    now = get_berlin_time()
+    print(f'\n[INFO] Berlin Zeit: {now.strftime("%Y-%m-%d %H:%M:%S %Z")}')
+    print(f'[INFO] Wochentag: {now.strftime("%A")}')
+
+    # Prüfe ob Trainingszeit
+    is_time, message = is_training_time()
+    print(f'[INFO] {message}')
+
+    if not is_time:
+        print('\n[SKIP] Keine Trainingszeit - komm wieder 08:00-24:00 (JEDEN TAG)!')
+        return
+
+    # Bestimme Stunden-Block
+    hour_block = get_current_hour_block()
+    if not hour_block:
+        print('[ERROR] Konnte Stunden-Block nicht bestimmen!')
+        return
+
+    session_info = HOURLY_SCHEDULE[hour_block]
+
+    # Lade Schedule
+    schedule = load_schedule()
+
+    # Check ob diese Session schon gemacht wurde heute
+    today_key = now.strftime('%Y-%m-%d')
+    session_key = f"{today_key}_{hour_block}"
+
+    if session_key in schedule.get('completed_sessions', []):
+        print(f'\n[INFO] Session {hour_block} heute bereits abgeschlossen!')
+        print('[INFO] Komm zur nächsten Stunde wieder.')
+        return
+
+    # Generiere Session-File
+    lines = []
+    lines.append('# NAJIKA TRAINING SESSION')
+    lines.append('')
+    lines.append(f'**Datum:** {now.strftime("%Y-%m-%d (%A)")}')
+    lines.append(f'**Zeit:** {hour_block}')
+    lines.append(f'**Woche:** {schedule["current_week"]}')
+    lines.append(f'**Gesamt-Stunden:** {schedule["total_hours"]}')
+    lines.append('')
+    lines.append('='*80)
+    lines.append('')
+    lines.append(f'## FOCUS: {session_info["focus"]}')
+    lines.append('')
+    lines.append('### AUFGABEN FÜR DIESE STUNDE:')
+    lines.append('')
+    for task in session_info['tasks']:
+        lines.append(task)
+    lines.append('')
+    lines.append('='*80)
+    lines.append('')
+
+    # Lade entsprechende Ressource basierend auf Focus
+    if 'Kata' in session_info['focus']:
+        # Lade aktuelle Kata
+        kata_file = TRAINING_DIR / 'CODE_KATAS_DAILY.md'
+        if kata_file.exists():
+            lines.append('## CODE-KATA RESSOURCE:')
+            lines.append('')
+            lines.append(kata_file.read_text(encoding='utf-8'))
+            lines.append('')
+
+    elif 'Reading' in session_info['focus']:
+        lines.append('## CODE-READING RESSOURCE:')
+        lines.append('')
+        lines.append('**Heute zu lesen:**')
+        lines.append('- `C:/NajikaCore/najika_server.py`')
+        lines.append('- Fokus: Server-Architektur, Routing, Error Handling')
+        lines.append('')
+
+    elif 'Refactoring' in session_info['focus']:
+        lines.append('## REFACTORING RESSOURCE:')
+        lines.append('')
+        refactoring_file = TRAINING_DIR / 'COMMON_PITFALLS.md'
+        if refactoring_file.exists():
+            lines.append(refactoring_file.read_text(encoding='utf-8'))
+            lines.append('')
+
+    elif 'Theory' in session_info['focus']:
+        lines.append('## THEORY RESSOURCE:')
+        lines.append('')
+        theory_file = TRAINING_DIR / 'ARCHITECTURE_PATTERNS.md'
+        if theory_file.exists():
+            lines.append(theory_file.read_text(encoding='utf-8'))
+            lines.append('')
+
+    elif 'Review' in session_info['focus']:
+        lines.append('## REVIEW RESSOURCE:')
+        lines.append('')
+        lines.append('**Heutige Sessions:**')
+        for completed in schedule.get('completed_sessions', []):
+            if today_key in completed:
+                lines.append(f'- ✓ {completed.split("_")[1]}')
+        lines.append('')
+
+    lines.append('='*80)
+    lines.append('# ABSCHLUSS DIESER SESSION')
+    lines.append('='*80)
+    lines.append('')
+    lines.append('**Wenn Session abgeschlossen:**')
+    lines.append('```bash')
+    lines.append('python C:/NajikaCore/najika_complete_training_session.py')
+    lines.append('```')
+    lines.append('')
+    lines.append('**Das macht:**')
+    lines.append('1. Markiert diese Session als erledigt')
+    lines.append('2. Updated Gesamt-Stunden Counter')
+    lines.append('3. Speichert Progress')
+    lines.append('')
+    lines.append(f'**Nächste Session:** {get_next_session_time(hour_block)}')
+    lines.append('')
+
+    # Speichern
+    CURRENT_SESSION_FILE.write_text('\n'.join(lines), encoding='utf-8')
+
+    print(f'\n[OK] Training-Session generiert: {CURRENT_SESSION_FILE}')
+    print(f'[OK] Focus: {session_info["focus"]}')
+    print(f'[OK] Zeit: {hour_block}')
+    print(f'[OK] Aufgaben: {len(session_info["tasks"])}')
+    print('')
+
+def get_next_session_time(current_block):
+    """Bestimmt nächste Session-Zeit"""
+    blocks = list(HOURLY_SCHEDULE.keys())
+    try:
+        current_idx = blocks.index(current_block)
+        if current_idx < len(blocks) - 1:
+            return f"Heute {blocks[current_idx + 1]}"
+        else:
+            return "Morgen 09:00-10:00"
+    except:
+        return "Unbekannt"
+
+if __name__ == '__main__':
+    generate_current_session()

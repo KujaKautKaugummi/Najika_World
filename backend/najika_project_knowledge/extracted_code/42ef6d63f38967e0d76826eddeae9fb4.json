@@ -1,0 +1,7 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\START_SEARCH.bat",
+  "hash": "42ef6d63f38967e0d76826eddeae9fb4",
+  "chars": 713,
+  "timestamp": "2025-11-04T16:47:07.928819",
+  "content": "@echo off\ncls\necho ==============================================================\necho          NAJIKA PROJECT SEARCH\necho ==============================================================\necho.\necho Starte Suche im Ordner: %~dp0\necho.\necho Das Script durchsucht alle Dateien nach:\necho   - Najika Projekt-Komponenten\necho   - Gameplay-Mechaniken\necho   - Klassen und Skills\necho   - Crafting, Fishing, Farming\necho   - Digivice System\necho   - Schwarze Muehle\necho   - UEFN Komponenten\necho   - Und VIEL mehr!\necho.\necho ==============================================================\necho.\necho Druecke eine beliebige Taste zum Starten...\npause >nul\n\necho.\necho Starte Suche...\necho.\n\ncall \"%~dp0NAJIKA_SEARCH.bat\"\n"
+}

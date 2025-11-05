@@ -1,0 +1,7 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\manifest.json",
+  "hash": "dda3ff7afba8528a605fdcc1593b5301",
+  "chars": 333,
+  "timestamp": "2025-11-04T16:47:07.323499",
+  "content": "{\n  \"root\": \"C:\\\\NajikaCore\",\n  \"generated_at\": \"2025-10-13T09:18:30.999272Z\",\n  \"count_files\": 6831,\n  \"count_chunks\": 3,\n  \"supported_ext\": [\n    \".bmp\",\n    \".csv\",\n    \".docx\",\n    \".jpeg\",\n    \".jpg\",\n    \".log\",\n    \".md\",\n    \".pdf\",\n    \".png\",\n    \".pptx\",\n    \".tif\",\n    \".tiff\",\n    \".txt\",\n    \".webp\",\n    \".xlsx\"\n  ]\n}"
+}
