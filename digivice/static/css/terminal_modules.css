@@ -1,0 +1,194 @@
+/* TERMINAL MODULE SWITCHER */
+
+#terminalModuleSwitcher {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s;
+}
+
+.module-switcher-container {
+    background: #000;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    font-family: 'Courier New', monospace;
+    color: #0f0;
+}
+
+.switcher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #0f0;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.module-button {
+    background: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    padding: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.module-button:hover {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.module-button.active {
+    background: rgba(0, 255, 0, 0.2);
+    border-color: #0ff;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.module-icon {
+    font-size: 48px;
+}
+
+.module-name {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.module-key {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.switcher-footer {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid #0f0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.hint {
+    animation: pulse 2s infinite;
+}
+
+/* MODULE PLACEHOLDER */
+
+#modulePlaceholder {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.placeholder-container {
+    background: #000;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    color: #0f0;
+}
+
+.placeholder-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.placeholder-desc {
+    font-size: 16px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.placeholder-status {
+    font-size: 20px;
+    margin: 30px 0;
+    color: #ff0;
+    animation: blink 1s infinite;
+}
+
+.placeholder-btn {
+    background: transparent;
+    border: 2px solid #0f0;
+    color: #0f0;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.placeholder-btn:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}

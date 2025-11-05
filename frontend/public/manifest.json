@@ -1,0 +1,24 @@
+{
+  "short_name": "Najika",
+  "name": "Najika - Your AI Companion",
+  "description": "Najika: Deine persönliche KI-Begleiterin & Action-RPG",
+  "icons": [
+    {
+      "src": "najika-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "najika-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#FF6B9D",
+  "background_color": "#1a1a2e",
+  "orientation": "portrait"
+}

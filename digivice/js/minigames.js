@@ -1,0 +1,921 @@
+// MINIGAMES MODULE v2
+(function() {
+    let currentGame = null;
+    let score = 0;
+    let gameInterval = null;
+    let cleanupFn = null;
+    let frameHandle = null;
+    const timeouts = new Set();
+    let currentGameLabel = '';
+    function scheduleTimeout(handler, delay) {
+        const id = setTimeout(() => {
+            timeouts.delete(id);
+            handler();
+        }, delay);
+        timeouts.add(id);
+        return id;
+    }
+    function cancelTimeout(id) {
+        if (timeouts.has(id)) {
+            clearTimeout(id);
+            timeouts.delete(id);
+        }
+    }
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+    function clearTimers() {
+        if (gameInterval) {
+            clearInterval(gameInterval);
+            gameInterval = null;
+        }
+        if (frameHandle) {
+            cancelAnimationFrame(frameHandle);
+            frameHandle = null;
+        }
+        timeouts.forEach(id => clearTimeout(id));
+        timeouts.clear();
+    }
+    function setCleanup(fn) {
+        cleanupFn = fn;
+    }
+    function createOverlay() {
+        if (document.getElementById('minigameOverlay')) return;
+        const overlay = document.createElement('div');
+        overlay.id = 'minigameOverlay';
+        overlay.className = 'minigame-overlay';
+        overlay.innerHTML = `
+            <div class="minigame-container">
+                <div class="minigame-header">
+                    <h2 id="minigameTitle">Minigame</h2>
+                    <div class="minigame-score">Score: <span id="minigameScore">0</span></div>
+                    <button class="minigame-close" onclick="MiniGames.close()">×</button>
+                </div>
+                <div class="minigame-content" id="minigameContent"></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    function updateScore(points = 0, reset = false) {
+        if (reset) {
+            score = 0;
+        } else {
+            score += points;
+        }
+        const scoreEl = document.getElementById('minigameScore');
+        if (scoreEl) {
+            scoreEl.textContent = Math.max(0, Math.round(score));
+        }
+    }
+    function open(gameName) {
+        createOverlay();
+        const overlay = document.getElementById('minigameOverlay');
+        const content = document.getElementById('minigameContent');
+        const title = document.getElementById('minigameTitle');
+        clearTimers();
+        if (cleanupFn) {
+            cleanupFn();
+            cleanupFn = null;
+        }
+        score = 0;
+        updateScore(0, true);
+        setCleanup(null);
+        overlay.classList.add('active');
+        currentGame = gameName;
+        currentGameLabel = 'Minigame';
+        switch (gameName) {
+            case 'rhythm':
+                title.textContent = '🎵 Rhythmus-Spiel';
+                currentGameLabel = title.textContent;
+                startRhythmGame(content);
+                break;
+            case 'garden':
+                title.textContent = '🌿 Garten-Spiel';
+                currentGameLabel = title.textContent;
+                startGardenGame(content);
+                break;
+            case 'reflex':
+                title.textContent = '⚡ Reflex-Spiel';
+                currentGameLabel = title.textContent;
+                startReflexGame(content);
+                break;
+            case 'broom':
+                title.textContent = '🧹 Besen-Lieferung';
+                currentGameLabel = title.textContent;
+                startBroomGame(content);
+                break;
+            case 'craft':
+                title.textContent = '🛠️ Crafting-Workshop';
+                currentGameLabel = title.textContent;
+                startCraftingGame(content);
+                break;
+            case 'training':
+                title.textContent = '🥋 Trainings-Dojō';
+                currentGameLabel = title.textContent;
+                startTrainingGame(content);
+                break;
+            case 'cooking':
+                title.textContent = '🍳 Najikas Hexenküche';
+                currentGameLabel = title.textContent;
+                startCookingGame(content);
+                break;
+            default:
+                title.textContent = '🎮 Minigame';
+                currentGameLabel = title.textContent;
+                content.innerHTML = '<div class="minigame-placeholder">Kein Minigame verfügbar.</div>';
+        }
+    }
+    function close(showResult = true) {
+        clearTimers();
+        if (cleanupFn) {
+            cleanupFn();
+            cleanupFn = null;
+        }
+        const overlay = document.getElementById('minigameOverlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+        if (showResult && currentGame && score > 0) {
+            const finalScore = Math.max(0, Math.round(score));
+            scheduleTimeout(() => {
+                if (typeof notify === 'function') {
+                    notify(`🎮 ${currentGameLabel} beendet! Score: ${finalScore}`, 'success');
+                }
+            }, 200);
+        }
+        currentGame = null;
+    }
+    /* === RHYTHM GAME === */
+    function startRhythmGame(content) {
+        content.innerHTML = `
+            <div class="rhythm-game">
+                <div class="rhythm-track" id="rhythmTrack">
+                    <div class="rhythm-hitzone"></div>
+                </div>
+                <div class="rhythm-keys">
+                    <div class="rhythm-key" data-key="a">A</div>
+                    <div class="rhythm-key" data-key="s">S</div>
+                    <div class="rhythm-key" data-key="d">D</div>
+                </div>
+            </div>
+        `;
+        const keys = ['a', 's', 'd'];
+        const track = document.getElementById('rhythmTrack');
+        gameInterval = setInterval(() => {
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const note = document.createElement('div');
+            note.className = 'rhythm-note';
+            note.textContent = randomKey.toUpperCase();
+            note.dataset.key = randomKey;
+            note.style.left = (Math.random() * 60 + 20) + '%';
+            note.style.animationDuration = '3.2s';
+            track.appendChild(note);
+            scheduleTimeout(() => note.remove(), 3200);
+        }, 1500);
+        const handleKeyPress = (e) => {
+            const key = e.key.toLowerCase();
+            if (!keys.includes(key)) return;
+            const keyEl = document.querySelector(`.rhythm-key[data-key="${key}"]`);
+            if (keyEl) {
+                keyEl.classList.add('pressed');
+                scheduleTimeout(() => keyEl.classList.remove('pressed'), 120);
+            }
+            const notes = Array.from(document.querySelectorAll('.rhythm-note'));
+            const hitzoneRect = document.querySelector('.rhythm-hitzone').getBoundingClientRect();
+            let hit = false;
+            notes.forEach(note => {
+                if (note.dataset.key !== key) return;
+                const rect = note.getBoundingClientRect();
+                if (rect.bottom >= hitzoneRect.top && rect.top <= hitzoneRect.bottom) {
+                    updateScore(10);
+                    note.remove();
+                    hit = true;
+                }
+            });
+            if (!hit) {
+                updateScore(-5);
+            }
+        };
+        document.addEventListener('keydown', handleKeyPress);
+        setCleanup(() => document.removeEventListener('keydown', handleKeyPress));
+    }
+    /* === GARDEN GAME === */
+    function startGardenGame(content) {
+        content.innerHTML = '<div class="garden-game" id="gardenGrid"></div>';
+        const grid = document.getElementById('gardenGrid');
+        const tiles = [];
+        for (let i = 0; i < 16; i++) {
+            const tile = document.createElement('div');
+            tile.className = 'garden-tile';
+            grid.appendChild(tile);
+            tiles.push(tile);
+        }
+        function spawnWeed() {
+            const emptyTiles = tiles.filter(t => !t.classList.contains('weed') && !t.classList.contains('flower'));
+            if (!emptyTiles.length) return;
+            const tile = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+            tile.classList.add('weed');
+            tile.textContent = '🌱';
+            scheduleTimeout(() => {
+                if (tile.classList.contains('weed')) {
+                    tile.classList.remove('weed');
+                    tile.textContent = '';
+                }
+            }, 2800);
+        }
+        tiles.forEach(tile => {
+            tile.onclick = () => {
+                if (tile.classList.contains('weed')) {
+                    tile.classList.remove('weed');
+                    tile.classList.add('flower');
+                    tile.textContent = '🌸';
+                    updateScore(5);
+                    scheduleTimeout(() => {
+                        tile.classList.remove('flower');
+                        tile.textContent = '';
+                    }, 900);
+                }
+            };
+        });
+        gameInterval = setInterval(spawnWeed, 1400);
+        spawnWeed();
+        setCleanup(() => tiles.forEach(tile => (tile.onclick = null)));
+    }
+    /* === REFLEX GAME === */
+    function startReflexGame(content) {
+        let round = 0;
+        let waiting = false;
+        let startTime = 0;
+        content.innerHTML = `
+            <div class="reflex-game">
+                <div class="reflex-target" id="reflexTarget">Warte...</div>
+                <div class="reflex-instruction">Klicke, sobald der Kreis ROT wird!</div>
+            </div>
+        `;
+        const target = document.getElementById('reflexTarget');
+        function startRound() {
+            if (round >= 5) {
+                target.textContent = 'Fertig!';
+                scheduleTimeout(() => close(), 1200);
+                return;
+            }
+            round++;
+            waiting = false;
+            target.textContent = 'Warte...';
+            target.classList.remove('ready');
+            const delay = 900 + Math.random() * 2000;
+            scheduleTimeout(() => {
+                target.textContent = 'JETZT!';
+                target.classList.add('ready');
+                waiting = true;
+                startTime = Date.now();
+            }, delay);
+        }
+        target.onclick = () => {
+            if (waiting) {
+                const reaction = Date.now() - startTime;
+                const points = Math.max(1, Math.floor(120 - reaction / 8));
+                updateScore(points);
+                target.textContent = `${reaction} ms!`;
+                target.classList.remove('ready');
+                waiting = false;
+                scheduleTimeout(startRound, 800);
+            } else {
+                target.textContent = 'Zu früh!';
+                scheduleTimeout(startRound, 900);
+            }
+        };
+        setCleanup(() => (target.onclick = null));
+        startRound();
+    }
+    /* === BROOM DELIVERY GAME === */
+    function startBroomGame(content) {
+        content.innerHTML = `
+            <div class="broom-game">
+                <canvas id="broomCanvas" width="720" height="400"></canvas>
+                <div class="broom-hud">
+                    <span>🧹 Leben: <span id="broomLives">3</span></span>
+                    <span>📦 Lieferungen: <span id="broomDeliveries">0</span></span>
+                    <span>⏳ <span id="broomTimer">60</span>s</span>
+                    <p>Steuerung: W / S oder Pfeile ↑ ↓ · SPACE liefert Hexenpost</p>
+                </div>
+            </div>
+        `;
+        const canvas = document.getElementById('broomCanvas');
+        const ctx = canvas.getContext('2d');
+        const livesEl = document.getElementById('broomLives');
+        const deliveriesEl = document.getElementById('broomDeliveries');
+        const timerEl = document.getElementById('broomTimer');
+        const player = { x: 90, y: canvas.height / 2, width: 42, height: 22 };
+        const packages = [];
+        const houses = [];
+        const keys = new Set();
+        let lives = 3;
+        let deliveries = 0;
+        let timer = 60;
+        let lastThrow = 0;
+        let running = true;
+        function spawnHouse() {
+            const doorY = 110 + Math.random() * (canvas.height - 180);
+            houses.push({
+                x: canvas.width + Math.random() * 220 + 200,
+                y: doorY,
+                width: 70,
+                height: 120
+            });
+        }
+        while (houses.length < 4) {
+            spawnHouse();
+        }
+        function updateHud() {
+            livesEl.textContent = Math.max(0, lives);
+            deliveriesEl.textContent = deliveries;
+            timerEl.textContent = Math.max(0, timer);
+        }
+        function throwPackage() {
+            const now = performance.now();
+            if (now - lastThrow < 400) return;
+            lastThrow = now;
+            packages.push({
+                x: player.x + 28,
+                y: player.y,
+                vx: 6.2,
+                vy: 0
+            });
+        }
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#05021d');
+            gradient.addColorStop(1, '#0f3057');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            for (let i = 0; i < 60; i++) {
+                const x = (i * 73 + performance.now() * 0.02) % canvas.width;
+                const y = (i * 53) % canvas.height;
+                ctx.fillRect(x, y, 2, 2);
+            }
+        }
+        function drawPlayer() {
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.fillStyle = '#452b7c';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 24, 16, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffcf40';
+            ctx.fillRect(12, -4, 26, 8);
+            ctx.fillStyle = '#c08457';
+            ctx.fillRect(28, -8, 18, 16);
+            ctx.restore();
+        }
+        function drawHouse(house) {
+            ctx.save();
+            ctx.translate(house.x, house.y);
+            ctx.fillStyle = '#2f2a4a';
+            ctx.fillRect(-house.width / 2, -house.height / 2, house.width, house.height);
+            ctx.fillStyle = '#1b5e20';
+            ctx.fillRect(-house.width / 2, house.height / 2 - 50, house.width, 50);
+            ctx.fillStyle = '#ffea00';
+            ctx.fillRect(-15, 10, 30, 40);
+            ctx.restore();
+        }
+        function gameLoop() {
+            if (!running) return;
+            frameHandle = requestAnimationFrame(gameLoop);
+            drawBackground();
+            if (keys.has('ArrowUp') || keys.has('KeyW')) player.y -= 4;
+            if (keys.has('ArrowDown') || keys.has('KeyS')) player.y += 4;
+            player.y = clamp(player.y, 50, canvas.height - 50);
+            drawPlayer();
+            const speed = 3.2 + deliveries * 0.04;
+            houses.forEach(house => {
+                house.x -= speed;
+                drawHouse(house);
+                if (house.x < -120) {
+                    lives -= 1;
+                    house.x = canvas.width + Math.random() * 220 + 200;
+                    house.y = 110 + Math.random() * (canvas.height - 180);
+                }
+            });
+            for (let i = packages.length - 1; i >= 0; i--) {
+                const pkg = packages[i];
+                pkg.x += pkg.vx;
+                pkg.y += pkg.vy;
+                ctx.fillStyle = '#ff7043';
+                ctx.fillRect(pkg.x - 6, pkg.y - 6, 12, 12);
+                if (pkg.x > canvas.width + 40) {
+                    packages.splice(i, 1);
+                    continue;
+                }
+                houses.forEach(house => {
+                    const doorY = house.y + house.height / 2 - 20;
+                    if (
+                        pkg.x > house.x - house.width / 2 &&
+                        pkg.x < house.x + house.width / 2 &&
+                        Math.abs(pkg.y - doorY) < 30
+                    ) {
+                        deliveries += 1;
+                        updateScore(15);
+                        packages.splice(i, 1);
+                        house.x = canvas.width + Math.random() * 220 + 220;
+                        house.y = 110 + Math.random() * (canvas.height - 180);
+                    }
+                });
+            }
+            if (lives <= 0) {
+                running = false;
+                triggerExplosion(content);
+            }
+            updateHud();
+        }
+        function triggerExplosion(contentContainer) {
+            clearTimers();
+            const splash = document.createElement('div');
+            splash.className = 'broom-explosion';
+            splash.innerHTML = `
+                <h3>💥 EXPLOSION!</h3>
+                <p>Najika rastet aus und jagt die Welt mit einer Explosion in die Luft!</p>
+            `;
+            contentContainer.appendChild(splash);
+            scheduleTimeout(() => close(), 2500);
+        }
+        function tickTimer() {
+            timer -= 1;
+            updateHud();
+            if (timer <= 0) {
+                running = false;
+                const banner = document.createElement('div');
+                banner.className = 'broom-success';
+                banner.innerHTML = '<h3>✨ Alle Lieferungen geschafft!</h3><p>Najika ist zufrieden.</p>';
+                content.appendChild(banner);
+                scheduleTimeout(() => close(), 1500);
+            }
+        }
+        const keyDown = (e) => {
+            if (['ArrowUp', 'ArrowDown', 'KeyW', 'KeyS'].includes(e.code)) {
+                keys.add(e.code);
+                e.preventDefault();
+            }
+            if (e.code === 'Space' || e.code === 'Enter') {
+                throwPackage();
+                e.preventDefault();
+            }
+        };
+        const keyUp = (e) => {
+            if (['ArrowUp', 'ArrowDown', 'KeyW', 'KeyS'].includes(e.code)) {
+                keys.delete(e.code);
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('keydown', keyDown);
+        window.addEventListener('keyup', keyUp);
+        setCleanup(() => {
+            window.removeEventListener('keydown', keyDown);
+            window.removeEventListener('keyup', keyUp);
+        });
+        frameHandle = requestAnimationFrame(gameLoop);
+        gameInterval = setInterval(tickTimer, 1000);
+        updateHud();
+    }
+    /* === CRAFTING GAME === */
+    function startCraftingGame(content) {
+        content.innerHTML = `
+            <div class="craft-game">
+                <div class="craft-recipe">
+                    <h3>Rezept</h3>
+                    <div class="craft-recipe-steps" id="craftRecipe"></div>
+                </div>
+                <div class="craft-buttons" id="craftButtons"></div>
+                <div class="craft-status">
+                    <span>⏳ <span id="craftTimer">60</span>s</span>
+                    <span id="craftHint">Klicke die Zutaten in der richtigen Reihenfolge!</span>
+                </div>
+            </div>
+        `;
+        const ingredients = [
+            { icon: '🔥', name: 'Flamme' },
+            { icon: '💧', name: 'Essenz' },
+            { icon: '🍃', name: 'Blatt' },
+            { icon: '⚙️', name: 'Mechanismus' },
+            { icon: '💎', name: 'Kristall' },
+            { icon: '🌙', name: 'Mondlicht' }
+        ];
+        const recipeEl = document.getElementById('craftRecipe');
+        const buttonsEl = document.getElementById('craftButtons');
+        const timerEl = document.getElementById('craftTimer');
+        const hintEl = document.getElementById('craftHint');
+        let timer = 60;
+        let stepIndex = 0;
+        let currentRecipe = [];
+        const buttons = ingredients.map(item => {
+            const btn = document.createElement('button');
+            btn.className = 'craft-button';
+            btn.innerHTML = `${item.icon}<span>${item.name}</span>`;
+            btn.dataset.name = item.name;
+            buttonsEl.appendChild(btn);
+            return btn;
+        });
+        function renderRecipe() {
+            recipeEl.innerHTML = '';
+            currentRecipe.forEach((item, index) => {
+                const span = document.createElement('span');
+                span.className = 'craft-step';
+                span.textContent = item.icon;
+                if (index === stepIndex) {
+                    span.classList.add('active');
+                }
+                recipeEl.appendChild(span);
+            });
+        }
+        function newRecipe() {
+            const length = Math.min(3 + Math.floor(score / 60), 6);
+            currentRecipe = Array.from({ length }, () => ingredients[Math.floor(Math.random() * ingredients.length)]);
+            stepIndex = 0;
+            renderRecipe();
+            hintEl.textContent = 'Rezept zusammenstellen!';
+        }
+        function completeStep(name) {
+            const expected = currentRecipe[stepIndex];
+            if (expected && expected.name === name) {
+                stepIndex += 1;
+                updateScore(5);
+                if (stepIndex >= currentRecipe.length) {
+                    updateScore(20);
+                    hintEl.textContent = 'Perfekt! Neues Rezept...';
+                    newRecipe();
+                } else {
+                    renderRecipe();
+                }
+            } else {
+                updateScore(-8);
+                hintEl.textContent = 'Falsche Zutat!';
+            }
+            renderRecipe();
+        }
+        buttons.forEach(btn => {
+            btn.onclick = () => completeStep(btn.dataset.name);
+        });
+        setCleanup(() => buttons.forEach(btn => (btn.onclick = null)));
+        newRecipe();
+        gameInterval = setInterval(() => {
+            timer -= 1;
+            timerEl.textContent = Math.max(0, timer);
+            if (timer <= 0) {
+                hintEl.textContent = 'Zeit vorbei!';
+                scheduleTimeout(() => close(), 1000);
+            }
+        }, 1000);
+    }
+    /* === TRAINING GAME === */
+    function startTrainingGame(content) {
+        content.innerHTML = `
+            <div class="training-game">
+                <div class="training-arena" id="trainingArena"></div>
+                <div class="training-status">
+                    <span>🎯 Treffer: <span id="trainingHits">0</span></span>
+                    <span>❤️ <span id="trainingLives">5</span></span>
+                </div>
+            </div>
+        `;
+        const arena = document.getElementById('trainingArena');
+        const hitsEl = document.getElementById('trainingHits');
+        const livesEl = document.getElementById('trainingLives');
+        let hits = 0;
+        let lives = 5;
+        function updateHud() {
+            hitsEl.textContent = hits;
+            livesEl.textContent = Math.max(0, lives);
+        }
+        function spawnTarget() {
+            if (!arena.isConnected) return;
+            const target = document.createElement('div');
+            target.className = 'training-target';
+            const arenaRect = arena.getBoundingClientRect();
+            const size = 60;
+            target.style.left = Math.random() * (arenaRect.width - size) + 'px';
+            target.style.top = Math.random() * (arenaRect.height - size) + 'px';
+            arena.appendChild(target);
+            const timeoutId = scheduleTimeout(() => {
+                if (target.isConnected) {
+                    arena.removeChild(target);
+                    lives -= 1;
+                    updateHud();
+                    if (lives <= 0) {
+                        arena.innerHTML = '<div class="training-message">Najika ist erschöpft!</div>';
+                        scheduleTimeout(() => close(), 1200);
+                    }
+                }
+            }, 1400);
+            target.onclick = () => {
+                hits += 1;
+                updateScore(12);
+                updateHud();
+                target.classList.add('hit');
+                cancelTimeout(timeoutId);
+                scheduleTimeout(() => target.remove(), 120);
+            };
+        }
+        gameInterval = setInterval(spawnTarget, 900);
+        spawnTarget();
+        updateHud();
+        setCleanup(() => arena.innerHTML = '');
+    }
+    /* === COOKING GAME (Fruit Ninja Style) === */
+    function startCookingGame(content) {
+        content.innerHTML = `
+            <div class="cooking-game-ninja">
+                <div class="cooking-recipe-display" id="recipeDisplay">
+                    <h4>Rezept: <span id="recipeName">Hexentrank</span></h4>
+                    <div class="recipe-ingredients" id="recipeIngredients"></div>
+                </div>
+                <canvas id="cookingCanvas" width="700" height="500"></canvas>
+                <div class="cooking-hud">
+                    <span>❤️ <span id="cookingLives">3</span></span>
+                    <span>🎯 Combo: <span id="cookingCombo">0</span></span>
+                    <span>📋 Zutaten: <span id="cookingProgress">0/5</span></span>
+                </div>
+            </div>
+        `;
+
+        const canvas = document.getElementById('cookingCanvas');
+        const ctx = canvas.getContext('2d');
+        const livesEl = document.getElementById('cookingLives');
+        const comboEl = document.getElementById('cookingCombo');
+        const progressEl = document.getElementById('cookingProgress');
+        const recipeNameEl = document.getElementById('recipeName');
+        const recipeIngredientsEl = document.getElementById('recipeIngredients');
+
+        // Rezepte mit verschiedenen Zutaten
+        const recipes = [
+            { name: 'Hexentrank', ingredients: ['🍄', '🧄', '🌿', '🦎', '🕷️'], icon: '🧪' },
+            { name: 'Suppenzauber', ingredients: ['🥕', '🥔', '🧅', '🍅', '🌶️'], icon: '🍲' },
+            { name: 'Fruchtbombe', ingredients: ['🍎', '🍊', '🍋', '🍇', '🍓'], icon: '🍹' },
+            { name: 'Giftgebräu', ingredients: ['🦴', '☠️', '🕸️', '🐛', '🪲'], icon: '⚗️' }
+        ];
+
+        let currentRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+        let items = [];
+        let lives = 3;
+        let combo = 0;
+        let collected = [];
+        let slicePaths = [];
+        let isSlicing = false;
+        let sliceStart = null;
+
+        recipeNameEl.textContent = currentRecipe.name + ' ' + currentRecipe.icon;
+        renderRecipeDisplay();
+
+        function renderRecipeDisplay() {
+            recipeIngredientsEl.innerHTML = '';
+            currentRecipe.ingredients.forEach((ing, i) => {
+                const span = document.createElement('span');
+                span.className = 'recipe-ingredient';
+                span.textContent = ing;
+                if (collected.includes(ing)) {
+                    span.classList.add('collected');
+                }
+                recipeIngredientsEl.appendChild(span);
+            });
+        }
+
+        function spawnItem() {
+            // 70% Chance für Rezept-Zutat, 30% für "falsche" Zutat
+            const isRecipeItem = Math.random() > 0.3;
+            const ingredient = isRecipeItem
+                ? currentRecipe.ingredients[Math.floor(Math.random() * currentRecipe.ingredients.length)]
+                : ['💀', '🔥', '❌', '💣'][Math.floor(Math.random() * 4)];
+
+            const x = Math.random() * (canvas.width - 100) + 50;
+            const vy = -(8 + Math.random() * 4);
+            const vx = (Math.random() - 0.5) * 6;
+
+            items.push({
+                x,
+                y: canvas.height - 50,
+                vx,
+                vy,
+                gravity: 0.35,
+                icon: ingredient,
+                isRecipe: isRecipeItem && currentRecipe.ingredients.includes(ingredient),
+                isWrong: !isRecipeItem,
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 0.2,
+                size: 50
+            });
+        }
+
+        function drawItem(item) {
+            ctx.save();
+            ctx.translate(item.x, item.y);
+            ctx.rotate(item.rotation);
+            ctx.font = `${item.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.icon, 0, 0);
+            ctx.restore();
+        }
+
+        function drawSlicePaths() {
+            slicePaths.forEach((path, idx) => {
+                ctx.strokeStyle = `rgba(255, 100, 100, ${1 - idx / slicePaths.length})`;
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                path.points.forEach((pt, i) => {
+                    if (i === 0) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                });
+                ctx.stroke();
+            });
+        }
+
+        function checkSlice(sliceX, sliceY) {
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                const dx = item.x - sliceX;
+                const dy = item.y - sliceY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < item.size / 2 + 20) {
+                    // Treffer!
+                    items.splice(i, 1);
+
+                    if (item.isWrong) {
+                        // Falsche Zutat geschnitten → Verliere Leben
+                        lives -= 1;
+                        combo = 0;
+                        updateHud();
+                        createParticles(item.x, item.y, '💥');
+                        if (lives <= 0) {
+                            endGame('💀 Najika hat sich vergiftet!');
+                            return;
+                        }
+                    } else if (item.isRecipe) {
+                        // Richtige Zutat!
+                        if (!collected.includes(item.icon)) {
+                            collected.push(item.icon);
+                            renderRecipeDisplay();
+                        }
+                        combo += 1;
+                        updateScore(10 + combo * 3);
+                        updateHud();
+                        createParticles(item.x, item.y, '✨');
+
+                        // Rezept komplett?
+                        if (collected.length >= currentRecipe.ingredients.length) {
+                            finishRecipe();
+                        }
+                    }
+                }
+            }
+        }
+
+        function createParticles(x, y, icon) {
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const speed = 3 + Math.random() * 2;
+                items.push({
+                    x,
+                    y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 2,
+                    gravity: 0.2,
+                    icon,
+                    size: 20,
+                    rotation: 0,
+                    rotationSpeed: 0.1,
+                    isParticle: true
+                });
+            }
+        }
+
+        function finishRecipe() {
+            updateScore(50);
+            combo = 0;
+            collected = [];
+            currentRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+            recipeNameEl.textContent = currentRecipe.name + ' ' + currentRecipe.icon;
+            renderRecipeDisplay();
+            updateHud();
+        }
+
+        function endGame(message) {
+            clearTimers();
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            ctx.font = '36px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+            scheduleTimeout(() => close(), 2000);
+        }
+
+        function updateHud() {
+            livesEl.textContent = Math.max(0, lives);
+            comboEl.textContent = combo;
+            progressEl.textContent = `${collected.length}/${currentRecipe.ingredients.length}`;
+        }
+
+        function gameLoop() {
+            if (!canvas.isConnected) return;
+            frameHandle = requestAnimationFrame(gameLoop);
+
+            // Clear
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#1a0808');
+            gradient.addColorStop(1, '#0f1722');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update items
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                item.vy += item.gravity;
+                item.x += item.vx;
+                item.y += item.vy;
+                item.rotation += item.rotationSpeed;
+
+                // Entferne Items die unten raus fallen
+                if (item.y > canvas.height + 60) {
+                    items.splice(i, 1);
+                    if (!item.isParticle && item.isRecipe) {
+                        lives -= 1;
+                        combo = 0;
+                        updateHud();
+                        if (lives <= 0) {
+                            endGame('😵 Alle Zutaten verpasst!');
+                            return;
+                        }
+                    }
+                    continue;
+                }
+
+                drawItem(item);
+            }
+
+            // Draw slice paths
+            drawSlicePaths();
+
+            // Fade out old slices
+            slicePaths = slicePaths.filter(path => path.age++ < 15);
+        }
+
+        // Mouse/Touch Controls
+        const getPos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0]?.clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0]?.clientY);
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        };
+
+        const onStart = (e) => {
+            isSlicing = true;
+            const pos = getPos(e);
+            sliceStart = pos;
+            slicePaths.push({ points: [pos], age: 0 });
+        };
+
+        const onMove = (e) => {
+            if (!isSlicing) return;
+            const pos = getPos(e);
+            if (slicePaths.length > 0) {
+                slicePaths[slicePaths.length - 1].points.push(pos);
+            }
+            checkSlice(pos.x, pos.y);
+        };
+
+        const onEnd = () => {
+            isSlicing = false;
+            sliceStart = null;
+        };
+
+        canvas.addEventListener('mousedown', onStart);
+        canvas.addEventListener('mousemove', onMove);
+        canvas.addEventListener('mouseup', onEnd);
+        canvas.addEventListener('touchstart', onStart);
+        canvas.addEventListener('touchmove', onMove);
+        canvas.addEventListener('touchend', onEnd);
+
+        setCleanup(() => {
+            canvas.removeEventListener('mousedown', onStart);
+            canvas.removeEventListener('mousemove', onMove);
+            canvas.removeEventListener('mouseup', onEnd);
+            canvas.removeEventListener('touchstart', onStart);
+            canvas.removeEventListener('touchmove', onMove);
+            canvas.removeEventListener('touchend', onEnd);
+        });
+
+        frameHandle = requestAnimationFrame(gameLoop);
+        gameInterval = setInterval(spawnItem, 900);
+        updateHud();
+    }
+    window.MiniGames = {
+        open,
+        close: () => close(true)
+    };
+    console.log('✅ Minigames module loaded');
+})();

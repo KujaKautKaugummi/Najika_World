@@ -1,0 +1,495 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🎤 NAJIKA VOICE CLONING SYSTEM 🎤
+
+Klont Megumin's deutsche Stimme mit Coqui TTS (XTTS-v2)
+
+FEATURES:
+- Voice Cloning aus Audio-Samples (min. 6 Sekunden!)
+- XTTS-v2 (Multi-lingual, hochqualitativ)
+- Lokales Training (kein Cloud!)
+- Inference in Echtzeit
+
+PROZESS:
+1. Sample-Audio extrahieren (Megumin deutsch, 6+ Sekunden)
+2. XTTS Fine-Tuning (optional)
+3. TTS Inference (Text → Megumin's Stimme)
+
+INSTALLATION:
+pip install TTS
+"""
+
+import json
+import subprocess
+import sys
+import os
+import shutil
+from pathlib import Path
+from datetime import datetime
+import pytz
+
+# Fix Windows console encoding
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+NAJIKA_DIR = Path('C:/Najika-World')
+VOICE_DIR = NAJIKA_DIR / 'voice_data'
+SAMPLES_DIR = VOICE_DIR / 'samples'
+MODELS_DIR = VOICE_DIR / 'models'
+OUTPUT_DIR = VOICE_DIR / 'output'
+LOG_FILE = VOICE_DIR / 'voice_clone.log'
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+# FFmpeg Path
+FFMPEG_PATH = r"C:\Users\0KKK0\AppData\Local\Microsoft\WinGet\Links\ffmpeg.exe"
+
+# VOICE CONFIG
+VOICE_CONFIG = {
+    'megumin': {
+        'name': 'Megumin (Deutsch)',
+        'language': 'de',
+        'sample_length_min': 6,  # Mindestens 6 Sekunden für XTTS
+        'sample_length_max': 30,  # Maximal 30 Sekunden
+        'samples_needed': 3,  # Mindestens 3 Samples für gute Qualität
+        'description': 'Megumin deutsche Synchronsprecherin - dramatisch, enthusiastisch',
+        'reference_text': 'EXPLOSION! Meine Magie ist unbesiegbar und die finstere Dunkelheit verschwindet!'
+    }
+}
+
+def log(message, level='INFO'):
+    """Logging"""
+    timestamp = datetime.now(BERLIN_TZ).strftime('%Y-%m-%d %H:%M:%S')
+    log_line = f'[{timestamp}] [{level}] {message}'
+    print(log_line)
+
+    VOICE_DIR.mkdir(exist_ok=True)
+    with open(LOG_FILE, 'a', encoding='utf-8') as f:
+        f.write(log_line + '\n')
+
+def check_dependencies():
+    """Prüft ob TTS und FFmpeg verfügbar sind"""
+    log("Prüfe Dependencies...", 'INFO')
+
+    # Check TTS (Coqui)
+    try:
+        from TTS.api import TTS
+        log("Coqui TTS: OK", 'SUCCESS')
+    except ImportError:
+        log("Coqui TTS: NICHT GEFUNDEN!", 'ERROR')
+        log("Installiere mit: pip install TTS", 'ERROR')
+        return False
+
+    # Check FFmpeg
+    ffmpeg_ok = False
+    if os.path.exists(FFMPEG_PATH):
+        try:
+            result = subprocess.run([FFMPEG_PATH, '-version'], capture_output=True, timeout=5)
+            if result.returncode == 0:
+                ffmpeg_ok = True
+        except:
+            pass
+
+    if ffmpeg_ok:
+        log("FFmpeg: OK", 'SUCCESS')
+    else:
+        log("FFmpeg: NICHT GEFUNDEN!", 'WARNING')
+        log("Audio-Extraktion wird nicht funktionieren!", 'WARNING')
+
+    return True
+
+def extract_audio_sample(video_path, start_time, duration, output_name):
+    """Extrahiert Audio-Sample aus Video"""
+    SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
+
+    output_file = SAMPLES_DIR / f"{output_name}.wav"
+
+    if output_file.exists():
+        log(f"Sample bereits vorhanden: {output_name}", 'INFO')
+        return output_file
+
+    log(f"Extrahiere Sample: {output_name} ({start_time}s, {duration}s)...", 'INFO')
+
+    try:
+        cmd = [
+            FFMPEG_PATH,
+            '-i', str(video_path),
+            '-ss', str(start_time),  # Start
+            '-t', str(duration),  # Dauer
+            '-vn',  # Kein Video
+            '-acodec', 'pcm_s16le',  # WAV 16-bit
+            '-ar', '22050',  # 22kHz (TTS optimal)
+            '-ac', '1',  # Mono
+            '-y',  # Überschreiben
+            str(output_file)
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, timeout=60)
+
+        if result.returncode == 0 and output_file.exists():
+            duration_actual = get_audio_duration(output_file)
+            log(f"Sample extrahiert: {output_name} ({duration_actual:.1f}s)", 'SUCCESS')
+            return output_file
+        else:
+            log(f"FFmpeg Fehler: {result.stderr[:200]}", 'ERROR')
+            return None
+
+    except Exception as e:
+        log(f"Sample-Extraktion Fehler: {e}", 'ERROR')
+        return None
+
+def get_audio_duration(audio_file):
+    """Gibt Audio-Dauer in Sekunden zurück"""
+    try:
+        import wave
+        with wave.open(str(audio_file), 'rb') as wf:
+            frames = wf.getnframes()
+            rate = wf.getframerate()
+            duration = frames / float(rate)
+            return duration
+    except:
+        return 0.0
+
+def validate_sample(audio_file, min_duration=6, max_duration=30):
+    """Validiert Audio-Sample"""
+    if not audio_file.exists():
+        log(f"Sample nicht gefunden: {audio_file}", 'ERROR')
+        return False
+
+    duration = get_audio_duration(audio_file)
+
+    if duration < min_duration:
+        log(f"Sample zu kurz: {duration:.1f}s (min. {min_duration}s)", 'ERROR')
+        return False
+
+    if duration > max_duration:
+        log(f"Sample zu lang: {duration:.1f}s (max. {max_duration}s)", 'WARNING')
+        # Ist ok, aber nicht optimal
+
+    log(f"Sample OK: {duration:.1f}s", 'SUCCESS')
+    return True
+
+def initialize_tts_model():
+    """Initialisiert XTTS-v2 Model"""
+    log("Lade XTTS-v2 Model...", 'INFO')
+
+    try:
+        from TTS.api import TTS
+
+        # XTTS-v2 (Multi-lingual Voice Cloning)
+        model_name = "tts_models/multilingual/multi-dataset/xtts_v2"
+
+        log(f"Model: {model_name}", 'INFO')
+        log("Download kann beim ersten Mal dauern (~2GB)...", 'INFO')
+
+        tts = TTS(model_name=model_name)
+
+        log("XTTS-v2 geladen!", 'SUCCESS')
+        log(f"Unterstützte Sprachen: {', '.join(tts.languages)}", 'INFO')
+
+        return tts
+
+    except Exception as e:
+        log(f"TTS Model Fehler: {e}", 'ERROR')
+        return None
+
+def clone_voice_from_samples(voice_name='megumin'):
+    """Erstellt Voice-Clone aus Samples"""
+    config = VOICE_CONFIG.get(voice_name)
+    if not config:
+        log(f"Unbekannte Stimme: {voice_name}", 'ERROR')
+        return False
+
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log(f"VOICE CLONING: {config['name']}", 'INFO')
+    log("="*60, 'INFO')
+
+    # Finde Samples
+    samples = list(SAMPLES_DIR.glob(f"{voice_name}_sample_*.wav"))
+
+    if not samples:
+        log("KEINE SAMPLES GEFUNDEN!", 'ERROR')
+        log("", 'ERROR')
+        log("SO ERSTELLST DU SAMPLES:", 'INFO')
+        log("1. Konosuba Video öffnen", 'INFO')
+        log("2. Szene mit Megumin-Dialogen suchen (6+ Sekunden)", 'INFO')
+        log("3. Timestamps notieren", 'INFO')
+        log("4. extract_audio_sample() nutzen", 'INFO')
+        return False
+
+    log(f"Gefundene Samples: {len(samples)}", 'INFO')
+
+    # Validiere Samples
+    valid_samples = []
+    for sample in samples:
+        if validate_sample(sample, config['sample_length_min'], config['sample_length_max']):
+            valid_samples.append(sample)
+
+    if len(valid_samples) < config['samples_needed']:
+        log(f"Zu wenig valide Samples! ({len(valid_samples)}/{config['samples_needed']})", 'ERROR')
+        return False
+
+    log(f"Valide Samples: {len(valid_samples)}", 'SUCCESS')
+
+    # Initialisiere TTS
+    tts = initialize_tts_model()
+    if not tts:
+        return False
+
+    # Nutze erstes Sample als Referenz
+    reference_sample = valid_samples[0]
+    log(f"Referenz-Sample: {reference_sample.name}", 'INFO')
+
+    # Teste Voice Clone
+    log("", 'INFO')
+    log("TESTE VOICE CLONE...", 'INFO')
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    test_output = OUTPUT_DIR / f"{voice_name}_test.wav"
+
+    try:
+        tts.tts_to_file(
+            text=config['reference_text'],
+            file_path=str(test_output),
+            speaker_wav=str(reference_sample),
+            language=config['language']
+        )
+
+        log(f"Test-Audio erstellt: {test_output.name}", 'SUCCESS')
+        log("", 'INFO')
+        log("HÖRE TEST-AUDIO AN:", 'INFO')
+        log(f"  {test_output}", 'INFO')
+        log("", 'INFO')
+        log("Klingt es wie Megumin? Dann ist Voice Cloning bereit!", 'SUCCESS')
+
+        # Speichere Config
+        voice_config_file = MODELS_DIR / f"{voice_name}_config.json"
+        MODELS_DIR.mkdir(parents=True, exist_ok=True)
+
+        voice_data = {
+            'name': config['name'],
+            'language': config['language'],
+            'reference_sample': str(reference_sample),
+            'model': 'xtts_v2',
+            'created_at': datetime.now(BERLIN_TZ).isoformat()
+        }
+
+        with open(voice_config_file, 'w', encoding='utf-8') as f:
+            json.dump(voice_data, f, indent=2, ensure_ascii=False)
+
+        log(f"Voice Config gespeichert: {voice_config_file.name}", 'SUCCESS')
+
+        return True
+
+    except Exception as e:
+        log(f"Voice Clone Fehler: {e}", 'ERROR')
+        import traceback
+        log(f"Traceback: {traceback.format_exc()}", 'ERROR')
+        return False
+
+def text_to_speech(text, voice_name='megumin', output_file=None):
+    """Konvertiert Text zu Sprache (Megumin's Stimme)"""
+
+    # Lade Voice Config
+    voice_config_file = MODELS_DIR / f"{voice_name}_config.json"
+
+    if not voice_config_file.exists():
+        log("Voice Clone noch nicht erstellt!", 'ERROR')
+        log("Führe zuerst clone_voice_from_samples() aus!", 'ERROR')
+        return None
+
+    with open(voice_config_file, 'r', encoding='utf-8') as f:
+        voice_data = json.load(f)
+
+    reference_sample = Path(voice_data['reference_sample'])
+
+    if not reference_sample.exists():
+        log(f"Referenz-Sample nicht gefunden: {reference_sample}", 'ERROR')
+        return None
+
+    # Output File
+    if output_file is None:
+        timestamp = datetime.now(BERLIN_TZ).strftime('%Y%m%d_%H%M%S')
+        output_file = OUTPUT_DIR / f"najika_{timestamp}.wav"
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    log(f"TTS: {text[:50]}...", 'INFO')
+
+    try:
+        # Initialisiere TTS
+        tts = initialize_tts_model()
+        if not tts:
+            return None
+
+        # Generate Speech
+        tts.tts_to_file(
+            text=text,
+            file_path=str(output_file),
+            speaker_wav=str(reference_sample),
+            language=voice_data['language']
+        )
+
+        duration = get_audio_duration(output_file)
+        log(f"Audio erstellt: {output_file.name} ({duration:.1f}s)", 'SUCCESS')
+
+        return output_file
+
+    except Exception as e:
+        log(f"TTS Fehler: {e}", 'ERROR')
+        return None
+
+def extract_megumin_samples_auto():
+    """Extrahiert automatisch Megumin-Samples aus vorhandenen Videos"""
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("AUTO-SAMPLE EXTRAKTION", 'INFO')
+    log("="*60, 'INFO')
+
+    # Suche Megumin Videos
+    megumin_dir = NAJIKA_DIR / 'training_data' / 'personalities' / 'megumin'
+
+    if not megumin_dir.exists():
+        log("Megumin-Ordner nicht gefunden!", 'ERROR')
+        log(f"Erwarteter Pfad: {megumin_dir}", 'ERROR')
+        return False
+
+    videos = list(megumin_dir.rglob('*.mp4')) + list(megumin_dir.rglob('*.mkv'))
+
+    if not videos:
+        log("Keine Videos gefunden!", 'ERROR')
+        return False
+
+    log(f"Gefundene Videos: {len(videos)}", 'INFO')
+
+    # Nehme erstes Video
+    video = videos[0]
+    log(f"Nutze Video: {video.name}", 'INFO')
+
+    # Extrahiere 3 Samples (Anfang, Mitte, Ende)
+    # WICHTIG: Timestamps müssen Megumin-Dialoge enthalten!
+    samples_config = [
+        {'start': 60, 'duration': 10, 'name': 'megumin_sample_1'},  # 1 Min
+        {'start': 300, 'duration': 10, 'name': 'megumin_sample_2'},  # 5 Min
+        {'start': 600, 'duration': 10, 'name': 'megumin_sample_3'},  # 10 Min
+    ]
+
+    extracted = 0
+    for config in samples_config:
+        sample = extract_audio_sample(
+            video,
+            config['start'],
+            config['duration'],
+            config['name']
+        )
+        if sample:
+            extracted += 1
+
+    log("", 'INFO')
+    log(f"Samples extrahiert: {extracted}/3", 'SUCCESS' if extracted == 3 else 'WARNING')
+
+    if extracted < 3:
+        log("", 'WARNING')
+        log("WARNUNG: Nicht alle Samples konnten extrahiert werden!", 'WARNING')
+        log("Möglicherweise ist das Video zu kurz.", 'WARNING')
+        log("", 'INFO')
+        log("MANUELLE SAMPLE-EXTRAKTION:", 'INFO')
+        log("1. Finde Szenen mit klaren Megumin-Dialogen", 'INFO')
+        log("2. Notiere Start-Zeit (Sekunden)", 'INFO')
+        log("3. Nutze extract_audio_sample(video, start, 10, 'name')", 'INFO')
+
+    return extracted >= 3
+
+def main():
+    """Main"""
+    import sys
+
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("NAJIKA VOICE CLONING SYSTEM", 'INFO')
+    log("="*60, 'INFO')
+
+    if not check_dependencies():
+        log("", 'ERROR')
+        log("INSTALLATION FEHLGESCHLAGEN!", 'ERROR')
+        log("", 'INFO')
+        log("INSTALLATION:", 'INFO')
+        log("1. pip install TTS", 'INFO')
+        log("2. FFmpeg (bereits installiert)", 'INFO')
+        return
+
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+
+        if command == 'extract':
+            # Extrahiere Samples
+            log("", 'INFO')
+            log("EXTRAHIERE MEGUMIN-SAMPLES...", 'INFO')
+            extract_megumin_samples_auto()
+
+        elif command == 'clone':
+            # Erstelle Voice Clone
+            log("", 'INFO')
+            log("ERSTELLE VOICE CLONE...", 'INFO')
+            clone_voice_from_samples('megumin')
+
+        elif command == 'test':
+            # Teste TTS
+            log("", 'INFO')
+            log("TESTE TTS...", 'INFO')
+
+            test_text = "EXPLOSION! Meine Magie ist unbesiegbar!"
+            output = text_to_speech(test_text, 'megumin')
+
+            if output:
+                log("", 'SUCCESS')
+                log("TEST ERFOLGREICH!", 'SUCCESS')
+                log(f"Audio: {output}", 'INFO')
+
+        elif command == 'full':
+            # Kompletter Workflow
+            log("", 'INFO')
+            log("KOMPLETTER WORKFLOW (Extract → Clone → Test)", 'INFO')
+
+            # Schritt 1: Samples
+            if extract_megumin_samples_auto():
+                # Schritt 2: Clone
+                if clone_voice_from_samples('megumin'):
+                    # Schritt 3: Test
+                    test_text = "EXPLOSION! Hallo Kuja! Die finstere Dunkelheit verschlingt alles!"
+                    output = text_to_speech(test_text, 'megumin')
+
+                    if output:
+                        log("", 'SUCCESS')
+                        log("="*60, 'SUCCESS')
+                        log("VOICE CLONING KOMPLETT!", 'SUCCESS')
+                        log("="*60, 'SUCCESS')
+                        log(f"Test-Audio: {output}", 'INFO')
+
+        else:
+            print(f"Unbekannter Command: {command}")
+
+    else:
+        print()
+        print("="*60)
+        print("NAJIKA VOICE CLONING SYSTEM")
+        print("="*60)
+        print()
+        print("USAGE:")
+        print("  python najika_voice_clone.py extract   # Samples extrahieren")
+        print("  python najika_voice_clone.py clone     # Voice Clone erstellen")
+        print("  python najika_voice_clone.py test      # TTS testen")
+        print("  python najika_voice_clone.py full      # Alles in einem")
+        print()
+        print("WORKFLOW:")
+        print("  1. extract  → Megumin Audio-Samples (6-10s)")
+        print("  2. clone    → Voice Clone Training")
+        print("  3. test     → Test mit Beispiel-Text")
+        print()
+        print("="*60)
+
+if __name__ == "__main__":
+    main()

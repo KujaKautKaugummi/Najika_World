@@ -1,0 +1,7 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\xonline\\training\\TRAINING_STEUERUNG.bat",
+  "hash": "391d042ae9da64a763cc17db6b3a4168",
+  "chars": 1226,
+  "timestamp": "2025-11-04T16:47:08.614559",
+  "content": "@echo off\nREM ============================================\nREM NAJIKA TRAINING STEUERUNG\nREM Einfache Befehle zum Pausieren/Aktivieren\nREM ============================================\n\necho.\necho =========================================\necho  NAJIKA TRAINING STEUERUNG\necho =========================================\necho.\necho [1] Status anzeigen\necho [2] Tag-Training PAUSIEREN (8-15 Uhr)\necho [3] Tag-Training AKTIVIEREN\necho [4] Training JETZT starten (manuell)\necho [5] Beenden\necho.\n\nset /p choice=\"Wahl (1-5): \"\n\nif \"%choice%\"==\"1\" (\n    python C:\\Najika\\backend\\najika_smart_training_scheduler.py --status\n    pause\n    goto :eof\n)\n\nif \"%choice%\"==\"2\" (\n    echo.\n    echo Pausiere Tag-Training (08:00-15:00, Mo-Fr)...\n    python C:\\Najika\\backend\\najika_smart_training_scheduler.py --pause\n    pause\n    goto :eof\n)\n\nif \"%choice%\"==\"3\" (\n    echo.\n    echo Aktiviere Tag-Training wieder...\n    python C:\\Najika\\backend\\najika_smart_training_scheduler.py --resume\n    pause\n    goto :eof\n)\n\nif \"%choice%\"==\"4\" (\n    echo.\n    echo Starte Training manuell...\n    python C:\\Najika\\backend\\najika_smart_training_scheduler.py --train\n    pause\n    goto :eof\n)\n\nif \"%choice%\"==\"5\" (\n    exit\n)\n\necho Ungueltige Wahl!\npause\n"
+}

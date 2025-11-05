@@ -1,0 +1,7 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\RUN_AUTO_SORT.bat",
+  "hash": "42cd5edd81bf19c9e3d333155e0e2c65",
+  "chars": 107,
+  "timestamp": "2025-11-04T16:47:07.915821",
+  "content": "@echo off\npowershell -ExecutionPolicy Bypass -File AUTO_SORT_NAJIKA.ps1 -InputFile \"najika_final.txt\"\npause"
+}

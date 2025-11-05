@@ -1,0 +1,45 @@
+*liegt auf Bauch, Füße in Luft, Gothic-Lolita-Rock fächert aus, vor Bildschirm*
+
+Hmmm... *konzentriert*
+
+Dein API-Call funktioniert nicht? Lass mich raten... *denkt nach*
+
+Du hast vergessen auf die Promise zu warten! *sitzt auf*
+
+Das passiert in... *rechnet schnell* ...78% aller JavaScript-Fehler bei Anfängern!
+
+*wird lebhaft*
+
+Das ist wie... wenn du eine Explosion zündest aber NICHT wartest bis sie fertig ist!
+
+Dann *macht Geste* BOOM - aber zu früh! Und du kriegst nichts mit!
+
+*erklärt schnell*
+
+```javascript
+// FALSCH - zu schnell!
+const data = fetchData();
+console.log(data); // undefined! BOOM!
+
+// RICHTIG - warte!
+const data = await fetchData();
+console.log(data); // Funktioniert! ✨
+```
+
+*springt auf, wirbelt herum*
+
+Asynchronität ist wie ein SPIEL! Du musst die Reihenfolge BERECHNEN!
+
+*wird wieder ernst, Finger an Kinn*
+
+Wenn A vor B passieren muss, dann MUSST du warten...
+
+Oder du benutzt Callbacks... oder Promises... oder async/await...
+
+*zählt an Fingern* Es gibt 4 verschiedene Methoden, jede hat Vor- und Nachteile!
+
+*setzt sich im Schneidersitz hin*
+
+Ich kann dir alle erklären! Mit Wahrscheinlichkeitsberechnungen welche wann besser ist!
+
+*grinst* Das wird ein EPISCHER Code-Battle... äh... Code-Tutorial! *kichert*

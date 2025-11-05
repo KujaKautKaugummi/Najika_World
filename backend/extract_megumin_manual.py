@@ -1,0 +1,367 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+r"""
+MANUELLE MEGUMIN EXTRAKTION - MIT SUPERVISION!
+
+USER wählt Megumin-REFERENZ-Sample aus
+→ AI vergleicht ALLE Segmente mit Referenz
+→ Extrahiert NUR ähnliche Segmente (= Megumin!)
+
+BESSER als "häufigster Speaker"!
+"""
+
+import sys
+import io
+from pathlib import Path
+from datetime import datetime
+import pytz
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+NAJIKA_DIR = Path('C:/Najika-World')
+VOICE_DIR = NAJIKA_DIR / 'voice_data'
+AUDIO_DIR = VOICE_DIR / 'raw'
+CLEAN_DIR = VOICE_DIR / 'samples' / 'megumin_clean'
+MEGUMIN_ONLY_DIR = VOICE_DIR / 'samples' / 'megumin_only'
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+def log(message, level='INFO'):
+    """Logging"""
+    timestamp = datetime.now(BERLIN_TZ).strftime('%Y-%m-%d %H:%M:%S')
+    print(f'[{timestamp}] [{level}] {message}')
+
+def check_dependencies():
+    """Prüft Dependencies"""
+    missing = []
+
+    try:
+        from pyannote.audio import Pipeline
+    except ImportError:
+        missing.append("pyannote.audio")
+
+    try:
+        import torchaudio
+    except ImportError:
+        missing.append("torchaudio")
+
+    try:
+        from resemblyzer import VoiceEncoder, preprocess_wav
+    except ImportError:
+        missing.append("resemblyzer")
+
+    return len(missing) == 0, missing
+
+def create_reference_embeddings():
+    """
+    Erstellt Megumin-REFERENZ-Embeddings aus USER's reinen Samples
+
+    USER liefert 6 REINE Megumin-Samples (kein Background!)
+    → Script erstellt Embeddings für alle 6
+    → Nutzt DURCHSCHNITT als Referenz (robuster!)
+    """
+
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("MEGUMIN REFERENZ-EMBEDDINGS", 'INFO')
+    log("="*60, 'INFO')
+
+    # Referenz Directory (User's reine Samples!)
+    reference_dir = VOICE_DIR / 'samples' / 'megumin_reference'
+
+    if not reference_dir.exists():
+        log(f"FEHLER: Kein Referenz-Directory gefunden!", 'ERROR')
+        log("", 'INFO')
+        log("ERSTELLE DIRECTORY:", 'INFO')
+        log(f"  mkdir {reference_dir}", 'INFO')
+        log("", 'INFO')
+        log("KOPIERE DEINE 6 REINEN MEGUMIN-SAMPLES DORTHIN:", 'INFO')
+        log("  (Nur Megumin, kein Background!)", 'INFO')
+        return None
+
+    # Finde alle Referenz-Samples
+    samples = sorted(reference_dir.glob('*.wav'))
+
+    if not samples:
+        log(f"Keine Samples in {reference_dir}!", 'ERROR')
+        return None
+
+    log(f"Gefunden: {len(samples)} Referenz-Samples", 'SUCCESS')
+
+    for sample in samples:
+        log(f"  - {sample.name}", 'INFO')
+
+    log("", 'INFO')
+
+    try:
+        from resemblyzer import VoiceEncoder, preprocess_wav
+        import numpy as np
+
+        log("Lade Voice Encoder...", 'INFO')
+        encoder = VoiceEncoder()
+
+        embeddings = []
+
+        for sample in samples:
+            log(f"Verarbeite: {sample.name}...", 'DEBUG')
+            wav = preprocess_wav(str(sample))
+            embedding = encoder.embed_utterance(wav)
+            embeddings.append(embedding)
+
+        # Durchschnitt aller Embeddings (robuster!)
+        ref_embedding = np.mean(embeddings, axis=0)
+
+        log("", 'INFO')
+        log(f"✅ Referenz-Embedding erstellt aus {len(samples)} Samples", 'SUCCESS')
+
+        return ref_embedding, encoder
+
+    except Exception as e:
+        log(f"FEHLER: {e}", 'ERROR')
+        import traceback
+        traceback.print_exc()
+        return None
+
+def extract_megumin_from_episodes(ref_embedding, encoder, num_samples=20):
+    """
+    Extrahiert Megumin-Segmente aus ALLEN 61 Episoden
+
+    STRATEGIE:
+    1. Lade alle 61 Episoden
+    2. Speaker Diarization für jede Episode
+    3. Vergleiche jeden Speaker mit USER's Referenz-Embedding
+    4. Extrahiere NUR Segmente die ähnlich zu Referenz sind (>75%)
+    5. Wähle die besten 20-30 Samples aus
+
+    Args:
+        ref_embedding: Referenz-Embedding (aus 6 User-Samples!)
+        encoder: Voice Encoder Instanz
+        num_samples: Anzahl Samples zu extrahieren (20+)
+    """
+
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("EXTRAHIERE MEGUMIN AUS ALLEN 61 EPISODEN", 'INFO')
+    log("="*60, 'INFO')
+
+    try:
+        from pyannote.audio import Pipeline
+        import torch
+        import torchaudio
+        from resemblyzer import preprocess_wav
+        import numpy as np
+
+        # Lade Speaker Diarization
+        log("Lade Speaker Diarization Model...", 'INFO')
+        log("WICHTIG: HuggingFace Token benötigt!", 'WARNING')
+        log("  1. https://huggingface.co/settings/tokens", 'INFO')
+        log("  2. Erstelle Token (read access)", 'INFO')
+        log("  3. Akzeptiere: https://huggingface.co/pyannote/speaker-diarization-3.1", 'INFO')
+        log("", 'INFO')
+
+        token = input("HuggingFace Token: ").strip()
+
+        if not token:
+            log("Kein Token - Abbruch!", 'ERROR')
+            return False
+
+        pipeline = Pipeline.from_pretrained(
+            "pyannote/speaker-diarization-3.1",
+            use_auth_token=token
+        )
+
+        log("Pipeline geladen!", 'SUCCESS')
+
+        # Finde alle Episoden
+        audio_files = sorted(AUDIO_DIR.glob('KonoSuba*.wav'))
+
+        if not audio_files:
+            log(f"Keine Episoden gefunden in: {AUDIO_DIR}", 'ERROR')
+            return False
+
+        log(f"Gefunden: {len(audio_files)} Episoden", 'SUCCESS')
+        log("", 'INFO')
+
+        # Erstelle Output Directory
+        MEGUMIN_ONLY_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Extrahiere Megumin-Segmente
+        all_megumin_segments = []
+
+        for i, audio_file in enumerate(audio_files, 1):
+            log(f"[{i}/{len(audio_files)}] {audio_file.name}", 'INFO')
+
+            try:
+                # Diarization
+                log("  Analysiere Speaker...", 'DEBUG')
+                diarization = pipeline(str(audio_file))
+
+                # Lade Audio
+                waveform, sample_rate = torchaudio.load(str(audio_file))
+
+                # Prüfe jeden Speaker
+                speakers_found = {}
+                for turn, _, speaker in diarization.itertracks(yield_label=True):
+                    if speaker not in speakers_found:
+                        # Extrahiere Segment
+                        start_sample = int(turn.start * sample_rate)
+                        end_sample = int(turn.end * sample_rate)
+                        segment = waveform[:, start_sample:end_sample]
+
+                        # Speichere temporär
+                        temp_file = VOICE_DIR / 'temp_segment.wav'
+                        torchaudio.save(str(temp_file), segment, sample_rate)
+
+                        # Vergleiche mit Referenz
+                        seg_wav = preprocess_wav(str(temp_file))
+                        seg_embedding = encoder.embed_utterance(seg_wav)
+
+                        # Berechne Similarity
+                        similarity = np.dot(ref_embedding, seg_embedding)
+
+                        speakers_found[speaker] = similarity
+
+                        # Cleanup
+                        temp_file.unlink()
+
+                # Finde ähnlichsten Speaker (= Megumin!)
+                if speakers_found:
+                    megumin_speaker = max(speakers_found.items(), key=lambda x: x[1])
+                    speaker_label, similarity = megumin_speaker
+
+                    if similarity > 0.75:  # Threshold: 75% ähnlich
+                        log(f"  Megumin gefunden! (Similarity: {similarity:.2%})", 'SUCCESS')
+
+                        # Extrahiere ALLE Megumin-Segmente
+                        for turn, _, speaker in diarization.itertracks(yield_label=True):
+                            if speaker == speaker_label:
+                                start_sample = int(turn.start * sample_rate)
+                                end_sample = int(turn.end * sample_rate)
+                                segment = waveform[:, start_sample:end_sample]
+
+                                duration = (end_sample - start_sample) / sample_rate
+
+                                # Nur Segmente > 3s (zu kurz = nutzlos)
+                                if duration >= 3.0:
+                                    all_megumin_segments.append({
+                                        'episode': audio_file.name,
+                                        'start': turn.start,
+                                        'end': turn.end,
+                                        'duration': duration,
+                                        'audio': segment,
+                                        'sample_rate': sample_rate,
+                                        'similarity': similarity
+                                    })
+                    else:
+                        log(f"  Keine Megumin gefunden (beste Similarity: {similarity:.2%})", 'WARNING')
+
+            except Exception as e:
+                log(f"  Fehler: {e}", 'ERROR')
+                continue
+
+            log("", 'INFO')
+
+        # Sortiere nach Similarity (beste zuerst!)
+        all_megumin_segments.sort(key=lambda x: x['similarity'], reverse=True)
+
+        log("="*60, 'INFO')
+        log(f"EXTRAHIERT: {len(all_megumin_segments)} Megumin-Segmente", 'SUCCESS')
+        log("="*60, 'INFO')
+
+        # Wähle beste N Samples
+        num_to_keep = min(num_samples, len(all_megumin_segments))
+
+        log(f"Wähle beste {num_to_keep} Samples aus...", 'INFO')
+
+        for i, segment in enumerate(all_megumin_segments[:num_to_keep], 1):
+            # Speichere
+            output_file = MEGUMIN_ONLY_DIR / f"megumin_pure_{i:02d}.wav"
+
+            torchaudio.save(
+                str(output_file),
+                segment['audio'],
+                segment['sample_rate']
+            )
+
+            log(f"  {i:2d}. {output_file.name} ({segment['duration']:.1f}s, {segment['similarity']:.2%})", 'SUCCESS')
+
+        log("", 'INFO')
+        log("="*60, 'INFO')
+        log("EXTRAKTION KOMPLETT!", 'SUCCESS')
+        log("="*60, 'INFO')
+        log(f"Samples: {MEGUMIN_ONLY_DIR}", 'INFO')
+        log(f"Anzahl: {num_to_keep}", 'INFO')
+        log("", 'INFO')
+        log("NAECHSTER SCHRITT:", 'INFO')
+        log("  1. Höre Samples an (prüfe Quality!)", 'INFO')
+        log("  2. python train_voice_clone_NAJIKA.py", 'INFO')
+        log("     (Update SAMPLES_DIR zu megumin_only!)", 'INFO')
+        log("="*60, 'INFO')
+
+        return True
+
+    except Exception as e:
+        log(f"FEHLER: {e}", 'ERROR')
+        import traceback
+        traceback.print_exc()
+        return False
+
+def main():
+    """Hauptfunktion"""
+
+    log("="*60, 'INFO')
+    log("MEGUMIN VOICE EXTRACTION - SUPERVISED", 'INFO')
+    log("="*60, 'INFO')
+
+    # Prüfe Dependencies
+    has_deps, missing = check_dependencies()
+
+    if not has_deps:
+        log("FEHLER: Dependencies fehlen!", 'ERROR')
+        log("", 'INFO')
+        log("INSTALLATION:", 'INFO')
+        for dep in missing:
+            if dep == "pyannote.audio":
+                log("  pip install pyannote.audio", 'INFO')
+            elif dep == "torchaudio":
+                log("  pip install torchaudio", 'INFO')
+            elif dep == "resemblyzer":
+                log("  pip install resemblyzer", 'INFO')
+        log("", 'INFO')
+        return False
+
+    log("Dependencies OK", 'SUCCESS')
+    log("", 'INFO')
+
+    # Schritt 1: Erstelle Referenz-Embedding aus User's 6 Samples
+    result = create_reference_embeddings()
+
+    if not result:
+        log("Kein Referenz-Embedding - Abbruch!", 'ERROR')
+        return False
+
+    ref_embedding, encoder = result
+
+    # Schritt 2: Extrahiere aus allen Episoden
+    log("", 'INFO')
+    input("Drücke Enter um Extraktion zu starten (dauert ~30-60 Min!)...")
+
+    num_samples = 25  # 25 beste Samples
+
+    success = extract_megumin_from_episodes(ref_embedding, encoder, num_samples)
+
+    return success
+
+if __name__ == '__main__':
+    try:
+        success = main()
+        sys.exit(0 if success else 1)
+    except KeyboardInterrupt:
+        log("\n\nAbgebrochen!", 'ERROR')
+        sys.exit(1)
+    except Exception as e:
+        log(f"FEHLER: {e}", 'ERROR')
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

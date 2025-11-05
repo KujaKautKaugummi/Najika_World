@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""
+Zeigt Najika's Training-Progress an
+"""
+import json
+from pathlib import Path
+from datetime import datetime
+import pytz
+
+TRAINING_DIR = Path('C:/NajikaCore/training')
+SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+def show_progress():
+    if not SCHEDULE_FILE.exists():
+        print('[INFO] Noch kein Training gestartet!')
+        print('[INFO] Starte mit: START_NAJIKA_TRAINING.bat')
+        return
+
+    with open(SCHEDULE_FILE, 'r', encoding='utf-8') as f:
+        schedule = json.load(f)
+
+    print('='*80)
+    print('NAJIKA TRAINING PROGRESS')
+    print('='*80)
+    print()
+
+    # Basis-Stats
+    total_hours = schedule.get('total_hours', 0)
+    days_trained = schedule.get('days_trained', 0)
+    current_week = schedule.get('current_week', 1)
+    start_date = schedule.get('start_date', 'Unknown')
+
+    print(f'Start-Datum:      {start_date[:10]}')
+    print(f'Gesamt-Stunden:   {total_hours} / 300 (Ziel: 12 Wochen)')
+    print(f'Trainings-Tage:   {days_trained}')
+    print(f'Aktuelle Woche:   {current_week} / 12')
+    print()
+
+    # Progress Bar
+    progress_pct = (total_hours / 300) * 100
+    bar_length = 50
+    filled = int(bar_length * total_hours / 300)
+    bar = '█' * filled + '░' * (bar_length - filled)
+    print(f'Progress: [{bar}] {progress_pct:.1f}%')
+    print()
+
+    # Diese Woche
+    completed = schedule.get('completed_sessions', [])
+    now = datetime.now(BERLIN_TZ)
+    this_week_start = now.strftime('%Y-%m-%d')[:8]  # YYYY-MM-
+
+    this_week_sessions = [s for s in completed if s.startswith(this_week_start)]
+    print(f'Diese Woche:      {len(this_week_sessions)} Sessions')
+    print()
+
+    # Heute
+    today = now.strftime('%Y-%m-%d')
+    today_sessions = [s for s in completed if s.startswith(today)]
+
+    print(f'Heute ({today}):')
+    if today_sessions:
+        for session in today_sessions:
+            time_block = session.split('_')[1]
+            print(f'  ✓ {time_block}')
+    else:
+        print('  Noch keine Sessions heute')
+    print()
+
+    # Nächste Session (NEUES SYSTEM: 08:00-23:00, JEDEN TAG)
+    hour = now.hour
+    if hour < 8:
+        print(f'Nächste Session:  Heute 08:00-09:00')
+    elif 8 <= hour < 22:
+        next_hour = hour + 1
+        print(f'Nächste Session:  Heute {next_hour:02d}:00-{next_hour+1:02d}:00')
+    else:
+        print(f'Nächste Session:  Morgen 08:00-09:00')
+    print()
+
+    # Statistiken
+    print('='*80)
+    print('STATISTIKEN')
+    print('='*80)
+    print()
+    print(f'Durchschnitt:     {total_hours / max(days_trained, 1):.1f} Stunden/Tag')
+    print(f'Verbleibend:      {300 - total_hours} Stunden')
+    print(f'Geschätzte Tage:  {(300 - total_hours) / 15:.0f} Tage (bei 15h/Tag, 7 Tage/Woche)')
+    print()
+
+    # Meilensteine
+    milestones = [
+        (25, 'Woche 1 abgeschlossen'),
+        (50, 'Woche 2 abgeschlossen'),
+        (100, 'Monat 1 abgeschlossen'),
+        (150, 'Halbzeit!'),
+        (200, '2/3 geschafft'),
+        (250, 'Fast fertig!'),
+        (300, 'TRAINING KOMPLETT!')
+    ]
+
+    print('MEILENSTEINE:')
+    for hours, desc in milestones:
+        if total_hours >= hours:
+            print(f'  ✓ {hours}h - {desc}')
+        else:
+            print(f'  ○ {hours}h - {desc} (noch {hours - total_hours}h)')
+    print()
+
+    print('='*80)
+
+if __name__ == '__main__':
+    show_progress()

@@ -1,0 +1,22 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\xonline\\config\\requirements.txt",
+  "hash": "a960d62172797fdc3a6e8835c1c9c340",
+  "chars": 699,
+  "timestamp": "2025-11-04T16:47:08.508985",
+  "type": "ideas",
+  "ideas_count": 11,
+  "ideas": [
+    "Konzept: Najika Project - Python Dependencies",
+    "Konzept: Version: 2.5",
+    "Konzept: Web Framework",
+    "Konzept: Data & Database",
+    "Konzept: AI & ML",
+    "Konzept: Audio Processing",
+    "Konzept: Image Processing",
+    "Konzept: Computer Vision",
+    "Konzept: Utilities",
+    "Konzept: Crypto & Security",
+    "Konzept: Development"
+  ],
+  "content": "# Najika Project - Python Dependencies\n# Version: 2.5\n\n# Web Framework\nfastapi==0.104.1\nuvicorn[standard]==0.24.0\npython-multipart==0.0.6\nwebsockets==12.0\n\n# Data & Database\npydantic==2.5.0\nsqlalchemy==2.0.23\nchromadb==0.4.18\n\n# AI & ML\ntorch==2.1.0\ntransformers==4.35.0\nsentence-transformers==2.2.2\nopenai==1.3.5\nanthropic==0.7.0\n\n# Audio Processing\nopenai-whisper==20231117\nsounddevice==0.4.6\nscipy==1.11.4\n\n# Image Processing\npillow==10.1.0\nopencv-python==4.8.1.78\n\n# Computer Vision\nmediapipe==0.10.8\n\n# Utilities\npython-dotenv==1.0.0\nrequests==2.31.0\naiohttp==3.9.1\nnumpy==1.26.2\npyyaml==6.0.1\n\n# Crypto & Security\ncryptography==41.0.7\n\n# Development\npytest==7.4.3\nblack==23.11.0\nflake8==6.1.0\n"
+}

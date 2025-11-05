@@ -1,0 +1,25 @@
+{
+  "start_date": "2025-10-24T19:36:09.628110+02:00",
+  "total_sessions": 18,
+  "personalities": {
+    "megumin": {
+      "videos": 2,
+      "repetitions_done": {
+        "megumin\\KonoSuba_An_Explosion_on_This_Wonderful_World!_1x10[supervideo.cc].mp4": 10,
+        "megumin\\KonoSuba_An_Explosion_on_This_Wonderful_World!_1x11[supervideo.cc].mp4": 8
+      }
+    },
+    "harley": {
+      "videos": 0,
+      "repetitions_done": {}
+    },
+    "shiro": {
+      "videos": 0,
+      "repetitions_done": {}
+    },
+    "melissa": {
+      "videos": 0,
+      "repetitions_done": {}
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "source_file": "C:\\Users\\0KKK0\\Desktop\\zip\\najla leer.txt",
+  "hash": "79b0045db18ea6e7453ff7b88064bced",
+  "chars": 1745,
+  "timestamp": "2025-11-04T16:47:07.599122",
+  "type": "ideas",
+  "ideas_count": 9,
+  "ideas": [
+    "Konzept: ============================================================================",
+    "Konzept: PROMPT CONVERTER - Template → Ollama Modelfile",
+    "Konzept: ============================================================================",
+    "Konzept: Lese Custom-Prompt",
+    "Konzept: Extrahiere Werte (simple Regex)",
+    "Konzept: ... etc",
+    "Konzept: Generiere finalen Prompt",
+    "Konzept: Schreibe in system.txt",
+    "Konzept: Update Modelfile"
+  ],
+  "content": "# ============================================================================\n# PROMPT CONVERTER - Template → Ollama Modelfile\n# ============================================================================\n\n$Base = \"C:\\NajikaCore\"\n\nWrite-Host \"Konvertiere Custom-Prompt...\" -ForegroundColor Yellow\n\n# Lese Custom-Prompt\n$customPath = \"$Base\\najika-brain\\prompts\\custom.txt\"\n\nif (-not (Test-Path $customPath)) {\n    Write-Host \"✗ custom.txt nicht gefunden!\" -ForegroundColor Red\n    Write-Host \"Erstelle erst die Datei aus template.txt\" -ForegroundColor Yellow\n    exit 1\n}\n\n$customContent = Get-Content $customPath -Raw\n\n# Extrahiere Werte (simple Regex)\nfunction Get-Value($key) {\n    if ($customContent -match \"$key\\s*:\\s*\\[\\[(.+?)\\]\\]\") {\n        return $matches[1].Trim()\n    }\n    return \"\"\n}\n\n$name = Get-Value \"NAME\"\n$owner = Get-Value \"OWNER\"\n$traits = Get-Value \"CORE_TRAITS\"\n$philosophy = Get-Value \"PHILOSOPHY\"\n# ... etc\n\n# Generiere finalen Prompt\n$finalPrompt = @\"\nDu bist $name.\n\nPERSÖNLICHKEIT:\n$traits\n\nPHILOSOPHIE:\n$philosophy\n\n[... Rest basierend auf Template ...]\n\nBleib im Charakter als $name.\n\"@\n\n# Schreibe in system.txt\nSet-Content -Path \"$Base\\najika-brain\\prompts\\system.txt\" -Value $finalPrompt -Encoding UTF8\n\n# Update Modelfile\n$modelfile = @\"\nFROM C:\\NajikaCore\\najika-brain\\models\\Meta-Llama-3.1-8B-Base-Q5_K_M.gguf\n\nTEMPLATE \"\"\"{{ .Prompt }}\"\"\"\n\nPARAMETER temperature 0.8\nPARAMETER top_p 0.9\n\nSYSTEM \"\"\"$finalPrompt\"\"\"\n\"@\n\nSet-Content -Path \"$Base\\najika-brain\\Modelfile\" -Value $modelfile -Encoding UTF8\n\nWrite-Host \"✓ Prompt konvertiert\" -ForegroundColor Green\nWrite-Host \"✓ Modelfile aktualisiert\" -ForegroundColor Green\nWrite-Host \"\"\nWrite-Host \"Jetzt: ollama create najika -f Modelfile\" -ForegroundColor Cyan"
+}

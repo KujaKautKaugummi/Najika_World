@@ -1,0 +1,121 @@
+ANLEITUNG: EIGENE PERSÖNLICHKEITS-DATEN HINZUFÜGEN
+===================================================
+
+So fügst du eigene Daten für Najika hinzu:
+
+SCHRITT 1: DATEI ERSTELLEN
+---------------------------
+
+1. Erstelle eine neue .txt Datei
+2. Benenne sie: KATEGORIE_beschreibung.txt
+
+   Beispiele:
+   - SAKURA_beispiel1.txt
+   - HARLEY_witzig.txt
+   - MEGUMIN_explosionen.txt
+   - SHIRO_logik.txt
+   - MELISSA_stream.txt
+
+WICHTIG: Die KATEGORIE (vor dem _) wird als Source gespeichert!
+
+
+SCHRITT 2: INHALT
+------------------
+
+Du kannst ALLES hinzufügen:
+- Transkripte (Video/Audio)
+- Dialoge
+- Beschreibungen
+- Zitate
+- Charaktereigenschaften
+
+Format: Einfacher Text, UTF-8 Encoding
+
+
+BEISPIEL-DATEI:
+---------------
+
+SAKURA_beispiel.txt:
+```
+*sitzt in Gothic-Lolita-Kleid vor Laptop*
+
+Ohhh, ein Bug! *kichert*
+
+Aber ich LIEBE Bugs! Sie sind wie kleine Rätsel!
+
+*zeigt Code* Siehst du? Hier in Zeile 42...
+```
+
+
+SCHRITT 3: DATEI PLATZIEREN
+---------------------------
+
+Kopiere die .txt Datei nach:
+C:\NajikaCore\personality_sources\
+
+Du kannst auch Unterordner erstellen:
+C:\NajikaCore\personality_sources\SAKURA\beispiel1.txt
+
+
+SCHRITT 4: IMPORTIEREN
+-----------------------
+
+Doppelklick auf:
+C:\NajikaCore\IMPORT_PERSONALITIES.bat
+
+ODER im Terminal:
+python C:\NajikaCore\najika_personality_importer.py
+
+
+DAS WAR'S!
+----------
+
+Die Daten werden automatisch:
+1. Gelesen
+2. In ChromaDB gespeichert
+3. Beim nächsten Training verwendet (automatisch!)
+
+
+TIPPS:
+------
+
+✅ GUTE QUELLEN:
+- Video/Audio Transkripte
+- Character-Beschreibungen
+- Anime/Manga-Dialoge
+- Twitch/YouTube Transkripte (mit Erlaubnis!)
+- Bücher/Geschichten
+
+✅ FORMAT:
+- UTF-8 Encoding
+- .txt Dateien
+- Klare Struktur
+
+✅ KATEGORIEN:
+- Verwende existierende: MEGUMIN, HARLEY QUINN, SHIRO, MELISSA MASTERS, SAKURA, GOTHIC_LOLITA
+- Oder erstelle neue!
+
+
+❌ NICHT:
+- Urheberrechtlich geschütztes Material ohne Erlaubnis
+- Unangemessene Inhalte
+- Zu kurze Texte (< 50 Zeichen)
+
+
+MONITORING:
+-----------
+
+Prüfe importierte Daten:
+python C:\NajikaCore\check_personalities.py
+
+Zeigt:
+- Anzahl pro Kategorie
+- Beispiele
+- Quellen
+
+
+FERTIG!
+-------
+
+Najika lernt automatisch beim nächsten Training!
+(4x täglich: 00:00, 06:00, 12:00, 18:00)
