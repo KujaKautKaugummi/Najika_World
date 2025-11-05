@@ -1,0 +1,513 @@
+// Najika Game Scene - Three.js Setup with Combat System
+import React, { useRef, useEffect, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Sky, Environment, KeyboardControls } from '@react-three/drei';
+import * as THREE from 'three';
+
+// Import combat systems
+import { CombatSystem } from './CombatSystem';
+import { CheerSystem } from './CheerSystem';
+import { CameraController } from './CameraController';
+
+// Najika Character Model (Placeholder - will be replaced with proper model)
+function NajikaModel({ position, rotation, combatSystem, cheerSystem, cameraMode }) {
+  const meshRef = useRef();
+  const [najikaState, setNajikaState] = useState('idle');
+
+  useFrame((state, delta) => {
+    if (!meshRef.current) return;
+
+    // Update Najika's animation based on state
+    if (cameraMode === 'orbit') {
+      // Autonomous movement in cheer mode
+      // Simulate combat states for cheer timing
+      const now = Date.now();
+      const cycle = (now % 3000) / 3000; // 3s cycle
+
+      if (cycle < 0.2) {
+        setNajikaState('attacking');
+        cheerSystem.updateNajikaState('attacking');
+      } else if (cycle < 0.4) {
+        setNajikaState('recovering');
+        cheerSystem.updateNajikaState('recovering');
+      } else if (cycle < 0.6) {
+        setNajikaState('dodging');
+        cheerSystem.updateNajikaState('dodging');
+      } else {
+        setNajikaState('idle');
+        cheerSystem.updateNajikaState('idle');
+      }
+
+      // Rotate slowly
+      meshRef.current.rotation.y += delta * 0.5;
+    } else {
+      // Player controlled in action mode
+      meshRef.current.position.copy(position);
+      meshRef.current.rotation.y = rotation;
+    }
+
+    // Update combat system
+    combatSystem.update(delta);
+    cheerSystem.update(delta);
+  });
+
+  return (
+    <mesh ref={meshRef} position={position} castShadow>
+      <capsuleGeometry args={[0.5, 1.5, 4, 8]} />
+      <meshStandardMaterial color="#FF6B9D" />
+
+      {/* Visual indicator for Najika's state */}
+      {najikaState === 'attacking' && (
+        <mesh position={[0, 2, 0]}>
+          <sphereGeometry args={[0.2, 8, 8]} />
+          <meshBasicMaterial color="#FF0000" />
+        </mesh>
+      )}
+
+      {najikaState === 'dodging' && (
+        <mesh position={[0, 2, 0]}>
+          <sphereGeometry args={[0.2, 8, 8]} />
+          <meshBasicMaterial color="#00FF00" />
+        </mesh>
+      )}
+    </mesh>
+  );
+}
+
+// Combat UI Overlay
+function CombatUI({ combatSystem, cheerSystem, cameraMode, onCheer, onCameraSwitch }) {
+  const [stats, setStats] = useState(combatSystem.getStats());
+  const [cheerData, setCheerData] = useState(cheerSystem.getUIData());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(combatSystem.getStats());
+      setCheerData(cheerSystem.getUIData());
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [combatSystem, cheerSystem]);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      pointerEvents: 'none',
+      color: 'white',
+      fontFamily: 'Arial',
+      padding: '20px'
+    }}>
+      {/* HP Bar */}
+      <div style={{ marginBottom: '10px' }}>
+        <div style={{ fontSize: '14px', marginBottom: '5px' }}>HP: {stats.hp}/{stats.maxHp}</div>
+        <div style={{
+          width: '300px',
+          height: '20px',
+          background: '#333',
+          border: '2px solid white',
+          borderRadius: '10px',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            width: `${(stats.hp / stats.maxHp) * 100}%`,
+            height: '100%',
+            background: 'linear-gradient(90deg, #FF6B9D, #FF1744)',
+            transition: 'width 0.3s'
+          }} />
+        </div>
+      </div>
+
+      {/* Stamina Bar */}
+      <div style={{ marginBottom: '10px' }}>
+        <div style={{ fontSize: '14px', marginBottom: '5px' }}>Stamina: {Math.floor(stats.stamina)}/100</div>
+        <div style={{
+          width: '300px',
+          height: '15px',
+          background: '#333',
+          border: '2px solid white',
+          borderRadius: '10px',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            width: `${stats.stamina}%`,
+            height: '100%',
+            background: 'linear-gradient(90deg, #76FF03, #CDDC39)',
+            transition: 'width 0.1s'
+          }} />
+        </div>
+      </div>
+
+      {/* Cheer Meter (Orbit Cam only) */}
+      {cameraMode === 'orbit' && (
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ fontSize: '16px', marginBottom: '5px', fontWeight: 'bold' }}>
+            {cheerData.meterDisplay.status}
+          </div>
+          <div style={{ fontSize: '24px', marginBottom: '10px' }}>
+            {cheerData.meterDisplay.display}
+          </div>
+          <div style={{
+            width: '300px',
+            height: '25px',
+            background: '#333',
+            border: '3px solid #FFD700',
+            borderRadius: '15px',
+            overflow: 'hidden',
+            boxShadow: cheerData.specialReady ? '0 0 20px #FFD700' : 'none'
+          }}>
+            <div style={{
+              width: `${cheerData.cheerMeter}%`,
+              height: '100%',
+              background: cheerData.specialReady
+                ? 'linear-gradient(90deg, #FF9800, #F44336)'
+                : 'linear-gradient(90deg, #FFEB3B, #FFC107)',
+              transition: 'width 0.3s'
+            }} />
+          </div>
+
+          {/* Cheer Button */}
+          <button
+            onClick={onCheer}
+            disabled={!cheerData.canCheer}
+            style={{
+              marginTop: '10px',
+              padding: '15px 30px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              background: cheerData.canCheer ? '#4CAF50' : '#666',
+              color: 'white',
+              border: '3px solid white',
+              borderRadius: '10px',
+              cursor: cheerData.canCheer ? 'pointer' : 'not-allowed',
+              pointerEvents: 'auto',
+              boxShadow: cheerData.canCheer ? '0 4px 10px rgba(0,0,0,0.3)' : 'none',
+              transition: 'all 0.2s'
+            }}
+          >
+            👏 ANFEUERN (SPACE)
+          </button>
+
+          {cheerData.specialReady && (
+            <div style={{
+              marginTop: '15px',
+              padding: '15px',
+              background: 'rgba(255, 69, 0, 0.9)',
+              border: '3px solid #FFD700',
+              borderRadius: '10px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              animation: 'pulse 1s infinite'
+            }}>
+              🔥 SPECIAL FINISHER BEREIT! 🔥<br/>
+              <small>Drücke F für EXPLOSION!</small>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Camera Mode Indicator */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        background: 'rgba(0,0,0,0.7)',
+        padding: '15px',
+        borderRadius: '10px',
+        border: '2px solid white'
+      }}>
+        <div style={{ fontSize: '14px', marginBottom: '5px' }}>Kamera-Modus:</div>
+        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+          {cameraMode === 'orbit' && '🎥 ORBIT (Anfeuern)'}
+          {cameraMode === 'third_person' && '👤 THIRD PERSON (Action)'}
+          {cameraMode === 'first_person' && '👁️ FIRST PERSON (Action)'}
+        </div>
+        <button
+          onClick={onCameraSwitch}
+          style={{
+            marginTop: '10px',
+            padding: '8px 15px',
+            fontSize: '12px',
+            background: '#2196F3',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            pointerEvents: 'auto'
+          }}
+        >
+          WECHSELN (C)
+        </button>
+      </div>
+
+      {/* Controls Help */}
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '20px',
+        background: 'rgba(0,0,0,0.7)',
+        padding: '15px',
+        borderRadius: '10px',
+        border: '2px solid white',
+        fontSize: '12px',
+        maxWidth: '250px'
+      }}>
+        <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>STEUERUNG:</div>
+        {cameraMode === 'orbit' ? (
+          <>
+            <div>SPACE - Anfeuern</div>
+            <div>F - Special Finisher</div>
+            <div>Maus - Kamera drehen</div>
+            <div>Scroll - Zoom</div>
+          </>
+        ) : (
+          <>
+            <div>WASD - Bewegung</div>
+            <div>LMB - Light Attack</div>
+            <div>RMB - Heavy Attack</div>
+            <div>SPACE - Dodge</div>
+            <div>Q - Parry</div>
+            <div>SHIFT - Block</div>
+            <div>1-6 - Elemente</div>
+          </>
+        )}
+        <div style={{ marginTop: '10px', borderTop: '1px solid white', paddingTop: '10px' }}>
+          C - Kamera wechseln
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main Game Scene Component
+function Scene({ combatSystem, cheerSystem, cameraController, cameraMode, setCameraMode }) {
+  const { camera } = useThree();
+  const [najikaPosition, setNajikaPosition] = useState(new THREE.Vector3(0, 0, 0));
+  const [najikaRotation, setNajikaRotation] = useState(0);
+
+  // Keyboard input
+  const keys = useRef({});
+
+  useEffect(() => {
+    const handleKeyDown = (e) => { keys.current[e.key.toLowerCase()] = true; };
+    const handleKeyUp = (e) => { keys.current[e.key.toLowerCase()] = false; };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  useFrame((state, delta) => {
+    // Update camera
+    const input = {
+      mouseDeltaX: 0,
+      mouseDeltaY: 0,
+      wheelDelta: 0,
+      mouseDown: false,
+      isMoving: false
+    };
+
+    // Movement in action modes
+    if (cameraMode !== 'orbit') {
+      const moveSpeed = 5 * delta;
+      const forward = cameraController.getForwardVector();
+      const right = cameraController.getRightVector();
+
+      let moved = false;
+
+      if (keys.current['w']) {
+        najikaPosition.x += forward.x * moveSpeed;
+        najikaPosition.z += forward.z * moveSpeed;
+        moved = true;
+      }
+      if (keys.current['s']) {
+        najikaPosition.x -= forward.x * moveSpeed;
+        najikaPosition.z -= forward.z * moveSpeed;
+        moved = true;
+      }
+      if (keys.current['a']) {
+        najikaPosition.x -= right.x * moveSpeed;
+        najikaPosition.z -= right.z * moveSpeed;
+        moved = true;
+      }
+      if (keys.current['d']) {
+        najikaPosition.x += right.x * moveSpeed;
+        najikaPosition.z += right.z * moveSpeed;
+        moved = true;
+      }
+
+      input.isMoving = moved;
+      setNajikaPosition(najikaPosition);
+    }
+
+    // Update camera controller
+    cameraController.target = najikaPosition;
+    cameraController.update(delta, input);
+  });
+
+  return (
+    <>
+      <Sky sunPosition={[100, 20, 100]} />
+      <ambientLight intensity={0.3} />
+      <directionalLight
+        position={[10, 10, 5]}
+        intensity={1}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+      />
+
+      {/* Najika Character */}
+      <NajikaModel
+        position={najikaPosition}
+        rotation={najikaRotation}
+        combatSystem={combatSystem}
+        cheerSystem={cheerSystem}
+        cameraMode={cameraMode}
+      />
+
+      {/* Ground */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial color="#4CAF50" />
+      </mesh>
+
+      {/* Environment */}
+      <Environment preset="sunset" />
+    </>
+  );
+}
+
+// Main Game Scene Export
+export default function GameScene() {
+  const [combatSystem] = useState(() => new CombatSystem());
+  const [cheerSystem] = useState(() => new CheerSystem());
+  const [cameraController, setCameraController] = useState(null);
+  const [cameraMode, setCameraMode] = useState('orbit');
+  const [cheerMessage, setCheerMessage] = useState('');
+
+  // Initialize camera controller
+  useEffect(() => {
+    // Will be initialized in Canvas
+  }, []);
+
+  // Handle cheer input
+  const handleCheer = () => {
+    const result = cheerSystem.onCheerInput();
+    setCheerMessage(result.message || '');
+
+    setTimeout(() => setCheerMessage(''), 2000);
+  };
+
+  // Handle camera switch
+  const handleCameraSwitch = () => {
+    const modes = ['orbit', 'third_person', 'first_person'];
+    const currentIndex = modes.indexOf(cameraMode);
+    const nextMode = modes[(currentIndex + 1) % modes.length];
+    setCameraMode(nextMode);
+
+    if (cameraController) {
+      cameraController.setMode(nextMode);
+    }
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === ' ' && cameraMode === 'orbit') {
+        e.preventDefault();
+        handleCheer();
+      } else if (e.key.toLowerCase() === 'c') {
+        handleCameraSwitch();
+      } else if (e.key.toLowerCase() === 'f' && cameraMode === 'orbit') {
+        // Special finisher
+        const uiData = cheerSystem.getUIData();
+        if (uiData.specialReady) {
+          const result = cheerSystem.useSpecialFinisher();
+          if (result) {
+            setCheerMessage(result.message);
+            setTimeout(() => setCheerMessage(''), 3000);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keypress', handleKeyPress);
+    return () => window.removeEventListener('keypress', handleKeyPress);
+  }, [cameraMode, cheerSystem, cameraController]);
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <Canvas
+        camera={{ position: [0, 3, 8], fov: 60 }}
+        shadows
+        onCreated={({ camera }) => {
+          const controller = new CameraController(camera, { x: 0, y: 0, z: 0 });
+          setCameraController(controller);
+        }}
+      >
+        {cameraController && (
+          <Scene
+            combatSystem={combatSystem}
+            cheerSystem={cheerSystem}
+            cameraController={cameraController}
+            cameraMode={cameraMode}
+            setCameraMode={setCameraMode}
+          />
+        )}
+      </Canvas>
+
+      {/* Combat UI Overlay */}
+      {cameraController && (
+        <CombatUI
+          combatSystem={combatSystem}
+          cheerSystem={cheerSystem}
+          cameraMode={cameraMode}
+          onCheer={handleCheer}
+          onCameraSwitch={handleCameraSwitch}
+        />
+      )}
+
+      {/* Cheer Message Popup */}
+      {cheerMessage && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          background: 'rgba(0,0,0,0.9)',
+          color: 'white',
+          padding: '30px 50px',
+          borderRadius: '20px',
+          border: '4px solid #FFD700',
+          fontSize: '24px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          zIndex: 1000,
+          animation: 'fadeInOut 2s'
+        }}>
+          {cheerMessage}
+        </div>
+      )}
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+          20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+      `}</style>
+    </div>
+  );
+}

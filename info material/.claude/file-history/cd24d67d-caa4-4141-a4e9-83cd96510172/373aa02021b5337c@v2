@@ -1,0 +1,275 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🔥 MELISSA MASTERS - INTERACTIVE TRAINING 🔥
+
+FÜR: Sexuelle Handlungen, Bewegungen, Dominanz
+WIE: Du beschreibst Szenen, Najika lernt!
+
+PROZESS:
+Video → Audio → Dialoge → DU BESCHREIBST → Najika lernt Kontext!
+"""
+
+import json
+import subprocess
+import sys
+import io
+from pathlib import Path
+from datetime import datetime
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+NAJIKA_DIR = Path('C:/NajikaCore')
+MELISSA_DIR = NAJIKA_DIR / 'training_data' / 'personalities' / 'melissa'
+DESCRIPTIONS_DIR = NAJIKA_DIR / 'training_data' / 'melissa_descriptions'
+PROGRESS_FILE = DESCRIPTIONS_DIR / 'interactive_progress.json'
+
+def find_melissa_videos():
+    """Findet Melissa Videos"""
+    if not MELISSA_DIR.exists():
+        return []
+
+    video_extensions = ['.mp4', '.avi', '.mkv', '.mov', '.wmv']
+    videos = []
+
+    for ext in video_extensions:
+        videos.extend(MELISSA_DIR.rglob(f'*{ext}'))
+
+    return sorted(videos)
+
+def load_progress():
+    """Lädt Progress"""
+    if PROGRESS_FILE.exists():
+        try:
+            return json.loads(PROGRESS_FILE.read_text(encoding='utf-8'))
+        except:
+            pass
+
+    return {
+        'videos_described': [],
+        'total_descriptions': 0
+    }
+
+def save_progress(progress):
+    """Speichert Progress"""
+    DESCRIPTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    PROGRESS_FILE.write_text(json.dumps(progress, indent=2, ensure_ascii=False), encoding='utf-8')
+
+def interactive_describe_scene(video_path):
+    """Interaktive Szenen-Beschreibung"""
+    print()
+    print("="*60)
+    print(f"VIDEO: {video_path.name}")
+    print("="*60)
+    print()
+    print("BESCHREIBE WAS MELISSA MACHT:")
+    print("(Sexuelle Handlungen, Bewegungen, Dominanz)")
+    print()
+    print("BEISPIEL:")
+    print("  Melissa nimmt dominante Position ein, drückt Partner")
+    print("  aufs Bett, greift fest zu, bewegt Hüften kreisend,")
+    print("  intensiver Blick, kommandiert verbal, kontrolliert Tempo")
+    print()
+    print("DEINE BESCHREIBUNG (leer = überspringen):")
+    print()
+
+    description = input("> ")
+
+    if not description.strip():
+        print("\n[Übersprungen]")
+        return None
+
+    return description.strip()
+
+def save_description(video_path, description):
+    """Speichert Beschreibung"""
+    desc_file = DESCRIPTIONS_DIR / f"{video_path.stem}_description.txt"
+
+    content = f"""# MELISSA MASTERS - SZENEN-BESCHREIBUNG
+
+**Video:** {video_path.name}
+**Datum:** {datetime.now().strftime('%Y-%m-%d %H:%M')}
+
+## DEINE BESCHREIBUNG (Bewegungen/Handlungen):
+
+{description}
+
+## FÜR TRAINING:
+
+Diese Beschreibung wird mit den Video-Dialogen kombiniert.
+Najika lernt:
+- Welche BEWEGUNGEN Melissa macht
+- Wie sie DOMINIERT
+- Sexuelle HANDLUNGEN im Kontext
+- Verbindung: Dialog + Aktion
+
+"""
+
+    desc_file.write_text(content, encoding='utf-8')
+    print(f"\n[OK] Beschreibung gespeichert: {desc_file.name}")
+
+    return desc_file
+
+def train_with_description(video_path, description, dialog_text=None):
+    """Trainiert mit Beschreibung + Dialog"""
+    prompt = f"""# MELISSA MASTERS TRAINING
+
+**Video:** {video_path.name}
+
+## BEWEGUNGEN/HANDLUNGEN (was Melissa macht):
+
+{description}
+
+"""
+
+    if dialog_text:
+        prompt += f"""
+## DIALOGE (was Melissa sagt):
+
+{dialog_text}
+
+"""
+
+    prompt += """
+## AUFGABE:
+
+Lerne aus dieser Szene:
+- Wie Melissa HANDELT (Bewegungen, Dominanz)
+- Was Melissa SAGT (Dialoge)
+- Wie Bewegung + Dialog zusammenpassen
+
+Melissa ist dominant, besitzergreifend, kommandierend.
+Mit KUJA ist sie sexuell dominant und kontrolliert!
+
+## ANTWORT:
+
+Beschreibe kurz (1-2 Sätze) wie Melissa mit Kuja umgeht:
+"""
+
+    print("\n[Training...]")
+
+    try:
+        result = subprocess.run(
+            ['ollama', 'run', 'najika-local', prompt],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            encoding='utf-8'
+        )
+
+        if result.returncode == 0:
+            response = result.stdout.strip()
+            print(f"[OK] Najika: {response}")
+            return True
+        else:
+            print(f"[FEHLER] {result.stderr}")
+            return False
+
+    except Exception as e:
+        print(f"[FEHLER] {e}")
+        return False
+
+def interactive_training():
+    """Interaktives Training für Melissa"""
+    print()
+    print("="*60)
+    print("MELISSA MASTERS - INTERACTIVE TRAINING")
+    print("="*60)
+    print()
+
+    videos = find_melissa_videos()
+
+    if not videos:
+        print("[!] Keine Melissa Videos gefunden!")
+        print(f"[!] Lege Videos in: {MELISSA_DIR}")
+        return
+
+    print(f"Gefunden: {len(videos)} Melissa Videos")
+    print()
+
+    progress = load_progress()
+
+    for i, video_path in enumerate(videos, 1):
+        video_key = str(video_path.relative_to(MELISSA_DIR))
+
+        # Überspringe wenn schon beschrieben
+        if video_key in progress['videos_described']:
+            print(f"\n[{i}/{len(videos)}] Bereits beschrieben: {video_path.name}")
+            continue
+
+        print(f"\n[{i}/{len(videos)}]")
+
+        # Hole Beschreibung
+        description = interactive_describe_scene(video_path)
+
+        if not description:
+            continue
+
+        # Speichere Beschreibung
+        desc_file = save_description(video_path, description)
+
+        # Trainiere (10x)
+        print("\nTrainiere 10x...")
+        for rep in range(1, 11):
+            print(f"  [{rep}/10]", end=' ', flush=True)
+            success = train_with_description(video_path, description)
+            if not success:
+                print(" FEHLER")
+                break
+            print(" OK")
+
+        # Update Progress
+        progress['videos_described'].append(video_key)
+        progress['total_descriptions'] += 1
+        save_progress(progress)
+
+        print(f"\n[OK] Video komplett: {video_path.name}")
+
+    print()
+    print("="*60)
+    print("INTERACTIVE TRAINING ABGESCHLOSSEN!")
+    print("="*60)
+    print(f"Videos beschrieben: {len(progress['videos_described'])}")
+    print()
+
+def main():
+    """Main"""
+    import sys
+
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+
+        if command == 'train':
+            interactive_training()
+        elif command == 'status':
+            progress = load_progress()
+            print()
+            print("="*60)
+            print("MELISSA INTERACTIVE TRAINING - STATUS")
+            print("="*60)
+            print(f"Videos beschrieben: {len(progress['videos_described'])}")
+            print(f"Beschreibungen gesamt: {progress['total_descriptions']}")
+            print()
+        else:
+            print(f"Unbekannt: {command}")
+    else:
+        print()
+        print("="*60)
+        print("MELISSA MASTERS - INTERACTIVE TRAINING")
+        print("="*60)
+        print()
+        print("USAGE:")
+        print("  python MELISSA_INTERACTIVE_TRAINING.py train")
+        print()
+        print("WAS PASSIERT:")
+        print("  1. System zeigt dir jedes Melissa-Video")
+        print("  2. DU beschreibst sexuelle Handlungen/Bewegungen")
+        print("  3. Najika lernt Kontext (Dialog + Handlung)")
+        print("  4. 10x Training pro Video")
+        print()
+        print("="*60)
+
+if __name__ == "__main__":
+    main()

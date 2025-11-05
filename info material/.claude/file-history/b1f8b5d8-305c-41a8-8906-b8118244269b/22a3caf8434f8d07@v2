@@ -1,0 +1,96 @@
+# NAJIKA 4X DAILY TRAINING SETUP
+# Erstellt Windows Scheduled Tasks für 15h tägliches Training
+
+$ErrorActionPreference = "Stop"
+
+Write-Host "=" * 80
+Write-Host "NAJIKA 4X DAILY TRAINING - SETUP"
+Write-Host "=" * 80
+Write-Host ""
+
+# Python Path
+$pythonPath = "python"
+$scriptPath = "C:\NajikaCore\najika_unsloth_training.py"
+
+# Task Names
+$taskNames = @("Najika06", "Najika12", "Najika18", "Najika00")
+$taskTimes = @("06:00", "12:00", "18:00", "00:00")
+
+Write-Host "Training-Zeiten: 06:00, 12:00, 18:00, 00:00 (4x täglich)"
+Write-Host "Script: $scriptPath"
+Write-Host ""
+
+# Prüfe ob Script existiert
+if (!(Test-Path $scriptPath)) {
+    Write-Host "FEHLER: Script nicht gefunden: $scriptPath" -ForegroundColor Red
+    exit 1
+}
+
+# Erstelle Tasks
+for ($i = 0; $i -lt $taskNames.Length; $i++) {
+    $taskName = $taskNames[$i]
+    $taskTime = $taskTimes[$i]
+
+    Write-Host "Erstelle Task: $taskName (Zeit: $taskTime)" -ForegroundColor Cyan
+
+    try {
+        # Lösche existierenden Task
+        $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+        if ($existingTask) {
+            Write-Host "  - Lösche existierenden Task..." -ForegroundColor Yellow
+            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+        }
+
+        # Erstelle neuen Task mit schtasks (einfacher als PowerShell cmdlets)
+        $command = "python `"$scriptPath`""
+
+        $result = schtasks /Create /TN "$taskName" /TR "$command" /SC DAILY /ST $taskTime /F
+
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✅ Task erstellt: $taskName" -ForegroundColor Green
+        } else {
+            Write-Host "  ❌ Fehler bei $taskName" -ForegroundColor Red
+        }
+    }
+    catch {
+        Write-Host "  ❌ Exception: $_" -ForegroundColor Red
+    }
+
+    Write-Host ""
+}
+
+Write-Host "=" * 80
+Write-Host "VERIFIKATION"
+Write-Host "=" * 80
+Write-Host ""
+
+# Liste alle Najika-Tasks
+Write-Host "Erstellte Tasks:"
+Write-Host ""
+
+foreach ($taskName in $taskNames) {
+    $task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    if ($task) {
+        $trigger = $task.Triggers[0]
+        Write-Host "  ✅ $taskName - Täglich um $($trigger.StartBoundary.Split('T')[1].Substring(0,5))" -ForegroundColor Green
+    } else {
+        Write-Host "  ❌ $taskName - NICHT GEFUNDEN!" -ForegroundColor Red
+    }
+}
+
+Write-Host ""
+Write-Host "=" * 80
+Write-Host "SETUP ABGESCHLOSSEN!"
+Write-Host "=" * 80
+Write-Host ""
+Write-Host "Najika wird jetzt 4x täglich trainieren:"
+Write-Host "  - 06:00 Uhr (Morgens)"
+Write-Host "  - 12:00 Uhr (Mittags)"
+Write-Host "  - 18:00 Uhr (Abends)"
+Write-Host "  - 00:00 Uhr (Mitternacht)"
+Write-Host ""
+Write-Host "Gesamt: ~15 Stunden Training pro Tag!" -ForegroundColor Green
+Write-Host ""
+Write-Host "Test manuell:"
+Write-Host "  python $scriptPath"
+Write-Host ""

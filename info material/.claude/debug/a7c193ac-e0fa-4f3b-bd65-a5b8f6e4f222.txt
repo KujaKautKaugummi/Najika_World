@@ -1,0 +1,823 @@
+[DEBUG] Watching for changes in setting files C:\Users\0KKK0\.claude\settings.json, C:\NajikaCore\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Applying permission update: Adding 43 allow rule(s) to destination 'localSettings': ["Bash(echo \"$file\")","Bash(done)","WebSearch","Bash(start /B python:*)","Bash(dir \"C:\\Users\\0KKK0\\.claude\" /O-D /A-D)","Read(//c/Users/0KKK0/.claude/projects/C--NajikaCore/**)","Bash(dir /O-D \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\")","Bash(python:*)","Bash(timeout:*)","Bash(netstat:*)","Read(//c/Users/0KKK0/.claude/projects/**)","Bash(START_NAJIKA.bat)","Bash(curl:*)","Bash(findstr:*)","Bash(tasklist)","Bash(taskkill:*)","Bash(cmd /c \"taskkill /F /PID 25152 & taskkill /F /PID 27084 & taskkill /F /PID 12564\")","Bash(dir \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\" /O-D /A-D)","Read(//c/Users/0KKK0/Desktop/zip/**)","Bash(dir:*)","Read(//c/Users/0KKK0/.claude/**)","Read(//c/Users/0KKK0/Desktop/**)","Bash(cmd /c:*)","Read(//c/**)","Bash(powershell -Command \"(Get-Content ''C:\\Users\\0KKK0\\Desktop\\zip\\neu 1.txt'').Count\")","Bash(ollama list:*)","Bash(ollama cp:*)","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\COPY_KAYKIT_ASSETS.ps1\")","Bash(powershell -Command:*)","Bash(robocopy:*)","WebFetch(domain:www.instagram.com)","Bash(ollama pull:*)","Bash(ollama show:*)","Bash(ollama rm:*)","Bash(ollama create:*)","Bash(pip install:*)","Bash(ollama run:*)","Bash(cd:*)","Bash(ping:*)","Bash(pip show:*)","Bash(winget install:*)","Bash(cat:*)","Bash(echo:*)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\0KKK0\.claude\skills, project=C:\NajikaCore\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\0KKK0\.bashrc
+[DEBUG] Shell config file not found: C:\Users\0KKK0\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\0KKK0\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1760738898442-nf3ngw.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760738898461
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760738898461 to C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Summarizing all 2 messages (~0 tokens)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738898816
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738898816 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738898840
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738898840 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738898847
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738898847 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[ERROR] AxiosError: AxiosError: Request failed with status code 401
+    at _O (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:24:1136)
+    at IncomingMessage.<anonymous> (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:29:9841)
+    at IncomingMessage.emit (node:events:531:35)
+    at IncomingMessage.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at M31.request (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:31:2129)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async iIB (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1497:26166)
+[DEBUG] Failed to fetch Grove notice config: AxiosError: Request failed with status code 401
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899004
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899004 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899058
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105550 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899058 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899065
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105550 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899065 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called, ENABLE_PLUGINS=true
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899098
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899098 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899153
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899153 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899188
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899188 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760738899347
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105655 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760738899347 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Summarizing all 3 messages (~0 tokens)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Metadata string for najika-update:
+[DEBUG] <command-message>najika-update is running…</command-message>
+<command-name>/najika-update</command-name>
+[DEBUG] command-message tags in metadata: 1
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] processPromptSlashCommand creating 3 messages for najika-update
+[DEBUG] Message 1: <command-message>najika-update is running…</command-message>
+<command-name>/najika-update</command-name>
+[DEBUG] Message 2 [META]: [{"type":"text","text":"# Najika Update Command\n\nBringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.\n\n## Ablauf:\n\n1. Rufe `python C:/NajikaCore/najika_sync.py` auf\n2. Warte bis
+[DEBUG] Message 3: [ATTACHMENT]
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Added snapshot for fb17a0c2-4e6c-4844-9ff9-311023314fcc, tracking 0 files
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-message>najika-update is running…</command-message>
+<command-name>/najika-update</command-n...
+[DEBUG] UserCommandMessage rendering: "najika-update is running…" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] Reading through symlink: C:/NajikaCore/najika_sync.py -> C:\NajikaCore\najika_sync.py
+[DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] FileHistory: Tracked file modification for C:\NajikaCore\najika_sync.py
+[DEBUG] Writing to temp file: C:\NajikaCore\najika_sync.py.tmp.4436.1760738926485
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 9508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\NajikaCore\najika_sync.py.tmp.4436.1760738926485 to C:\NajikaCore\najika_sync.py
+[DEBUG] File C:\NajikaCore\najika_sync.py written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\NajikaCore\najika_sync.py.tmp.4436.1760738950740
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 9690 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\NajikaCore\najika_sync.py.tmp.4436.1760738950740 to C:\NajikaCore\najika_sync.py
+[DEBUG] File C:\NajikaCore\najika_sync.py written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 72c44201-0d22-4fb4-85db-ae7351c3921b
+[DEBUG] FileHistory: Added snapshot for 72c44201-0d22-4fb4-85db-ae7351c3921b, tracking 1 files
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:62:719
+    at Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:15093)
+    at Zn2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1056:20444)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760739088520
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 1485 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760739088520 to C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760739115433
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 110922 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760739115433 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760740069084
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 110922 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760740069084 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 5777a115-c10d-4c66-8f4a-80243964b1f3
+[DEBUG] FileHistory: Added snapshot for 5777a115-c10d-4c66-8f4a-80243964b1f3, tracking 1 files
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760740587099
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 110922 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760740587099 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760740597602
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 1752 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760740597602 to C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760740662599
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 127389 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760740662599 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760740734841
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 127389 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760740734841 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 7df3d0e3-d17b-49a7-ac1d-f03409bfb3fc
+[DEBUG] FileHistory: Added snapshot for 7df3d0e3-d17b-49a7-ac1d-f03409bfb3fc, tracking 1 files
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:62:719
+    at Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:15093)
+    at Zn2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1056:20444)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760741617999
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 1323 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760741617999 to C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: WebSearch
+[DEBUG] Getting matching hook commands for PreToolUse with query: WebSearch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for PostToolUse with query: WebSearch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741647642
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 150282 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741647642 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 52be19fa-426b-46b4-8c8d-3d20b3e38dd4
+[DEBUG] FileHistory: Added snapshot for 52be19fa-426b-46b4-8c8d-3d20b3e38dd4, tracking 1 files
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:62:719
+    at Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:15093)
+    at Zn2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1056:20444)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: TodoWrite
+[DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760741775889
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 1206 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json.tmp.4436.1760741775889 to C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222-agent-a7c193ac-e0fa-4f3b-bd65-a5b8f6e4f222.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for PreCompact with query: auto
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "auto" (0 before deduplication)
+[ERROR] Error streaming, falling back to non-streaming mode: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbXyu6BMJTxvVFdHrwo"}
+[ERROR] Error in non-streaming fallback: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbY3D2VGdLRVMaozQCW"}
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbY3D2VGdLRVMaozQCW"}
+    at E4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Tz1.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19535)
+    at async Tz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async fRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19689)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13874
+    at async Ma0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:4494)
+    at async aQ1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13844)
+[ERROR] Error: Error: Conversation too long. Press esc twice to go up a few messages and try again.
+    at zd1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1716:1607)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async bXB (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1716:4720)
+    at async Tj (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:54989)
+    at async Tj (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:58676)
+    at async u9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2806:33422)
+    at async QI (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2806:34357)
+    at async Qt1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2800:3605)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2806:30760
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2795:4702
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] Error streaming, falling back to non-streaming mode: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207592 tokens > 200000 maximum"},"request_id":"req_011CUDbY5MFoJEsWRkphbw5V"}
+[ERROR] Error in non-streaming fallback: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207592 tokens > 200000 maximum"},"request_id":"req_011CUDbY8G8gJMUHoE1zNZe3"}
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207592 tokens > 200000 maximum"},"request_id":"req_011CUDbY8G8gJMUHoE1zNZe3"}
+    at E4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Tz1.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19535)
+    at async Tz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async fRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19689)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13874
+    at async Ma0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:4494)
+    at async aQ1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13844)
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741782502
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 150039 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741782502 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] Td1: Td1: Failed to install new version of claude:  npm error code EBUSY
+npm error syscall copyfile
+npm error path C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm error dest C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-OLxAk3ZW\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm error errno -4082
+npm error EBUSY: resource busy or locked, copyfile 'C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-OLxAk3ZW\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+npm error A complete log of this run can be found in: C:\Users\0KKK0\AppData\Local\npm-cache\_logs\2025-10-17T22_57_00_475Z-debug-0.log
+    at eF1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1771:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2768:24055
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Getting matching hook commands for PreCompact with query: manual
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "manual" (0 before deduplication)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] Error streaming, falling back to non-streaming mode: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbbByCtAK6mdZUoBxsU"}
+[ERROR] Error in non-streaming fallback: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbbF2WXdLqxxyhFd4fs"}
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 213089 tokens > 200000 maximum"},"request_id":"req_011CUDbbF2WXdLqxxyhFd4fs"}
+    at E4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Tz1.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19535)
+    at async Tz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async fRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19689)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13874
+    at async Ma0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:4494)
+    at async aQ1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13844)
+[ERROR] Error: Error: Conversation too long. Press esc twice to go up a few messages and try again.
+    at zd1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1716:1607)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1716:8440)
+    at async bU8 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2695:5163)
+    at async B$Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2695:3240)
+    at async bq8 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2800:1790)
+    at async i51 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2798:1801)
+    at async Qt1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2800:3239)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2806:30760
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2795:4702
+[ERROR] Error: Error: Error during compaction: Error: Conversation too long. Press esc twice to go up a few messages and try again.
+    at Object.call (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1717:189)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async bU8 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2695:5163)
+    at async B$Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2695:3240)
+    at async bq8 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2800:1790)
+    at async i51 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2798:1801)
+    at async Qt1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2800:3239)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2806:30760
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2795:4702
+[DEBUG] FileHistory: Making snapshot for message ed83451c-25e6-4754-8983-3a14aa880c18
+[DEBUG] FileHistory: Added snapshot for ed83451c-25e6-4754-8983-3a14aa880c18, tracking 1 files
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-name>/compact</command-name>
+            <command-message>compact</command-message>
+       ...
+[DEBUG] UserCommandMessage rendering: "compact" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741824803
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147767 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741824803 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741825520
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147767 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741825520 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:62:719
+    at Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:15093)
+    at Zn2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1056:20444)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[DEBUG] FileHistory: [Rewind] Rewinding to snapshot for 52be19fa-426b-46b4-8c8d-3d20b3e38dd4
+[DEBUG] FileHistory: [Rewind] Finished rewinding to 52be19fa-426b-46b4-8c8d-3d20b3e38dd4
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-message>najika-update is running…</command-message>
+<command-name>/najika-update</command-n...
+[DEBUG] UserCommandMessage rendering: "najika-update is running…" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at mD (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4413)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4141
+    at Array.map (<anonymous>)
+    at WV (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1140:4132)
+    at o5Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2202:17128)
+    at m$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at ps (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at y9 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Dd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at t$ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741875458
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147662 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741875458 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741875465
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147662 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741875465 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741875481
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147767 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741875481 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] Td1: Td1: Failed to install new version of claude:  npm error code EBUSY
+npm error syscall copyfile
+npm error path C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm error dest C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-OLxAk3ZW\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm error errno -4082
+npm error EBUSY: resource busy or locked, copyfile 'C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-OLxAk3ZW\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+npm error A complete log of this run can be found in: C:\Users\0KKK0\AppData\Local\npm-cache\_logs\2025-10-17T22_57_56_408Z-debug-0.log
+    at eF1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1771:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2768:24055
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 98ad4df3-5e4f-43e7-b207-c4c72e63bc0b
+[DEBUG] FileHistory: Added snapshot for 98ad4df3-5e4f-43e7-b207-c4c72e63bc0b, tracking 1 files
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[ERROR] Error streaming, falling back to non-streaming mode: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207785 tokens > 200000 maximum"},"request_id":"req_011CUDbhbwGWcrpgZmf9ghD8"}
+[ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:62:719
+    at Q (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:8:15093)
+    at Zn2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1056:20444)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[ERROR] Error in non-streaming fallback: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207785 tokens > 200000 maximum"},"request_id":"req_011CUDbhf9zw8NePxRRbaeXk"}
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"prompt is too long: 207785 tokens > 200000 maximum"},"request_id":"req_011CUDbhf9zw8NePxRRbaeXk"}
+    at E4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Tz1.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19535)
+    at async Tz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async fRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:19689)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13874
+    at async Ma0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:4494)
+    at async aQ1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3311:13844)
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.4436.1760741911826
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 147882 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.4436.1760741911826 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically

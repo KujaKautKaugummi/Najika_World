@@ -1,0 +1,12 @@
+[
+  {
+    "content": "KRITISCH: Kätzchen-Trigger funktioniert nicht!",
+    "status": "completed",
+    "activeForm": "Fixe Kätzchen-Trigger"
+  },
+  {
+    "content": "W-Taste Bug in Kampfarena (anderer Ansatz!)",
+    "status": "in_progress",
+    "activeForm": "Fixe W-Bug Kampfarena"
+  }
+]

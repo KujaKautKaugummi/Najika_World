@@ -1,0 +1,76 @@
+[DEBUG] Watching for changes in setting files C:\Users\0KKK0\.claude\settings.json, C:\Users\0KKK0\.claude\settings.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\0KKK0\.claude\skills, project=C:\Users\0KKK0\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.34000.1762202028557
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38732 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.34000.1762202028557 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.34000.1762202028569
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38732 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.34000.1762202028569 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\0KKK0\.bashrc
+[DEBUG] Shell config file not found: C:\Users\0KKK0\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\0KKK0\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1762202028710-p00jb8.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\4647213c-bab0-446b-a298-16d8dd277f5e-agent-4647213c-bab0-446b-a298-16d8dd277f5e.json.tmp.34000.1762202028728
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\4647213c-bab0-446b-a298-16d8dd277f5e-agent-4647213c-bab0-446b-a298-16d8dd277f5e.json.tmp.34000.1762202028728 to C:\Users\0KKK0\.claude\todos\4647213c-bab0-446b-a298-16d8dd277f5e-agent-4647213c-bab0-446b-a298-16d8dd277f5e.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\4647213c-bab0-446b-a298-16d8dd277f5e-agent-4647213c-bab0-446b-a298-16d8dd277f5e.json written atomically
+[DEBUG] Install: Starting installation process (force=false, target=stable)
+[DEBUG] Install: Calling installLatest(force=true, target=stable, forceReinstall=false)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.34000.1762202029050
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38732 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.34000.1762202029050 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (307 bytes)
+[ERROR] Error streaming, falling back to non-streaming mode: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbRDfkMkcjxMDBioA1f"}
+[DEBUG] Checking for native installer update to version 2.0.31
+[DEBUG] Downloading native installer version 2.0.31
+[ERROR] Error streaming, falling back to non-streaming mode: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbRDpBDT4fQVzq1af3L"}
+[ERROR] Error in non-streaming fallback: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbREd3Ryqb7dBTZpeow"}
+[ERROR] Error: Error: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbREd3Ryqb7dBTZpeow"}
+    at generate (B:/~BUN/root/claude.exe:380:26306)
+    at makeRequest (B:/~BUN/root/claude.exe:525:5345)
+    at processTicksAndRejections (native:7:39)
+[DEBUG] Skipping SubagentStop hook execution - workspace trust not accepted
+[ERROR] Error in non-streaming fallback: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbRFKiNVh24TKPEFEgF"}
+[ERROR] Error: Error: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUmbRFKiNVh24TKPEFEgF"}
+    at generate (B:/~BUN/root/claude.exe:380:26306)
+    at makeRequest (B:/~BUN/root/claude.exe:525:5345)
+    at processTicksAndRejections (native:7:39)
+[DEBUG] Skipping SubagentStop hook execution - workspace trust not accepted
+[DEBUG] Successfully updated to version 2.0.31
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.34000.1762202043833
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38774 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.34000.1762202043833 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Native installer: Set installMethod to "native" and disabled legacy auto-updater for protection
+[DEBUG] Install: installLatest returned version=2.0.31, wasUpdated=true, lockFailed=false
+[DEBUG] Install: Setup launcher completed with 1 messages
+[DEBUG] Install: Setup message: Native installation exists but C:\Users\0KKK0\.local\bin is not in your PATH. Add it by opening: System Properties → Environment Variables → Edit User PATH → New → Add the path above. Then restart your terminal.
+[DEBUG] Install: Cleaning up npm installations after successful install
+[DEBUG] Removed global npm installation of @anthropic-ai/claude-code
+[DEBUG] Cleaned up 1 npm installation(s)

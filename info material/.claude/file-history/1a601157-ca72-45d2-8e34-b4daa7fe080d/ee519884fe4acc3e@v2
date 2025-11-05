@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+import json
+
+SESSION = 'C:/Users/0KKK0/.claude/projects/C--NajikaCore/1e75a874-27fc-4133-a038-22081b5aae06.jsonl'
+
+with open(SESSION, 'r', encoding='utf-8') as f:
+    all_lines = f.readlines()
+
+# Start ab Zeile 1420 (letzte Slime-Nachrichten)
+relevant_lines = all_lines[1420:1600]
+
+messages = []
+for line_num, line in enumerate(relevant_lines, start=1420):
+    try:
+        entry = json.loads(line)
+        msg_type = entry.get('type')
+
+        if msg_type in ['user', 'assistant']:
+            content = entry.get('message', {}).get('content', [])
+            text_parts = []
+
+            for item in content:
+                if isinstance(item, dict) and item.get('type') == 'text':
+                    text_parts.append(item.get('text', ''))
+
+            if text_parts:
+                full_text = ' '.join(text_parts)
+                messages.append({
+                    'line': line_num,
+                    'type': msg_type.upper(),
+                    'timestamp': entry.get('timestamp', '')[:19],
+                    'text': full_text
+                })
+    except:
+        pass
+
+# Ausgabe der Nachrichten
+print(f"Found {len(messages)} messages from line 1420 onwards:\n")
+print("="*80)
+
+for msg in messages[-30:]:  # Letzte 30 Nachrichten
+    print(f"\n[Line {msg['line']}] {msg['type']} - {msg['timestamp']}")
+    print("-"*80)
+    # Max 800 chars pro Nachricht
+    text = msg['text'][:800]
+    print(text)
+    if len(msg['text']) > 800:
+        print("\n... [GEKÜRZT]")
+    print("="*80)

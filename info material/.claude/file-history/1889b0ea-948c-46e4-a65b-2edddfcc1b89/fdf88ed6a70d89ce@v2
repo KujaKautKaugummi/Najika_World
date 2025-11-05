@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""
+NAJIKA KNOWLEDGE LOADER
+Lädt verarbeitete Training-Daten in Najika's Context
+
+Verwendet von:
+- najika_server.py (beim Chat-Prompt bauen)
+- najika_cli.py (für Code-Anfragen)
+
+Usage:
+    from knowledge_loader import load_knowledge
+
+    context = load_knowledge(topics=["python", "java", "verse"])
+"""
+
+import json
+from pathlib import Path
+
+PROCESSED_DIR = Path("training_data/output/processed")
+KNOWLEDGE_INDEX = Path("training_data/output/knowledge_index.json")
+
+class KnowledgeLoader:
+    """Lädt und cached verarbeitete Training-Daten"""
+
+    def __init__(self):
+        self.index = self._load_index()
+        self.cache = {}
+
+    def _load_index(self):
+        """Lädt Index von verarbeiteten Dateien"""
+        if not KNOWLEDGE_INDEX.exists():
+            return self._build_index()
+
+        try:
+            with open(KNOWLEDGE_INDEX, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            return self._build_index()
+
+    def _build_index(self):
+        """Erstellt Index von allen verarbeiteten Dateien"""
+        index = {
+            "programming": {
+                "python": [],
+                "java": [],
+                "verse": [],
+                "javascript": [],
+                "cpp": [],
+                "csharp": []
+            },
+            "text": [],
+            "general": []
+        }
+
+        if not PROCESSED_DIR.exists():
+            return index
+
+        for file in PROCESSED_DIR.iterdir():
+            if file.suffix != '.txt':
+                continue
+
+            filename_lower = file.stem.lower()
+
+            # Kategorisiere nach Dateinamen
+            if 'python' in filename_lower or filename_lower.endswith('.py'):
+                index['programming']['python'].append(str(file))
+            elif 'java' in filename_lower or filename_lower.endswith('.java'):
+                index['programming']['java'].append(str(file))
+            elif 'verse' in filename_lower or filename_lower.endswith('.verse'):
+                index['programming']['verse'].append(str(file))
+            elif 'javascript' in filename_lower or 'js' in filename_lower:
+                index['programming']['javascript'].append(str(file))
+            elif 'cpp' in filename_lower or 'c++' in filename_lower:
+                index['programming']['cpp'].append(str(file))
+            elif 'csharp' in filename_lower or 'c#' in filename_lower:
+                index['programming']['csharp'].append(str(file))
+            elif file.stem.startswith('text_'):
+                index['text'].append(str(file))
+            else:
+                index['general'].append(str(file))
+
+        # Speichere Index
+        KNOWLEDGE_INDEX.parent.mkdir(parents=True, exist_ok=True)
+        with open(KNOWLEDGE_INDEX, 'w', encoding='utf-8') as f:
+            json.dump(index, f, indent=2)
+
+        return index
+
+    def load_knowledge(self, topics=None, max_chars=8000):
+        """
+        Lädt Knowledge für spezifische Topics
+
+        Args:
+            topics: List von Topics (z.B. ["python", "java", "verse"])
+                   None = alle verfügbaren Topics
+            max_chars: Max Zeichen für Context (default 8000)
+
+        Returns:
+            String mit Knowledge-Context
+        """
+        if topics is None:
+            topics = ["python", "java", "verse"]
+
+        knowledge_parts = []
+        total_chars = 0
+
+        for topic in topics:
+            topic_lower = topic.lower()
+
+            # Suche in Programming-Kategorie
+            if topic_lower in self.index.get('programming', {}):
+                files = self.index['programming'][topic_lower]
+
+                for file_path in files[:3]:  # Max 3 Dateien pro Topic
+                    if total_chars >= max_chars:
+                        break
+
+                    content = self._load_file(file_path)
+                    if content:
+                        # Kürze auf max_chars
+                        remaining = max_chars - total_chars
+                        if len(content) > remaining:
+                            content = content[:remaining] + "\n... (gekürzt)"
+
+                        knowledge_parts.append(f"[{topic.upper()} KNOWLEDGE]\n{content}\n")
+                        total_chars += len(content)
+
+        if not knowledge_parts:
+            return ""
+
+        return "\n".join(knowledge_parts)
+
+    def _load_file(self, file_path):
+        """Lädt einzelne Datei (mit Caching)"""
+        if file_path in self.cache:
+            return self.cache[file_path]
+
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                self.cache[file_path] = content
+                return content
+        except Exception:
+            return None
+
+    def get_available_topics(self):
+        """Gibt Liste verfügbarer Topics zurück"""
+        topics = []
+
+        for category, items in self.index.items():
+            if category == 'programming':
+                for lang, files in items.items():
+                    if files:
+                        topics.append(lang)
+            elif items:
+                topics.append(category)
+
+        return topics
+
+    def rebuild_index(self):
+        """Erstellt Index neu (nach Processing)"""
+        self.index = self._build_index()
+        self.cache = {}
+
+
+# Globale Instanz
+_loader = None
+
+def get_loader():
+    """Gibt globale KnowledgeLoader-Instanz zurück"""
+    global _loader
+    if _loader is None:
+        _loader = KnowledgeLoader()
+    return _loader
+
+
+def load_knowledge(topics=None, max_chars=8000):
+    """
+    Convenience-Funktion zum Laden von Knowledge
+
+    Usage:
+        context = load_knowledge(["python", "java"])
+        context = load_knowledge()  # Alle verfügbaren Topics
+    """
+    loader = get_loader()
+    return loader.load_knowledge(topics, max_chars)
+
+
+def get_available_topics():
+    """Gibt Liste verfügbarer Topics zurück"""
+    loader = get_loader()
+    return loader.get_available_topics()
+
+
+def rebuild_index():
+    """Erstellt Knowledge-Index neu"""
+    loader = get_loader()
+    loader.rebuild_index()
+
+
+# Test-Funktion
+if __name__ == "__main__":
+    print("=" * 60)
+    print("NAJIKA KNOWLEDGE LOADER TEST")
+    print("=" * 60)
+    print()
+
+    loader = KnowledgeLoader()
+
+    print("Verfügbare Topics:")
+    topics = loader.get_available_topics()
+    if topics:
+        for topic in topics:
+            print(f"  - {topic}")
+    else:
+        print("  (keine Training-Daten gefunden)")
+    print()
+
+    if topics:
+        print("Lade Knowledge für Python:")
+        print("-" * 60)
+        knowledge = loader.load_knowledge(["python"], max_chars=500)
+        if knowledge:
+            print(knowledge[:500])
+        else:
+            print("  (keine Python-Daten verfügbar)")
+        print()
+
+    print("=" * 60)
+    print("Test abgeschlossen!")

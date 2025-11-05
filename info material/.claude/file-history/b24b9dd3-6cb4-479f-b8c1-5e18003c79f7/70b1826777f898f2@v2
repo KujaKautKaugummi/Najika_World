@@ -1,0 +1,211 @@
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║          NAJIKA FEATURE EXTRACTION TOOL                      ║
+echo ║  Durchsucht alle Dateien nach relevanten Najika-Features    ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+set "OUTPUT=NAJIKA_FEATURES_FOUND_%date:~-4%%date:~-7,2%%date:~-10,2%_%time:~0,2%%time:~3,2%%time:~6,2%.txt"
+set "OUTPUT=%OUTPUT: =0%"
+
+echo Starte Suche in: %~dp0
+echo Report wird erstellt: %OUTPUT%
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+REM Erstelle Report-Header
+(
+echo NAJIKA FEATURE EXTRACTION REPORT
+echo Erstellt am: %date% %time%
+echo Durchsuchtes Verzeichnis: %~dp0
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo SUCHKRITERIEN:
+echo   [1] Najika KI/AI System
+echo   [2] Digivice ^(Handy-Spiel^)
+echo   [3] Gesicherter Bereich / Schwarze Mühle
+echo   [4] Maximale Freiheit ^& Totale Eigenverantwortung
+echo   [5] Wizard-Modell Ergänzungen
+echo   [6] UEFN Integration
+echo   [7] Opus Advanced Features
+echo   [8] Memory System
+echo   [9] Bond-Strength / Beziehungssystem
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo.
+) > "%OUTPUT%"
+
+REM Keywords für die Suche
+set "KEYWORDS=najika wizard freiheit eigenverantwortung digivice schwarze mühle gesichert uefn opus memory bond beziehung persona import export logging importance kätzchen private"
+
+echo [PHASE 1] Durchsuche Text-Dateien...
+echo.
+
+REM Zähler
+set /a TOTAL_FILES=0
+set /a FOUND_FILES=0
+set /a TOTAL_MATCHES=0
+
+REM Durchsuche alle Text-Dateien
+for /R "%~dp0" %%F in (*.txt *.md *.json *.jsonl) do (
+    set /a TOTAL_FILES+=1
+    set "CURRENT_FILE=%%F"
+    set "FOUND_IN_FILE=0"
+
+    REM Prüfe jedes Keyword
+    for %%K in (%KEYWORDS%) do (
+        findstr /I /C:"%%K" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            if !FOUND_IN_FILE! EQU 0 (
+                set /a FOUND_FILES+=1
+                set "FOUND_IN_FILE=1"
+                echo.
+                echo ═══════════════════════════════════════════════════════════════
+                echo FUNDSTELLE IN: %%~nxF
+                echo Pfad: %%F
+                echo ═══════════════════════════════════════════════════════════════
+                echo.
+                (
+                    echo.
+                    echo ═══════════════════════════════════════════════════════════════
+                    echo DATEI: %%~nxF
+                    echo PFAD: %%F
+                    echo ═══════════════════════════════════════════════════════════════
+                    echo.
+                ) >> "%OUTPUT%"
+            )
+
+            REM Extrahiere Zeilen mit Kontext
+            echo [KEYWORD: %%K]
+            echo [KEYWORD: %%K] >> "%OUTPUT%"
+
+            for /F "delims=:" %%L in ('findstr /I /N /C:"%%K" "%%F"') do (
+                set /a LINE_NUM=%%L
+                set /a TOTAL_MATCHES+=1
+                set /a CONTEXT_START=!LINE_NUM!-2
+                set /a CONTEXT_END=!LINE_NUM!+2
+                if !CONTEXT_START! LSS 1 set CONTEXT_START=1
+
+                REM Zeige Zeile mit Kontext
+                set /a CURRENT=0
+                for /F "usebackq delims=" %%M in ("%%F") do (
+                    set /a CURRENT+=1
+                    if !CURRENT! GEQ !CONTEXT_START! if !CURRENT! LEQ !CONTEXT_END! (
+                        if !CURRENT! EQU !LINE_NUM! (
+                            echo   ^>^>^> %%M
+                            echo   ^>^>^> %%M >> "%OUTPUT%"
+                        ) else (
+                            echo       %%M
+                            echo       %%M >> "%OUTPUT%"
+                        )
+                    )
+                )
+            )
+            echo. >> "%OUTPUT%"
+        )
+    )
+)
+
+echo.
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo [PHASE 2] Spezielle Muster-Suche...
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+REM Suche nach speziellen Patterns
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo SPEZIELLE PATTERN-SUCHE
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+REM Suche nach Code-Patterns
+echo [Suche nach Python-Funktionen...]
+for /R "%~dp0" %%F in (*.py *.txt) do (
+    findstr /I /R /C:"def.*najika" /C:"class.*Najika" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   GEFUNDEN in: %%~nxF
+        (
+            echo PYTHON CODE in: %%~nxF
+            findstr /I /N /R /C:"def.*najika" /C:"class.*Najika" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+echo [Suche nach Config/Settings...]
+for /R "%~dp0" %%F in (*.json *.jsonl *.env) do (
+    findstr /I /C:"najika" /C:"wizard" /C:"model" /C:"persona" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   GEFUNDEN in: %%~nxF
+        (
+            echo CONFIG/SETTINGS in: %%~nxF
+            type "%%F" | findstr /I /N /C:"najika" /C:"wizard" /C:"model" /C:"persona"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+echo [Suche nach API-Endpoints...]
+for /R "%~dp0" %%F in (*.txt *.md *.py) do (
+    findstr /I /C:"/api/" /C:"endpoint" /C:"route" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   GEFUNDEN in: %%~nxF
+            (
+                echo API ENDPOINTS in: %%~nxF
+                type "%%F" | findstr /I /N /C:"/api/"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM Summary
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo ZUSAMMENFASSUNG
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+    echo Durchsuchte Dateien:       %TOTAL_FILES%
+    echo Dateien mit Treffern:      %FOUND_FILES%
+    echo Gesamt Fundstellen:        %TOTAL_MATCHES%
+    echo.
+    echo Report gespeichert in:
+    echo %~dp0%OUTPUT%
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+echo.
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║                    SUCHE ABGESCHLOSSEN                       ║
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Durchsuchte Dateien:       %TOTAL_FILES%
+echo ║  Dateien mit Treffern:      %FOUND_FILES%
+echo ║  Gesamt Fundstellen:        %TOTAL_MATCHES%
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Report erstellt:                                            ║
+echo ║  %OUTPUT%
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+echo Report wird geöffnet...
+echo.
+
+REM Öffne Report in Notepad
+start notepad "%OUTPUT%"
+
+pause

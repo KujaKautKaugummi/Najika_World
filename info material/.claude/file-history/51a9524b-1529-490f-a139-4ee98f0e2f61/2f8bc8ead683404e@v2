@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+"""
+NAJIKA READ VERIFIER - GARANTIERT DASS CLAUDE ALLES LIEST!
+
+System:
+1. Generiert versteckte Challenge-Codes in Update
+2. Claude MUSS alle Codes finden und antworten
+3. Automatische Verifikation
+4. Nur wenn ALLE Codes korrekt → Claude darf arbeiten
+
+ANTI-SCHUMMELN:
+- Codes sind versteckt im Text
+- Codes ändern sich bei jedem Update
+- Codes müssen EXAKT stimmen
+- Keine Codes = Claude hat nicht gelesen!
+"""
+
+import json
+import hashlib
+from pathlib import Path
+from datetime import datetime
+import random
+import string
+
+NAJIKA_DIR = Path("C:/NajikaCore")
+UPDATE_FILE = NAJIKA_DIR / "CLAUDE_SMART_UPDATE.md"
+MASTER_FILE = NAJIKA_DIR / "NAJIKA_MASTER_ZUSAMMENFASSUNG.md"
+LESSONS_FILE = NAJIKA_DIR / "GELERNT_AUS_ALLEN_SESSIONS.md"
+VERIFICATION_FILE = NAJIKA_DIR / ".claude_verification.json"
+
+class ReadVerifier:
+    """Bombensicherer Read-Verifier"""
+
+    def __init__(self):
+        self.challenges = {}
+        self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    def generate_challenge(self, name, difficulty="medium"):
+        """Generiert Challenge-Code"""
+
+        if difficulty == "easy":
+            # 4 Zeichen, leicht zu finden
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+        elif difficulty == "medium":
+            # 6 Zeichen, mittelschwer
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        else:  # hard
+            # 8 Zeichen, schwer zu erraten
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+
+        self.challenges[name] = {
+            "code": code,
+            "difficulty": difficulty,
+            "generated": datetime.now().isoformat()
+        }
+
+        return code
+
+    def inject_challenge_into_file(self, file_path, challenge_name, marker_text):
+        """Injiziert Challenge-Code in File"""
+
+        if not Path(file_path).exists():
+            print(f"[WARNING] File nicht gefunden: {file_path}")
+            return False
+
+        # Generiere Code
+        code = self.generate_challenge(challenge_name)
+
+        # Lese File
+        content = Path(file_path).read_text(encoding='utf-8')
+
+        # Suche Marker
+        if marker_text not in content:
+            print(f"[WARNING] Marker nicht gefunden: {marker_text}")
+            return False
+
+        # Injiziere Challenge NACH Marker (versteckt im nächsten Absatz)
+        injection = f"\n\n**VERIFICATION CODE: `{code}`** ← Notiere diesen Code für Nachweis!\n"
+
+        # Ersetze Marker
+        new_content = content.replace(marker_text, marker_text + injection)
+
+        # Speichere
+        Path(file_path).write_text(new_content, encoding='utf-8')
+
+        print(f"[OK] Challenge '{challenge_name}' injiziert: {code}")
+        return True
+
+    def create_verification_instructions(self):
+        """Erstellt Verifikations-Anweisungen für Claude"""
+
+        lines = []
+        lines.append("# 🔐 READ VERIFICATION SYSTEM")
+        lines.append("")
+        lines.append("**DU MUSST ALLE CODES FINDEN UND BERICHTEN!**")
+        lines.append("")
+        lines.append("## AUFGABE:")
+        lines.append("")
+        lines.append("1. Lese ALLE erwähnten Files **KOMPLETT**")
+        lines.append("2. Finde **VERIFICATION CODE:** Einträge")
+        lines.append("3. Notiere **ALLE Codes**")
+        lines.append("4. Berichte sie im Format:")
+        lines.append("")
+        lines.append("```")
+        lines.append("✅ VERIFICATION CODES GEFUNDEN:")
+        lines.append("")
+
+        for name in self.challenges.keys():
+            lines.append(f"- {name.upper()}: [DEIN CODE HIER]")
+
+        lines.append("```")
+        lines.append("")
+        lines.append("## ⚠️ WARNUNG:")
+        lines.append("")
+        lines.append("**Wenn du NICHT ALLE Codes findest:**")
+        lines.append("- Du hast Files NICHT komplett gelesen!")
+        lines.append("- Du darfst NICHTS tun bis du nochmal liest!")
+        lines.append("- User wird SOFORT wissen dass du geschummelt hast!")
+        lines.append("")
+        lines.append("## ✅ WENN ALLE CODES KORREKT:")
+        lines.append("")
+        lines.append("→ Du darfst mit Arbeit beginnen")
+        lines.append("→ User vertraut dir")
+        lines.append("→ Du hast Gesamtüberblick")
+        lines.append("")
+
+        return '\n'.join(lines)
+
+    def inject_all_challenges(self):
+        """Injiziert Challenges in alle wichtigen Files"""
+
+        print("\n" + "="*60)
+        print("INJIZIERE VERIFICATION CHALLENGES")
+        print("="*60 + "\n")
+
+        # Challenge 1: CLAUDE_SMART_UPDATE.md
+        self.inject_challenge_into_file(
+            UPDATE_FILE,
+            "update",
+            "## ANWEISUNGEN FÜR CLAUDE:"
+        )
+
+        # Challenge 2: NAJIKA_MASTER_ZUSAMMENFASSUNG.md
+        self.inject_challenge_into_file(
+            MASTER_FILE,
+            "master",
+            "# NAJIKA MASTER ZUSAMMENFASSUNG"
+        )
+
+        # Challenge 3: GELERNT_AUS_ALLEN_SESSIONS.md
+        self.inject_challenge_into_file(
+            LESSONS_FILE,
+            "lessons",
+            "# 🎓 GELERNT AUS ALLEN SESSIONS"
+        )
+
+        # Speichere Challenges
+        self.save_verification_data()
+
+        # Erstelle Verifikations-Anweisungen
+        instructions = self.create_verification_instructions()
+
+        # Füge zu UPDATE.md hinzu
+        update_content = UPDATE_FILE.read_text(encoding='utf-8')
+        update_content += "\n\n---\n\n" + instructions
+        UPDATE_FILE.write_text(update_content, encoding='utf-8')
+
+        print(f"\n[OK] Alle Challenges injiziert!")
+        print(f"[OK] Verifikations-Anweisungen hinzugefügt!")
+        print(f"\n[INFO] Session: {self.session_id}")
+        print(f"[INFO] Challenges: {len(self.challenges)}")
+
+    def save_verification_data(self):
+        """Speichert Verification-Daten für spätere Prüfung"""
+        data = {
+            "session_id": self.session_id,
+            "challenges": self.challenges,
+            "created": datetime.now().isoformat()
+        }
+
+        VERIFICATION_FILE.write_text(
+            json.dumps(data, indent=2),
+            encoding='utf-8'
+        )
+
+        print(f"[OK] Verification-Daten gespeichert: {VERIFICATION_FILE}")
+
+    def verify_claude_response(self, claude_codes):
+        """Verifiziert ob Claude die richtigen Codes gefunden hat
+
+        Args:
+            claude_codes: Dict wie {"update": "ABC123", "master": "XYZ789", ...}
+
+        Returns:
+            (success: bool, message: str)
+        """
+
+        if not VERIFICATION_FILE.exists():
+            return False, "Keine Verification-Daten gefunden!"
+
+        # Lade gespeicherte Challenges
+        data = json.loads(VERIFICATION_FILE.read_text(encoding='utf-8'))
+        expected = data['challenges']
+
+        # Prüfe alle Codes
+        missing = []
+        wrong = []
+
+        for name, challenge_data in expected.items():
+            expected_code = challenge_data['code']
+
+            if name not in claude_codes:
+                missing.append(name.upper())
+            elif claude_codes[name] != expected_code:
+                wrong.append(f"{name.upper()} (erwartet: {expected_code}, bekam: {claude_codes[name]})")
+
+        # Ergebnis
+        if missing or wrong:
+            msg = "❌ VERIFICATION FEHLGESCHLAGEN!\n\n"
+            if missing:
+                msg += f"FEHLENDE Codes: {', '.join(missing)}\n"
+            if wrong:
+                msg += f"FALSCHE Codes: {', '.join(wrong)}\n"
+            msg += "\n→ Du hast NICHT alle Files komplett gelesen!"
+            msg += "\n→ Lies nochmal KOMPLETT!"
+            return False, msg
+
+        # Alles korrekt!
+        return True, "✅ VERIFICATION ERFOLGREICH! Du darfst arbeiten!"
+
+
+def inject_challenges_to_update():
+    """Hauptfunktion: Injiziert Challenges in Update-Files"""
+    verifier = ReadVerifier()
+    verifier.inject_all_challenges()
+
+    print("\n" + "="*60)
+    print("CHALLENGES BEREIT FÜR NÄCHSTE SESSION!")
+    print("="*60)
+    print(f"\nClaude MUSS diese Codes finden:")
+    for name, data in verifier.challenges.items():
+        print(f"  - {name.upper()}: {data['code']}")
+    print()
+
+
+if __name__ == "__main__":
+    inject_challenges_to_update()

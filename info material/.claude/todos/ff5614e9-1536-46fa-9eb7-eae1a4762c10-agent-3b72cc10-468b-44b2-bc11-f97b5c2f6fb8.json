@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Erstelle KONOSUBA × OREGON TRAIL CHAOS-ENGINE Dokument",
+    "status": "in_progress",
+    "activeForm": "Erstelle KONOSUBA × OREGON TRAIL CHAOS-ENGINE Dokument"
+  },
+  {
+    "content": "Event-Kategorien definieren (Reise, Stadt, Kampf, Klassen-spezifisch)",
+    "status": "pending",
+    "activeForm": "Definiere Event-Kategorien"
+  },
+  {
+    "content": "Konosuba-Chaos-Mechanik ausarbeiten (Chaos-Level 1-10)",
+    "status": "pending",
+    "activeForm": "Arbeite Konosuba-Chaos-Mechanik aus"
+  },
+  {
+    "content": "Najika-Reaktionen für alle 4 Modi detaillieren (Megumin, Harley, Shiro, Melissa)",
+    "status": "pending",
+    "activeForm": "Detailliere Najika-Reaktionen für alle 4 Modi"
+  },
+  {
+    "content": "Klassen-Integration (Explosion, Schwert, Bogen Builds)",
+    "status": "pending",
+    "activeForm": "Integriere Klassen-Spezialisierungen"
+  },
+  {
+    "content": "Erstelle 50+ Event-Datenbank mit JSON-Struktur",
+    "status": "pending",
+    "activeForm": "Erstelle 50+ Event-Datenbank"
+  },
+  {
+    "content": "Technische Implementierung konzipieren",
+    "status": "pending",
+    "activeForm": "Konzipiere technische Implementierung"
+  },
+  {
+    "content": "Gameplay-Flow mit Beispiel-Session",
+    "status": "pending",
+    "activeForm": "Erstelle Gameplay-Flow Beispiel"
+  },
+  {
+    "content": "Balance & Belohnungs-System",
+    "status": "pending",
+    "activeForm": "Definiere Balance & Belohnungen"
+  }
+]

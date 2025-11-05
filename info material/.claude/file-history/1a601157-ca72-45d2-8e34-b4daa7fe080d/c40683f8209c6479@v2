@@ -1,0 +1,106 @@
+@echo off
+REM Automatische Einrichtung von Windows Task Scheduler für Najika Training
+REM Erstellt Tasks für Mo-Fr 09:00-14:00 Uhr
+
+echo ================================================================================
+echo NAJIKA TRAINING - AUTOMATISCHE TASK SCHEDULER EINRICHTUNG
+echo ================================================================================
+echo.
+
+REM Admin-Rechte prüfen
+net session >nul 2>&1
+if errorlevel 1 (
+    echo [FEHLER] Dieses Script benoetigt Administrator-Rechte!
+    echo.
+    echo Bitte:
+    echo 1. Rechtsklick auf SETUP_AUTO_TRAINING.bat
+    echo 2. "Als Administrator ausfuehren" waehlen
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Administrator-Rechte vorhanden
+echo.
+
+REM Lösche alte Tasks falls vorhanden
+echo [INFO] Loesche alte Tasks falls vorhanden...
+schtasks /Delete /TN "NajikaTraining09" /F >nul 2>&1
+schtasks /Delete /TN "NajikaTraining10" /F >nul 2>&1
+schtasks /Delete /TN "NajikaTraining11" /F >nul 2>&1
+schtasks /Delete /TN "NajikaTraining12" /F >nul 2>&1
+schtasks /Delete /TN "NajikaTraining13" /F >nul 2>&1
+echo [OK] Alte Tasks entfernt
+echo.
+
+REM Erstelle Task für 09:00 Uhr (Hauptstart)
+echo [1/5] Erstelle Task: Najika Training 09:00...
+schtasks /Create /TN "NajikaTraining09" /TR "C:\NajikaCore\START_NAJIKA_TRAINING.bat" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 09:00 /RL HIGHEST /F
+if errorlevel 1 (
+    echo [FEHLER] Konnte Task nicht erstellen!
+    pause
+    exit /b 1
+)
+echo [OK] Task 09:00 erstellt
+echo.
+
+REM Erstelle Tasks für 10:00-13:00 Uhr (Follow-up Sessions)
+echo [2/5] Erstelle Task: Najika Training 10:00...
+schtasks /Create /TN "NajikaTraining10" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 10:00 /RL HIGHEST /F
+echo [OK] Task 10:00 erstellt
+echo.
+
+echo [3/5] Erstelle Task: Najika Training 11:00...
+schtasks /Create /TN "NajikaTraining11" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 11:00 /RL HIGHEST /F
+echo [OK] Task 11:00 erstellt
+echo.
+
+echo [4/5] Erstelle Task: Najika Training 12:00...
+schtasks /Create /TN "NajikaTraining12" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 12:00 /RL HIGHEST /F
+echo [OK] Task 12:00 erstellt
+echo.
+
+echo [5/5] Erstelle Task: Najika Training 13:00...
+schtasks /Create /TN "NajikaTraining13" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 13:00 /RL HIGHEST /F
+echo [OK] Task 13:00 erstellt
+echo.
+
+REM Zeige erstellte Tasks
+echo ================================================================================
+echo ERSTELLTE TASKS:
+echo ================================================================================
+echo.
+schtasks /Query /TN "NajikaTraining09" /FO LIST
+echo.
+schtasks /Query /TN "NajikaTraining10" /FO LIST
+echo.
+schtasks /Query /TN "NajikaTraining11" /FO LIST
+echo.
+schtasks /Query /TN "NajikaTraining12" /FO LIST
+echo.
+schtasks /Query /TN "NajikaTraining13" /FO LIST
+echo.
+
+echo ================================================================================
+echo SETUP KOMPLETT!
+echo ================================================================================
+echo.
+echo NAJIKA TRAINING startet jetzt VOLLAUTOMATISCH:
+echo   - Jeden Montag-Freitag
+echo   - Um 09:00, 10:00, 11:00, 12:00, 13:00 Uhr
+echo   - Laeuft bis 14:00 Uhr
+echo.
+echo DU MUSST NICHTS MEHR TUN!
+echo.
+echo PC muss nur eingeschaltet sein Mo-Fr 09:00-14:00
+echo.
+echo Tasks anzeigen:
+echo   taskschd.msc
+echo.
+echo Tasks deaktivieren:
+echo   schtasks /Change /TN "NajikaTraining09" /DISABLE
+echo.
+echo Tasks loeschen:
+echo   schtasks /Delete /TN "NajikaTraining09" /F
+echo.
+pause

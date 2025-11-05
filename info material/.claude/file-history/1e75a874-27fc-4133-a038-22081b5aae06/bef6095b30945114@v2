@@ -1,0 +1,359 @@
+/* NAJIKA CODE EDITOR - Grüne Matrix-Ästhetik (Erika Style) */
+
+#codeEditorOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.code-editor-container {
+    width: 95vw;
+    height: 95vh;
+    background: #0a0e14;
+    border: 2px solid #00ff41;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Consolas', 'Monaco', monospace;
+    color: #00ff41;
+}
+
+/* ===== HEADER ===== */
+.code-editor-header {
+    background: #0d1117;
+    border-bottom: 1px solid #00ff41;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.terminal-icon {
+    color: #00ff41;
+    font-size: 20px;
+}
+
+.status-indicator {
+    color: #00ff41;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.close-btn {
+    background: transparent;
+    border: 1px solid #00ff41;
+    color: #00ff41;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #00ff41;
+    color: #0a0e14;
+}
+
+/* ===== MAIN AREA ===== */
+.code-editor-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 200px 1fr 350px;
+    gap: 1px;
+    background: #00ff41;
+    overflow: hidden;
+}
+
+/* ===== SIDEBAR (File Explorer) ===== */
+.sidebar {
+    background: #0d1117;
+    overflow-y: auto;
+    border-right: 1px solid #00ff41;
+}
+
+.sidebar-header {
+    padding: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #00ff41;
+    background: #0a0e14;
+    border-bottom: 1px solid #00ff41;
+}
+
+.file-tree {
+    padding: 8px;
+}
+
+.file-item {
+    padding: 6px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.file-item:hover {
+    background: rgba(0, 255, 65, 0.1);
+}
+
+.file-item.folder {
+    font-weight: 600;
+}
+
+.folder-icon, .file-icon {
+    font-size: 14px;
+}
+
+/* ===== EDITOR AREA ===== */
+.editor-area {
+    background: #0a0e14;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-tabs {
+    background: #0d1117;
+    border-bottom: 1px solid #00ff41;
+    display: flex;
+    padding: 0 10px;
+}
+
+.tab {
+    padding: 8px 16px;
+    background: #0a0e14;
+    border: 1px solid #00ff41;
+    border-bottom: none;
+    margin-top: 4px;
+    border-radius: 4px 4px 0 0;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #0a0e14;
+    color: #00ff41;
+}
+
+.tab-close {
+    background: none;
+    border: none;
+    color: #00ff41;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.6;
+}
+
+.tab-close:hover {
+    opacity: 1;
+}
+
+.editor-content {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+}
+
+#codeEditorTextarea {
+    width: 100%;
+    height: 100%;
+    background: #0a0e14;
+    color: #00ff41;
+    border: none;
+    outline: none;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    caret-color: #00ff41;
+}
+
+/* ===== NAJIKA ASSISTANT (Right Panel) ===== */
+.najika-assistant {
+    background: #0d1117;
+    border-left: 1px solid #00ff41;
+    display: flex;
+    flex-direction: column;
+}
+
+.assistant-header {
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    background: #0a0e14;
+    border-bottom: 1px solid #00ff41;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.najika-icon {
+    font-size: 18px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.message.user {
+    background: rgba(0, 255, 65, 0.1);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    align-self: flex-end;
+    max-width: 80%;
+}
+
+.message.assistant {
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    max-width: 95%;
+}
+
+.chat-input-container {
+    padding: 12px;
+    border-top: 1px solid #00ff41;
+    display: flex;
+    gap: 8px;
+}
+
+#najikaCodeInput {
+    flex: 1;
+    background: #0a0e14;
+    border: 1px solid #00ff41;
+    color: #00ff41;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+}
+
+#najikaCodeInput:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+}
+
+.chat-input-container button {
+    background: #00ff41;
+    color: #0a0e14;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.chat-input-container button:hover {
+    background: #00cc34;
+    box-shadow: 0 0 12px rgba(0, 255, 65, 0.5);
+}
+
+/* ===== TERMINAL OUTPUT (Bottom) ===== */
+.terminal-output {
+    background: #000;
+    border-top: 1px solid #00ff41;
+    max-height: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-header {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #0a0e14;
+    border-bottom: 1px solid #00ff41;
+}
+
+.terminal-content {
+    flex: 1;
+    padding: 10px;
+    font-size: 13px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.prompt {
+    color: #00ff41;
+    font-weight: 700;
+}
+
+.cursor {
+    color: #00ff41;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0e14;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ff41;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cc34;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

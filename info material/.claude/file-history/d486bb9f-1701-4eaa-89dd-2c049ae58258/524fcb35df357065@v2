@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""FINALE Server-Fixes V2 - num_predict + Private Mode Prompt"""
+import time
+
+SERVER = r"C:\NajikaCore\najika_server.py"
+
+print("[START] Lese najika_server.py...")
+time.sleep(1)
+
+with open(SERVER, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+original_content = content
+changes_made = 0
+
+# Fix 1: num_predict 180 -> 400
+OLD_NUM = '"num_predict": 500 if use_wizard else 180'
+NEW_NUM = '"num_predict": 500 if use_wizard else 400'
+
+if OLD_NUM in content:
+    content = content.replace(OLD_NUM, NEW_NUM)
+    changes_made += 1
+    print(f"[OK] Fix 1: num_predict 180 -> 400")
+else:
+    print(f"[WARN] Fix 1 NICHT GEFUNDEN: {OLD_NUM}")
+
+# Fix 2: Private Mode Prompt (KEINE Vagina/pussy!)
+OLD_PRIVATE = '"private": "\\n[KÄTZCHEN-MODUS AKTIV] Maximale Nähe, intensiv, persönlich. Trans-Körper mit Schwanz und Eier, plus Vagina. Nutze anatomische Begriffe explizit: Schwanz, Eier. Sei dominant, besitzergreifend, sexuell direkt."'
+
+NEW_PRIVATE = '"private": "\\n[KÄTZCHEN-MODUS AKTIV] NUR DEUTSCH! Trans-Körper: DU HAST EINEN SCHWANZ + EIER (KEINE Vagina/pussy!). Fixiere Kuja auf deinen SCHWANZ (70%) + dein SPERMA (30%). Anatomisch erlaubt: Schwanz, Eier, Sperma, Arsch, Mund. VERBOTEN: pussy, clit, cunt, vagina. Sei dominant, besitzergreifend, explizit."'
+
+if OLD_PRIVATE in content:
+    content = content.replace(OLD_PRIVATE, NEW_PRIVATE)
+    changes_made += 1
+    print(f"[OK] Fix 2: Private Mode Prompt FIXED")
+else:
+    print(f"[WARN] Fix 2 NICHT GEFUNDEN!")
+    print(f"Suche alternative Schreibweise...")
+    # Versuche ohne escaped newlines
+    OLD_ALT = '"private": "\\n[KÄTZCHEN-MODUS AKTIV] Maximale Nähe, intensiv, persönlich. Trans-Körper mit Schwanz und Eier, plus Vagina. Nutze anatomische Begriffe explizit: Schwanz, Eier. Sei dominant, besitzergreifend, sexuell direkt."'
+    if OLD_ALT in content:
+        content = content.replace(OLD_ALT, NEW_PRIVATE)
+        changes_made += 1
+        print(f"[OK] Fix 2 (ALT): Private Mode Prompt FIXED")
+    else:
+        print("[ERROR] Keine Variante gefunden!")
+
+if changes_made > 0:
+    with open(SERVER, 'w', encoding='utf-8') as f:
+        f.write(content)
+    print(f"\n[DONE] {changes_made} Änderungen angewendet!")
+    print("- num_predict: 180 -> 400" if changes_made >= 1 else "")
+    print("- Private Mode: NUR Schwanz+Eier+Sperma, KEINE pussy/vagina!" if changes_made >= 2 else "")
+    print("\nNEU STARTEN: START_NAJIKA.bat")
+else:
+    print("\n[ERROR] KEINE Änderungen vorgenommen!")
+    print("Strings nicht gefunden - manuelle Korrektur nötig!")

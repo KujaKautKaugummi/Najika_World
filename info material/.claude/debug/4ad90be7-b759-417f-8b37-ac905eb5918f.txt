@@ -1,0 +1,150 @@
+[DEBUG] Watching for changes in setting files C:\Users\0KKK0\.claude\settings.json, C:\NajikaCore\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Applying permission update: Adding 94 allow rule(s) to destination 'localSettings': ["Bash(echo \"$file\")","Bash(done)","WebSearch","Bash(start /B python:*)","Bash(dir \"C:\\Users\\0KKK0\\.claude\" /O-D /A-D)","Read(//c/Users/0KKK0/.claude/projects/C--NajikaCore/**)","Bash(dir /O-D \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\")","Bash(python:*)","Bash(timeout:*)","Bash(netstat:*)","Read(//c/Users/0KKK0/.claude/projects/**)","Bash(START_NAJIKA.bat)","Bash(curl:*)","Bash(findstr:*)","Bash(tasklist)","Bash(taskkill:*)","Bash(cmd /c \"taskkill /F /PID 25152 & taskkill /F /PID 27084 & taskkill /F /PID 12564\")","Bash(dir \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\" /O-D /A-D)","Read(//c/Users/0KKK0/Desktop/zip/**)","Bash(dir:*)","Read(//c/Users/0KKK0/.claude/**)","Read(//c/Users/0KKK0/Desktop/**)","Bash(cmd /c:*)","Read(//c/**)","Bash(powershell -Command \"(Get-Content ''C:\\Users\\0KKK0\\Desktop\\zip\\neu 1.txt'').Count\")","Bash(ollama list:*)","Bash(ollama cp:*)","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\COPY_KAYKIT_ASSETS.ps1\")","Bash(powershell -Command:*)","Bash(robocopy:*)","WebFetch(domain:www.instagram.com)","Bash(ollama pull:*)","Bash(ollama show:*)","Bash(ollama rm:*)","Bash(ollama create:*)","Bash(pip install:*)","Bash(ollama run:*)","Bash(cd:*)","Bash(ping:*)","Bash(pip show:*)","Bash(winget install:*)","Bash(cat:*)","Bash(echo:*)","Bash(awk '{print $9}')","Bash(iconv -f UTF-8 -t ASCII//TRANSLIT)","WebFetch(domain:dev.epicgames.com)","Bash(schtasks /Query /FO LIST)","Bash(schtasks /Query /TN \"NajikaTraining09\")","Bash(CHECK_AUTO_TRAINING.bat)","Bash(start cmd /k \"cd /d C:\\NajikaCore && python najika_universal_search.py\")","Bash(schtasks /Query /TN \"NajikaTraining09\" /FO LIST)","Bash(schtasks /Query /TN \"NajikaTraining09\" /V /FO LIST)","Bash(if [ -f \"C:/NajikaCore/NAJIKA_PDF_EXTRACTION.md\" ])","Bash(then wc -l \"C:/NajikaCore/NAJIKA_PDF_EXTRACTION.md\")","Bash(else echo \"Datei wird noch erstellt...\")","Bash(fi)","Bash(xargs ls:*)","Bash(schtasks /Create /TN \"NajikaTraining16h\" /TR \"python C:\\NajikaCore\\najika_training_scheduler.py\" /SC HOURLY /ST 08:00 /F)","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\CREATE_TRAINING_TASK.ps1\")","Bash(start \"\" \"C:\\NajikaCore\\NAJIKA_FINALE_DEFINITION.md\")","Bash(start \"\" \"C:\\NajikaCore\\NAJIKA_FINALE_DEFINITION_CLEAN.md\")","Bash(start \"\" \"C:\\NajikaCore\\NAJIKA_GAME_DESIGN_UEBERSICHT.md\")","Bash(find:*)","Bash(awk:*)","Bash(C:/NajikaCore/CHECK_AUTO_TRAINING.bat)","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\SETUP_ULTIMATE_TRAINING_TASKS.ps1\")","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\SETUP_ULTIMATE_TRAINING_TASKS_SIMPLE.ps1\")","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\SETUP_ULTIMATE_TRAINING_TASKS_SCHTASKS.ps1\")","Bash(schtasks /Create /TN NajikaUltimate08 /TR \"python \"\"C:\\NajikaCore\\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py\"\"\" /SC DAILY /ST 08:00 /F)","Bash(schtasks /Query /TN NajikaUltimate08 /FO LIST)","Bash(schtasks /Query /TN \"NajikaUltimate*\" /FO LIST)","Bash(where:*)","Bash(test:*)","Bash(winget list:*)","Bash(winget uninstall:*)","Bash(ffmpeg:*)","Bash(\"C:\\Users\\0KKK0\\AppData\\Local\\Microsoft\\WinGet\\Links\\ffmpeg.exe\" -version)","Bash(schtasks /Query /FO TABLE)","Bash(nvidia-smi:*)","Bash(pip uninstall:*)","Bash(tee:*)","Bash(SETUP_LORA_TRAINING_SCHEDULER.bat)","Bash(schtasks /Create /TN \"NajikaLoRAMorning\" /TR \"python C:\\NajikaCore\\najika_lora_training.py\" /SC DAILY /ST 08:00 /F)","Bash(schtasks /Create /TN \"NajikaLoRAEvening\" /TR \"python C:\\NajikaCore\\najika_lora_training.py\" /SC DAILY /ST 20:00 /F)","Bash(schtasks /Query /TN \"NajikaLoRA*\" /FO LIST)","Bash(powershell -ExecutionPolicy Bypass -File C:NajikaCoreinstall_scheduler.ps1)","Bash(powershell -ExecutionPolicy Bypass -File \"C:/NajikaCore/install_scheduler.ps1\")","Bash(powershell -ExecutionPolicy Bypass -File \"C:/NajikaCore/verify_tasks.ps1\")","Bash(powershell -ExecutionPolicy Bypass -File \"C:/NajikaCore/install_session_importer.ps1\")","Bash(powershell -ExecutionPolicy Bypass -File \"C:/NajikaCore/install_intensive_training.ps1\")","Bash(schtasks /Query /TN \"Najika*\" /FO LIST)","Bash(powershell -ExecutionPolicy Bypass -File \"C:/NajikaCore/install_ultimate_training.ps1\")","Bash(npm install:*)","Bash(npm start)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\0KKK0\.claude\skills, project=C:\NajikaCore\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\0KKK0\.bashrc
+[DEBUG] Shell config file not found: C:\Users\0KKK0\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\0KKK0\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1761412322674-h57ji0.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\4ad90be7-b759-417f-8b37-ac905eb5918f-agent-4ad90be7-b759-417f-8b37-ac905eb5918f.json.tmp.25972.1761412322694
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\4ad90be7-b759-417f-8b37-ac905eb5918f-agent-4ad90be7-b759-417f-8b37-ac905eb5918f.json.tmp.25972.1761412322694 to C:\Users\0KKK0\.claude\todos\4ad90be7-b759-417f-8b37-ac905eb5918f-agent-4ad90be7-b759-417f-8b37-ac905eb5918f.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\4ad90be7-b759-417f-8b37-ac905eb5918f-agent-4ad90be7-b759-417f-8b37-ac905eb5918f.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Summarizing all 2 messages (~4178 tokens)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412322959
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412322959 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412322972
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412322972 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412323045
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412323045 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[ERROR] Error streaming, falling back to non-streaming mode: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkZjrU3smX7kdnjXF7"}
+[ERROR] Error streaming, falling back to non-streaming mode: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkZroPRRzpC2jt1TaZ"}
+[ERROR] Error in non-streaming fallback: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkanccQCArrBM2x4Po"}
+[ERROR] Error: Error: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkanccQCArrBM2x4Po"}
+    at D4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:203:83274)
+    at uy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:2117)
+    at uy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async qtA.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:18846)
+    at async qtA (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2685:39781)
+    at async vb2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:19014)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:12775
+    at async Bo1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:4492)
+    at async zd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:12746)
+[DEBUG] Summarizing last 3 of 96 messages (~103475 tokens)
+[ERROR] Error in non-streaming fallback: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkaw3Qaq269D6TTm9E"}
+[ERROR] Error: Error: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkaw3Qaq269D6TTm9E"}
+    at D4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:203:83274)
+    at uy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:2117)
+    at uy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async qtA.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:18846)
+    at async qtA (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2685:39781)
+    at async vb2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:19014)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:13007
+    at async Bo1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:4492)
+    at async m4A (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:12977)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412323530
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412323530 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412323597
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81770 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412323597 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412323605
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81770 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412323605 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412323659
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412323659 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[ERROR] Error streaming, falling back to non-streaming mode: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkbsMNEVcRch4op25u"}
+[ERROR] Error in non-streaming fallback: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkd9VcgF3izfJ6e8EZ"}
+[ERROR] Error: Error: 429 {"type":"error","error":{"type":"rate_limit_error","message":"This request would exceed your account's rate limit. Please try again later."},"request_id":"req_011CUUHkd9VcgF3izfJ6e8EZ"}
+    at D4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:203:83274)
+    at uy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:2117)
+    at uy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:357:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async qtA.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:18846)
+    at async qtA (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2685:39781)
+    at async vb2 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:19014)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:12775
+    at async Bo1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:4492)
+    at async zd (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3356:12746)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Telemetry flushed successfully
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412330994
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81875 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412330994 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412331006
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81480 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412331006 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1761412322674-h57ji0.sh
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.25972.1761412331228
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 81860 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.25972.1761412331228 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically

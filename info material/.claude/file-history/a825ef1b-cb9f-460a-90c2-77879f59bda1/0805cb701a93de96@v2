@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🔥 NAJIKA LoRA TRAINING - RESUME FROM CHECKPOINT 🔥
+
+Führt das Training von checkpoint-2250 fort (92% → 100%)
+Fehlende 200 Steps bis Epoch 10!
+"""
+
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+import os
+import torch
+from datetime import datetime
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    TrainingArguments,
+    BitsAndBytesConfig,
+    Trainer,
+    DataCollatorForLanguageModeling
+)
+from peft import (
+    LoraConfig,
+    get_peft_model,
+    prepare_model_for_kbit_training
+)
+from datasets import Dataset
+
+# ChromaDB Import
+from najika_memory import NajikaMemory
+
+# ===== CONFIGURATION =====
+
+CHECKPOINT_DIR = "C:/NajikaCore/lora_checkpoints/najika_lora_20251025_180107/checkpoint-2250"
+BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct"
+OUTPUT_DIR = "C:/NajikaCore/lora_checkpoints/najika_lora_20251025_180107"
+
+print("=" * 60)
+print("NAJIKA LoRA TRAINING - RESUME")
+print("=" * 60)
+print(f"Checkpoint: {CHECKPOINT_DIR}")
+print(f"Basis-Modell: {BASE_MODEL}")
+print(f"Fortschritt: 92% → 100% (200 Steps verbleibend)")
+print()
+
+# Prüfe CUDA
+if not torch.cuda.is_available():
+    print("⚠️  WARNUNG: CUDA nicht verfügbar!")
+    sys.exit(1)
+
+print(f"✅ GPU: {torch.cuda.get_device_name(0)}")
+print(f"✅ VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+print()
+
+# ===== LADE TRAINING-DATEN =====
+
+print("📚 Lade Training-Daten...")
+
+memory = NajikaMemory()
+
+# 1. Konversationen laden
+all_convs = memory.conversations.get()
+
+if not all_convs['documents']:
+    print("❌ Keine Konversationen gefunden!")
+    sys.exit(1)
+
+conversations = []
+
+for i in range(0, len(all_convs['documents']) - 1, 2):
+    user_msg = all_convs['documents'][i]
+    najika_msg = all_convs['documents'][i + 1]
+
+    # Llama3.1 Chat Format
+    formatted = f"""<|start_header_id|>user<|end_header_id|>
+
+{user_msg}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+{najika_msg}<|eot_id|>"""
+
+    conversations.append({"text": formatted})
+
+print(f"✅ {len(conversations)} Konversationen geladen")
+
+# 2. Dataset erstellen
+dataset = Dataset.from_list(conversations)
+
+# ===== LADE MODELL =====
+
+print("\n⚙️  Lade Modell (4-bit quantized)...")
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL,
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True
+)
+
+tokenizer = AutoTokenizer.from_pretrained(
+    BASE_MODEL,
+    trust_remote_code=True
+)
+tokenizer.pad_token = tokenizer.eos_token
+
+print("✅ Modell geladen!")
+
+# ===== LoRA CONFIG =====
+
+print("⚙️  Konfiguriere LoRA...")
+
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model = prepare_model_for_kbit_training(model)
+model = get_peft_model(model, lora_config)
+
+print("✅ LoRA aktiviert!")
+model.print_trainable_parameters()
+
+# ===== TRAINING ARGS =====
+
+training_args = TrainingArguments(
+    output_dir=OUTPUT_DIR,
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=4,
+    num_train_epochs=10,  # Selbe Config wie Original
+    learning_rate=2e-4,
+    fp16=True,
+    logging_steps=10,
+    save_steps=50,
+    save_total_limit=2,
+    report_to="none",
+    optim="paged_adamw_8bit",
+    warmup_steps=10,
+    lr_scheduler_type="cosine"
+)
+
+# ===== TOKENIZE =====
+
+print("\n⚙️  Tokenize Training-Daten...")
+
+def tokenize_function(examples):
+    return tokenizer(
+        examples["text"],
+        truncation=True,
+        max_length=512,
+        padding="max_length"
+    )
+
+tokenized_dataset = dataset.map(
+    tokenize_function,
+    batched=True,
+    remove_columns=dataset.column_names
+)
+
+print(f"✅ {len(tokenized_dataset)} Samples tokenized")
+
+# ===== DATA COLLATOR =====
+
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=False
+)
+
+# ===== TRAINER =====
+
+print("\n🎓 Erstelle Trainer...")
+
+trainer = Trainer(
+    model=model,
+    train_dataset=tokenized_dataset,
+    args=training_args,
+    data_collator=data_collator
+)
+
+# ===== RESUME TRAINING =====
+
+print()
+print("=" * 60)
+print("🔥 RESUME TRAINING FROM CHECKPOINT 2250")
+print("=" * 60)
+print()
+
+try:
+    trainer.train(resume_from_checkpoint=CHECKPOINT_DIR)
+
+    # Speichere Final Adapter
+    print("\n💾 Speichere finalen LoRA Adapter...")
+    final_adapter = "C:/NajikaCore/lora_checkpoints/najika_lora_latest"
+    trainer.model.save_pretrained(final_adapter)
+    tokenizer.save_pretrained(final_adapter)
+
+    print(f"✅ Adapter gespeichert: {final_adapter}")
+    print()
+    print("=" * 60)
+    print("✅ TRAINING ABGESCHLOSSEN (100%)")
+    print("=" * 60)
+    print()
+
+except Exception as e:
+    print(f"\n❌ Training-Fehler: {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)

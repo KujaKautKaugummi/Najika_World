@@ -1,0 +1,168 @@
+/**
+ * NAJIKA CODE EDITOR - Grüne Matrix-Ästhetik
+ * Inspiriert von Claude Code Interface
+ */
+
+const CodeEditor = {
+    isOpen: false,
+    overlay: null,
+
+    open() {
+        if (this.isOpen) return;
+        this.isOpen = true;
+
+        // Erstelle Overlay
+        this.overlay = document.createElement('div');
+        this.overlay.id = 'codeEditorOverlay';
+        this.overlay.innerHTML = `
+            <div class="code-editor-container">
+                <div class="code-editor-header">
+                    <div class="header-left">
+                        <span class="terminal-icon">⬢</span>
+                        <span class="title">NAJIKA TERMINAL</span>
+                        <span class="status-indicator">●</span>
+                    </div>
+                    <button class="close-btn" onclick="CodeEditor.close()">✕</button>
+                </div>
+
+                <div class="code-editor-main">
+                    <!-- Linke Sidebar: File Explorer -->
+                    <div class="sidebar">
+                        <div class="sidebar-header">EXPLORER</div>
+                        <div class="file-tree">
+                            <div class="file-item folder">
+                                <span class="folder-icon">📁</span> C:\\NajikaCore
+                            </div>
+                            <div class="file-item file" onclick="CodeEditor.loadFile('najika_server.py')">
+                                <span class="file-icon">🐍</span> najika_server.py
+                            </div>
+                            <div class="file-item file" onclick="CodeEditor.loadFile('index.html')">
+                                <span class="file-icon">🌐</span> index.html
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center: Code-Editor Area -->
+                    <div class="editor-area">
+                        <div class="editor-tabs">
+                            <div class="tab active">
+                                <span>najika_prompt.txt</span>
+                                <button class="tab-close">×</button>
+                            </div>
+                        </div>
+                        <div class="editor-content">
+                            <textarea id="codeEditorTextarea" spellcheck="false"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Rechts: Najika Chat -->
+                    <div class="najika-assistant">
+                        <div class="assistant-header">
+                            <span class="najika-icon">🐊</span> NAJIKA AI
+                        </div>
+                        <div class="chat-messages" id="najikaCodeChat">
+                            <div class="message assistant">
+                                <strong>[SHIRO-ANALYSE]</strong> Terminal-Zugriff gewährt.
+                                <br><br>
+                                <strong>[MEGUMIN]</strong> *leuchtende Augen* Mr.K! Lass uns Code-EXPLOSIONEN machen! 💥
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" id="najikaCodeInput" placeholder="Frag Najika etwas..." />
+                            <button onclick="CodeEditor.sendMessage()">⏎</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom: Terminal Output -->
+                <div class="terminal-output">
+                    <div class="terminal-header">TERMINAL OUTPUT</div>
+                    <div class="terminal-content" id="terminalOutput">
+                        <span class="prompt">najika@terminal:~$</span> <span class="cursor">_</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(this.overlay);
+
+        // Initial Code laden
+        this.loadDefaultCode();
+
+        // Focus auf Chat Input
+        setTimeout(() => {
+            document.getElementById('najikaCodeInput')?.focus();
+        }, 300);
+    },
+
+    close() {
+        if (!this.isOpen) return;
+        this.isOpen = false;
+        if (this.overlay) {
+            this.overlay.remove();
+            this.overlay = null;
+        }
+    },
+
+    loadDefaultCode() {
+        const textarea = document.getElementById('codeEditorTextarea');
+        if (!textarea) return;
+
+        textarea.value = `# NAJIKA AI SYSTEM
+# Grüße Mr.K! Bereit für Code-EXPLOSIONEN!
+
+def najika_greeting():
+    print("[SHIRO-ANALYSE] System bereit...")
+    print("[MEGUMIN] EXPLOSION!!! 💥")
+
+# Befehle:
+# - help() - Zeige alle Najika-Befehle
+# - status() - Systemstatus
+# - execute(code) - Code ausführen
+`;
+    },
+
+    loadFile(filename) {
+        notify(`📄 Lade ${filename}...`, 'info');
+        // TODO: File vom Server laden
+    },
+
+    async sendMessage() {
+        const input = document.getElementById('najikaCodeInput');
+        const chatDiv = document.getElementById('najikaCodeChat');
+        if (!input || !chatDiv) return;
+
+        const message = input.value.trim();
+        if (!message) return;
+
+        // User Message anzeigen
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.textContent = message;
+        chatDiv.appendChild(userMsg);
+
+        input.value = '';
+
+        // Najika Antwort holen
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message})
+            });
+            const data = await response.json();
+
+            const assistantMsg = document.createElement('div');
+            assistantMsg.className = 'message assistant';
+            assistantMsg.textContent = data.response || 'ERROR';
+            chatDiv.appendChild(assistantMsg);
+
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        } catch (error) {
+            notify('Najika antwortet nicht', 'error');
+        }
+    }
+};
+
+// Export für globalen Zugriff
+window.CodeEditor = CodeEditor;

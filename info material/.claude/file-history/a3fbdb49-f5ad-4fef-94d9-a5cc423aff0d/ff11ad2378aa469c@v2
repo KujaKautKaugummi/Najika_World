@@ -1,0 +1,54 @@
+{
+  "method": "manual_timestamp_extraction",
+  "created_by": "User (Kuja)",
+  "created_at": "2025-10-30T16:30:00+01:00",
+  "samples_extracted": 5,
+  "strategy": "User hat 5 REINE Megumin-Segmente aus Voice Isolation MP3 extrahiert bei exakten Timestamps. NUR Megumin, kein Background, keine anderen Charaktere!",
+  "source_file": "KONOSUBA Synchronclip #3_ Lea Kalbhenn spricht Megumin(2) (online-audio-converter.com)_Voice Isolation.mp3",
+  "timestamps": [
+    "00:30-00:51 (21s)",
+    "01:00-01:15 (15s)",
+    "01:27-01:31 (4s)",
+    "01:49-02:10 (21s)",
+    "02:33-02:45 (12s)"
+  ],
+  "total_duration_seconds": 73,
+  "quality": "EXCELLENT - Voice Isolation applied, pure Megumin voice only",
+  "samples": [
+    {
+      "name": "megumin_ref_01.wav",
+      "file": "C:/NajikaFinal/voice_data/samples/megumin_reference/megumin_ref_01.wav",
+      "duration_seconds": 21,
+      "timestamp": "00:30-00:51",
+      "reason": "Erste Megumin-Sequenz, emotional authentisch"
+    },
+    {
+      "name": "megumin_ref_02.wav",
+      "file": "C:/NajikaFinal/voice_data/samples/megumin_reference/megumin_ref_02.wav",
+      "duration_seconds": 15,
+      "timestamp": "01:00-01:15",
+      "reason": "Mittlere Sequenz, klare Aussprache"
+    },
+    {
+      "name": "megumin_ref_03.wav",
+      "file": "C:/NajikaFinal/voice_data/samples/megumin_reference/megumin_ref_03.wav",
+      "duration_seconds": 4,
+      "timestamp": "01:27-01:31",
+      "reason": "Kurze aber prägnante Sequenz"
+    },
+    {
+      "name": "megumin_ref_04.wav",
+      "file": "C:/NajikaFinal/voice_data/samples/megumin_reference/megumin_ref_04.wav",
+      "duration_seconds": 21,
+      "timestamp": "01:49-02:10",
+      "reason": "Längste Sequenz, beste Referenz für Voice Clone"
+    },
+    {
+      "name": "megumin_ref_05.wav",
+      "file": "C:/NajikaFinal/voice_data/samples/megumin_reference/megumin_ref_05.wav",
+      "duration_seconds": 12,
+      "timestamp": "02:33-02:45",
+      "reason": "Abschluss-Sequenz, verschiedene Emotionen"
+    }
+  ]
+}

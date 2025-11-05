@@ -1,0 +1,73 @@
+﻿// PRIVATE MODE DETECTOR
+(function() {
+    let privateMode = false;
+    let lastStatusError = 0;
+    
+    function checkPrivateMode() {
+        fetch('/api/status')
+            .then(r => r.json())
+            .then(data => {
+                if (window.setServerStatus) {
+                    window.setServerStatus(true);
+                }
+                if (data.private_mode && !privateMode) {
+                    activatePrivateMode();
+                } else if (!data.private_mode && privateMode) {
+                    deactivatePrivateMode();
+                }
+            })
+            .catch(err => {
+                if (window.setServerStatus) {
+                    window.setServerStatus(false);
+                }
+                const now = Date.now();
+                if (now - lastStatusError > 15000) {
+                    console.warn('Status check failed (offline?)', err && err.message ? err.message : err);
+                    lastStatusError = now;
+                }
+                if (privateMode) {
+                    deactivatePrivateMode();
+                }
+            });
+    }
+    
+    function activatePrivateMode() {
+        privateMode = true;
+        const indicator = document.getElementById('privateIndicator');
+        if (indicator) {
+            indicator.classList.add('active');
+        }
+        
+        // Change scene colors to red
+        if (window.Scene3D && window.Scene3D.setPrivateMode) {
+            window.Scene3D.setPrivateMode(true);
+        }
+        
+        console.log('🔞 Private Mode ACTIVATED');
+    }
+    
+    function deactivatePrivateMode() {
+        privateMode = false;
+        const indicator = document.getElementById('privateIndicator');
+        if (indicator) {
+            indicator.classList.remove('active');
+        }
+        
+        // Restore normal colors
+        if (window.Scene3D && window.Scene3D.setPrivateMode) {
+            window.Scene3D.setPrivateMode(false);
+        }
+        
+        console.log('🔒 Private Mode DEACTIVATED');
+    }
+    
+    // Check every 3 seconds
+    setInterval(checkPrivateMode, 3000);
+    checkPrivateMode(); // Initial check
+    
+    window.PrivateModeDetector = {
+        isActive: () => privateMode
+    };
+    
+    console.log('✅ Private Mode Detector loaded');
+})();

@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""
+Test: Audio direkt laden ohne Whisper's FFmpeg
+"""
+
+import numpy as np
+import wave
+from pathlib import Path
+
+audio_file = Path("C:/NajikaCore/training_data/extracted_audio/megumin/KonoSuba_An_Explosion_on_This_Wonderful_World!_1x10_supervideo.cc_.wav")
+
+print(f"Testing: {audio_file.name}")
+print(f"Exists: {audio_file.exists()}")
+print(f"Size: {audio_file.stat().st_size / (1024*1024):.1f} MB")
+print()
+
+# Try loading with wave module
+try:
+    with wave.open(str(audio_file), 'rb') as wf:
+        print("WAV File Info:")
+        print(f"  Channels: {wf.getnchannels()}")
+        print(f"  Sample Width: {wf.getsampwidth()} bytes")
+        print(f"  Frame Rate: {wf.getframerate()} Hz")
+        print(f"  Frames: {wf.getnframes()}")
+        print(f"  Duration: {wf.getnframes() / wf.getframerate():.1f}s")
+        print()
+
+        # Read first 1000 frames
+        frames = wf.readframes(1000)
+        print(f"Read {len(frames)} bytes OK!")
+
+except Exception as e:
+    print(f"ERROR loading WAV: {e}")
+    import traceback
+    traceback.print_exc()

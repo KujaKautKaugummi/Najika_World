@@ -1,0 +1,219 @@
+{
+  "version": "1.0",
+  "description": "Najika Open World - 1 großer Raum mit Gebäuden",
+  "world": {
+    "name": "Najika World",
+    "size": [100, 100],
+    "tileSize": 24,
+    "totalSpan": 2400,
+    "floor": {
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Grass_2_A_Color1.gltf",
+      "span": 2400,
+      "tint": "#3f7a2c",
+      "roughness": 0.95,
+      "metalness": 0.0,
+      "envMapIntensity": 0.1
+    },
+    "walls": {
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_2_B_Color1.gltf",
+      "height": 96,
+      "tint": "#355c2a",
+      "spacing": 50
+    },
+    "sky": {
+      "type": "gradient",
+      "topColor": "#87CEEB",
+      "bottomColor": "#E0F6FF",
+      "sunPosition": [100, 50, 100]
+    },
+    "spawn": [1200, 0, 1200]
+  },
+  "buildings": [
+    {
+      "id": "schwarze_muehle",
+      "name": "Schwarze Mühle",
+      "position": [1200, 0, 1200],
+      "rotation": [0, 0, 0],
+      "type": "main_building",
+      "model": "KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/grave_cross.gltf",
+      "scale": 8.0,
+      "collisionRadius": 80,
+      "doorPosition": [1200, 0, 1160],
+      "doorPrompt": "E - Schwarze Mühle betreten",
+      "interior": {
+        "floors": [
+          {
+            "name": "Erdgeschoss",
+            "level": 0,
+            "rooms": ["Wohnzimmer", "Küche", "Badezimmer"]
+          },
+          {
+            "name": "Obergeschoss",
+            "level": 1,
+            "rooms": ["Schlafzimmer", "Musikraum", "Medizin"]
+          },
+          {
+            "name": "Turm",
+            "level": 2,
+            "rooms": ["Terminal"]
+          },
+          {
+            "name": "Keller",
+            "level": -1,
+            "rooms": ["Studieren & Crafting", "Trainingszimmer"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "kampfarena",
+      "name": "Kampfarena",
+      "position": [600, 0, 600],
+      "rotation": [0, 0.785, 0],
+      "type": "arena",
+      "model": "KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/pillar.gltf",
+      "scale": 4.0,
+      "collisionRadius": 50,
+      "doorPosition": [600, 0, 560],
+      "doorPrompt": "E - Kampfarena betreten",
+      "interior": {
+        "singleRoom": true,
+        "roomName": "Kampfarena"
+      }
+    },
+    {
+      "id": "garten",
+      "name": "Garten",
+      "position": [1800, 0, 1800],
+      "rotation": [0, 0, 0],
+      "type": "garden",
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_2_B_Color1.gltf",
+      "scale": 5.0,
+      "collisionRadius": 60,
+      "doorPosition": [1800, 0, 1760],
+      "doorPrompt": "E - Garten betreten",
+      "interior": {
+        "singleRoom": true,
+        "roomName": "Garten"
+      }
+    },
+    {
+      "id": "dungeon_1",
+      "name": "Dungeon des Schattens",
+      "position": [480, 0, 480],
+      "rotation": [0, 0, 0],
+      "type": "dungeon",
+      "model": "KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_gated.gltf",
+      "scale": 6.0,
+      "collisionRadius": 70,
+      "doorPosition": [480, 0, 440],
+      "doorPrompt": "E - Dungeon betreten (Level 1)",
+      "difficulty": 1,
+      "boss": "Schatten-Najika"
+    },
+    {
+      "id": "dungeon_2",
+      "name": "Dungeon der Explosion",
+      "position": [1920, 0, 480],
+      "rotation": [0, 1.571, 0],
+      "type": "dungeon",
+      "model": "KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_gated.gltf",
+      "scale": 6.0,
+      "collisionRadius": 70,
+      "doorPosition": [1920, 0, 440],
+      "doorPrompt": "E - Dungeon betreten (Level 5)",
+      "difficulty": 5,
+      "boss": "Explosion-Geist"
+    },
+    {
+      "id": "dungeon_3",
+      "name": "Dungeon des Chaos",
+      "position": [1200, 0, 1920],
+      "rotation": [0, 3.142, 0],
+      "type": "dungeon",
+      "model": "KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_gated.gltf",
+      "scale": 6.0,
+      "collisionRadius": 70,
+      "doorPosition": [1200, 0, 1880],
+      "doorPrompt": "E - Dungeon betreten (Level 10)",
+      "difficulty": 10,
+      "boss": "Korrumpierter Wächter",
+      "locked": true
+    }
+  ],
+  "decorations": [
+    {
+      "type": "tree_cluster",
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_2_B_Color1.gltf",
+      "positions": [
+        [300, 0, 300],
+        [2100, 0, 300],
+        [300, 0, 2100],
+        [2100, 0, 2100]
+      ],
+      "scale": 3.5,
+      "randomRotation": true
+    },
+    {
+      "type": "rocks",
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Rock_3_Color1.gltf",
+      "count": 20,
+      "randomPlacement": true,
+      "scale": 2.0
+    },
+    {
+      "type": "bushes",
+      "model": "KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Bush_1_A_Color1.gltf",
+      "count": 30,
+      "randomPlacement": true,
+      "scale": 1.5
+    }
+  ],
+  "lighting": {
+    "ambient": {
+      "color": "#ffffff",
+      "intensity": 0.6
+    },
+    "directional": {
+      "color": "#ffe9b8",
+      "intensity": 1.0,
+      "position": [100, 100, 50],
+      "castShadow": true
+    },
+    "fog": {
+      "enabled": true,
+      "color": "#b5d8e0",
+      "near": 500,
+      "far": 2000
+    }
+  },
+  "character": {
+    "model": "KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/Assets/gltf/Skeleton_Minion.gltf",
+    "animations": {
+      "idle": "KayKit Character Animations 1.2/Animations/gltf/Idle.gltf",
+      "walk": "KayKit Character Animations 1.2/Animations/gltf/Walking.gltf",
+      "run": "KayKit Character Animations 1.2/Animations/gltf/Running.gltf",
+      "attack": "KayKit Character Animations 1.2/Animations/gltf/Sword_Slash.gltf",
+      "jump": "KayKit Character Animations 1.2/Animations/gltf/Jumping.gltf"
+    },
+    "scale": 1.8,
+    "speed": {
+      "walk": 5,
+      "run": 12
+    }
+  },
+  "controls": {
+    "desktop": {
+      "movement": "WASD",
+      "run": "Shift",
+      "interact": "E",
+      "attack": "Space",
+      "camera": "Mouse"
+    },
+    "mobile": {
+      "movement": "VirtualJoystick",
+      "interact": "ButtonE",
+      "attack": "ButtonSpace"
+    }
+  }
+}

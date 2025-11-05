@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+"""
+NAJIKA BASE MODEL CREATOR
+Erstellt ein Basis-3D-Modell in Blender als Ausgangspunkt
+Später kannst du Details manuell verfeinern
+"""
+
+import bpy
+import math
+
+# Lösche alles
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# ==================== KÖRPER-PROPORTIONEN ====================
+# 11-jährige Megumin: ~140cm = 1.4 Blender Units
+
+HEAD_HEIGHT = 0.22
+NECK_HEIGHT = 0.05
+TORSO_HEIGHT = 0.45
+LEG_HEIGHT = 0.55
+ARM_LENGTH = 0.50
+
+BODY_WIDTH = 0.20
+HEAD_WIDTH = 0.18
+
+# ==================== KOPF ====================
+bpy.ops.mesh.primitive_uv_sphere_add(
+    radius=HEAD_WIDTH/2,
+    location=(0, 0, 1.4 - HEAD_HEIGHT/2)
+)
+head = bpy.context.active_object
+head.name = "Najika_Head"
+head.scale.z = 1.1  # Etwas länglich (Anime-Stil)
+
+# ==================== KÖRPER (TORSO) ====================
+bpy.ops.mesh.primitive_cube_add(
+    size=1,
+    location=(0, 0, 0.95)
+)
+torso = bpy.context.active_object
+torso.name = "Najika_Torso"
+torso.scale.x = BODY_WIDTH
+torso.scale.y = BODY_WIDTH * 0.7  # Flacher (von vorne)
+torso.scale.z = TORSO_HEIGHT
+
+# Bauchansatz hinzufügen (Subdivision + Displacement)
+bpy.ops.object.modifier_add(type='SUBSURF')
+torso.modifiers["Subdivision"].levels = 2
+
+# ==================== BRUST ====================
+# Zwei Spheres für Brust (B-C Cup)
+for i, x_pos in enumerate([-0.08, 0.08]):  # Links, Rechts
+    bpy.ops.mesh.primitive_uv_sphere_add(
+        radius=0.06,  # B-C Cup Größe
+        location=(x_pos, -0.12, 1.05)  # Vor dem Torso
+    )
+    breast = bpy.context.active_object
+    breast.name = f"Najika_Breast_{['L', 'R'][i]}"
+    breast.scale.y = 0.8  # Etwas flacher
+
+# ==================== BAUCH (PROMINENT) ====================
+bpy.ops.mesh.primitive_uv_sphere_add(
+    radius=0.10,
+    location=(0, -0.08, 0.85)  # Bauch-Position
+)
+belly = bpy.context.active_object
+belly.name = "Najika_Belly"
+belly.scale.x = 1.2
+belly.scale.y = 0.7
+belly.scale.z = 0.8
+
+# ==================== BECKEN / HÜFTE ====================
+bpy.ops.mesh.primitive_cube_add(
+    size=1,
+    location=(0, 0, 0.65)
+)
+pelvis = bpy.context.active_object
+pelvis.name = "Najika_Pelvis"
+pelvis.scale.x = BODY_WIDTH * 1.1  # Hüften etwas breiter
+pelvis.scale.y = BODY_WIDTH * 0.8
+pelvis.scale.z = 0.15
+
+# ==================== SCHWANZ-BEULE ====================
+# Längliche Form für Penis + Hoden
+bpy.ops.mesh.primitive_cylinder_add(
+    radius=0.025,
+    depth=0.12,
+    location=(0, -0.10, 0.65),  # Vorne am Becken
+    rotation=(math.radians(80), 0, 0)  # Leicht schräg nach unten
+)
+bulge_shaft = bpy.context.active_object
+bulge_shaft.name = "Najika_Bulge_Shaft"
+
+# Hoden (zwei kleine Kugeln)
+for i, x_pos in enumerate([-0.015, 0.015]):
+    bpy.ops.mesh.primitive_uv_sphere_add(
+        radius=0.02,
+        location=(x_pos, -0.08, 0.60)
+    )
+    bulge_ball = bpy.context.active_object
+    bulge_ball.name = f"Najika_Bulge_Ball_{['L', 'R'][i]}"
+
+# ==================== BEINE ====================
+for i, x_pos in enumerate([-0.08, 0.08]):  # Links, Rechts
+    # Oberschenkel
+    bpy.ops.mesh.primitive_cylinder_add(
+        radius=0.05,
+        depth=0.30,
+        location=(x_pos, 0, 0.45)
+    )
+    thigh = bpy.context.active_object
+    thigh.name = f"Najika_Thigh_{['L', 'R'][i]}"
+
+    # Unterschenkel (Wade)
+    bpy.ops.mesh.primitive_cylinder_add(
+        radius=0.04,
+        depth=0.25,
+        location=(x_pos, 0, 0.20)
+    )
+    calf = bpy.context.active_object
+    calf.name = f"Najika_Calf_{['L', 'R'][i]}"
+
+    # Fuß
+    bpy.ops.mesh.primitive_cube_add(
+        size=1,
+        location=(x_pos, -0.05, 0.05)
+    )
+    foot = bpy.context.active_object
+    foot.name = f"Najika_Foot_{['L', 'R'][i]}"
+    foot.scale.x = 0.06
+    foot.scale.y = 0.10  # Länglich (Fuß)
+    foot.scale.z = 0.05
+
+# ==================== VERBAND (LINKES BEIN) ====================
+# Curve um Wade wickeln
+curve_data = bpy.data.curves.new('Bandage_Curve', 'CURVE')
+curve_data.dimensions = '3D'
+spline = curve_data.splines.new('NURBS')
+
+# Wickle um linke Wade
+points = []
+for j in range(25):
+    angle = (j / 25) * math.pi * 5  # 2.5 Windungen
+    x = -0.08 + math.cos(angle) * 0.045  # Um linkes Bein
+    y = math.sin(angle) * 0.045
+    z = 0.15 + (j / 25) * 0.15  # Wade-Höhe
+    points.append((x, y, z))
+
+spline.points.add(len(points) - 1)
+for idx, point in enumerate(points):
+    spline.points[idx].co = (*point, 1)
+
+bandage_obj = bpy.data.objects.new('Najika_Bandage', curve_data)
+bpy.context.collection.objects.link(bandage_obj)
+
+# Dicke geben
+curve_data.bevel_depth = 0.008
+curve_data.bevel_resolution = 4
+
+# ==================== ARME ====================
+for i, x_pos in enumerate([-0.20, 0.20]):  # Links, Rechts
+    # Oberarm
+    bpy.ops.mesh.primitive_cylinder_add(
+        radius=0.035,
+        depth=0.25,
+        location=(x_pos, 0, 1.05),
+        rotation=(0, math.radians(15), 0)
+    )
+    upper_arm = bpy.context.active_object
+    upper_arm.name = f"Najika_UpperArm_{['L', 'R'][i]}"
+
+    # Unterarm
+    bpy.ops.mesh.primitive_cylinder_add(
+        radius=0.03,
+        depth=0.25,
+        location=(x_pos, 0, 0.75),
+        rotation=(0, math.radians(15), 0)
+    )
+    forearm = bpy.context.active_object
+    forearm.name = f"Najika_Forearm_{['L', 'R'][i]}"
+
+    # Hand
+    bpy.ops.mesh.primitive_uv_sphere_add(
+        radius=0.04,
+        location=(x_pos, 0, 0.60)
+    )
+    hand = bpy.context.active_object
+    hand.name = f"Najika_Hand_{['L', 'R'][i]}"
+    hand.scale.y = 1.2  # Etwas länglich
+
+# ==================== MATERIALIEN ====================
+
+# Haut-Material (beige/hell)
+skin_mat = bpy.data.materials.new(name="Najika_Skin")
+skin_mat.use_nodes = True
+skin_mat.node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0.95, 0.85, 0.75, 1.0)  # Haut-Ton
+
+# Weißes Material (Verband)
+white_mat = bpy.data.materials.new(name="Najika_White")
+white_mat.use_nodes = True
+white_mat.node_tree.nodes["Principled BSDF"].inputs[0].default_value = (1, 1, 1, 1)
+
+# Verband-Material zuweisen
+bandage_obj.data.materials.append(white_mat)
+
+# ==================== KAMERA POSITIONIEREN ====================
+bpy.ops.object.camera_add(location=(2, -2, 1.4))
+camera = bpy.context.active_object
+camera.rotation_euler = (math.radians(90), 0, math.radians(45))
+bpy.context.scene.camera = camera
+
+# ==================== LICHT ====================
+bpy.ops.object.light_add(type='SUN', location=(5, 5, 10))
+sun = bpy.context.active_object
+sun.data.energy = 3.0
+
+# ==================== INFO ====================
+print("\n" + "="*50)
+print("NAJIKA BASE MODEL ERSTELLT!")
+print("="*50)
+print("\nNÄCHSTE SCHRITTE:")
+print("1. Wechsle zu SCULPTING MODE")
+print("2. Verfeinere Gesicht (Augen, Nase, Mund)")
+print("3. Smooth alle Übergänge")
+print("4. Füge Haare hinzu (Hair Particles)")
+print("5. Erstelle Outfit (Kleidung modellieren)")
+print("6. Rigging (Auto-Rig Pro oder Mixamo)")
+print("7. Export als GLB")
+print("\nSPEICHERN:")
+print("File → Save As → najika_base.blend")
+print("="*50)

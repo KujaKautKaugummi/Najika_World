@@ -1,0 +1,35 @@
+@echo off
+REM Entfernt automatische Najika Training Tasks
+
+echo ================================================================================
+echo NAJIKA TRAINING - AUTOMATIK DEAKTIVIEREN
+echo ================================================================================
+echo.
+
+REM Admin-Rechte prüfen
+net session >nul 2>&1
+if errorlevel 1 (
+    echo [FEHLER] Benoetigt Administrator-Rechte!
+    echo Rechtsklick -> "Als Administrator ausfuehren"
+    pause
+    exit /b 1
+)
+
+echo [INFO] Entferne alle Najika Training Tasks...
+echo.
+
+schtasks /Delete /TN "NajikaTraining09" /F
+schtasks /Delete /TN "NajikaTraining10" /F
+schtasks /Delete /TN "NajikaTraining11" /F
+schtasks /Delete /TN "NajikaTraining12" /F
+schtasks /Delete /TN "NajikaTraining13" /F
+
+echo.
+echo [OK] Alle Tasks entfernt
+echo.
+echo Najika Training ist jetzt NICHT mehr automatisch.
+echo.
+echo Manuell starten:
+echo   START_NAJIKA_TRAINING.bat
+echo.
+pause

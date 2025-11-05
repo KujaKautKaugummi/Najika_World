@@ -1,0 +1,138 @@
+[DEBUG] Watching for changes in setting files C:\Users\0KKK0\.claude\settings.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\0KKK0\.claude\skills, project=C:\Najika-World\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\0KKK0\.bashrc
+[DEBUG] Shell config file not found: C:\Users\0KKK0\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\0KKK0\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1762201568608-yukm91.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c-agent-0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c.json.tmp.5652.1762201568627
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c-agent-0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c.json.tmp.5652.1762201568627 to C:\Users\0KKK0\.claude\todos\0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c-agent-0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c-agent-0e5b45b2-1e57-45f0-b4cf-de4e4b5d0e7c.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201568955
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38282 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201568955 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201568962
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38282 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201568962 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201568968
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38282 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201568968 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201569206
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38282 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201569206 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571190
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38702 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571190 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571211
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38702 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571211 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571327
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38597 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571327 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571333
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38597 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571333 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571339
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38597 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571339 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571385
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38597 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571385 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201571392
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38702 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201571392 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Telemetry flushed successfully
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201583892
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38702 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201583892 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201583900
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38307 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201583900 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1762201568608-yukm91.sh
+[DEBUG] LSP server manager shut down successfully
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.5652.1762201584121
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38739 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.5652.1762201584121 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically

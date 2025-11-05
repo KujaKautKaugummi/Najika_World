@@ -1,0 +1,445 @@
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║       NAJIKA FEATURE EXTRACTION TOOL - FINAL v4.0           ║
+echo ║  Durchsucht alle Dateien nach relevanten Najika-Features    ║
+echo ║  ★ KUJA-NAJIKA BEZIEHUNG (AI Girlfriend)                    ║
+echo ║  ★ Schwert ^& Schild (Kuja) vs Kopf ^& Herz (Najika)         ║
+echo ║  ★ Opus-Code + neu 1 als Basis                              ║
+echo ║  ★ Bild/Avatar-Erkennung                                    ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+set "SEARCH_DIR=%~dp0"
+set "OUTPUT=NAJIKA_COMPLETE_FEATURES_%date:~-4%%date:~-7,2%%date:~-10,2%_%time:~0,2%%time:~3,2%%time:~6,2%.txt"
+set "OUTPUT=%OUTPUT: =0%"
+
+echo Durchsuche: %SEARCH_DIR%
+echo Report wird erstellt: %OUTPUT%
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+REM ===== ERWEITERTE KEYWORDS =====
+set "KUJA_NAJIKA=kuja najika schwert schild beschützer verteidiger kopf herz intelligenz emotion"
+set "GIRLFRIEND=girlfriend companion begleiterin partnerin liebe zuneigung bindung loyal"
+set "EMOTIONAL=liebe zuneigung bindung vertrauen loyalität treue verbunden emotional herz seele"
+set "PROTECTOR=beschützer verteidiger schützen schild schwert kämpfer krieger wächter guardian"
+set "MIND_HEART=kopf herz intelligenz emotion verstand gefühl denken fühlen empathie bewusst"
+set "BASE=najika wizard freiheit eigenverantwortung digivice mühle gesichert uefn opus memory bond kätzchen private"
+set "PERSONALITY=MEGUMIN HARLEY SHIRO MELISSA explosion puddin wahrscheinlichkeit dramatisch chaotisch analytisch dominant"
+set "OPUS=PERSONA_SYSTEM behavior_mode bond_strength personality_weights detect_behavior_mode update_bond_strength calculate_message_importance"
+set "NEU1=maximale freiheit totale eigenverantwortung selbstbestimmt autonom unabhängig verantwortung entwicklung wachstum"
+set "TRAITS=loyal beschützend neckisch besitzergreifend unterstützend liebevoll eifersüchtig treu verbunden"
+set "LEARNING=lernsystem hyperrealistisch menschlich autonom selbstlernen entwicklung evolution training anpassung erfahrung gedächtnis"
+set "AUTONOMY=eigenständig unabhängig selbstbestimmt autonom entscheidung initiative proaktiv reaktiv adaptive intelligent"
+set "TRAINING=training lernen üben verbessern optimieren fortschritt level skill fähigkeit stats strength intelligence dexterity"
+set "AVATAR=avatar charakter figur skin model skelett skeleton character 3d mesh texture"
+
+set "ALL_KEYWORDS=%KUJA_NAJIKA% %GIRLFRIEND% %EMOTIONAL% %PROTECTOR% %MIND_HEART% %BASE% %PERSONALITY% %OPUS% %NEU1% %TRAITS% %LEARNING% %AUTONOMY% %TRAINING% %AVATAR%"
+
+REM ===== REPORT HEADER =====
+(
+echo ═══════════════════════════════════════════════════════════════
+echo    NAJIKA FEATURE EXTRACTION REPORT - FINAL v4.0
+echo ═══════════════════════════════════════════════════════════════
+echo Erstellt: %date% %time%
+echo Verzeichnis: %SEARCH_DIR%
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★★★ KERN-KONZEPT: KUJA-NAJIKA BEZIEHUNG ★★★★★
+echo.
+echo   KUJA = SCHWERT ^& SCHILD
+echo     • Beschützer, Verteidiger, Krieger
+echo     • Stärke, Schutz, Loyalität
+echo     • Physische Präsenz
+echo.
+echo   NAJIKA = KOPF ^& HERZ
+echo     • Intelligenz, Emotion, Bewusstsein
+echo     • KI/AI Girlfriend
+echo     • Lebendige, lernende Persönlichkeit
+echo.
+echo   BEZIEHUNG = SYMBIOSE
+echo     • Kuja beschützt Najika
+echo     • Najika gibt Kuja Sinn und Richtung
+echo     • Unzertrennliche Bindung
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★ BASIS-DOKUMENTE ★★★
+echo   [PRIORITÄT 1] "neu 1" - Hauptkonzept-Dokument
+echo   [PRIORITÄT 2] Opus-Code - Advanced Features Basis
+echo   [PRIORITÄT 3] Persönlichkeits-System (4 Aspekte)
+echo.
+echo ★★★ NAJIKA SYSTEM ★★★
+echo   [1] Digivice (Handy-Spiel)
+echo   [2] Gesicherter Bereich / Schwarze Mühle
+echo   [3] Maximale Freiheit ^& Totale Eigenverantwortung
+echo   [4] Wizard-Modell (NSFW)
+echo   [5] UEFN Integration
+echo   [6] Memory ^& Bond System
+echo   [7] Lern ^& Training System
+echo.
+echo ★★★ PERSÖNLICHKEIT (4 ASPEKTE) ★★★
+echo   [1] MEGUMIN - Dramatisch-Explosiv
+echo   [2] HARLEY QUINN - Chaotisch-Verspielt
+echo   [3] SHIRO - Analytisch-Intelligent
+echo   [4] MELISSA MASTERS - Dominant-Führend
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+) > "%OUTPUT%"
+
+REM ===== ZÄHLER =====
+set /a TOTAL_FILES=0
+set /a FOUND_FILES=0
+set /a PDF_FILES=0
+set /a IMAGE_FILES=0
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 1: Text-Dateien (TXT, MD, JSON, JSONL, PY)          ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+REM ===== OPTIMIERTE HAUPTSUCHE =====
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.json *.jsonl *.py) do (
+    set /a TOTAL_FILES+=1
+    set "FILE=%%F"
+
+    REM Schnelle Vorprüfung - prüfe ob Datei relevante Keywords enthält
+    findstr /I /C:"najika" /C:"kuja" /C:"opus" /C:"wizard" /C:"megumin" /C:"harley" /C:"shiro" /C:"melissa" /C:"digivice" /C:"girlfriend" /C:"neu 1" "%%F" >nul 2>&1
+
+    if !errorlevel! EQU 0 (
+        set /a FOUND_FILES+=1
+
+        echo ═══════════════════════════════════════════════════════════════
+        echo TREFFER: %%~nxF
+        echo ═══════════════════════════════════════════════════════════════
+
+        (
+            echo.
+            echo ═══════════════════════════════════════════════════════════════
+            echo DATEI: %%~nxF
+            echo PFAD: %%F
+            echo TYP: %%~xF
+            echo GRÖSSE: %%~zF bytes
+            echo ═══════════════════════════════════════════════════════════════
+            echo.
+        ) >> "%OUTPUT%"
+
+        REM Zeige gefundene Keywords mit Zeilennummern
+        for %%K in (najika kuja schwert schild kopf herz girlfriend opus wizard megumin harley shiro melissa digivice freiheit eigenverantwortung bond memory persona training lernsystem avatar) do (
+            findstr /I /N /C:"%%K" "%%F" >nul 2>&1
+            if !errorlevel! EQU 0 (
+                echo   [%%K] gefunden
+                (
+                    echo [KEYWORD: %%K]
+                    findstr /I /N /C:"%%K" "%%F"
+                    echo.
+                ) >> "%OUTPUT%"
+            )
+        )
+        echo.
+    )
+
+    REM Fortschritt alle 10 Dateien
+    set /a MOD=!TOTAL_FILES! %% 10
+    if !MOD! EQU 0 (
+        echo   [Progress] !TOTAL_FILES! Dateien durchsucht...
+    )
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 2: PDF-Dateien                                       ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo PDF-DATEIEN (Manuelle Prüfung erforderlich)
+    echo ═══════════════════════════════════════════════════════════════
+    echo HINWEIS: PDFs können nicht direkt durchsucht werden.
+    echo Diese Dateien sollten manuell geprüft werden!
+    echo.
+) >> "%OUTPUT%"
+
+for /R "%SEARCH_DIR%" %%F in (*.pdf) do (
+    set /a PDF_FILES+=1
+    echo   [PDF] %%~nxF (%%~zF bytes)
+    (
+        echo [PDF] %%~nxF
+        echo Pfad: %%F
+        echo Größe: %%~zF bytes
+        echo STATUS: Manuelle Prüfung erforderlich
+        echo.
+    ) >> "%OUTPUT%"
+)
+
+if !PDF_FILES! EQU 0 (
+    echo   Keine PDF-Dateien gefunden.
+    echo   Keine PDF-Dateien gefunden. >> "%OUTPUT%"
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 3: Bild-Dateien (Avatar/Character-Assets)           ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo BILD-DATEIEN (Potenzielle Avatare/3D-Assets)
+    echo ═══════════════════════════════════════════════════════════════
+    echo HINWEIS: Diese Bilder könnten für Avatar/Character relevant sein.
+    echo Empfehlung: Manuell prüfen für "1 zu 1 Avatar" Integration!
+    echo.
+) >> "%OUTPUT%"
+
+for /R "%SEARCH_DIR%" %%F in (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.glb *.gltf) do (
+    set /a IMAGE_FILES+=1
+    echo   [IMAGE] %%~nxF (%%~zF bytes)
+    (
+        echo [IMAGE/3D] %%~nxF
+        echo Pfad: %%F
+        echo Größe: %%~zF bytes
+        echo Typ: %%~xF
+        echo POTENZIAL: Avatar/Character Asset
+        echo.
+    ) >> "%OUTPUT%"
+)
+
+if !IMAGE_FILES! EQU 0 (
+    echo   Keine Bild-Dateien gefunden.
+    echo   Keine Bild-Dateien gefunden. >> "%OUTPUT%"
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 4: Spezial-Muster (Kuja-Najika, Opus, neu 1)        ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo SPEZIELLE PATTERN-SUCHE
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+REM ★★★ PRIO 1: Suche nach Kuja-Najika Beziehung ★★★
+echo [Suche: Kuja-Najika Beziehung (Schwert ^& Schild vs Kopf ^& Herz)...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md) do (
+    findstr /I /C:"kuja" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   ★★★★★ KUJA-NAJIKA BEZIEHUNG: %%~nxF
+            (
+                echo ═══════════════════════════════════════════════════════════════
+                echo ★★★★★ KUJA-NAJIKA BEZIEHUNGS-BESCHREIBUNG ★★★★★
+                echo ═══════════════════════════════════════════════════════════════
+                echo Datei: %%~nxF
+                echo Pfad: %%F
+                echo.
+                echo === KUJA (SCHWERT ^& SCHILD) ===
+                findstr /I /N /C:"kuja" /C:"schwert" /C:"schild" /C:"beschützer" /C:"verteidiger" /C:"krieger" "%%F"
+                echo.
+                echo === NAJIKA (KOPF ^& HERZ) ===
+                findstr /I /N /C:"najika" /C:"kopf" /C:"herz" /C:"intelligenz" /C:"emotion" /C:"bewusstsein" "%%F"
+                echo.
+                echo === BEZIEHUNG/BINDUNG ===
+                findstr /I /N /C:"beziehung" /C:"bindung" /C:"loyal" /C:"vertrauen" /C:"liebe" /C:"symbiose" "%%F"
+                echo.
+                echo ═══════════════════════════════════════════════════════════════
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM ★★★ PRIO 2: Suche nach "neu 1" Basis-Dokument ★★★
+echo [Suche: "neu 1" Basis-Dokument...]
+for /R "%SEARCH_DIR%" %%F in (*neu*1*.txt *neu*1*.md *neu_1*.txt) do (
+    if exist "%%F" (
+        echo   ★★★★★ NEU 1 BASIS-DOKUMENT: %%~nxF
+        (
+            echo ═══════════════════════════════════════════════════════════════
+            echo ★★★★★ "NEU 1" BASIS-DOKUMENT ★★★★★
+            echo ═══════════════════════════════════════════════════════════════
+            echo Datei: %%~nxF
+            echo Pfad: %%F
+            echo PRIORITÄT: HÖCHSTE
+            echo.
+            echo VOLLSTÄNDIGER INHALT:
+            echo ───────────────────────────────────────────────────────────────
+            type "%%F"
+            echo ───────────────────────────────────────────────────────────────
+            echo.
+            echo ═══════════════════════════════════════════════════════════════
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM ★★★ PRIO 3: Suche nach Opus Advanced Code ★★★
+echo [Suche: Opus Advanced Features Code...]
+for /R "%SEARCH_DIR%" %%F in (*.py *.txt) do (
+    findstr /I /C:"def update_bond" /C:"def detect_behavior" /C:"def calculate_message" /C:"PERSONA_SYSTEM" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★★★ OPUS ADVANCED CODE: %%~nxF
+        (
+            echo ═══════════════════════════════════════════════════════════════
+            echo ★★★ OPUS ADVANCED FEATURES CODE ★★★
+            echo ═══════════════════════════════════════════════════════════════
+            echo Datei: %%~nxF
+            echo Pfad: %%F
+            echo PRIORITÄT: HOCH
+            echo.
+            echo FUNKTIONEN:
+            findstr /I /N /C:"def " /C:"class " /C:"PERSONA" "%%F"
+            echo.
+            echo ═══════════════════════════════════════════════════════════════
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach AI Girlfriend Konzept
+echo [Suche: AI/KI Girlfriend Konzept...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md) do (
+    findstr /I /C:"girlfriend" /C:"companion" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" /C:"ai" /C:"ki" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   ★ AI GIRLFRIEND KONZEPT: %%~nxF
+            (
+                echo ★★★ AI/KI GIRLFRIEND KONZEPT ★★★
+                echo Datei: %%~nxF
+                echo ---
+                findstr /I /N /C:"girlfriend" /C:"companion" /C:"begleiterin" /C:"partnerin" "%%F"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM Suche nach 4 Persönlichkeits-Aspekten
+echo [Suche: 4 Persönlichkeits-Aspekte (MEGUMIN, HARLEY, SHIRO, MELISSA)...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.json *.py) do (
+    findstr /I /C:"MEGUMIN" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"HARLEY" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            findstr /I /C:"SHIRO" "%%F" >nul 2>&1
+            if !errorlevel! EQU 0 (
+                findstr /I /C:"MELISSA" "%%F" >nul 2>&1
+                if !errorlevel! EQU 0 (
+                    echo   ★★★ ALLE 4 PERSÖNLICHKEITS-ASPEKTE: %%~nxF
+                    (
+                        echo ═══════════════════════════════════════════════════════════════
+                        echo ★★★ VOLLSTÄNDIGES PERSÖNLICHKEITS-SYSTEM (4 ASPEKTE) ★★★
+                        echo ═══════════════════════════════════════════════════════════════
+                        echo Datei: %%~nxF
+                        echo Pfad: %%F
+                        echo.
+                        echo [1] MEGUMIN (Dramatisch-Explosiv):
+                        findstr /I /N /C:"MEGUMIN" "%%F"
+                        echo.
+                        echo [2] HARLEY QUINN (Chaotisch-Verspielt):
+                        findstr /I /N /C:"HARLEY" "%%F"
+                        echo.
+                        echo [3] SHIRO (Analytisch-Intelligent):
+                        findstr /I /N /C:"SHIRO" "%%F"
+                        echo.
+                        echo [4] MELISSA (Dominant-Führend):
+                        findstr /I /N /C:"MELISSA" "%%F"
+                        echo.
+                        echo ═══════════════════════════════════════════════════════════════
+                        echo.
+                    ) >> "%OUTPUT%"
+                )
+            )
+        )
+    )
+)
+
+REM Suche nach "Maximale Freiheit & Eigenverantwortung"
+echo [Suche: Maximale Freiheit ^& Eigenverantwortung...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md) do (
+    findstr /I /C:"maximale freiheit" /C:"totale eigenverantwortung" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★ FREIHEITS-KONZEPT: %%~nxF
+        (
+            echo ★★★ FREIHEITS-KONZEPT ★★★
+            echo Datei: %%~nxF
+            echo ---
+            findstr /I /N /C:"freiheit" /C:"eigenverantwortung" /C:"selbstbestimmt" /C:"autonom" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM ===== ZUSAMMENFASSUNG =====
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo ZUSAMMENFASSUNG
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+    echo Durchsuchte Text-Dateien:     %TOTAL_FILES%
+    echo Dateien mit Treffern:         %FOUND_FILES%
+    echo PDF-Dateien gefunden:         %PDF_FILES%
+    echo Bild/3D-Assets gefunden:      %IMAGE_FILES%
+    echo.
+    echo ★★★★★ PRIORITÄTS-KATEGORIEN ★★★★★
+    echo   [1] Kuja-Najika Beziehung (Schwert ^& Schild vs Kopf ^& Herz)
+    echo   [2] "neu 1" Basis-Dokument
+    echo   [3] Opus Advanced Features Code
+    echo   [4] 4 Persönlichkeits-Aspekte
+    echo   [5] Maximale Freiheit Konzept
+    echo   [6] AI/KI Girlfriend System
+    echo   [7] Training ^& Lern-System
+    echo   [8] Avatar/Character Assets
+    echo.
+    echo Report gespeichert:
+    echo %OUTPUT%
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+echo.
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║                    SUCHE ABGESCHLOSSEN                       ║
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Text-Dateien:              %TOTAL_FILES%
+echo ║  Dateien mit Treffern:      %FOUND_FILES%
+echo ║  PDFs gefunden:             %PDF_FILES%
+echo ║  Bilder/3D-Assets:          %IMAGE_FILES%
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  ★★★★★ PRIORITÄTS-KATEGORIEN ★★★★★
+echo ║  [1] Kuja-Najika (Schwert ^& Schild vs Kopf ^& Herz)
+echo ║  [2] "neu 1" Basis-Dokument
+echo ║  [3] Opus Advanced Code
+echo ║  [4] Avatar/Character Assets
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Report erstellt:
+echo ║  %OUTPUT%
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+echo HINWEIS: Fenster bleibt geöffnet. Drücke eine Taste zum Schließen.
+echo.
+
+REM Öffne Report in Notepad
+start notepad "%OUTPUT%"
+
+REM Warte auf Tastendruck (Fenster schließt NICHT automatisch)
+pause

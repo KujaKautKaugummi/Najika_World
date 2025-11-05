@@ -1,0 +1,102 @@
+@echo off
+REM TESTE NAJIKA TRAINING SYSTEM - KOMPLETT-CHECK
+
+echo ================================================================================
+echo NAJIKA TRAINING SYSTEM - KOMPLETT-TEST
+echo ================================================================================
+echo.
+
+echo [TEST 1/6] Python vorhanden?
+python --version
+if errorlevel 1 (
+    echo [FEHLER] Python nicht gefunden!
+    pause
+    exit /b 1
+)
+echo [OK] Python gefunden
+echo.
+
+echo [TEST 2/6] pytz installiert?
+python -c "import pytz; print('[OK] pytz version:', pytz.__version__)"
+if errorlevel 1 (
+    echo [FEHLER] pytz nicht installiert - installiere jetzt...
+    pip install pytz
+)
+echo.
+
+echo [TEST 3/6] Training-Scripts vorhanden?
+if exist "C:\NajikaCore\najika_training_scheduler.py" (
+    echo [OK] najika_training_scheduler.py
+) else (
+    echo [FEHLER] najika_training_scheduler.py fehlt!
+)
+
+if exist "C:\NajikaCore\najika_complete_training_session.py" (
+    echo [OK] najika_complete_training_session.py
+) else (
+    echo [FEHLER] najika_complete_training_session.py fehlt!
+)
+
+if exist "C:\NajikaCore\najika_show_progress.py" (
+    echo [OK] najika_show_progress.py
+) else (
+    echo [FEHLER] najika_show_progress.py fehlt!
+)
+echo.
+
+echo [TEST 4/6] Training-Ressourcen vorhanden?
+if exist "C:\NajikaCore\training\CODE_KATAS_DAILY.md" (
+    echo [OK] CODE_KATAS_DAILY.md
+) else (
+    echo [FEHLER] CODE_KATAS_DAILY.md fehlt!
+)
+
+if exist "C:\NajikaCore\training\COMMON_PITFALLS.md" (
+    echo [OK] COMMON_PITFALLS.md
+) else (
+    echo [FEHLER] COMMON_PITFALLS.md fehlt!
+)
+
+if exist "C:\NajikaCore\training\PERFORMANCE_PATTERNS.md" (
+    echo [OK] PERFORMANCE_PATTERNS.md
+) else (
+    echo [FEHLER] PERFORMANCE_PATTERNS.md fehlt!
+)
+
+if exist "C:\NajikaCore\training\ARCHITECTURE_PATTERNS.md" (
+    echo [OK] ARCHITECTURE_PATTERNS.md
+) else (
+    echo [FEHLER] ARCHITECTURE_PATTERNS.md fehlt!
+)
+echo.
+
+echo [TEST 5/6] Scheduler-Test (Syntax-Check)
+python -m py_compile C:\NajikaCore\najika_training_scheduler.py
+if errorlevel 1 (
+    echo [FEHLER] Syntax-Fehler in najika_training_scheduler.py
+) else (
+    echo [OK] Scheduler Syntax korrekt
+)
+echo.
+
+echo [TEST 6/6] Scheduler ausfuehren (Zeit-Check)
+echo.
+python C:\NajikaCore\najika_training_scheduler.py
+echo.
+
+echo ================================================================================
+echo TEST KOMPLETT
+echo ================================================================================
+echo.
+echo NAECHSTE SCHRITTE:
+echo.
+echo 1. Wenn heute Mo-Fr 09:00-14:00: Training startet automatisch
+echo 2. Sonst: Kommt am Montag 09:00 zurueck
+echo.
+echo MANUELLER START (falls gewuenscht):
+echo   START_NAJIKA_TRAINING.bat
+echo.
+echo PROGRESS ANZEIGEN:
+echo   python najika_show_progress.py
+echo.
+pause

@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Update najika-update.md auf V2"""
+
+import time
+
+FILE = r"C:\Users\0KKK0\.claude\commands\najika-update.md"
+
+NEW = """# Najika Update Command V2
+
+Smart Update System mit Task-Tracking und Auto-File-Detection.
+
+## PFLICHT-ABLAUF:
+
+1. `python C:/NajikaCore/najika_smart_update_v2.py`
+2. Warte bis fertig
+3. **LIES KOMPLETT:** `C:/NajikaCore/CLAUDE_SMART_UPDATE.md` (Read OHNE offset!)
+
+Das Update enthaelt:
+- Letzte 2 User-Messages VOLLSTAENDIG (max 600 chars)
+- Erkannte offene Aufgaben (kategorisiert)
+- Files die erwaehnt wurden (Read-Liste!)
+- Task-Tracking ueber Sessions
+
+4. Lies alle Files aus "FILES DIE ERWAEHNT WURDEN" KOMPLETT!
+5. Pruefe offene Aufgaben
+6. Frage User KURZ (max 2 Saetze!) was als naechstes
+
+**TOKEN-EFFIZIENZ (KRITISCH!):**
+
+- Read IMMER komplett vor Edit (keine Ausnahmen!)
+- Grep fuer Suchen, nicht File-Reading
+- User-Textstueck? → `grep -F "TEXT" SESSION.jsonl`
+- Halte Antworten kurz - User kennt Kontext!
+- Keine Trial-and-Error Edits - erst lesen!
+
+**WENN FEHLER PASSIEREN:**
+
+- File modified? → Read nochmal!
+- Nicht raten - User fragen!
+- Keine Token-Verschwendung!
+"""
+
+time.sleep(1)
+with open(FILE, 'w', encoding='utf-8') as f:
+    f.write(NEW)
+
+print("[OK] najika-update.md auf V2 aktualisiert!")

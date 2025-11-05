@@ -1,0 +1,40 @@
+@echo off
+REM 🔥 NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP 🔥
+REM Quick-Setup für das neue System
+
+echo ================================================================================
+echo 🔥 NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP 🔥
+echo ================================================================================
+echo.
+echo DIESES SCRIPT ERSTELLT:
+echo   - 15 Tasks (08:00-23:00 Uhr)
+echo   - JEDEN TAG (Mo-So)
+echo   - Heartbeat-Monitoring
+echo   - Warn-Popups bei Ausfall
+echo   - Auto-Recovery
+echo   - Progress-Tracking
+echo.
+echo ================================================================================
+echo.
+
+pause
+
+echo.
+echo [INFO] Starte PowerShell-Setup...
+echo.
+
+REM Starte PowerShell als Admin
+powershell -ExecutionPolicy Bypass -File "C:\NajikaCore\SETUP_ULTIMATE_TRAINING_TASKS.ps1"
+
+echo.
+echo ================================================================================
+echo SETUP ABGESCHLOSSEN!
+echo ================================================================================
+echo.
+echo TESTE DAS SYSTEM JETZT:
+echo   python C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py
+echo.
+echo LIVE-MONITOR STARTEN:
+echo   python C:\NajikaCore\NAJIKA_TRAINING_MONITOR.py
+echo.
+pause

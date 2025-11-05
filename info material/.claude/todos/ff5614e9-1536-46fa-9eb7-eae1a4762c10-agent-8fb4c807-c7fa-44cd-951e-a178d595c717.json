@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Teil 1 + 2 lesen und vollständig verstehen",
+    "status": "completed",
+    "activeForm": "Lese Teil 1 + 2 und verstehe vollständig"
+  },
+  {
+    "content": "Finale Master-Datei erstellen mit vollständigem Inhaltsverzeichnis",
+    "status": "in_progress",
+    "activeForm": "Erstelle finale Master-Datei mit vollständigem Inhaltsverzeichnis"
+  },
+  {
+    "content": "Technische Implementierung hinzufügen (Event-Generator, Chaos-Berechnung, Najika-Reaktions-System)",
+    "status": "pending",
+    "activeForm": "Füge technische Implementierung hinzu"
+  },
+  {
+    "content": "Balance & Rewards System hinzufügen",
+    "status": "pending",
+    "activeForm": "Füge Balance & Rewards System hinzu"
+  },
+  {
+    "content": "Integration in Najika V3 beschreiben",
+    "status": "pending",
+    "activeForm": "Beschreibe Integration in Najika V3"
+  }
+]

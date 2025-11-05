@@ -1,0 +1,175 @@
+[DEBUG] Watching for changes in setting files C:\Users\0KKK0\.claude\settings.json, C:\NajikaCore\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Applying permission update: Adding 43 allow rule(s) to destination 'localSettings': ["Bash(echo \"$file\")","Bash(done)","WebSearch","Bash(start /B python:*)","Bash(dir \"C:\\Users\\0KKK0\\.claude\" /O-D /A-D)","Read(//c/Users/0KKK0/.claude/projects/C--NajikaCore/**)","Bash(dir /O-D \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\")","Bash(python:*)","Bash(timeout:*)","Bash(netstat:*)","Read(//c/Users/0KKK0/.claude/projects/**)","Bash(START_NAJIKA.bat)","Bash(curl:*)","Bash(findstr:*)","Bash(tasklist)","Bash(taskkill:*)","Bash(cmd /c \"taskkill /F /PID 25152 & taskkill /F /PID 27084 & taskkill /F /PID 12564\")","Bash(dir \"C:\\Users\\0KKK0\\.claude\\projects\\C--NajikaCore\" /O-D /A-D)","Read(//c/Users/0KKK0/Desktop/zip/**)","Bash(dir:*)","Read(//c/Users/0KKK0/.claude/**)","Read(//c/Users/0KKK0/Desktop/**)","Bash(cmd /c:*)","Read(//c/**)","Bash(powershell -Command \"(Get-Content ''C:\\Users\\0KKK0\\Desktop\\zip\\neu 1.txt'').Count\")","Bash(ollama list:*)","Bash(ollama cp:*)","Bash(powershell -ExecutionPolicy Bypass -File \"C:\\NajikaCore\\COPY_KAYKIT_ASSETS.ps1\")","Bash(powershell -Command:*)","Bash(robocopy:*)","WebFetch(domain:www.instagram.com)","Bash(ollama pull:*)","Bash(ollama show:*)","Bash(ollama rm:*)","Bash(ollama create:*)","Bash(pip install:*)","Bash(ollama run:*)","Bash(cd:*)","Bash(ping:*)","Bash(pip show:*)","Bash(winget install:*)","Bash(cat:*)","Bash(echo:*)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\0KKK0\.claude\skills, project=C:\NajikaCore\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\0KKK0\.bashrc
+[DEBUG] Shell config file not found: C:\Users\0KKK0\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\0KKK0\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1760653350430-sp70kc.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude\todos\d57c3a0b-935a-4c3f-853a-6676a3ebbd73-agent-d57c3a0b-935a-4c3f-853a-6676a3ebbd73.json.tmp.2448.1760653350448
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\0KKK0\.claude\todos\d57c3a0b-935a-4c3f-853a-6676a3ebbd73-agent-d57c3a0b-935a-4c3f-853a-6676a3ebbd73.json.tmp.2448.1760653350448 to C:\Users\0KKK0\.claude\todos\d57c3a0b-935a-4c3f-853a-6676a3ebbd73-agent-d57c3a0b-935a-4c3f-853a-6676a3ebbd73.json
+[DEBUG] File C:\Users\0KKK0\.claude\todos\d57c3a0b-935a-4c3f-853a-6676a3ebbd73-agent-d57c3a0b-935a-4c3f-853a-6676a3ebbd73.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\0KKK0\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350717
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106334 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350717 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350772
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106229 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350772 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350779
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106229 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350779 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called, ENABLE_PLUGINS=true
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350925
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106279 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350925 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350966
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106279 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350966 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350974
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106279 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350974 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653350986
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106384 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653350986 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653351043
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106384 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653351043 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653351099
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106384 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653351099 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CUBf9bouCCK7gkQTDvDMx"}
+    at w4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Rz1.maxRetries (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:12180)
+    at async Rz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async ww0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:724:1216)
+    at async gEQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:12071)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2788:2679
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CUBf9cezzEHP9w4z7kqAC"}
+    at w4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async rX1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1275:8784)
+    at async PC1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3292:977)
+    at async lt1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3292:1186)
+    at async LRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:531)
+[ERROR] Error streaming, falling back to non-streaming mode: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CUBf9crA3BuAfFGxg67Mt"}
+[ERROR] Error in non-streaming fallback: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CUBf9dhWHTaWhMyrNTZiP"}
+[ERROR] Error: Error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CUBf9dhWHTaWhMyrNTZiP"}
+    at w4.generate (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:202:83047)
+    at Yy.makeStatusError (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:2117)
+    at Yy.makeRequest (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:356:5330)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Rz1.model (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:19535)
+    at async Rz1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2649:39781)
+    at async bRQ (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:19689)
+    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:13874
+    at async Na0 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:4494)
+    at async nQ1 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3302:13844)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Metrics opt-out API response: enabled=true
+[DEBUG] BigQuery metrics exported successfully
+[DEBUG] API Response: {
+  "accepted_count": 2,
+  "rejected_count": 0
+}
+[DEBUG] BigQuery metrics exporter flush complete
+[DEBUG] Telemetry flushed successfully
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653366290
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106253 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653366290 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653366297
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 105772 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653366297 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: C:\Users\0KKK0\.claude\shell-snapshots\snapshot-bash-1760653350430-sp70kc.sh
+[DEBUG] Metrics export failed: No API key available
+[ERROR] Error: Error: {"stack":"Error: PeriodicExportingMetricReader: metrics export failed (error Error: No API key available)\n    at ETB._doRun (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:154064)\n    at async ETB._runOnce (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:153301)\n    at async ETB.onForceFlush (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:154288)\n    at async ETB.onShutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:154411)\n    at async ETB.shutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:151886)\n    at async NSB.shutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1854:8622)\n    at async Promise.all (index 0)\n    at async lSB.shutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1854:12914)\n    at async Promise.all (index 0)\n    at async file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1886:4435","message":"PeriodicExportingMetricReader: metrics export failed (error Error: No API key available)","name":"Error"}
+    at Pb0.error (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1882:49442)
+    at LS0.error (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:12441)
+    at file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:61428
+    at Ce6 (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:61974)
+    at ETB._runOnce (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:153534)
+    at async ETB.onForceFlush (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:154288)
+    at async ETB.onShutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:154411)
+    at async ETB.shutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1841:151886)
+    at async NSB.shutdown (file:///C:/Users/0KKK0/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1854:8622)
+    at async Promise.all (index 0)
+[DEBUG] BigQuery metrics exporter flush complete
+[DEBUG] BigQuery metrics exporter flush complete
+[DEBUG] BigQuery metrics exporter shutdown complete
+[DEBUG] Writing to temp file: C:\Users\0KKK0\.claude.json.tmp.2448.1760653366523
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 106153 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\0KKK0\.claude.json.tmp.2448.1760653366523 to C:\Users\0KKK0\.claude.json
+[DEBUG] File C:\Users\0KKK0\.claude.json written atomically

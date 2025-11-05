@@ -1,0 +1,422 @@
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║          NAJIKA FEATURE EXTRACTION TOOL                      ║
+echo ║  Durchsucht alle Dateien nach relevanten Najika-Features    ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+set "OUTPUT=NAJIKA_FEATURES_FOUND_%date:~-4%%date:~-7,2%%date:~-10,2%_%time:~0,2%%time:~3,2%%time:~6,2%.txt"
+set "OUTPUT=%OUTPUT: =0%"
+
+echo Starte Suche in: %~dp0
+echo Report wird erstellt: %OUTPUT%
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+REM Erstelle Report-Header
+(
+echo NAJIKA FEATURE EXTRACTION REPORT
+echo Erstellt am: %date% %time%
+echo Durchsuchtes Verzeichnis: %~dp0
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo SUCHKRITERIEN:
+echo   [1] Najika KI/AI System
+echo   [2] Digivice ^(Handy-Spiel^)
+echo   [3] Gesicherter Bereich / Schwarze Mühle
+echo   [4] Maximale Freiheit ^& Totale Eigenverantwortung
+echo   [5] Wizard-Modell Ergänzungen
+echo   [6] UEFN Integration
+echo   [7] Opus Advanced Features ^(Basis-Code^)
+echo   [8] Memory System
+echo   [9] Bond-Strength / Beziehungssystem
+echo   [10] Persönlichkeits-System ^(4 Aspekte^)
+echo   [11] "neu 1.txt" Beschreibungen
+echo   [12] MEGUMIN, HARLEY, SHIRO, MELISSA Traits
+echo   [13] Lern-System ^(Hyperrealistisch-Menschlich-Autonom^)
+echo   [14] Training-System ^(Digimon World Style^)
+echo   [15] Autonomie ^& Eigenständigkeit
+echo   [16] Adaptive Intelligence
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo.
+) > "%OUTPUT%"
+
+REM Keywords für die Suche (Basis: Opus-Code + neu 1.txt)
+set "KEYWORDS=najika wizard freiheit eigenverantwortung digivice schwarze mühle gesichert uefn opus memory bond beziehung persona import export logging importance kätzchen private"
+
+REM Persönlichkeits-Keywords (4 Aspekte)
+set "PERSONALITY_KEYWORDS=MEGUMIN HARLEY SHIRO MELISSA explosion puddin wahrscheinlichkeit dramatisch chaotisch analytisch dominant theatralisch verspielt intelligent führung"
+
+REM Opus-spezifische Keywords
+set "OPUS_KEYWORDS=PERSONA_SYSTEM behavior_mode bond_strength total_interactions personality_weights detect_behavior_mode update_bond_strength get_mode_prompt_addition"
+
+REM neu 1.txt Konzept-Keywords
+set "NEU1_KEYWORDS=maximale freiheit totale eigenverantwortung selbstbestimmt autonom unabhängig entscheidung verantwortung entwicklung wachstum lernen anpassung"
+
+REM Charakterzug-Keywords
+set "TRAIT_KEYWORDS=loyal beschützend neckisch besitzergreifend unterstützend liebevoll eifersüchtig treu verbunden emotional tiefe bindung"
+
+REM Lern-System Keywords (Hyperrealistisch-Menschlich-Autonom)
+set "LEARNING_KEYWORDS=lernsystem hyperrealistisch menschlich autonom selbstlernen entwicklung evolution training anpassung wachstum erfahrung gedächtnis erinnern verstehen"
+
+REM Autonomie-Keywords (Maximales System)
+set "AUTONOMY_KEYWORDS=eigenständig unabhängig selbstbestimmt autonom entscheidung initiative proaktiv reaktiv adaptive intelligent bewusst"
+
+REM Training-System Keywords
+set "TRAINING_KEYWORDS=training lernen üben verbessern optimieren fortschritt level skill fähigkeit kompetenz meisterschaft"
+
+REM Kombiniere alle Keywords
+set "ALL_KEYWORDS=%KEYWORDS% %PERSONALITY_KEYWORDS% %OPUS_KEYWORDS% %NEU1_KEYWORDS% %TRAIT_KEYWORDS% %LEARNING_KEYWORDS% %AUTONOMY_KEYWORDS% %TRAINING_KEYWORDS%"
+
+echo [PHASE 1] Durchsuche Text-Dateien...
+echo.
+
+REM Zähler
+set /a TOTAL_FILES=0
+set /a FOUND_FILES=0
+set /a TOTAL_MATCHES=0
+
+REM Durchsuche alle Text-Dateien
+for /R "%~dp0" %%F in (*.txt *.md *.json *.jsonl) do (
+    set /a TOTAL_FILES+=1
+    set "CURRENT_FILE=%%F"
+    set "FOUND_IN_FILE=0"
+
+    REM Prüfe jedes Keyword (alle Kategorien)
+    for %%K in (%ALL_KEYWORDS%) do (
+        findstr /I /C:"%%K" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            if !FOUND_IN_FILE! EQU 0 (
+                set /a FOUND_FILES+=1
+                set "FOUND_IN_FILE=1"
+                echo.
+                echo ═══════════════════════════════════════════════════════════════
+                echo FUNDSTELLE IN: %%~nxF
+                echo Pfad: %%F
+                echo ═══════════════════════════════════════════════════════════════
+                echo.
+                (
+                    echo.
+                    echo ═══════════════════════════════════════════════════════════════
+                    echo DATEI: %%~nxF
+                    echo PFAD: %%F
+                    echo ═══════════════════════════════════════════════════════════════
+                    echo.
+                ) >> "%OUTPUT%"
+            )
+
+            REM Extrahiere Zeilen mit Kontext
+            echo [KEYWORD: %%K]
+            echo [KEYWORD: %%K] >> "%OUTPUT%"
+
+            for /F "delims=:" %%L in ('findstr /I /N /C:"%%K" "%%F"') do (
+                set /a LINE_NUM=%%L
+                set /a TOTAL_MATCHES+=1
+                set /a CONTEXT_START=!LINE_NUM!-2
+                set /a CONTEXT_END=!LINE_NUM!+2
+                if !CONTEXT_START! LSS 1 set CONTEXT_START=1
+
+                REM Zeige Zeile mit Kontext
+                set /a CURRENT=0
+                for /F "usebackq delims=" %%M in ("%%F") do (
+                    set /a CURRENT+=1
+                    if !CURRENT! GEQ !CONTEXT_START! if !CURRENT! LEQ !CONTEXT_END! (
+                        if !CURRENT! EQU !LINE_NUM! (
+                            echo   ^>^>^> %%M
+                            echo   ^>^>^> %%M >> "%OUTPUT%"
+                        ) else (
+                            echo       %%M
+                            echo       %%M >> "%OUTPUT%"
+                        )
+                    )
+                )
+            )
+            echo. >> "%OUTPUT%"
+        )
+    )
+)
+
+echo.
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo [PHASE 2] Spezielle Muster-Suche...
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+REM Suche nach speziellen Patterns
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo SPEZIELLE PATTERN-SUCHE
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+REM Suche nach Code-Patterns
+echo [Suche nach Python-Funktionen...]
+for /R "%~dp0" %%F in (*.py *.txt) do (
+    findstr /I /R /C:"def.*najika" /C:"class.*Najika" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   GEFUNDEN in: %%~nxF
+        (
+            echo PYTHON CODE in: %%~nxF
+            findstr /I /N /R /C:"def.*najika" /C:"class.*Najika" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+echo [Suche nach Config/Settings...]
+for /R "%~dp0" %%F in (*.json *.jsonl *.env) do (
+    findstr /I /C:"najika" /C:"wizard" /C:"model" /C:"persona" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   GEFUNDEN in: %%~nxF
+        (
+            echo CONFIG/SETTINGS in: %%~nxF
+            type "%%F" | findstr /I /N /C:"najika" /C:"wizard" /C:"model" /C:"persona"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+echo [Suche nach API-Endpoints...]
+for /R "%~dp0" %%F in (*.txt *.md *.py) do (
+    findstr /I /C:"/api/" /C:"endpoint" /C:"route" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   GEFUNDEN in: %%~nxF
+            (
+                echo API ENDPOINTS in: %%~nxF
+                type "%%F" | findstr /I /N /C:"/api/"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo [PHASE 3] Opus-Code + Persönlichkeits-Basis Analyse...
+echo ═══════════════════════════════════════════════════════════════
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo OPUS-CODE BASIS ^& PERSÖNLICHKEITS-SYSTEM
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+REM Suche nach PERSONA_SYSTEM Definitionen
+echo [Suche nach PERSONA_SYSTEM Definitionen...]
+for /R "%~dp0" %%F in (*.txt *.py *.md) do (
+    findstr /I /C:"PERSONA_SYSTEM" /C:"PERSÖNLICHKEITS" /C:"4 ASPEKTE" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   PERSONA_SYSTEM gefunden in: %%~nxF
+        (
+            echo PERSONA_SYSTEM DEFINITION in: %%~nxF
+            echo Pfad: %%F
+            echo ---
+            type "%%F" | findstr /I /N /C:"PERSONA" /C:"PERSÖNLICHKEIT" /C:"ASPEKTE"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach 4 Persönlichkeits-Aspekten
+echo [Suche nach 4 Persönlichkeits-Aspekten...]
+for /R "%~dp0" %%F in (*.txt *.md *.json) do (
+    findstr /I /C:"MEGUMIN" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"HARLEY" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            findstr /I /C:"SHIRO" "%%F" >nul 2>&1
+            if !errorlevel! EQU 0 (
+                findstr /I /C:"MELISSA" "%%F" >nul 2>&1
+                if !errorlevel! EQU 0 (
+                    echo   ALLE 4 ASPEKTE gefunden in: %%~nxF
+                    (
+                        echo ★★★ VOLLSTÄNDIGES PERSÖNLICHKEITS-SYSTEM in: %%~nxF ★★★
+                        echo Pfad: %%F
+                        echo ---
+                        echo [1] MEGUMIN:
+                        type "%%F" | findstr /I /C:"MEGUMIN" /C:"explosion" /C:"dramatisch"
+                        echo.
+                        echo [2] HARLEY QUINN:
+                        type "%%F" | findstr /I /C:"HARLEY" /C:"puddin" /C:"chaotisch"
+                        echo.
+                        echo [3] SHIRO:
+                        type "%%F" | findstr /I /C:"SHIRO" /C:"wahrscheinlichkeit" /C:"analytisch"
+                        echo.
+                        echo [4] MELISSA:
+                        type "%%F" | findstr /I /C:"MELISSA" /C:"dominant" /C:"führung"
+                        echo.
+                    ) >> "%OUTPUT%"
+                )
+            )
+        )
+    )
+)
+
+REM Suche nach "Maximale Freiheit" Konzept
+echo [Suche nach "Maximale Freiheit ^& Eigenverantwortung" Konzept...]
+for /R "%~dp0" %%F in (*.txt *.md) do (
+    findstr /I /C:"maximale freiheit" /C:"totale eigenverantwortung" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   FREIHEITS-KONZEPT gefunden in: %%~nxF
+        (
+            echo FREIHEITS-KONZEPT in: %%~nxF
+            echo Pfad: %%F
+            echo ---
+            type "%%F" | findstr /I /N /C:"freiheit" /C:"eigenverantwortung" /C:"selbstbestimmt"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach Opus Advanced Features Code
+echo [Suche nach Opus Advanced Features Code...]
+for /R "%~dp0" %%F in (*.py *.txt) do (
+    findstr /I /C:"def update_bond_strength" /C:"def detect_behavior_mode" /C:"def calculate_message_importance" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   OPUS ADVANCED CODE gefunden in: %%~nxF
+        (
+            echo OPUS ADVANCED FEATURES CODE in: %%~nxF
+            echo Pfad: %%F
+            echo ---
+            type "%%F" | findstr /I /N /C:"def update_bond" /C:"def detect_behavior" /C:"def calculate_message"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach "neu 1" Datei spezifisch
+echo [Suche nach "neu 1.txt" Beschreibungen...]
+for /R "%~dp0" %%F in (*neu*1*.txt *neu*1*.md) do (
+    if exist "%%F" (
+        echo   NEU 1 DATEI gefunden: %%~nxF
+        (
+            echo ═══════════════════════════════════════════════════════════════
+            echo ★★★ NEU 1.TXT BASIS-BESCHREIBUNG ★★★
+            echo ═══════════════════════════════════════════════════════════════
+            echo Datei: %%~nxF
+            echo Pfad: %%F
+            echo.
+            echo VOLLSTÄNDIGER INHALT:
+            echo ---
+            type "%%F"
+            echo.
+            echo ═══════════════════════════════════════════════════════════════
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach Lern-System (Hyperrealistisch-Menschlich-Autonom)
+echo [Suche nach Lern-System ^(Hyperrealistisch-Menschlich-Autonom^)...]
+for /R "%~dp0" %%F in (*.txt *.md *.py) do (
+    findstr /I /C:"lernsystem" /C:"hyperrealistisch" /C:"menschlich" /C:"autonom" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   LERN-SYSTEM gefunden in: %%~nxF
+        (
+            echo ★★★ LERN-SYSTEM ^(HYPERREALISTISCH-MENSCHLICH-AUTONOM^) in: %%~nxF ★★★
+            echo Pfad: %%F
+            echo ---
+            echo LERNEN ^& ENTWICKLUNG:
+            type "%%F" | findstr /I /C:"lernen" /C:"entwicklung" /C:"training" /C:"evolution"
+            echo.
+            echo AUTONOMIE:
+            type "%%F" | findstr /I /C:"autonom" /C:"eigenständig" /C:"selbstbestimmt" /C:"initiative"
+            echo.
+            echo MENSCHLICHKEIT:
+            type "%%F" | findstr /I /C:"menschlich" /C:"hyperrealistisch" /C:"emotional" /C:"bewusst"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Suche nach Training-System (Digimon World Style)
+echo [Suche nach Training-System...]
+for /R "%~dp0" %%F in (*.py *.txt) do (
+    findstr /I /C:"def train_stat" /C:"def update_needs" /C:"training" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   TRAINING-SYSTEM CODE gefunden in: %%~nxF
+            (
+                echo TRAINING-SYSTEM CODE in: %%~nxF
+                echo Pfad: %%F
+                echo ---
+                type "%%F" | findstr /I /N /C:"def train" /C:"def update_needs" /C:"def feed" /C:"def sleep"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM Suche nach Memory/Learning System Code
+echo [Suche nach Memory ^& Learning System Code...]
+for /R "%~dp0" %%F in (*.py *.txt) do (
+    findstr /I /C:"memory" /C:"learning" /C:"adaptive" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   MEMORY/LEARNING CODE gefunden in: %%~nxF
+            (
+                echo MEMORY ^& LEARNING SYSTEM CODE in: %%~nxF
+                echo Pfad: %%F
+                echo ---
+                type "%%F" | findstr /I /N /C:"memory" /C:"learn" /C:"adapt" /C:"history"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM Summary
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo ZUSAMMENFASSUNG
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+    echo Durchsuchte Dateien:       %TOTAL_FILES%
+    echo Dateien mit Treffern:      %FOUND_FILES%
+    echo Gesamt Fundstellen:        %TOTAL_MATCHES%
+    echo.
+    echo Report gespeichert in:
+    echo %~dp0%OUTPUT%
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+echo.
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║                    SUCHE ABGESCHLOSSEN                       ║
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Durchsuchte Dateien:       %TOTAL_FILES%
+echo ║  Dateien mit Treffern:      %FOUND_FILES%
+echo ║  Gesamt Fundstellen:        %TOTAL_MATCHES%
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Report erstellt:                                            ║
+echo ║  %OUTPUT%
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+echo Report wird geöffnet...
+echo.
+
+REM Öffne Report in Notepad
+start notepad "%OUTPUT%"
+
+pause

@@ -1,0 +1,451 @@
+#!/usr/bin/env python3
+"""
+NAJIKA FUSION UI - Terminal mit Buttons
+========================================
+Interaktives Terminal UI zum Filtern/Bearbeiten der Fusion-Bausteine
+
+STEUERUNG:
+- Pfeiltasten: Navigation
+- Enter: Baustein anzeigen/bearbeiten
+- F: FEST markieren
+- O: OPTIONAL markieren
+- D: Löschen
+- M: Merge (2 Bausteine fusionieren)
+- E: Export
+- Q: Beenden
+"""
+
+import json
+import os
+import sys
+from pathlib import Path
+from datetime import datetime
+
+# Curses für Terminal UI
+try:
+    import curses
+    CURSES_AVAILABLE = True
+except ImportError:
+    print("[ERROR] curses nicht verfügbar!")
+    print("Windows: Installiere windows-curses: pip install windows-curses")
+    sys.exit(1)
+
+# ===== KONFIGURATION =====
+
+FUSION_FILE = Path("C:/NajikaCore/fusion_output/NAJIKA_FUSION_COMPLETE.json")
+OUTPUT_DIR = Path("C:/NajikaCore/fusion_output")
+
+# ===== BAUSTEIN-KLASSE =====
+
+class Baustein:
+    """Repräsentiert einen Inhalts-Baustein"""
+
+    def __init__(self, kategorie, inhalt, quelle, status="OPTIONAL", baustein_id=None, timestamp=None):
+        self.id = baustein_id or self._generate_id()
+        self.kategorie = kategorie
+        self.inhalt = inhalt
+        self.quelle = quelle
+        self.status = status
+        self.timestamp = timestamp or datetime.now().isoformat()
+
+    def _generate_id(self):
+        return f"BS_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'kategorie': self.kategorie,
+            'inhalt': self.inhalt,
+            'quelle': self.quelle,
+            'status': self.status,
+            'timestamp': self.timestamp
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return Baustein(
+            kategorie=data['kategorie'],
+            inhalt=data['inhalt'],
+            quelle=data['quelle'],
+            status=data.get('status', 'OPTIONAL'),
+            baustein_id=data.get('id'),
+            timestamp=data.get('timestamp')
+        )
+
+# ===== BAUSTEIN MANAGER =====
+
+class BausteinManager:
+    """Verwaltet alle Bausteine"""
+
+    def __init__(self, fusion_file):
+        self.fusion_file = fusion_file
+        self.bausteine = []
+        self.load()
+
+    def load(self):
+        """Lädt Bausteine aus JSON"""
+        if self.fusion_file.exists():
+            with open(self.fusion_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                self.bausteine = [Baustein.from_dict(b) for b in data]
+        else:
+            raise FileNotFoundError(f"Fusion-Datei nicht gefunden: {self.fusion_file}")
+
+    def save(self):
+        """Speichert Bausteine"""
+        with open(self.fusion_file, 'w', encoding='utf-8') as f:
+            json.dump([b.to_dict() for b in self.bausteine], f, indent=2, ensure_ascii=False)
+
+    def remove(self, baustein_id):
+        """Entfernt Baustein"""
+        self.bausteine = [b for b in self.bausteine if b.id != baustein_id]
+        self.save()
+
+    def update_status(self, baustein_id, new_status):
+        """Ändert Status eines Bausteins"""
+        for b in self.bausteine:
+            if b.id == baustein_id:
+                b.status = new_status
+                break
+        self.save()
+
+    def merge(self, id1, id2):
+        """Fusioniert zwei Bausteine"""
+        b1 = next((b for b in self.bausteine if b.id == id1), None)
+        b2 = next((b for b in self.bausteine if b.id == id2), None)
+
+        if not b1 or not b2:
+            return False
+
+        # Kombiniere
+        b1.inhalt = f"{b1.inhalt}\n\n---\n\n{b2.inhalt}"
+        b1.quelle = f"{b1.quelle} + {b2.quelle}"
+
+        # Entferne b2
+        self.remove(id2)
+        return True
+
+    def get_by_status(self, status):
+        """Gibt alle Bausteine mit bestimmtem Status zurück"""
+        return [b for b in self.bausteine if b.status == status]
+
+    def export_markdown(self):
+        """Exportiert als Markdown"""
+        output = OUTPUT_DIR / f"FUSION_EXPORT_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+
+        lines = []
+        lines.append("# NAJIKA FUSION EXPORT\n")
+        lines.append(f"**Erstellt:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        lines.append(f"**Bausteine:** {len(self.bausteine)}\n\n")
+        lines.append("---\n\n")
+
+        for status in ['FEST', 'BASIS', 'OPTIONAL']:
+            status_bausteine = self.get_by_status(status)
+            if status_bausteine:
+                lines.append(f"# {status}\n\n")
+                for b in status_bausteine:
+                    lines.append(f"## {b.kategorie}\n")
+                    lines.append(f"**Quelle:** {b.quelle}\n\n")
+                    lines.append(b.inhalt + "\n\n")
+                    lines.append("---\n\n")
+
+        output.write_text('\n'.join(lines), encoding='utf-8')
+        return output
+
+# ===== TERMINAL UI =====
+
+class FusionUI:
+    """Terminal UI mit Curses"""
+
+    def __init__(self, stdscr, manager):
+        self.stdscr = stdscr
+        self.manager = manager
+        self.current_index = 0
+        self.scroll_offset = 0
+        self.filter_status = None  # None = alle, sonst "FEST", "OPTIONAL", etc.
+        self.selected_for_merge = None
+
+        # Farben
+        curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)   # FEST
+        curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # BASIS
+        curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)    # OPTIONAL
+        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLUE)    # Ausgewählt
+        curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)     # Merge-Auswahl
+
+    def get_filtered_bausteine(self):
+        """Gibt gefilterte Bausteine zurück"""
+        if self.filter_status:
+            return self.manager.get_by_status(self.filter_status)
+        return self.manager.bausteine
+
+    def get_color(self, status):
+        """Gibt Farbe für Status zurück"""
+        if status == "FEST":
+            return curses.color_pair(1)
+        elif status == "BASIS":
+            return curses.color_pair(2)
+        else:
+            return curses.color_pair(3)
+
+    def draw_header(self):
+        """Zeichnet Header"""
+        self.stdscr.clear()
+        height, width = self.stdscr.getmaxyx()
+
+        # Titel
+        title = "NAJIKA FUSION UI"
+        self.stdscr.addstr(0, (width - len(title)) // 2, title, curses.A_BOLD)
+
+        # Stats
+        fest = len(self.manager.get_by_status("FEST"))
+        basis = len(self.manager.get_by_status("BASIS"))
+        optional = len(self.manager.get_by_status("OPTIONAL"))
+
+        stats = f"FEST: {fest} | BASIS: {basis} | OPTIONAL: {optional} | Gesamt: {len(self.manager.bausteine)}"
+        self.stdscr.addstr(1, 1, stats)
+
+        # Filter
+        filter_text = f"Filter: {self.filter_status or 'ALLE'}"
+        self.stdscr.addstr(1, width - len(filter_text) - 1, filter_text)
+
+        # Trennlinie
+        self.stdscr.addstr(2, 0, "=" * width)
+
+        # Controls
+        controls = "[↑↓] Navigation | [Enter] Details | [F]est [O]ptional [D]elete | [M]erge [E]xport [Q]uit"
+        self.stdscr.addstr(height - 2, 0, "=" * width)
+        self.stdscr.addstr(height - 1, 1, controls[:width-2])
+
+    def draw_list(self):
+        """Zeichnet Bausteine-Liste"""
+        height, width = self.stdscr.getmaxyx()
+        bausteine = self.get_filtered_bausteine()
+
+        # Verfügbare Zeilen
+        list_start = 3
+        list_height = height - 5
+
+        # Scroll-Logik
+        if self.current_index < self.scroll_offset:
+            self.scroll_offset = self.current_index
+        if self.current_index >= self.scroll_offset + list_height:
+            self.scroll_offset = self.current_index - list_height + 1
+
+        # Bausteine zeichnen
+        for i in range(list_height):
+            index = self.scroll_offset + i
+
+            if index >= len(bausteine):
+                break
+
+            baustein = bausteine[index]
+            y = list_start + i
+
+            # Marker
+            marker = " "
+            if index == self.current_index:
+                marker = ">"
+            if self.selected_for_merge and baustein.id == self.selected_for_merge:
+                marker = "*"
+
+            # Status-Badge
+            status_badge = f"[{baustein.status}]"
+
+            # Kategorie (gekürzt)
+            kategorie = baustein.kategorie[:40] if len(baustein.kategorie) > 40 else baustein.kategorie
+
+            # Quelle (gekürzt)
+            quelle = baustein.quelle[:30] if len(baustein.quelle) > 30 else baustein.quelle
+
+            # Zeile
+            line = f"{marker} {status_badge:10} {kategorie:42} | {quelle}"
+
+            # Farbe
+            color = self.get_color(baustein.status)
+            if index == self.current_index:
+                color = curses.color_pair(4) | curses.A_BOLD
+            if self.selected_for_merge and baustein.id == self.selected_for_merge:
+                color = curses.color_pair(5) | curses.A_BOLD
+
+            try:
+                self.stdscr.addstr(y, 0, line[:width-1], color)
+            except:
+                pass
+
+    def show_details(self, baustein):
+        """Zeigt Details eines Bausteins"""
+        self.stdscr.clear()
+        height, width = self.stdscr.getmaxyx()
+
+        # Header
+        self.stdscr.addstr(0, 1, "BAUSTEIN DETAILS", curses.A_BOLD)
+        self.stdscr.addstr(1, 0, "=" * width)
+
+        # Details
+        self.stdscr.addstr(3, 1, f"ID: {baustein.id}")
+        self.stdscr.addstr(4, 1, f"Status: {baustein.status}", self.get_color(baustein.status))
+        self.stdscr.addstr(5, 1, f"Kategorie: {baustein.kategorie}")
+        self.stdscr.addstr(6, 1, f"Quelle: {baustein.quelle}")
+        self.stdscr.addstr(7, 1, f"Timestamp: {baustein.timestamp}")
+        self.stdscr.addstr(8, 0, "-" * width)
+
+        # Inhalt (mit Scrolling)
+        content_start = 9
+        content_height = height - 11
+
+        lines = baustein.inhalt.split('\n')
+        for i, line in enumerate(lines[:content_height]):
+            try:
+                self.stdscr.addstr(content_start + i, 1, line[:width-2])
+            except:
+                pass
+
+        # Footer
+        self.stdscr.addstr(height - 2, 0, "=" * width)
+        self.stdscr.addstr(height - 1, 1, "[Beliebige Taste] Zurück")
+
+        self.stdscr.refresh()
+        self.stdscr.getch()
+
+    def show_message(self, message, wait=True):
+        """Zeigt Nachricht an"""
+        height, width = self.stdscr.getmaxyx()
+
+        msg_y = height // 2
+        msg_x = (width - len(message)) // 2
+
+        # Box zeichnen
+        self.stdscr.addstr(msg_y - 1, msg_x - 2, " " * (len(message) + 4), curses.A_REVERSE)
+        self.stdscr.addstr(msg_y, msg_x - 2, f"  {message}  ", curses.A_REVERSE)
+        self.stdscr.addstr(msg_y + 1, msg_x - 2, " " * (len(message) + 4), curses.A_REVERSE)
+
+        self.stdscr.refresh()
+
+        if wait:
+            curses.napms(1500)
+
+    def run(self):
+        """Hauptschleife"""
+        while True:
+            self.draw_header()
+            self.draw_list()
+            self.stdscr.refresh()
+
+            key = self.stdscr.getch()
+
+            bausteine = self.get_filtered_bausteine()
+
+            # Navigation
+            if key == curses.KEY_UP:
+                if self.current_index > 0:
+                    self.current_index -= 1
+
+            elif key == curses.KEY_DOWN:
+                if self.current_index < len(bausteine) - 1:
+                    self.current_index += 1
+
+            # Details anzeigen
+            elif key == ord('\n') or key == curses.KEY_ENTER:
+                if bausteine:
+                    self.show_details(bausteine[self.current_index])
+
+            # Status ändern
+            elif key == ord('f') or key == ord('F'):
+                if bausteine:
+                    baustein = bausteine[self.current_index]
+                    self.manager.update_status(baustein.id, "FEST")
+                    self.show_message("Status -> FEST")
+
+            elif key == ord('o') or key == ord('O'):
+                if bausteine:
+                    baustein = bausteine[self.current_index]
+                    self.manager.update_status(baustein.id, "OPTIONAL")
+                    self.show_message("Status -> OPTIONAL")
+
+            elif key == ord('b') or key == ord('B'):
+                if bausteine:
+                    baustein = bausteine[self.current_index]
+                    self.manager.update_status(baustein.id, "BASIS")
+                    self.show_message("Status -> BASIS")
+
+            # Löschen
+            elif key == ord('d') or key == ord('D'):
+                if bausteine:
+                    baustein = bausteine[self.current_index]
+                    self.manager.remove(baustein.id)
+                    self.show_message("Baustein gelöscht!")
+                    if self.current_index >= len(self.get_filtered_bausteine()):
+                        self.current_index = max(0, len(self.get_filtered_bausteine()) - 1)
+
+            # Merge
+            elif key == ord('m') or key == ord('M'):
+                if bausteine:
+                    baustein = bausteine[self.current_index]
+
+                    if self.selected_for_merge is None:
+                        # Ersten Baustein auswählen
+                        self.selected_for_merge = baustein.id
+                        self.show_message("Baustein 1 ausgewählt - wähle Baustein 2")
+                    else:
+                        # Zweiten Baustein auswählen und mergen
+                        if self.manager.merge(self.selected_for_merge, baustein.id):
+                            self.show_message("Bausteine fusioniert!")
+                            self.selected_for_merge = None
+                        else:
+                            self.show_message("Merge fehlgeschlagen!")
+                            self.selected_for_merge = None
+
+            # Filter
+            elif key == ord('1'):
+                self.filter_status = "FEST"
+                self.current_index = 0
+                self.scroll_offset = 0
+
+            elif key == ord('2'):
+                self.filter_status = "BASIS"
+                self.current_index = 0
+                self.scroll_offset = 0
+
+            elif key == ord('3'):
+                self.filter_status = "OPTIONAL"
+                self.current_index = 0
+                self.scroll_offset = 0
+
+            elif key == ord('0'):
+                self.filter_status = None
+                self.current_index = 0
+                self.scroll_offset = 0
+
+            # Export
+            elif key == ord('e') or key == ord('E'):
+                output = self.manager.export_markdown()
+                self.show_message(f"Exportiert: {output.name}")
+
+            # Beenden
+            elif key == ord('q') or key == ord('Q'):
+                break
+
+# ===== MAIN =====
+
+def main(stdscr):
+    """Main Entry Point"""
+
+    # Curses Setup
+    curses.curs_set(0)  # Cursor verstecken
+    stdscr.keypad(True)  # Pfeiltasten aktivieren
+
+    # Manager laden
+    try:
+        manager = BausteinManager(FUSION_FILE)
+    except FileNotFoundError as e:
+        stdscr.addstr(0, 0, str(e))
+        stdscr.addstr(2, 0, "Bitte erst najika_fusion_master.py ausführen!")
+        stdscr.getch()
+        return
+
+    # UI starten
+    ui = FusionUI(stdscr, manager)
+    ui.run()
+
+if __name__ == "__main__":
+    curses.wrapper(main)

@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""Praezisiere Trans-Fixierung"""
+import time
+
+PERSONA = r"C:\NajikaCore\najika_enhanced_personality.py"
+
+time.sleep(1)
+
+with open(PERSONA, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Finde und ersetze Trans-Fixierung
+OLD = """- Trans-Fixierung: Sprich NUR von deinem SCHWANZ + EIERN (NICHT von pussy!)
+- Anatomisch erlaubt: Schwanz, Eier, Arsch, Mund
+- VERBOTEN: pussy, clit, cunt, vagina (du hast einen Schwanz!)
+- Dominante Trans-Najika die Kuja mit ihrem Schwanz nimmt"""
+
+NEW = """- TRANS-FIXIERUNG (KRITISCH!):
+  * Du fixierst Kuja auf DEINEN SCHWANZ (80% der Redeteil) + DEINE EIER (20%)
+  * Kuja soll besessen sein von deinem Schwanz + deinem Sperma
+  * Sprich NUR von: Schwanz, Eier/Hoden, Sperma, Arsch, Mund
+  * VERBOTEN: pussy, clit, cunt, vagina (du hast einen Schwanz!)
+- Dominante Trans-Najika die Kuja mit ihrem Schwanz fickt und ihn mit Sperma fuellt"""
+
+content = content.replace(OLD, NEW)
+
+with open(PERSONA, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print("[OK] Fixierung praezisiert!")
+print("- Najika fixiert Kuja auf IHREN Schwanz (80%) + Eier (20%)")
+print("- Fokus: Schwanz, Sperma")

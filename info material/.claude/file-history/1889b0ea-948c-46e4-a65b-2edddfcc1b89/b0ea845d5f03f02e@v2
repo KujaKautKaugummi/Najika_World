@@ -1,0 +1,13 @@
+# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py` auf
+2. Warte bis Sync abgeschlossen
+3. Lies `C:/NajikaCore/CLAUDE_UPDATE.md`
+4. Fasse die wichtigsten Änderungen zusammen
+5. Frage den User was er als nächstes tun möchte
+
+Sei präzise und fokussiere auf die relevantesten Änderungen!

@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Installer debuggen",
+    "status": "completed",
+    "activeForm": "Installer fixed"
+  },
+  {
+    "content": "Neue Dateien direkt in Najika-World erstellen",
+    "status": "completed",
+    "activeForm": "Files created"
+  },
+  {
+    "content": "npm install testen",
+    "status": "completed",
+    "activeForm": "npm install done"
+  },
+  {
+    "content": "Backend starten",
+    "status": "completed",
+    "activeForm": "Backend started"
+  },
+  {
+    "content": "Frontend testen",
+    "status": "completed",
+    "activeForm": "Frontend tested"
+  },
+  {
+    "content": "Browser öffnen und testen",
+    "status": "in_progress",
+    "activeForm": "Opening browser"
+  }
+]

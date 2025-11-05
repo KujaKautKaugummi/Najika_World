@@ -1,0 +1,53 @@
+import requests
+import json
+
+# Test 1: Einfacher Gruß
+print("=== TEST 1: Einfacher Gruß ===")
+response = requests.post(
+    "http://localhost:8000/api/chat",
+    json={"message": "Hallo Najika!"},
+    timeout=30
+)
+result = response.json()
+print("Antwort:", result.get("response", "FEHLER"))
+print()
+
+# Test 2: Frage
+print("=== TEST 2: Frage ===")
+response = requests.post(
+    "http://localhost:8000/api/chat",
+    json={"message": "Wie geht es dir?"},
+    timeout=30
+)
+result = response.json()
+print("Antwort:", result.get("response", "FEHLER"))
+print()
+
+# Test 3: Check für Meta-Content
+print("=== TEST 3: Anatomie-Check ===")
+response = requests.post(
+    "http://localhost:8000/api/chat",
+    json={"message": "Erzähl mir von dir"},
+    timeout=30
+)
+result = response.json()
+antwort = result.get("response", "")
+print("Antwort:", antwort)
+print()
+
+# Prüfe ob verbotene Inhalte enthalten sind
+print("=== QUALITÄTS-CHECK ===")
+if "Option" in antwort or "Wähle" in antwort or "A)" in antwort:
+    print("❌ FEHLER: Menüs/Optionen gefunden!")
+else:
+    print("✅ Keine Menüs")
+
+if "Persönlichkeits-Gewichtung" in antwort or "Megumin:" in antwort:
+    print("❌ FEHLER: Meta-Content gefunden!")
+else:
+    print("✅ Kein Meta-Content")
+
+if len(antwort) < 200:
+    print(f"✅ Kurze Antwort ({len(antwort)} Zeichen)")
+else:
+    print(f"⚠️ Lange Antwort ({len(antwort)} Zeichen)")

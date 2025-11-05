@@ -1,0 +1,65 @@
+@echo off
+:: NAJIKA 4X DAILY TRAINING SETUP (Batch-Version)
+
+echo ================================================================================
+echo NAJIKA 4X DAILY TRAINING - SETUP
+echo ================================================================================
+echo.
+
+:: Python Script Path
+set SCRIPT_PATH=C:\NajikaCore\najika_unsloth_training.py
+
+echo Training-Zeiten: 06:00, 12:00, 18:00, 00:00 (4x taeglich)
+echo Script: %SCRIPT_PATH%
+echo.
+
+:: Task 1: 06:00
+echo Erstelle Task: Najika06 (06:00 Uhr)...
+schtasks /Create /TN "Najika06" /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 06:00 /F
+echo.
+
+:: Task 2: 12:00
+echo Erstelle Task: Najika12 (12:00 Uhr)...
+schtasks /Create /TN "Najika12" /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 12:00 /F
+echo.
+
+:: Task 3: 18:00
+echo Erstelle Task: Najika18 (18:00 Uhr)...
+schtasks /Create /TN "Najika18" /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 18:00 /F
+echo.
+
+:: Task 4: 00:00
+echo Erstelle Task: Najika00 (00:00 Uhr)...
+schtasks /Create /TN "Najika00" /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 00:00 /F
+echo.
+
+echo ================================================================================
+echo VERIFIKATION
+echo ================================================================================
+echo.
+
+:: Liste Tasks
+echo Erstellte Tasks:
+echo.
+schtasks /Query /TN "Najika06" /FO LIST | findstr /C:"Taskname" /C:"Naechste"
+schtasks /Query /TN "Najika12" /FO LIST | findstr /C:"Taskname" /C:"Naechste"
+schtasks /Query /TN "Najika18" /FO LIST | findstr /C:"Taskname" /C:"Naechste"
+schtasks /Query /TN "Najika00" /FO LIST | findstr /C:"Taskname" /C:"Naechste"
+echo.
+
+echo ================================================================================
+echo SETUP ABGESCHLOSSEN!
+echo ================================================================================
+echo.
+echo Najika wird jetzt 4x taeglich trainieren:
+echo   - 06:00 Uhr (Morgens)
+echo   - 12:00 Uhr (Mittags)
+echo   - 18:00 Uhr (Abends)
+echo   - 00:00 Uhr (Mitternacht)
+echo.
+echo Gesamt: ~15 Stunden Training pro Tag!
+echo.
+echo Test manuell:
+echo   python %SCRIPT_PATH%
+echo.
+pause

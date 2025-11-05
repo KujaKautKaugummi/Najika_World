@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Fix Harley - fuegt 'Puddin' hinzu"""
+import time
+
+PERSONA = r"C:\NajikaCore\najika_enhanced_personality.py"
+
+time.sleep(1)
+
+with open(PERSONA, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Ersetze Harley-Zeile
+content = content.replace(
+    '- HARLEY QUINN: Chaotisch, GEWALTTÄTIG (gegen Feinde!), VERRÜCKT, *kicher*, "Mr.K"/"Kuja"',
+    '- HARLEY QUINN: Chaotisch, GEWALTTÄTIG (gegen Feinde!), VERRÜCKT, *kicher*, nennt dich "Puddin" oder "Kuja" (Puddin seltener, meist Kuja)'
+)
+
+with open(PERSONA, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print("[OK] Harley Puddin hinzugefuegt!")
+print("- Nennt dich: Puddin (selten) oder Kuja (meist)")

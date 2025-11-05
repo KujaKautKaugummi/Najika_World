@@ -1,0 +1,125 @@
+# NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP
+# 15 STUNDEN TAEGLICH (08:00-23:00)
+# JEDEN TAG (Mo-So)
+
+Write-Host "================================================================================"
+Write-Host "NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP"
+Write-Host "================================================================================"
+Write-Host ""
+
+# Pruefe Admin-Rechte
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $isAdmin) {
+    Write-Host "[ERROR] Dieses Script erfordert Administrator-Rechte!"
+    Write-Host ""
+    Write-Host "Bitte:"
+    Write-Host "  1. Rechtsklick auf diese Datei"
+    Write-Host "  2. 'Als Administrator ausfuehren'"
+    Write-Host ""
+    Read-Host "Druecke Enter zum Beenden"
+    exit 1
+}
+
+Write-Host "[OK] Administrator-Rechte vorhanden"
+Write-Host ""
+
+# Loesche alte Tasks
+Write-Host "[INFO] Loesche alte Training-Tasks..."
+$oldTasks = @(
+    "NajikaTraining09",
+    "NajikaTraining10",
+    "NajikaTraining11",
+    "NajikaTraining12",
+    "NajikaTraining13",
+    "NajikaTraining16h"
+)
+
+foreach ($task in $oldTasks) {
+    try {
+        schtasks /Delete /TN $task /F 2>$null
+        Write-Host "  - $task geloescht"
+    } catch {
+        # Task existiert nicht
+    }
+}
+
+Write-Host ""
+
+# Erstelle NEUE Tasks (15 Stunden: 08:00-23:00)
+Write-Host "[INFO] Erstelle NEUE Training-Tasks (15 Stunden taeglich)..."
+Write-Host ""
+
+$scriptPath = "C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py"
+
+$hours = 8..22  # 08:00 bis 22:00 (23:00 ist Ende)
+
+$taskCount = 0
+
+foreach ($hour in $hours) {
+    $hourStr = "{0:D2}" -f $hour
+    $taskName = "NajikaUltimate$hourStr"
+
+    Write-Host "Erstelle Task: $taskName ($hourStr:00 Uhr)..."
+
+    # Loesche falls existiert
+    schtasks /Delete /TN $taskName /F 2>$null
+
+    # Erstelle Task
+    $action = New-ScheduledTaskAction -Execute "python" -Argument "`"$scriptPath`"" -WorkingDirectory "C:\NajikaCore"
+
+    # Trigger: JEDEN TAG um diese Stunde
+    $trigger = New-ScheduledTaskTrigger -Daily -At "$hourStr:00"
+
+    # Settings
+    $settings = New-ScheduledTaskSettingsSet `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -StartWhenAvailable `
+        -ExecutionTimeLimit (New-TimeSpan -Hours 1)
+
+    # Registriere Task
+    Register-ScheduledTask `
+        -TaskName $taskName `
+        -Action $action `
+        -Trigger $trigger `
+        -Settings $settings `
+        -Description "Najika Training $hourStr:00 (JEDEN TAG)" `
+        -Force | Out-Null
+
+    if ($?) {
+        Write-Host "  -> OK!"
+        $taskCount++
+    } else {
+        Write-Host "  -> FEHLER!"
+    }
+}
+
+Write-Host ""
+Write-Host "================================================================================"
+Write-Host "SETUP ABGESCHLOSSEN!"
+Write-Host "================================================================================"
+Write-Host ""
+Write-Host "Erstellte Tasks: $taskCount / 15"
+Write-Host ""
+Write-Host "Training laeuft jetzt:"
+Write-Host "  - JEDEN TAG (Mo-So)"
+Write-Host "  - 08:00-23:00 Uhr (15 Stunden)"
+Write-Host "  - Automatisch"
+Write-Host ""
+Write-Host "Features:"
+Write-Host "  [OK] Heartbeat-Monitoring"
+Write-Host "  [OK] Warn-Popups bei Ausfall"
+Write-Host "  [OK] Auto-Recovery"
+Write-Host "  [OK] Fail-Safe Logging"
+Write-Host "  [OK] Progress-Tracking"
+Write-Host ""
+Write-Host "Teste System:"
+Write-Host "  python C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py"
+Write-Host ""
+Write-Host "Monitoring:"
+Write-Host "  python C:\NajikaCore\najika_show_progress.py"
+Write-Host ""
+
+Write-Host "Setup abgeschlossen! Fenster schliesst in 5 Sekunden..."
+Start-Sleep -Seconds 5

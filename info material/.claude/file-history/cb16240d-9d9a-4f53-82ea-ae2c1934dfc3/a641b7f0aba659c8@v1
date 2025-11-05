@@ -1,0 +1,47 @@
+// Najika Combat System
+export class CombatSystem {
+  constructor() {
+    this.player = {
+      hp: 100,
+      maxHp: 100,
+      mana: 50,
+      maxMana: 50,
+      stamina: 100
+    };
+    
+    this.combos = [];
+    this.elements = ['fire', 'ice', 'lightning', 'shadow', 'light', 'nature'];
+  }
+  
+  lightAttack() {
+    this.combos.push('light');
+    return { damage: 10, stamina: -5 };
+  }
+  
+  heavyAttack() {
+    this.combos.push('heavy');
+    return { damage: 25, stamina: -15 };
+  }
+  
+  parry() {
+    return { success: Math.random() > 0.5, stamina: -10 };
+  }
+  
+  dodge() {
+    return { success: true, stamina: -20 };
+  }
+  
+  weaveElements(element1, element2) {
+    const combinations = {
+      'fire_ice': 'steam',
+      'fire_lightning': 'plasma',
+      'ice_lightning': 'freeze',
+      'shadow_light': 'chaos',
+      'fire_nature': 'wildfire',
+      'ice_nature': 'blizzard'
+    };
+    
+    const key = [element1, element2].sort().join('_');
+    return combinations[key] || 'basic';
+  }
+}

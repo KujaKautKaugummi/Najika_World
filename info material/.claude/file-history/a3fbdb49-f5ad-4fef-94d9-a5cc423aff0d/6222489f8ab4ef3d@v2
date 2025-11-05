@@ -1,0 +1,78 @@
+@echo off
+chcp 65001 > nul
+REM ========================================
+REM NAJIKA NÄCHTLICHES GPU-TRAINING SETUP
+REM Erstellt Windows Task für 00:00-08:00
+REM ========================================
+
+echo.
+echo ========================================
+echo   NAJIKA NIGHTLY GPU TRAINING SETUP
+echo ========================================
+echo.
+
+REM Prüfe Admin-Rechte
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo ❌ Fehler: Admin-Rechte benötigt!
+    echo.
+    echo Rechtsklick auf Script → "Als Administrator ausführen"
+    echo.
+    pause
+    exit /b 1
+)
+
+echo ✅ Admin-Rechte OK
+echo.
+
+REM Lösche alte Task (falls existiert)
+echo [1/3] Lösche alte Task...
+schtasks /Delete /TN "Najika_Nightly_Training" /F >nul 2>&1
+echo ✅ Alte Task gelöscht (falls vorhanden)
+echo.
+
+REM Erstelle neue Task
+echo [2/3] Erstelle neue Task...
+schtasks /Create ^
+    /TN "Najika_Nightly_Training" ^
+    /TR "python C:\NajikaFinal\backend\najika_smart_training_scheduler.py" ^
+    /SC DAILY ^
+    /ST 00:00 ^
+    /RL HIGHEST ^
+    /F
+
+if %errorLevel% neq 0 (
+    echo ❌ Fehler beim Erstellen der Task!
+    pause
+    exit /b 1
+)
+
+echo ✅ Task erstellt!
+echo.
+
+REM Zeige Task-Info
+echo [3/3] Task-Info:
+schtasks /Query /TN "Najika_Nightly_Training" /FO LIST /V | findstr /C:"Taskname" /C:"Status" /C:"Startzeit" /C:"Ausführen als"
+echo.
+
+echo ========================================
+echo   ✅ SETUP KOMPLETT!
+echo ========================================
+echo.
+echo 📅 SCHEDULE:
+echo   - Zeit: 00:00 (Mitternacht)
+echo   - Tage: JEDEN TAG
+echo   - Dauer: bis 08:00 Uhr (8 Stunden!)
+echo   - Typ: GPU LoRA Training
+echo.
+echo 🎯 NÄCHSTE SCHRITTE:
+echo   1. Heute Abend: Lass PC an!
+echo   2. 00:00 Uhr: Training startet automatisch
+echo   3. 08:00 Uhr: Training stoppt automatisch
+echo   4. Montag: Prüfe Ergebnisse!
+echo.
+echo 💡 MANUELLER START (zum Testen):
+echo   python C:\NajikaFinal\backend\najika_smart_training_scheduler.py
+echo.
+echo ========================================
+pause

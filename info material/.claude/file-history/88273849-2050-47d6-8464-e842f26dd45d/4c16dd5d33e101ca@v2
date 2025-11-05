@@ -1,0 +1,28 @@
+import requests
+import time
+
+# Test 1: Erste Anfrage (sollte MISS sein)
+print("Test 1: Erste Anfrage 'Hallo Najika'")
+start = time.time()
+r1 = requests.post("http://localhost:8000/api/chat", json={"message": "Hallo Najika"}, timeout=60)
+t1 = time.time() - start
+print(f"Response: {r1.json()['response'][:50]}...")
+print(f"Zeit: {t1:.2f}s\n")
+
+# Test 2: Zweite identische Anfrage (sollte HIT sein!)
+print("Test 2: Zweite Anfrage 'Hallo Najika' (Cache HIT erwartet)")
+start = time.time()
+r2 = requests.post("http://localhost:8000/api/chat", json={"message": "Hallo Najika"}, timeout=60)
+t2 = time.time() - start
+print(f"Response: {r2.json()['response'][:50]}...")
+print(f"Zeit: {t2:.2f}s")
+print(f"Speedup: {t1/t2:.1f}x schneller!\n")
+
+# Test 3: Cache Stats abfragen
+print("Test 3: Cache Statistiken")
+stats = requests.get("http://localhost:8000/api/cache/stats").json()
+print(f"Hits: {stats['hits']}")
+print(f"Misses: {stats['misses']}")
+print(f"Total: {stats['total_requests']}")
+print(f"Hit Rate: {stats['hit_rate_percent']}%")
+print(f"Cache Size: {stats['cache_size']}/{stats['cache_max_size']}")

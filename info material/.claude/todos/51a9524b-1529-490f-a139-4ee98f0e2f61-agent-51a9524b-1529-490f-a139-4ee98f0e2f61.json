@@ -1,0 +1,37 @@
+[
+  {
+    "content": "README_NEUE_KI.md lesen",
+    "status": "completed",
+    "activeForm": "Lese README_NEUE_KI.md"
+  },
+  {
+    "content": "00_FINALE_KOMPLETT_UEBERSICHT_V7.md lesen",
+    "status": "completed",
+    "activeForm": "Lese 00_FINALE_KOMPLETT_UEBERSICHT_V7.md"
+  },
+  {
+    "content": "pflicht_docs/00_MASTER_INDEX_LESEN.md lesen",
+    "status": "in_progress",
+    "activeForm": "Lese pflicht_docs/00_MASTER_INDEX_LESEN.md"
+  },
+  {
+    "content": "pflicht_docs/01_START_HIER_8_GEBOTE.md lesen",
+    "status": "pending",
+    "activeForm": "Lese pflicht_docs/01_START_HIER_8_GEBOTE.md"
+  },
+  {
+    "content": "pflicht_docs 02-08 lesen",
+    "status": "pending",
+    "activeForm": "Lese pflicht_docs 02-08"
+  },
+  {
+    "content": "Code-Files analysieren",
+    "status": "pending",
+    "activeForm": "Analysiere Code-Files"
+  },
+  {
+    "content": "Lokale Grundlage schaffen",
+    "status": "pending",
+    "activeForm": "Schaffe lokale Grundlage"
+  }
+]

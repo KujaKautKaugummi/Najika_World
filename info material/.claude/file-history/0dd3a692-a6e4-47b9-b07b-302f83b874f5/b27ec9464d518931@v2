@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+"""
+NAJIKA DESIGN DOCUMENT IMPORTER
+Importiert V3/V4 Design-Dokumente ins Training
+"""
+
+import os
+from datetime import datetime
+from najika_memory import NajikaMemory
+
+class NajikaDesignImporter:
+    def __init__(self):
+        self.memory = NajikaMemory()
+        self.design_docs_path = "C:/NajikaCore/design_documents"
+
+        # Erstelle separate Collection für Design-Docs
+        try:
+            self.design_collection = self.memory.client.create_collection(
+                name="najika_design_documents",
+                metadata={"description": "V3/V4 Game & AI Design Documents"}
+            )
+        except:
+            self.design_collection = self.memory.client.get_collection("najika_design_documents")
+
+    def import_document(self, filepath):
+        """Importiert ein Design-Dokument"""
+
+        filename = os.path.basename(filepath)
+        print(f"\n[*] Importiere: {filename}")
+
+        # Lese Datei
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except UnicodeDecodeError:
+            # Fallback auf latin-1
+            with open(filepath, 'r', encoding='latin-1') as f:
+                content = f.read()
+
+        # Bestimme Typ
+        doc_type = "design"
+        if "V3" in filename:
+            doc_type = "v3_complete"
+        elif "V4_ERGAENZUNGEN" in filename:
+            doc_type = "v4_additions"
+        elif "V4_OPTIONAL" in filename:
+            doc_type = "v4_optional"
+        elif "INDEX" in filename:
+            doc_type = "index"
+
+        # Speichere in ChromaDB
+        doc_id = f"design_{filename}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        self.design_collection.add(
+            ids=[doc_id],
+            documents=[content],
+            metadatas=[{
+                'filename': filename,
+                'type': doc_type,
+                'source': 'design_documents',
+                'imported_at': datetime.now().isoformat(),
+                'lines': len(content.splitlines())
+            }]
+        )
+
+        print(f"  [OK] {len(content.splitlines())} Zeilen importiert")
+        print(f"  Type: {doc_type}")
+
+        return doc_id
+
+    def import_all(self):
+        """Importiert alle Design-Dokumente"""
+
+        print("=" * 60)
+        print("NAJIKA DESIGN DOCUMENT IMPORTER")
+        print("=" * 60)
+
+        if not os.path.exists(self.design_docs_path):
+            print(f"[ERROR] Ordner nicht gefunden: {self.design_docs_path}")
+            return
+
+        md_files = [f for f in os.listdir(self.design_docs_path) if f.endswith('.md')]
+
+        print(f"\nGefunden: {len(md_files)} Design-Dokumente\n")
+
+        imported = []
+        for filename in md_files:
+            filepath = os.path.join(self.design_docs_path, filename)
+            doc_id = self.import_document(filepath)
+            imported.append(doc_id)
+
+        print("\n" + "=" * 60)
+        print(f"[OK] {len(imported)} Dokumente importiert!")
+        print("=" * 60)
+
+        # Status anzeigen
+        all_docs = self.design_collection.get()
+        print(f"\nGesamt in Collection: {len(all_docs['ids'])} Dokumente")
+
+        return imported
+
+if __name__ == "__main__":
+    importer = NajikaDesignImporter()
+    imported = importer.import_all()
+
+    print("\n[OK] Design-Dokumente sind jetzt in ChromaDB!")
+    print("Das LoRA-Training kann sie jetzt nutzen.")

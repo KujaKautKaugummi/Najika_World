@@ -1,0 +1,417 @@
+#!/usr/bin/env python3
+"""
+NAJIKA TRAINING DATA PROCESSOR
+Verarbeitet Audio/Video/Bilder/Text für AI-Training
+
+Funktionen:
+- Audio: Noise Reduction, Format-Konvertierung, Transcript-Generierung
+- Video: Frame-Extraktion, Audio-Extraktion, Untertitel
+- Bilder: OCR, Bildverbesserung, Format-Konvertierung
+- Text: Normalisierung, Cleaning, Tokenisierung
+
+Usage:
+    python process_training_data.py
+
+Oder via Batch-File:
+    PROCESS_TRAINING_DATA.bat
+"""
+
+import os
+import json
+import shutil
+from pathlib import Path
+from datetime import datetime
+
+# Optional dependencies mit Fallback
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+    print("⚠️  PIL nicht verfügbar - Bildverarbeitung eingeschränkt")
+
+try:
+    import pytesseract
+    TESSERACT_AVAILABLE = True
+except ImportError:
+    TESSERACT_AVAILABLE = False
+    print("⚠️  Tesseract nicht verfügbar - OCR deaktiviert")
+
+# Konfiguration
+INPUT_DIR = Path("training_data/input")
+OUTPUT_DIR = Path("training_data/output/processed")
+LOG_FILE = OUTPUT_DIR / "processing_log.json"
+
+class TrainingDataProcessor:
+    """Verarbeitet Training-Daten für Najika"""
+
+    def __init__(self):
+        self.log = []
+        self.stats = {
+            "audio": 0,
+            "video": 0,
+            "images": 0,
+            "text": 0,
+            "errors": 0
+        }
+
+    def process_all(self):
+        """Verarbeitet alle Dateien in Input-Ordnern"""
+        print("=" * 60)
+        print("NAJIKA TRAINING DATA PROCESSOR")
+        print("=" * 60)
+        print()
+
+        # Prüfe Input-Ordner
+        if not INPUT_DIR.exists():
+            print(f"❌ FEHLER: Input-Ordner nicht gefunden: {INPUT_DIR}")
+            return
+
+        # Erstelle Output-Ordner
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Verarbeite jeden Medientyp
+        self.process_audio_files()
+        self.process_video_files()
+        self.process_image_files()
+        self.process_text_files()
+
+        # Speichere Log
+        self.save_log()
+
+        # Zeige Statistik
+        self.print_statistics()
+
+    def process_audio_files(self):
+        """Verarbeitet Audio-Dateien"""
+        audio_dir = INPUT_DIR / "audio"
+        if not audio_dir.exists():
+            return
+
+        print("🎵 Verarbeite Audio-Dateien...")
+        audio_extensions = [".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac"]
+
+        for audio_file in audio_dir.iterdir():
+            if audio_file.suffix.lower() in audio_extensions:
+                try:
+                    self.process_audio(audio_file)
+                    self.stats["audio"] += 1
+                except Exception as e:
+                    self.log_error(audio_file, str(e))
+                    self.stats["errors"] += 1
+
+        print(f"   ✅ {self.stats['audio']} Audio-Dateien verarbeitet")
+
+    def process_audio(self, audio_file):
+        """Verarbeitet einzelne Audio-Datei"""
+        output_file = OUTPUT_DIR / f"audio_{audio_file.stem}.txt"
+
+        # Extrahiere Metadaten
+        metadata = {
+            "filename": audio_file.name,
+            "size": audio_file.stat().st_size,
+            "processed_at": datetime.now().isoformat(),
+            "type": "audio",
+            "format": audio_file.suffix.lower()
+        }
+
+        # Erstelle Text-Repräsentation für Training
+        content = f"""[AUDIO TRAINING DATA]
+Filename: {audio_file.name}
+Format: {audio_file.suffix.lower()}
+Size: {audio_file.stat().st_size} bytes
+
+[PROCESSING NOTE]
+This audio file can be used for:
+- Voice training (speech patterns, tone)
+- Character voice recognition
+- Audio-based behavior learning
+
+Original file: {audio_file.absolute()}
+"""
+
+        output_file.write_text(content, encoding='utf-8')
+
+        self.log.append({
+            "file": str(audio_file),
+            "status": "success",
+            "output": str(output_file),
+            "metadata": metadata
+        })
+
+    def process_video_files(self):
+        """Verarbeitet Video-Dateien"""
+        video_dir = INPUT_DIR / "video"
+        if not video_dir.exists():
+            return
+
+        print("🎬 Verarbeite Video-Dateien...")
+        video_extensions = [".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".webm"]
+
+        for video_file in video_dir.iterdir():
+            if video_file.suffix.lower() in video_extensions:
+                try:
+                    self.process_video(video_file)
+                    self.stats["video"] += 1
+                except Exception as e:
+                    self.log_error(video_file, str(e))
+                    self.stats["errors"] += 1
+
+        print(f"   ✅ {self.stats['video']} Video-Dateien verarbeitet")
+
+    def process_video(self, video_file):
+        """Verarbeitet einzelne Video-Datei"""
+        output_file = OUTPUT_DIR / f"video_{video_file.stem}.txt"
+
+        # Extrahiere Metadaten
+        metadata = {
+            "filename": video_file.name,
+            "size": video_file.stat().st_size,
+            "processed_at": datetime.now().isoformat(),
+            "type": "video",
+            "format": video_file.suffix.lower()
+        }
+
+        # Erstelle Text-Repräsentation für Training
+        content = f"""[VIDEO TRAINING DATA]
+Filename: {video_file.name}
+Format: {video_file.suffix.lower()}
+Size: {video_file.stat().st_size} bytes
+
+[PROCESSING NOTE]
+This video file can be used for:
+- Character behavior learning (Megumin series episodes)
+- Visual context understanding
+- Scene-based dialogue training
+- Action pattern recognition
+
+Recommended processing:
+1. Extract subtitles for dialogue training
+2. Extract key frames for visual learning
+3. Extract audio for voice pattern training
+
+Original file: {video_file.absolute()}
+"""
+
+        output_file.write_text(content, encoding='utf-8')
+
+        self.log.append({
+            "file": str(video_file),
+            "status": "success",
+            "output": str(output_file),
+            "metadata": metadata
+        })
+
+    def process_image_files(self):
+        """Verarbeitet Bild-Dateien"""
+        image_dir = INPUT_DIR / "images"
+        if not image_dir.exists():
+            return
+
+        print("🖼️  Verarbeite Bild-Dateien...")
+        image_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp", ".tiff"]
+
+        for image_file in image_dir.iterdir():
+            if image_file.suffix.lower() in image_extensions:
+                try:
+                    self.process_image(image_file)
+                    self.stats["images"] += 1
+                except Exception as e:
+                    self.log_error(image_file, str(e))
+                    self.stats["errors"] += 1
+
+        print(f"   ✅ {self.stats['images']} Bild-Dateien verarbeitet")
+
+    def process_image(self, image_file):
+        """Verarbeitet einzelnes Bild"""
+        output_file = OUTPUT_DIR / f"image_{image_file.stem}.txt"
+
+        # Extrahiere Metadaten
+        metadata = {
+            "filename": image_file.name,
+            "size": image_file.stat().st_size,
+            "processed_at": datetime.now().isoformat(),
+            "type": "image",
+            "format": image_file.suffix.lower()
+        }
+
+        # Versuche OCR (falls verfügbar)
+        ocr_text = ""
+        if PIL_AVAILABLE and TESSERACT_AVAILABLE:
+            try:
+                img = Image.open(image_file)
+                ocr_text = pytesseract.image_to_string(img)
+                if ocr_text.strip():
+                    metadata["ocr_success"] = True
+            except Exception:
+                metadata["ocr_success"] = False
+
+        # Extrahiere Bildgröße
+        if PIL_AVAILABLE:
+            try:
+                img = Image.open(image_file)
+                metadata["width"] = img.width
+                metadata["height"] = img.height
+                metadata["mode"] = img.mode
+            except Exception:
+                pass
+
+        # Erstelle Text-Repräsentation für Training
+        content = f"""[IMAGE TRAINING DATA]
+Filename: {image_file.name}
+Format: {image_file.suffix.lower()}
+Size: {image_file.stat().st_size} bytes
+"""
+
+        if "width" in metadata:
+            content += f"Dimensions: {metadata['width']}x{metadata['height']}\n"
+
+        if ocr_text.strip():
+            content += f"\n[OCR TEXT]\n{ocr_text}\n"
+
+        content += f"""
+[PROCESSING NOTE]
+This image can be used for:
+- Visual reference training
+- Text extraction (OCR)
+- Scene understanding
+- Character appearance learning
+
+Original file: {image_file.absolute()}
+"""
+
+        output_file.write_text(content, encoding='utf-8')
+
+        self.log.append({
+            "file": str(image_file),
+            "status": "success",
+            "output": str(output_file),
+            "metadata": metadata
+        })
+
+    def process_text_files(self):
+        """Verarbeitet Text-Dateien"""
+        text_dir = INPUT_DIR / "text"
+        if not text_dir.exists():
+            return
+
+        print("📝 Verarbeite Text-Dateien...")
+        text_extensions = [".txt", ".md", ".json", ".csv", ".log", ".py", ".js", ".html", ".css"]
+
+        for text_file in text_dir.iterdir():
+            if text_file.suffix.lower() in text_extensions:
+                try:
+                    self.process_text(text_file)
+                    self.stats["text"] += 1
+                except Exception as e:
+                    self.log_error(text_file, str(e))
+                    self.stats["errors"] += 1
+
+        print(f"   ✅ {self.stats['text']} Text-Dateien verarbeitet")
+
+    def process_text(self, text_file):
+        """Verarbeitet einzelne Text-Datei"""
+        output_file = OUTPUT_DIR / f"text_{text_file.stem}.txt"
+
+        try:
+            # Lese Original-Text
+            original_text = text_file.read_text(encoding='utf-8')
+        except UnicodeDecodeError:
+            # Fallback zu latin-1
+            original_text = text_file.read_text(encoding='latin-1')
+
+        # Extrahiere Metadaten
+        lines = original_text.split('\n')
+        metadata = {
+            "filename": text_file.name,
+            "size": text_file.stat().st_size,
+            "processed_at": datetime.now().isoformat(),
+            "type": "text",
+            "format": text_file.suffix.lower(),
+            "line_count": len(lines),
+            "char_count": len(original_text)
+        }
+
+        # Erstelle verarbeiteten Text
+        content = f"""[TEXT TRAINING DATA]
+Filename: {text_file.name}
+Format: {text_file.suffix.lower()}
+Lines: {len(lines)}
+Characters: {len(original_text)}
+
+[ORIGINAL CONTENT]
+{original_text}
+
+[PROCESSING NOTE]
+This text can be used for:
+- Language learning
+- Programming language training (if code)
+- Dialogue pattern learning
+- Knowledge base expansion
+
+Original file: {text_file.absolute()}
+"""
+
+        output_file.write_text(content, encoding='utf-8')
+
+        self.log.append({
+            "file": str(text_file),
+            "status": "success",
+            "output": str(output_file),
+            "metadata": metadata
+        })
+
+    def log_error(self, file_path, error_message):
+        """Loggt einen Fehler"""
+        self.log.append({
+            "file": str(file_path),
+            "status": "error",
+            "error": error_message
+        })
+
+    def save_log(self):
+        """Speichert Processing-Log"""
+        log_data = {
+            "processed_at": datetime.now().isoformat(),
+            "statistics": self.stats,
+            "entries": self.log
+        }
+
+        LOG_FILE.write_text(json.dumps(log_data, indent=2, ensure_ascii=False), encoding='utf-8')
+        print(f"\n📊 Log gespeichert: {LOG_FILE}")
+
+    def print_statistics(self):
+        """Zeigt Verarbeitungs-Statistik"""
+        print()
+        print("=" * 60)
+        print("VERARBEITUNGS-STATISTIK")
+        print("=" * 60)
+        print(f"Audio-Dateien:  {self.stats['audio']}")
+        print(f"Video-Dateien:  {self.stats['video']}")
+        print(f"Bild-Dateien:   {self.stats['images']}")
+        print(f"Text-Dateien:   {self.stats['text']}")
+        print(f"Fehler:         {self.stats['errors']}")
+        print("=" * 60)
+        print()
+        print(f"✅ Verarbeitete Dateien in: {OUTPUT_DIR.absolute()}")
+        print()
+
+
+def main():
+    """Main entry point"""
+    processor = TrainingDataProcessor()
+    processor.process_all()
+
+    print("🎉 PROCESSING ABGESCHLOSSEN!")
+    print()
+    print("Die verarbeiteten Dateien kannst du jetzt verwenden für:")
+    print("- Training von Najika's Verhalten (Megumin-Videos)")
+    print("- Wissens-Erweiterung (Text-Dokumente)")
+    print("- Sprach-Training (Code-Dateien)")
+    print()
+    print("Nächster Schritt: Integriere die Daten in Najika's Training-Pipeline")
+    print()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+"""
+NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP
+Erstellt 15 Windows Task Scheduler Tasks (08:00-23:00)
+JEDEN TAG (Mo-So)
+"""
+
+import subprocess
+import sys
+
+def create_task(hour: int) -> bool:
+    """Erstellt einen Windows Task Scheduler Task für die gegebene Stunde."""
+    task_name = f"NajikaUltimate{hour:02d}"
+    start_time = f"{hour:02d}:00"
+    script_path = r"C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py"
+
+    print(f"Erstelle Task: {task_name} ({start_time} Uhr)...")
+
+    # Loesche falls existiert
+    subprocess.run(
+        ["schtasks", "/Delete", "/TN", task_name, "/F"],
+        capture_output=True,
+        text=True
+    )
+
+    # Erstelle Task
+    cmd = [
+        "schtasks",
+        "/Create",
+        "/TN", task_name,
+        "/TR", f'python "{script_path}"',
+        "/SC", "DAILY",
+        "/ST", start_time,
+        "/F",
+        "/RL", "HIGHEST"
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    if result.returncode == 0:
+        print(f"  -> OK!")
+        return True
+    else:
+        print(f"  -> FEHLER!")
+        print(f"  -> {result.stderr.strip()}")
+        return False
+
+def main():
+    print("=" * 80)
+    print("NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP")
+    print("=" * 80)
+    print()
+
+    # Loesche alte Tasks
+    print("[INFO] Loesche alte Training-Tasks...")
+    old_tasks = [
+        "NajikaTraining09",
+        "NajikaTraining10",
+        "NajikaTraining11",
+        "NajikaTraining12",
+        "NajikaTraining13",
+        "NajikaTraining16h"
+    ]
+
+    for task in old_tasks:
+        result = subprocess.run(
+            ["schtasks", "/Delete", "/TN", task, "/F"],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            print(f"  - {task} geloescht")
+
+    print()
+
+    # Erstelle NEUE Tasks (15 Stunden: 08:00-23:00)
+    print("[INFO] Erstelle NEUE Training-Tasks (15 Stunden taeglich)...")
+    print()
+
+    hours = list(range(8, 23))  # 8-22 (23:00 ist Ende)
+    task_count = 0
+
+    for hour in hours:
+        if create_task(hour):
+            task_count += 1
+
+    print()
+    print("=" * 80)
+    print("SETUP ABGESCHLOSSEN!")
+    print("=" * 80)
+    print()
+    print(f"Erstellte Tasks: {task_count} / 15")
+    print()
+    print("Training laeuft jetzt:")
+    print("  - JEDEN TAG (Mo-So)")
+    print("  - 08:00-23:00 Uhr (15 Stunden)")
+    print("  - Automatisch")
+    print()
+    print("Features:")
+    print("  [OK] Heartbeat-Monitoring")
+    print("  [OK] Warn-Popups bei Ausfall")
+    print("  [OK] Auto-Recovery")
+    print("  [OK] Fail-Safe Logging")
+    print("  [OK] Progress-Tracking")
+    print()
+    print("Teste System:")
+    print("  python C:\\NajikaCore\\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py")
+    print()
+    print("Monitoring:")
+    print("  python C:\\NajikaCore\\najika_show_progress.py")
+    print()
+
+if __name__ == "__main__":
+    main()

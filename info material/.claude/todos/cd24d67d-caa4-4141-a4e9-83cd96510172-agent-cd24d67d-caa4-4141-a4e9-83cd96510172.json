@@ -1,0 +1,12 @@
+[
+  {
+    "content": "Direkten Whisper-Test mit neuem Dateinamen durchführen",
+    "status": "in_progress",
+    "activeForm": "Teste Whisper direkt"
+  },
+  {
+    "content": "Bei Erfolg: Training laufen lassen",
+    "status": "pending",
+    "activeForm": "Training läuft"
+  }
+]

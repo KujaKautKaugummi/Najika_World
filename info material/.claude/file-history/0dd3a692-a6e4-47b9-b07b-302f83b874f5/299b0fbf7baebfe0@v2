@@ -1,0 +1,56 @@
+@echo off
+:: NAJIKA LoRA AUTO-TRAINING SCHEDULER
+:: Trainiert Najika alle 12h mit neuen Konversationen
+
+echo ============================================================
+echo NAJIKA LoRA AUTO-TRAINING SETUP
+echo ============================================================
+echo.
+
+:: Lösche alte Tasks
+echo Loesche alte Training-Tasks...
+schtasks /Delete /TN "NajikaLoRAMorning" /F >nul 2>&1
+schtasks /Delete /TN "NajikaLoRAEvening" /F >nul 2>&1
+
+echo.
+echo Erstelle neue Tasks...
+echo.
+
+:: Morning Training (08:00)
+echo 1. Morning Training (08:00 Uhr)...
+schtasks /Create /TN "NajikaLoRAMorning" /TR "python C:\NajikaCore\najika_lora_training.py" /SC DAILY /ST 08:00 /F
+
+if %ERRORLEVEL% EQU 0 (
+    echo    [OK] Morning Training Task erstellt
+) else (
+    echo    [FEHLER] Morning Training konnte nicht erstellt werden
+)
+
+echo.
+
+:: Evening Training (20:00)
+echo 2. Evening Training (20:00 Uhr)...
+schtasks /Create /TN "NajikaLoRAEvening" /TR "python C:\NajikaCore\najika_lora_training.py" /SC DAILY /ST 20:00 /F
+
+if %ERRORLEVEL% EQU 0 (
+    echo    [OK] Evening Training Task erstellt
+) else (
+    echo    [FEHLER] Evening Training konnte nicht erstellt werden
+)
+
+echo.
+echo ============================================================
+echo TRAINING-SCHEDULE
+echo ============================================================
+echo.
+echo 08:00 Uhr - Morning Training
+echo 20:00 Uhr - Evening Training
+echo.
+echo = 2x taeglich, alle 12 Stunden
+echo.
+echo ============================================================
+echo SETUP ABGESCHLOSSEN!
+echo ============================================================
+echo.
+
+pause

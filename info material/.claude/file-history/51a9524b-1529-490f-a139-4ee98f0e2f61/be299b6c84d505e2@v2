@@ -1,0 +1,414 @@
+#!/usr/bin/env python3
+"""
+NAJIKA SMART UPDATE V3 - MIT READ VERIFICATION!
+
+NEU:
+- Automatische Challenge-Code Injection
+- Bombensichere Verifikation dass Claude ALLES liest
+- Keine Schummeln mehr möglich!
+"""
+
+import json
+import re
+import sys
+from pathlib import Path
+from datetime import datetime
+import random
+import string
+
+NAJIKA_DIR = Path("C:/NajikaCore")
+CLAUDE_PROJECTS = Path("C:/Users/0KKK0/.claude/projects/C--NajikaCore")
+CLAUDE_TODOS = Path("C:/Users/0KKK0/.claude/todos")
+UPDATE_FILE = NAJIKA_DIR / "CLAUDE_SMART_UPDATE.md"
+MASTER_FILE = NAJIKA_DIR / "NAJIKA_MASTER_ZUSAMMENFASSUNG.md"
+LESSONS_FILE = NAJIKA_DIR / "GELERNT_AUS_ALLEN_SESSIONS.md"
+VERIFICATION_FILE = NAJIKA_DIR / ".claude_verification.json"
+
+class SmartUpdateV3:
+    def __init__(self):
+        self.current_session = None
+        self.previous_session = None
+        self.open_tasks = []
+        self.files_to_read = []
+        self.previous_todos = []
+        self.challenges = {}
+        self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    def generate_challenge_code(self):
+        """Generiert 6-stelligen Challenge-Code"""
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+    def find_sessions(self):
+        """Findet aktuelle und vorherige Session"""
+        sessions = sorted(CLAUDE_PROJECTS.glob("*.jsonl"),
+                         key=lambda p: p.stat().st_mtime, reverse=True)
+
+        if len(sessions) >= 2:
+            self.current_session = sessions[0]
+            self.previous_session = sessions[1]
+            print(f"[OK] Aktuelle: {self.current_session.name[:12]}...")
+            print(f"[OK] Vorherige: {self.previous_session.name[:12]}...")
+
+            self.load_previous_todos()
+            return True
+        else:
+            print("[WARNING] Nicht genug Sessions")
+            return False
+
+    def load_previous_todos(self):
+        """Lädt Todo-Liste aus vorheriger Session"""
+        if not self.previous_session:
+            return
+
+        session_id = self.previous_session.stem
+
+        for todo_file in CLAUDE_TODOS.glob(f"{session_id}*.json"):
+            try:
+                with open(todo_file, 'r', encoding='utf-8') as f:
+                    todos = json.load(f)
+                    if todos:
+                        self.previous_todos = todos
+                        print(f"[OK] Todos geladen: {len(todos)} Aufgaben")
+                        break
+            except:
+                continue
+
+    def extract_user_messages(self, session_file, max_messages=5):
+        """Extrahiert User-Messages"""
+        user_messages = []
+
+        try:
+            with open(session_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    try:
+                        entry = json.loads(line)
+                        if entry.get('type') == 'user':
+                            msg = entry.get('message', {})
+                            content = msg.get('content', [])
+
+                            text_parts = []
+                            for item in content:
+                                if isinstance(item, dict) and item.get('type') == 'text':
+                                    text_parts.append(item.get('text', ''))
+
+                            if text_parts:
+                                full_text = ' '.join(text_parts)
+                                truncated = full_text[:800]
+                                user_messages.append({
+                                    'timestamp': entry.get('timestamp', '')[:19],
+                                    'text': truncated,
+                                    'was_truncated': len(full_text) > 800
+                                })
+                    except:
+                        continue
+
+            return user_messages[-max_messages:]
+        except Exception as e:
+            print(f"[ERROR] Session lesen: {e}")
+            return []
+
+    def detect_files_mentioned(self, messages):
+        """Erkennt erwähnte Files"""
+        file_patterns = [
+            r'(najika_\w+\.py)',
+            r'(index\.html)',
+            r'(3d_scene\.js)',
+            r'(najika_\w+\.md)',
+            r'(/digivice/\S+)',
+            r'(\.env)',
+            r'(CLAUDE\.md)'
+        ]
+
+        files = set()
+        for msg in messages:
+            text = msg['text']
+            for pattern in file_patterns:
+                matches = re.findall(pattern, text, re.IGNORECASE)
+                files.update(matches)
+
+        return list(files)[:5]
+
+    def detect_open_tasks(self, messages):
+        """Task-Erkennung"""
+        task_keywords = [
+            (r"(mach|erstell|bau|füg|änder|fix|korrigier)\w*\s+\w+", "direct"),
+            (r"(fehler|problem|bug|geht nicht|funktioniert nicht)", "issue"),
+            (r"(soll|muss|brauch|möcht)\w*\s+\w+", "requirement"),
+        ]
+
+        tasks = []
+        for msg in messages:
+            text = msg['text']
+
+            for line in text.split('\n'):
+                line = line.strip()
+                if len(line) < 10 or len(line) > 200:
+                    continue
+
+                for pattern, category in task_keywords:
+                    if re.search(pattern, line, re.IGNORECASE):
+                        tasks.append({
+                            'text': line[:150],
+                            'category': category,
+                            'timestamp': msg['timestamp']
+                        })
+                        break
+
+        unique_tasks = []
+        seen = set()
+        for task in tasks:
+            if task['text'] not in seen:
+                seen.add(task['text'])
+                unique_tasks.append(task)
+
+        return unique_tasks[:8]
+
+    def create_challenge_for_file(self, file_name):
+        """Erstellt Challenge für ein File"""
+        code = self.generate_challenge_code()
+        self.challenges[file_name] = {
+            "code": code,
+            "generated": datetime.now().isoformat()
+        }
+        return code
+
+    def generate_smart_update(self):
+        """Generiert Update MIT Challenges"""
+        lines = []
+
+        # Header
+        lines.append("# 🔐 NAJIKA SMART UPDATE V3 (VERIFIED)")
+        lines.append(f"**Session: {self.session_id}**")
+        lines.append(f"**Zeit: {datetime.now().strftime('%H:%M:%S')}**")
+        lines.append("")
+
+        # VERIFICATION SECTION (OBEN!)
+        lines.append("---")
+        lines.append("")
+        lines.append("## ⚠️ READ VERIFICATION - PFLICHT!")
+        lines.append("")
+        lines.append("**Du MUSST folgende Files KOMPLETT lesen und alle VERIFICATION CODES finden:**")
+        lines.append("")
+
+        # Challenge 1: MASTER-ZUSAMMENFASSUNG
+        code1 = self.create_challenge_for_file("master")
+        lines.append(f"1. **`NAJIKA_MASTER_ZUSAMMENFASSUNG.md`**")
+        lines.append(f"   - **VERIFICATION CODE: `{code1}`** ← Dieser Code ist IM FILE versteckt!")
+        lines.append("")
+
+        # Challenge 2: GELERNTE LEKTIONEN
+        code2 = self.create_challenge_for_file("lessons")
+        lines.append(f"2. **`GELERNT_AUS_ALLEN_SESSIONS.md`**")
+        lines.append(f"   - **VERIFICATION CODE: `{code2}`** ← Dieser Code ist IM FILE versteckt!")
+        lines.append("")
+
+        # Challenge 3: Erwähnte Files (wenn vorhanden)
+        if self.files_to_read:
+            code3 = self.create_challenge_for_file("mentioned_files")
+            lines.append(f"3. **Erwähnte Files** (siehe unten)")
+            lines.append(f"   - **VERIFICATION CODE: `{code3}`** ← Wird unten erwähnt!")
+            lines.append("")
+
+        lines.append("**BEWEISE DASS DU GELESEN HAST:**")
+        lines.append("```")
+        lines.append("✅ VERIFICATION CODES GEFUNDEN:")
+        lines.append("")
+        lines.append(f"MASTER: {code1}")
+        lines.append(f"LESSONS: {code2}")
+        if self.files_to_read:
+            lines.append(f"MENTIONED: {code3}")
+        lines.append("```")
+        lines.append("")
+        lines.append("**❌ WENN DU DIESE CODES NICHT FINDEST:**")
+        lines.append("→ Du hast Files NICHT gelesen!")
+        lines.append("→ Du darfst NICHTS tun!")
+        lines.append("→ Lies nochmal KOMPLETT!")
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+        # Vorherige Session
+        if self.previous_session:
+            lines.append("## VORHERIGE SESSION KONTEXT")
+            lines.append("")
+
+            prev_messages = self.extract_user_messages(self.previous_session, max_messages=5)
+
+            if prev_messages:
+                lines.append("### Letzte 5 User-Nachrichten:")
+                lines.append("")
+                for i, msg in enumerate(prev_messages, 1):
+                    lines.append(f"**{i}. Zeit:** {msg['timestamp']}")
+                    lines.append("```")
+                    lines.append(msg['text'])
+                    if msg.get('was_truncated'):
+                        lines.append("\n... [GEKÜRZT auf 800 chars]")
+                    lines.append("```")
+                    lines.append("")
+
+                # Tasks
+                self.open_tasks = self.detect_open_tasks(prev_messages)
+                if self.open_tasks:
+                    lines.append("### ERKANNTE OFFENE AUFGABEN:")
+                    lines.append("")
+                    for task in self.open_tasks:
+                        icon = {'direct': '🔨', 'issue': '🐛', 'requirement': '📋'}.get(task['category'], '•')
+                        lines.append(f"{icon} {task['text']}")
+                    lines.append("")
+
+                # Files
+                self.files_to_read = self.detect_files_mentioned(prev_messages)
+                if self.files_to_read:
+                    lines.append("### FILES DIE ERWÄHNT WURDEN:")
+                    lines.append("")
+                    for f in self.files_to_read:
+                        lines.append(f"- `{f}`")
+                    if self.files_to_read:
+                        lines.append("")
+                        lines.append(f"**VERIFICATION CODE für diese Files: `{self.challenges['mentioned_files']['code']}`**")
+                    lines.append("")
+
+                # Todos
+                if self.previous_todos:
+                    lines.append("### TODO-LISTE VORHERIGE SESSION:")
+                    lines.append("")
+                    pending = [t for t in self.previous_todos if t.get('status') == 'pending']
+                    in_progress = [t for t in self.previous_todos if t.get('status') == 'in_progress']
+
+                    if in_progress:
+                        lines.append("**⏳ IN ARBEIT:**")
+                        for todo in in_progress:
+                            lines.append(f"- {todo.get('content', todo.get('activeForm', 'N/A'))}")
+                        lines.append("")
+
+                    if pending:
+                        lines.append("**📋 OFFEN:**")
+                        for todo in pending:
+                            lines.append(f"- {todo.get('content', 'N/A')}")
+                        lines.append("")
+
+            lines.append("---")
+            lines.append("")
+
+        # Anweisungen
+        lines.append("## ANWEISUNGEN FÜR CLAUDE:")
+        lines.append("")
+        lines.append("**PFLICHT (in dieser Reihenfolge!):**")
+        lines.append("")
+        lines.append("1. **Lies `NAJIKA_MASTER_ZUSAMMENFASSUNG.md` KOMPLETT**")
+        lines.append(f"   - Finde VERIFICATION CODE: `{self.challenges['master']['code']}`")
+        lines.append("")
+        lines.append("2. **Lies `GELERNT_AUS_ALLEN_SESSIONS.md` KOMPLETT**")
+        lines.append(f"   - Finde VERIFICATION CODE: `{self.challenges['lessons']['code']}`")
+        lines.append("")
+        if self.files_to_read:
+            lines.append("3. **Lies alle erwähnten Files KOMPLETT**")
+            lines.append(f"   - VERIFICATION CODE: `{self.challenges['mentioned_files']['code']}`")
+            lines.append("")
+        lines.append("4. **Berichte ALLE gefundenen VERIFICATION CODES**")
+        lines.append("")
+        lines.append("5. **NUR DANN:** Frage User kurz (max 2 Sätze!)")
+        lines.append("")
+        lines.append("**WENN CODES FEHLEN:**")
+        lines.append("→ Du hast NICHT komplett gelesen!")
+        lines.append("→ User wird SOFORT wissen dass du schummels!")
+        lines.append("→ Du darfst NICHTS tun bis alle Codes da sind!")
+        lines.append("")
+
+        # Speichern
+        UPDATE_FILE.write_text('\n'.join(lines), encoding='utf-8')
+        print(f"\n[OK] Smart Update V3: {UPDATE_FILE}")
+
+        # Challenges speichern
+        self.save_verification_data()
+
+    def save_verification_data(self):
+        """Speichert Challenges für Verifikation"""
+        data = {
+            "session_id": self.session_id,
+            "challenges": self.challenges,
+            "created": datetime.now().isoformat()
+        }
+
+        VERIFICATION_FILE.write_text(
+            json.dumps(data, indent=2),
+            encoding='utf-8'
+        )
+        print(f"[OK] Verification-Daten: {VERIFICATION_FILE}")
+
+    def inject_codes_into_files(self):
+        """Injiziert Codes in MASTER + LESSONS"""
+
+        # MASTER-ZUSAMMENFASSUNG
+        if MASTER_FILE.exists():
+            content = MASTER_FILE.read_text(encoding='utf-8')
+            code = self.challenges['master']['code']
+
+            # Füge Code am Anfang ein (nach Titel - suche beide Varianten)
+            if "# NAJIKA PROJEKT - MASTER-ZUSAMMENFASSUNG" in content:
+                content = content.replace(
+                    "# NAJIKA PROJEKT - MASTER-ZUSAMMENFASSUNG",
+                    f"# NAJIKA PROJEKT - MASTER-ZUSAMMENFASSUNG\n\n**🔐 VERIFICATION CODE: `{code}`** ← Notiere diesen Code!"
+                )
+                MASTER_FILE.write_text(content, encoding='utf-8')
+                print(f"[OK] Code in MASTER injiziert: {code}")
+            elif "# NAJIKA MASTER ZUSAMMENFASSUNG" in content:
+                content = content.replace(
+                    "# NAJIKA MASTER ZUSAMMENFASSUNG",
+                    f"# NAJIKA MASTER ZUSAMMENFASSUNG\n\n**🔐 VERIFICATION CODE: `{code}`** ← Notiere diesen Code!"
+                )
+                MASTER_FILE.write_text(content, encoding='utf-8')
+                print(f"[OK] Code in MASTER injiziert: {code}")
+
+        # GELERNTE LEKTIONEN
+        if LESSONS_FILE.exists():
+            content = LESSONS_FILE.read_text(encoding='utf-8')
+            code = self.challenges['lessons']['code']
+
+            # Füge Code am Anfang ein (beide Varianten)
+            if "# 🎓 GELERNT AUS ALLEN SESSIONS" in content:
+                content = content.replace(
+                    "# 🎓 GELERNT AUS ALLEN SESSIONS",
+                    f"# 🎓 GELERNT AUS ALLEN SESSIONS\n\n**🔐 VERIFICATION CODE: `{code}`** ← Notiere diesen Code!"
+                )
+                LESSONS_FILE.write_text(content, encoding='utf-8')
+                print(f"[OK] Code in LESSONS injiziert: {code}")
+            elif "# GELERNT AUS ALLEN SESSIONS" in content:
+                content = content.replace(
+                    "# GELERNT AUS ALLEN SESSIONS",
+                    f"# GELERNT AUS ALLEN SESSIONS\n\n**🔐 VERIFICATION CODE: `{code}`** ← Notiere diesen Code!"
+                )
+                LESSONS_FILE.write_text(content, encoding='utf-8')
+                print(f"[OK] Code in LESSONS injiziert: {code}")
+
+    def run(self):
+        """Führt Smart Update V3 durch"""
+        print("\n" + "="*60)
+        print("NAJIKA SMART UPDATE V3 - MIT VERIFICATION!")
+        print("="*60 + "\n")
+
+        if not self.find_sessions():
+            print("[ERROR] Sessions nicht gefunden!")
+            return
+
+        # Generiere Update + Challenges
+        self.generate_smart_update()
+
+        # Injiziere Codes in Files
+        self.inject_codes_into_files()
+
+        print("\n" + "="*60)
+        print("FERTIG!")
+        print("="*60)
+        print(f"\nUpdate: {UPDATE_FILE}")
+        print(f"Tasks: {len(self.open_tasks)}")
+        print(f"Files: {len(self.files_to_read)}")
+        print(f"Todos: {len(self.previous_todos)}")
+        print(f"\nCHALLENGE CODES:")
+        for name, data in self.challenges.items():
+            print(f"  - {name.upper()}: {data['code']}")
+        print("\nClaude MUSS alle Codes finden!\n")
+
+if __name__ == "__main__":
+    updater = SmartUpdateV3()
+    updater.run()

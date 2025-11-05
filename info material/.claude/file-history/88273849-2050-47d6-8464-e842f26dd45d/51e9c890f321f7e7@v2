@@ -1,0 +1,88 @@
+﻿// PRIVATE MODE DETECTOR (SSE VERSION)
+(function() {
+    let privateMode = false;
+    let lastStatusError = 0;
+    let eventSource = null;
+
+    function connectSSE() {
+        // Schließe alte Verbindung
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        // Neue SSE-Verbindung
+        eventSource = new EventSource('/api/status/stream');
+
+        eventSource.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (window.setServerStatus) {
+                    window.setServerStatus(true);
+                }
+                if (data.private_mode && !privateMode) {
+                    activatePrivateMode();
+                } else if (!data.private_mode && privateMode) {
+                    deactivatePrivateMode();
+                }
+            } catch (err) {
+                console.warn('SSE parse error:', err);
+            }
+        };
+
+        eventSource.onerror = (err) => {
+            if (window.setServerStatus) {
+                window.setServerStatus(false);
+            }
+            const now = Date.now();
+            if (now - lastStatusError > 15000) {
+                console.warn('SSE connection failed (offline?), reconnecting...', err);
+                lastStatusError = now;
+            }
+            if (privateMode) {
+                deactivatePrivateMode();
+            }
+            // SSE reconnectet automatisch
+        };
+
+        console.log('✅ SSE-Verbindung zu /api/status/stream hergestellt');
+    }
+    
+    function activatePrivateMode() {
+        privateMode = true;
+        const indicator = document.getElementById('privateIndicator');
+        if (indicator) {
+            indicator.classList.add('active');
+        }
+        
+        // Change scene colors to red
+        if (window.Scene3D && window.Scene3D.setPrivateMode) {
+            window.Scene3D.setPrivateMode(true);
+        }
+        
+        console.log('🔞 Private Mode ACTIVATED');
+    }
+    
+    function deactivatePrivateMode() {
+        privateMode = false;
+        const indicator = document.getElementById('privateIndicator');
+        if (indicator) {
+            indicator.classList.remove('active');
+        }
+        
+        // Restore normal colors
+        if (window.Scene3D && window.Scene3D.setPrivateMode) {
+            window.Scene3D.setPrivateMode(false);
+        }
+        
+        console.log('🔒 Private Mode DEACTIVATED');
+    }
+    
+    // Starte SSE-Verbindung
+    connectSSE();
+    
+    window.PrivateModeDetector = {
+        isActive: () => privateMode
+    };
+    
+    console.log('✅ Private Mode Detector loaded');
+})();

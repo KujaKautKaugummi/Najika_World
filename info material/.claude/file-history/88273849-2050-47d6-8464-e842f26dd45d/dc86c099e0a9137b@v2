@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Performance Test - Texturen Check</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: monospace;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        #scene {
+            width: 100vw;
+            height: 100vh;
+        }
+        .ok { color: #4ade80; }
+        .warn { color: #fbbf24; }
+        .error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>🔍 3D Performance & Texture Check</h3>
+        <div id="status">Loading Three.js...</div>
+        <hr>
+        <div id="stats">
+            <div>FPS: <span id="fps">--</span></div>
+            <div>Draw Calls: <span id="drawcalls">--</span></div>
+            <div>Triangles: <span id="triangles">--</span></div>
+            <div>Geometries: <span id="geometries">--</span></div>
+            <div>Textures: <span id="textures">--</span></div>
+            <div>Materials: <span id="materials">--</span></div>
+        </div>
+        <hr>
+        <div id="checks"></div>
+        <hr>
+        <button onclick="changeRoom('Wohnzimmer')">Wohnzimmer</button>
+        <button onclick="changeRoom('Garten')">Garten</button>
+        <button onclick="changeRoom('Schwarze Mühle – Keller')">Schwarze Mühle</button>
+    </div>
+    <div id="scene"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="/digivice/js/kaykit_loader.js"></script>
+    <script src="/digivice/js/3d_scene.js"></script>
+
+    <script>
+        let lastTime = performance.now();
+        let frames = 0;
+
+        function updateStats() {
+            frames++;
+            const now = performance.now();
+            if (now - lastTime >= 1000) {
+                document.getElementById('fps').textContent = frames;
+                frames = 0;
+                lastTime = now;
+            }
+
+            // Renderer Stats
+            if (window.Scene3D && Scene3D.getRenderer) {
+                const renderer = Scene3D.getRenderer();
+                if (renderer && renderer.info) {
+                    const info = renderer.info;
+                    document.getElementById('drawcalls').textContent = info.render.calls || 0;
+                    document.getElementById('triangles').textContent = info.render.triangles || 0;
+                    document.getElementById('geometries').textContent = info.memory.geometries || 0;
+                    document.getElementById('textures').textContent = info.memory.textures || 0;
+                    document.getElementById('materials').textContent = (info.programs?.length || 0);
+                }
+            }
+
+            requestAnimationFrame(updateStats);
+        }
+
+        function changeRoom(name) {
+            if (window.Scene3D && Scene3D.changeRoom) {
+                Scene3D.changeRoom(name);
+                setTimeout(checkTextures, 1000);
+            }
+        }
+
+        function checkTextures() {
+            const checks = document.getElementById('checks');
+            checks.innerHTML = '<h4>Texture Checks:</h4>';
+
+            // Check 1: Sind Texturen geladen?
+            let textureCount = 0;
+            let missingTextures = 0;
+
+            if (window.KayKitLoader && KayKitLoader.loadedModels) {
+                Object.keys(KayKitLoader.loadedModels).forEach(key => {
+                    const model = KayKitLoader.loadedModels[key];
+                    model.traverse(node => {
+                        if (node.isMesh && node.material) {
+                            const materials = Array.isArray(node.material) ? node.material : [node.material];
+                            materials.forEach(mat => {
+                                if (mat.map) {
+                                    textureCount++;
+                                    if (!mat.map.image) {
+                                        missingTextures++;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (missingTextures === 0 && textureCount > 0) {
+                checks.innerHTML += `<div class="ok">✅ Alle Texturen geladen (${textureCount})</div>`;
+            } else if (missingTextures > 0) {
+                checks.innerHTML += `<div class="error">❌ ${missingTextures} Texturen fehlen!</div>`;
+            } else {
+                checks.innerHTML += `<div class="warn">⚠️ Keine Texturen gefunden</div>`;
+            }
+
+            // Check 2: Texture Encoding
+            let correctEncoding = 0;
+            let wrongEncoding = 0;
+
+            if (window.KayKitLoader && KayKitLoader.loadedModels) {
+                Object.keys(KayKitLoader.loadedModels).forEach(key => {
+                    const model = KayKitLoader.loadedModels[key];
+                    model.traverse(node => {
+                        if (node.isMesh && node.material) {
+                            const materials = Array.isArray(node.material) ? node.material : [node.material];
+                            materials.forEach(mat => {
+                                if (mat.map) {
+                                    if (mat.map.encoding === THREE.sRGBEncoding) {
+                                        correctEncoding++;
+                                    } else {
+                                        wrongEncoding++;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (wrongEncoding === 0 && correctEncoding > 0) {
+                checks.innerHTML += `<div class="ok">✅ Texture Encoding korrekt (${correctEncoding})</div>`;
+            } else if (wrongEncoding > 0) {
+                checks.innerHTML += `<div class="error">❌ ${wrongEncoding} Texturen mit falschem Encoding!</div>`;
+            }
+
+            // Check 3: Shared Geometries (Instancing)
+            let geometryMap = new Map();
+            let sharedCount = 0;
+
+            if (window.KayKitLoader && KayKitLoader.loadedModels) {
+                Object.keys(KayKitLoader.loadedModels).forEach(key => {
+                    const model = KayKitLoader.loadedModels[key];
+                    model.traverse(node => {
+                        if (node.isMesh && node.geometry) {
+                            const uuid = node.geometry.uuid;
+                            geometryMap.set(uuid, (geometryMap.get(uuid) || 0) + 1);
+                        }
+                    });
+                });
+
+                geometryMap.forEach(count => {
+                    if (count > 1) sharedCount++;
+                });
+            }
+
+            if (sharedCount > 0) {
+                checks.innerHTML += `<div class="ok">✅ Geometry Instancing aktiv (${sharedCount} shared)</div>`;
+            } else {
+                checks.innerHTML += `<div class="warn">⚠️ Kein Geometry Sharing gefunden</div>`;
+            }
+        }
+
+        // Wait for Scene3D
+        document.addEventListener('scene3d:ready', () => {
+            document.getElementById('status').innerHTML = '<span class="ok">✅ Scene3D Ready!</span>';
+            updateStats();
+            setTimeout(checkTextures, 2000);
+        });
+
+        // Fallback
+        setTimeout(() => {
+            if (!window.Scene3D) {
+                document.getElementById('status').innerHTML = '<span class="error">❌ Scene3D failed to load!</span>';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

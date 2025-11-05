@@ -1,0 +1,34 @@
+// ===== NOTIFICATION SYSTEM (Ersetzt alert()) =====
+// Füge diesen Code direkt nach "<script>" und "const ORIGIN = location.origin;" ein
+
+let notificationContainer = null;
+
+function notify(message, type = 'info') {
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.onclick = () => removeNotification(notification);
+
+    notificationContainer.appendChild(notification);
+
+    // Auto-remove nach 5 Sekunden
+    setTimeout(() => removeNotification(notification), 5000);
+}
+
+function removeNotification(el) {
+    if (!el || !el.parentElement) return;
+    el.style.animation = 'slideOutRight 0.3s ease-out';
+    setTimeout(() => el.remove(), 300);
+}
+
+// USAGE:
+// notify('Nachricht', 'info');    // Standard (blau-lila)
+// notify('Erfolg!', 'success');   // Grün
+// notify('Fehler!', 'error');     // Rot
+// notify('Warnung!', 'warning');  // Gelb

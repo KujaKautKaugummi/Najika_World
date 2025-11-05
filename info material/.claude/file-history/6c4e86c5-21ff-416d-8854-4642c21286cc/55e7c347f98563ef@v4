@@ -1,0 +1,338 @@
+// Najika Open World Scene - Main 3D Environment
+import React, { useRef, useEffect, useState, Suspense } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Sky, useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
+
+// Import world config
+const worldConfig = require('../assets/open_world_config.json');
+
+// Ground/Floor Component
+function Ground({ config }) {
+  const meshRef = useRef();
+
+  return (
+    <mesh
+      ref={meshRef}
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, 0, 0]}
+      receiveShadow
+    >
+      <planeGeometry args={[config.totalSpan, config.totalSpan, 100, 100]} />
+      <meshStandardMaterial
+        color={config.floor.tint}
+        roughness={config.floor.roughness}
+        metalness={config.floor.metalness}
+      />
+    </mesh>
+  );
+}
+
+// Building Component - Loads 3D models for buildings
+function Building({ building, onNearDoor }) {
+  const [hovered, setHovered] = useState(false);
+
+  // Load building model
+  const { scene } = useGLTF(`/assets/${building.model}`);
+
+  return (
+    <group position={building.position} rotation={building.rotation}>
+      {/* Building model */}
+      <primitive
+        object={scene.clone()}
+        scale={building.scale || 1}
+        castShadow
+        receiveShadow
+      />
+
+      {/* Name label (optional - can be removed later) */}
+      {hovered && (
+        <sprite position={[0, building.collisionRadius + 20, 0]} scale={[100, 20, 1]}>
+          <spriteMaterial color="#ffffff" transparent opacity={0.9} />
+        </sprite>
+      )}
+    </group>
+  );
+}
+
+// Character/Player Component
+function Character({ config, onPositionChange, onNearBuilding }) {
+  const characterRef = useRef();
+  const mixerRef = useRef();
+
+  // Load character model with animations
+  const { scene, animations } = useGLTF('/assets/KayKit Character Animations 1.2/Animations/gltf/KayKit_AnimatedCharacter_v1.2.glb');
+
+  const [position, setPosition] = useState(new THREE.Vector3(
+    worldConfig.world.spawn[0],
+    worldConfig.world.spawn[1],
+    worldConfig.world.spawn[2]
+  ));
+  const [velocity, setVelocity] = useState(new THREE.Vector3());
+  const [rotation, setRotation] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
+
+  // Setup animation mixer
+  useEffect(() => {
+    if (scene && animations.length > 0) {
+      const mixer = new THREE.AnimationMixer(scene);
+      mixerRef.current = mixer;
+
+      // Play idle/walk animation (first animation in array)
+      const action = mixer.clipAction(animations[0]);
+      action.play();
+    }
+  }, [scene, animations]);
+
+  // Keyboard state
+  const keys = useRef({
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    shift: false
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      switch(e.code) {
+        case 'KeyW': keys.current.forward = true; break;
+        case 'KeyS': keys.current.backward = true; break;
+        case 'KeyA': keys.current.left = true; break;
+        case 'KeyD': keys.current.right = true; break;
+        case 'ShiftLeft': keys.current.shift = true; break;
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      switch(e.code) {
+        case 'KeyW': keys.current.forward = false; break;
+        case 'KeyS': keys.current.backward = false; break;
+        case 'KeyA': keys.current.left = false; break;
+        case 'KeyD': keys.current.right = false; break;
+        case 'ShiftLeft': keys.current.shift = false; break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  useFrame((state, delta) => {
+    if (!characterRef.current) return;
+
+    const speed = keys.current.shift ? config.speed.run : config.speed.walk;
+    const moveSpeed = speed * delta * 60; // Delta is in seconds, normalize to 60fps
+
+    // Calculate movement direction
+    const moveX = (keys.current.right ? 1 : 0) - (keys.current.left ? 1 : 0);
+    const moveZ = (keys.current.backward ? 1 : 0) - (keys.current.forward ? 1 : 0);
+
+    if (moveX !== 0 || moveZ !== 0) {
+      // Normalize diagonal movement
+      const length = Math.sqrt(moveX * moveX + moveZ * moveZ);
+      const normalizedX = moveX / length;
+      const normalizedZ = moveZ / length;
+
+      // Update position
+      const newPos = position.clone();
+      newPos.x += normalizedX * moveSpeed;
+      newPos.z += normalizedZ * moveSpeed;
+
+      // Boundary check
+      const maxPos = worldConfig.world.totalSpan / 2 - 50;
+      newPos.x = Math.max(-maxPos, Math.min(maxPos, newPos.x));
+      newPos.z = Math.max(-maxPos, Math.min(maxPos, newPos.z));
+
+      setPosition(newPos);
+
+      // Update rotation
+      const angle = Math.atan2(normalizedX, normalizedZ);
+      setRotation(angle);
+
+      onPositionChange(newPos);
+
+      // Check proximity to buildings
+      worldConfig.buildings.forEach(building => {
+        const dist = newPos.distanceTo(new THREE.Vector3(...building.position));
+        if (dist < building.collisionRadius + 30) {
+          onNearBuilding(building);
+        }
+      });
+    }
+
+    // Update mesh and animation
+    if (characterRef.current) {
+      characterRef.current.position.copy(position);
+      characterRef.current.rotation.y = rotation;
+    }
+
+    // Update animation mixer
+    if (mixerRef.current) {
+      mixerRef.current.update(delta);
+    }
+  });
+
+  if (!scene) return null;
+
+  return (
+    <group ref={characterRef} position={position} scale={config.scale || 1.8}>
+      <primitive object={scene.clone()} castShadow receiveShadow />
+    </group>
+  );
+}
+
+// Camera Follow System
+function CameraFollow({ target }) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    if (target) {
+      const targetPos = new THREE.Vector3(
+        target.x,
+        target.y + 100,
+        target.z + 150
+      );
+      camera.position.lerp(targetPos, 0.1);
+      camera.lookAt(target.x, target.y, target.z);
+    }
+  });
+
+  return null;
+}
+
+// UI Overlay
+function WorldUI({ nearBuilding, onEnterBuilding }) {
+  if (!nearBuilding) return null;
+
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '150px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      pointerEvents: 'auto'
+    }}>
+      <button
+        onClick={() => onEnterBuilding(nearBuilding)}
+        style={{
+          padding: '15px 30px',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          background: 'linear-gradient(135deg, #FF6B9D, #FF1744)',
+          color: 'white',
+          border: '3px solid white',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          boxShadow: '0 6px 12px rgba(0,0,0,0.6)',
+          animation: 'pulse 1.5s infinite'
+        }}
+      >
+        {nearBuilding.doorPrompt}
+      </button>
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// Main Open World Scene
+export default function OpenWorldScene() {
+  const [characterPos, setCharacterPos] = useState(null);
+  const [nearBuilding, setNearBuilding] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState('world');
+
+  const handleEnterBuilding = (building) => {
+    console.log('Entering building:', building.name);
+    // TODO: Load interior scene
+    setCurrentLocation(building.id);
+  };
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      {/* Debug Info */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        background: 'rgba(0,0,0,0.7)',
+        color: 'white',
+        padding: '15px',
+        borderRadius: '10px',
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        zIndex: 100
+      }}>
+        <div>🗺️ Najika Open World</div>
+        <div>📍 Pos: {characterPos ? `${Math.round(characterPos.x)}, ${Math.round(characterPos.z)}` : 'Loading...'}</div>
+        <div>🏠 Near: {nearBuilding ? nearBuilding.name : 'None'}</div>
+      </div>
+
+      {/* World UI */}
+      <WorldUI nearBuilding={nearBuilding} onEnterBuilding={handleEnterBuilding} />
+
+      {/* 3D Canvas */}
+      <Canvas
+        shadows
+        camera={{ position: [0, 100, 150], fov: 60 }}
+        style={{ background: '#87CEEB' }}
+      >
+        <Suspense fallback={null}>
+          {/* Lighting */}
+          <ambientLight intensity={worldConfig.lighting.ambient.intensity} color={worldConfig.lighting.ambient.color} />
+          <directionalLight
+            position={worldConfig.lighting.directional.position}
+            intensity={worldConfig.lighting.directional.intensity}
+            castShadow
+            shadow-mapSize={[2048, 2048]}
+          />
+
+          {/* Sky */}
+          <Sky
+            sunPosition={worldConfig.world.sky.sunPosition}
+            turbidity={10}
+            rayleigh={2}
+          />
+
+          {/* Fog */}
+          <fog attach="fog" args={[worldConfig.lighting.fog.color, worldConfig.lighting.fog.near, worldConfig.lighting.fog.far]} />
+
+          {/* Ground */}
+          <Ground config={worldConfig.world} />
+
+          {/* Buildings */}
+          {worldConfig.buildings.map((building, index) => (
+            <Building
+              key={building.id}
+              building={building}
+              onNearDoor={() => setNearBuilding(building)}
+            />
+          ))}
+
+          {/* Character */}
+          <Character
+            config={worldConfig.character}
+            onPositionChange={setCharacterPos}
+            onNearBuilding={(building) => {
+              if (!nearBuilding || nearBuilding.id !== building.id) {
+                setNearBuilding(building);
+              }
+            }}
+          />
+
+          {/* Camera Follow */}
+          <CameraFollow target={characterPos} />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}

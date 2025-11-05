@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""UI Redesign - Schnelle Fixes"""
+
+HTML = r"C:\NajikaCore\digivice\index.html"
+
+with open(HTML, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# 1. Aktionsleiste nach oben in Header verschieben
+content = content.replace(
+    '<div class="room-actions">',
+    '<div class="room-actions" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: transparent; display: flex; gap: 8px; align-items: center;">'
+)
+
+content = content.replace(
+    '<label>Aktionen:</label>',
+    ''
+)
+
+# 2. Chat-Button: Nur Icon, klein, unten mittig
+content = content.replace(
+    '<button id="chatToggle" class="cloud-btn" style="flex: 1;">💬 Chat mit Najika öffnen</button>',
+    '<button id="chatToggle" class="cloud-btn" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; padding: 0; font-size: 2rem; z-index: 1000;">💬</button>'
+)
+
+with open(HTML, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print("[OK] UI Redesign abgeschlossen!")
+print("- Aktionsleiste: Oben mittig im Header")
+print("- Chat-Button: Unten mittig, nur Icon, rund")

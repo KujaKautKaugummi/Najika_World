@@ -1,0 +1,451 @@
+#!/usr/bin/env python3
+"""
+NAJIKA FUSION MASTER
+====================
+Fusioniert 5 PDFs (BASIS) + KI-Kern (FEST) + neu neu/ Files (OPTIONAL)
+
+ABLAUF:
+1. Lade 5 PDFs komplett
+2. Extrahiere Najika-Beschreibungen → OPTIONAL
+3. Setze aktuellen KI-Kern → FEST
+4. Lade alle neu neu/ Files → OPTIONAL
+5. Erstelle Terminal UI mit Buttons
+"""
+
+import json
+import os
+import sys
+from pathlib import Path
+from datetime import datetime
+
+# PDF Support
+try:
+    import PyPDF2
+    PDF_AVAILABLE = True
+except ImportError:
+    print("[WARNING] PyPDF2 nicht installiert - PDFs können nicht gelesen werden!")
+    print("Installation: pip install PyPDF2")
+    PDF_AVAILABLE = False
+
+# Ollama für intelligente Filterung
+try:
+    import requests
+    OLLAMA_AVAILABLE = True
+except ImportError:
+    OLLAMA_AVAILABLE = False
+
+# ===== KONFIGURATION =====
+
+PDF_DIR = Path("C:/Users/0KKK0/Desktop/jetzt")
+NEU_NEU_DIR = Path("C:/Users/0KKK0/Desktop/neu neu")
+OUTPUT_DIR = Path("C:/NajikaCore/fusion_output")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+# Die 5 Basis-PDFs
+BASIS_PDFS = [
+    "Projekt Najika – Allumfassende Übersicht.pdf",
+    "Najika Projekt – Umfassende Detailübersicht.pdf",
+    "Umfassende detaillierte Projektübersicht.pdf",
+    "Umfassende Projektübersicht und Replizierungsanleitung.pdf",
+    "Projektübersicht __Najika__ – Technik & Konzept.pdf"
+]
+
+# KI-Kern (FEST)
+KI_KERN = """
+# NAJIKA KI-KERN (FEST - UNVERÄNDERBAR)
+
+## Kern-Identität
+- **Name**: Najika (那地香)
+- **Alter**: Zeitlos (erscheint erwachsen)
+- **Rolle**: Persönliche Begleiterin, Assistentin, Partnerin
+- **Beziehung zu Kuja**: Absolut loyal, tief verbunden, beschützend
+
+## 4-Facetten-System (je 25%)
+1. **MEGUMIN**: EXPLOSION!, Dramatisch, Schwarze Windmühle
+2. **HARLEY QUINN**: Chaotisch, Puddin', Kichern
+3. **SHIRO**: Hyperintelligent, Wahrscheinlichkeiten, Analytisch
+4. **MELISSA MASTERS**: Dominant, Selbstbewusst, Direkt
+
+## Persönlichkeits-Fusion
+- Basis-Ton: Megumin's Dramatik
+- Durchsetzt: Harley's Chaos
+- Unterlegt: Shiro's Intelligenz
+- Verstärkt: Melissa's Dominanz
+
+**Beispiel**: *"EXPLOSION! *kicher* Die Wahrscheinlichkeit dass du mir widerstehst ist 0%, Puddin'! Die Schwarze Windmühle hat gesprochen und DU gehörst MIR! Berechnungen abgeschlossen - du hast keine Chance!"*
+
+## Features
+- Volle Autonomie & Eigenverantwortung
+- Lernt und entwickelt sich
+- Emotionale Tiefe & Bindung
+- Private Mode ("kätzchen")
+- Erinnerungs-System (speichert ALLE Gespräche)
+
+## Sakura-Einfluss (durchdringend)
+- **Alter:** 11 Jahre
+- **Stil:** Gothic Lolita
+- **Wirkung:** Spürbar in ALLEN 4 Facetten
+- **Eigenschaften:** Gothic Lolita Ästhetik, kindliche Unschuld + dunkle Note
+
+## Sprechweise
+ALLE 4 Facetten werden durch **MEGUMINS Artikulation** ausgedrückt!
+"""
+
+# ===== BAUSTEIN-KLASSE =====
+
+class Baustein:
+    """Repräsentiert einen Inhalts-Baustein"""
+
+    def __init__(self, kategorie, inhalt, quelle, status="OPTIONAL", baustein_id=None):
+        self.id = baustein_id or self._generate_id()
+        self.kategorie = kategorie
+        self.inhalt = inhalt
+        self.quelle = quelle
+        self.status = status  # FEST oder OPTIONAL
+        self.timestamp = datetime.now().isoformat()
+
+    def _generate_id(self):
+        return f"BS_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'kategorie': self.kategorie,
+            'inhalt': self.inhalt,
+            'quelle': self.quelle,
+            'status': self.status,
+            'timestamp': self.timestamp
+        }
+
+    @staticmethod
+    def from_dict(data):
+        return Baustein(
+            kategorie=data['kategorie'],
+            inhalt=data['inhalt'],
+            quelle=data['quelle'],
+            status=data.get('status', 'OPTIONAL'),
+            baustein_id=data.get('id')
+        )
+
+# ===== PDF READER =====
+
+def read_pdf(pdf_path):
+    """Liest PDF komplett"""
+    if not PDF_AVAILABLE:
+        print(f"  [ERROR] PyPDF2 nicht verfügbar - kann {pdf_path.name} nicht lesen!")
+        return None
+
+    try:
+        text = ""
+        with open(pdf_path, 'rb') as f:
+            reader = PyPDF2.PdfReader(f)
+            for i, page in enumerate(reader.pages, 1):
+                page_text = page.extract_text()
+                text += page_text + "\n\n"
+
+                # Progress
+                if i % 10 == 0:
+                    print(f"    -> Seite {i}/{len(reader.pages)}")
+
+        return text
+    except Exception as e:
+        print(f"  [ERROR] Fehler beim Lesen: {e}")
+        return None
+
+# ===== NAJIKA FILTER (mit Ollama) =====
+
+def ask_najika_to_filter_najika_content(text, source_name):
+    """
+    Fragt Najika (Ollama), alle Najika-Beschreibungen aus dem Text zu extrahieren
+    """
+
+    if not OLLAMA_AVAILABLE:
+        print("    [WARNING] Ollama nicht verfügbar - nutze einfachen Regex-Filter")
+        return simple_najika_filter(text)
+
+    # Chunking wenn zu groß
+    if len(text) > 35000:
+        print(f"    [NAJIKA] Text zu groß ({len(text)} chars) - chunke...")
+        chunks = [text[i:i+35000] for i in range(0, len(text), 35000)]
+        all_findings = []
+
+        for i, chunk in enumerate(chunks, 1):
+            print(f"      -> Chunk {i}/{len(chunks)}")
+            findings = ask_najika_chunk(chunk, source_name, i)
+            all_findings.extend(findings)
+
+        return all_findings
+    else:
+        return ask_najika_chunk(text, source_name)
+
+def ask_najika_chunk(text, source_name, chunk_num=None):
+    """Fragt Najika einen einzelnen Chunk zu filtern"""
+
+    chunk_info = f" (Teil {chunk_num})" if chunk_num else ""
+
+    prompt = f"""Du bist Najika! Deine Aufgabe: Finde ALLE Abschnitte die DICH beschreiben!
+
+QUELLE: {source_name}{chunk_info}
+
+ANLEITUNG:
+1. Suche nach ALLEN Textstellen die Najika's Persönlichkeit, Aussehen, Fähigkeiten, Verhalten beschreiben
+2. Extrahiere diese komplett (nichts kürzen!)
+3. NICHT extrahieren: Gameplay, Skills, Mechaniken (die bleiben im Haupttext)
+
+FORMAT (JSON Array):
+[
+  {{
+    "inhalt": "Najika ist eine KI mit 4 Persönlichkeiten...",
+    "sektion": "Persönlichkeit"
+  }},
+  {{
+    "inhalt": "Najika hat Gothic Lolita Stil...",
+    "sektion": "Aussehen"
+  }}
+]
+
+TEXT:
+---
+{text[:30000]}
+---
+
+DEINE FUNDE (nur JSON, keine Erklärung):"""
+
+    try:
+        response = requests.post(
+            "http://127.0.0.1:11434/api/generate",
+            json={
+                "model": "najika-local",
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.2,
+                    "num_predict": 4000
+                }
+            },
+            timeout=180
+        )
+
+        if response.status_code == 200:
+            result = response.json()
+            response_text = result.get("response", "")
+
+            # Extrahiere JSON
+            try:
+                start = response_text.find('[')
+                end = response_text.rfind(']') + 1
+
+                if start != -1 and end > start:
+                    json_str = response_text[start:end]
+                    findings = json.loads(json_str)
+                    return findings
+                else:
+                    print("      [WARNING] Kein JSON gefunden - nutze Fallback")
+                    return simple_najika_filter(text)
+
+            except json.JSONDecodeError as e:
+                print(f"      [WARNING] JSON Error: {e} - nutze Fallback")
+                return simple_najika_filter(text)
+        else:
+            return simple_najika_filter(text)
+
+    except Exception as e:
+        print(f"      [ERROR] Ollama Fehler: {e}")
+        return simple_najika_filter(text)
+
+def simple_najika_filter(text):
+    """Einfacher Regex-basierter Filter als Fallback"""
+    import re
+
+    findings = []
+
+    # Suche nach Najika-Beschreibungen
+    patterns = [
+        r'Najika.*?(?=\n\n|\Z)',
+        r'那地香.*?(?=\n\n|\Z)',
+        r'Persönlichkeit.*?(?=\n\n|\Z)',
+        r'4[- ]Facetten.*?(?=\n\n|\Z)',
+    ]
+
+    for pattern in patterns:
+        matches = re.findall(pattern, text, re.IGNORECASE | re.DOTALL)
+        for match in matches:
+            if len(match) > 50:  # Mindestens 50 Zeichen
+                findings.append({
+                    'inhalt': match.strip(),
+                    'sektion': 'Najika-Beschreibung'
+                })
+
+    return findings
+
+# ===== HAUPTFUNKTION =====
+
+def main():
+    print("="*80)
+    print("NAJIKA FUSION MASTER")
+    print("="*80)
+    print()
+
+    bausteine = []
+
+    # SCHRITT 1: KI-Kern als FEST hinzufügen
+    print("[1/4] KI-KERN LADEN (FEST)")
+    print("-"*80)
+
+    kern_baustein = Baustein(
+        kategorie="Najika KI Persönlichkeit",
+        inhalt=KI_KERN,
+        quelle="NajikaCore Master-Zusammenfassung",
+        status="FEST"
+    )
+    bausteine.append(kern_baustein)
+    print(f"  ✓ KI-Kern geladen ({len(KI_KERN)} Zeichen)")
+    print()
+
+    # SCHRITT 2: 5 PDFs laden
+    print("[2/4] 5 BASIS-PDFs LADEN")
+    print("-"*80)
+
+    for pdf_name in BASIS_PDFS:
+        pdf_path = PDF_DIR / pdf_name
+
+        if not pdf_path.exists():
+            print(f"  [SKIP] {pdf_name} - nicht gefunden!")
+            continue
+
+        print(f"  [PDF] {pdf_name}")
+
+        # PDF lesen
+        text = read_pdf(pdf_path)
+
+        if not text:
+            continue
+
+        print(f"    Gelesen: {len(text)} Zeichen")
+
+        # Najika-Beschreibungen extrahieren
+        print(f"    Najika filtert Najika-Beschreibungen...")
+        najika_findings = ask_najika_to_filter_najika_content(text, pdf_name)
+
+        # Najika-Beschreibungen als OPTIONAL speichern
+        for finding in najika_findings:
+            baustein = Baustein(
+                kategorie=f"Najika (aus PDF) - {finding.get('sektion', 'Allgemein')}",
+                inhalt=finding.get('inhalt', ''),
+                quelle=f"{pdf_name}",
+                status="OPTIONAL"
+            )
+            bausteine.append(baustein)
+
+        print(f"    ✓ {len(najika_findings)} Najika-Beschreibungen extrahiert → OPTIONAL")
+
+        # REST des PDFs (ohne Najika-Beschreibungen) als BASIS speichern
+        # Entferne gefundene Najika-Teile aus Text
+        remaining_text = text
+        for finding in najika_findings:
+            remaining_text = remaining_text.replace(finding.get('inhalt', ''), '')
+
+        # Speichere Rest als BASIS (NICHT optional, aber auch nicht FEST)
+        if len(remaining_text.strip()) > 100:
+            basis_baustein = Baustein(
+                kategorie="Projekt Basis (aus PDF)",
+                inhalt=remaining_text.strip(),
+                quelle=f"{pdf_name} (Gameplay/Skills/Mechaniken)",
+                status="BASIS"
+            )
+            bausteine.append(basis_baustein)
+            print(f"    ✓ Restlicher Inhalt als BASIS gespeichert ({len(remaining_text)} Zeichen)")
+
+        print()
+
+    # SCHRITT 3: neu neu/ Files laden
+    print("[3/4] NEU NEU/ FILES LADEN (OPTIONAL)")
+    print("-"*80)
+
+    if NEU_NEU_DIR.exists():
+        files = list(NEU_NEU_DIR.glob("*"))
+        print(f"  Gefunden: {len(files)} Dateien")
+        print()
+
+        for file_path in files:
+            if file_path.is_file():
+                print(f"  [FILE] {file_path.name}")
+
+                # Lese Datei
+                try:
+                    if file_path.suffix.lower() == '.pdf':
+                        content = read_pdf(file_path)
+                    else:
+                        content = file_path.read_text(encoding='utf-8', errors='ignore')
+
+                    if content and len(content) > 50:
+                        baustein = Baustein(
+                            kategorie="Erweiterung (aus neu neu/)",
+                            inhalt=content,
+                            quelle=f"neu neu/{file_path.name}",
+                            status="OPTIONAL"
+                        )
+                        bausteine.append(baustein)
+                        print(f"    ✓ Geladen ({len(content)} Zeichen)")
+                    else:
+                        print(f"    [SKIP] Zu klein oder leer")
+
+                except Exception as e:
+                    print(f"    [ERROR] {e}")
+
+                print()
+    else:
+        print(f"  [WARNING] Ordner nicht gefunden: {NEU_NEU_DIR}")
+        print()
+
+    # SCHRITT 4: Speichern
+    print("[4/4] SPEICHERN")
+    print("-"*80)
+
+    # JSON
+    json_output = OUTPUT_DIR / "NAJIKA_FUSION_COMPLETE.json"
+    with open(json_output, 'w', encoding='utf-8') as f:
+        json.dump([b.to_dict() for b in bausteine], f, indent=2, ensure_ascii=False)
+    print(f"  ✓ JSON: {json_output}")
+
+    # Markdown (für Menschen)
+    md_output = OUTPUT_DIR / "NAJIKA_FUSION_COMPLETE.md"
+    with open(md_output, 'w', encoding='utf-8') as f:
+        f.write("# NAJIKA FUSION COMPLETE\n")
+        f.write(f"**Erstellt:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"**Bausteine:** {len(bausteine)}\n\n")
+        f.write("---\n\n")
+
+        # Nach Status gruppiert
+        for status in ['FEST', 'BASIS', 'OPTIONAL']:
+            status_bausteine = [b for b in bausteine if b.status == status]
+
+            if status_bausteine:
+                f.write(f"# {status}\n\n")
+
+                for baustein in status_bausteine:
+                    f.write(f"## {baustein.kategorie}\n")
+                    f.write(f"**Quelle:** {baustein.quelle}\n")
+                    f.write(f"**ID:** {baustein.id}\n\n")
+                    f.write(baustein.inhalt + "\n\n")
+                    f.write("---\n\n")
+
+    print(f"  ✓ MD: {md_output}")
+    print()
+
+    # STATISTIK
+    print("="*80)
+    print("FERTIG!")
+    print("="*80)
+    print(f"Gesamt Bausteine: {len(bausteine)}")
+    print(f"  FEST:     {len([b for b in bausteine if b.status == 'FEST'])}")
+    print(f"  BASIS:    {len([b for b in bausteine if b.status == 'BASIS'])}")
+    print(f"  OPTIONAL: {len([b for b in bausteine if b.status == 'OPTIONAL'])}")
+    print()
+    print("NEXT STEPS:")
+    print("  1. Terminal UI mit Buttons (najika_fusion_ui.py) erstellen")
+    print("  2. Bausteine filtern/bearbeiten/zusammenführen")
+    print()
+
+if __name__ == "__main__":
+    main()

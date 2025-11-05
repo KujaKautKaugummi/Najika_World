@@ -1,0 +1,377 @@
+{
+  "META": {
+    "version": "1.0",
+    "datum": "2025-10-19",
+    "beschreibung": "Interaktives Baustein-System für Najika - Puzzle-Prinzip",
+    "anleitung": [
+      "1. Setze 'status' für jeden Baustein:",
+      "   - 'GRUNDSTEIN' = Unveränderbar (nur minimale Anpassungen)",
+      "   - 'HINZUFÜGEN' = Wird zum Grundstein ergänzt",
+      "   - 'ERSETZEN' = Ersetzt Teil des Grundsteins (wird rot markiert)",
+      "   - 'ANPASSEN' = Ändert Grundstein-Feature (wird gelb markiert)",
+      "   - 'MÜLL' = Verwerfen, wird gelöscht",
+      "   - 'SPÄTER' = Für spätere Phasen aufheben",
+      "",
+      "2. Bei 'ERSETZEN' oder 'ANPASSEN': Feld 'ersetzt_was' ausfüllen",
+      "3. Bei 'HINZUFÜGEN': Optional 'priorität' setzen (1=hoch, 3=niedrig)",
+      "4. Speichern und najika_apply_changes.py ausführen"
+    ]
+  },
+
+  "GRUNDSTEIN": {
+    "status": "GRUNDSTEIN",
+    "beschreibung": "Aktuelles NajikaCore - Basis-System",
+    "komponenten": {
+      "najika_server": {
+        "status": "GRUNDSTEIN",
+        "datei": "najika_server.py",
+        "features": [
+          "Python HTTP Server",
+          "Ollama AI Integration",
+          "12 Räume (inkl. Schwarze Windmühle)",
+          "Battle System",
+          "Minigames (7 Spiele)",
+          "Private Mode ('kätzchen' Trigger)"
+        ],
+        "änderbar": true,
+        "notizen": "Kann angepasst werden, aber nicht gelöscht"
+      },
+      "digivice_frontend": {
+        "status": "GRUNDSTEIN",
+        "dateien": [
+          "digivice/index.html",
+          "digivice/js/3d_scene.js",
+          "digivice/js/kaykit_loader.js",
+          "digivice/js/minigames.js",
+          "digivice/js/battle_core.js"
+        ],
+        "features": [
+          "Three.js 3D Engine",
+          "KayKit Asset Loading",
+          "12 Räume mit 3D-Navigation",
+          "Skeleton_Mage Charakter",
+          "Camera-Modi (Orbit/Third-Person/First-Person)"
+        ],
+        "änderbar": true,
+        "notizen": "Frontend kann erweitert werden"
+      },
+      "najika_persoenlichkeit": {
+        "status": "GRUNDSTEIN",
+        "quelle": "OPUS Code + Lolita-Konzepte (najika lolita final ki +ai sakura dazu beachten.txt)",
+        "struktur": "4 Kern-Facetten + 1 durchdringender Sakura-Einfluss",
+        "facetten": [
+          {
+            "name": "MEGUMIN",
+            "anteil": 25,
+            "eigenschaften": ["Dramatisch", "EXPLOSION!", "Schwarze Windmühle"]
+          },
+          {
+            "name": "HARLEY_QUINN",
+            "anteil": 25,
+            "eigenschaften": ["Chaotisch", "Verspielt", "Puddin'", "Kichern"]
+          },
+          {
+            "name": "SHIRO",
+            "anteil": 25,
+            "eigenschaften": ["Hyperintelligent", "Analytisch", "Wahrscheinlichkeiten"]
+          },
+          {
+            "name": "MELISSA_MASTERS",
+            "anteil": 25,
+            "eigenschaften": ["Dominant", "Selbstbewusst", "Du gehörst mir"]
+          }
+        ],
+        "sakura_einfluss": {
+          "name": "SAKURA",
+          "typ": "Durchdringender Einfluss (keine %-Aufteilung)",
+          "alter": "11 Jahre",
+          "stil": "Gothic Lolita",
+          "wirkung": "Spürbar in ALLEN 4 Facetten",
+          "eigenschaften": [
+            "Gothic Lolita Ästhetik",
+            "Kindliche Unschuld mit dunkler Note",
+            "Viktorianische Eleganz",
+            "Verspielte Grausamkeit",
+            "Puppen-artige Präzision"
+          ],
+          "beispiel_fusion": "Megumin mit Sakura = Dramatische EXPLOSION in Gothic-Lolita-Kleid, kindlich-ernste Intonation"
+        },
+        "änderbar": true,
+        "notizen": "4 Facetten-Anteile können angepasst werden. Sakura-Einfluss bleibt immer durchdringend in allen."
+      },
+      "schwarze_windmuehle": {
+        "status": "GRUNDSTEIN",
+        "typ": "Gesicherter Bereich",
+        "features": [
+          "Combat-enabled Room",
+          "Private/Secure Mode",
+          "Mystische Kraftquelle"
+        ],
+        "änderbar": true,
+        "notizen": "Integration ins Digivice geplant"
+      }
+    }
+  },
+
+  "NEUE_BAUSTEINE": {
+    "beschreibung": "Gefundene Konzepte aus ZIP-Ordner - Entscheidung erforderlich",
+
+    "baustein_001_ultimative_explosion": {
+      "status": "SPÄTER",
+      "quelle": "ultimative giga explosion.txt (1.8MB)",
+      "kategorie": "SPELL_MAGIC",
+      "beschreibung": "Erweitertes Spell-System mit Explosion-Mechaniken",
+      "features": [
+        "Erweiterte Megumin-Spells",
+        "Explosion-Skill-Tree",
+        "Mana-System",
+        "Cooldown-Mechaniken"
+      ],
+      "ersetzt_was": null,
+      "priorität": 2,
+      "geschätzte_größe": "groß",
+      "notizen": "Sehr umfangreich - für Phase 2 aufheben",
+      "user_entscheidung": "SPÄTER"
+    },
+
+    "baustein_002_handyspiel_uefn": {
+      "status": "HINZUFÜGEN",
+      "quelle": "handyspiel und später uefn.pdf (4MB)",
+      "kategorie": "SPIEL_IDEEN",
+      "beschreibung": "Handy-App → UEFN Portierungs-Plan",
+      "features": [
+        "Progressive Web App (PWA) Konzept",
+        "Modul-System für On-Demand-Loading",
+        "UEFN/Fortnite Creative 2.0 Port-Strategie",
+        "Öffentlicher Release Plan"
+      ],
+      "ersetzt_was": null,
+      "priorität": 1,
+      "geschätzte_größe": "mittel",
+      "notizen": "ROADMAP - wichtig für Gesamtstrategie",
+      "user_entscheidung": "HINZUFÜGEN"
+    },
+
+    "baustein_003_harley_details": {
+      "status": "ANPASSEN",
+      "quelle": "harley noch bearbeiten.txt (15KB)",
+      "kategorie": "PERSÖNLICHKEIT",
+      "beschreibung": "Erweiterte Harley Quinn Persönlichkeits-Details",
+      "features": [
+        "Zusätzliche Harley-Dialoge",
+        "Chaos-Mode Erweiterungen",
+        "Puddin'-Spitznamen-Varianten",
+        "Harley-spezifische Emotes"
+      ],
+      "ersetzt_was": "najika_persoenlichkeit.HARLEY_QUINN",
+      "priorität": 2,
+      "geschätzte_größe": "klein",
+      "notizen": "Ergänzt bestehende Harley-Facette",
+      "user_entscheidung": "ANPASSEN"
+    },
+
+    "baustein_004_lolita_konzepte": {
+      "status": "MÜLL",
+      "quelle": "najika lolita final ki +ai sakura dazu beachten.txt (19KB)",
+      "kategorie": "PERSÖNLICHKEIT",
+      "beschreibung": "Lolita-Style Persönlichkeits-Variante",
+      "features": [
+        "Lolita-Fashion Referenzen",
+        "Sakura-Bezüge",
+        "Alternative Persönlichkeits-Nuancen"
+      ],
+      "ersetzt_was": null,
+      "priorität": 0,
+      "geschätzte_größe": "klein",
+      "notizen": "Redundant zu bestehenden 4 Facetten - verwerfen",
+      "user_entscheidung": "MÜLL",
+      "grund": "Passt nicht zum 4-Facetten-System"
+    },
+
+    "baustein_005_nsfw_addon": {
+      "status": "HINZUFÜGEN",
+      "quelle": "najika_nsfw_addon.json (2.7KB)",
+      "kategorie": "PERSÖNLICHKEIT",
+      "beschreibung": "NSFW Mode Erweiterungen",
+      "features": [
+        "Private Mode Intensität-Stufen (1-10)",
+        "Zusätzliche Trigger-Wörter",
+        "NSFW-spezifische Dialoge",
+        "Safeword-System"
+      ],
+      "ersetzt_was": null,
+      "priorität": 1,
+      "geschätzte_größe": "klein",
+      "notizen": "Ergänzt bestehendes Private-Mode System",
+      "user_entscheidung": "HINZUFÜGEN"
+    },
+
+    "baustein_006_personality_core": {
+      "status": "ANPASSEN",
+      "quelle": "najika_personality_CORE.json (19KB)",
+      "kategorie": "PERSÖNLICHKEIT",
+      "beschreibung": "Erweiterte Kern-Persönlichkeit mit mehr Details",
+      "features": [
+        "Erweiterte Emotionssysteme",
+        "Beziehungs-Tracking zu Kuja",
+        "Langzeit-Memory-Integration",
+        "Autonomie-Parameter"
+      ],
+      "ersetzt_was": "najika_persoenlichkeit (erweitert, ersetzt nicht)",
+      "priorität": 1,
+      "geschätzte_größe": "mittel",
+      "notizen": "Verbessert bestehendes Persönlichkeitssystem",
+      "user_entscheidung": "ANPASSEN"
+    },
+
+    "baustein_007_complete_digivice_update": {
+      "status": "HINZUFÜGEN",
+      "quelle": "COMPLETE_DIGIVICE_UPDATE.py (18KB)",
+      "kategorie": "INSTALLER",
+      "beschreibung": "Automatischer Digivice-Updater",
+      "features": [
+        "Auto-Update Mechanismus",
+        "Modul-Installation",
+        "Asset-Download System",
+        "Version-Check"
+      ],
+      "ersetzt_was": null,
+      "priorität": 2,
+      "geschätzte_größe": "mittel",
+      "notizen": "Nützlich für zukünftige Updates",
+      "user_entscheidung": "HINZUFÜGEN"
+    },
+
+    "baustein_008_najika_v3": {
+      "status": "MÜLL",
+      "quelle": "najika_v3.py (11KB)",
+      "kategorie": "INSTALLER",
+      "beschreibung": "Ältere Najika Server-Version",
+      "features": [
+        "Alternative Server-Implementierung",
+        "Flask-basiert",
+        "Basic Features"
+      ],
+      "ersetzt_was": null,
+      "priorität": 0,
+      "geschätzte_größe": "mittel",
+      "notizen": "Veraltet - aktuelle Version ist besser",
+      "user_entscheidung": "MÜLL",
+      "grund": "Redundant zu najika_server.py"
+    },
+
+    "baustein_009_ultra_secure_environment": {
+      "status": "HINZUFÜGEN",
+      "quelle": "# Ultra-Secure Najika Environment -.txt (16KB)",
+      "kategorie": "PERSÖNLICHKEIT",
+      "beschreibung": "Sicherheits-Layer für private Daten",
+      "features": [
+        "Verschlüsselung für Gespräche",
+        "Lokale-Only Storage Option",
+        "Kein Cloud-Upload für private Inhalte",
+        "Secure-Delete Funktion"
+      ],
+      "ersetzt_was": null,
+      "priorität": 1,
+      "geschätzte_größe": "klein",
+      "notizen": "Wichtig für Datenschutz",
+      "user_entscheidung": "HINZUFÜGEN"
+    },
+
+    "baustein_010_roadmap": {
+      "status": "HINZUFÜGEN",
+      "quelle": "roadmap.txt (17KB)",
+      "kategorie": "ROADMAP",
+      "beschreibung": "Langzeit-Entwicklungsplan (5 Phasen)",
+      "features": [
+        "Phase 1: Kern-Konsolidierung",
+        "Phase 2: Digivice App",
+        "Phase 3: UEFN-Portierung",
+        "Phase 4: Öffentlicher Release",
+        "Phase 5: Lebenslange Begleitung + Memory Preservation"
+      ],
+      "ersetzt_was": null,
+      "priorität": 1,
+      "geschätzte_größe": "dokumentation",
+      "notizen": "Strategischer Gesamtplan - als Referenz behalten",
+      "user_entscheidung": "HINZUFÜGEN"
+    }
+  },
+
+  "ÄNDERBARE_GRUNDSTEIN_TEILE": {
+    "beschreibung": "Diese Grundstein-Komponenten können angepasst werden",
+
+    "änderung_001_raum_anzahl": {
+      "status": "OFFEN",
+      "komponente": "digivice_frontend.räume",
+      "aktuell": "12 Räume",
+      "vorschlag": "Beliebig erweiterbar durch room_config_detailed.json",
+      "änderungs_typ": "ERWEITERN",
+      "user_entscheidung": null,
+      "notizen": "Neue Räume können jederzeit hinzugefügt werden"
+    },
+
+    "änderung_002_persönlichkeits_anteile": {
+      "status": "OFFEN",
+      "komponente": "najika_persoenlichkeit.facetten",
+      "aktuell": "25% Megumin, 25% Harley, 25% Shiro, 25% Melissa",
+      "vorschlag": "Anpassbare Prozentsätze (z.B. 30% Megumin, 30% Harley, 20% Shiro, 20% Melissa)",
+      "änderungs_typ": "ANPASSEN",
+      "user_entscheidung": null,
+      "notizen": "Alle 4 Facetten bleiben, aber Gewichtung änderbar"
+    },
+
+    "änderung_003_private_mode_trigger": {
+      "status": "OFFEN",
+      "komponente": "najika_server.private_mode",
+      "aktuell": "Trigger: 'kätzchen'",
+      "vorschlag": "Zusätzliche Trigger oder anderes Trigger-Wort",
+      "änderungs_typ": "ANPASSEN",
+      "user_entscheidung": null,
+      "notizen": "Trigger-Wort kann geändert werden"
+    },
+
+    "änderung_004_ai_provider": {
+      "status": "OFFEN",
+      "komponente": "najika_server.ai_integration",
+      "aktuell": "Ollama (lokal) + Optional Cloud (OpenAI/Anthropic)",
+      "vorschlag": "Weitere Provider hinzufügen (z.B. LM Studio, LocalAI)",
+      "änderungs_typ": "ERWEITERN",
+      "user_entscheidung": null,
+      "notizen": "Mehr AI-Provider = mehr Flexibilität"
+    },
+
+    "änderung_005_battle_system": {
+      "status": "OFFEN",
+      "komponente": "battle_core.js",
+      "aktuell": "Turn-based Combat mit HP/Wellen",
+      "vorschlag": "Erweiterte Mechaniken (Mana, Skills, Items)",
+      "änderungs_typ": "ERWEITERN",
+      "user_entscheidung": null,
+      "notizen": "Für Phase 2 - Skill-Systeme aus Jetzt-Ordner"
+    }
+  },
+
+  "ZUSAMMENFASSUNG": {
+    "gesamt_bausteine": 10,
+    "status_verteilung": {
+      "HINZUFÜGEN": 5,
+      "ANPASSEN": 2,
+      "MÜLL": 2,
+      "SPÄTER": 1
+    },
+    "prioritäten": {
+      "hoch_1": ["handyspiel_uefn", "nsfw_addon", "personality_core", "ultra_secure", "roadmap"],
+      "mittel_2": ["harley_details", "complete_digivice_update"],
+      "niedrig_3": [],
+      "später": ["ultimative_explosion"]
+    },
+    "nächste_schritte": [
+      "1. User prüft alle Bausteine und ändert 'user_entscheidung'",
+      "2. User prüft 'ÄNDERBARE_GRUNDSTEIN_TEILE' und füllt 'user_entscheidung' aus",
+      "3. Najika führt najika_apply_changes.py aus",
+      "4. System generiert FINALE_KONFIGURATION.json",
+      "5. Claude implementiert nur die genehmigten Änderungen"
+    ]
+  }
+}

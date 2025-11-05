@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Qwen2.5:7B-Instruct herunterladen (~4.9GB)",
+    "status": "in_progress",
+    "activeForm": "Lade Qwen2.5:7B-Instruct herunter - 3% (128MB/4.7GB) - ETA 9m35s"
+  },
+  {
+    "content": "Neues Ollama Modelfile für najika-local mit Qwen erstellen",
+    "status": "pending",
+    "activeForm": "Erstelle Modelfile für najika-local"
+  },
+  {
+    "content": "Server neu starten mit neuem Model",
+    "status": "pending",
+    "activeForm": "Starte Server neu"
+  },
+  {
+    "content": "Qwen testen mit vorherigen Problem-Inputs",
+    "status": "pending",
+    "activeForm": "Teste Qwen mit Problem-Inputs"
+  }
+]

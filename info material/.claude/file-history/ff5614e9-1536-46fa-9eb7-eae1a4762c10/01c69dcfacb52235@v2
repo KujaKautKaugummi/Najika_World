@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""Verifiziert, dass alle 15 Training-Tasks korrekt erstellt wurden."""
+
+import subprocess
+import sys
+
+def check_task(hour: int) -> dict:
+    """Prüft, ob ein Task existiert und gibt Details zurück."""
+    task_name = f"NajikaUltimate{hour:02d}"
+
+    result = subprocess.run(
+        ["schtasks", "/Query", "/TN", task_name, "/FO", "LIST"],
+        capture_output=True,
+        text=True
+    )
+
+    exists = result.returncode == 0
+
+    if exists:
+        # Parse output
+        output = result.stdout
+        next_run = "Unknown"
+        status = "Unknown"
+        for line in output.splitlines():
+            if "Nächste Ausführungszeit:" in line or "Next Run Time:" in line:
+                next_run = line.split(":", 1)[1].strip()
+            if "Status:" in line:
+                status = line.split(":", 1)[1].strip()
+
+        return {
+            "exists": True,
+            "next_run": next_run,
+            "status": status
+        }
+    else:
+        return {"exists": False}
+
+def main():
+    print("=" * 80)
+    print("NAJIKA TRAINING - TASK VERIFIKATION")
+    print("=" * 80)
+    print()
+
+    hours = list(range(8, 23))  # 8-22
+    total = len(hours)
+    found = 0
+
+    print(f"Prüfe {total} Tasks (08:00-22:00)...")
+    print()
+
+    for hour in hours:
+        task_name = f"NajikaUltimate{hour:02d}"
+        info = check_task(hour)
+
+        if info["exists"]:
+            found += 1
+            print(f"[OK] {task_name} - Next: {info['next_run']}")
+        else:
+            print(f"[FEHLER] {task_name} - NICHT GEFUNDEN!")
+
+    print()
+    print("=" * 80)
+    print(f"ERGEBNIS: {found} / {total} Tasks gefunden")
+    print("=" * 80)
+
+    if found == total:
+        print()
+        print("STATUS: ALL OK! Training-System bereit.")
+        print()
+        print("Training läuft jetzt:")
+        print("  - JEDEN TAG (Mo-So)")
+        print("  - 08:00-23:00 Uhr (15 Stunden)")
+        print("  - Automatisch")
+        print()
+        print("Nächste automatische Session: Siehe 'Next' Zeiten oben")
+        return 0
+    else:
+        print()
+        print("STATUS: FEHLER - Nicht alle Tasks gefunden!")
+        return 1
+
+if __name__ == "__main__":
+    sys.exit(main())

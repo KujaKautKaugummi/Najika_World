@@ -1,0 +1,124 @@
+# 🔥 NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP 🔥
+# 15 STUNDEN TÄGLICH (08:00-23:00)
+# JEDEN TAG (Mo-So)
+
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host "🔥 NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP 🔥" -ForegroundColor Yellow
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Prüfe Admin-Rechte
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $isAdmin) {
+    Write-Host "[ERROR] Dieses Script erfordert Administrator-Rechte!" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Bitte:" -ForegroundColor Yellow
+    Write-Host "  1. Rechtsklick auf diese Datei" -ForegroundColor Yellow
+    Write-Host "  2. 'Als Administrator ausführen'" -ForegroundColor Yellow
+    Write-Host ""
+    Read-Host "Druecke Enter zum Beenden"
+    exit 1
+}
+
+Write-Host "[OK] Administrator-Rechte vorhanden" -ForegroundColor Green
+Write-Host ""
+
+# Lösche alte Tasks
+Write-Host "[INFO] Lösche alte Training-Tasks..." -ForegroundColor Cyan
+$oldTasks = @(
+    "NajikaTraining09",
+    "NajikaTraining10",
+    "NajikaTraining11",
+    "NajikaTraining12",
+    "NajikaTraining13",
+    "NajikaTraining16h"
+)
+
+foreach ($task in $oldTasks) {
+    try {
+        schtasks /Delete /TN $task /F 2>$null
+        Write-Host "  - $task gelöscht" -ForegroundColor Yellow
+    } catch {
+        # Task existiert nicht
+    }
+}
+
+Write-Host ""
+
+# Erstelle NEUE Tasks (15 Stunden: 08:00-23:00)
+Write-Host "[INFO] Erstelle NEUE Training-Tasks (15 Stunden täglich)..." -ForegroundColor Cyan
+Write-Host ""
+
+$scriptPath = "C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py"
+
+$hours = 8..22  # 08:00 bis 22:00 (23:00 ist Ende)
+
+$taskCount = 0
+
+foreach ($hour in $hours) {
+    $hourStr = "{0:D2}" -f $hour
+    $taskName = "NajikaUltimate$hourStr"
+
+    Write-Host "Erstelle Task: $taskName ($hourStr:00 Uhr)..." -ForegroundColor White
+
+    # Lösche falls existiert
+    schtasks /Delete /TN $taskName /F 2>$null
+
+    # Erstelle Task
+    $action = New-ScheduledTaskAction -Execute "python" -Argument "`"$scriptPath`"" -WorkingDirectory "C:\NajikaCore"
+
+    # Trigger: JEDEN TAG um diese Stunde
+    $trigger = New-ScheduledTaskTrigger -Daily -At "$hourStr:00"
+
+    # Settings
+    $settings = New-ScheduledTaskSettingsSet `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -StartWhenAvailable `
+        -ExecutionTimeLimit (New-TimeSpan -Hours 1)
+
+    # Registriere Task
+    Register-ScheduledTask `
+        -TaskName $taskName `
+        -Action $action `
+        -Trigger $trigger `
+        -Settings $settings `
+        -Description "Najika Training $hourStr:00 (JEDEN TAG)" `
+        -Force | Out-Null
+
+    if ($?) {
+        Write-Host "  -> OK!" -ForegroundColor Green
+        $taskCount++
+    } else {
+        Write-Host "  -> FEHLER!" -ForegroundColor Red
+    }
+}
+
+Write-Host ""
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host "SETUP ABGESCHLOSSEN!" -ForegroundColor Green
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Erstellte Tasks: $taskCount / 15" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "Training läuft jetzt:" -ForegroundColor White
+Write-Host "  - JEDEN TAG (Mo-So)" -ForegroundColor White
+Write-Host "  - 08:00-23:00 Uhr (15 Stunden)" -ForegroundColor White
+Write-Host "  - Automatisch" -ForegroundColor White
+Write-Host ""
+Write-Host "Features:" -ForegroundColor Cyan
+Write-Host "  ✓ Heartbeat-Monitoring" -ForegroundColor Green
+Write-Host "  ✓ Warn-Popups bei Ausfall" -ForegroundColor Green
+Write-Host "  ✓ Auto-Recovery" -ForegroundColor Green
+Write-Host "  ✓ Fail-Safe Logging" -ForegroundColor Green
+Write-Host "  ✓ Progress-Tracking" -ForegroundColor Green
+Write-Host ""
+Write-Host "Teste System:" -ForegroundColor Yellow
+Write-Host "  python C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py" -ForegroundColor White
+Write-Host ""
+Write-Host "Monitoring:" -ForegroundColor Yellow
+Write-Host "  python C:\NajikaCore\najika_show_progress.py" -ForegroundColor White
+Write-Host ""
+
+Read-Host "Druecke Enter zum Beenden"

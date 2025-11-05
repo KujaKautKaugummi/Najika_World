@@ -1,0 +1,161 @@
+# NAJIKA - System Status & Handoff
+**Datum**: 2025-10-16 19:38
+**Status**: ✅ LAUFFÄHIG - Server running on port 8000
+
+---
+
+## 🎯 KRITISCHES FIX - Anatomische Begriffe Problem GELÖST
+
+### Problem
+Najika sagte "Schwanz und Eier" im NORMALEN Modus (sollte NUR im Kätzchen/Private Mode sein).
+
+### Lösung
+**File**: `C:\NajikaCore\najika_enhanced_personality.py` **Zeile 54**
+```python
+- NIEMALS explizite anatomische Begriffe verwenden (kein "Schwanz", "Eier")! Nur verspielt andeuten!
+```
+
+**File**: `C:\NajikaCore\najika_server.py` **Zeile 870**
+```python
+"private": "\n[KÄTZCHEN-MODUS AKTIV] ... Trans-Körper mit Schwanz und Eier, plus Vagina. Nutze anatomische Begriffe explizit: Schwanz, Eier. ..."
+```
+
+### Cleanup durchgeführt
+- ✅ Chat-History gelöscht (`saves/najika_state.json`)
+- ✅ Shared Memories gelöscht
+- ✅ Server neu gestartet mit Fixes
+
+---
+
+## 📍 Aktueller Server Status
+
+**Server**: Background Shell `af78d5`
+```bash
+cd C:/NajikaCore && python najika_server.py 2>&1
+```
+
+**URL**: http://localhost:8000/
+**Port**: 8000
+**Status**: Running ✅
+
+**Ollama**:
+- Model: `najika-local` (llama3.1:8b Q4_K_M)
+- Endpoint: http://127.0.0.1:11434/api/generate
+- Status: Active
+
+---
+
+## 🔧 Wichtige Dateien & Änderungen
+
+### Modified Files (diese Session)
+1. **`najika_enhanced_personality.py:54`**
+   → Explizite Verbotsregel für anatomische Begriffe im Normal-Modus
+
+2. **`najika_server.py:870`**
+   → Anatomische Begriffe NUR in Private/Kätzchen Mode
+
+3. **`saves/najika_state.json`**
+   → History und Memories GELÖSCHT (clean slate)
+
+### Verhalten jetzt
+**Normal Mode** (Standard):
+- Sexuelle Andeutungen wie in Konosuba: verspielt, aber NICHT explizit
+- KEINE anatomischen Begriffe
+
+**Kätzchen Mode** (sag "kätzchen" zum Aktivieren):
+- Explizite anatomische Begriffe erlaubt
+- Maximale Nähe, dominant, direkt
+
+---
+
+## 🚀 Quick Start für nächstes Modell
+
+### Server starten
+```bash
+cd C:\NajikaCore
+python najika_server.py
+```
+
+### Testen
+1. Browser → http://localhost:8000/
+2. Normale Message senden → sollte KEINE expliziten Begriffe zeigen
+3. "kätzchen" sagen → aktiviert Private Mode → dann explizit erlaubt
+
+### Wichtige Endpoints
+- `/api/chat` - Chat with Najika
+- `/api/status` - System status
+- `/api/battle/action` - Battle system (fixed endpoint)
+
+---
+
+## ⚠️ Noch zu testen
+
+1. **Chat-Qualität**: Sind Antworten kurz und natürlich? (ca. 1-2 Sätze)
+2. **Battle System**: Funktioniert `/api/battle/action` korrekt?
+3. **Kätzchen Mode**: Wird richtig aktiviert/deaktiviert?
+
+---
+
+## 📁 Datei-Struktur
+
+```
+C:\NajikaCore\
+├── najika_server.py              # Main server (modified line 870)
+├── najika_enhanced_personality.py # Persona (modified line 54)
+├── START_NAJIKA.bat               # Windows launcher
+├── saves/
+│   └── najika_state.json          # Save file (CLEANED)
+├── digivice/
+│   ├── index.html                 # Frontend (battle endpoint fixed)
+│   └── js/                        # 3D scene + battle + minigames
+└── assets/                        # KayKit 3D models
+
+```
+
+---
+
+## 🔑 Environment Variables (`.env`)
+
+⚠️ **WICHTIG**: `.env` enthält echte API Keys - NICHT committen!
+
+```
+AI_PROVIDER=ollama
+OLLAMA_MODEL_ALIAS=najika-local
+NSFW_LOCAL=true
+```
+
+---
+
+## 💡 Wenn Probleme auftreten
+
+### Problem: Alte explizite Begriffe erscheinen wieder
+**Lösung**: Chat-History ist noch kontaminiert → neu starten:
+```bash
+# Im Browser: Refresh oder neue Session
+# Oder: History löschen in najika_state.json
+```
+
+### Problem: Server antwortet nicht
+**Lösung**: Ollama prüfen:
+```bash
+ollama list  # Model da?
+curl http://127.0.0.1:11434/api/generate  # Endpoint erreichbar?
+```
+
+### Problem: Battle System 404
+**Lösung**: Endpoint bereits gefixt auf `/api/battle/action` (nicht `/attack`)
+
+---
+
+## ✅ Was funktioniert
+
+- ✅ Server läuft stabil
+- ✅ Ollama Integration
+- ✅ Living State Migration (alte saves kompatibel)
+- ✅ Meta-Content entfernt (keine Prozentangaben mehr)
+- ✅ Anatomische Begriffe separiert (Normal vs. Kätzchen Mode)
+- ✅ Chat-History gesäubert
+
+---
+
+**Ende der Übergabe** - System bereit für nächste Session!

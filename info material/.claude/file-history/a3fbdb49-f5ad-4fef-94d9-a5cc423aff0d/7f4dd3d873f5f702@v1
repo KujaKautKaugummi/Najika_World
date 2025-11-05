@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""
+NAJIKA DAILY TRAINING - Automatisches Selbst-Training
+Laedt taeglich neue Aufgaben
+"""
+import json
+from pathlib import Path
+from datetime import datetime, timedelta
+
+NAJIKA_DIR = Path("C:/NajikaCore")
+TRAINING_DIR = NAJIKA_DIR / "training"
+PROGRESS_FILE = TRAINING_DIR / "progress.json"
+DAILY_TASK_FILE = NAJIKA_DIR / "NAJIKA_DAILY_TASK.md"
+
+# Alle Trainings-Ressourcen
+RESOURCES = {
+    "katas": TRAINING_DIR / "CODE_KATAS_DAILY.md",
+    "pitfalls": TRAINING_DIR / "COMMON_PITFALLS.md",
+    "performance": TRAINING_DIR / "PERFORMANCE_PATTERNS.md",
+    "architecture": TRAINING_DIR / "ARCHITECTURE_PATTERNS.md"
+}
+
+def load_progress():
+    """Laedt Training-Fortschritt"""
+    if PROGRESS_FILE.exists():
+        try:
+            with open(PROGRESS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            pass
+    
+    return {
+        "start_date": datetime.now().isoformat(),
+        "current_day": 1,
+        "completed_katas": [],
+        "completed_topics": []
+    }
+
+def save_progress(progress):
+    """Speichert Fortschritt"""
+    TRAINING_DIR.mkdir(exist_ok=True)
+    with open(PROGRESS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(progress, f, indent=2)
+
+def get_daily_task(day_number):
+    """Bestimmt Aufgabe fuer Tag"""
+    # Rotation: Tag 1-7 = Katas, Tag 8 = Pitfalls, Tag 9 = Performance, etc.
+    week_day = (day_number - 1) % 10
+    
+    if week_day < 7:
+        return "katas", f"TAG {week_day + 1}"
+    elif week_day == 7:
+        return "pitfalls", "Common Pitfalls Review"
+    elif week_day == 8:
+        return "performance", "Performance Patterns"
+    else:
+        return "architecture", "Architecture Patterns"
+
+def generate_daily_task():
+    """Generiert taeglich neue Aufgabe fuer Najika"""
+    print("="*80)
+    print("NAJIKA DAILY TRAINING")
+    print("="*80)
+    
+    progress = load_progress()
+    day = progress["current_day"]
+    
+    task_type, task_name = get_daily_task(day)
+    
+    lines = []
+    lines.append("# NAJIKA DAILY TRAINING")
+    lines.append("")
+    lines.append(f"**Tag:** {day}")
+    lines.append(f"**Datum:** {datetime.now().strftime('%Y-%m-%d')}")
+    lines.append(f"**Typ:** {task_type.upper()}")
+    lines.append(f"**Aufgabe:** {task_name}")
+    lines.append("")
+    lines.append("="*80)
+    lines.append("")
+    
+    # Lade entsprechende Resource
+    resource_file = RESOURCES[task_type]
+    if resource_file.exists():
+        content = resource_file.read_text(encoding='utf-8')
+        lines.append(content)
+    
+    lines.append("")
+    lines.append("="*80)
+    lines.append("# ANWEISUNGEN FUER NAJIKA")
+    lines.append("="*80)
+    lines.append("")
+    lines.append("1. Lese die Aufgabe oben KOMPLETT")
+    lines.append("2. Verstehe das Problem")
+    lines.append("3. Implementiere die Loesung in allen 3 Sprachen (Verse, Python, Java)")
+    lines.append("4. Teste den Code gedanklich")
+    lines.append("5. Erklaere WARUM die Loesung funktioniert")
+    lines.append("")
+    lines.append("**Wenn fertig:**")
+    lines.append("- Fuehre `python najika_complete_daily_task.py` aus")
+    lines.append("- Naechste Aufgabe wird automatisch geladen")
+    lines.append("")
+    
+    # Speichern
+    DAILY_TASK_FILE.write_text('\n'.join(lines), encoding='utf-8')
+    
+    print(f"\n[OK] Daily Task generiert: {DAILY_TASK_FILE}")
+    print(f"Tag: {day}")
+    print(f"Aufgabe: {task_name}")
+    print(f"Typ: {task_type}\n")
+
+if __name__ == "__main__":
+    generate_daily_task()

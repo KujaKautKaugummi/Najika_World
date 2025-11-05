@@ -1,0 +1,128 @@
+﻿// KAYKIT ASSET LOADER
+(function() {
+    const ASSETS_ROOT = '/assets/';
+    const loadedModels = {};
+    let loader = null;
+    let config = null;
+    let roomMap = {};
+
+    function init() {
+        if (loader) {
+            return;
+        }
+        if (typeof THREE === 'undefined' || typeof THREE.GLTFLoader === 'undefined') {
+            setTimeout(init, 500);
+            return;
+        }
+
+        loader = new THREE.GLTFLoader();
+        console.log('✅ KayKit Loader initialized');
+        loadRoomConfig();
+    }
+
+    async function loadRoomConfig() {
+        try {
+            const response = await fetch('/assets/room_config_detailed.json');
+            config = await response.json();
+            console.log('📦 Room config loaded:', config);
+            roomMap = {};
+
+            const assetsToLoad = new Set();
+
+            if (Array.isArray(config.rooms)) {
+                config.rooms.forEach(room => {
+                    if (room && room.name) {
+                        roomMap[room.name] = room;
+                    }
+                    if (room?.floor?.model) {
+                        assetsToLoad.add(room.floor.model);
+                    }
+                    if (room?.walls?.model) {
+                        assetsToLoad.add(room.walls.model);
+                    }
+                    if (Array.isArray(room?.props)) {
+                        room.props.forEach(prop => {
+                            if (prop?.model) {
+                                assetsToLoad.add(prop.model);
+                            }
+                        });
+                    }
+                });
+            }
+
+            assetsToLoad.forEach(path => preloadAsset(path));
+            document.dispatchEvent(new CustomEvent('kaykit:configReady'));
+        } catch (error) {
+            console.log('ℹ️ No room config found, using defaults');
+        }
+    }
+
+    function preloadAsset(path, alias) {
+        if (!loader) {
+            return;
+        }
+        if (!path || path === '__none__') {
+            return;
+        }
+
+        const fullPath = ASSETS_ROOT + path;
+        const key = alias || path;
+
+        loader.load(
+            fullPath,
+            gltf => {
+                loadedModels[key] = gltf.scene;
+                console.log(`✅ Loaded ${key}: ${path}`);
+                dispatchModelLoaded(key);
+            },
+            undefined,
+            error => {
+                console.log(`ℹ️ Could not load ${key}: ${error.message || error}`);
+            }
+        );
+    }
+
+    function dispatchModelLoaded(name) {
+        document.dispatchEvent(new CustomEvent('kaykit:modelLoaded', {
+            detail: { name }
+        }));
+    }
+
+    function getModel(name) {
+        return loadedModels[name] || null;
+    }
+
+    function hasModel(name) {
+        return !!loadedModels[name];
+    }
+
+    function getConfig() {
+        return config;
+    }
+
+    function getRoomConfig(name) {
+        if (!name || !roomMap[name]) {
+            return null;
+        }
+        try {
+            return structuredClone(roomMap[name]);
+        } catch (err) {
+            return JSON.parse(JSON.stringify(roomMap[name]));
+        }
+    }
+
+    window.KayKitLoader = {
+        init,
+        getModel,
+        hasModel,
+        getConfig,
+        getRoomConfig,
+        loadedModels
+    };
+
+    if (typeof THREE !== 'undefined') {
+        setTimeout(init, 500);
+    } else {
+        setTimeout(init, 1000);
+    }
+})();

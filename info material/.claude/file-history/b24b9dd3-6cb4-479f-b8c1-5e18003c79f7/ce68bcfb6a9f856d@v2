@@ -1,0 +1,980 @@
+// Najika Digivice – Three.js scene manager with KayKit rooms, character controls and camera modes
+(function () {
+    const CAMERA_MODES = {
+        ORBIT: 'orbit',
+        THIRD: 'third',
+        FIRST: 'first'
+    };
+
+    const DEFAULT_PALETTE = {
+        background: 0x1a1a2e,
+        fog: 0x1a1a2e,
+        ambient: 0.45,
+        dir: 0xffffff,
+        dirIntensity: 0.9,
+        primary: 0xff6b6b,
+        secondary: 0x667eea,
+        floor: 0x2a2a3e
+    };
+
+    const PRIVATE_PALETTE = {
+        background: 0x240008,
+        fog: 0x240008,
+        ambient: 0.25,
+        dir: 0xff5500,
+        dirIntensity: 0.6,
+        primary: 0xaa1111,
+        secondary: 0x330033,
+        floor: 0x240008
+    };
+
+    const FALLBACK_DEFAULTS = {
+        span: 24,
+        wallHeight: 6
+    };
+
+    const CHARACTER_SPEED = 7.5;
+    const CHARACTER_HEIGHT = 3.8;
+    const CLAMP_PADDING = 2;
+
+    let scene;
+    let camera;
+    let renderer;
+    let ambientLight;
+    let dirLight;
+    let pointLight1;
+    let pointLight2;
+    let baseFloor;
+    let gridHelper;
+    const fallbackWalls = [];
+
+    let roomGroup = null;
+    let currentRoomName = 'Wohnzimmer';
+    let currentRoomSpan = FALLBACK_DEFAULTS.span;
+    let privateModeActive = false;
+    let usingFallbackRoom = true;
+    let pendingRoomBuild = false;
+
+    let clock;
+    let animationHandle = null;
+
+    let characterGroup = null;
+    let characterReady = false;
+    let characterHeading = 0;
+    const activeKeys = new Set();
+
+    let webcamStream = null;
+    let webcamElement = null;
+
+    // Orbit Camera Controls (alte perfekte Version)
+    let orbitYaw = Math.PI / 4;
+    let orbitPitch = 0.3;
+    let orbitDistance = 14;
+    const ORBIT_MIN_DIST = 6;
+    const ORBIT_MAX_DIST = 40;
+    const ORBIT_MIN_PITCH = -Math.PI / 2 + 0.12;
+    const ORBIT_MAX_PITCH = Math.PI / 2 - 0.12;
+
+    const activePointers = new Map();
+    let pointerMode = null;
+    let dragStartPos = { x: 0, y: 0 };
+    let dragStartYaw = orbitYaw;
+    let dragStartPitch = orbitPitch;
+    let pinchStartDist = 0;
+    let pinchBaseDistance = orbitDistance;
+    let orbitCanvas = null;
+
+    let cameraMode = CAMERA_MODES.ORBIT;
+
+    function getContainer() {
+        return document.getElementById('scene');
+    }
+
+    function init() {
+        if (scene || typeof THREE === 'undefined') {
+            if (typeof THREE === 'undefined') {
+                console.warn('Scene3D: THREE.js not yet available.');
+            }
+            return;
+        }
+
+        const container = getContainer();
+        if (!container) {
+            console.warn('Scene3D: container element #scene not found.');
+            return;
+        }
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(DEFAULT_PALETTE.background);
+        scene.fog = new THREE.Fog(DEFAULT_PALETTE.fog, 12, 160);
+
+        camera = new THREE.PerspectiveCamera(
+            65,
+            container.clientWidth / container.clientHeight,
+            0.1,
+            2000
+        );
+        camera.position.set(0, 12, 28);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio || 1);
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.innerHTML = '';
+        container.appendChild(renderer.domElement);
+
+        clock = new THREE.Clock();
+
+        setupLights();
+        setupFallbackRoom();
+        installEventHandlers();
+        ensureKayKitLoader();
+        loadCharacter();
+        scheduleRoomBuild();
+        startAnimationLoop();
+
+        document.dispatchEvent(new CustomEvent('scene3d:ready'));
+        console.log('Scene3D initialised.');
+    }
+
+    function setupLights() {
+        ambientLight = new THREE.AmbientLight(DEFAULT_PALETTE.dir, DEFAULT_PALETTE.ambient);
+        scene.add(ambientLight);
+
+        dirLight = new THREE.DirectionalLight(DEFAULT_PALETTE.dir, DEFAULT_PALETTE.dirIntensity);
+        dirLight.position.set(12, 25, 12);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        dirLight.shadow.camera.near = 0.1;
+        dirLight.shadow.camera.far = 120;
+        scene.add(dirLight);
+
+        pointLight1 = new THREE.PointLight(DEFAULT_PALETTE.primary, 1.1, 80);
+        pointLight1.position.set(-14, 6, -14);
+        scene.add(pointLight1);
+
+        pointLight2 = new THREE.PointLight(DEFAULT_PALETTE.secondary, 1.1, 80);
+        pointLight2.position.set(14, 6, 14);
+        scene.add(pointLight2);
+    }
+
+    function setupFallbackRoom() {
+        const floorGeometry = new THREE.PlaneGeometry(120, 120);
+        const floorMaterial = new THREE.MeshStandardMaterial({
+            color: DEFAULT_PALETTE.floor,
+            roughness: 0.85,
+            metalness: 0.1
+        });
+        baseFloor = new THREE.Mesh(floorGeometry, floorMaterial);
+        baseFloor.rotation.x = -Math.PI / 2;
+        baseFloor.receiveShadow = true;
+        scene.add(baseFloor);
+
+        gridHelper = new THREE.GridHelper(120, 60, DEFAULT_PALETTE.secondary, 0x1d1d30);
+        gridHelper.material.opacity = 0.25;
+        gridHelper.material.transparent = true;
+        scene.add(gridHelper);
+
+        const wallMaterial = new THREE.MeshStandardMaterial({
+            color: 0x36364a,
+            roughness: 0.7,
+            metalness: 0.2
+        });
+        const wallThickness = 1;
+        const wallHeight = FALLBACK_DEFAULTS.wallHeight;
+        const wallSpan = FALLBACK_DEFAULTS.span;
+        const positions = [
+            { pos: [0, wallHeight / 2, -wallSpan], size: [wallSpan * 2, wallHeight, wallThickness] },
+            { pos: [0, wallHeight / 2, wallSpan], size: [wallSpan * 2, wallHeight, wallThickness] },
+            { pos: [-wallSpan, wallHeight / 2, 0], size: [wallThickness, wallHeight, wallSpan * 2] },
+            { pos: [wallSpan, wallHeight / 2, 0], size: [wallThickness, wallHeight, wallSpan * 2] }
+        ];
+        positions.forEach(info => {
+            const wall = new THREE.Mesh(new THREE.BoxGeometry(...info.size), wallMaterial);
+            wall.position.set(info.pos[0], info.pos[1], info.pos[2]);
+            wall.castShadow = true;
+            wall.receiveShadow = true;
+            scene.add(wall);
+            fallbackWalls.push(wall);
+        });
+    }
+
+    function installEventHandlers() {
+        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('keydown', onKeyDown, false);
+        window.addEventListener('keyup', onKeyUp, false);
+
+        const canvas = renderer.domElement;
+        orbitCanvas = canvas;
+        canvas.style.touchAction = 'none';
+        canvas.addEventListener('pointerdown', onPointerDown, { passive: false });
+        canvas.addEventListener('pointermove', onPointerMove, { passive: false });
+        canvas.addEventListener('pointerup', onPointerUp, { passive: false });
+        canvas.addEventListener('pointerleave', onPointerUp, { passive: false });
+        canvas.addEventListener('pointercancel', onPointerUp, { passive: false });
+        canvas.addEventListener('wheel', onWheel, { passive: false });
+    }
+
+    function ensureKayKitLoader() {
+        if (!window.KayKitLoader) {
+            return;
+        }
+        document.addEventListener('kaykit:configReady', scheduleRoomBuild, false);
+        document.addEventListener('kaykit:modelLoaded', onKayKitModelLoaded, false);
+        if (typeof KayKitLoader.init === 'function') {
+            KayKitLoader.init();
+        }
+    }
+
+    function startAnimationLoop() {
+        const loop = () => {
+            animationHandle = requestAnimationFrame(loop);
+            const delta = clock ? clock.getDelta() : 0.016;
+            updateCharacter(delta);
+            updateCamera(delta);
+            if (pendingRoomBuild) {
+                buildRoom();
+            }
+            renderer.render(scene, camera);
+        };
+        loop();
+    }
+
+    function onWindowResize() {
+        const container = getContainer();
+        if (!container || !camera || !renderer) {
+            return;
+        }
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    function onKeyDown(event) {
+        activeKeys.add(event.code);
+        // F1/F2/F3: Kamera-Modus wechseln
+        if (event.code === 'F1') {
+            event.preventDefault();
+            updateCameraMode(CAMERA_MODES.ORBIT);
+        } else if (event.code === 'F2') {
+            event.preventDefault();
+            updateCameraMode(CAMERA_MODES.THIRD);
+        } else if (event.code === 'F3') {
+            event.preventDefault();
+            updateCameraMode(CAMERA_MODES.FIRST);
+        }
+        // F-Taste: Najika dreht sich zum Spieler
+        if (event.code === 'KeyF') {
+            faceCharacter();
+        }
+    }
+
+    function onKeyUp(event) {
+        activeKeys.delete(event.code);
+    }
+
+    function onPointerDown(event) {
+        if (!orbitCanvas || cameraMode !== CAMERA_MODES.ORBIT) {
+            return;
+        }
+        event.preventDefault();
+        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (activePointers.size === 1) {
+            // Single touch/click: Rotate
+            pointerMode = 'rotate';
+            dragStartPos = { x: event.clientX, y: event.clientY };
+            dragStartYaw = orbitYaw;
+            dragStartPitch = orbitPitch;
+        } else if (activePointers.size === 2) {
+            // Two touches: Pinch to zoom
+            pointerMode = 'pinch';
+            pinchStartDist = computePointerDistance();
+            pinchBaseDistance = orbitDistance;
+        }
+    }
+
+    function onPointerMove(event) {
+        if (!activePointers.has(event.pointerId) || cameraMode !== CAMERA_MODES.ORBIT) {
+            return;
+        }
+        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (pointerMode === 'pinch' && activePointers.size === 2) {
+            const dist = computePointerDistance();
+            if (pinchStartDist > 0) {
+                const ratio = dist / pinchStartDist;
+                if (ratio > 0) {
+                    orbitDistance = clamp(pinchBaseDistance / ratio, ORBIT_MIN_DIST, ORBIT_MAX_DIST);
+                }
+            }
+        } else if (pointerMode === 'rotate' && activePointers.size === 1) {
+            const dx = event.clientX - dragStartPos.x;
+            const dy = event.clientY - dragStartPos.y;
+            orbitYaw = dragStartYaw - dx * 0.005;
+            orbitPitch = clamp(dragStartPitch - dy * 0.003, ORBIT_MIN_PITCH, ORBIT_MAX_PITCH);
+        }
+    }
+
+    function onPointerUp(event) {
+        activePointers.delete(event.pointerId);
+        if (activePointers.size === 0) {
+            pointerMode = null;
+        } else if (activePointers.size === 1 && pointerMode === 'pinch') {
+            // Switched from pinch back to rotate
+            pointerMode = 'rotate';
+            const remaining = Array.from(activePointers.values())[0];
+            dragStartPos = { x: remaining.x, y: remaining.y };
+            dragStartYaw = orbitYaw;
+            dragStartPitch = orbitPitch;
+        }
+    }
+
+    function onWheel(event) {
+        if (cameraMode !== CAMERA_MODES.ORBIT) {
+            return;
+        }
+        event.preventDefault();
+        const delta = Math.sign(event.deltaY) * 1.5;
+        orbitDistance = clamp(orbitDistance + delta, ORBIT_MIN_DIST, ORBIT_MAX_DIST);
+    }
+
+    function computePointerDistance() {
+        const ptrs = Array.from(activePointers.values());
+        if (ptrs.length < 2) return 0;
+        const dx = ptrs[0].x - ptrs[1].x;
+        const dy = ptrs[0].y - ptrs[1].y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function onKayKitModelLoaded(event) {
+        const modelName = event && event.detail && event.detail.name;
+        if (!characterReady && modelName && modelName.includes('wand')) {
+            attachStaffToCharacter();
+        }
+        scheduleRoomBuild();
+    }
+
+    function scheduleRoomBuild() {
+        pendingRoomBuild = true;
+    }
+
+    function buildRoom() {
+        pendingRoomBuild = false;
+
+        if (roomGroup) {
+            scene.remove(roomGroup);
+            disposeHierarchy(roomGroup);
+            roomGroup = null;
+        }
+
+        let config = getRoomConfig(currentRoomName);
+        let assetsReady = config ? roomAssetsAvailable(config) : false;
+
+        if (!config || !assetsReady) {
+            usingFallbackRoom = true;
+            currentRoomSpan = FALLBACK_DEFAULTS.span;
+            showFallbackRoom(true);
+            applyPalette(null);
+            resetCharacterPosition(null);
+            return;
+        }
+
+        usingFallbackRoom = false;
+        showFallbackRoom(false);
+
+        const span = resolveSpan(config);
+        currentRoomSpan = span;
+
+        // 🏰 DUNGEON GENERATOR für Keller
+        if (currentRoomName === 'Schwarze Mühle – Keller' && window.DungeonGenerator) {
+            const dungeonLevel = DungeonGenerator.currentLevel || 1;
+            const dungeon = DungeonGenerator.generateDungeon(dungeonLevel, span);
+            config = DungeonGenerator.applyDungeonToRoom(config, dungeon);
+            console.log(`🏰 Dungeon Level ${dungeonLevel} geladen in Keller`);
+        }
+
+        const group = new THREE.Group();
+
+        if (config.floor && config.floor.model) {
+            const floor = buildFloor(config.floor, span);
+            if (floor) {
+                group.add(floor);
+            }
+        }
+
+        if (config.walls && config.walls.model) {
+            const walls = buildWalls(config.walls, span, resolveWallHeight(config));
+            if (walls) {
+                group.add(walls);
+            }
+        }
+
+        if (Array.isArray(config.props)) {
+            config.props.forEach(prop => {
+                const instance = buildProp(prop);
+                if (instance) {
+                    group.add(instance);
+                }
+            });
+        }
+
+        roomGroup = group;
+        scene.add(roomGroup);
+
+        applyPalette(config.palette || null);
+        resetCharacterPosition(config.spawn || null);
+    }
+
+    function showFallbackRoom(visible) {
+        if (baseFloor) baseFloor.visible = visible;
+        if (gridHelper) gridHelper.visible = visible;
+        fallbackWalls.forEach(w => (w.visible = visible));
+    }
+
+    function getRoomConfig(name) {
+        if (!name || !window.KayKitLoader || typeof KayKitLoader.getRoomConfig !== 'function') {
+            return null;
+        }
+        try {
+            return KayKitLoader.getRoomConfig(name);
+        } catch (error) {
+            console.warn('Scene3D: failed to read room config', error);
+            return null;
+        }
+    }
+
+    function getKayKitDefaults() {
+        if (!window.KayKitLoader || typeof KayKitLoader.getConfig !== 'function') {
+            return { ...FALLBACK_DEFAULTS };
+        }
+        const cfg = KayKitLoader.getConfig();
+        if (!cfg || !cfg.defaults) {
+            return { ...FALLBACK_DEFAULTS };
+        }
+        return { ...FALLBACK_DEFAULTS, ...cfg.defaults };
+    }
+
+    function resolveSpan(config) {
+        if (typeof config.span === 'number') {
+            return config.span;
+        }
+        if (config.floor && typeof config.floor.span === 'number') {
+            return config.floor.span;
+        }
+        if (config.walls && typeof config.walls.span === 'number') {
+            return config.walls.span;
+        }
+        const defaults = getKayKitDefaults();
+        return defaults.span;
+    }
+
+    function resolveWallHeight(config) {
+        if (config.walls && typeof config.walls.height === 'number') {
+            return config.walls.height;
+        }
+        if (typeof config.wallHeight === 'number') {
+            return config.wallHeight;
+        }
+        const defaults = getKayKitDefaults();
+        return defaults.wallHeight;
+    }
+
+    function roomAssetsAvailable(config) {
+        if (!window.KayKitLoader) {
+            return false;
+        }
+        const required = new Set();
+        if (config.floor && config.floor.model) required.add(config.floor.model);
+        if (config.walls && config.walls.model) required.add(config.walls.model);
+        if (Array.isArray(config.props)) {
+            config.props.forEach(prop => {
+                if (prop && prop.model) required.add(prop.model);
+            });
+        }
+        for (const name of required) {
+            if (!KayKitLoader.hasModel || !KayKitLoader.hasModel(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function buildFloor(entry, span) {
+        const instance = makeModelInstance(entry);
+        if (!instance) return null;
+        // Skaliere Boden auf volle span-Größe
+        scaleUniformToSpan(instance, span);
+        // Mache Boden EXTREM flach (nur 5% Höhe) wie eine dünne Platte
+        instance.scale.y *= 0.05;
+        // Berechne BoundingBox um Boden korrekt zu positionieren
+        const box = new THREE.Box3().setFromObject(instance);
+        const floorHeight = box.max.y - box.min.y;
+        // Positioniere so dass OBERSEITE bei Y=0 ist (Unterseite darunter)
+        instance.position.y = -box.min.y - floorHeight;
+        applyEntryTransform(instance, entry);
+        return instance;
+    }
+
+    function buildWalls(entry, span, wallHeight) {
+        const base = makeModelInstance(entry);
+        if (!base) return null;
+
+        // Skaliere Wand-Modell auf die volle span-Breite
+        scaleAxisToSpan(base, 'x', span);
+
+        const group = new THREE.Group();
+        // Wände am RAND des Bodens positionieren (span / 2)
+        const half = span / 2;
+
+        const north = cloneGroup(base);
+        north.position.set(0, 0, -half);
+        group.add(north);
+
+        const south = cloneGroup(base);
+        south.rotation.y = Math.PI;
+        south.position.set(0, 0, half);
+        group.add(south);
+
+        const east = cloneGroup(base);
+        east.rotation.y = -Math.PI / 2;
+        east.position.set(half, 0, 0);
+        group.add(east);
+
+        const west = cloneGroup(base);
+        west.rotation.y = Math.PI / 2;
+        west.position.set(-half, 0, 0);
+        group.add(west);
+
+        group.traverse(node => {
+            if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+
+        // Skaliere Wand-Höhe auf gewünschte wallHeight
+        const currentHeight = getBoundingSize(group).y;
+        const scaleFactor = wallHeight / Math.max(currentHeight, 0.0001);
+        group.scale.y *= scaleFactor;
+
+        // WICHTIG: Wände mit UNTERSEITE auf Y=0 (Boden-Oberseite)
+        const box = new THREE.Box3().setFromObject(group);
+        group.position.y = -box.min.y;
+
+        applyEntryTransform(group, entry);
+        return group;
+    }
+
+    function buildProp(entry) {
+        const instance = makeModelInstance(entry);
+        if (!instance) return null;
+        adjustToGround(instance);
+        applyEntryTransform(instance, entry);
+        return instance;
+    }
+
+    function makeModelInstance(entry) {
+        if (!entry || !entry.model || !window.KayKitLoader) return null;
+        if (!KayKitLoader.hasModel || !KayKitLoader.hasModel(entry.model)) return null;
+        const source = KayKitLoader.getModel(entry.model);
+        if (!source) return null;
+        const wrapper = new THREE.Group();
+        const clone = cloneObject(source);
+        wrapper.add(clone);
+        applyTint(wrapper, entry.tint);
+        wrapper.traverse(node => {
+            if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        return wrapper;
+    }
+
+    function cloneObject(object) {
+        if (THREE.SkeletonUtils && typeof THREE.SkeletonUtils.clone === 'function') {
+            return THREE.SkeletonUtils.clone(object);
+        }
+        return object.clone(true);
+    }
+
+    function cloneGroup(group) {
+        const copy = group.clone(true);
+        copy.traverse(node => {
+            if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        });
+        return copy;
+    }
+
+    function scaleUniformToSpan(group, span) {
+        const size = getBoundingSize(group);
+        const max = Math.max(size.x, size.z);
+        if (!max || !isFinite(max)) return;
+        const factor = span / max;
+        group.scale.multiplyScalar(factor);
+    }
+
+    function scaleAxisToSpan(group, axis, span) {
+        const size = getBoundingSize(group);
+        const axisSize = axis === 'z' ? size.z : size.x;
+        if (!axisSize || !isFinite(axisSize)) return;
+        const factor = span / axisSize;
+        if (axis === 'z') {
+            group.scale.z *= factor;
+        } else {
+            group.scale.x *= factor;
+        }
+    }
+
+    function getBoundingSize(group) {
+        const box = new THREE.Box3().setFromObject(group);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        return size;
+    }
+
+    function adjustToGround(group) {
+        const box = new THREE.Box3().setFromObject(group);
+        const offsetY = box.min.y;
+        group.position.y -= offsetY;
+    }
+
+    function applyTint(group, tint) {
+        const hex = parseColor(tint);
+        if (hex === null) return;
+        group.traverse(node => {
+            if (node.isMesh) {
+                const material = node.material;
+                if (Array.isArray(material)) {
+                    material.forEach(mat => mat && mat.color && mat.color.set(hex));
+                } else if (material && material.color) {
+                    material.color.set(hex);
+                }
+            }
+        });
+    }
+
+    function applyEntryTransform(group, entry) {
+        if (!entry) return;
+
+        if (typeof entry.scale === 'number') {
+            group.scale.multiplyScalar(entry.scale);
+        } else if (Array.isArray(entry.scale)) {
+            const [sx = 1, sy = 1, sz = 1] = entry.scale;
+            group.scale.x *= sx;
+            group.scale.y *= sy;
+            group.scale.z *= sz;
+        }
+
+        if (Array.isArray(entry.rotation)) {
+            const [rx = 0, ry = 0, rz = 0] = entry.rotation;
+            group.rotation.set(rx, ry, rz);
+        }
+
+        if (Array.isArray(entry.position)) {
+            const [px = 0, py = 0, pz = 0] = entry.position;
+            // Nur X und Z setzen, Y wird durch adjustToGround() bestimmt
+            group.position.x += px;
+            group.position.z += pz;
+            // Y-Offset wird NACH adjustToGround angewendet
+            if (py !== 0) {
+                group.position.y += py;
+            }
+        }
+
+        // adjustToGround wurde bereits vorher aufgerufen, nicht nochmal!
+        // adjustToGround(group);
+    }
+
+    function parseColor(value) {
+        if (typeof value === 'number') return value;
+        if (typeof value === 'string') {
+            try {
+                return new THREE.Color(value).getHex();
+            } catch (error) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    function applyPalette(roomPalette) {
+        const paletteSource = privateModeActive
+            ? PRIVATE_PALETTE
+            : roomPalette
+            ? { ...DEFAULT_PALETTE, ...roomPalette }
+            : DEFAULT_PALETTE;
+
+        const palette = { ...DEFAULT_PALETTE };
+        Object.keys(paletteSource).forEach(key => {
+            const value = paletteSource[key];
+            palette[key] = typeof value === 'string' ? parseColor(value) || palette[key] : value;
+        });
+
+        scene.background = new THREE.Color(palette.background);
+        if (!scene.fog) {
+            scene.fog = new THREE.Fog(palette.fog, 12, 160);
+        } else {
+            scene.fog.color.setHex(palette.fog);
+        }
+
+        ambientLight.color.setHex(palette.dir);
+        ambientLight.intensity = palette.ambient;
+
+        dirLight.color.setHex(palette.dir);
+        dirLight.intensity = palette.dirIntensity;
+
+        pointLight1.color.setHex(palette.primary);
+        pointLight2.color.setHex(palette.secondary);
+
+        if (baseFloor && usingFallbackRoom) {
+            baseFloor.material.color.setHex(palette.floor);
+        }
+    }
+
+    function resetCharacterPosition(spawn) {
+        if (!characterGroup) return;
+        const [x = 0, y = 0, z = 0] = Array.isArray(spawn) ? spawn : [0, 0, 0];
+        characterGroup.position.set(x, y, z);
+        clampCharacterToRoom(characterGroup.position);
+    }
+
+    function loadCharacter() {
+        if (!THREE.GLTFLoader) {
+            console.warn('Scene3D: GLTFLoader missing; cannot load Skeleton_Mage.');
+            return;
+        }
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+            '/assets/KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
+            gltf => {
+                characterGroup = gltf.scene;
+                characterGroup.traverse(node => {
+                    if (node.isMesh) {
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+                    }
+                });
+                // Skeleton soll mit Füßen AUF dem Boden stehen (Y=0)
+                adjustToGround(characterGroup);
+                scene.add(characterGroup);
+                attachStaffToCharacter();
+                characterReady = true;
+                console.log('✅ Skeleton_Mage geladen, Füße auf Y=0');
+            },
+            undefined,
+            error => {
+                console.warn('Scene3D: failed to load Skeleton_Mage model', error);
+            }
+        );
+    }
+
+    function attachStaffToCharacter() {
+        if (!characterGroup || !window.KayKitLoader || !KayKitLoader.getModel) {
+            return;
+        }
+        if (characterGroup.getObjectByName('najika_staff')) {
+            return;
+        }
+        const wandModel = KayKitLoader.getModel(
+            'KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Assets/gltf/wand.gltf'
+        );
+        if (!wandModel) {
+            return;
+        }
+        const wand = cloneObject(wandModel);
+        wand.name = 'najika_staff';
+        adjustToGround(wand);
+        wand.scale.multiplyScalar(1.3);
+        wand.rotation.set(0, Math.PI / 2, Math.PI / 8);
+        wand.position.set(0.4, 1.1, -0.2);
+        characterGroup.add(wand);
+    }
+
+    function updateCharacter(delta) {
+        if (!characterGroup) return;
+        const move = new THREE.Vector3();
+
+        if (activeKeys.has('KeyW') || activeKeys.has('ArrowUp')) move.z -= 1;
+        if (activeKeys.has('KeyS') || activeKeys.has('ArrowDown')) move.z += 1;
+        if (activeKeys.has('KeyA') || activeKeys.has('ArrowLeft')) move.x -= 1;
+        if (activeKeys.has('KeyD') || activeKeys.has('ArrowRight')) move.x += 1;
+
+        if (move.lengthSq() > 0) {
+            move.normalize();
+            characterHeading = Math.atan2(move.x, move.z);
+            const speed = CHARACTER_SPEED * (cameraMode === CAMERA_MODES.FIRST ? 0.9 : 1);
+            characterGroup.position.x += move.x * speed * delta;
+            characterGroup.position.z += move.z * speed * delta;
+            clampCharacterToRoom(characterGroup.position);
+            characterGroup.rotation.y = characterHeading;
+        }
+    }
+
+    function clampCharacterToRoom(position) {
+        const limit = Math.max(8, currentRoomSpan / 2 - CLAMP_PADDING);
+        position.x = clamp(position.x, -limit, limit);
+        position.z = clamp(position.z, -limit, limit);
+    }
+
+    function getCameraTarget() {
+        if (characterGroup) {
+            return characterGroup.position.clone().add(new THREE.Vector3(0, CHARACTER_HEIGHT * 0.85, 0));
+        }
+        return new THREE.Vector3(0, 0, 0);
+    }
+
+    function updateCamera(delta) {
+        if (!camera) return;
+
+        const target = getCameraTarget();
+
+        // ORBIT Mode: Manuelle Kamera-Steuerung (dreht NICHT automatisch mit WASD)
+        if (cameraMode === CAMERA_MODES.ORBIT || !characterGroup) {
+            const cosPitch = Math.cos(orbitPitch);
+            const offset = new THREE.Vector3(
+                Math.sin(orbitYaw) * cosPitch,
+                Math.sin(orbitPitch),
+                Math.cos(orbitYaw) * cosPitch
+            ).multiplyScalar(orbitDistance);
+            camera.position.copy(target).add(offset);
+            camera.lookAt(target);
+            return;
+        }
+
+        // THIRD Person: Folgt dem Character von hinten (dreht MIT WASD)
+        const forwardDir = new THREE.Vector3(Math.sin(characterHeading), 0, -Math.cos(characterHeading));
+        const basePos = characterGroup ? characterGroup.position.clone() : new THREE.Vector3();
+
+        if (cameraMode === CAMERA_MODES.THIRD) {
+            const followOffset = forwardDir.clone().multiplyScalar(-18);
+            const desiredPosition = basePos.clone().add(new THREE.Vector3(0, 4, 0)).add(followOffset);
+            camera.position.lerp(desiredPosition, Math.min(delta * 6, 1));
+            camera.lookAt(target);
+        } else if (cameraMode === CAMERA_MODES.FIRST) {
+            // FIRST Person: Direkt hinter den Augen
+            const eyePosition = target.clone()
+                .add(new THREE.Vector3(0, -CHARACTER_HEIGHT * 0.15, 0))
+                .add(forwardDir.clone().multiplyScalar(1.8));
+            const lookPoint = target.clone().add(forwardDir.clone().multiplyScalar(6));
+            camera.position.copy(eyePosition);
+            camera.lookAt(lookPoint);
+        }
+    }
+
+    function faceCharacter() {
+        if (!characterGroup || !camera) return;
+        const dx = camera.position.x - characterGroup.position.x;
+        const dz = camera.position.z - characterGroup.position.z;
+        characterHeading = Math.atan2(dx, dz);
+        characterGroup.rotation.y = characterHeading;
+    }
+
+    async function toggleWebcam(videoElement) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert('Webcam wird nicht unterstützt.');
+            return false;
+        }
+        if (webcamStream) {
+            webcamStream.getTracks().forEach(track => track.stop());
+            webcamStream = null;
+            if (webcamElement) {
+                webcamElement.srcObject = null;
+            }
+            webcamElement = null;
+            return false;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            webcamStream = stream;
+            webcamElement = videoElement;
+            webcamElement.srcObject = stream;
+            await webcamElement.play();
+            return true;
+        } catch (error) {
+            console.warn('Scene3D: webcam access failed', error);
+            alert('Webcam konnte nicht gestartet werden.');
+            return false;
+        }
+    }
+
+    function updateCameraMode(mode) {
+        if (!Object.values(CAMERA_MODES).includes(mode)) {
+            return;
+        }
+        cameraMode = mode;
+        // Clear pointer state when leaving Orbit mode
+        if (cameraMode !== CAMERA_MODES.ORBIT) {
+            activePointers.clear();
+            pointerMode = null;
+        }
+        return cameraMode;
+    }
+
+    function setPrivateMode(active) {
+        privateModeActive = !!active;
+        scheduleRoomBuild();
+    }
+
+    function getCameraMode() {
+        return cameraMode;
+    }
+
+    function disposeHierarchy(object) {
+        if (!object) return;
+        object.traverse(child => {
+            if (child.geometry && child.geometry.dispose) {
+                child.geometry.dispose();
+            }
+            if (child.material) {
+                if (Array.isArray(child.material)) {
+                    child.material.forEach(mat => mat && mat.dispose && mat.dispose());
+                } else if (child.material.dispose) {
+                    child.material.dispose();
+                }
+            }
+        });
+    }
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
+    function bootWhenReady() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    }
+
+    window.Scene3D = {
+        init,
+        changeRoom(name) {
+            if (name) {
+                currentRoomName = name;
+                if (window.KayKitLoader && typeof KayKitLoader.loadRoomOnDemand === 'function') {
+                    KayKitLoader.loadRoomOnDemand(name);
+                }
+                // Lade Dungeon-Assets wenn Keller betreten wird
+                if (name === 'Schwarze Mühle – Keller' && window.DungeonGenerator) {
+                    DungeonGenerator.preloadDungeonAssets();
+                }
+                scheduleRoomBuild();
+            }
+        },
+        setCameraMode: updateCameraMode,
+        getCameraMode,
+        faceCharacter,
+        toggleWebcam,
+        setPrivateMode
+    };
+
+    bootWhenReady();
+})();

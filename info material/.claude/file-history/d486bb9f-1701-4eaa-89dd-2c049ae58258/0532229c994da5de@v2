@@ -1,0 +1,9 @@
+@echo off
+echo Najika Cache loeschen...
+echo.
+echo 1. Stoppe Browser (falls offen)
+echo 2. Druecke STRG+F5 im Browser nach Neustart
+echo 3. Oder oeffne: http://localhost:8000/?v=%random%
+echo.
+pause
+start http://localhost:8000/?v=%random%

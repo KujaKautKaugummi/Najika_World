@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Game Design Dokument erstellt",
+    "status": "completed",
+    "activeForm": "Design fertig!"
+  },
+  {
+    "content": "Slime-Begleiter System hinzufügen",
+    "status": "in_progress",
+    "activeForm": "Füge Slime-Pet hinzu"
+  },
+  {
+    "content": "Inventar-System im Keller bauen",
+    "status": "pending",
+    "activeForm": "Baue Inventar"
+  },
+  {
+    "content": "Equipment-System im Keller",
+    "status": "pending",
+    "activeForm": "Baue Equipment"
+  },
+  {
+    "content": "Loot-Drops im Keller",
+    "status": "pending",
+    "activeForm": "Implementiere Loot"
+  },
+  {
+    "content": "Shop NPC im Keller",
+    "status": "pending",
+    "activeForm": "Erstelle Shop"
+  },
+  {
+    "content": "Gold-Währung System",
+    "status": "pending",
+    "activeForm": "Baue Currency"
+  }
+]

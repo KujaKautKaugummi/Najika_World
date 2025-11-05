@@ -1,0 +1,213 @@
+@echo off
+REM ========================================
+REM NAJIKA MERGE - STEP 2: EXECUTE
+REM Führt die Zusammenführung durch
+REM ========================================
+
+echo.
+echo ========================================
+echo    NAJIKA MERGE - AUSFÜHREN
+echo ========================================
+echo.
+
+REM Prüfe ob Backup existiert
+if not exist "C:\Najika_Backups" (
+    echo FEHLER: Kein Backup gefunden!
+    echo Bitte erst MERGE_01_BACKUP.bat ausführen!
+    pause
+    exit /b 1
+)
+
+echo WARNUNG: Dieser Vorgang verändert die Ordnerstruktur!
+echo.
+echo Quelle: C:\NajikaCore
+echo Ziel:   C:\Najika\backend
+echo.
+echo Backup existiert in: C:\Najika_Backups
+echo.
+set /p confirm="Fortfahren? (J/N): "
+if /i not "%confirm%"=="J" (
+    echo Abgebrochen.
+    pause
+    exit /b 0
+)
+
+echo.
+echo ========================================
+echo    MERGE STARTEN
+echo ========================================
+echo.
+
+REM [1/6] Erstelle backend Ordner
+echo [1/6] Erstelle C:\Najika\backend...
+if not exist "C:\Najika\backend" mkdir "C:\Najika\backend"
+echo ✓ Ordner erstellt
+
+REM [2/6] Kopiere Python Backend
+echo.
+echo [2/6] Kopiere Python-Dateien...
+copy "C:\NajikaCore\*.py" "C:\Najika\backend\" /Y
+if %ERRORLEVEL% NEQ 0 (
+    echo FEHLER beim Kopieren der Python-Dateien!
+    goto :error
+)
+echo ✓ Python-Dateien kopiert
+
+REM [3/6] Kopiere .env
+echo.
+echo [3/6] Kopiere .env Config...
+if exist "C:\NajikaCore\.env" (
+    copy "C:\NajikaCore\.env" "C:\Najika\backend\.env" /Y
+    echo ✓ .env kopiert
+) else (
+    echo ! Keine .env gefunden, übersprungen
+)
+
+REM [4/6] Kopiere Launcher
+echo.
+echo [4/6] Erstelle neuen Launcher...
+(
+echo @echo off
+echo REM Najika Unified Launcher
+echo REM Startet Backend + Frontend
+echo.
+echo echo ========================================
+echo echo    NAJIKA - STARTING...
+echo echo ========================================
+echo.
+echo REM Backend starten
+echo echo [1/2] Starting Backend...
+echo start /B python backend\najika_server.py
+echo.
+echo REM Warte 3 Sekunden
+echo timeout /t 3 /nobreak ^>nul
+echo.
+echo REM Frontend starten
+echo echo [2/2] Starting Frontend...
+echo cd frontend
+echo start /B npm start
+echo cd ..
+echo.
+echo echo ========================================
+echo echo    NAJIKA IS RUNNING!
+echo echo ========================================
+echo echo.
+echo echo Frontend: http://localhost:3002
+echo echo Backend:  http://localhost:8000
+echo echo.
+echo echo Drücke STRG+C zum Beenden
+echo pause
+) > "C:\Najika\START_NAJIKA.bat"
+echo ✓ Launcher erstellt
+
+REM [5/6] Kopiere Dokumentation
+echo.
+echo [5/6] Kopiere Dokumentation...
+if not exist "C:\Najika\DOCS" mkdir "C:\Najika\DOCS"
+copy "C:\NajikaCore\*.md" "C:\Najika\DOCS\" /Y 2>nul
+echo ✓ Dokumentation kopiert
+
+REM [6/6] Erstelle README
+echo.
+echo [6/6] Erstelle README.md...
+(
+echo # Najika - Virtual Companion Game
+echo.
+echo ## Project Structure
+echo.
+echo ```
+echo C:\Najika\
+echo ├── backend\               # Python Backend
+echo │   ├── najika_server.py   # Main Server
+echo │   ├── najika_battle.py   # Battle System
+echo │   ├── najika_*.py         # Other Modules
+echo │   └── .env               # Configuration
+echo ├── frontend\              # React Frontend
+echo │   ├── src\
+echo │   │   └── game\          # Game Logic
+echo │   └── package.json
+echo ├── DOCS\                  # Documentation
+echo ├── START_NAJIKA.bat       # Launcher
+echo └── README.md              # This File
+echo ```
+echo.
+echo ## Quick Start
+echo.
+echo 1. Run `START_NAJIKA.bat`
+echo 2. Wait for both servers to start
+echo 3. Open http://localhost:3002 in browser
+echo.
+echo ## Backend
+echo - Python HTTP Server
+echo - Port: 8000
+echo - AI: Ollama ^(local^) + Cloud ^(optional^)
+echo - Battle System with Enhanced Mechanics
+echo.
+echo ## Frontend
+echo - React + Three.js
+echo - Port: 3002
+echo - 3D Graphics with KayKit Assets
+echo - Digimon World inspired Command System
+echo.
+echo ## Features
+echo - Command System ^(Rookie → Champion → Ultimate → Mega^)
+echo - Praise/Scold Relationship Mechanics
+echo - 3 Camera Modes ^(Orbit/Third/First Person^)
+echo - Battle System with Backend Integration
+echo - Evolution System based on Battle XP
+echo.
+echo ## Documentation
+echo - See `DOCS\` folder for detailed documentation
+echo - `NAJIKA_SYSTEM_STATUS.md` - Current status
+echo - `NAJIKA_ENHANCED_DIGIMON_COMBAT.md` - Combat system details
+echo.
+echo ## Development
+echo.
+echo **Backend:**
+echo ```bash
+echo python backend\najika_server.py
+echo ```
+echo.
+echo **Frontend:**
+echo ```bash
+echo cd frontend
+echo npm start
+echo ```
+) > "C:\Najika\README.md"
+echo ✓ README erstellt
+
+echo.
+echo ========================================
+echo    MERGE ERFOLGREICH!
+echo ========================================
+echo.
+echo Neue Struktur:
+echo.
+echo C:\Najika\
+echo   ├── backend\         (NEU - von NajikaCore)
+echo   ├── frontend\        (behalten)
+echo   ├── DOCS\            (NEU)
+echo   ├── START_NAJIKA.bat (NEU)
+echo   └── README.md        (NEU)
+echo.
+echo WICHTIG:
+echo - C:\NajikaCore\ wurde NICHT gelöscht
+echo - Backup: C:\Najika_Backups\
+echo.
+echo Weiter mit MERGE_03_TEST.bat zum Testen!
+echo.
+pause
+goto :eof
+
+:error
+echo.
+echo ========================================
+echo    FEHLER BEIM MERGE!
+echo ========================================
+echo.
+echo Restore aus Backup:
+echo 1. Gehe zu C:\Najika_Backups\
+echo 2. Kopiere neuestes Backup zurück
+echo.
+pause
+exit /b 1

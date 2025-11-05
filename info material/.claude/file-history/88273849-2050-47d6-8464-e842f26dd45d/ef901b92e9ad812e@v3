@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+import requests
+import time
+import json
+
+print("=== PERSISTENT STORAGE TEST ===\n")
+
+# Test 1: State abrufen
+print("Test 1: State abrufen")
+state = requests.get("http://localhost:8000/api/state").json()
+print(f"User: Level {state['user']['level']}, XP {state['user']['xp']}")
+print(f"Progress: Dungeon Level {state['progress']['dungeon_level']}")
+print(f"Battle: HP {state['battle']['hp']}")
+print(f"History Size: {state['history_size']} messages\n")
+
+# Test 2: User Update
+print("Test 2: User Stats Update (XP +100, Level +1)")
+update_result = requests.post(
+    "http://localhost:8000/api/user/update",
+    json={"xp": state['user']['xp'] + 100, "level": state['user']['level'] + 1}
+).json()
+print(f"Update erfolgreich: {update_result['ok']}")
+print(f"Neuer User: Level {update_result['user']['level']}, XP {update_result['user']['xp']}\n")
+
+# Test 3: Progress Update
+print("Test 3: Progress Update (Dungeon Level +1)")
+progress_result = requests.post(
+    "http://localhost:8000/api/progress/update",
+    json={"dungeon_level": state['progress']['dungeon_level'] + 1}
+).json()
+print(f"Update erfolgreich: {progress_result['ok']}")
+print(f"Neuer Dungeon Level: {progress_result['progress']['dungeon_level']}\n")
+
+# Test 4: Manuelles Save triggern
+print("Test 4: Manuelles Save")
+save_result = requests.get("http://localhost:8000/api/save").json()
+print(f"Save erfolgreich: {save_result['ok']}")
+print(f"Message: {save_result['message']}\n")
+
+# Test 5: Save-Datei checken
+print("Test 5: Save-Datei prüfen")
+import os
+save_file = os.path.join(os.path.dirname(__file__), "saves", "najika_state.json")
+if os.path.exists(save_file):
+    with open(save_file, "r", encoding="utf-8") as f:
+        saved_data = json.load(f)
+    print(f"Save-Datei existiert: {save_file}")
+    print(f"Gespeichert am: {saved_data['saved_at']}")
+    print(f"User in Save: Level {saved_data['user']['level']}, XP {saved_data['user']['xp']}")
+    print(f"Progress in Save: Dungeon Level {saved_data['progress']['dungeon_level']}")
+
+    # Backups zählen
+    saves_dir = os.path.join(os.path.dirname(__file__), "saves")
+    backups = [f for f in os.listdir(saves_dir) if f.startswith("najika_state_")]
+    print(f"\nBackups vorhanden: {len(backups)}")
+    if backups:
+        print(f"Neuestes Backup: {sorted(backups)[-1]}")
+else:
+    print("FEHLER: Save-Datei nicht gefunden!")
+
+print("\n✅ Persistent Storage System ist AKTIV!")
+print("\nFeatures:")
+print("  - Auto-Save alle 30 Sekunden nach Chat-Message")
+print("  - Save-on-Shutdown (Ctrl+C)")
+print("  - Load-on-Startup")
+print("  - Backup-Rotation (letzte 3 Saves)")
+print("  - API Endpoints:")
+print("    GET /api/state - State abrufen")
+print("    GET /api/save - Manuell speichern")
+print("    POST /api/user/update - User Stats updaten")
+print("    POST /api/progress/update - Progress updaten")

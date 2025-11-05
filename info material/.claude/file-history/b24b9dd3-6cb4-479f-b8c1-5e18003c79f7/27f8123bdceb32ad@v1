@@ -1,0 +1,587 @@
+﻿/* MINIGAME OVERLAY */
+.minigame-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.minigame-overlay.active {
+    display: flex;
+}
+
+.minigame-container {
+    width: 90%;
+    max-width: 800px;
+    height: 80vh;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 20px;
+    border: 3px solid #667eea;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.minigame-header {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.minigame-header h2 {
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.minigame-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.minigame-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.4rem;
+    transition: all 0.3s;
+}
+
+.minigame-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.minigame-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* RHYTHM GAME */
+.rhythm-game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.rhythm-track {
+    width: 80%;
+    height: 400px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.rhythm-note {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(240, 147, 251, 0.5);
+    animation: notefall linear;
+}
+
+@keyframes notefall {
+    from { top: -60px; }
+    to { top: 100%; }
+}
+
+.rhythm-hitzone {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    border: 3px dashed #2ecc71;
+    border-radius: 10px;
+    animation: pulse 1s infinite;
+}
+
+.rhythm-keys {
+    display: flex;
+    gap: 1rem;
+}
+
+.rhythm-key {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.rhythm-key:active, .rhythm-key.pressed {
+    transform: scale(0.9);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+}
+
+/* GARDEN GAME */
+.garden-game {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    padding: 2rem;
+}
+
+.garden-tile {
+    background: linear-gradient(135deg, #2a4a2e, #1a3a1e);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.garden-tile.weed {
+    background: linear-gradient(135deg, #8b4513, #654321);
+    animation: weedShake 0.5s infinite;
+}
+
+@keyframes weedShake {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+.garden-tile.flower {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+}
+
+.garden-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* REFLEX GAME */
+.reflex-game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* BROOM GAME */
+.broom-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.broom-game canvas {
+    width: 100%;
+    max-width: 760px;
+    border-radius: 18px;
+    background: #040016;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+.broom-hud {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    color: #ffd166;
+}
+
+.broom-hud span {
+    padding: 0.35rem 0.9rem;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+}
+
+.broom-hud p {
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.4rem 0 0;
+}
+
+.broom-explosion,
+.broom-success {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 2rem 3rem;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 40px rgba(255, 99, 71, 0.7);
+    animation: pulse 1s infinite;
+}
+
+.broom-success {
+    background: rgba(15, 100, 50, 0.85);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.6);
+    animation: none;
+}
+
+.broom-explosion h3,
+.broom-success h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* CRAFTING GAME */
+.craft-game {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    padding: 2rem;
+}
+
+.craft-recipe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.craft-recipe-steps {
+    display: flex;
+    gap: 1rem;
+    font-size: 2rem;
+}
+
+.craft-step {
+    padding: 0.5rem 0.9rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.craft-step.active {
+    border: 2px solid #ffd166;
+    box-shadow: 0 0 20px rgba(255, 209, 102, 0.6);
+}
+
+.craft-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.craft-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 1rem;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.35), rgba(118, 75, 162, 0.35));
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.craft-button span {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.craft-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(102, 126, 234, 0.35);
+}
+
+.craft-status {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    padding: 0 0.5rem;
+}
+
+/* TRAINING GAME */
+.training-game {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.training-arena {
+    position: relative;
+    flex: 1;
+    border-radius: 18px;
+    background: radial-gradient(circle at center, rgba(102, 126, 234, 0.2) 0%, rgba(22, 33, 62, 0.8) 100%);
+    overflow: hidden;
+}
+
+.training-target {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9f43, #f6416c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(246, 65, 108, 0.45);
+    cursor: pointer;
+    animation: pulse 1s infinite;
+}
+
+.training-target.hit {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    animation: none;
+}
+
+.training-status {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.training-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    font-size: 1.4rem;
+}
+
+/* COOKING GAME */
+.cooking-game {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.cooking-track {
+    position: relative;
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255, 183, 77, 0.2), rgba(255, 94, 98, 0.3));
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.cooking-items {
+    position: absolute;
+    inset: 0;
+}
+
+.cooking-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 3px dashed rgba(255, 255, 255, 0.5);
+}
+
+.cooking-item {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.4rem;
+    transition: transform 0.05s linear;
+}
+
+.cooking-item.sliced {
+    animation: slicePop 0.2s ease forwards;
+}
+
+@keyframes slicePop {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -80%) scale(0); }
+}
+
+.cooking-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cooking-controls button {
+    padding: 0.8rem 1.6rem;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cooking-status {
+    font-weight: 600;
+}
+
+.cooking-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.75);
+    padding: 1.2rem 2rem;
+    border-radius: 12px;
+}
+
+.minigame-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.reflex-target {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px rgba(52, 152, 219, 0.5);
+}
+
+.reflex-target.ready {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    animation: targetPulse 0.5s infinite;
+    box-shadow: 0 10px 40px rgba(231, 76, 60, 0.8);
+}
+
+@keyframes targetPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.reflex-timer {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+.reflex-instruction {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* COOKING GAME NINJA STYLE */
+.cooking-game-ninja {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.cooking-recipe-display {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.cooking-recipe-display h4 {
+    margin: 0 0 0.75rem;
+    font-size: 1.2rem;
+}
+
+.recipe-ingredients {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.recipe-ingredient {
+    font-size: 2.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    opacity: 0.4;
+    transition: all 0.3s;
+}
+
+.recipe-ingredient.collected {
+    opacity: 1;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+    animation: collectPulse 0.5s ease;
+}
+
+@keyframes collectPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+#cookingCanvas {
+    flex: 1;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0f0f1a, #1a0f1e);
+    cursor: crosshair;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.cooking-hud {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+}

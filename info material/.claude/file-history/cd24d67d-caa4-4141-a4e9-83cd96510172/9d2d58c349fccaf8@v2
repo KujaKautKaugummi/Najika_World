@@ -1,0 +1,71 @@
+@echo off
+REM ========================================
+REM NAJIKA VOICE TRAINING SETUP
+REM ========================================
+
+echo.
+echo ========================================
+echo NAJIKA VOICE TRAINING SETUP
+echo ========================================
+echo.
+
+cd /d "%~dp0"
+
+echo SCHRITT 1: Pruefe Python...
+python --version >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [!] Python nicht gefunden!
+    pause
+    exit /b 1
+)
+echo [OK] Python gefunden
+echo.
+
+echo SCHRITT 2: Installiere Whisper AI...
+echo (Das kann 2-3 Minuten dauern...)
+echo.
+pip install openai-whisper
+echo.
+
+if %errorLevel% neq 0 (
+    echo [!] Whisper Installation fehlgeschlagen!
+    pause
+    exit /b 1
+)
+
+echo [OK] Whisper installiert
+echo.
+
+echo SCHRITT 3: Pruefe FFmpeg...
+ffmpeg -version >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [!] FFmpeg nicht gefunden!
+    echo.
+    echo BITTE INSTALLIERE FFMPEG:
+    echo 1. Gehe zu: https://ffmpeg.org/download.html
+    echo 2. Lade Windows Build herunter
+    echo 3. Entpacke nach C:\ffmpeg
+    echo 4. Fuege C:\ffmpeg\bin zu PATH hinzu
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] FFmpeg gefunden
+echo.
+
+echo ========================================
+echo SETUP KOMPLETT!
+echo ========================================
+echo.
+echo NAECHSTE SCHRITTE:
+echo 1. Lege deine Videos in die Ordner:
+echo    - training_data\personalities\megumin\
+echo    - training_data\personalities\harley\
+echo    - training_data\personalities\shiro\
+echo    - training_data\personalities\melissa\
+echo.
+echo 2. Starte Training:
+echo    python NAJIKA_VIDEO_TO_VOICE_TRAINING.py train
+echo.
+pause

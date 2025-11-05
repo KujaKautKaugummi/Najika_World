@@ -1,0 +1,22 @@
+[
+  {
+    "content": "User: Alle Browser-Tabs schließen (localhost)",
+    "status": "in_progress",
+    "activeForm": "User schließt Tabs"
+  },
+  {
+    "content": "Alle node-Prozesse killen",
+    "status": "pending",
+    "activeForm": "Kille alle node-Prozesse"
+  },
+  {
+    "content": "Frontend frisch starten",
+    "status": "pending",
+    "activeForm": "Starte Frontend frisch"
+  },
+  {
+    "content": "Nach erfolgreichen Start: V4 Features",
+    "status": "pending",
+    "activeForm": "Implementiere V4 Features"
+  }
+]

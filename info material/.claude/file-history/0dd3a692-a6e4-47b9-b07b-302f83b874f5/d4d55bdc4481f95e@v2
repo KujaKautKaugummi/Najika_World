@@ -1,0 +1,84 @@
+# NAJIKA ULTIMATE TRAINING SCHEDULE
+# 4x daily, 10 Epochs, ~70 Min each = OPTIMAL!
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "NAJIKA ULTIMATE TRAINING SETUP (4x DAILY, 10 EPOCHS)" -ForegroundColor Cyan
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "ULTIMATE PRE-TRAINING:" -ForegroundColor Yellow
+Write-Host "- 4x daily Training (~70 Min each)" -ForegroundColor Yellow
+Write-Host "- 10 Epochs (deep learning!)" -ForegroundColor Yellow
+Write-Host "- ~4.7h GPU load per day" -ForegroundColor Yellow
+Write-Host "- Optimal for RTX 3060 Ti`n" -ForegroundColor Yellow
+
+# Delete ALL old Training-Tasks
+Write-Host "Delete old Training-Tasks..." -ForegroundColor Yellow
+schtasks /Delete /TN "NajikaLoRAMorning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAEvening" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Midnight" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_EarlyMorning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Morning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Noon" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Afternoon" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Evening" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAUltimate_Night" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAUltimate_Morning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAUltimate_Afternoon" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAUltimate_Evening" /F 2>$null
+
+Write-Host "`nCreate 4 ULTIMATE Training-Tasks...`n" -ForegroundColor Yellow
+
+# Training-Times: 00:00, 06:00, 12:00, 18:00
+$times = @("00:00", "06:00", "12:00", "18:00")
+$names = @("Night", "Morning", "Afternoon", "Evening")
+
+for ($i = 0; $i -lt $times.Length; $i++) {
+    $taskName = "NajikaLoRAUltimate_$($names[$i])"
+    $time = $times[$i]
+
+    Write-Host "[$($i+1)/4] $taskName ($time)..." -ForegroundColor Green
+
+    $action = New-ScheduledTaskAction -Execute "python" -Argument "C:\NajikaCore\najika_lora_training.py"
+    $trigger = New-ScheduledTaskTrigger -Daily -At $time
+    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Force | Out-Null
+
+    if ($?) {
+        Write-Host "      [OK] Task created" -ForegroundColor Green
+    } else {
+        Write-Host "      [ERROR] Task creation failed" -ForegroundColor Red
+    }
+}
+
+Write-Host "`n============================================================" -ForegroundColor Cyan
+Write-Host "ULTIMATE TRAINING-SCHEDULE" -ForegroundColor Cyan
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "00:00 - Night Training (10 Epochs, ~70 Min)" -ForegroundColor White
+Write-Host "06:00 - Morning Training (10 Epochs, ~70 Min)" -ForegroundColor White
+Write-Host "12:00 - Afternoon Training (10 Epochs, ~70 Min)" -ForegroundColor White
+Write-Host "18:00 - Evening Training (10 Epochs, ~70 Min)`n" -ForegroundColor White
+
+Write-Host "= 4x daily, every 6 hours!" -ForegroundColor Yellow
+Write-Host "= ~4.7h GPU load per day (4x ~70 Min)" -ForegroundColor Yellow
+Write-Host "= 10 Epochs = DEEP LEARNING!`n" -ForegroundColor Green
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "TOTAL TRAINING DATA:" -ForegroundColor Cyan
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "- 741 Claude Sessions" -ForegroundColor White
+Write-Host "- 370 Personality Samples (5x intensive)" -ForegroundColor White
+Write-Host "- 10 Core Instructions" -ForegroundColor White
+Write-Host "- 6 External Code Examples" -ForegroundColor White
+Write-Host "= 936+ Samples total!`n" -ForegroundColor Green
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "BACK TO NORMAL (after 1-2 weeks):" -ForegroundColor Red
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "powershell -File 'C:/NajikaCore/install_scheduler.ps1'`n" -ForegroundColor White
+Write-Host "Returns to 2x daily (08:00 + 20:00, 3 Epochs)`n" -ForegroundColor Yellow
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "SETUP COMPLETE!" -ForegroundColor Green
+Write-Host "============================================================`n" -ForegroundColor Cyan

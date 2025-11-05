@@ -1,0 +1,53 @@
+# ============================================
+# NAJIKA TRAINING SCHEDULER SETUP
+# Erstellt Windows Tasks für automatisches Training
+# ============================================
+
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " NAJIKA TRAINING SCHEDULER SETUP" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Task 1: NACHT-TRAINING (00:00-08:00, JEDEN TAG!)
+Write-Host "[1/2] Erstelle Nacht-Training Task (00:00 Uhr)..." -ForegroundColor Yellow
+
+$action1 = New-ScheduledTaskAction -Execute "python" -Argument "C:\Najika\backend\najika_smart_training_scheduler.py --train"
+$trigger1 = New-ScheduledTaskTrigger -Daily -At "00:00"
+$settings1 = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+Register-ScheduledTask -TaskName "NajikaTrainingNacht" -Action $action1 -Trigger $trigger1 -Settings $settings1 -Force | Out-Null
+
+Write-Host "   [OK] Task 'NajikaTrainingNacht' erstellt (00:00, 7 Tage)" -ForegroundColor Green
+
+# Task 2: TAG-TRAINING CHECK (08:00, Mo-Fr)
+Write-Host "[2/2] Erstelle Tag-Training Task (08:00 Uhr, Mo-Fr)..." -ForegroundColor Yellow
+
+$action2 = New-ScheduledTaskAction -Execute "python" -Argument "C:\Najika\backend\najika_smart_training_scheduler.py --train"
+$trigger2 = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At "08:00"
+$settings2 = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+Register-ScheduledTask -TaskName "NajikaTrainingTag" -Action $action2 -Trigger $trigger2 -Settings $settings2 -Force | Out-Null
+
+Write-Host "   [OK] Task 'NajikaTrainingTag' erstellt (08:00, Mo-Fr, PAUSIERBAR!)" -ForegroundColor Green
+
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " SETUP ABGESCHLOSSEN!" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "TRAINING LAEUFT AUTOMATISCH:" -ForegroundColor White
+Write-Host "  - NACHT: 00:00-08:00 (JEDEN TAG!)" -ForegroundColor Green
+Write-Host "  - TAG: 08:00-15:00 (Mo-Fr, pausierbar)" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "STEUERUNG:" -ForegroundColor White
+Write-Host "  Doppelklick: C:\Najika\TRAINING_STEUERUNG.bat" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "ODER MANUELL:" -ForegroundColor White
+Write-Host "  Pausieren:  python najika_smart_training_scheduler.py --pause" -ForegroundColor Yellow
+Write-Host "  Aktivieren: python najika_smart_training_scheduler.py --resume" -ForegroundColor Green
+Write-Host "  Status:     python najika_smart_training_scheduler.py --status" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Tasks in Task Scheduler anzeigen:" -ForegroundColor White
+Write-Host "  schtasks /Query /TN 'Najika*' /FO LIST" -ForegroundColor Gray
+Write-Host ""

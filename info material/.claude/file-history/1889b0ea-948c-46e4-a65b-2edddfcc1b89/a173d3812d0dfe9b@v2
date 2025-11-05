@@ -1,0 +1,23 @@
+@echo off
+REM ========================================
+REM NAJIKA - INTERACTIVE MODE
+REM Einfach "najika" eingeben und loslegen!
+REM ========================================
+
+cd /d "%~dp0"
+
+REM Prüfe ob Server läuft
+curl -s http://localhost:8000/health >nul 2>&1
+if %errorLevel% neq 0 (
+    echo.
+    echo [!] Najika-Server läuft nicht!
+    echo [*] Starte Server...
+    echo.
+    start /B python najika_server.py
+    timeout /t 3 /nobreak >nul
+)
+
+REM Starte interaktive Session
+python najika_interactive.py
+
+exit /b 0

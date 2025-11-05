@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""
+NAJIKA COMPLETE PROJECT ANALYZER
+Analysiert ALLE Dateien in:
+- C:\NajikaCore\
+- C:\Users\0KKK0\Desktop\zip\
+- C:\Users\0KKK0\.claude\
+
+Erfasst:
+- Jeden Code
+- Jeden Erfolg/Fehler
+- Jede Konfiguration
+- Komplettes Projekt-Verständnis
+"""
+
+import os
+import json
+from pathlib import Path
+from datetime import datetime
+
+# Ordner die analysiert werden sollen
+ANALYZE_PATHS = [
+    Path("C:/NajikaCore"),
+    Path("C:/Users/0KKK0/Desktop/zip"),
+    Path("C:/Users/0KKK0/.claude")
+]
+
+# Output für Najika's Wissen
+KNOWLEDGE_DIR = Path("C:/NajikaCore/knowledge")
+FULL_CONTEXT_FILE = KNOWLEDGE_DIR / "complete_project_context.json"
+SUMMARY_FILE = KNOWLEDGE_DIR / "project_summary.txt"
+
+# Dateitypen die analysiert werden
+CODE_EXTENSIONS = {
+    '.py', '.js', '.java', '.cpp', '.c', '.h', '.cs', '.go', '.rs', '.rb',
+    '.php', '.ts', '.jsx', '.tsx', '.vue', '.swift', '.kt', '.scala',
+    '.verse', '.vert', '.frag', '.glsl', '.hlsl'
+}
+
+TEXT_EXTENSIONS = {
+    '.txt', '.md', '.json', '.yaml', '.yml', '.toml', '.ini', '.cfg',
+    '.conf', '.xml', '.html', '.css', '.scss', '.sass', '.bat', '.sh',
+    '.ps1', '.log', '.env'
+}
+
+class ProjectAnalyzer:
+    """Analysiert komplettes Projekt"""
+
+    def __init__(self):
+        self.files_analyzed = 0
+        self.total_lines = 0
+        self.total_chars = 0
+        self.file_index = {}
+        self.code_files = []
+        self.text_files = []
+        self.config_files = []
+        self.errors = []
+
+    def analyze_all(self):
+        """Analysiert alle Ordner"""
+        print("=" * 70)
+        print("NAJIKA COMPLETE PROJECT ANALYZER")
+        print("=" * 70)
+        print()
+        print("Analysiere ALLE Dateien für vollständiges Projekt-Verständnis...")
+        print()
+
+        # Erstelle Knowledge-Ordner
+        KNOWLEDGE_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Analysiere jeden Pfad
+        for path in ANALYZE_PATHS:
+            if not path.exists():
+                print(f"⚠️  Pfad nicht gefunden: {path}")
+                continue
+
+            print(f"📂 Analysiere: {path}")
+            self.analyze_directory(path)
+            print()
+
+        # Erstelle Zusammenfassung
+        self.create_summary()
+
+        # Speichere Komplett-Context
+        self.save_full_context()
+
+        # Zeige Statistik
+        self.print_statistics()
+
+    def analyze_directory(self, path):
+        """Analysiert ein Verzeichnis rekursiv"""
+        try:
+            for item in path.rglob('*'):
+                if item.is_file():
+                    # Skip bestimmte Ordner
+                    skip_dirs = ['__pycache__', '.git', 'node_modules', '.venv', 'venv']
+                    if any(skip in str(item) for skip in skip_dirs):
+                        continue
+
+                    # Skip sehr große Dateien (>5MB)
+                    try:
+                        if item.stat().st_size > 5 * 1024 * 1024:
+                            continue
+                    except:
+                        continue
+
+                    self.analyze_file(item)
+
+        except PermissionError:
+            self.errors.append(f"Zugriff verweigert: {path}")
+        except Exception as e:
+            self.errors.append(f"Fehler bei {path}: {str(e)}")
+
+    def analyze_file(self, file_path):
+        """Analysiert einzelne Datei"""
+        try:
+            ext = file_path.suffix.lower()
+
+            # Kategorisiere Datei
+            category = "other"
+            if ext in CODE_EXTENSIONS:
+                category = "code"
+                self.code_files.append(file_path)
+            elif ext in TEXT_EXTENSIONS:
+                category = "text"
+                self.text_files.append(file_path)
+            elif ext in ['.json', '.yaml', '.yml', '.toml', '.ini', '.env']:
+                category = "config"
+                self.config_files.append(file_path)
+
+            # Lese Datei
+            try:
+                content = file_path.read_text(encoding='utf-8')
+            except UnicodeDecodeError:
+                try:
+                    content = file_path.read_text(encoding='latin-1')
+                except:
+                    content = None
+
+            if content:
+                lines = content.split('\n')
+                self.total_lines += len(lines)
+                self.total_chars += len(content)
+
+                # Indexiere Datei
+                self.file_index[str(file_path)] = {
+                    "path": str(file_path),
+                    "category": category,
+                    "extension": ext,
+                    "size": file_path.stat().st_size,
+                    "lines": len(lines),
+                    "chars": len(content),
+                    "preview": content[:500] if len(content) > 500 else content
+                }
+
+                self.files_analyzed += 1
+
+        except Exception as e:
+            self.errors.append(f"Fehler bei Datei {file_path}: {str(e)}")
+
+    def create_summary(self):
+        """Erstellt Projekt-Zusammenfassung"""
+        summary = []
+        summary.append("=" * 70)
+        summary.append("NAJIKA - COMPLETE PROJECT KNOWLEDGE")
+        summary.append("=" * 70)
+        summary.append("")
+        summary.append(f"Analysiert am: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        summary.append("")
+
+        # Statistik
+        summary.append("STATISTIK:")
+        summary.append(f"- Dateien analysiert: {self.files_analyzed}")
+        summary.append(f"- Code-Dateien: {len(self.code_files)}")
+        summary.append(f"- Text-Dateien: {len(self.text_files)}")
+        summary.append(f"- Config-Dateien: {len(self.config_files)}")
+        summary.append(f"- Total Zeilen: {self.total_lines:,}")
+        summary.append(f"- Total Zeichen: {self.total_chars:,}")
+        summary.append("")
+
+        # Wichtigste Dateien
+        summary.append("WICHTIGSTE DATEIEN:")
+        important_files = [
+            "najika_server.py",
+            "najika_enhanced_personality.py",
+            "najika_cli.py",
+            "najika_tools.py",
+            "knowledge_loader.py",
+            "najika_state.json",
+            "HANDOFF_SESSION4.md",
+            "PROGRAMMING_TRAINING_GUIDE.md",
+            "USAGE_GUIDE.md"
+        ]
+
+        for filename in important_files:
+            found = [f for f in self.file_index.keys() if filename in f]
+            if found:
+                file_info = self.file_index[found[0]]
+                summary.append(f"  ✅ {filename}")
+                summary.append(f"     Zeilen: {file_info['lines']}, Größe: {file_info['size']} bytes")
+        summary.append("")
+
+        # Code-Typen
+        summary.append("CODE-TYPEN GEFUNDEN:")
+        code_exts = {}
+        for file_path in self.code_files:
+            ext = Path(file_path).suffix
+            code_exts[ext] = code_exts.get(ext, 0) + 1
+
+        for ext, count in sorted(code_exts.items(), key=lambda x: x[1], reverse=True):
+            summary.append(f"  {ext}: {count} Dateien")
+        summary.append("")
+
+        # Fehler
+        if self.errors:
+            summary.append("FEHLER/WARNUNGEN:")
+            for error in self.errors[:10]:  # Max 10 Fehler
+                summary.append(f"  ⚠️  {error}")
+            summary.append("")
+
+        # Speichere Summary
+        summary_text = "\n".join(summary)
+        SUMMARY_FILE.write_text(summary_text, encoding='utf-8')
+
+        print(summary_text)
+
+    def save_full_context(self):
+        """Speichert kompletten Context für Najika"""
+        context_data = {
+            "analyzed_at": datetime.now().isoformat(),
+            "statistics": {
+                "files_analyzed": self.files_analyzed,
+                "code_files": len(self.code_files),
+                "text_files": len(self.text_files),
+                "config_files": len(self.config_files),
+                "total_lines": self.total_lines,
+                "total_chars": self.total_chars
+            },
+            "file_index": self.file_index,
+            "code_files": [str(f) for f in self.code_files],
+            "text_files": [str(f) for f in self.text_files],
+            "config_files": [str(f) for f in self.config_files],
+            "errors": self.errors
+        }
+
+        with open(FULL_CONTEXT_FILE, 'w', encoding='utf-8') as f:
+            json.dump(context_data, f, indent=2, ensure_ascii=False)
+
+        print(f"📊 Komplett-Context gespeichert: {FULL_CONTEXT_FILE}")
+        print()
+
+    def print_statistics(self):
+        """Zeigt finale Statistik"""
+        print("=" * 70)
+        print("ANALYSE ABGESCHLOSSEN")
+        print("=" * 70)
+        print()
+        print(f"✅ {self.files_analyzed} Dateien analysiert")
+        print(f"✅ {self.total_lines:,} Zeilen Code erfasst")
+        print(f"✅ {self.total_chars:,} Zeichen verarbeitet")
+        print()
+        print("Najika hat jetzt VOLLSTÄNDIGES Projekt-Verständnis!")
+        print()
+        print(f"Knowledge gespeichert in: {KNOWLEDGE_DIR}")
+        print()
+
+
+def main():
+    """Main entry point"""
+    analyzer = ProjectAnalyzer()
+    analyzer.analyze_all()
+
+    print("=" * 70)
+    print("NÄCHSTER SCHRITT:")
+    print("=" * 70)
+    print()
+    print("Najika kann jetzt auf ALLES zugreifen!")
+    print()
+    print("Starte Najika mit:")
+    print("  najika")
+    print()
+    print("Oder:")
+    print("  python najika_interactive.py")
+    print()
+
+
+if __name__ == "__main__":
+    main()

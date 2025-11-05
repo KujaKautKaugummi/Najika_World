@@ -1,0 +1,59 @@
+# PowerShell Script zum Erstellen des Auto-Training Tasks
+
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host "NAJIKA AUTO-TRAINING TASK ERSTELLEN" -ForegroundColor Cyan
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Loesche alten Task falls vorhanden
+Write-Host "[1/3] Loesche alten Task falls vorhanden..." -ForegroundColor Yellow
+try {
+    Unregister-ScheduledTask -TaskName "NajikaTraining16h" -Confirm:$false -ErrorAction SilentlyContinue
+    Write-Host "      Alter Task geloescht" -ForegroundColor Green
+} catch {
+    Write-Host "      Kein alter Task vorhanden" -ForegroundColor Gray
+}
+
+Write-Host ""
+Write-Host "[2/3] Erstelle neuen Task..." -ForegroundColor Yellow
+
+# Task Action
+$action = New-ScheduledTaskAction -Execute "python" -Argument "C:\NajikaCore\najika_training_scheduler.py"
+
+# Task Trigger - Stuendlich von 08:00-23:00
+$triggers = @()
+for ($hour = 8; $hour -lt 24; $hour++) {
+    $time = "{0:D2}:00" -f $hour
+    $trigger = New-ScheduledTaskTrigger -Daily -At $time
+    $triggers += $trigger
+}
+
+# Task Settings
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+
+# Task Principal (User Context)
+$principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -RunLevel Highest
+
+# Registriere Task
+Register-ScheduledTask -TaskName "NajikaTraining16h" -Action $action -Trigger $triggers -Settings $settings -Principal $principal -Force
+
+Write-Host "      Task erstellt!" -ForegroundColor Green
+
+Write-Host ""
+Write-Host "[3/3] Pruefe Task-Status..." -ForegroundColor Yellow
+Get-ScheduledTask -TaskName "NajikaTraining16h" | Format-List TaskName, State, Triggers
+
+Write-Host ""
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host "FERTIG!" -ForegroundColor Green
+Write-Host "================================================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Der Task 'NajikaTraining16h' ist jetzt aktiv und laeuft:" -ForegroundColor White
+Write-Host "- JEDEN Tag (Mo-So)" -ForegroundColor White
+Write-Host "- Stuendlich von 08:00-23:00 Uhr" -ForegroundColor White
+Write-Host "- Automatisch im Hintergrund" -ForegroundColor White
+Write-Host ""
+Write-Host "Task aktivieren:   Enable-ScheduledTask -TaskName 'NajikaTraining16h'" -ForegroundColor Cyan
+Write-Host "Task deaktivieren: Disable-ScheduledTask -TaskName 'NajikaTraining16h'" -ForegroundColor Cyan
+Write-Host "Task loeschen:     Unregister-ScheduledTask -TaskName 'NajikaTraining16h'" -ForegroundColor Cyan
+Write-Host ""

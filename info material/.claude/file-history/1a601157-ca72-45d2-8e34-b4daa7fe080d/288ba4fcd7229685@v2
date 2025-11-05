@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""Extrahiert die letzten Nachrichten aus einer Claude Session"""
+import json
+from pathlib import Path
+
+SESSION = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore/1e75a874-27fc-4133-a038-22081b5aae06.jsonl')
+
+# Alle Zeilen laden
+all_lines = SESSION.read_text(encoding='utf-8').strip().split('\n')
+print(f"Total lines in session: {len(all_lines)}\n")
+
+# Letzte 100 Zeilen durchgehen
+last_lines = all_lines[-100:]
+
+conversation = []
+for line in last_lines:
+    try:
+        entry = json.loads(line)
+        msg_type = entry.get('type')
+
+        if msg_type == 'user':
+            content = entry.get('message', {}).get('content', [])
+            text_parts = []
+            for item in content:
+                if isinstance(item, dict) and item.get('type') == 'text':
+                    text_parts.append(item.get('text', ''))
+
+            if text_parts:
+                conversation.append({
+                    'type': 'USER',
+                    'timestamp': entry.get('timestamp', '')[:19],
+                    'text': ' '.join(text_parts)
+                })
+
+        elif msg_type == 'assistant':
+            content = entry.get('message', {}).get('content', [])
+            text_parts = []
+            for item in content:
+                if isinstance(item, dict) and item.get('type') == 'text':
+                    text_parts.append(item.get('text', ''))
+
+            if text_parts:
+                conversation.append({
+                    'type': 'ASSISTANT',
+                    'timestamp': entry.get('timestamp', '')[:19],
+                    'text': ' '.join(text_parts)
+                })
+    except Exception as e:
+        continue
+
+# Letzte 15 Nachrichten ausgeben
+print("=" * 80)
+print("LETZTE 15 NACHRICHTEN DER SESSION")
+print("=" * 80)
+print()
+
+for i, msg in enumerate(conversation[-15:], 1):
+    print(f"\n{'='*80}")
+    print(f"[{i}] {msg['type']} - {msg['timestamp']}")
+    print(f"{'='*80}")
+    print(msg['text'][:1000])  # Max 1000 chars
+    if len(msg['text']) > 1000:
+        print("\n... [GEKÜRZT]")

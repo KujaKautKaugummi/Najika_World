@@ -1,0 +1,82 @@
+[
+  {
+    "content": "Optimierungs-Vorschläge präsentieren",
+    "status": "completed",
+    "activeForm": "Präsentiere Optimierungs-Vorschläge"
+  },
+  {
+    "content": "#4 Private Mode - SSE statt Polling implementieren",
+    "status": "completed",
+    "activeForm": "Implementiere SSE für Private Mode"
+  },
+  {
+    "content": "#2 AI Response Caching implementieren",
+    "status": "completed",
+    "activeForm": "Implementiere AI Response Caching"
+  },
+  {
+    "content": "#9 Persistent Storage System aufbauen",
+    "status": "completed",
+    "activeForm": "Baue Persistent Storage System auf"
+  },
+  {
+    "content": "3D-Böden für alle Räume hinzufügen",
+    "status": "completed",
+    "activeForm": "Füge 3D-Böden hinzu"
+  },
+  {
+    "content": "#3 Asset Lazy Loading implementieren",
+    "status": "completed",
+    "activeForm": "Implementiere Asset Lazy Loading"
+  },
+  {
+    "content": "#1 3D Performance Optimierung",
+    "status": "completed",
+    "activeForm": "Optimiere 3D Performance"
+  },
+  {
+    "content": "Texturen nach Optimierung überprüfen",
+    "status": "completed",
+    "activeForm": "Überprüfe Texturen"
+  },
+  {
+    "content": "#8 Dungeon Generator für Schwarze Mühle",
+    "status": "completed",
+    "activeForm": "Implementiere Dungeon Generator"
+  },
+  {
+    "content": "Server zum Laufen bringen",
+    "status": "completed",
+    "activeForm": "Bringe Server zum Laufen"
+  },
+  {
+    "content": "Kochen Minigame (Fruit Ninja Style mit Rezepten)",
+    "status": "completed",
+    "activeForm": "Implementiere Kochen Minigame"
+  },
+  {
+    "content": "Texturen Fix (outputEncoding deprecated)",
+    "status": "completed",
+    "activeForm": "Fixe Texturen"
+  },
+  {
+    "content": "#5 Minigame Loading optimieren",
+    "status": "completed",
+    "activeForm": "Optimiere Minigame Loading"
+  },
+  {
+    "content": "Server-Verbindungsproblem beheben",
+    "status": "completed",
+    "activeForm": "Behebe Server-Verbindungsproblem"
+  },
+  {
+    "content": "#6 Server API Streaming für AI",
+    "status": "in_progress",
+    "activeForm": "Implementiere Server API Streaming"
+  },
+  {
+    "content": "#7 Frontend Bundle Optimierung",
+    "status": "pending",
+    "activeForm": "Optimiere Frontend Bundle"
+  }
+]

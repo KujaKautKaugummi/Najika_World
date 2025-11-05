@@ -1,0 +1,218 @@
+# KAYKIT ASSETS KOPIER-SCRIPT
+# Kopiert alle benötigten KayKit 3D Assets von Desktop nach NajikaCore
+
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host "  KAYKIT ASSETS KOPIEREN" -ForegroundColor Cyan
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host ""
+
+$ErrorActionPreference = "Stop"
+
+# Pfade
+$desktopModels = "C:\Users\0KKK0\Desktop\modelle"
+$targetBase = "C:\NajikaCore\assets"
+
+Write-Host "[1/4] Erstelle Zielverzeichnisse..." -ForegroundColor Yellow
+
+# Erstelle Verzeichnisse
+$kaykit = "$targetBase\kaykit"
+$characters = "$kaykit\characters"
+New-Item -ItemType Directory -Path $kaykit -Force | Out-Null
+New-Item -ItemType Directory -Path $characters -Force | Out-Null
+
+Write-Host "  -> $kaykit" -ForegroundColor Green
+Write-Host "  -> $characters" -ForegroundColor Green
+
+# ===== DUNGEON REMASTERED ASSETS =====
+
+Write-Host ""
+Write-Host "[2/4] Kopiere Dungeon Assets..." -ForegroundColor Yellow
+
+$dungeonSource = "$desktopModels\KayKit_DungeonRemastered_1.1_FREE\Assets\gltf"
+
+if (-not (Test-Path $dungeonSource)) {
+    Write-Host "  FEHLER: Dungeon Source nicht gefunden!" -ForegroundColor Red
+    Write-Host "  Erwarteter Pfad: $dungeonSource" -ForegroundColor Yellow
+    exit 1
+}
+
+# Assets die wir brauchen
+$dungeonAssets = @(
+    "wall",
+    "floor_tile_large",
+    "torch",
+    "floor_foundation",
+    "ceiling",
+    "pillar",
+    "banner",
+    "barrel",
+    "crate"
+)
+
+$copiedCount = 0
+
+foreach ($asset in $dungeonAssets) {
+    $glb = "$dungeonSource\$asset.glb"
+    $bin = "$dungeonSource\$asset.bin"
+
+    if (Test-Path $glb) {
+        Copy-Item $glb -Destination "$kaykit\$asset.glb" -Force
+        Write-Host "  -> $asset.glb" -ForegroundColor Green
+        $copiedCount++
+
+        if (Test-Path $bin) {
+            Copy-Item $bin -Destination "$kaykit\$asset.bin" -Force
+        }
+    } else {
+        Write-Host "  ! $asset.glb nicht gefunden (optional)" -ForegroundColor DarkYellow
+    }
+}
+
+Write-Host "  $copiedCount Dungeon Assets kopiert" -ForegroundColor Cyan
+
+# ===== ADVENTURERS CHARACTER =====
+
+Write-Host ""
+Write-Host "[3/4] Kopiere Character (Skeleton Mage)..." -ForegroundColor Yellow
+
+$characterSource = "$desktopModels\KayKit_Adventurers_1.0_FREE\Characters\gltf"
+
+if (-not (Test-Path $characterSource)) {
+    # Versuche alternatives Verzeichnis
+    $characterSource = "$desktopModels\KayKit_Skeletons_1.0_FREE\Characters\gltf"
+}
+
+if (Test-Path $characterSource) {
+    # Suche nach Skeleton/Mage Models
+    $characterFiles = Get-ChildItem -Path $characterSource -Filter "*.glb"
+
+    foreach ($file in $characterFiles) {
+        if ($file.Name -match "skeleton|mage" -or $characterFiles.Count -le 3) {
+            Copy-Item $file.FullName -Destination "$characters\$($file.Name)" -Force
+            Write-Host "  -> $($file.Name)" -ForegroundColor Green
+
+            # Kopiere auch .bin falls vorhanden
+            $binFile = $file.FullName -replace "\.glb$", ".bin"
+            if (Test-Path $binFile) {
+                Copy-Item $binFile -Destination "$characters\$($file.BaseName).bin" -Force
+            }
+        }
+    }
+} else {
+    Write-Host "  WARNUNG: Character Source nicht gefunden" -ForegroundColor Yellow
+    Write-Host "  Erwarteter Pfad: $characterSource" -ForegroundColor DarkYellow
+}
+
+# ===== ROOM CONFIG =====
+
+Write-Host ""
+Write-Host "[4/4] Erstelle room_config_detailed.json..." -ForegroundColor Yellow
+
+$roomConfig = @"
+{
+  "wohnzimmer": {
+    "span": 20,
+    "wallHeight": 4,
+    "floor": "floor_tile_large",
+    "wall": "wall",
+    "palette": {
+      "primary": "#8B4513",
+      "secondary": "#D2691E",
+      "accent": "#FFD700"
+    },
+    "props": [
+      {
+        "model": "torch",
+        "position": [-15, 0, -15],
+        "rotation": [0, 0, 0],
+        "scale": 1.5
+      },
+      {
+        "model": "torch",
+        "position": [15, 0, -15],
+        "rotation": [0, 0, 0],
+        "scale": 1.5
+      }
+    ]
+  },
+  "kampfarena": {
+    "span": 30,
+    "wallHeight": 6,
+    "floor": "floor_tile_large",
+    "wall": "wall",
+    "palette": {
+      "primary": "#8B0000",
+      "secondary": "#DC143C",
+      "accent": "#FF4500"
+    },
+    "props": [
+      {
+        "model": "torch",
+        "position": [-20, 0, -20],
+        "rotation": [0, 0, 0],
+        "scale": 2
+      },
+      {
+        "model": "torch",
+        "position": [20, 0, -20],
+        "rotation": [0, 0, 0],
+        "scale": 2
+      },
+      {
+        "model": "torch",
+        "position": [-20, 0, 20],
+        "rotation": [0, 0, 0],
+        "scale": 2
+      },
+      {
+        "model": "torch",
+        "position": [20, 0, 20],
+        "rotation": [0, 0, 0],
+        "scale": 2
+      }
+    ]
+  },
+  "schwarze_muehle": {
+    "span": 25,
+    "wallHeight": 5,
+    "floor": "floor_tile_large",
+    "wall": "wall",
+    "palette": {
+      "primary": "#1a1a1a",
+      "secondary": "#4a0e4e",
+      "accent": "#9d4edd"
+    },
+    "props": [
+      {
+        "model": "torch",
+        "position": [0, 0, -20],
+        "rotation": [0, 0, 0],
+        "scale": 1.5
+      }
+    ]
+  }
+}
+"@
+
+Set-Content -Path "$targetBase\room_config_detailed.json" -Value $roomConfig -Encoding UTF8
+Write-Host "  -> room_config_detailed.json" -ForegroundColor Green
+
+# ===== ZUSAMMENFASSUNG =====
+
+Write-Host ""
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host "  ASSETS ERFOLGREICH KOPIERT!" -ForegroundColor Green
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host ""
+
+Write-Host "Kopierte Dateien:" -ForegroundColor Cyan
+Get-ChildItem -Path $kaykit -Recurse -File | ForEach-Object {
+    Write-Host "  - $($_.Name) ($([math]::Round($_.Length/1KB, 2)) KB)" -ForegroundColor White
+}
+
+Write-Host ""
+Write-Host "NAECHSTE SCHRITTE:" -ForegroundColor Yellow
+Write-Host "1. Server starten mit: python najika_server.py" -ForegroundColor White
+Write-Host "2. Browser oeffnen: http://localhost:8000/digivice/" -ForegroundColor White
+Write-Host "3. Raeume testen (Wohnzimmer, Kampfarena, Schwarze Muehle)" -ForegroundColor White
+Write-Host ""

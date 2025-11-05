@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Script to copy KayKit assets from Desktop to NajikaCore"""
+
+import os
+import shutil
+from pathlib import Path
+
+print("="*50)
+print("  KAYKIT ASSETS KOPIEREN")
+print("="*50)
+print()
+
+# Pfade
+desktop_models = Path("C:/Users/0KKK0/Desktop/modelle")
+target_base = Path("C:/NajikaCore/assets")
+
+# Erstelle Verzeichnisse
+print("[1/3] Erstelle Verzeichnisse...")
+kaykit = target_base / "kaykit"
+characters = kaykit / "characters"
+kaykit.mkdir(parents=True, exist_ok=True)
+characters.mkdir(parents=True, exist_ok=True)
+print(f"  -> {kaykit}")
+print(f"  -> {characters}")
+
+# Kopiere Dungeon Assets
+print()
+print("[2/3] Kopiere Dungeon Assets...")
+# Richtiger Pfad: KayKit Dungeon Pack 1.0
+dungeon_source = desktop_models / "KayKit Dungeon Pack 1.0/Models/gltf"
+
+if dungeon_source.exists():
+    copied = 0
+    # KayKit Dungeon Pack verwendet ".gltf.glb" Format
+    assets_to_copy = [
+        ("wall.gltf.glb", "wall.glb"),
+        ("torch.gltf.glb", "torch.glb"),
+        ("pillar.gltf.glb", "pillar.glb"),
+        ("barrel.gltf.glb", "barrel.glb"),
+        ("crate.gltf.glb", "crate.glb"),
+        ("floorDecoration_tilesLarge.gltf.glb", "floor_tile_large.glb"),
+        ("door.gltf.glb", "door.glb"),
+    ]
+
+    for source_name, target_name in assets_to_copy:
+        glb = dungeon_source / source_name
+
+        if glb.exists():
+            shutil.copy2(glb, kaykit / target_name)
+            print(f"  -> {target_name}")
+            copied += 1
+
+    print(f"  {copied} Dungeon Assets kopiert")
+else:
+    print(f"  FEHLER: {dungeon_source} nicht gefunden!")
+
+# Kopiere Character Assets
+print()
+print("[3/3] Kopiere Character Assets...")
+char_paths = [
+    desktop_models / "KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Characters/gltf",
+    desktop_models / "KayKit_Adventurers_1.0_FREE/Characters/gltf",
+    desktop_models / "KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/Characters/gltf",
+    desktop_models / "KayKit_Skeletons_1.0_FREE/Characters/gltf"
+]
+
+char_source = None
+for path in char_paths:
+    if path.exists():
+        char_source = path
+        break
+
+if char_source.exists():
+    copied = 0
+    for glb_file in char_source.glob("*.glb"):
+        shutil.copy2(glb_file, characters / glb_file.name)
+        print(f"  -> {glb_file.name}")
+        copied += 1
+
+        # Kopiere auch .bin falls vorhanden
+        bin_file = glb_file.with_suffix(".bin")
+        if bin_file.exists():
+            shutil.copy2(bin_file, characters / bin_file.name)
+
+    print(f"  {copied} Character Assets kopiert")
+else:
+    print(f"  WARNUNG: Character Source nicht gefunden")
+
+# Zusammenfassung
+print()
+print("="*50)
+print("  ASSETS ERFOLGREICH KOPIERT!")
+print("="*50)
+print()
+
+print("Kopierte Dateien:")
+for file in sorted(kaykit.rglob("*.glb")):
+    size_kb = file.stat().st_size / 1024
+    print(f"  - {file.relative_to(kaykit)} ({size_kb:.1f} KB)")
+
+print()
+print("NAECHSTE SCHRITTE:")
+print("  1. Server starten: python najika_server.py")
+print("  2. Browser oeffnen: http://localhost:8000/digivice/")
+print("  3. Raeume testen (Wohnzimmer, Kampfarena)")
+print()

@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🔊 NAJIKA TTS INTEGRATION 🔊
+
+Text-to-Speech Service für najika_server.py
+
+FEATURES:
+- Konvertiert Najika's Chat-Responses zu Audio
+- Nutzt geklonte Megumin-Stimme (XTTS-v2)
+- Caching für schnellere Responses
+- Streaming-Support
+
+USAGE:
+    from najika_tts import NajikaTTS
+
+    tts = NajikaTTS()
+    audio_file = tts.speak("EXPLOSION!")
+"""
+
+import json
+import os
+import hashlib
+from pathlib import Path
+from datetime import datetime
+import pytz
+
+try:
+    from TTS.api import TTS
+    TTS_AVAILABLE = True
+except ImportError:
+    TTS_AVAILABLE = False
+
+NAJIKA_DIR = Path('C:/NajikaCore')
+VOICE_DIR = NAJIKA_DIR / 'voice_data'
+MODELS_DIR = VOICE_DIR / 'models'
+CACHE_DIR = VOICE_DIR / 'cache'
+OUTPUT_DIR = VOICE_DIR / 'output'
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+class NajikaTTS:
+    """Najika Text-to-Speech Service"""
+
+    def __init__(self, voice_name='megumin', use_cache=True):
+        self.voice_name = voice_name
+        self.use_cache = use_cache
+        self.tts_model = None
+        self.voice_config = None
+
+        # Initialisiere
+        self._load_voice_config()
+
+    def _load_voice_config(self):
+        """Lädt Voice-Config"""
+        config_file = MODELS_DIR / f"{self.voice_name}_config.json"
+
+        if not config_file.exists():
+            print(f"[NAJIKA TTS] Voice Config nicht gefunden: {config_file}")
+            print(f"[NAJIKA TTS] Führe zuerst najika_voice_clone.py aus!")
+            return False
+
+        with open(config_file, 'r', encoding='utf-8') as f:
+            self.voice_config = json.load(f)
+
+        print(f"[NAJIKA TTS] Voice geladen: {self.voice_config['name']}")
+        return True
+
+    def _init_tts_model(self):
+        """Initialisiert TTS Model (lazy loading)"""
+        if self.tts_model is not None:
+            return True
+
+        if not TTS_AVAILABLE:
+            print("[NAJIKA TTS] TTS Modul nicht verfügbar! (pip install TTS)")
+            return False
+
+        if self.voice_config is None:
+            print("[NAJIKA TTS] Voice Config fehlt!")
+            return False
+
+        try:
+            print("[NAJIKA TTS] Lade XTTS-v2 Model...")
+            self.tts_model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2")
+            print("[NAJIKA TTS] Model geladen!")
+            return True
+        except Exception as e:
+            print(f"[NAJIKA TTS] Model-Fehler: {e}")
+            return False
+
+    def _get_cache_key(self, text):
+        """Generiert Cache-Key aus Text"""
+        text_hash = hashlib.md5(text.encode('utf-8')).hexdigest()
+        return f"{self.voice_name}_{text_hash}"
+
+    def _get_cached_audio(self, text):
+        """Holt Audio aus Cache"""
+        if not self.use_cache:
+            return None
+
+        cache_key = self._get_cache_key(text)
+        cache_file = CACHE_DIR / f"{cache_key}.wav"
+
+        if cache_file.exists():
+            print(f"[NAJIKA TTS] Cache HIT: {cache_file.name}")
+            return cache_file
+
+        return None
+
+    def _cache_audio(self, text, audio_file):
+        """Speichert Audio in Cache"""
+        if not self.use_cache:
+            return
+
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+        cache_key = self._get_cache_key(text)
+        cache_file = CACHE_DIR / f"{cache_key}.wav"
+
+        try:
+            import shutil
+            shutil.copy(audio_file, cache_file)
+            print(f"[NAJIKA TTS] Cached: {cache_file.name}")
+        except Exception as e:
+            print(f"[NAJIKA TTS] Cache-Fehler: {e}")
+
+    def speak(self, text, output_file=None):
+        """
+        Konvertiert Text zu Audio (Megumin's Stimme)
+
+        Args:
+            text (str): Text zum Sprechen
+            output_file (Path): Optional output file
+
+        Returns:
+            Path: Audio-File oder None
+        """
+        # Check Cache
+        cached = self._get_cached_audio(text)
+        if cached:
+            return cached
+
+        # Initialisiere TTS
+        if not self._init_tts_model():
+            return None
+
+        # Output File
+        if output_file is None:
+            timestamp = datetime.now(BERLIN_TZ).strftime('%Y%m%d_%H%M%S')
+            output_file = OUTPUT_DIR / f"najika_speech_{timestamp}.wav"
+
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Reference Sample
+        reference_sample = Path(self.voice_config['reference_sample'])
+        if not reference_sample.exists():
+            print(f"[NAJIKA TTS] Referenz-Sample fehlt: {reference_sample}")
+            return None
+
+        try:
+            print(f"[NAJIKA TTS] Generate: {text[:50]}...")
+
+            self.tts_model.tts_to_file(
+                text=text,
+                file_path=str(output_file),
+                speaker_wav=str(reference_sample),
+                language=self.voice_config['language']
+            )
+
+            print(f"[NAJIKA TTS] Audio erstellt: {output_file.name}")
+
+            # Cache
+            self._cache_audio(text, output_file)
+
+            return output_file
+
+        except Exception as e:
+            print(f"[NAJIKA TTS] TTS-Fehler: {e}")
+            return None
+
+    def clear_cache(self):
+        """Löscht TTS Cache"""
+        if CACHE_DIR.exists():
+            import shutil
+            shutil.rmtree(CACHE_DIR)
+            CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            print("[NAJIKA TTS] Cache gelöscht!")
+
+# Global Instance (lazy loaded)
+_najika_tts_instance = None
+
+def get_tts():
+    """Gibt TTS-Instance zurück (Singleton)"""
+    global _najika_tts_instance
+
+    if _najika_tts_instance is None:
+        _najika_tts_instance = NajikaTTS()
+
+    return _najika_tts_instance
+
+def text_to_speech(text):
+    """
+    Convenience Function für najika_server.py
+
+    Args:
+        text (str): Text zum Sprechen
+
+    Returns:
+        Path: Audio-File oder None
+    """
+    tts = get_tts()
+    return tts.speak(text)
+
+# Test
+if __name__ == "__main__":
+    print("="*60)
+    print("NAJIKA TTS TEST")
+    print("="*60)
+
+    if not TTS_AVAILABLE:
+        print("ERROR: TTS nicht installiert!")
+        print("Install: pip install TTS")
+    else:
+        tts = NajikaTTS()
+
+        test_text = "EXPLOSION! Hallo Kuja! Meine Magie ist unbesiegbar!"
+
+        audio = tts.speak(test_text)
+
+        if audio:
+            print()
+            print("SUCCESS!")
+            print(f"Audio: {audio}")
+        else:
+            print()
+            print("FEHLER!")
+            print("Führe zuerst najika_voice_clone.py aus!")

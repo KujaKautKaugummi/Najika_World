@@ -1,0 +1,60 @@
+// Najika Game Scene - Three.js Setup
+import React, { useRef, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sky, Environment } from '@react-three/drei';
+import * as THREE from 'three';
+
+// Najika Character Model (Placeholder)
+function NajikaModel() {
+  const meshRef = useRef();
+  
+  useFrame((state, delta) => {
+    meshRef.current.rotation.y += delta * 0.5;
+  });
+
+  return (
+    <mesh ref={meshRef} position={[0, 1, 0]}>
+      <capsuleGeometry args={[0.5, 1.5, 4, 8]} />
+      <meshStandardMaterial color="#FF6B9D" />
+    </mesh>
+  );
+}
+
+// Main Game Scene
+export default function GameScene() {
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Canvas
+        camera={{ position: [0, 2, 5], fov: 60 }}
+        shadows
+      >
+        <Sky sunPosition={[100, 20, 100]} />
+        <ambientLight intensity={0.3} />
+        <directionalLight
+          position={[10, 10, 5]}
+          intensity={1}
+          castShadow
+        />
+        
+        {/* Najika Character */}
+        <NajikaModel />
+        
+        {/* Ground */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+          <planeGeometry args={[50, 50]} />
+          <meshStandardMaterial color="#4CAF50" />
+        </mesh>
+        
+        {/* Camera Controls */}
+        <OrbitControls
+          target={[0, 1, 0]}
+          maxPolarAngle={Math.PI / 2}
+          minDistance={2}
+          maxDistance={10}
+        />
+        
+        <Environment preset="sunset" />
+      </Canvas>
+    </div>
+  );
+}

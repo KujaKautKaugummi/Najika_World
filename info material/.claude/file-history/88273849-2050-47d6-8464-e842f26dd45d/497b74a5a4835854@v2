@@ -1,0 +1,228 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Najika is a web-based virtual companion application featuring a 3D interactive environment, AI chatbot integration, and minigames. The system consists of:
+- Python HTTP server backend with AI model integration (Ollama local + optional cloud providers)
+- Three.js-based 3D frontend with room navigation and character controls
+- WebGL-powered interactive environment using KayKit asset packs
+
+## Starting the Application
+
+**Windows:**
+```bash
+START_NAJIKA.bat
+```
+
+This script:
+1. Checks for Ollama availability
+2. Starts the Python server on port 8000
+3. Server accessible at http://localhost:8000/
+
+**Manual start:**
+```bash
+python najika_server.py
+```
+
+## Architecture
+
+### Backend (`najika_server.py`)
+
+**Core Server:**
+- Built on Python's `http.server.SimpleHTTPRequestHandler`
+- Single-file architecture with no external framework dependencies
+- Configurable via `.env` file (see Environment Configuration below)
+- Default host: `0.0.0.0:8000`
+
+**AI Provider System:**
+- Primary: Ollama (local) at `http://127.0.0.1:11434/api/generate`
+- Models: `najika-local` (default), `najika-wizard` (NSFW mode)
+- Optional cloud providers: OpenAI, Anthropic (requires `CLOUD_PIN` to enable)
+- Fallback to `urllib` if `requests` library unavailable
+
+**Persona System:**
+- Najika character with 4 facets: MEGUMIN, HARLEY, SHIRO, MELISSA
+- Conversation history maintained in `STATE["history"]` (last 4 messages for context)
+- Private mode trigger: keyword "kätzchen" switches to `najika-wizard` model
+
+**Room System:**
+12 predefined rooms with specific actions and configurations:
+- Wohnzimmer, Schlafzimmer, Küche, Badezimmer, Garten, Musikraum
+- Medizin, Terminal, Studieren & Crafting, Trainingszimmer
+- Kampfarena, Schwarze Mühle – Keller (combat-enabled)
+
+**Battle System:**
+- Turn-based combat with HP tracking
+- Wave-based enemy spawning (rats, skeletons, slimes)
+- Damage calculation based on active enemy count
+- Combat available in: Kampfarena, Schwarze Mühle – Keller
+
+### Frontend Architecture
+
+**Entry Point:** `digivice/index.html`
+- Grid layout with header, 3D scene, action bar, chat footer
+- Inline styles with gradient aesthetics
+- Responsive design with mobile breakpoints
+
+**JavaScript Modules (in load order):**
+
+1. **`kaykit_loader.js`**: Asset management system
+   - Loads room configurations from `/assets/room_config_detailed.json`
+   - GLTFLoader integration for KayKit 3D models
+   - Model caching and availability checking
+
+2. **`minigames.js`**: Interactive game overlay system
+   - Rhythm game, garden game, reflex game, cooking, training, crafting, broom delivery
+   - Modal-based UI with canvas rendering
+   - Server API integration for score persistence
+
+3. **`chat_ui.js`**: Chat interface enhancements
+   - Likely handles chat display/formatting (not read in detail)
+
+4. **`touch_controls.js`**: Mobile control handlers
+   - Touch input for 3D scene navigation
+
+5. **`private_mode.js`**: NSFW mode indicator
+   - Visual indicator management for private mode
+
+6. **`3d_scene.js`**: Core 3D rendering engine (919 lines)
+   - **Camera modes**: Orbit (default), Third-person, First-person
+   - **Character system**: Skeleton_Mage model with wand attachment
+   - **Room builder**: Dynamic floor/wall/prop instantiation from config
+   - **Lighting**: Ambient + directional + 2 point lights (primary/secondary colors)
+   - **Movement**: WASD/Arrow keys, room boundary clamping
+   - **Palette system**: Per-room color schemes with private mode override
+   - **Fallback mode**: Procedural room if KayKit assets unavailable
+
+**Room Configuration:** `assets/room_config_detailed.json`
+- Per-room definitions with floor/wall models, props, palette, spawn points
+- Configurable span (room size) and wall height
+- Each room has unique visual theme via color palette
+- Props have position, rotation, scale transformations
+
+### API Endpoints
+
+**GET:**
+- `/health` - Server status, AI provider, cloud status
+- `/api/rooms` - List of available rooms
+- `/api/status` - Status with private mode indicator
+- `/api/cloud/status` - Cloud provider availability
+
+**POST:**
+- `/api/chat` - Send message, receive AI response
+- `/api/cloud/enable` - Enable cloud AI (requires PIN)
+- `/api/cloud/disable` - Revert to local Ollama
+- `/api/room/actions` - Get actions for specific room
+- `/api/battle/start` - Initialize combat (HP=100, wave=1, enemies=3)
+- `/api/battle/attack` - Execute attack, receive updated battle state
+- `/api/minigame/{rhythm,garden,reflex}` - Minigame score endpoints
+- `/api/crafting` - Crafting action
+- `/api/heal` - Restore HP to 100
+- `/api/event/next` - Random Oregon Trail-style event
+
+## Environment Configuration
+
+The `.env` file contains:
+- `HOST`, `PORT` - Server binding
+- `AI_PROVIDER` - `ollama` or `openai`
+- `CLOUD_ENABLED`, `CLOUD_PIN` - Cloud provider toggle
+- `NSFW_LOCAL` - Enable private mode trigger
+- `OLLAMA_MODEL_ALIAS` - Local model name
+- `GGUF_LLAMA`, `GGUF_WIZARD` - Model file paths
+- `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` - Cloud API keys
+
+**Security Note:** The `.env` file contains API keys and should not be committed. The current file in this repo appears to contain real credentials and should be removed from version control.
+
+## Development Patterns
+
+**Adding New Rooms:**
+1. Add room configuration to `assets/room_config_detailed.json`
+2. Update `ROOMS` array in `najika_server.py:32`
+3. Add actions to `ROOM_ACTIONS` dict in `najika_server.py:148-161`
+4. Update fallback in `index.html:383-396`
+
+**Adding Minigames:**
+1. Implement game logic in `digivice/js/minigames.js`
+2. Add server endpoint in `najika_server.py` (pattern: `/api/minigame/{name}`)
+3. Hook action in `handleAction()` in `index.html`
+
+**Modifying AI Behavior:**
+- Edit `PERSONA_SYSTEM` prompt in `najika_server.py:25-30`
+- Adjust context window via `history[-4:]` in `build_prompt()`
+- Modify Ollama parameters in `call_ollama()` (temp, top_p, repeat_penalty)
+
+**3D Scene Modifications:**
+- Camera settings: `digivice/js/3d_scene.js` - `init()` function
+- Character model/behavior: `loadCharacter()`, `updateCharacter()`
+- Room building logic: `buildRoom()`, `buildFloor()`, `buildWalls()`, `buildProp()`
+- Lighting: `setupLights()` - modify ambient/directional/point lights
+
+## File Structure
+
+```
+C:\NajikaCore\
+├── najika_server.py          # Main server + AI integration
+├── START_NAJIKA.bat           # Windows launcher
+├── .env                       # Configuration (DO NOT COMMIT)
+├── assets/
+│   └── room_config_detailed.json  # 3D room definitions
+├── config/                    # (currently empty)
+├── logs/                      # Server logs
+└── digivice/                  # Frontend application
+    ├── index.html             # Main UI + inline scripts
+    ├── js/
+    │   ├── 3d_scene.js        # Three.js rendering engine
+    │   ├── kaykit_loader.js   # Asset loader
+    │   ├── battle_core.js     # Client-side battle logic
+    │   ├── minigames.js       # Interactive minigames
+    │   ├── room_connector.js  # Room/scene bridge
+    │   ├── chat_ui.js         # Chat interface
+    │   ├── private_mode.js    # NSFW mode indicator
+    │   ├── touch_controls.js  # Mobile controls
+    │   ├── oregon.js          # Event system (unused?)
+    │   └── safe_functions.js  # Utility functions (unused?)
+    └── static/
+        └── css/               # Stylesheets
+```
+
+## Dependencies
+
+**Python:**
+- `requests` (optional, falls back to `urllib`)
+- `python-dotenv` (optional, for .env loading)
+
+**JavaScript (CDN):**
+- Three.js r128 (from cdnjs + jsdelivr)
+- GLTFLoader (Three.js examples)
+
+**Assets:**
+- KayKit asset packs (multiple themed packs for rooms/props/characters)
+- Loaded from `/assets/KayKit_*/` paths
+
+## Testing the Application
+
+**Test server connectivity:**
+```bash
+curl http://localhost:8000/health
+```
+
+**Test chat endpoint:**
+```bash
+curl -X POST http://localhost:8000/api/chat -H "Content-Type: application/json" -d '{"message":"Hello"}'
+```
+
+**Test room actions:**
+```bash
+curl -X POST http://localhost:8000/api/room/actions -H "Content-Type: application/json" -d '{"room":"Wohnzimmer"}'
+```
+
+## Known Issues & Notes
+
+- No git repository initialized in project directory
+- `.env` file contains real API keys (security risk)
+- Server uses hardcoded path `C:\NajikaCore` in `translate_path()` (najika_server.py:102)
+- No automated tests present
+- Battle system has basic balance (may need tuning)
+- Ollama must be running separately for local AI to work

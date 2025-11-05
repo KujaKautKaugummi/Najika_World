@@ -1,0 +1,88 @@
+@echo off
+REM ========================================
+REM NAJIKA REAL TRAINING - MIT VIDEOS
+REM ========================================
+
+echo.
+echo ========================================
+echo NAJIKA REAL TRAINING
+echo ========================================
+echo.
+
+cd /d "%~dp0"
+
+:MENU
+echo.
+echo OPTIONEN:
+echo   1 - Setup (Ordner erstellen)
+echo   2 - Status (Videos zaehlen)
+echo   3 - Training starten (ALLE Videos, 10x)
+echo   4 - Beenden
+echo.
+set /p choice="Deine Wahl: "
+
+if "%choice%"=="1" goto SETUP
+if "%choice%"=="2" goto STATUS
+if "%choice%"=="3" goto TRAIN
+if "%choice%"=="4" goto END
+
+echo.
+echo [!] Ungueltige Wahl!
+goto MENU
+
+:SETUP
+echo.
+echo ========================================
+echo SETUP - ORDNERSTRUKTUR
+echo ========================================
+echo.
+python NAJIKA_REAL_TRAINING.py setup
+echo.
+pause
+goto MENU
+
+:STATUS
+echo.
+echo ========================================
+echo STATUS - VIDEO-ZAEHLUNG
+echo ========================================
+echo.
+python NAJIKA_REAL_TRAINING.py status
+echo.
+pause
+goto MENU
+
+:TRAIN
+echo.
+echo ========================================
+echo TRAINING STARTEN
+echo ========================================
+echo.
+echo [!] WICHTIG: Das kann LANGE dauern!
+echo [!] Jedes Video wird 10x trainiert!
+echo.
+set /p confirm="Wirklich starten? (j/n): "
+
+if /i not "%confirm%"=="j" (
+    echo.
+    echo [*] Training abgebrochen
+    pause
+    goto MENU
+)
+
+echo.
+echo [*] Training laeuft...
+echo.
+python NAJIKA_REAL_TRAINING.py train
+echo.
+echo ========================================
+echo TRAINING ABGESCHLOSSEN
+echo ========================================
+echo.
+pause
+goto MENU
+
+:END
+echo.
+echo Tschuess!
+echo.

@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Erika Mishima Zimmer Referenz recherchieren",
+    "status": "completed",
+    "activeForm": "Recherchiere Erika Mishima Zimmer"
+  },
+  {
+    "content": "Pop-ups bei Aktionen entfernen",
+    "status": "in_progress",
+    "activeForm": "Entferne Pop-ups bei Aktionen"
+  },
+  {
+    "content": "W-Taste Raumwechsel deaktivieren",
+    "status": "in_progress",
+    "activeForm": "Deaktiviere W-Taste Raumwechsel"
+  },
+  {
+    "content": "Najika Persona-Prompt anpassen (Code-Modus + EXPLOSION)",
+    "status": "in_progress",
+    "activeForm": "Passe Persona-Prompt an"
+  },
+  {
+    "content": "Kätzchen-Modus Prompt verbessern",
+    "status": "pending",
+    "activeForm": "Verbessere Kätzchen-Modus"
+  },
+  {
+    "content": "Fruit Ninja UI-Fix",
+    "status": "pending",
+    "activeForm": "Fixe Fruit Ninja UI"
+  },
+  {
+    "content": "Aktionsleiste nach oben verlegen",
+    "status": "pending",
+    "activeForm": "Verlege Aktionsleiste"
+  },
+  {
+    "content": "Chat-Button verkleinern",
+    "status": "pending",
+    "activeForm": "Verkleinere Chat-Button"
+  },
+  {
+    "content": "Terminal-Raum Erika-Style designen",
+    "status": "pending",
+    "activeForm": "Designe Terminal-Raum"
+  }
+]

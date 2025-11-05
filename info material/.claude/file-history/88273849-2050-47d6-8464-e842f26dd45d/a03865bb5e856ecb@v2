@@ -1,0 +1,11 @@
+import requests
+import json
+
+# Test Private Mode mit kätzchen
+response = requests.post(
+    "http://localhost:8000/api/chat",
+    json={"message": "Hallo kätzchen, wie geht es dir?"},
+    timeout=60
+)
+
+print(response.json())

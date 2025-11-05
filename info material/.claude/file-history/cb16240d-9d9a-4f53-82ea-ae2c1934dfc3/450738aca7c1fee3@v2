@@ -1,0 +1,104 @@
+# ============================================
+# NAJIKA TRAINING KOMPLETT-SETUP
+# Killt alte Prozesse + Erstellt Tasks
+# ============================================
+
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " NAJIKA TRAINING KOMPLETT-SETUP" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+# ============================================
+# SCHRITT 1: ALTE TRAINING-PROZESSE KILLEN
+# ============================================
+Write-Host "[1/3] Suche und beende alte Training-Prozesse..." -ForegroundColor Yellow
+
+$killedAny = $false
+
+# Finde alle Python-Prozesse die Training machen
+$trainingProcesses = Get-Process python -ErrorAction SilentlyContinue | Where-Object {
+    $_.CommandLine -like "*najika*training*" -or
+    $_.CommandLine -like "*lora*training*" -or
+    $_.CommandLine -like "*najika_smart_training*"
+}
+
+if ($trainingProcesses) {
+    foreach ($proc in $trainingProcesses) {
+        Write-Host "   Beende Prozess: PID $($proc.Id)" -ForegroundColor Gray
+        Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+        $killedAny = $true
+    }
+}
+
+if ($killedAny) {
+    Write-Host "   [OK] Alte Training-Prozesse beendet" -ForegroundColor Green
+    Start-Sleep -Seconds 2
+} else {
+    Write-Host "   [OK] Keine alten Training-Prozesse gefunden" -ForegroundColor Green
+}
+
+# ============================================
+# SCHRITT 2: ALTE TASKS LOESCHEN
+# ============================================
+Write-Host "[2/3] Loesche alte Windows Tasks..." -ForegroundColor Yellow
+
+$oldTasks = @("NajikaTrainingNacht", "NajikaTrainingTag", "NajikaTraining*")
+
+foreach ($taskName in $oldTasks) {
+    $exists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    if ($exists) {
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+        Write-Host "   Geloescht: $taskName" -ForegroundColor Gray
+    }
+}
+
+Write-Host "   [OK] Alte Tasks entfernt" -ForegroundColor Green
+
+# ============================================
+# SCHRITT 3: NEUE TASKS ERSTELLEN
+# ============================================
+Write-Host "[3/3] Erstelle neue Training Tasks..." -ForegroundColor Yellow
+
+# Task 1: NACHT-TRAINING (00:00-08:00, JEDEN TAG!)
+$action1 = New-ScheduledTaskAction -Execute "python" -Argument "C:\Najika\backend\najika_smart_training_scheduler.py --train" -WorkingDirectory "C:\Najika\backend"
+$trigger1 = New-ScheduledTaskTrigger -Daily -At "00:00"
+$settings1 = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 8)
+
+Register-ScheduledTask -TaskName "NajikaTrainingNacht" -Action $action1 -Trigger $trigger1 -Settings $settings1 -Force | Out-Null
+
+Write-Host "   [OK] Task 'NajikaTrainingNacht' erstellt (00:00, 7 Tage)" -ForegroundColor Green
+
+# Task 2: TAG-TRAINING (08:00-15:00, Mo-Fr, PAUSIERBAR!)
+$action2 = New-ScheduledTaskAction -Execute "python" -Argument "C:\Najika\backend\najika_smart_training_scheduler.py --train" -WorkingDirectory "C:\Najika\backend"
+$trigger2 = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At "08:00"
+$settings2 = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 7)
+
+Register-ScheduledTask -TaskName "NajikaTrainingTag" -Action $action2 -Trigger $trigger2 -Settings $settings2 -Force | Out-Null
+
+Write-Host "   [OK] Task 'NajikaTrainingTag' erstellt (08:00, Mo-Fr, PAUSIERBAR!)" -ForegroundColor Green
+
+# ============================================
+# FERTIG!
+# ============================================
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " SETUP ABGESCHLOSSEN!" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "TRAINING LAEUFT AUTOMATISCH:" -ForegroundColor White
+Write-Host "  - NACHT: 00:00-08:00 (JEDEN TAG!)" -ForegroundColor Green
+Write-Host "  - TAG: 08:00-15:00 (Mo-Fr, pausierbar)" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "STEUERUNG:" -ForegroundColor White
+Write-Host "  Pausieren:  python najika_smart_training_scheduler.py --pause" -ForegroundColor Yellow
+Write-Host "  Aktivieren: python najika_smart_training_scheduler.py --resume" -ForegroundColor Green
+Write-Host "  Status:     python najika_smart_training_scheduler.py --status" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Tasks pruefen:" -ForegroundColor White
+Write-Host "  Get-ScheduledTask | Where-Object {" -NoNewline -ForegroundColor Gray
+Write-Host '$_.TaskName -like "Najika*"}' -ForegroundColor Gray
+Write-Host ""
+Write-Host "WICHTIG: Keine manuellen Training-Prozesse mehr starten!" -ForegroundColor Red
+Write-Host "         NUR die Windows Tasks trainieren jetzt!" -ForegroundColor Red
+Write-Host ""

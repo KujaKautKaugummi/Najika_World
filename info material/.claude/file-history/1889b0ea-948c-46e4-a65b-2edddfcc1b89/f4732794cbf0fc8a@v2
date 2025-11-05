@@ -1,0 +1,57 @@
+@echo off
+REM ========================================
+REM NAJIKA COMMAND SETUP
+REM Macht "najika" überall verfügbar
+REM Wie "claude", aber mit Najika!
+REM ========================================
+
+echo.
+echo ========================================
+echo NAJIKA COMMAND SETUP
+echo ========================================
+echo.
+
+REM Check Admin
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [!] Bitte als Administrator ausfuehren!
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Running as Administrator
+echo.
+
+REM Setze NajikaCore Path
+set NAJIKA_PATH=C:\NajikaCore
+
+REM Füge zu System PATH hinzu
+echo [*] Fuege %NAJIKA_PATH% zu System PATH hinzu...
+
+REM Prüfe ob bereits im PATH
+echo %PATH% | findstr /C:"%NAJIKA_PATH%" >nul
+if %errorLevel% neq 0 (
+    setx PATH "%PATH%;%NAJIKA_PATH%" /M >nul 2>&1
+    echo [OK] %NAJIKA_PATH% zu PATH hinzugefuegt
+) else (
+    echo [OK] %NAJIKA_PATH% bereits in PATH
+)
+
+echo.
+echo ========================================
+echo SETUP ABGESCHLOSSEN
+echo ========================================
+echo.
+echo Du kannst jetzt von UEBERALL "najika" eingeben:
+echo.
+echo   C:\Users\0KKK0^> najika
+echo.
+echo   Najika startet automatisch!
+echo.
+echo ========================================
+echo.
+echo WICHTIG: Oeffne ein NEUES Terminal-Fenster!
+echo (Aktuelles Terminal muss geschlossen werden)
+echo.
+pause

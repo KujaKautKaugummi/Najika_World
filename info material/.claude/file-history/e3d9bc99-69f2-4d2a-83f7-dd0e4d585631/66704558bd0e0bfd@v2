@@ -1,0 +1,345 @@
+@echo off
+setlocal enabledelayedexpansion
+color 0A
+title NAJIKA WORLD INSTALLER SIMPLE
+
+set "TARGET=C:\Najika-World"
+
+cls
+echo.
+echo ========================================================================
+echo                   NAJIKA WORLD INSTALLER - SIMPLE
+echo ========================================================================
+echo.
+echo Druecke TASTE zum Starten (oder STRG+C zum Abbrechen)
+pause
+
+REM Admin Check
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    color 0C
+    cls
+    echo FEHLER: Keine Admin-Rechte!
+    echo Rechtsklick -^> Als Administrator ausfuehren
+    pause
+    exit /b 1
+)
+
+REM Python Check
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    color 0C
+    cls
+    echo FEHLER: Python nicht gefunden!
+    echo Installiere Python 3.11+ von python.org
+    pause
+    exit /b 1
+)
+
+color 0A
+cls
+echo.
+echo [OK] Checks bestanden!
+echo.
+timeout /t 2 >nul
+
+REM Ordner erstellen
+cls
+echo.
+echo [SCHRITT 1] Erstelle Ordner...
+echo.
+
+mkdir "%TARGET%\backend" 2>nul
+mkdir "%TARGET%\frontend" 2>nul
+mkdir "%TARGET%\data" 2>nul
+
+if exist "%TARGET%\backend" (
+    echo [OK] Ordner erstellt: %TARGET%
+) else (
+    color 0C
+    echo [FEHLER] Konnte Ordner nicht erstellen!
+    pause
+    exit /b 1
+)
+
+timeout /t 2 >nul
+
+REM Python Files DIREKT schreiben (ohne PowerShell!)
+cls
+echo.
+echo [SCHRITT 2] Erstelle Python Files...
+echo.
+
+REM world_system.py - DIREKT schreiben
+(
+echo # -*- coding: utf-8 -*-
+echo import json, random, os
+echo.
+echo class NajikaWorld:
+echo     def __init__^(self^):
+echo         self.world_size = ^(100, 100^)
+echo         self.seed = random.randint^(0, 999999^)
+echo         self.player_pos = [50, 50]
+echo         self.buildings = {
+echo             "schwarze_muehle": {
+echo                 "position": [50, 50],
+echo                 "name": "Schwarze Muehle",
+echo                 "floors": {
+echo                     "erdgeschoss": ["wohnzimmer", "kueche", "bad"],
+echo                     "obergeschoss": ["schlafzimmer", "musikzimmer"],
+echo                     "keller": ["training", "studieren"]
+echo                 }
+echo             }
+echo         }
+echo         self.world_tiles = []
+echo         self.generate_world^(^)
+echo.
+echo     def generate_world^(self^):
+echo         print^(f"[WORLD] Seed: {self.seed}"^)
+echo         for y in range^(100^):
+echo             row = []
+echo             for x in range^(100^):
+echo                 if x == 50 and y == 50:
+echo                     row.append^("schwarze_muehle"^)
+echo                 else:
+echo                     biomes = ["forest", "meadow", "lake", "mountain"]
+echo                     row.append^(random.choice^(biomes^)^)
+echo             self.world_tiles.append^(row^)
+echo         print^("[OK] World generiert"^)
+echo.
+echo     def move_player^(self, direction^):
+echo         x, y = self.player_pos
+echo         if direction=="north" and y^>0: y-=1
+echo         elif direction=="south" and y^<99: y+=1
+echo         elif direction=="west" and x^>0: x-=1
+echo         elif direction=="east" and x^<99: x+=1
+echo         self.player_pos = [x, y]
+echo         return self.get_current_tile^(^)
+echo.
+echo     def get_current_tile^(self^):
+echo         x, y = self.player_pos
+echo         biome = self.world_tiles[y][x]
+echo         building = None
+echo         if biome == "schwarze_muehle":
+echo             building = self.buildings["schwarze_muehle"]
+echo         return {"type": biome, "position": self.player_pos, "building": building}
+echo.
+echo     def get_visible_area^(self, radius=5^):
+echo         x, y = self.player_pos
+echo         visible = []
+echo         for dy in range^(-radius, radius+1^):
+echo             row = []
+echo             for dx in range^(-radius, radius+1^):
+echo                 wx, wy = x+dx, y+dy
+echo                 if 0^<=wx^<100 and 0^<=wy^<100:
+echo                     row.append^(self.world_tiles[wy][wx]^)
+echo                 else:
+echo                     row.append^("void"^)
+echo             visible.append^(row^)
+echo         return visible
+) > "%TARGET%\backend\world_system.py"
+
+if exist "%TARGET%\backend\world_system.py" (
+    echo [OK] world_system.py erstellt
+) else (
+    color 0C
+    echo [FEHLER] world_system.py fehlgeschlagen!
+    pause
+    exit /b 1
+)
+
+timeout /t 2 >nul
+
+REM game_server.py
+cls
+echo.
+echo [SCHRITT 3] Erstelle Game Server...
+echo.
+
+(
+echo # -*- coding: utf-8 -*-
+echo from flask import Flask, request, jsonify
+echo from flask_cors import CORS
+echo import json
+echo from world_system import NajikaWorld
+echo.
+echo app = Flask^(__name__^)
+echo CORS^(app^)
+echo.
+echo print^("="*70^)
+echo print^("NAJIKA WORLD SERVER"^)
+echo print^("="*70^)
+echo.
+echo najika_world = NajikaWorld^(^)
+echo print^(f"[OK] Seed: {najika_world.seed}"^)
+echo print^(^)
+echo.
+echo @app.route^("/"^)
+echo def index^(^):
+echo     return jsonify^({"status": "ok", "message": "Najika World Server"}^)
+echo.
+echo @app.route^("/api/world/info"^)
+echo def world_info^(^):
+echo     return jsonify^({
+echo         "seed": najika_world.seed,
+echo         "player_pos": najika_world.player_pos,
+echo         "current_tile": najika_world.get_current_tile^(^)
+echo     }^)
+echo.
+echo @app.route^("/api/world/move", methods=["POST"]^)
+echo def world_move^(^):
+echo     direction = request.json.get^("direction", ""^)
+echo     if direction not in ["north", "south", "east", "west"]:
+echo         return jsonify^({"error": "Invalid"}^), 400
+echo     tile = najika_world.move_player^(direction^)
+echo     return jsonify^({"success": True, "tile": tile, "player_pos": najika_world.player_pos}^)
+echo.
+echo @app.route^("/api/world/visible"^)
+echo def world_visible^(^):
+echo     visible = najika_world.get_visible_area^(5^)
+echo     return jsonify^({"visible": visible, "player_pos": najika_world.player_pos}^)
+echo.
+echo if __name__ == "__main__":
+echo     print^("[INFO] Server Port 7010"^)
+echo     print^("="*70^)
+echo     app.run^(host="127.0.0.1", port=7010, debug=False^)
+) > "%TARGET%\backend\game_server.py"
+
+if exist "%TARGET%\backend\game_server.py" (
+    echo [OK] game_server.py erstellt
+) else (
+    color 0C
+    echo [FEHLER] game_server.py fehlgeschlagen!
+    pause
+    exit /b 1
+)
+
+timeout /t 2 >nul
+
+REM Frontend HTML
+cls
+echo.
+echo [SCHRITT 4] Erstelle Frontend...
+echo.
+
+(
+echo ^<!DOCTYPE html^>
+echo ^<html^>^<head^>^<meta charset="UTF-8"^>^<title^>Najika World^</title^>
+echo ^<style^>
+echo body{background:#0a0a0a;color:#0f0;font-family:monospace;padding:20px}
+echo button{background:#0f0;color:#000;padding:10px;margin:5px;border:none;cursor:pointer}
+echo ^</style^>
+echo ^</head^>^<body^>
+echo ^<h1^>NAJIKA WORLD TEST^</h1^>
+echo ^<button onclick="test()"^>Test Server^</button^>
+echo ^<button onclick="move('north')"^>Nord^</button^>
+echo ^<button onclick="move('south')"^>Sued^</button^>
+echo ^<button onclick="move('west')"^>West^</button^>
+echo ^<button onclick="move('east')"^>Ost^</button^>
+echo ^<div id="log"^>^</div^>
+echo ^<script^>
+echo const API="http://127.0.0.1:7010";
+echo function log(m){document.getElementById("log").innerHTML+=m+"^<br^>";}
+echo async function test(){const r=await fetch(API+"/api/world/info");const d=await r.json();log(JSON.stringify(d));}
+echo async function move(d){const r=await fetch(API+"/api/world/move",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({direction:d})});const x=await r.json();log("Moved: "+JSON.stringify(x));}
+echo ^</script^>^</body^>^</html^>
+) > "%TARGET%\frontend\index.html"
+
+if exist "%TARGET%\frontend\index.html" (
+    echo [OK] Frontend erstellt
+) else (
+    color 0C
+    echo [FEHLER] Frontend fehlgeschlagen!
+    pause
+    exit /b 1
+)
+
+timeout /t 2 >nul
+
+REM Launcher
+cls
+echo.
+echo [SCHRITT 5] Erstelle Launcher...
+echo.
+
+(
+echo @echo off
+echo title Najika World
+echo cd /d "%TARGET%"
+echo start /B python backend\game_server.py
+echo timeout /t 3 ^>nul
+echo start frontend\index.html
+echo echo Server laeuft auf Port 7010
+echo pause
+) > "%TARGET%\START.bat"
+
+echo [OK] START.bat erstellt
+
+timeout /t 2 >nul
+
+REM Python Packages
+cls
+echo.
+echo [SCHRITT 6] Python Packages installieren...
+echo [INFO] Das kann 2-3 Minuten dauern...
+echo.
+
+python -m pip install --quiet flask flask-cors >nul 2>&1
+
+if %errorlevel% equ 0 (
+    echo [OK] Flask installiert
+) else (
+    echo [WARNUNG] Flask-Installation fehlgeschlagen
+    echo [INFO] Versuche manuell: pip install flask flask-cors
+)
+
+timeout /t 2 >nul
+
+REM Desktop Shortcut
+cls
+echo.
+echo [SCHRITT 7] Desktop-Verknuepfung...
+echo.
+
+powershell -Command "$WS=New-Object -ComObject WScript.Shell;$SC=$WS.CreateShortcut([Environment]::GetFolderPath('Desktop')+'\Najika World.lnk');$SC.TargetPath='%TARGET%\START.bat';$SC.WorkingDirectory='%TARGET%';$SC.Save()" 2>nul
+
+if %errorlevel% equ 0 (
+    echo [OK] Verknuepfung erstellt
+) else (
+    echo [INFO] Verknuepfung fehlgeschlagen (nicht kritisch^)
+)
+
+timeout /t 2 >nul
+
+REM FERTIG!
+cls
+color 0B
+echo.
+echo ========================================================================
+echo.
+echo                     INSTALLATION ERFOLGREICH!
+echo.
+echo ========================================================================
+echo.
+echo [OK] NAJIKA WORLD INSTALLIERT!
+echo.
+echo INSTALLIERT IN: %TARGET%
+echo.
+echo WAS ERSTELLT WURDE:
+echo    - Open World System
+echo    - Game Server (Port 7010^)
+echo    - Frontend (Test-Interface^)
+echo    - START.bat Launcher
+echo.
+echo JETZT STARTEN:
+echo    1. Desktop: "Najika World"
+echo    2. Oder: %TARGET%\START.bat
+echo.
+echo TESTE:
+echo    http://127.0.0.1:7010/api/world/info
+echo.
+echo ========================================================================
+echo.
+echo Taste druecken zum Schliessen...
+pause >nul
+exit /b 0

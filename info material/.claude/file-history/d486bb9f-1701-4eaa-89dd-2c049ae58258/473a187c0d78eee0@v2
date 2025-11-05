@@ -1,0 +1,266 @@
+#!/usr/bin/env python3
+"""
+NAJIKA SMART UPDATE SYSTEM V2
+Verbesserte Version mit:
+- Task-Tracking über Sessions
+- Automatische File-Read Liste
+- Kontext-Caching
+- Noch token-effizienter
+"""
+
+import json
+import re
+from pathlib import Path
+from datetime import datetime
+
+NAJIKA_DIR = Path("C:/NajikaCore")
+CLAUDE_PROJECTS = Path("C:/Users/0KKK0/.claude/projects/C--NajikaCore")
+UPDATE_FILE = NAJIKA_DIR / "CLAUDE_SMART_UPDATE.md"
+TASK_TRACKING = NAJIKA_DIR / "knowledge" / "task_tracking.json"
+
+class SmartUpdateV2:
+    def __init__(self):
+        self.current_session = None
+        self.previous_session = None
+        self.open_tasks = []
+        self.completed_tasks = []
+        self.files_to_read = []
+        self.tracked_tasks = self.load_tracked_tasks()
+
+    def load_tracked_tasks(self):
+        """Lädt gespeicherte Tasks"""
+        if TASK_TRACKING.exists():
+            try:
+                with open(TASK_TRACKING, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except:
+                return {"open": [], "completed": []}
+        return {"open": [], "completed": []}
+
+    def save_tracked_tasks(self):
+        """Speichert Tasks für nächste Session"""
+        TASK_TRACKING.parent.mkdir(parents=True, exist_ok=True)
+        with open(TASK_TRACKING, 'w', encoding='utf-8') as f:
+            json.dump({
+                "open": self.open_tasks,
+                "completed": self.completed_tasks,
+                "last_update": datetime.now().isoformat()
+            }, f, indent=2)
+
+    def find_sessions(self):
+        """Findet aktuelle und vorherige Session"""
+        sessions = sorted(CLAUDE_PROJECTS.glob("*.jsonl"),
+                         key=lambda p: p.stat().st_mtime, reverse=True)
+
+        if len(sessions) >= 2:
+            self.current_session = sessions[0]
+            self.previous_session = sessions[1]
+            print(f"[OK] Aktuelle: {self.current_session.name[:12]}...")
+            print(f"[OK] Vorherige: {self.previous_session.name[:12]}...")
+            return True
+        else:
+            print("[WARNING] Nicht genug Sessions")
+            return False
+
+    def extract_user_messages(self, session_file, max_messages=10):
+        """Extrahiert User-Messages TOKEN-EFFIZIENT"""
+        user_messages = []
+
+        try:
+            with open(session_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    try:
+                        entry = json.loads(line)
+                        if entry.get('type') == 'user':
+                            msg = entry.get('message', {})
+                            content = msg.get('content', [])
+
+                            text_parts = []
+                            for item in content:
+                                if isinstance(item, dict) and item.get('type') == 'text':
+                                    text_parts.append(item.get('text', ''))
+
+                            if text_parts:
+                                full_text = ' '.join(text_parts)
+                                # Kompakte Summary
+                                summary = full_text[:150] + ('...' if len(full_text) > 150 else '')
+                                user_messages.append({
+                                    'timestamp': entry.get('timestamp', '')[:19],
+                                    'text': full_text,
+                                    'summary': summary
+                                })
+                    except:
+                        continue
+
+            return user_messages[-max_messages:]
+        except Exception as e:
+            print(f"[ERROR] Session lesen: {e}")
+            return []
+
+    def detect_files_mentioned(self, messages):
+        """Erkennt welche Files erwähnt werden -> Auto-Read Liste"""
+        file_patterns = [
+            r'(najika_\w+\.py)',
+            r'(index\.html)',
+            r'(3d_scene\.js)',
+            r'(najika_\w+\.md)',
+            r'(/digivice/\S+)',
+            r'(\.env)',
+            r'(CLAUDE\.md)'
+        ]
+
+        files = set()
+        for msg in messages:
+            text = msg['text']
+            for pattern in file_patterns:
+                matches = re.findall(pattern, text, re.IGNORECASE)
+                files.update(matches)
+
+        return list(files)[:5]  # Max 5 Files
+
+    def detect_open_tasks(self, messages):
+        """Verbesserte Task-Erkennung"""
+        task_keywords = [
+            # Direkte Befehle
+            (r"(mach|erstell|bau|füg|änder|fix|korrigier)\w*\s+\w+", "direct"),
+            # Probleme
+            (r"(fehler|problem|bug|geht nicht|funktioniert nicht)", "issue"),
+            # Wünsche
+            (r"(soll|muss|brauch|möcht)\w*\s+\w+", "requirement"),
+            # Priorität
+            (r"(wichtig|prio|dringend|schnell)", "priority"),
+            # UI-Spezifisch
+            (r"(w-taste|ui|button|icon|chat|terminal|raum)", "ui_change")
+        ]
+
+        tasks = []
+        for msg in messages:
+            text = msg['text']
+
+            # Zeilenweise durchgehen (besser als Sätze)
+            for line in text.split('\n'):
+                line = line.strip()
+                if len(line) < 10 or len(line) > 200:  # Nur sinnvolle Längen
+                    continue
+
+                for pattern, category in task_keywords:
+                    if re.search(pattern, line, re.IGNORECASE):
+                        tasks.append({
+                            'text': line[:150],  # Max 150 chars
+                            'category': category,
+                            'timestamp': msg['timestamp']
+                        })
+                        break
+
+        # Dedupliziere + nach Kategorie sortiert
+        unique_tasks = []
+        seen = set()
+        for task in tasks:
+            if task['text'] not in seen:
+                seen.add(task['text'])
+                unique_tasks.append(task)
+
+        return unique_tasks[:8]  # Max 8 Tasks
+
+    def generate_smart_update(self):
+        """Generiert OPTIMALES Update"""
+        lines = []
+
+        # Kompakter Header
+        lines.append("# NAJIKA SMART UPDATE V2")
+        lines.append(f"**{datetime.now().strftime('%H:%M:%S')}**")
+        lines.append("")
+
+        # Vorherige Session
+        if self.previous_session:
+            lines.append("## VORHERIGE SESSION KONTEXT")
+            lines.append("")
+
+            prev_messages = self.extract_user_messages(self.previous_session, max_messages=8)
+
+            if prev_messages:
+                # Nur die ALLERLETZTEN 2 Messages VOLLSTÄNDIG
+                lines.append("### Letzte 2 User-Nachrichten (VOLLSTÄNDIG):")
+                lines.append("")
+                for msg in prev_messages[-2:]:
+                    lines.append(f"**Zeit:** {msg['timestamp']}")
+                    lines.append("```")
+                    # Vollständig aber max 600 chars
+                    lines.append(msg['text'][:600])
+                    if len(msg['text']) > 600:
+                        lines.append("\n... [GEKÜRZT - Nutze grep für vollständigen Text]")
+                    lines.append("```")
+                    lines.append("")
+
+                # Erkannte Tasks
+                self.open_tasks = self.detect_open_tasks(prev_messages)
+                if self.open_tasks:
+                    lines.append("### ERKANNTE OFFENE AUFGABEN:")
+                    lines.append("")
+                    for task in self.open_tasks:
+                        category_icon = {
+                            'direct': '🔨',
+                            'issue': '🐛',
+                            'requirement': '📋',
+                            'priority': '⚡',
+                            'ui_change': '🎨'
+                        }.get(task['category'], '•')
+                        lines.append(f"{category_icon} {task['text']}")
+                    lines.append("")
+
+                # File-Read Liste
+                self.files_to_read = self.detect_files_mentioned(prev_messages)
+                if self.files_to_read:
+                    lines.append("### FILES DIE ERWÄHNT WURDEN (Read empfohlen):")
+                    lines.append("")
+                    for f in self.files_to_read:
+                        lines.append(f"- `{f}`")
+                    lines.append("")
+
+            lines.append("---")
+            lines.append("")
+
+        # Claude Anweisungen - KOMPAKT
+        lines.append("## ANWEISUNGEN FÜR CLAUDE:")
+        lines.append("")
+        lines.append("**PFLICHT:**")
+        lines.append("1. Lies Files aus 'FILES DIE ERWÄHNT WURDEN' KOMPLETT (Read ohne offset)!")
+        lines.append("2. Prüfe 'ERKANNTE OFFENE AUFGABEN' - was ist noch zu tun?")
+        lines.append("3. Frage User kurz was als nächstes (max 2 Sätze!)")
+        lines.append("")
+        lines.append("**TOKEN-EFFIZIENZ:**")
+        lines.append("- Read IMMER komplett vor Edit")
+        lines.append("- Grep für Suchen, nicht File-Reading")
+        lines.append("- User-Textstück? → `grep -F 'TEXT' SESSION.jsonl`")
+        lines.append("- Kurze Antworten - User kennt Kontext!")
+        lines.append("")
+
+        # Speichern
+        UPDATE_FILE.write_text('\n'.join(lines), encoding='utf-8')
+        print(f"\n[OK] Smart Update V2: {UPDATE_FILE}")
+
+        # Task-Tracking speichern
+        self.save_tracked_tasks()
+
+    def run(self):
+        """Führt Smart Update durch"""
+        print("\n" + "="*60)
+        print("NAJIKA SMART UPDATE V2")
+        print("="*60 + "\n")
+
+        if not self.find_sessions():
+            print("[ERROR] Sessions nicht gefunden!")
+            return
+
+        self.generate_smart_update()
+
+        print("\n" + "="*60)
+        print("FERTIG!")
+        print("="*60)
+        print(f"\nClaude liest: {UPDATE_FILE}")
+        print(f"Tasks getrackt: {len(self.open_tasks)}")
+        print(f"Files erwähnt: {len(self.files_to_read)}\n")
+
+if __name__ == "__main__":
+    updater = SmartUpdateV2()
+    updater.run()

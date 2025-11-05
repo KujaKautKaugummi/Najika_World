@@ -1,0 +1,92 @@
+@echo off
+title NAJIKA SERVER - DEBUG
+color 0A
+cls
+echo.
+echo ========================================================
+echo   NAJIKA V2 SERVER - DEBUG MODE
+echo ========================================================
+echo.
+
+REM Test Python
+echo [TEST] Python Version:
+python --version 2>&1
+if errorlevel 1 (
+    echo [ERROR] Python nicht gefunden!
+    echo.
+    echo LÖSUNG:
+    echo 1. Python installieren: https://www.python.org/
+    echo 2. ODER: Python zum PATH hinzufügen
+    echo.
+    pause
+    exit /b 1
+)
+echo.
+
+REM Test Working Directory
+echo [TEST] Working Directory:
+cd /d C:\NajikaFinal\backend
+echo %CD%
+echo.
+
+REM Test najika_server.py exists
+echo [TEST] najika_server.py existiert:
+if exist "najika_server.py" (
+    echo [OK] File gefunden
+) else (
+    echo [ERROR] File nicht gefunden!
+    echo Aktuelles Verzeichnis: %CD%
+    echo.
+    pause
+    exit /b 1
+)
+echo.
+
+REM Test Ollama
+echo [1/2] Pruefe Ollama...
+ollama list >nul 2>&1
+if errorlevel 1 (
+    echo [!] Ollama nicht gefunden!
+    echo     Starte: ollama serve
+    echo.
+) else (
+    echo [OK] Ollama gefunden
+)
+
+REM Kill old processes
+echo [2/3] Beende alte Prozesse...
+taskkill /F /IM python.exe /FI "WINDOWTITLE eq NAJIKA*" >nul 2>&1
+taskkill /F /IM node.exe /FI "WINDOWTITLE eq *najika*" >nul 2>&1
+echo [OK] Alte Prozesse beendet
+echo.
+
+REM Start Server mit Error Handling
+echo [3/3] Starte Server...
+echo.
+echo ========================================================
+echo   Backend:  http://localhost:8000/
+echo   Frontend: http://localhost:3002/
+echo ========================================================
+echo.
+echo [DEBUG] Starte: python najika_server.py
+echo.
+
+python najika_server.py
+set EXIT_CODE=%errorlevel%
+
+echo.
+echo.
+echo ========================================================
+if %EXIT_CODE% EQU 0 (
+    echo [INFO] Server wurde normal beendet (Exit Code: 0^)
+) else (
+    echo [ERROR] Server mit Fehler beendet (Exit Code: %EXIT_CODE%^)
+    echo.
+    echo MÖGLICHE URSACHEN:
+    echo - Python Modul fehlt (pip install -r requirements.txt^)
+    echo - Port 8000 bereits belegt
+    echo - Syntax-Fehler in najika_server.py
+)
+echo ========================================================
+echo.
+pause

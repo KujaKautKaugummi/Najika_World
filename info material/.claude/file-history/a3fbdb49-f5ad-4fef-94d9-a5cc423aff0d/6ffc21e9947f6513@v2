@@ -1,0 +1,398 @@
+// Najika Command System - Digimon World 1 Style
+// Rookie → Champion → Ultimate → Mega Evolution
+
+class CommandSystem {
+  constructor() {
+    // Battle XP for evolution
+    this.battleXP = 0;
+    this.evolutionStage = 'rookie'; // rookie, champion, ultimate, mega
+
+    // Relationship stats - SYNC FROM SERVER!
+    this.happiness = 50; // 0-100 (wird vom Server geladen)
+    this.discipline = 50; // 0-100 (wird vom Server geladen)
+    this.trust = 0; // 0-100
+    this.understanding = 0; // 0-100
+    this.synergy = 0; // 0-100
+
+    // Sync with server on init
+    this.syncFromServer();
+
+    // Battle stats
+    this.totalBattles = 0;
+    this.victories = 0;
+    this.commandsGiven = 0;
+    this.perfectTimings = 0;
+    this.learnedPatterns = [];
+
+    // Current battle state
+    this.lastCommandTime = 0;
+    this.commandCooldown = 2000; // 2s cooldown
+    this.overrideMode = false; // TAB toggle
+
+    // AI preferences (learned over time)
+    this.preferredStyle = 'balanced'; // offensive, defensive, balanced
+    this.commandPreferences = {
+      attack: 0,
+      defend: 0,
+      tech: 0,
+      distance: 0
+    };
+  }
+
+  // Get current evolution stage
+  getStage() {
+    if (this.battleXP >= 1000) return 'mega';
+    if (this.battleXP >= 500) return 'ultimate';
+    if (this.battleXP >= 100) return 'champion';
+    return 'rookie';
+  }
+
+  // Update evolution stage
+  updateStage() {
+    const oldStage = this.evolutionStage;
+    this.evolutionStage = this.getStage();
+
+    if (oldStage !== this.evolutionStage) {
+      return {
+        evolved: true,
+        oldStage,
+        newStage: this.evolutionStage,
+        message: this.getEvolutionMessage(this.evolutionStage)
+      };
+    }
+
+    return { evolved: false };
+  }
+
+  // Evolution messages
+  getEvolutionMessage(stage) {
+    const messages = {
+      champion: "Kuja! Ich verstehe jetzt besser was du willst!",
+      ultimate: "Wir sind ein Team, Kuja! Ich kann fast alleine kämpfen!",
+      mega: "Perfekt! Ich kenne dich jetzt so gut, Kuja!"
+    };
+    return messages[stage] || '';
+  }
+
+  // Get available commands based on stage and override
+  getAvailableCommands() {
+    // Override mode = always rookie commands
+    if (this.overrideMode) {
+      return {
+        mode: 'override',
+        commands: [
+          { key: '1', label: 'ATTACK', icon: '⚔️', description: 'Greif an!' },
+          { key: '2', label: 'DEFEND', icon: '🛡️', description: 'Verteidige!' },
+          { key: '3', label: 'TECH', icon: '⚡', description: 'Zauber!' },
+          { key: '4', label: 'DISTANCE', icon: '💨', description: 'Zurück!' }
+        ]
+      };
+    }
+
+    // Stage-based commands
+    switch (this.evolutionStage) {
+      case 'rookie':
+        return {
+          mode: 'direct',
+          commands: [
+            { key: '1', label: 'ATTACK', icon: '⚔️', description: 'Greif an!' },
+            { key: '2', label: 'DEFEND', icon: '🛡️', description: 'Verteidige!' },
+            { key: '3', label: 'TECH', icon: '⚡', description: 'Zauber!' },
+            { key: '4', label: 'DISTANCE', icon: '💨', description: 'Zurück!' }
+          ]
+        };
+
+      case 'champion':
+        return {
+          mode: 'tactical',
+          commands: [
+            { key: '1', label: 'ATTACK', icon: '⚔️', description: 'Greif an (Najika wählt wie)' },
+            { key: '2', label: 'DEFEND', icon: '🛡️', description: 'Verteidige (Najika wählt wie)' },
+            { key: '3', label: 'TECH', icon: '⚡', description: 'Zauber (Najika wählt welchen)' },
+            { key: '4', label: 'DISTANCE', icon: '💨', description: 'Zurück (Najika entscheidet wann)' }
+          ]
+        };
+
+      case 'ultimate':
+        return {
+          mode: 'strategic',
+          commands: [
+            { key: '1', label: 'OFFENSIVE', icon: '⚔️', description: 'Aggressiv kämpfen' },
+            { key: '2', label: 'DEFENSIVE', icon: '🛡️', description: 'Vorsichtig kämpfen' },
+            { key: '3', label: 'BALANCED', icon: '⚖️', description: 'Ausgeglichen' },
+            { key: '4', label: 'SPECIAL', icon: '✨', description: 'Finisher vorbereiten' }
+          ]
+        };
+
+      case 'mega':
+        return {
+          mode: 'signals',
+          commands: [
+            { key: '1', label: 'NOW!', icon: '❗', description: 'Jetzt zuschlagen!' },
+            { key: '2', label: 'WAIT!', icon: '✋', description: 'Zurückhalten!' },
+            { key: '3', label: 'COMBO!', icon: '💥', description: 'Combo vorbereiten!' },
+            { key: '4', label: 'SPECIAL', icon: '✨', description: 'Finisher!' }
+          ]
+        };
+
+      default:
+        return this.getAvailableCommands(); // Fallback to rookie
+    }
+  }
+
+  // Execute command
+  executeCommand(commandKey, najikaState) {
+    const now = Date.now();
+
+    // Check cooldown
+    if (now - this.lastCommandTime < this.commandCooldown) {
+      return {
+        success: false,
+        reason: 'cooldown',
+        message: 'Warte kurz...'
+      };
+    }
+
+    // Check if Najika will listen (discipline check)
+    if (!this.overrideMode && Math.random() > this.discipline / 100) {
+      // Low discipline = might ignore
+      return {
+        success: false,
+        reason: 'ignored',
+        message: 'Najika ignoriert dich! (Niedrige Discipline)',
+        disciplineCheck: false
+      };
+    }
+
+    this.lastCommandTime = now;
+    this.commandsGiven++;
+
+    // Track command preference
+    const commandMap = { '1': 'attack', '2': 'defend', '3': 'tech', '4': 'distance' };
+    if (commandMap[commandKey]) {
+      this.commandPreferences[commandMap[commandKey]]++;
+    }
+
+    // Learn preferred style (after 50 commands)
+    if (this.commandsGiven > 50) {
+      this.updatePreferredStyle();
+    }
+
+    // Check timing (if champion+)
+    const timingResult = this.evaluateTiming(commandKey, najikaState);
+
+    return {
+      success: true,
+      command: commandKey,
+      timing: timingResult,
+      mode: this.overrideMode ? 'override' : this.evolutionStage,
+      disciplineCheck: true
+    };
+  }
+
+  // Evaluate command timing (Champion+)
+  evaluateTiming(commandKey, najikaState) {
+    if (this.evolutionStage === 'rookie' || this.overrideMode) {
+      return { quality: 'normal', bonus: 0 };
+    }
+
+    // Perfect timing scenarios
+    const perfectTimings = {
+      '1': ['idle', 'recovering'], // Attack when enemy open
+      '2': ['taking_damage', 'enemy_attacking'], // Defend when under attack
+      '3': ['idle', 'preparing'], // Tech when ready
+      '4': ['taking_damage', 'low_hp'] // Distance when in danger
+    };
+
+    if (perfectTimings[commandKey]?.includes(najikaState)) {
+      this.perfectTimings++;
+      this.trust = Math.min(100, this.trust + 2);
+      return {
+        quality: 'perfect',
+        bonus: 0.3,
+        message: 'Perfektes Timing!'
+      };
+    }
+
+    // Good timing
+    if (['idle', 'recovering', 'preparing'].includes(najikaState)) {
+      return {
+        quality: 'good',
+        bonus: 0.1,
+        message: 'Gutes Timing!'
+      };
+    }
+
+    // Bad timing
+    return {
+      quality: 'bad',
+      bonus: -0.1,
+      message: 'Schlechtes Timing...'
+    };
+  }
+
+  // Toggle override mode
+  toggleOverride() {
+    this.overrideMode = !this.overrideMode;
+
+    return {
+      enabled: this.overrideMode,
+      message: this.overrideMode
+        ? '⚠️ DIRECT COMMAND MODE - Najika folgt sofort!'
+        : '✅ Zurück zu autonomem Modus'
+    };
+  }
+
+  // Praise Najika
+  praise(context = 'normal') {
+    if (context === 'after_good_move') {
+      // Both stats increase!
+      this.happiness = Math.min(100, this.happiness + 10);
+      this.discipline = Math.min(100, this.discipline + 10);
+      this.trust = Math.min(100, this.trust + 5);
+      return {
+        success: true,
+        message: 'Danke! Das motiviert mich!',
+        happiness: +10,
+        discipline: +10,
+        trust: +5
+      };
+    } else {
+      // Normal praise
+      this.happiness = Math.min(100, this.happiness + 5);
+      this.discipline = Math.max(0, this.discipline - 5);
+      return {
+        success: true,
+        message: 'Danke, Kuja!',
+        happiness: +5,
+        discipline: -5
+      };
+    }
+  }
+
+  // Scold Najika
+  scold(context = 'normal') {
+    if (context === 'after_mistake') {
+      // Both stats increase!
+      this.discipline = Math.min(100, this.discipline + 10);
+      this.happiness = Math.max(0, this.happiness - 5);
+      this.understanding = Math.min(100, this.understanding + 5);
+      return {
+        success: true,
+        message: 'Okay, ich pass besser auf!',
+        discipline: +10,
+        happiness: -5,
+        understanding: +5
+      };
+    } else {
+      // Unfair scold
+      this.discipline = Math.min(100, this.discipline + 5);
+      this.happiness = Math.max(0, this.happiness - 15);
+      this.trust = Math.max(0, this.trust - 10);
+      return {
+        success: true,
+        message: 'Was?! Das war unfair, Kuja!',
+        discipline: +5,
+        happiness: -15,
+        trust: -10
+      };
+    }
+  }
+
+  // Add battle XP
+  addBattleXP(amount, victory = false) {
+    this.battleXP += amount;
+    this.totalBattles++;
+    if (victory) this.victories++;
+
+    // Update synergy
+    this.synergy = Math.min(100, this.synergy + 1);
+
+    return this.updateStage();
+  }
+
+  // Learn enemy pattern
+  learnPattern(enemyType) {
+    if (!this.learnedPatterns.includes(enemyType)) {
+      this.learnedPatterns.push(enemyType);
+      return {
+        learned: true,
+        message: `Ich kenne ${enemyType} jetzt!`
+      };
+    }
+    return { learned: false };
+  }
+
+  // Update preferred style based on command history
+  updatePreferredStyle() {
+    const total = Object.values(this.commandPreferences).reduce((a, b) => a + b, 0);
+    const attackPercent = this.commandPreferences.attack / total;
+    const defendPercent = this.commandPreferences.defend / total;
+
+    if (attackPercent > 0.6) {
+      this.preferredStyle = 'offensive';
+    } else if (defendPercent > 0.4) {
+      this.preferredStyle = 'defensive';
+    } else {
+      this.preferredStyle = 'balanced';
+    }
+  }
+
+  // Sync happiness/discipline from server
+  async syncFromServer() {
+    try {
+      const response = await fetch('/api/status');
+      const data = await response.json();
+      if (data.najika) {
+        this.happiness = data.najika.happiness || 50;
+        this.discipline = data.najika.discipline || 50;
+        console.log(`[CommandSystem] Synced from server: happiness=${this.happiness}, discipline=${this.discipline}`);
+      }
+    } catch (error) {
+      console.warn('[CommandSystem] Failed to sync from server, using defaults');
+    }
+  }
+
+  // Get stats for UI
+  getStats() {
+    return {
+      // Evolution
+      battleXP: this.battleXP,
+      evolutionStage: this.evolutionStage,
+      nextStageXP: this.getNextStageXP(),
+
+      // Relationship
+      happiness: this.happiness,
+      discipline: this.discipline,
+      trust: this.trust,
+      understanding: this.understanding,
+      synergy: this.synergy,
+
+      // Battle history
+      totalBattles: this.totalBattles,
+      victories: this.victories,
+      winRate: this.totalBattles > 0 ? (this.victories / this.totalBattles * 100).toFixed(1) : 0,
+      commandsGiven: this.commandsGiven,
+      perfectTimings: this.perfectTimings,
+
+      // AI preferences
+      preferredStyle: this.preferredStyle,
+      learnedPatterns: this.learnedPatterns.length,
+
+      // Current state
+      overrideMode: this.overrideMode,
+      canCommand: (Date.now() - this.lastCommandTime) >= this.commandCooldown
+    };
+  }
+
+  // Get XP needed for next stage
+  getNextStageXP() {
+    switch (this.evolutionStage) {
+      case 'rookie': return 100;
+      case 'champion': return 500;
+      case 'ultimate': return 1000;
+      case 'mega': return null; // Max level
+      default: return 100;
+    }
+  }
+}

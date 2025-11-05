@@ -1,0 +1,50 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import GameScene from './game/GameScene';
+
+// Main App Component
+function App() {
+  const [backendStatus, setBackendStatus] = useState('checking...');
+
+  useEffect(() => {
+    // Check backend connection
+    axios.get('http://localhost:8000/health')
+      .then(response => {
+        setBackendStatus('Connected ✅');
+        console.log('Backend:', response.data);
+      })
+      .catch(error => {
+        setBackendStatus('Disconnected ❌');
+        console.error('Backend error:', error);
+      });
+  }, []);
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      {/* Backend Status Badge */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '20px',
+        zIndex: 100,
+        background: 'rgba(0,0,0,0.7)',
+        padding: '15px 20px',
+        borderRadius: '10px',
+        color: 'white',
+        fontFamily: 'monospace',
+        fontSize: '12px',
+        border: '2px solid #FF6B9D'
+      }}>
+        <div style={{ color: '#FF6B9D', fontWeight: 'bold', marginBottom: '5px' }}>
+          🌟 NAJIKA V4
+        </div>
+        <div>Backend: {backendStatus}</div>
+      </div>
+
+      {/* Game Scene with Combat System */}
+      <GameScene />
+    </div>
+  );
+}
+
+export default App;

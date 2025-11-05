@@ -1,0 +1,42 @@
+@echo off
+title NAJIKA SERVER
+color 0A
+cls
+echo.
+echo ========================================================
+echo   NAJIKA V2 SERVER
+echo ========================================================
+echo.
+cd /d C:\NajikaCore
+
+echo [1/2] Pruefe Ollama...
+ollama list >nul 2>&1
+if errorlevel 1 (
+    echo [!] Ollama nicht gefunden!
+    echo     Starte: ollama serve
+    echo.
+) else (
+    echo [OK] Ollama gefunden
+)
+
+echo [2/3] Beende alte Prozesse...
+taskkill /F /IM python.exe /FI "WINDOWTITLE eq NAJIKA*" >nul 2>&1
+taskkill /F /IM node.exe /FI "WINDOWTITLE eq *najika*" >nul 2>&1
+echo [OK] Alte Prozesse beendet
+
+echo.
+echo [3/3] Starte Server...
+echo.
+echo ========================================================
+echo   Backend:  http://localhost:8000/
+echo   Frontend: http://localhost:3002/
+echo ========================================================
+echo.
+
+python najika_server.py
+
+echo.
+echo.
+echo [!] Server wurde beendet!
+echo.
+pause

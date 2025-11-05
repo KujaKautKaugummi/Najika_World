@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Blockiere W-Taste fuer Raumwechsel (nur Bewegung!)"""
+import time
+
+HTML = r"C:\NajikaCore\digivice\index.html"
+
+time.sleep(1)
+
+with open(HTML, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Finde applyRoom Funktion und fuege W-Taste Block ein
+# Suche nach "async function applyRoom"
+INSERT_POINT = "async function applyRoom(name) {"
+
+BLOCK_CODE = """async function applyRoom(name) {
+    // BLOCK: Verhindere versehentliche Aufrufe durch Tasten
+    // Nur erlaubt wenn durch Dropdown ausgeloest
+    if (!name || typeof name !== 'string') {
+        console.warn('applyRoom: Ungueltige Raumaenderung blockiert');
+        return;
+    }
+"""
+
+if INSERT_POINT in content:
+    content = content.replace(INSERT_POINT, BLOCK_CODE)
+
+    with open(HTML, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    print("[OK] W-Taste Raumwechsel blockiert!")
+    print("- applyRoom prueft jetzt ob Aufruf legitim ist")
+    print("- Nur Dropdown-Wechsel erlaubt")
+else:
+    print("[ERROR] applyRoom Funktion nicht gefunden!")

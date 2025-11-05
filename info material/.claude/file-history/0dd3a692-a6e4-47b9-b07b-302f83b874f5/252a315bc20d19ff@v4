@@ -1,0 +1,367 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+NAJIKA LoRA FINE-TUNING
+Echtes permanentes Lernen auf RTX 3060 Ti (8GB VRAM)
+
+Training-Prozess:
+1. Lädt Konversationen aus ChromaDB
+2. Trainiert LoRA-Adapter (4-bit quantized)
+3. Merged Adapter mit Basis-Modell
+4. Exportiert zu GGUF für Ollama
+5. Update najika-local Modell
+
+Najika lernt WIRKLICH - keine temporären Sessions!
+"""
+
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+import os
+import json
+import torch
+from datetime import datetime
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    TrainingArguments,
+    BitsAndBytesConfig,
+    Trainer,
+    DataCollatorForLanguageModeling
+)
+from peft import (
+    LoraConfig,
+    get_peft_model,
+    prepare_model_for_kbit_training,
+    PeftModel
+)
+from datasets import Dataset
+
+# ChromaDB Import
+from najika_memory import NajikaMemory
+
+class NajikaLoRATrainer:
+    """LoRA Fine-Tuning für RTX 3060 Ti (8GB VRAM)"""
+
+    def __init__(
+        self,
+        base_model="unsloth/Meta-Llama-3.1-8B-Instruct",
+        output_dir="C:/NajikaCore/lora_checkpoints",
+        logs_dir="C:/NajikaCore/training_logs"
+    ):
+        self.base_model = base_model
+        self.output_dir = output_dir
+        self.logs_dir = logs_dir
+
+        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs(logs_dir, exist_ok=True)
+
+        # Memory System
+        self.memory = NajikaMemory()
+
+        # Training Log
+        self.training_log = {
+            "start_time": datetime.now().isoformat(),
+            "base_model": base_model,
+            "training_samples": 0,
+            "status": "initializing"
+        }
+
+        print("=" * 60)
+        print("NAJIKA LoRA TRAINING - ECHTES LERNEN!")
+        print("=" * 60)
+        print(f"Basis-Modell: {base_model}")
+        print(f"Output: {output_dir}")
+        print(f"GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU (WARNUNG!)'}")
+        print()
+
+    def prepare_training_data(self, min_samples=10):
+        """
+        Konvertiert ChromaDB Konversationen + Video-Transkripte zu Training-Daten
+
+        Kombiniert:
+        - Konversations-Paare (User + Najika)
+        - Video-Transkripte (Persönlichkeits-Beispiele)
+
+        Format: Llama3.1 Chat Template
+        """
+        print("📚 Lade Training-Daten aus ChromaDB...")
+
+        try:
+            # 1. Konversationen laden
+            print("  → Konversationen...")
+            all_convs = self.memory.conversations.get()
+
+            if not all_convs['documents'] or len(all_convs['documents']) < min_samples:
+                print(f"❌ Zu wenig Daten! Brauche mindestens {min_samples}, habe {len(all_convs['documents'])}")
+                return None
+
+            # Konversationen paaren (User + Najika)
+            conversations = []
+
+            for i in range(0, len(all_convs['documents']) - 1, 2):
+                user_msg = all_convs['documents'][i]
+                najika_msg = all_convs['documents'][i + 1]
+
+                # Llama3.1 Chat Format
+                formatted = self._format_llama3_chat(user_msg, najika_msg)
+                conversations.append({"text": formatted})
+
+            print(f"    ✅ {len(conversations)} Konversations-Paare")
+
+            # 2. Video-Transkripte laden (Persönlichkeits-Training!)
+            print("  → Video-Transkripte (Persönlichkeiten)...")
+            try:
+                personalities = self.memory.client.get_collection("najika_personalities")
+                all_pers = personalities.get()
+
+                if all_pers['documents']:
+                    # Formatiere als Monolog-Training
+                    for i, doc in enumerate(all_pers['documents']):
+                        metadata = all_pers['metadatas'][i] if all_pers['metadatas'] else {}
+                        source = metadata.get('source', 'Unknown')
+
+                        # Formatiere als "System erklärt Persönlichkeit"
+                        formatted = f"""<|start_header_id|>system<|end_header_id|>
+
+Du bist Najika. Hier ist ein Beispiel wie du als {source} sprichst:
+
+{doc[:500]}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+Verstanden! Ich integriere diesen {source}-Stil in meine Persönlichkeit.<|eot_id|>"""
+                        conversations.append({"text": formatted})
+
+                    print(f"    ✅ {len(all_pers['documents'])} Video-Transkripte")
+
+            except Exception as e:
+                print(f"    ⚠️  Video-Transkripte übersprungen: {e}")
+
+            # 3. Dataset erstellen
+            total_samples = len(conversations)
+            print(f"\n📊 GESAMT: {total_samples} Training-Samples")
+            print(f"   - Konversationen: {len(conversations) - (len(all_pers['documents']) if 'all_pers' in locals() else 0)}")
+            print(f"   - Persönlichkeiten: {len(all_pers['documents']) if 'all_pers' in locals() else 0}")
+
+            dataset = Dataset.from_list(conversations)
+
+            self.training_log['training_samples'] = total_samples
+            self.training_log['conversation_samples'] = len(conversations)
+            self.training_log['personality_samples'] = len(all_pers['documents']) if 'all_pers' in locals() else 0
+
+            return dataset
+
+        except Exception as e:
+            print(f"❌ Fehler beim Laden: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+
+    def _format_llama3_chat(self, user_msg, assistant_msg):
+        """Formatiert als Llama3.1 Chat Template"""
+        return f"""<|start_header_id|>user<|end_header_id|>
+
+{user_msg}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+{assistant_msg}<|eot_id|>"""
+
+    def train(self, epochs=1, batch_size=1, learning_rate=2e-4):
+        """
+        Haupttraining mit 4-bit quantization für 8GB VRAM
+        """
+        print("\n🚀 Starte LoRA Training...")
+        print(f"Epochs: {epochs}")
+        print(f"Batch Size: {batch_size}")
+        print(f"Learning Rate: {learning_rate}")
+        print()
+
+        # 1. Training-Daten vorbereiten
+        dataset = self.prepare_training_data()
+        if dataset is None:
+            print("❌ Training abgebrochen - keine Daten!")
+            return False
+
+        # 2. 4-bit Quantization Config (spart VRAM!)
+        print("⚙️  Lade Modell (4-bit quantized)...")
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True
+        )
+
+        # 3. Basis-Modell laden
+        try:
+            model = AutoModelForCausalLM.from_pretrained(
+                self.base_model,
+                quantization_config=bnb_config,
+                device_map="auto",
+                trust_remote_code=True
+            )
+
+            tokenizer = AutoTokenizer.from_pretrained(
+                self.base_model,
+                trust_remote_code=True
+            )
+            tokenizer.pad_token = tokenizer.eos_token
+
+            print("✅ Modell geladen!")
+
+        except Exception as e:
+            print(f"❌ Fehler beim Laden: {e}")
+            return False
+
+        # 4. LoRA Config
+        print("⚙️  Konfiguriere LoRA...")
+        lora_config = LoraConfig(
+            r=16,  # LoRA Rank
+            lora_alpha=32,
+            target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+            lora_dropout=0.05,
+            bias="none",
+            task_type="CAUSAL_LM"
+        )
+
+        # 5. Modell für Training vorbereiten
+        model = prepare_model_for_kbit_training(model)
+        model = get_peft_model(model, lora_config)
+
+        print("✅ LoRA aktiviert!")
+        model.print_trainable_parameters()
+
+        # 6. Training Args
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        checkpoint_dir = os.path.join(self.output_dir, f"najika_lora_{timestamp}")
+
+        training_args = TrainingArguments(
+            output_dir=checkpoint_dir,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=4,
+            num_train_epochs=epochs,
+            learning_rate=learning_rate,
+            fp16=True,
+            logging_steps=10,
+            save_steps=50,
+            save_total_limit=2,
+            report_to="none",
+            optim="paged_adamw_8bit",
+            warmup_steps=10,
+            lr_scheduler_type="cosine"
+        )
+
+        # 7. Tokenize Dataset
+        print("\n⚙️  Tokenize Training-Daten...")
+
+        def tokenize_function(examples):
+            return tokenizer(
+                examples["text"],
+                truncation=True,
+                max_length=512,
+                padding="max_length"
+            )
+
+        tokenized_dataset = dataset.map(
+            tokenize_function,
+            batched=True,
+            remove_columns=dataset.column_names
+        )
+
+        print(f"✅ {len(tokenized_dataset)} Samples tokenized")
+
+        # 8. Data Collator
+        data_collator = DataCollatorForLanguageModeling(
+            tokenizer=tokenizer,
+            mlm=False  # Causal LM, nicht Masked LM
+        )
+
+        # 9. Trainer
+        print("\n🎓 Starte Training...")
+        print(f"Checkpoint: {checkpoint_dir}")
+        print()
+
+        trainer = Trainer(
+            model=model,
+            train_dataset=tokenized_dataset,
+            args=training_args,
+            data_collator=data_collator
+        )
+
+        # 8. TRAIN!
+        self.training_log['status'] = "training"
+
+        try:
+            trainer.train()
+
+            # 9. Speichere LoRA Adapter
+            print("\n💾 Speichere LoRA Adapter...")
+            final_adapter = os.path.join(self.output_dir, "najika_lora_latest")
+            trainer.model.save_pretrained(final_adapter)
+            tokenizer.save_pretrained(final_adapter)
+
+            print(f"✅ Adapter gespeichert: {final_adapter}")
+
+            self.training_log['status'] = "completed"
+            self.training_log['end_time'] = datetime.now().isoformat()
+            self.training_log['adapter_path'] = final_adapter
+
+            # 10. Log speichern
+            log_file = os.path.join(self.logs_dir, f"training_{timestamp}.json")
+            with open(log_file, 'w', encoding='utf-8') as f:
+                json.dump(self.training_log, f, indent=2, ensure_ascii=False)
+
+            print(f"📊 Training-Log: {log_file}")
+            print()
+            print("=" * 60)
+            print("✅ TRAINING ABGESCHLOSSEN!")
+            print("=" * 60)
+            print()
+            print("NÄCHSTE SCHRITTE:")
+            print("1. Adapter mit Basis-Modell mergen")
+            print("2. Zu GGUF konvertieren")
+            print("3. Ollama-Modell updaten")
+            print()
+
+            return True
+
+        except Exception as e:
+            print(f"\n❌ TRAINING FEHLER: {e}")
+            self.training_log['status'] = "failed"
+            self.training_log['error'] = str(e)
+            return False
+
+
+# MAIN
+if __name__ == "__main__":
+    print()
+    print("=" * 60)
+    print("NAJIKA LoRA FINE-TUNING")
+    print("RTX 3060 Ti (8GB VRAM) - 4-bit Quantized")
+    print("=" * 60)
+    print()
+
+    # Prüfe CUDA
+    if not torch.cuda.is_available():
+        print("⚠️  WARNUNG: CUDA nicht verfügbar!")
+        print("Training auf CPU ist SEHR langsam!")
+        response = input("Trotzdem fortfahren? (j/n): ")
+        if response.lower() != 'j':
+            print("Training abgebrochen.")
+            sys.exit(0)
+    else:
+        print(f"✅ GPU erkannt: {torch.cuda.get_device_name(0)}")
+        print(f"✅ VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+        print()
+
+    # Erstelle Trainer
+    trainer = NajikaLoRATrainer()
+
+    # Starte Training
+    success = trainer.train(
+        epochs=3,
+        batch_size=1,
+        learning_rate=2e-4
+    )
+
+    if success:
+        print("🎉 Najika hat gelernt! Sie ist jetzt schlauer!")
+    else:
+        print("❌ Training fehlgeschlagen - siehe Logs")

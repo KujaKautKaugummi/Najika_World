@@ -1,0 +1,37 @@
+@echo off
+echo ================================================================================
+echo NAJIKA AUTO-TRAINING AKTIVIEREN (16h/Tag, JEDEN TAG)
+echo ================================================================================
+echo.
+echo Dieser Task erstellt einen Windows Scheduled Task der:
+echo - JEDEN Tag (Mo-So) aktiv ist
+echo - Stuendlich von 08:00-23:00 Uhr ausfuehrt
+echo - Automatisch naechste Training-Session laedt
+echo.
+echo WICHTIG: Benoetigt Administrator-Rechte!
+echo.
+pause
+echo.
+echo [1/3] Loesche alten Task falls vorhanden...
+schtasks /Delete /TN "NajikaTraining16h" /F 2>nul
+echo.
+echo [2/3] Erstelle neuen Task...
+schtasks /Create /TN "NajikaTraining16h" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC HOURLY /MO 1 /ST 08:00 /ET 23:59 /RI 60 /F
+echo.
+echo [3/3] Pruefe Task-Status...
+schtasks /Query /TN "NajikaTraining16h" /V /FO LIST
+echo.
+echo ================================================================================
+echo FERTIG!
+echo ================================================================================
+echo.
+echo Der Task "NajikaTraining16h" ist jetzt aktiv und laeuft:
+echo - JEDEN Tag (Mo-So)
+echo - Stuendlich von 08:00-23:59 Uhr
+echo - Automatisch im Hintergrund
+echo.
+echo Manueller Start: START_TRAINING_NOW.bat
+echo Task deaktivieren: schtasks /Change /TN "NajikaTraining16h" /DISABLE
+echo Task aktivieren: schtasks /Change /TN "NajikaTraining16h" /ENABLE
+echo.
+pause

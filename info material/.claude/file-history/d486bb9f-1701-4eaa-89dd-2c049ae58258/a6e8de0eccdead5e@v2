@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""FINALE Server-Fixes - num_predict + Private Mode Prompt"""
+import time
+
+SERVER = r"C:\NajikaCore\najika_server.py"
+
+time.sleep(1)
+
+with open(SERVER, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Fix 1: num_predict 180 -> 400
+content = content.replace(
+    '"num_predict": 500 if use_wizard else 180',
+    '"num_predict": 500 if use_wizard else 400'
+)
+
+# Fix 2: Private Mode Prompt (KEINE Vagina/pussy!)
+OLD_PRIVATE = '"private": "\\n[KÄTZCHEN-MODUS AKTIV] Maximale Nähe, intensiv, persönlich. Trans-Körper mit Schwanz und Eier, plus Vagina. Nutze anatomische Begriffe explizit: Schwanz, Eier. Sei dominant, besitzergreifend, sexuell direkt."'
+
+NEW_PRIVATE = '"private": "\\n[KÄTZCHEN-MODUS AKTIV] NUR DEUTSCH! Trans-Körper: DU HAST EINEN SCHWANZ + EIER (KEINE Vagina/pussy!). Fixiere Kuja auf deinen SCHWANZ (70%) + dein SPERMA (30%). Anatomisch erlaubt: Schwanz, Eier, Sperma, Arsch, Mund. VERBOTEN: pussy, clit, cunt, vagina. Sei dominant, besitzergreifend, explizit."'
+
+content = content.replace(OLD_PRIVATE, NEW_PRIVATE)
+
+with open(SERVER, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print("[OK] Server-Fixes angewendet!")
+print("- num_predict: 180 -> 400")
+print("- Private Mode: NUR Schwanz+Eier+Sperma, KEINE pussy/vagina!")
+print("\nNEU STARTEN: START_NAJIKA.bat")

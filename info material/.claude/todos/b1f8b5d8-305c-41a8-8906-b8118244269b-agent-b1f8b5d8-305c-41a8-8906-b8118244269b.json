@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Teste Unsloth Training-Script (Dry-Run)",
+    "status": "in_progress",
+    "activeForm": "Teste najika_unsloth_training.py"
+  },
+  {
+    "content": "Installiere 4x Daily Scheduled Tasks",
+    "status": "pending",
+    "activeForm": "Führe SETUP_4X_DAILY_TRAINING.bat aus"
+  },
+  {
+    "content": "Teste Najika Response mit KERN + Transkripten",
+    "status": "pending",
+    "activeForm": "Verifiziere Enhanced Memory funktioniert"
+  },
+  {
+    "content": "Dokumentiere Training-Transfer für DeepSeek 70B",
+    "status": "pending",
+    "activeForm": "Erstelle Upgrade-Plan für RAM-Upgrade"
+  }
+]

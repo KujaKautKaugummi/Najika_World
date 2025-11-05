@@ -1,0 +1,99 @@
+@echo off
+echo ================================================
+echo   KAYKIT ASSETS KOPIEREN
+echo ================================================
+echo.
+
+REM Erstelle Verzeichnisse
+echo [1/3] Erstelle Verzeichnisse...
+mkdir "C:\NajikaCore\assets\kaykit" 2>nul
+mkdir "C:\NajikaCore\assets\kaykit\characters" 2>nul
+echo   OK
+
+REM Kopiere Dungeon Assets
+echo.
+echo [2/3] Kopiere Dungeon Assets...
+set SOURCE=C:\Users\0KKK0\Desktop\modelle\KayKit_DungeonRemastered_1.1_FREE\Assets\gltf
+set TARGET=C:\NajikaCore\assets\kaykit
+
+if exist "%SOURCE%\wall.glb" (
+    copy /Y "%SOURCE%\wall.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\wall.bin" "%TARGET%\" >nul 2>nul
+    echo   - wall.glb
+)
+
+if exist "%SOURCE%\floor_tile_large.glb" (
+    copy /Y "%SOURCE%\floor_tile_large.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\floor_tile_large.bin" "%TARGET%\" >nul 2>nul
+    echo   - floor_tile_large.glb
+)
+
+if exist "%SOURCE%\torch.glb" (
+    copy /Y "%SOURCE%\torch.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\torch.bin" "%TARGET%\" >nul 2>nul
+    echo   - torch.glb
+)
+
+if exist "%SOURCE%\floor_foundation.glb" (
+    copy /Y "%SOURCE%\floor_foundation.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\floor_foundation.bin" "%TARGET%\" >nul 2>nul
+    echo   - floor_foundation.glb
+)
+
+if exist "%SOURCE%\ceiling.glb" (
+    copy /Y "%SOURCE%\ceiling.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\ceiling.bin" "%TARGET%\" >nul 2>nul
+    echo   - ceiling.glb
+)
+
+if exist "%SOURCE%\pillar.glb" (
+    copy /Y "%SOURCE%\pillar.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\pillar.bin" "%TARGET%\" >nul 2>nul
+    echo   - pillar.glb
+)
+
+if exist "%SOURCE%\barrel.glb" (
+    copy /Y "%SOURCE%\barrel.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\barrel.bin" "%TARGET%\" >nul 2>nul
+    echo   - barrel.glb
+)
+
+if exist "%SOURCE%\crate.glb" (
+    copy /Y "%SOURCE%\crate.glb" "%TARGET%\" >nul
+    copy /Y "%SOURCE%\crate.bin" "%TARGET%\" >nul 2>nul
+    echo   - crate.glb
+)
+
+REM Kopiere Character Assets
+echo.
+echo [3/3] Kopiere Character Assets...
+set CHAR_SOURCE1=C:\Users\0KKK0\Desktop\modelle\KayKit_Adventurers_1.0_FREE\Characters\gltf
+set CHAR_SOURCE2=C:\Users\0KKK0\Desktop\modelle\KayKit_Skeletons_1.0_FREE\Characters\gltf
+set CHAR_TARGET=C:\NajikaCore\assets\kaykit\characters
+
+REM Versuche erstes Verzeichnis
+if exist "%CHAR_SOURCE1%" (
+    for %%f in ("%CHAR_SOURCE1%\*.glb") do (
+        copy /Y "%%f" "%CHAR_TARGET%\" >nul
+        echo   - %%~nxf
+    )
+) else if exist "%CHAR_SOURCE2%" (
+    for %%f in ("%CHAR_SOURCE2%\*.glb") do (
+        copy /Y "%%f" "%CHAR_TARGET%\" >nul
+        echo   - %%~nxf
+    )
+) else (
+    echo   WARNUNG: Character Source nicht gefunden!
+)
+
+echo.
+echo ================================================
+echo   ASSETS ERFOLGREICH KOPIERT!
+echo ================================================
+echo.
+echo Naechste Schritte:
+echo   1. Server starten: python najika_server.py
+echo   2. Browser oeffnen: http://localhost:8000/digivice/
+echo   3. Raeume testen
+echo.
+pause

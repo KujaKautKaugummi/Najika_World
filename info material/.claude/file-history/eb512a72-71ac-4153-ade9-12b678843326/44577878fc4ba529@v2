@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Najika Digivice v2</title>
+<link rel="stylesheet" href="/digivice/static/css/chat.css">
+<link rel="stylesheet" href="/digivice/static/css/minigames.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    background: #0b0b0f;
+    color: #eaeaea;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+}
+
+header {
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, #13131a, #1e1e2e);
+    border-bottom: 2px solid #667eea;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.status-bar {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2ecc71;
+    animation: pulse-dot 2s infinite;
+}
+
+.status-dot.offline {
+    background: #e74c3c;
+    animation: none;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#scene {
+    position: relative;
+    background: #1a1a2e;
+    overflow: hidden;
+}
+
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+    max-width: 260px;
+}
+
+.hud-panel {
+    background: rgba(0, 0, 0, 0.82);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid rgba(102, 126, 234, 0.6);
+    backdrop-filter: blur(10px);
+}
+
+.hud-panel h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: #a3b3ff;
+}
+
+#cameraPanel button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.camera-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cam-btn {
+    flex: 1;
+}
+
+.cam-btn.active {
+    background: linear-gradient(135deg, #4ecdc4, #45a9f0);
+    color: #0b0b0f;
+}
+
+#faceNajika {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+#webcamToggle {
+    background: linear-gradient(135deg, #ffb347, #ff6b6b);
+}
+
+#webcamFeed {
+    display: none;
+    width: 100%;
+    margin-top: 0.75rem;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+}
+
+.hp-bar {
+    width: 100%;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.hp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    transition: width 0.3s ease;
+    width: 100%;
+}
+
+.hud-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.room-actions {
+    padding: 1rem;
+    background: #13131a;
+    border-top: 2px solid #667eea;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.room-actions label {
+    font-weight: bold;
+    color: #667eea;
+    white-space: nowrap;
+}
+
+#room-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.chat-footer {
+    padding: 1rem;
+    background: #1a1a2e;
+    border-top: 2px solid #764ba2;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+select, button, input {
+    padding: 0.6rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #eaeaea;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+select:hover, input:hover, button:hover {
+    border-color: rgba(102, 126, 234, 0.8);
+}
+
+button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button.action-btn {
+    background: linear-gradient(135deg, #2a2adf, #3a3af5);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+button.battle-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+}
+
+button.cloud-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+input {
+    flex: 1;
+}
+
+.private-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    border-radius: 25px;
+    font-weight: bold;
+    display: none;
+    animation: pulse 2s infinite;
+    z-index: 1000;
+    box-shadow: 0 5px 30px rgba(255, 75, 87, 0.6);
+}
+
+.private-indicator.active {
+    display: block;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 5px 30px rgba(255, 75, 87, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 5px 40px rgba(255, 75, 87, 0.8);
+    }
+}
+
+@media (max-width: 900px) {
+    #app {
+        grid-template-rows: auto 1fr auto auto;
+    }
+    #hud {
+        position: static;
+        max-width: none;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .status-bar {
+        margin-left: 0;
+        width: 100%;
+    }
+    #scene {
+        min-height: 320px;
+    }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+
+<div class="private-indicator" id="privateIndicator">PRIVATE MODE AKTIV</div>
+
+<div id="app">
+    <header>
+        <h1>NAJIKA DIGIVICE v2</h1>
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <span id="statusText">Online</span>
+            </div>
+            <div class="status-item">
+                <span id="providerLabel">Provider: lokal</span>
+            </div>
+            <div class="status-item">
+                <label for="room">Raum:</label>
+                <select id="room"></select>
+            </div>
+            <div class="status-item" id="dungeonLevelControl" style="display:none">
+                <label for="dungeonLevel">Level:</label>
+                <select id="dungeonLevel">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <button id="cloud" class="cloud-btn" style="display:none">Cloud aktivieren</button>
+        </div>
+    </header>
+
+    <main id="scene">
+        <div id="hud">
+            <div class="hud-panel" id="cameraPanel">
+                <h3>Kamera</h3>
+                <div class="camera-buttons">
+                    <button data-camera="orbit" class="cam-btn active">Orbit</button>
+                    <button data-camera="third" class="cam-btn">Third</button>
+                    <button data-camera="first" class="cam-btn">First</button>
+                </div>
+                <button id="faceNajika">Najika ausrichten</button>
+                <button id="webcamToggle">Webcam starten</button>
+                <video id="webcamFeed" autoplay playsinline muted></video>
+            </div>
+            <div class="hud-panel" id="battlePanel" style="display:none">
+                <h3>Kampf</h3>
+                <div>HP: <span id="battleHP">100</span> / <span id="battleMaxHP">100</span></div>
+                <div class="hp-bar">
+                    <div class="hp-fill" id="hpFill"></div>
+                </div>
+                <div class="hud-stat">
+                    <span>Welle:</span>
+                    <strong id="battleWave">1</strong>
+                </div>
+                <div class="hud-stat">
+                    <span>Gegner:</span>
+                    <strong id="battleEnemies">0</strong>
+                </div>
+                <button id="battleBtn" class="battle-btn">Angreifen</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="room-actions">
+        <label>Aktionen:</label>
+        <div id="room-actions"></div>
+    </div>
+
+    <div class="chat-footer">
+        <input id="msg" placeholder="Nachricht an Najika" autocomplete="off">
+        <button id="send">Senden</button>
+    </div>
+</div>
+
+<script>
+const ORIGIN = location.origin;
+const ROOM_ACTIONS_FALLBACK = {
+    "Wohnzimmer": ["Füttern", "Reden"],
+    "Schlafzimmer": ["Schlafen", "Lesen"],
+    "Küche": ["Kochen"],
+    "Badezimmer": ["Toilette", "Waschen"],
+    "Garten": ["Gießen", "Ernten", "Garten-Spiel"],
+    "Musikraum": ["Rhythmus-Spiel"],
+    "Medizin": ["Heilen"],
+    "Terminal": ["Cloud", "Status", "Besen-Lieferung"],
+    "Studieren & Crafting": ["Studieren", "Crafting"],
+    "Trainingszimmer": ["Reflex-Spiel", "Trainieren"],
+    "Kampfarena": ["Kampf starten"],
+    "Schwarze Mühle - Keller": ["Kampf starten", "Erkunden"]
+};
+const BATTLE_ROOMS = new Set(["Kampfarena", "Schwarze Mühle - Keller"]);
+
+const statusDot = document.querySelector('.status-dot');
+const statusText = document.getElementById('statusText');
+const providerLabel = document.getElementById('providerLabel');
+const cameraButtons = Array.from(document.querySelectorAll('.cam-btn'));
+const faceBtn = document.getElementById('faceNajika');
+const webcamToggle = document.getElementById('webcamToggle');
+const webcamFeed = document.getElementById('webcamFeed');
+let webcamActive = false;
+let availableRooms = [];
+
+function setServerStatus(online) {
+    if (!statusDot || !statusText) return;
+    if (online) {
+        statusDot.classList.remove('offline');
+        statusText.textContent = 'Online';
+    } else {
+        statusDot.classList.add('offline');
+        statusText.textContent = 'Offline';
+    }
+}
+
+window.setServerStatus = setServerStatus;
+
+async function api(path, method = 'GET', body) {
+    const options = {
+        method,
+        headers: {'Content-Type': 'application/json'}
+    };
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+    try {
+        const response = await fetch(path, options);
+        if (!response.ok) {
+            throw new Error(response.status + ' ' + response.statusText);
+        }
+        const data = await response.json();
+        setServerStatus(true);
+        return data;
+    } catch (error) {
+        setServerStatus(false);
+        throw error;
+    }
+}
+
+async function cloudStatus() {
+    return api('/api/cloud/status');
+}
+
+async function toggleCloud() {
+    try {
+        const info = await cloudStatus();
+        if (!info.enabled) {
+            const pin = prompt('PIN eingeben:');
+            if (!pin) return;
+            await api('/api/cloud/enable', 'POST', {pin});
+        } else {
+            await api('/api/cloud/disable', 'POST');
+        }
+    } catch (error) {
+        console.warn('Cloud-Umschaltung fehlgeschlagen.', error);
+        alert('Cloud aktuell nicht erreichbar.');
+    } finally {
+        applyCloudBtn();
+    }
+}
+
+async function applyCloudBtn() {
+    const btn = document.getElementById('cloud');
+    if (!btn) return;
+    try {
+        const info = await cloudStatus();
+        btn.style.display = 'inline-block';
+        btn.textContent = info.enabled ? 'Cloud deaktivieren' : 'Cloud aktivieren';
+        if (providerLabel) {
+            providerLabel.textContent = 'Provider: ' + (info.provider || 'lokal');
+        }
+    } catch (error) {
+        btn.style.display = 'none';
+        if (providerLabel) {
+            providerLabel.textContent = 'Provider: offline';
+        }
+    }
+}
+
+function setCamButtonState(mode) {
+    cameraButtons.forEach(btn => {
+        if (btn.dataset.camera === mode) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+function applyCameraMode(mode) {
+    setCamButtonState(mode);
+    if (window.Scene3D && typeof window.Scene3D.setCameraMode === 'function') {
+        window.Scene3D.setCameraMode(mode);
+    }
+}
+
+cameraButtons.forEach(btn => {
+    btn.addEventListener('click', () => applyCameraMode(btn.dataset.camera));
+});
+
+if (faceBtn) {
+    faceBtn.addEventListener('click', () => {
+        if (window.Scene3D && typeof window.Scene3D.faceCharacter === 'function') {
+            window.Scene3D.faceCharacter();
+        }
+    });
+}
+
+if (webcamToggle) {
+    webcamToggle.addEventListener('click', async () => {
+        if (!window.Scene3D || typeof window.Scene3D.toggleWebcam !== 'function') {
+            alert('Webcam-Steuerung nicht verfügbar.');
+            return;
+        }
+        webcamToggle.disabled = true;
+        try {
+            const active = await window.Scene3D.toggleWebcam(webcamFeed);
+            webcamActive = active;
+            if (active) {
+                webcamFeed.style.display = 'block';
+                webcamToggle.textContent = 'Webcam stoppen';
+            } else {
+                webcamFeed.style.display = 'none';
+                webcamFeed.srcObject = null;
+                webcamToggle.textContent = 'Webcam starten';
+            }
+        } catch (error) {
+            console.warn('Webcam konnte nicht gestartet werden.', error);
+            alert('Webcam konnte nicht gestartet werden.');
+        } finally {
+            webcamToggle.disabled = false;
+        }
+    });
+}
+
+async function handleAction(room, action) {
+    switch (action) {
+        case 'Füttern':
+            alert('Najika ist satt.');
+            break;
+        case 'Reden': {
+            const text = prompt('Sag etwas zu Najika:');
+            if (text) {
+                try {
+                    const r = await api('/api/chat', 'POST', {message: text});
+                    alert('Najika: ' + (r.response || '...'));
+                } catch (error) {
+                    alert('Chat nicht verfügbar.');
+                }
+            }
+            break;
+        }
+        case 'Schlafen':
+            alert('Najika legt sich schlafen.');
+            break;
+        case 'Lesen':
+            alert('Najika liest ein Buch.');
+            break;
+        case 'Kochen':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('cooking');
+            } else {
+                alert('Najika kocht etwas Leckeres.');
+            }
+            break;
+        case 'Toilette':
+            alert('Kurze Pause.');
+            break;
+        case 'Waschen':
+            alert('Najika wäscht sich.');
+            break;
+        case 'Gießen':
+            try {
+                await api('/api/minigame/garden', 'POST', {mode: 'water'});
+            } catch (error) {
+                console.warn('Gießen offline.', error);
+            }
+            alert('Der Garten ist versorgt.');
+            break;
+        case 'Ernten':
+            alert('Ernte eingesammelt.');
+            break;
+        case 'Garten-Spiel':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('garden');
+            } else {
+                try {
+                    const gg = await api('/api/minigame/garden', 'POST', {});
+                    alert('Garten-Spiel Score: ' + (gg?.result?.score ?? 0));
+                } catch (error) {
+                    alert('Garten-Spiel nicht verfügbar.');
+                }
+            }
+            break;
+        case 'Rhythmus-Spiel':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('rhythm');
+            } else {
+                try {
+                    const rr = await api('/api/minigame/rhythm', 'POST', {});
+                    alert('Rhythmus-Spiel Score: ' + (rr?.result?.score ?? 0));
+                } catch (error) {
+                    alert('Rhythmus-Spiel nicht verfügbar.');
+                }
+            }
+            break;
+        case 'Heilen':
+            try {
+                const h = await api('/api/heal', 'POST', {});
+                alert('Geheilt! HP: ' + h.hp);
+                updateBattleHUD({hp: h.hp, max_hp: 100});
+            } catch (error) {
+                alert('Heilung nicht verfügbar.');
+            }
+            break;
+        case 'Cloud':
+            await toggleCloud();
+            break;
+        case 'Status':
+            try {
+                const s = await api('/health');
+                alert('Status:\n' + JSON.stringify(s, null, 2));
+            } catch (error) {
+                alert('Status aktuell offline.');
+            }
+            break;
+        case 'Studieren':
+            try {
+                const ev = await api('/api/event/next', 'POST', {});
+                alert('Event: ' + ev.title + '\n\n' + ev.text);
+            } catch (error) {
+                alert('Studieren nicht verfügbar.');
+            }
+            break;
+        case 'Crafting':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('craft');
+            } else {
+                try {
+                    const c = await api('/api/crafting', 'POST', {});
+                    alert(c.msg || 'Crafting abgeschlossen.');
+                } catch (error) {
+                    alert('Crafting nicht verfügbar.');
+                }
+            }
+            break;
+        case 'Reflex-Spiel':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('reflex');
+            } else {
+                try {
+                    const rx = await api('/api/minigame/reflex', 'POST', {});
+                    alert('Reflex-Spiel Score: ' + (rx?.result?.score ?? 0));
+                } catch (error) {
+                    alert('Reflex-Spiel nicht verfügbar.');
+                }
+            }
+            break;
+        case 'Trainieren':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('training');
+            } else {
+                alert('Training abgeschlossen.');
+            }
+            break;
+        case 'Besen-Lieferung':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('broom');
+            } else {
+                alert('Besen-Lieferung startet.');
+            }
+            break;
+        case 'Kampf starten':
+            try {
+                const kb = await api('/api/battle/start', 'POST', {room});
+                if (kb.ok) {
+                    document.getElementById('battlePanel').style.display = 'block';
+                    updateBattleHUD({hp: 100, max_hp: 100, wave: 1, enemies: 3});
+                    alert('Kampf gestartet!');
+                }
+            } catch (error) {
+                alert('Kampf kann nicht gestartet werden.');
+            }
+            break;
+        case 'Erkunden':
+            alert('Du erkundest den Keller der Schwarzen Mühle.');
+            break;
+        default:
+            alert('Aktion: ' + action);
+    }
+}
+
+async function renderActions(room) {
+    let resp;
+    try {
+        resp = await api('/api/room/actions', 'POST', {room});
+    } catch (error) {
+        console.warn('Nutze Fallback-Aktionen für "' + room + '".', error);
+        resp = {
+            battle: BATTLE_ROOMS.has(room),
+            actions: ROOM_ACTIONS_FALLBACK[room] || []
+        };
+    }
+    const wrap = document.getElementById('room-actions');
+    wrap.innerHTML = '';
+    const actions = resp && resp.actions ? resp.actions : ROOM_ACTIONS_FALLBACK[room] || [];
+    actions.forEach(a => {
+        const b = document.createElement('button');
+        b.className = 'action-btn';
+        b.textContent = a;
+        b.onclick = () => handleAction(room, a);
+        wrap.appendChild(b);
+    });
+    const battlePanel = document.getElementById('battlePanel');
+    if (battlePanel) {
+        if (!resp || !resp.battle) {
+            battlePanel.style.display = 'none';
+        }
+    }
+}
+
+async function applyRoom(name) {
+    if (!name) return;
+    try {
+        await renderActions(name);
+    } catch (error) {
+        console.warn('Aktionen konnten nicht geladen werden.', error);
+    }
+
+    // Zeige Dungeon-Level Selector bei Schwarze Mühle
+    const dungeonControl = document.getElementById('dungeonLevelControl');
+    if (dungeonControl) {
+        if (name === 'Schwarze Mühle – Keller') {
+            dungeonControl.style.display = 'flex';
+        } else {
+            dungeonControl.style.display = 'none';
+        }
+    }
+
+    if (window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+        window.Scene3D.changeRoom(name);
+    }
+}
+
+function updateBattleHUD(data) {
+    const hpEl = document.getElementById('battleHP');
+    const hpMaxEl = document.getElementById('battleMaxHP');
+    const waveEl = document.getElementById('battleWave');
+    const enemyEl = document.getElementById('battleEnemies');
+    const fillEl = document.getElementById('hpFill');
+    if (!hpEl || !hpMaxEl || !fillEl) return;
+    if (data.hp !== undefined) {
+        hpEl.textContent = data.hp;
+        hpMaxEl.textContent = data.max_hp || 100;
+        const percentage = Math.max(0, Math.min(100, (data.hp / (data.max_hp || 100)) * 100));
+        fillEl.style.width = percentage + '%';
+        if (percentage > 60) {
+            fillEl.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+        } else if (percentage > 30) {
+            fillEl.style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
+        } else {
+            fillEl.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+        }
+    }
+    if (waveEl && data.wave !== undefined) {
+        waveEl.textContent = data.wave;
+    }
+    if (enemyEl && data.enemies !== undefined) {
+        enemyEl.textContent = data.enemies;
+    }
+}
+
+async function battleAttack() {
+    try {
+        const r = await api('/api/battle/attack', 'POST', {});
+        alert(r.msg);
+        updateBattleHUD(r);
+        if (!r.ok) {
+            document.getElementById('battlePanel').style.display = 'none';
+            alert('Kampf verloren.');
+        }
+    } catch (error) {
+        alert('Kampf nicht verfügbar.');
+    }
+}
+
+async function sendChat() {
+    const input = document.getElementById('msg');
+    if (!input) return;
+    const text = (input.value || '').trim();
+    if (!text) return;
+    input.value = '';
+    try {
+        const r = await api('/api/chat', 'POST', {message: text});
+        alert('Najika: ' + (r.response || '...'));
+    } catch (error) {
+        alert('Chat nicht verfügbar.');
+    }
+}
+
+async function init() {
+    setCamButtonState('orbit');
+    const sel = document.getElementById('room');
+    try {
+        availableRooms = await api('/api/rooms');
+    } catch (error) {
+        console.warn('Falle auf lokale Räume zurück.', error);
+        availableRooms = Object.keys(ROOM_ACTIONS_FALLBACK);
+    }
+    if (!Array.isArray(availableRooms) || !availableRooms.length) {
+        availableRooms = Object.keys(ROOM_ACTIONS_FALLBACK);
+    }
+    sel.innerHTML = '';
+    availableRooms.forEach(r => {
+        const o = document.createElement('option');
+        o.value = r;
+        o.textContent = r;
+        sel.appendChild(o);
+    });
+    sel.onchange = () => applyRoom(sel.value);
+
+    // Dungeon Level Selector
+    const dungeonLevelSel = document.getElementById('dungeonLevel');
+    if (dungeonLevelSel) {
+        dungeonLevelSel.onchange = () => {
+            const level = parseInt(dungeonLevelSel.value, 10) || 1;
+            if (window.DungeonGenerator) {
+                DungeonGenerator.setDungeonLevel(level);
+                console.log(`🏰 Dungeon Level set to ${level}`);
+                // Raum neu laden um neues Dungeon zu generieren
+                const current = sel.value;
+                if (current === 'Schwarze Mühle – Keller') {
+                    applyRoom(current);
+                }
+            }
+        };
+    }
+
+    await applyRoom(sel.value || availableRooms[0]);
+    await applyCloudBtn();
+    document.getElementById('cloud').onclick = toggleCloud;
+    document.getElementById('send').onclick = sendChat;
+    document.getElementById('msg').addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendChat();
+    });
+    const battleBtn = document.getElementById('battleBtn');
+    if (battleBtn) {
+        battleBtn.onclick = battleAttack;
+    }
+    document.addEventListener('scene3d:ready', () => {
+        const current = sel.value || availableRooms[0];
+        if (current && window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+            window.Scene3D.changeRoom(current);
+        }
+        if (window.Scene3D && typeof window.Scene3D.getCameraMode === 'function') {
+            setCamButtonState(window.Scene3D.getCameraMode());
+        }
+    });
+    console.log('Najika Digivice initialisiert');
+}
+
+init();
+</script>
+
+<script src="/digivice/js/kaykit_loader.js"></script>
+<script src="/digivice/js/dungeon_generator.js"></script>
+<script src="/digivice/js/minigames.js"></script>
+<script src="/digivice/js/chat_ui.js"></script>
+<script src="/digivice/js/touch_controls.js"></script>
+<script src="/digivice/js/private_mode.js"></script>
+<script src="/digivice/js/3d_scene.js"></script>
+
+</body>
+</html>

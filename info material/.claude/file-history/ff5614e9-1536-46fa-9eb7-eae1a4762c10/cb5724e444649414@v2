@@ -1,0 +1,110 @@
+@echo off
+REM NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP
+REM 15 STUNDEN TAEGLICH (08:00-23:00)
+REM JEDEN TAG (Mo-So)
+
+echo ================================================================================
+echo NAJIKA TRAINING - ULTIMATE FAIL-SAFE SETUP
+echo ================================================================================
+echo.
+
+REM Loesche alte Tasks
+echo [INFO] Loesche alte Training-Tasks...
+schtasks /Delete /TN NajikaTraining09 /F 2>nul
+schtasks /Delete /TN NajikaTraining10 /F 2>nul
+schtasks /Delete /TN NajikaTraining11 /F 2>nul
+schtasks /Delete /TN NajikaTraining12 /F 2>nul
+schtasks /Delete /TN NajikaTraining13 /F 2>nul
+schtasks /Delete /TN NajikaTraining16h /F 2>nul
+echo.
+
+REM Erstelle NEUE Tasks (15 Stunden: 08:00-23:00)
+echo [INFO] Erstelle NEUE Training-Tasks (15 Stunden taeglich)...
+echo.
+
+set SCRIPT_PATH=C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py
+set TASK_COUNT=0
+
+echo Erstelle Task: NajikaUltimate08 (08:00 Uhr)...
+schtasks /Create /TN NajikaUltimate08 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 08:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate09 (09:00 Uhr)...
+schtasks /Create /TN NajikaUltimate09 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 09:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate10 (10:00 Uhr)...
+schtasks /Create /TN NajikaUltimate10 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 10:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate11 (11:00 Uhr)...
+schtasks /Create /TN NajikaUltimate11 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 11:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate12 (12:00 Uhr)...
+schtasks /Create /TN NajikaUltimate12 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 12:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate13 (13:00 Uhr)...
+schtasks /Create /TN NajikaUltimate13 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 13:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate14 (14:00 Uhr)...
+schtasks /Create /TN NajikaUltimate14 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 14:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate15 (15:00 Uhr)...
+schtasks /Create /TN NajikaUltimate15 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 15:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate16 (16:00 Uhr)...
+schtasks /Create /TN NajikaUltimate16 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 16:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate17 (17:00 Uhr)...
+schtasks /Create /TN NajikaUltimate17 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 17:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate18 (18:00 Uhr)...
+schtasks /Create /TN NajikaUltimate18 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 18:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate19 (19:00 Uhr)...
+schtasks /Create /TN NajikaUltimate19 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 19:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate20 (20:00 Uhr)...
+schtasks /Create /TN NajikaUltimate20 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 20:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate21 (21:00 Uhr)...
+schtasks /Create /TN NajikaUltimate21 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 21:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo Erstelle Task: NajikaUltimate22 (22:00 Uhr)...
+schtasks /Create /TN NajikaUltimate22 /TR "python \"%SCRIPT_PATH%\"" /SC DAILY /ST 22:00 /F /RL HIGHEST
+if %ERRORLEVEL% == 0 (echo   -^> OK!) else (echo   -^> FEHLER!)
+
+echo.
+echo ================================================================================
+echo SETUP ABGESCHLOSSEN!
+echo ================================================================================
+echo.
+echo Training laeuft jetzt:
+echo   - JEDEN TAG (Mo-So)
+echo   - 08:00-23:00 Uhr (15 Stunden)
+echo   - Automatisch
+echo.
+echo Features:
+echo   [OK] Heartbeat-Monitoring
+echo   [OK] Warn-Popups bei Ausfall
+echo   [OK] Auto-Recovery
+echo   [OK] Fail-Safe Logging
+echo   [OK] Progress-Tracking
+echo.
+echo Teste System:
+echo   python C:\NajikaCore\NAJIKA_TRAINING_ULTIMATE_FAILSAFE.py
+echo.
+echo Monitoring:
+echo   python C:\NajikaCore\najika_show_progress.py
+echo.

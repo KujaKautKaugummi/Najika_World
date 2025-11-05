@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Scan C:\\Users\\0KKK0\\Desktop\\zip vollständig",
+    "status": "completed",
+    "activeForm": "Scanning zip Ordner"
+  },
+  {
+    "content": "Scan C:\\Users\\0KKK0\\Desktop\\Najika finalee vollständig",
+    "status": "completed",
+    "activeForm": "Scanning Najika finalee"
+  },
+  {
+    "content": "V3/V4 Dokumente nach NajikaCore kopieren",
+    "status": "completed",
+    "activeForm": "Copying V3/V4 to NajikaCore"
+  },
+  {
+    "content": "Design-Dokumente ins LoRA Training integrieren",
+    "status": "completed",
+    "activeForm": "Integrating design docs into training"
+  },
+  {
+    "content": "Import-System für Design-Docs erstellen",
+    "status": "completed",
+    "activeForm": "Creating import system"
+  },
+  {
+    "content": "Gefilterte Personality-Files in ChromaDB importieren",
+    "status": "in_progress",
+    "activeForm": "Importing personality files to ChromaDB"
+  }
+]

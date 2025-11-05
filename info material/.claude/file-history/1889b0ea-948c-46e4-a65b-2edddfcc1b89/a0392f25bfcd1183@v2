@@ -1,0 +1,87 @@
+@echo off
+REM ========================================
+REM NAJIKA TRAINING DATA PROCESSOR
+REM Verarbeitet Audio/Video/Bilder/Text
+REM ========================================
+
+echo.
+echo ========================================
+echo NAJIKA TRAINING DATA PROCESSOR
+echo ========================================
+echo.
+
+REM Check if running as admin
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [!] Nicht als Administrator ausgefuehrt!
+    echo [!] Rechtsklick -^> Als Administrator ausfuehren
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Running as Administrator
+echo.
+
+REM Wechsle zu NajikaCore Verzeichnis
+cd /d "%~dp0"
+echo [*] Working Directory: %CD%
+echo.
+
+REM Pruefe ob Python verfuegbar ist
+python --version >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [!] FEHLER: Python nicht gefunden!
+    echo [!] Installiere Python von python.org
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Python gefunden
+echo.
+
+REM Pruefe ob Input-Ordner existiert
+if not exist "training_data\input" (
+    echo [!] WARNUNG: Input-Ordner nicht gefunden!
+    echo [*] Erstelle Ordnerstruktur...
+    mkdir "training_data\input\audio" 2>nul
+    mkdir "training_data\input\video" 2>nul
+    mkdir "training_data\input\images" 2>nul
+    mkdir "training_data\input\text" 2>nul
+    mkdir "training_data\output\processed" 2>nul
+    echo [OK] Ordner erstellt
+    echo.
+)
+
+echo ========================================
+echo STARTE VERARBEITUNG...
+echo ========================================
+echo.
+echo Lege deine Dateien in diese Ordner:
+echo   - training_data\input\audio\
+echo   - training_data\input\video\
+echo   - training_data\input\images\
+echo   - training_data\input\text\
+echo.
+echo Druecke eine Taste zum Starten...
+pause >nul
+echo.
+
+REM Fuehre Processing-Script aus
+python process_training_data.py
+
+echo.
+echo ========================================
+echo VERARBEITUNG ABGESCHLOSSEN
+echo ========================================
+echo.
+echo Verarbeitete Dateien in:
+echo   training_data\output\processed\
+echo.
+echo Diese Dateien kannst du jetzt verwenden fuer:
+echo   - Najika's Verhaltens-Training (Megumin-Videos)
+echo   - Wissens-Erweiterung (Text-Dokumente)
+echo   - Sprach-Training (Code/Programmiersprachen)
+echo.
+pause

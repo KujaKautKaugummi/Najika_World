@@ -1,0 +1,43 @@
+@echo off
+REM NAJIKA TRAINING AUTO-START
+REM Startet automatisch Mo-Fr 9:00-14:00 Uhr
+
+echo ================================================================================
+echo NAJIKA TRAINING AUTO-START
+echo ================================================================================
+echo.
+
+REM Pruefe Python
+python --version >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Python nicht gefunden!
+    pause
+    exit /b 1
+)
+
+echo [OK] Python gefunden
+echo.
+
+REM Pruefe pytz (fuer Timezone)
+python -c "import pytz" >nul 2>&1
+if errorlevel 1 (
+    echo [WARNING] pytz nicht installiert - installiere...
+    pip install pytz
+)
+
+echo [OK] Dependencies OK
+echo.
+
+REM Starte Training-Scheduler
+echo [START] Starte Training-Scheduler...
+echo.
+python C:\NajikaCore\najika_training_scheduler.py
+
+echo.
+echo ================================================================================
+echo FERTIG!
+echo ================================================================================
+echo.
+echo NAJIKA liest jetzt: C:\NajikaCore\NAJIKA_CURRENT_TRAINING.md
+echo.
+pause

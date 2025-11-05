@@ -1,0 +1,51 @@
+import requests
+import time
+import subprocess
+import sys
+
+def restart_server():
+    """Startet Server neu für sauberen State"""
+    print("🔄 Server wird neu gestartet...")
+    # Server läuft bereits, wir testen einfach mit neuem Chat ohne History-Reset
+
+# Test: Mehrere Anfragen mit gleichem Context senden
+# (Simulates ein User der den Chat mehrfach mit gleicher Frage öffnet)
+
+print("=== CACHING TEST (Stateless Messages) ===\n")
+
+# Test 1: Request mit leerem Context (fresh start simulation)
+print("Test 1: 'Wie geht es dir?' (erster Request)")
+start = time.time()
+r1 = requests.post("http://localhost:8000/api/chat", json={"message": "Wie geht es dir?"}, timeout=60)
+t1 = time.time() - start
+print(f"Response: {r1.json()['response'][:60]}...")
+print(f"Zeit: {t1:.2f}s\n")
+
+# Test 2: Andere Frage
+print("Test 2: 'Was ist 2+2?' (neuer Request)")
+start = time.time()
+r2 = requests.post("http://localhost:8000/api/chat", json={"message": "Was ist 2+2?"}, timeout=60)
+t2 = time.time() - start
+print(f"Response: {r2.json()['response'][:60]}...")
+print(f"Zeit: {t2:.2f}s\n")
+
+# Test 3: Nochmal die gleiche Frage wie Test 2 (sollte gecacht sein)
+print("Test 3: 'Was ist 2+2?' NOCHMAL (Cache HIT erwartet - gleicher Kontext!)")
+start = time.time()
+r3 = requests.post("http://localhost:8000/api/chat", json={"message": "Was ist 2+2?"}, timeout=60)
+t3 = time.time() - start
+print(f"Response: {r3.json()['response'][:60]}...")
+print(f"Zeit: {t3:.2f}s")
+if t3 < 0.5:
+    print(f"✅ CACHE HIT! {t2/t3:.1f}x schneller!\n")
+else:
+    print(f"⚠️ Kein Cache Hit (Kontext hat sich geändert)\n")
+
+# Cache Stats
+print("=== CACHE STATISTIKEN ===")
+stats = requests.get("http://localhost:8000/api/cache/stats").json()
+print(f"Hits: {stats['hits']}")
+print(f"Misses: {stats['misses']}")
+print(f"Total: {stats['total_requests']}")
+print(f"Hit Rate: {stats['hit_rate_percent']}%")
+print(f"Cache Size: {stats['cache_size']}/{stats['cache_max_size']}")

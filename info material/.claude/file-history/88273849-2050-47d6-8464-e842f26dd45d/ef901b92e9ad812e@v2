@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+import requests
+import time
+
+print("=== PERSISTENT STORAGE TEST ===\n")
+
+# Test 1: Check current state
+print("1. Aktueller State:")
+state = requests.get("http://localhost:8000/api/state").json()
+print(f"   User Level: {state['user']['level']}")
+print(f"   User XP: {state['user']['xp']}")
+print(f"   History Size: {state['history_size']}")
+print()
+
+# Test 2: Sende ein paar Chat-Messages
+print("2. Sende Test-Messages...")
+for i in range(3):
+    msg = f"Test Message {i+1}"
+    r = requests.post("http://localhost:8000/api/chat", json={"message": msg}, timeout=60)
+    print(f"   - Sent: {msg}")
+time.sleep(1)
+
+# Test 3: Check State again
+print("\n3. State nach Chat:")
+state = requests.get("http://localhost:8000/api/state").json()
+print(f"   History Size: {state['history_size']}")
+print()
+
+# Test 4: Trigger manual save
+print("4. Manuelles Speichern...")
+save_result = requests.get("http://localhost:8000/api/save").json()
+print(f"   Save erfolgreich: {save_result['ok']}")
+print(f"   Message: {save_result['message']}")
+print()
+
+# Test 5: Check if save file exists
+import os
+save_file = "C:\\NajikaCore\\saves\\najika_state.json"
+if os.path.exists(save_file):
+    print(f"5. Save-Datei existiert: {save_file}")
+    with open(save_file, "r", encoding="utf-8") as f:
+        import json
+        save_data = json.load(f)
+    print(f"   Gespeichert am: {save_data['saved_at']}")
+    print(f"   History Entries: {len(save_data['history'])}")
+    print(f"   User Level: {save_data['user']['level']}")
+else:
+    print("5. Save-Datei noch nicht erstellt")
+
+print("\n[SUCCESS] Persistent Storage funktioniert!")

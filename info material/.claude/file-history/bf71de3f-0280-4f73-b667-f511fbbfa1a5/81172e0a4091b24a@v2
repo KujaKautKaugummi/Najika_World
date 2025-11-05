@@ -1,0 +1,39 @@
+{
+  "name": "najika-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.4.0",
+    "axios": "^1.12.2",
+    "framer-motion": "^12.23.24",
+    "react": "^18.3.1",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.9.4",
+    "react-scripts": "^5.0.1",
+    "socket.io-client": "^4.8.1",
+    "styled-components": "^6.1.19",
+    "three": "^0.160.0",
+    "workbox-webpack-plugin": "^7.3.0",
+    "zustand": "^5.0.8"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

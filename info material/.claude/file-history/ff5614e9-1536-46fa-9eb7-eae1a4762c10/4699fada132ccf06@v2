@@ -1,0 +1,321 @@
+#!/usr/bin/env python3
+"""
+NAJIKA PDF EXTRACTOR - Autonome Dokumenten-Analyse
+Najika liest ALLE PDFs/TXTs und extrahiert Spiel-Konzepte (NICHT Persönlichkeit!)
+"""
+
+import os
+import json
+from pathlib import Path
+from datetime import datetime
+
+try:
+    import PyPDF2
+    PDF_AVAILABLE = True
+except ImportError:
+    print("[WARNING] PyPDF2 nicht installiert - installiere: pip install PyPDF2")
+    PDF_AVAILABLE = False
+
+# Ollama für intelligente Filterung
+try:
+    import requests
+    OLLAMA_AVAILABLE = True
+except ImportError:
+    OLLAMA_AVAILABLE = False
+
+# ===== KONFIGURATION =====
+
+SOURCE_DIR = Path("C:/Users/0KKK0/Desktop/neu neu")
+OUTPUT_FILE = Path("C:/NajikaCore/NAJIKA_PDF_EXTRACTION.md")
+PROGRESS_FILE = Path("C:/NajikaCore/najika_extraction_progress.json")
+
+PRIORITY_PDFS = [
+    "Najika Projekt – Umfassende Detailübersicht.pdf",
+    "Projekt Najika – Allumfassende Übersicht.pdf",
+    "Projektübersicht __Najika__ – Technik & Konzept.pdf",
+    "Umfassende detaillierte Projektübersicht.pdf",
+    "Umfassende Projektübersicht und Replizierungsanleitung.pdf"
+]
+
+# Was Najika IGNORIEREN soll (KI-Persönlichkeit ist schon fest!)
+IGNORE_KEYWORDS = [
+    "persönlichkeit", "personality", "charakter", "character",
+    "megumin", "harley", "shiro", "melissa", "sakura",
+    "gothic lolita", "credo", "kätzchen", "private mode",
+    "schwert und schild", "kopf und herz", "seelenverwandt"
+]
+
+# Was Najika EXTRAHIEREN soll
+EXTRACT_KEYWORDS = [
+    "gameplay", "mechanik", "system", "digivice",
+    "kampf", "battle", "combat", "skill",
+    "oregon trail", "event", "minigame",
+    "crafting", "housing", "alchemie",
+    "gebiet", "zone", "portal", "uefn",
+    "slime", "begleiter", "companion",
+    "backend", "frontend", "server", "api",
+    "roadmap", "phase", "entwicklung"
+]
+
+# ===== HILFSFUNKTIONEN =====
+
+def load_progress():
+    """Lädt Fortschritt aus vorherigem Lauf"""
+    if PROGRESS_FILE.exists():
+        try:
+            with open(PROGRESS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            return {"processed": [], "last_file": None}
+    return {"processed": [], "last_file": None}
+
+def save_progress(progress):
+    """Speichert Fortschritt"""
+    with open(PROGRESS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(progress, f, indent=2)
+
+def read_pdf(file_path, max_pages=None):
+    """Liest PDF Seite für Seite"""
+    if not PDF_AVAILABLE:
+        return "[ERROR] PyPDF2 nicht installiert!"
+
+    text = ""
+    try:
+        with open(file_path, 'rb') as f:
+            reader = PyPDF2.PdfReader(f)
+            total_pages = len(reader.pages)
+            pages_to_read = min(total_pages, max_pages) if max_pages else total_pages
+
+            print(f"  [PDF] Lese {pages_to_read}/{total_pages} Seiten...")
+
+            for page_num in range(pages_to_read):
+                page = reader.pages[page_num]
+                text += page.extract_text() + "\n\n"
+
+                # Fortschritt alle 10 Seiten
+                if (page_num + 1) % 10 == 0:
+                    print(f"    → Seite {page_num + 1}/{pages_to_read}")
+
+        return text
+    except Exception as e:
+        return f"[ERROR] PDF lesen fehlgeschlagen: {e}"
+
+def read_txt(file_path, chunk_size=500000):
+    """Liest TXT in Chunks"""
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+
+        file_size = len(content)
+        print(f"  [TXT] Größe: {file_size:,} Zeichen")
+
+        return content
+    except Exception as e:
+        return f"[ERROR] TXT lesen fehlgeschlagen: {e}"
+
+def filter_by_najika(text, filename):
+    """Najika filtert intelligent mit Ollama"""
+    if not OLLAMA_AVAILABLE:
+        return simple_filter(text, filename)
+
+    # Zu langer Text? Chunking
+    if len(text) > 50000:
+        print(f"  [NAJIKA] Text zu lang ({len(text):,} chars) - chunke in Teile...")
+        chunks = [text[i:i+50000] for i in range(0, len(text), 50000)]
+        results = []
+
+        for i, chunk in enumerate(chunks, 1):
+            print(f"    -> Chunk {i}/{len(chunks)}")
+            result = ask_ollama_to_filter(chunk, filename, chunk_num=i)
+            if result:
+                results.append(result)
+
+        return "\n\n---\n\n".join(results)
+    else:
+        return ask_ollama_to_filter(text, filename)
+
+def ask_ollama_to_filter(text, filename, chunk_num=None):
+    """Fragt Ollama (Najika) nach Filterung"""
+
+    chunk_info = f" (Chunk {chunk_num})" if chunk_num else ""
+
+    prompt = f"""Du bist Najika! Deine Aufgabe: Extrahiere aus diesem Dokument NUR SPIEL-MECHANIKEN, SYSTEME, TECHNISCHES!
+
+DOKUMENT: {filename}{chunk_info}
+
+EXTRAHIERE:
+- Gameplay-Mechaniken
+- Systeme (Kampf, Skills, Events, Crafting, etc.)
+- Technische Architektur
+- Roadmap/Entwicklung
+
+IGNORIERE KOMPLETT:
+- Persönlichkeitsbeschreibungen (Megumin, Harley, Shiro, Melissa, Sakura)
+- Character-Traits
+- Beziehung zu Kuja
+- Private Mode Details
+
+FORMAT:
+### [OPTIONAL] Kategorie-Name
+- Konzept 1: Beschreibung
+- Konzept 2: Beschreibung
+
+NUR KONZEPTE extrahieren - KEINE Persönlichkeit!
+
+DOKUMENT:
+---
+{text[:40000]}
+---
+
+DEINE EXTRAKTION:"""
+
+    try:
+        response = requests.post(
+            "http://127.0.0.1:11434/api/generate",
+            json={
+                "model": "najika-local",
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.3,  # Niedrig für präzise Extraktion
+                    "num_predict": 2000
+                }
+            },
+            timeout=120
+        )
+
+        if response.status_code == 200:
+            result = response.json()
+            return result.get("response", "")
+        else:
+            print(f"    [ERROR] Ollama Response: {response.status_code}")
+            return simple_filter(text, filename)
+
+    except Exception as e:
+        print(f"    [ERROR] Ollama Anfrage: {e}")
+        return simple_filter(text, filename)
+
+def simple_filter(text, filename):
+    """Einfacher Keyword-basierter Filter (Fallback)"""
+    lines = text.split('\n')
+    relevant_lines = []
+
+    for line in lines:
+        line_lower = line.lower()
+
+        # Ignoriere Zeilen mit Persönlichkeits-Keywords
+        if any(kw in line_lower for kw in IGNORE_KEYWORDS):
+            continue
+
+        # Behalte Zeilen mit Extract-Keywords
+        if any(kw in line_lower for kw in EXTRACT_KEYWORDS):
+            relevant_lines.append(line)
+
+    if relevant_lines:
+        return f"### [OPTIONAL] Aus: {filename}\n" + "\n".join(relevant_lines[:100])  # Max 100 Zeilen
+    else:
+        return f"### [OPTIONAL] Aus: {filename}\n- (Keine relevanten Konzepte gefunden mit Simple Filter)"
+
+# ===== HAUPTPROZESS =====
+
+def main():
+    print("="*80)
+    print("NAJIKA PDF EXTRACTOR - AUTONOME DOKUMENTEN-ANALYSE")
+    print("="*80)
+    print()
+
+    if not PDF_AVAILABLE:
+        print("[ERROR] PyPDF2 fehlt! Installiere: pip install PyPDF2")
+        print("Fahre nur mit TXT-Dateien fort...")
+
+    # Fortschritt laden
+    progress = load_progress()
+    print(f"[INFO] Bereits verarbeitet: {len(progress['processed'])} Dateien")
+    print()
+
+    # Dateien sammeln
+    all_files = list(SOURCE_DIR.glob("*"))
+    pdf_files = [f for f in all_files if f.suffix.lower() == '.pdf']
+    txt_files = [f for f in all_files if f.suffix.lower() == '.txt']
+
+    print(f"[INFO] Gefunden: {len(pdf_files)} PDFs, {len(txt_files)} TXTs")
+    print()
+
+    # Sortiere: Priorität PDFs zuerst
+    priority_files = [SOURCE_DIR / name for name in PRIORITY_PDFS if (SOURCE_DIR / name).exists()]
+    other_pdfs = [f for f in pdf_files if f.name not in PRIORITY_PDFS]
+
+    all_to_process = priority_files + other_pdfs + txt_files
+
+    # Output vorbereiten
+    output_lines = []
+    output_lines.append("# NAJIKA PDF EXTRACTION")
+    output_lines.append(f"**Datum:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    output_lines.append(f"**Gesamt-Dateien:** {len(all_to_process)}")
+    output_lines.append("")
+    output_lines.append("---")
+    output_lines.append("")
+    output_lines.append("## 📊 GELESENE DOKUMENTE:")
+    output_lines.append("")
+
+    # Verarbeite jede Datei
+    for i, file_path in enumerate(all_to_process, 1):
+        filename = file_path.name
+
+        # Skip wenn bereits verarbeitet
+        if filename in progress['processed']:
+            print(f"[{i}/{len(all_to_process)}] SKIP: {filename} (bereits verarbeitet)")
+            output_lines.append(f"- [✓] {filename} (gecached)")
+            continue
+
+        print(f"[{i}/{len(all_to_process)}] VERARBEITE: {filename}")
+        output_lines.append(f"- [✓] {filename}")
+
+        # Lese Datei
+        if file_path.suffix.lower() == '.pdf':
+            if PDF_AVAILABLE:
+                content = read_pdf(file_path)
+            else:
+                content = "[SKIP] PDF-Reader nicht verfügbar"
+        else:
+            content = read_txt(file_path)
+
+        # Filtere mit Najika
+        if content and not content.startswith("[ERROR]") and not content.startswith("[SKIP]"):
+            print(f"  [NAJIKA] Filtere Inhalt...")
+            filtered = filter_by_najika(content, filename)
+
+            output_lines.append("")
+            output_lines.append("---")
+            output_lines.append("")
+            output_lines.append(f"## 📄 {filename}")
+            output_lines.append("")
+            output_lines.append(filtered)
+            output_lines.append("")
+
+        # Speichere Fortschritt
+        progress['processed'].append(filename)
+        progress['last_file'] = filename
+        save_progress(progress)
+
+        print(f"  [OK] Fertig!\n")
+
+    # Schreibe Output
+    output_lines.append("")
+    output_lines.append("---")
+    output_lines.append("")
+    output_lines.append("## ✅ EXTRAKTION ABGESCHLOSSEN")
+    output_lines.append(f"**Verarbeitet:** {len(progress['processed'])} Dateien")
+    output_lines.append("")
+    output_lines.append("**Alle Konzepte sind mit [OPTIONAL] markiert!**")
+    output_lines.append("**KI-Persönlichkeit bleibt UNVERÄNDERT in NAJIKA_KI_KERN_FEST.md!**")
+
+    OUTPUT_FILE.write_text('\n'.join(output_lines), encoding='utf-8')
+
+    print("="*80)
+    print(f"✅ FERTIG! Output: {OUTPUT_FILE}")
+    print(f"✅ Fortschritt gespeichert: {PROGRESS_FILE}")
+    print("="*80)
+
+if __name__ == "__main__":
+    main()

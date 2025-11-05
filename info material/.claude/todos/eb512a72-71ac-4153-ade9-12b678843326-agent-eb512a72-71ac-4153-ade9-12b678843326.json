@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Altes perfektes Kamera-System analysiert",
+    "status": "completed",
+    "activeForm": "Analysiere altes System"
+  },
+  {
+    "content": "Orbit-System mit orbitYaw/Pitch/Distance implementieren",
+    "status": "completed",
+    "activeForm": "Implementiere Orbit-System"
+  },
+  {
+    "content": "Kamera-Buttons im UI hinzufügen",
+    "status": "completed",
+    "activeForm": "Füge UI-Buttons hinzu"
+  },
+  {
+    "content": "Event Listener für Buttons/Maus verbinden",
+    "status": "completed",
+    "activeForm": "Verbinde Event Listener"
+  },
+  {
+    "content": "Teste Kamera-System im Browser (Strg+F5)",
+    "status": "pending",
+    "activeForm": "Teste Kamera-Modi"
+  }
+]

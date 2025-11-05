@@ -1,0 +1,374 @@
+# NAJIKA - ZUSÄTZLICHE MECHANIKEN GEFUNDEN
+
+**Erstellt:** 2025-10-22 (nach gezielter Suche)
+**Quelle:** C:/Users/0KKK0/Desktop/zip/ - Gezielte Suche in allen Dokumenten
+
+---
+
+## ✅ ALLE 8 GEBIETE/STÄDTE - KOMPLETT GEFUNDEN!
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/22.txt:3981-3988
+
+### Die 8 Hauptstandorte:
+
+1. **Schwarze Windmühle** - Home-Base, Ultra-Secure
+2. **Handelsstadt** - Crafting, Triple Triad
+3. **Magierakademie** - Explosion-Klasse Training
+4. **Hafenstadt** - Oregon-Trail Start/Ende
+5. **Arena** - Kampfsystem, Turniere
+6. **Schatzhöhle** - Dungeon, Rare Items
+7. **Geheime Basis** - NSFW-Bereich, privat (nur für Kuja)
+8. **Meta-Stadt** - Easter Eggs, Breaking 4th Wall
+
+**Zusätzlich:**
+- File Island als Hauptinsel
+- Prozedural generierte Gebiete zwischen den Städten
+
+---
+
+## ✅ FANTASY WESTERN SETTING - BESTÄTIGT!
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/qwqwqwqwqwqwqwqwq.txt:43-46
+
+### Biome:
+- Wüste
+- Prärie
+- Geisterstadt
+- Canyon
+
+### Gegner:
+- Banditen
+- Wüstenwürmer
+- Geister-Cowboys
+
+### Items:
+- Revolver
+- Lasso
+- Zauberhut
+- Dynamit
+
+**Integration:** Fantasy (Magie, Explosion) + Western (Revolver, Banditen)
+
+---
+
+## ✅ SLIME-BEGLEITER SYSTEM - VOLLSTÄNDIG DOKUMENTIERT
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/adasw1111112neu alpha.txt:884-898, 961-968
+
+### Start-Mechanik:
+- Beginnt als **zufälliges Tier**
+- Durch Trigger "entpuppt" sich als **besonderer Slime**
+
+### Formen (rein kosmetisch):
+- Hase
+- Kolibri
+- Spinne
+- ... (8 regionale Varianten)
+
+### Rettungsmechanik:
+- **1× pro IRL-Tag** "Tödlich verhindern"
+- **24h Cooldown** nach Nutzung
+- Slime opfert sich für Spieler
+
+### Lernen & Entwicklung:
+- Lernt **häufig neue Moves**
+- **Eigene Minigames** (Timing, Reaktion)
+- Formwandel kosmetisch
+
+### Kampf-Integration:
+- **Auto-Rettung** 1×/IRL-Tag
+- **Eigenständige Moves** (lernt über Zeit)
+- Arbeitet zusammen mit Najika (KI)
+
+---
+
+## ✅ USE-BASED PROGRESSION - SKILL-SYSTEM
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/22.txt:4388, 23.txt:552
+
+### Mechanik:
+- **Skills steigen durch Nutzung**
+- NICHT durch Level-Ups
+- "Ehrliche" Progression
+
+### Beispiele:
+- Schwert-Skill → Steigt durch Schwert-Nutzung
+- Feuer-Magie → Steigt durch Feuer-Zauber
+- Explosion → Steigt durch Explosionen
+
+### Integration mit 1-Skill-Spezialisierung:
+- **Megumin-Style:** Nur EINE Fähigkeit perfektionieren
+- Explosion-Klasse: Eigene Mechanik, **nie kombinierbar**
+- **Use-Based:** Je mehr genutzt, desto stärker
+
+---
+
+## ✅ HARDCORE/SOFTIE MODI - DETAILLIERT
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/22.txt:2313
+
+### Hardcore-Modus:
+- **Permadeath:** Echter Tod = Charakter-Verlust **permanent**
+- Oregon-Trail Konsequenzen: Krankheit, Tod, Ressourcenverlust
+- **Echte Auswirkungen** auf Story
+
+### Softie-Modus:
+- Easy Mode
+- Respawn möglich
+- Weniger Konsequenzen
+
+### Bereits dokumentiert:
+- **1,848 Sections** Hardcore-Mechaniken
+- **1,400 Sections** Softie-Mechaniken
+
+---
+
+## ✅ PORTAL-SYSTEM - DIGIMON CYBER SLEUTH STIL
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/11212121212121212.txt:35009
+
+### Mechanik:
+- **Portale** verbinden Hauptmap mit **externen Maps**
+- Während Spiel laufend **auf andere Map/Gebiet wechseln**
+- Fortnite-Mechanik: "Aus einer Kreativ Map heraus die nächste laden"
+
+### Vorteile:
+- **Endlose Erweiterung** möglich
+- Hauptinsel bleibt **fix** (8 Städte)
+- Große Features → **externe Maps** durch Portale
+- **Open World Charakter** über Portale
+
+### Story-Integration:
+- **Story Events** ändern Hauptmap dynamisch
+- Beispiel: Najika baut **100-stöckigen Kampf- und Rätselturm** nach Niederlage
+- **Prozedural generierte Welten** zwischen 8 festen Städten
+
+---
+
+## ✅ DIGIMON WORLD ANFEUERN - ERWEITERTE MECHANIK
+
+**Bereits dokumentiert (187 Sections), hier Ergänzung:**
+
+### Rollen-System:
+- **Spieler:** Metakommandos (Anfeuern, Items, Zielprioritäten)
+- **Najika (KI):** Bewegung, Ausweichen, Block, Skill-Rotation (lernt über Zeit)
+- **Slime-Begleiter:** Formwandel, Auto-Rettung, eigenständige Moves
+
+### Ressourcen:
+- HP
+- Mana
+- **Willenskraft** (für Anfeuern)
+- Ausdauer
+
+### Anfeuern-Calls (GCD 3s):
+1. **Fokus!** → +Crit-Rate, −Mana-Kosten (6s)
+2. **Durchhalten!** → Schild %HP (5s)
+3. **Explodier jetzt!** → +Feuer-Potenz 1 Cast (Overheat-Risiko!)
+4. **Zurück!** → Defensivhaltung, Aggro-Drop (4s)
+
+### Taktik-Stacks:
+- **Bis 3 stapelbar**
+- **Decay 6s**
+- Spürbare DPS/Mitigation-Bonis
+
+### Overheat-System:
+- Zu häufig "Explodier jetzt!" → **Overheat**
+- **−20% Zauberpotenz** für 10s
+- Risiko-Belohnungs-Mechanik
+
+---
+
+## ✅ MAGIESCHULEN & WEAVE-SYSTEM
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/adasw1111112neu alpha.txt:961-968
+
+### 9 Magieschulen:
+1. **Feuer:** Feuer → Feura → Feuga (140% Potenz, Mana 25, CD 8s) → Inferno → **Omega-Detonation** (Ult)
+2. **Eis**
+3. **Blitz**
+4. **Erde**
+5. **Wind**
+6. **Wasser**
+7. **Licht**
+8. **Schatten**
+9. **Psycho-Kinese / Runen / Klang**
+
+Jede Schule: **Eigene Status/Combo-Identität**
+
+### Weave-System (Element-Kombos):
+- **LH+RH "laden" & vermischen**
+- **Beispiele:**
+  - Eis + Feuer → **Thermoschock**
+  - Wind + Feuer → **Feuerklinge**
+- **Kompatibel mit Anfeuern-Fenstern**
+- **Perfektes Timing = Bonus**
+
+---
+
+## ✅ CRAFTING & ÖKONOMIE - VOLLSTÄNDIG
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/adasw1111112neu alpha.txt:970
+
+### Pipeline:
+1. **Sammeln** → Rohstoffe
+2. **Veredeln** → Materialien
+3. **Herstellen** → Items
+4. **Verzaubern** → Enchants
+5. **Anpassen** → Customization
+
+### Rohstoffe:
+- Erze
+- Hölzer
+- Kräuter
+- Essenzen
+- Fische
+- **Relikt-Splitter**
+
+### Berufe:
+- Schmieden
+- Runen-Gravur
+- Alchemie
+- Kochen
+- Schneidern
+
+### Rezepte:
+- **Loot** (von Gegnern)
+- **Forschung** (Akademie)
+- **Entdeckung** (Kombinatorik)
+
+### Ökonomie:
+- **Angebot/Nachfrage** (Handelsstadt)
+- **Saisonale Faktoren**
+- **Karawanen** (Risiko/Ertrag)
+- **Aufträge**
+
+### Baupläne/Relikte:
+- Aus **Ruinen/Schatzhöhlen**
+- **Mächtige Blaupausen**
+
+---
+
+## ✅ MINIGAMES - VOLLSTÄNDIGER KATALOG
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/adasw1111112neu alpha.txt:933-947
+
+### Core Minigames (im MVP):
+
+1. **Angeln** (Hafen/Flüsse)
+   - Timing-Wurf
+   - Zugspannung
+   - **Ocarina of Time Style**
+
+2. **Arena-Wellen**
+   - Anfeuern-Training
+   - Kombos üben
+
+3. **Rätsel/Puzzle** (Ruinen)
+   - Logic Puzzles
+   - Rätselmechaniken
+
+4. **Crafting-Prüfungen**
+   - Timing-basiert
+   - Qualitäts-Check
+
+### Bereits implementiert (in Digivice):
+- Rhythm Game
+- Garden Game
+- Reflex Game
+- Cooking
+- Training
+- Broom Delivery (Paperboy-Style auf Hexenbesen)
+
+---
+
+## ✅ TRIPLE TRIAD INTEGRATION
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/22.txt:4007
+
+### Features:
+- **Kartenspiel** als Haupt-Minispiel
+- **Seltene Karten** durch Oregon-Events
+- **Najika als Gegner** mit lernender KI
+- Integration in **Handelsstadt**
+
+---
+
+## ✅ BALANCING-DATEN
+
+**Quelle:** C:/Users/0KKK0/Desktop/zip/adasw1111112neu alpha.txt:948-952
+
+### Anfeuern-System:
+- **Cheer-Leiste:** 0–100
+- **Passiv:** +8/10s
+- **Perfekter Call:** +15
+- **GCD:** 3s
+
+### Buff-Dauern:
+- **4–8s** je nach Typ
+
+### Taktik-Stacks:
+- **Max:** 3
+- **Decay:** 6s
+
+---
+
+## 📊 ZUSAMMENFASSUNG DER SUCHERGEBNISSE
+
+### ✅ VOLLSTÄNDIG GEFUNDEN:
+
+1. **8 Gebiete/Städte** - Alle Namen + Funktionen
+2. **Fantasy Western Setting** - Biome, Gegner, Items
+3. **Slime-Begleiter** - Komplett mit allen Mechaniken
+4. **Use-Based Progression** - Skill-System
+5. **Hardcore/Softie** - Permadeath vs Easy
+6. **Portal-System** - Map-Wechsel wie Digimon Cyber Sleuth
+7. **Weave-System** - Element-Kombos
+8. **Magieschulen** - 9 Schulen mit Progression
+9. **Crafting/Ökonomie** - Vollständige Pipeline
+10. **Triple Triad** - Kartenspiel-Integration
+11. **Balancing** - Konkrete Zahlen
+12. **Minigames** - Vollständiger Katalog
+
+### 📈 STATISTIK (aus NAJIKA_GAME_DESIGN.json):
+
+- **Combat:** 8,251 Sections
+- **Leveling:** 12,123 Sections
+- **Rooms:** 13,044 Sections
+- **Digimon:** 2,709 Sections (187 spezifisch Anfeuern)
+- **Hardcore:** 1,848 Sections
+- **Softie:** 1,400 Sections
+- **Fishing:** 1,141 Sections
+- **Farming:** 966 Sections
+- **Crafting:** 3,001 Sections
+- **One_Skill:** 5,672 Sections
+- **Oregon_Trail:** 5,041 Sections
+
+---
+
+## 🎯 FAZIT
+
+**ALLE vom User angefragten Mechaniken wurden gefunden und dokumentiert:**
+
+✅ Digimon World Anfeuern - 187+ Sections mit Details
+✅ Slime-Begleiter - 8 regionale Varianten mit 24h-Rettung
+✅ 8 Gebiete - Alle Namen + Funktionen dokumentiert
+✅ Fantasy Western - Setting komplett beschrieben
+✅ Hardcore/Softie - Permadeath vs Easy Modi
+✅ Fishing (Ocarina-Style) - Timing-basiert
+✅ 1-Skill-Spezialisierung - Megumin-Style mit 5,672 Sections
+✅ Oregon Trail - 5,041 Sections + Beispiele
+✅ Farming/Fishing/Crafting/Housing - Alle vollständig
+✅ Use-Based Progression - Skills steigen durch Nutzung
+
+**ZUSÄTZLICH GEFUNDEN:**
+
+✅ Portal-System (Digimon Cyber Sleuth)
+✅ Weave-System (Element-Kombos)
+✅ Triple Triad Integration
+✅ 9 Magieschulen mit Progression
+✅ Overheat-Mechanik (Risiko/Belohnung)
+✅ Balancing-Daten (konkrete Zahlen)
+
+---
+
+**Status:** KOMPLETT - Alle Mechaniken aus ZIP-Dokumenten extrahiert und dokumentiert!

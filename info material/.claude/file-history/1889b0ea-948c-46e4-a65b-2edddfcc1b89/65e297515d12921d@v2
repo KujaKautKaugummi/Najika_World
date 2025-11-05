@@ -1,0 +1,75 @@
+# NAJIKA WINDOWS SERVICE INSTALLER
+# Installiert Najika als Windows-Service (läuft immer im Hintergrund)
+
+# Prüfe Admin-Rechte
+if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{
+  Write-Warning "Dieses Script benötigt Administrator-Rechte!"
+  Write-Warning "Rechtsklick auf Script → Als Administrator ausführen"
+  pause
+  exit
+}
+
+# Service-Konfiguration
+$serviceName = "NajikaServer"
+$displayName = "Najika AI Server"
+$description = "Najika Virtual Companion AI Server"
+$pythonPath = (Get-Command python).Source
+$workingDir = "C:\NajikaCore"
+$scriptPath = "$workingDir\najika_server.py"
+
+# Prüfe ob Service schon existiert
+$existingService = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+
+if ($existingService) {
+    Write-Host "Service existiert bereits. Stoppe und entferne..."
+    Stop-Service -Name $serviceName -Force
+    sc.exe delete $serviceName
+    Start-Sleep -Seconds 2
+}
+
+# Erstelle Service mit NSSM (Non-Sucking Service Manager)
+# Download NSSM falls nicht vorhanden
+$nssmPath = "$workingDir\nssm.exe"
+if (-not (Test-Path $nssmPath)) {
+    Write-Host "Lade NSSM herunter..."
+    $nssmUrl = "https://nssm.cc/release/nssm-2.24.zip"
+    $nssmZip = "$env:TEMP\nssm.zip"
+    Invoke-WebRequest -Uri $nssmUrl -OutFile $nssmZip
+    Expand-Archive -Path $nssmZip -DestinationPath "$env:TEMP\nssm" -Force
+    Copy-Item "$env:TEMP\nssm\nssm-2.24\win64\nssm.exe" -Destination $nssmPath
+    Remove-Item $nssmZip, "$env:TEMP\nssm" -Recurse -Force
+}
+
+# Installiere Service
+Write-Host "Installiere Najika Service..."
+& $nssmPath install $serviceName $pythonPath "$scriptPath"
+& $nssmPath set $serviceName AppDirectory $workingDir
+& $nssmPath set $serviceName DisplayName "$displayName"
+& $nssmPath set $serviceName Description "$description"
+& $nssmPath set $serviceName Start SERVICE_AUTO_START
+
+# Auto-Restart bei Absturz
+& $nssmPath set $serviceName AppExit Default Restart
+& $nssmPath set $serviceName AppRestartDelay 5000
+
+# Logging
+& $nssmPath set $serviceName AppStdout "$workingDir\logs\najika_service.log"
+& $nssmPath set $serviceName AppStderr "$workingDir\logs\najika_service_error.log"
+
+# Starte Service
+Write-Host "Starte Najika Service..."
+Start-Service -Name $serviceName
+
+Write-Host ""
+Write-Host "✅ Najika Service erfolgreich installiert!" -ForegroundColor Green
+Write-Host "   Service läuft jetzt im Hintergrund"
+Write-Host "   Startet automatisch bei Windows-Boot"
+Write-Host ""
+Write-Host "Nützliche Befehle:" -ForegroundColor Cyan
+Write-Host "   Start: net start $serviceName"
+Write-Host "   Stop:  net stop $serviceName"
+Write-Host "   Status: sc query $serviceName"
+Write-Host "   Remove: sc delete $serviceName"
+Write-Host ""
+pause

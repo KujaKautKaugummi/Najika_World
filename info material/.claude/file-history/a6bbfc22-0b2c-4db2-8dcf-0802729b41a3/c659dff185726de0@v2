@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""
+Markiert aktuelle Training-Session als abgeschlossen
+"""
+import json
+from pathlib import Path
+from datetime import datetime
+import pytz
+import subprocess
+
+NAJIKA_DIR = Path('C:/NajikaCore')
+TRAINING_DIR = NAJIKA_DIR / 'training'
+SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
+
+BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+def complete_session():
+    now = datetime.now(BERLIN_TZ)
+    hour = now.hour
+
+    # Bestimme aktuellen Block (08:00-24:00)
+    if 8 <= hour < 9:
+        block = "08:00-09:00"
+    elif 9 <= hour < 10:
+        block = "09:00-10:00"
+    elif 10 <= hour < 11:
+        block = "10:00-11:00"
+    elif 11 <= hour < 12:
+        block = "11:00-12:00"
+    elif 12 <= hour < 13:
+        block = "12:00-13:00"
+    elif 13 <= hour < 14:
+        block = "13:00-14:00"
+    elif 14 <= hour < 15:
+        block = "14:00-15:00"
+    elif 15 <= hour < 16:
+        block = "15:00-16:00"
+    elif 16 <= hour < 17:
+        block = "16:00-17:00"
+    elif 17 <= hour < 18:
+        block = "17:00-18:00"
+    elif 18 <= hour < 19:
+        block = "18:00-19:00"
+    elif 19 <= hour < 20:
+        block = "19:00-20:00"
+    elif 20 <= hour < 21:
+        block = "20:00-21:00"
+    elif 21 <= hour < 22:
+        block = "21:00-22:00"
+    elif 22 <= hour < 23:
+        block = "22:00-23:00"
+    elif 23 <= hour < 24:
+        block = "23:00-24:00"
+    else:
+        print('[ERROR] Keine aktive Training-Session!')
+        return
+
+    # Lade Schedule
+    with open(SCHEDULE_FILE, 'r', encoding='utf-8') as f:
+        schedule = json.load(f)
+
+    # Session Key
+    today_key = now.strftime('%Y-%m-%d')
+    session_key = f"{today_key}_{block}"
+
+    if 'completed_sessions' not in schedule:
+        schedule['completed_sessions'] = []
+
+    # Prüfe ob schon erledigt
+    if session_key in schedule['completed_sessions']:
+        print(f'[INFO] Session {block} bereits als erledigt markiert!')
+        return
+
+    # Markiere als erledigt
+    schedule['completed_sessions'].append(session_key)
+    schedule['total_hours'] += 1
+
+    # Zähle Tage (einzigartige Tage)
+    unique_days = set(s.split('_')[0] for s in schedule['completed_sessions'])
+    schedule['days_trained'] = len(unique_days)
+
+    # Woche berechnen (5 Tage = 1 Woche)
+    schedule['current_week'] = (schedule['days_trained'] // 5) + 1
+
+    # Speichern
+    with open(SCHEDULE_FILE, 'w', encoding='utf-8') as f:
+        json.dump(schedule, f, indent=2)
+
+    print('='*80)
+    print(f'[OK] Session {block} abgeschlossen!')
+    print('='*80)
+    print(f'Gesamt-Stunden: {schedule["total_hours"]}')
+    print(f'Trainings-Tage: {schedule["days_trained"]}')
+    print(f'Aktuelle Woche: {schedule["current_week"]}')
+    print('')
+
+    # Wenn nicht letzte Session heute -> lade nächste
+    if hour < 23:
+        print('[INFO] Lade nächste Session...')
+        subprocess.run(['python', str(NAJIKA_DIR / 'najika_training_scheduler.py')])
+    else:
+        print('[INFO] Letztes Training heute - gut gemacht!')
+        print('[INFO] Morgen 08:00 weiter!')
+
+if __name__ == '__main__':
+    complete_session()

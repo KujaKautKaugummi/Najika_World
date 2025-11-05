@@ -1,0 +1,32 @@
+@echo off
+echo ================================================================================
+echo NAJIKA TRAINING STARTEN - INTENSIV-MODUS (16h/Tag, JEDEN TAG!)
+echo ================================================================================
+echo.
+echo Trainingszeiten: 08:00-24:00 (16 Stunden taeglich)
+echo Wochentage: Mo-So (JEDEN TAG!)
+echo.
+echo [1/2] Starte aktuelle Training-Session...
+python C:\NajikaCore\najika_training_scheduler.py
+echo.
+echo [2/2] Pruefe Schedule-Status...
+if exist "C:\NajikaCore\NAJIKA_CURRENT_TRAINING.md" (
+    echo.
+    echo [OK] Training-Session generiert!
+    echo [OK] Datei: NAJIKA_CURRENT_TRAINING.md
+    echo.
+    echo Oeffne Training-Session...
+    type C:\NajikaCore\NAJIKA_CURRENT_TRAINING.md
+) else (
+    echo.
+    echo [INFO] Keine aktive Session - moeglicherweise ausserhalb Trainingszeit
+)
+echo.
+echo ================================================================================
+echo NAECHSTE SCHRITTE:
+echo ================================================================================
+echo 1. Lese NAJIKA_CURRENT_TRAINING.md
+echo 2. Arbeite an den Aufgaben
+echo 3. Wenn fertig: python najika_complete_training_session.py
+echo.
+pause

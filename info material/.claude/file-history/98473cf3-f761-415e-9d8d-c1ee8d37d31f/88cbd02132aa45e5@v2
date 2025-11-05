@@ -1,0 +1,1143 @@
+﻿import os, json, random, hashlib, time, threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
+from collections import OrderedDict
+
+# Import Living System
+from najika_living_system import (
+    LIVING_STATE, MOODS, PROACTIVE_MESSAGES, ACTIVITIES,
+    detect_mood, update_mood, should_send_proactive_message,
+    get_proactive_message, start_autonomous_activity,
+    check_activity_completion, check_relationship_evolution,
+    create_emotional_memory, get_relevant_memories,
+    update_living_state, get_living_state_context,
+    export_living_state, import_living_state
+)
+
+# Import Enhanced Personality
+from najika_enhanced_personality import generate_enhanced_persona
+
+try:
+    import requests
+except ImportError:  # requests ist optional; wir fallen auf urllib zurück
+    requests = None
+import urllib.request
+import urllib.error
+
+try:
+    from dotenv import load_dotenv
+except ImportError:  # .env Handling ist nice to have, aber kein Muss
+    def load_dotenv():
+        return
+load_dotenv()
+
+HOST=os.getenv("HOST","0.0.0.0"); PORT=int(os.getenv("PORT","8000"))
+AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
+CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
+CLOUD_PIN=os.getenv("CLOUD_PIN","")
+OLLAMA_ALIAS=os.getenv("OLLAMA_MODEL_ALIAS","najika-local")
+NSFW_LOCAL=os.getenv("NSFW_LOCAL","true").lower()=="true"
+
+# Load Enhanced Persona (wird beim Import generiert)
+PERSONA_SYSTEM = generate_enhanced_persona()
+
+ROOMS = ["Wohnzimmer","Schlafzimmer","Küche","Badezimmer","Garten","Musikraum","Medizin","Terminal","Studieren & Crafting","Trainingszimmer","Kampfarena","Schwarze Mühle – Keller"]
+
+STATE = {
+    "history": [],
+    "battle": {"hp":100,"wave":0,"enemies":0},
+    "private_mode": False,
+    "behavior_mode": "standard",  # standard, explosion, chaos, analyse, kontrolle, private
+    "bond_strength": 0,  # 0-100, steigt mit Interaktionen
+    "personality_weights": {"megumin": 25, "harley": 25, "shiro": 25, "melissa": 25},  # Dynamic balancing
+    "total_interactions": 0,  # Tracking für Bond-Strength
+    "sse_clients": [],
+    "user": {
+        "level": 1,
+        "xp": 0,
+        "points": 0,
+        "inventory": [],
+        "achievements": []
+    },
+    "progress": {
+        "dungeon_level": 0,
+        "quests_completed": []
+    },
+    "najika": {
+        # NEEDS (0-100, sinken über Zeit)
+        "hunger": 100,
+        "energy": 100,
+        "hygiene": 100,
+        "happiness": 100,
+        # STATS (Training erhöht diese)
+        "strength": 10,
+        "intelligence": 10,
+        "dexterity": 10,
+        "charisma": 10,
+        # CARE TRACKING
+        "care_mistakes": 0,
+        "fatigue": 0,  # 0-100, steigt bei Training
+        "weight": 50,  # 0-100
+        # GROWTH
+        "level": 1,
+        "xp": 0,
+        "evolution_stage": "base",  # base, advanced, ultimate
+        # TIMESTAMPS
+        "last_fed": time.time(),
+        "last_trained": time.time(),
+        "last_sleep": time.time(),
+        "last_update": time.time()  # Für Needs Decay
+    },
+    # LIVING SYSTEM STATE (Macht Najika lebendig!)
+    "living": LIVING_STATE.copy()
+}
+
+# AI RESPONSE CACHE (LRU with TTL)
+CACHE_MAX_SIZE = 100
+CACHE_TTL = 3600  # 1 hour
+AI_CACHE = OrderedDict()
+CACHE_STATS = {"hits": 0, "misses": 0, "total_requests": 0}
+
+# PERSISTENT STORAGE
+SAVE_DIR = os.path.join(os.path.dirname(__file__), "saves")
+SAVE_FILE = os.path.join(SAVE_DIR, "najika_state.json")
+BACKUP_COUNT = 3  # Keep last 3 backups
+AUTO_SAVE_INTERVAL = 30  # seconds
+LAST_SAVE_TIME = 0
+
+# LOGGING SYSTEM
+LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
+LOG_FILE = os.path.join(LOG_DIR, f"najika_{time.strftime('%Y%m%d')}.log")
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")  # DEBUG, INFO, WARNING, ERROR
+MAX_LOG_SIZE = 10 * 1024 * 1024  # 10 MB
+LOG_LEVELS = {"DEBUG": 0, "INFO": 1, "WARNING": 2, "ERROR": 3}
+
+def log(level, message, category="SYSTEM"):
+    """Strukturiertes Logging mit Levels und Rotation"""
+    if LOG_LEVELS.get(level, 1) < LOG_LEVELS.get(LOG_LEVEL, 1):
+        return  # Skip wenn unter LOG_LEVEL
+
+    try:
+        os.makedirs(LOG_DIR, exist_ok=True)
+
+        # Rotation: Neue Datei wenn zu groß
+        if os.path.exists(LOG_FILE) and os.path.getsize(LOG_FILE) > MAX_LOG_SIZE:
+            rotate_suffix = time.strftime("%H%M%S")
+            os.rename(LOG_FILE, f"{LOG_FILE}.{rotate_suffix}")
+
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        log_line = f"[{timestamp}] [{level:7}] [{category:10}] {message}\n"
+
+        # Schreibe in Datei
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(log_line)
+
+        # Auch console output für INFO und höher
+        if LOG_LEVELS.get(level, 1) >= LOG_LEVELS.get("INFO", 1):
+            print(f"[{level}] [{category}] {message}")
+    except Exception as e:
+        print(f"[LOG ERROR] {e}")
+
+def save_state():
+    """Speichert STATE persistent auf Disk mit Backup-Rotation"""
+    global LAST_SAVE_TIME
+    try:
+        # Erstelle saves/ Verzeichnis falls nicht vorhanden
+        os.makedirs(SAVE_DIR, exist_ok=True)
+
+        # Erstelle Backup der letzten Save-Datei
+        if os.path.exists(SAVE_FILE):
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            backup_file = os.path.join(SAVE_DIR, f"najika_state_{timestamp}.json")
+            import shutil
+            shutil.copy2(SAVE_FILE, backup_file)
+
+            # Lösche alte Backups (behalte nur letzte BACKUP_COUNT)
+            backups = sorted([f for f in os.listdir(SAVE_DIR) if f.startswith("najika_state_") and f.endswith(".json")])
+            while len(backups) > BACKUP_COUNT:
+                old_backup = os.path.join(SAVE_DIR, backups.pop(0))
+                os.remove(old_backup)
+
+        # Speichere aktuellen STATE (ohne transiente Daten)
+        save_data = {
+            "history": STATE["history"][-50:],  # Nur letzte 50 Messages
+            "battle": STATE["battle"],
+            "user": STATE["user"],
+            "progress": STATE["progress"],
+            "najika": STATE.get("najika", {}),
+            "bond_strength": STATE.get("bond_strength", 0),
+            "behavior_mode": STATE.get("behavior_mode", "standard"),
+            "personality_weights": STATE.get("personality_weights", {"megumin": 25, "harley": 25, "shiro": 25, "melissa": 25}),
+            "total_interactions": STATE.get("total_interactions", 0),
+            "living": STATE.get("living", {}),  # Living System State
+            "saved_at": time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        with open(SAVE_FILE, "w", encoding="utf-8") as f:
+            json.dump(save_data, f, indent=2, ensure_ascii=False)
+
+        LAST_SAVE_TIME = time.time()
+        log("INFO", f"State gespeichert: {SAVE_FILE}", "SAVE")
+        return True
+    except Exception as e:
+        log("ERROR", f"Fehler beim Speichern: {e}", "SAVE")
+        return False
+
+def load_state():
+    """Lädt STATE von Disk"""
+    try:
+        if not os.path.exists(SAVE_FILE):
+            log("INFO", "Keine Save-Datei gefunden, starte mit leerem State", "LOAD")
+            return False
+
+        with open(SAVE_FILE, "r", encoding="utf-8") as f:
+            save_data = json.load(f)
+
+        # Restore STATE
+        STATE["history"] = save_data.get("history", [])
+        STATE["battle"] = save_data.get("battle", {"hp":100,"wave":0,"enemies":0})
+        STATE["user"] = save_data.get("user", {"level":1,"xp":0,"points":0,"inventory":[],"achievements":[]})
+        STATE["progress"] = save_data.get("progress", {"dungeon_level":0,"quests_completed":[]})
+        if "najika" in save_data:
+            STATE["najika"] = save_data["najika"]
+
+        # Restore Bond-Strength & Behavior-Modes
+        STATE["bond_strength"] = save_data.get("bond_strength", 0)
+        STATE["behavior_mode"] = save_data.get("behavior_mode", "standard")
+        STATE["personality_weights"] = save_data.get("personality_weights", {"megumin": 25, "harley": 25, "shiro": 25, "melissa": 25})
+        STATE["total_interactions"] = save_data.get("total_interactions", 0)
+
+        # Restore Living State
+        if "living" in save_data:
+            STATE["living"] = save_data["living"]
+        else:
+            STATE["living"] = LIVING_STATE.copy()
+
+        saved_at = save_data.get("saved_at", "unknown")
+        log("INFO", f"State geladen von: {saved_at}", "LOAD")
+        log("INFO", f"Bond-Strength: {STATE['bond_strength']}/100, Interaktionen: {STATE['total_interactions']}", "LOAD")
+        return True
+    except Exception as e:
+        log("ERROR", f"Fehler beim Laden: {e}", "LOAD")
+        return False
+
+def auto_save_check():
+    """Prüft ob Auto-Save nötig ist"""
+    global LAST_SAVE_TIME
+    if time.time() - LAST_SAVE_TIME > AUTO_SAVE_INTERVAL:
+        save_state()
+
+def build_prompt(history, user_text):
+    """Erstellt den Prompt mit Context, Persona und aktuellem Verhaltensmodus"""
+    ctx = "\n".join([f"{h['role'].capitalize()}: {h['content']}" for h in history[-4:]])
+
+    # Aktuellen Modus und Bond-Strength hinzufügen
+    mode = STATE.get("behavior_mode", "standard")
+    bond = STATE.get("bond_strength", 0)
+    mode_addition = get_mode_prompt_addition(mode)
+
+    # Bond-Strength Kontext
+    bond_context = ""
+    if bond >= 75:
+        bond_context = "\n[BEZIEHUNG: SEHR STARK ✨💜] Du fühlst dich Kuja extrem nah und verbunden!"
+    elif bond >= 50:
+        bond_context = "\n[BEZIEHUNG: STARK 💜] Du bist Kuja sehr zugetan und schätzt ihn!"
+    elif bond >= 25:
+        bond_context = "\n[BEZIEHUNG: ENTWICKELT 💙] Du magst Kuja und baust Vertrauen auf!"
+    else:
+        bond_context = "\n[BEZIEHUNG: NEU 🌸] Du lernst Kuja noch kennen!"
+
+    # Living State Context hinzufügen (Mood, Aktivität, etc.)
+    living_context = get_living_state_context(STATE.get("living", {}))
+
+    return f"{PERSONA_SYSTEM}{mode_addition}{bond_context}{living_context}\n\nKontext:\n{ctx}\n\nBenutzer: {user_text}\nNajika:"
+
+def generate_cache_key(history, user_text, use_wizard):
+    """Generiert einen Cache-Key aus Kontext + Message + Model"""
+    # Letzten 4 Messages + aktuelle Message + Model-Flag
+    ctx_str = json.dumps(history[-4:], sort_keys=True) if history else ""
+    key_str = f"{ctx_str}|{user_text}|{use_wizard}"
+    return hashlib.sha256(key_str.encode()).hexdigest()
+
+def get_cached_response(cache_key):
+    """Holt Response aus Cache, prüft TTL"""
+    if cache_key in AI_CACHE:
+        entry = AI_CACHE[cache_key]
+        if time.time() - entry["timestamp"] < CACHE_TTL:
+            # Move to end (LRU)
+            AI_CACHE.move_to_end(cache_key)
+            CACHE_STATS["hits"] += 1
+            return entry["response"]
+        else:
+            # Expired, remove
+            del AI_CACHE[cache_key]
+    CACHE_STATS["misses"] += 1
+    return None
+
+def cache_response(cache_key, response):
+    """Speichert Response im Cache (LRU)"""
+    # Entferne ältesten Eintrag wenn voll
+    if len(AI_CACHE) >= CACHE_MAX_SIZE:
+        AI_CACHE.popitem(last=False)  # FIFO: remove oldest
+    AI_CACHE[cache_key] = {
+        "response": response,
+        "timestamp": time.time()
+    }
+
+def _post_json(url, payload, timeout=90):
+    if requests:
+        r = requests.post(url, json=payload, timeout=timeout)
+        r.raise_for_status()
+        return r.json()
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            text = resp.read().decode("utf-8")
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"HTTP error contacting {url}: {e}") from e
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Invalid JSON from {url}: {text[:120]}") from e
+
+def call_ollama(prompt, use_wizard=False):
+    model = "najika-wizard" if use_wizard else OLLAMA_ALIAS
+    response = _post_json(
+        "http://127.0.0.1:11434/api/generate",
+        {
+            "model": model,
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "num_ctx": 4096,
+                "temperature": 0.88,
+                "top_p": 0.93,
+                "repeat_penalty": 1.18
+            }
+        },
+    )
+    return response.get("response","")
+
+def call_ollama_stream(prompt, use_wizard=False):
+    """Streamt Ollama Response Token für Token (Generator)"""
+    model = "najika-wizard" if use_wizard else OLLAMA_ALIAS
+    payload = json.dumps({
+        "model": model,
+        "prompt": prompt,
+        "stream": True,
+        "options": {
+            "num_ctx": 4096,
+            "temperature": 0.88,
+            "top_p": 0.93,
+            "repeat_penalty": 1.18
+        }
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        "http://127.0.0.1:11434/api/generate",
+        data=payload,
+        headers={"Content-Type": "application/json"}
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            for line in resp:
+                if line:
+                    try:
+                        chunk = json.loads(line.decode("utf-8"))
+                        if "response" in chunk:
+                            yield chunk["response"]
+                        if chunk.get("done", False):
+                            break
+                    except json.JSONDecodeError:
+                        continue
+    except Exception as e:
+        yield f"[ERROR: {e}]"
+
+OREGON_EVENTS = [
+  {"title":"Leise Schritte","text":"Du hörst Schritte im Flur der Mühle. Prüfen oder ignorieren?"},
+  {"title":"Kerze flackert","text":"Eine Kerze flackert stark. Versteckte Luftschächte?"},
+  {"title":"Geheimes Fach","text":"Hinter einem Ziegel wackelt etwas. Hebeln?"},
+  {"title":"Rattennest","text":"Ein Nest raschelt. Ressourcen oder Gefahr?"},
+  {"title":"Staubige Bücher","text":"Ein Buch mit Runen. Lesen oder mitnehmen?"}
+]
+def next_event():
+    ev=random.choice(OREGON_EVENTS)
+    return ev
+
+# ===== NAJIKA TRAINING SYSTEM (Digimon World Style) =====
+
+def update_needs():
+    """Reduziert Needs über Zeit (alle 5 Minuten)"""
+    n = STATE["najika"]
+    now = time.time()
+    elapsed = (now - n["last_update"]) / 60  # Minuten seit letztem Update
+
+    if elapsed >= 5:  # Alle 5 Minuten
+        intervals = int(elapsed / 5)
+        n["hunger"] = max(0, n["hunger"] - 5 * intervals)
+        n["hygiene"] = max(0, n["hygiene"] - 3 * intervals)
+        n["happiness"] = max(0, n["happiness"] - 2 * intervals)
+
+        # Fatigue regeneriert langsam wenn nicht trainiert
+        n["fatigue"] = max(0, n["fatigue"] - 2 * intervals)
+
+        n["last_update"] = now
+        check_care_mistakes()
+        return True
+    return False
+
+def check_care_mistakes():
+    """Prüft ob Care Mistakes aufgetreten sind"""
+    n = STATE["najika"]
+    mistakes_before = n["care_mistakes"]
+
+    if n["hunger"] <= 0:
+        n["care_mistakes"] += 1
+        n["happiness"] = max(0, n["happiness"] - 10)
+    if n["hygiene"] <= 20:
+        n["care_mistakes"] += 1
+        n["happiness"] = max(0, n["happiness"] - 5)
+    if n["fatigue"] >= 90:
+        n["care_mistakes"] += 1
+        n["energy"] = max(0, n["energy"] - 20)
+
+    if n["care_mistakes"] > mistakes_before:
+        return n["care_mistakes"] - mistakes_before
+    return 0
+
+def train_stat(stat_name):
+    """Training Session für einen Stat (Digimon World Style)"""
+    update_needs()  # Erst Needs aktualisieren
+    n = STATE["najika"]
+
+    # Prüfe ob Training möglich ist
+    if n["energy"] < 10:
+        return {"ok": False, "msg": "Najika ist zu müde zum Trainieren!"}
+    if n["fatigue"] >= 80:
+        return {"ok": False, "msg": "Najika ist überanstrengt! Lass sie ausruhen."}
+
+    # Training-Kosten
+    energy_cost = 15
+    fatigue_gain = 12
+    stat_gain = random.randint(2, 5)
+    xp_gain = 10
+
+    # Anwenden
+    n["energy"] = max(0, n["energy"] - energy_cost)
+    n["fatigue"] = min(100, n["fatigue"] + fatigue_gain)
+
+    if stat_name in ["strength", "intelligence", "dexterity", "charisma"]:
+        n[stat_name] = min(999, n[stat_name] + stat_gain)
+
+    n["xp"] += xp_gain
+    n["last_trained"] = time.time()
+
+    # Level-Up Check
+    xp_needed = n["level"] * 100
+    if n["xp"] >= xp_needed:
+        n["level"] += 1
+        n["xp"] = 0
+        return {"ok": True, "msg": f"+{stat_gain} {stat_name.upper()}! LEVEL UP → {n['level']}!", "level_up": True, "najika": n}
+
+    # Care Mistake wenn zu müde
+    if n["fatigue"] >= 90:
+        check_care_mistakes()
+
+    return {"ok": True, "msg": f"+{stat_gain} {stat_name.upper()}!", "najika": n}
+
+def feed_najika():
+    """Füttern erhöht Hunger und Gewicht"""
+    update_needs()
+    n = STATE["najika"]
+
+    n["hunger"] = min(100, n["hunger"] + 30)
+    n["weight"] = min(100, n["weight"] + 3)
+    n["happiness"] = min(100, n["happiness"] + 5)
+    n["last_fed"] = time.time()
+
+    return {"ok": True, "msg": "Najika wurde gefüttert!", "najika": n}
+
+def wash_najika():
+    """Waschen erhöht Hygiene"""
+    update_needs()
+    n = STATE["najika"]
+
+    n["hygiene"] = 100
+    n["happiness"] = min(100, n["happiness"] + 3)
+
+    return {"ok": True, "msg": "Najika ist jetzt sauber!", "najika": n}
+
+def sleep_najika():
+    """Schlafen regeneriert Energie und reduziert Fatigue"""
+    update_needs()
+    n = STATE["najika"]
+
+    n["energy"] = 100
+    n["fatigue"] = max(0, n["fatigue"] - 40)
+    n["happiness"] = min(100, n["happiness"] + 10)
+    n["last_sleep"] = time.time()
+
+    return {"ok": True, "msg": "Najika hat gut geschlafen!", "najika": n}
+
+# ===== IMPORTANCE SCORING SYSTEM =====
+
+def calculate_message_importance(message, is_user=True):
+    """
+    Berechnet Importance-Score für eine Message (0-100)
+    Höherer Score = wichtigere Message, wird länger behalten
+    """
+    score = 50  # Basis-Score
+
+    msg_lower = message.lower()
+
+    # Länge: Längere Messages = wichtiger
+    if len(message) > 200:
+        score += 20
+    elif len(message) > 100:
+        score += 10
+    elif len(message) < 20:
+        score -= 10
+
+    # Emotionale Keywords = wichtiger
+    emotional_keywords = ["liebe", "hasse", "wichtig", "problem", "hilfe", "danke", "sorry",
+                          "freude", "traurig", "glücklich", "wütend", "kätzchen"]
+    for kw in emotional_keywords:
+        if kw in msg_lower:
+            score += 15
+            break
+
+    # Fragen = wichtig
+    if "?" in message:
+        score += 10
+
+    # Befehle/Anweisungen = wichtig
+    command_keywords = ["mach", "erstelle", "baue", "implementiere", "zeig", "erklär"]
+    if any(kw in msg_lower for kw in command_keywords):
+        score += 10
+
+    # User Messages generell etwas wichtiger als Najika's Responses
+    if is_user:
+        score += 5
+
+    # Code-Mentions = sehr wichtig
+    if "code" in msg_lower or "bug" in msg_lower or "fehler" in msg_lower:
+        score += 15
+
+    # Clamp zwischen 0-100
+    return max(0, min(100, score))
+
+def add_message_with_importance(role, content):
+    """Fügt Message mit Importance-Score zur History hinzu"""
+    is_user = (role == "user")
+    importance = calculate_message_importance(content, is_user)
+
+    STATE["history"].append({
+        "role": role,
+        "content": content,
+        "importance": importance,
+        "timestamp": time.time()
+    })
+
+    # Prune History basierend auf Importance (behalte wichtige Messages)
+    prune_history_by_importance()
+
+def prune_history_by_importance(max_messages=50):
+    """
+    Hält History überschaubar, behält aber wichtige Messages
+    Löscht unwichtige alte Messages zuerst
+    """
+    if len(STATE["history"]) <= max_messages:
+        return
+
+    # Sortiere nach Importance (niedrigste zuerst)
+    sorted_history = sorted(STATE["history"], key=lambda m: m.get("importance", 50))
+
+    # Behalte die wichtigsten max_messages Messages
+    # ABER: Behalte immer die letzten 10 Messages, egal wie unwichtig
+    keep_recent = STATE["history"][-10:]
+
+    # Behalte die wichtigsten Messages (exkl. letzten 10)
+    keep_important = sorted_history[-(max_messages-10):]
+
+    # Merge (Deduplizieren basierend auf timestamp)
+    kept_msgs = {m.get("timestamp", 0): m for m in (keep_important + keep_recent)}
+    STATE["history"] = sorted(kept_msgs.values(), key=lambda m: m.get("timestamp", 0))
+
+# ===== BEZIEHUNGSSTÄRKE & VERHALTENSMODI =====
+
+def update_bond_strength():
+    """Berechnet und aktualisiert die Beziehungsstärke basierend auf Interaktionen"""
+    # Bond Strength steigt mit:
+    # - Anzahl der Interaktionen (Gespräche)
+    # - Najika's Happiness Level
+    # - Zeit die zusammen verbracht wurde
+
+    interactions = STATE["total_interactions"]
+    happiness = STATE["najika"]["happiness"]
+    history_size = len(STATE["history"])
+
+    # Basis: 0.5 pro Interaktion (max 50 Punkte)
+    interaction_score = min(50, interactions * 0.5)
+
+    # Happiness Bonus: bis zu 25 Punkte
+    happiness_score = happiness * 0.25
+
+    # Konversations-Tiefe: bis zu 25 Punkte
+    conversation_score = min(25, history_size * 0.1)
+
+    # Beziehungsstärke = Durchschnitt
+    bond = min(100, (interaction_score + happiness_score + conversation_score) / 3)
+    STATE["bond_strength"] = int(bond)
+
+    return STATE["bond_strength"]
+
+def detect_behavior_mode(user_message):
+    """
+    Erkennt automatisch den passenden Verhaltensmodus basierend auf Message
+    Returns: "standard", "explosion", "chaos", "analyse", "kontrolle"
+    """
+    msg_lower = user_message.lower()
+
+    # EXPLOSION Mode: Ausrufe, Aufregung, Action
+    explosion_keywords = ["!", "wow", "krass", "amazing", "epic", "explosion", "kampf", "battle"]
+    if any(kw in msg_lower for kw in explosion_keywords) or user_message.count("!") >= 2:
+        return "explosion"
+
+    # CHAOS Mode: Spaß, Langeweile, Scherze
+    chaos_keywords = ["langweilig", "langeweile", "spaß", "spiel", "lustig", "lol", "haha", "witzig"]
+    if any(kw in msg_lower for kw in chaos_keywords):
+        return "chaos"
+
+    # ANALYSE Mode: Fragen, Probleme, technisch
+    analyse_keywords = ["wie", "warum", "problem", "fehler", "bug", "code", "hilf", "erklär", "verstehe nicht"]
+    if any(kw in msg_lower for kw in analyse_keywords) or "?" in user_message:
+        return "analyse"
+
+    # KONTROLLE Mode: Befehle, Anweisungen, Entscheidungen
+    kontrolle_keywords = ["mach", "erstelle", "baue", "implementiere", "tu", "jetzt", "sofort", "los"]
+    if any(kw in msg_lower for kw in kontrolle_keywords):
+        return "kontrolle"
+
+    # Default: Standard Mode
+    return "standard"
+
+def get_mode_prompt_addition(mode):
+    """Gibt zusätzlichen Prompt-Text basierend auf Verhaltensmodus zurück"""
+    mode_prompts = {
+        "explosion": "\n[MEGUMIN-MODUS AKTIV] Sei dramatisch, explosiv und theatralisch! Nutze viele Ausrufezeichen!",
+        "chaos": "\n[HARLEY-MODUS AKTIV] Sei verspielt, chaotisch und neckisch! *kicher* und hab Spaß!",
+        "analyse": "\n[SHIRO-MODUS AKTIV] Sei analytisch, präzise und intelligent. Berechne Wahrscheinlichkeiten!",
+        "kontrolle": "\n[MELISSA-MODUS AKTIV] Sei bestimmt, führend und direkt. Keine Diskussion!",
+        "private": "\n[PRIVATE MODE] Maximale Nähe, intensiv, persönlich, nur für Kuja.",
+        "standard": ""  # Keine Änderung, alle 4 ausgeglichen
+    }
+    return mode_prompts.get(mode, "")
+
+def broadcast_state_update():
+    """Benachrichtigt alle SSE-Clients über State-Änderungen"""
+    data = json.dumps({"private_mode": STATE["private_mode"], "provider": AI_PROVIDER, "cloud": CLOUD_ENABLED})
+    # SSE-Clients werden beim nächsten Check benachrichtigt
+    STATE["_last_broadcast"] = data
+
+class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Access-Control-Allow-Origin","*")
+        self.send_header("Access-Control-Allow-Methods","GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers","*")
+        super().end_headers()
+    def do_OPTIONS(self): self.send_response(200); self.end_headers()
+    def translate_path(self, path):
+        import posixpath, urllib, os as _os
+        path = path.split('?',1)[0].split('#',1)[0]
+        path = posixpath.normpath(urllib.parse.unquote(path))
+        if path in ("/","/digivice","/index.html"):
+            return _os.path.join(r"C:\NajikaCore","digivice","index.html")
+        return _os.path.join(r"C:\NajikaCore", path.lstrip("/"))
+    def do_GET(self):
+        if self.path == "/health":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"status":"ok","provider":AI_PROVIDER,"cloud":CLOUD_ENABLED}).encode()); return
+        if self.path == "/api/rooms":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(ROOMS).encode()); return
+        if self.path == "/api/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"status":"ok","provider":AI_PROVIDER,"private_mode":STATE.get("private_mode",False),"cloud":CLOUD_ENABLED}).encode()); return
+        if self.path == "/api/status/stream":
+            # SSE Endpoint für Live-Updates (NON-BLOCKING VERSION)
+            self.send_response(200)
+            self.send_header("Content-Type","text/event-stream")
+            self.send_header("Cache-Control","no-cache")
+            self.send_header("Connection","keep-alive")
+            self.end_headers()
+            # FIXED: Sende nur initial Event, dann close connection
+            # Client reconnected automatisch (EventSource.js macht das)
+            data = json.dumps({"status":"ok","provider":AI_PROVIDER,"private_mode":STATE.get("private_mode",False),"cloud":CLOUD_ENABLED})
+            self.wfile.write(f"data: {data}\n\n".encode())
+            self.wfile.flush()
+            return
+        if self.path == "/api/cloud/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"enabled":CLOUD_ENABLED,"provider":AI_PROVIDER}).encode()); return
+        if self.path == "/api/cache/stats":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            hit_rate = (CACHE_STATS["hits"] / CACHE_STATS["total_requests"] * 100) if CACHE_STATS["total_requests"] > 0 else 0
+            stats = {
+                "hits": CACHE_STATS["hits"],
+                "misses": CACHE_STATS["misses"],
+                "total_requests": CACHE_STATS["total_requests"],
+                "hit_rate_percent": round(hit_rate, 2),
+                "cache_size": len(AI_CACHE),
+                "cache_max_size": CACHE_MAX_SIZE
+            }
+            self.wfile.write(json.dumps(stats).encode()); return
+        if self.path == "/api/save":
+            success = save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":success,"message":"State gespeichert" if success else "Fehler beim Speichern"}).encode()); return
+        if self.path == "/api/state":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            state_info = {
+                "user": STATE["user"],
+                "progress": STATE["progress"],
+                "battle": STATE["battle"],
+                "najika": STATE.get("najika", {}),
+                "history_size": len(STATE["history"])
+            }
+            self.wfile.write(json.dumps(state_info).encode()); return
+        if self.path == "/api/najika/status":
+            update_needs()  # Update needs before sending status
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(STATE["najika"]).encode()); return
+        if self.path == "/api/chat/history":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            # Sende letzte 50 Messages
+            history = STATE.get("history", [])[-50:]
+            self.wfile.write(json.dumps({"history": history}).encode()); return
+        if self.path == "/api/bond/status":
+            # Bond-Strength und aktueller Verhaltensmodus
+            update_bond_strength()  # Aktualisieren vor Ausgabe
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            bond_data = {
+                "bond_strength": STATE.get("bond_strength", 0),
+                "behavior_mode": STATE.get("behavior_mode", "standard"),
+                "personality_weights": STATE.get("personality_weights", {"megumin": 25, "harley": 25, "shiro": 25, "melissa": 25}),
+                "total_interactions": STATE.get("total_interactions", 0),
+                "private_mode": STATE.get("private_mode", False)
+            }
+            self.wfile.write(json.dumps(bond_data).encode()); return
+        if self.path == "/api/memory/export":
+            # Memory Export: Komplette History mit allen Metadaten exportieren
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            export_data = {
+                "history": STATE.get("history", []),
+                "bond_strength": STATE.get("bond_strength", 0),
+                "behavior_mode": STATE.get("behavior_mode", "standard"),
+                "total_interactions": STATE.get("total_interactions", 0),
+                "exported_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "version": "1.0"
+            }
+            self.wfile.write(json.dumps(export_data, indent=2, ensure_ascii=False).encode()); return
+        if self.path == "/api/living/state":
+            # Living State abrufen
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            living_state = STATE.get("living", {})
+            self.wfile.write(json.dumps(living_state, indent=2, default=str).encode()); return
+        if self.path == "/api/living/proactive":
+            # Check ob proaktive Message gesendet werden sollte
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            living_state = STATE.get("living", {})
+            should_send = should_send_proactive_message(living_state)
+            result = {"should_send": should_send, "message": None}
+            if should_send:
+                result["message"] = get_proactive_message(living_state)
+                living_state["last_proactive_message"] = time.time()
+                STATE["living"] = living_state
+            self.wfile.write(json.dumps(result).encode()); return
+        if self.path == "/api/living/activity/check":
+            # Prüfe ob Aktivität abgeschlossen ist
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            living_state = STATE.get("living", {})
+            completion = check_activity_completion(living_state, STATE["najika"])
+            result = {
+                "current_activity": living_state.get("current_activity"),
+                "completion_message": completion
+            }
+            if completion:
+                STATE["living"] = living_state
+            self.wfile.write(json.dumps(result).encode()); return
+        return super().do_GET()
+    def do_POST(self):
+        n=int(self.headers.get("Content-Length","0")); body=self.rfile.read(n) or b"{}"
+        if self.path=="/api/chat":
+            # Robust UTF-8 decoding mit Fallback auf Latin-1
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")  # Fallback für Windows curl
+            data=json.loads(body_str); msg=(data.get("message") or "").strip()
+            if not msg: self.send_error(400,"no message"); return
+
+            # ===== VERHALTENSMODI & BOND-STRENGTH =====
+
+            # 1. Interaktionszähler erhöhen
+            STATE["total_interactions"] += 1
+
+            # 2. Private Mode Toggle (persistent bis wieder "kätzchen")
+            old_private = STATE.get("private_mode", False)
+            if ("kätzchen" in msg.lower()) and NSFW_LOCAL:
+                # Toggle Private Mode
+                STATE["private_mode"] = not old_private
+                if old_private != STATE["private_mode"]:
+                    broadcast_state_update()
+
+            private_trigger = STATE.get("private_mode", False)
+
+            # 3. Verhaltensmodus automatisch erkennen (wenn nicht Private Mode)
+            if private_trigger:
+                STATE["behavior_mode"] = "private"
+            else:
+                # Automatische Modus-Erkennung basierend auf Message
+                detected_mode = detect_behavior_mode(msg)
+                STATE["behavior_mode"] = detected_mode
+                # Log mode switch für Debugging
+                if detected_mode != "standard":
+                    log("DEBUG", f"Wechsel zu: {detected_mode.upper()}", "MODE")
+
+            # 4. Bond-Strength aktualisieren
+            bond = update_bond_strength()
+            if STATE["total_interactions"] % 5 == 0:  # Alle 5 Interaktionen loggen
+                log("INFO", f"Beziehungsstärke: {bond}/100 ({STATE['total_interactions']} Interaktionen)", "BOND")
+
+            # Cache-Lookup (NICHT für Private Mode!)
+            CACHE_STATS["total_requests"] += 1
+            cached = None
+            cache_key = None
+            if not private_trigger:  # Nur cachen wenn NICHT Private Mode
+                cache_key = generate_cache_key(STATE["history"], msg, private_trigger)
+                cached = get_cached_response(cache_key)
+
+            if cached:
+                out = cached
+                log("DEBUG", f"HIT ({CACHE_STATS['hits']}/{CACHE_STATS['total_requests']} requests)", "CACHE")
+            else:
+                add_message_with_importance("user", msg)
+                prompt=build_prompt(STATE["history"], msg)
+                try:
+                    out=call_ollama(prompt, use_wizard=private_trigger)
+                    # Cache speichern (nur wenn nicht Private Mode)
+                    if not private_trigger and cache_key:
+                        cache_response(cache_key, out)
+                except Exception as e:
+                    out=f"Fehler: {e}"
+                add_message_with_importance("assistant", out)
+
+            # ===== LIVING SYSTEM UPDATE =====
+            living_state = STATE.get("living", {})
+            evolution_message = update_living_state(msg, out, living_state, STATE["najika"], bond)
+
+            # Check für autonome Aktivitäten
+            activity_completion = check_activity_completion(living_state, STATE["najika"])
+
+            # Erstelle emotionale Memory
+            importance = calculate_message_importance(msg, is_user=True)
+            memory = create_emotional_memory(msg, out, living_state, importance)
+            if "shared_memories" not in living_state:
+                living_state["shared_memories"] = []
+            living_state["shared_memories"].append(memory)
+
+            # Behalte nur letzte 100 Memories
+            if len(living_state["shared_memories"]) > 100:
+                living_state["shared_memories"] = living_state["shared_memories"][-100:]
+
+            STATE["living"] = living_state
+
+            # Füge Evolution-Message hinzu falls vorhanden
+            response_data = {"response": out}
+            if evolution_message:
+                response_data["evolution_message"] = evolution_message
+                log("INFO", f"Relationship Evolution: {evolution_message}", "LIVING")
+            if activity_completion:
+                response_data["activity_completion"] = activity_completion
+
+            # Auto-Save Check
+            auto_save_check()
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(response_data).encode()); return
+        if self.path=="/api/cloud/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"enabled":CLOUD_ENABLED,"provider":AI_PROVIDER}).encode()); return
+        if self.path=="/api/cloud/enable":
+            data=json.loads(body.decode("utf-8")); 
+            if data.get("pin","")!=CLOUD_PIN: self.send_error(401,"PIN falsch"); return
+            globals()["CLOUD_ENABLED"]=True; globals()["AI_PROVIDER"]="openai"
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"enabled":True}).encode()); return
+        if self.path=="/api/cloud/disable":
+            globals()["CLOUD_ENABLED"]=False; globals()["AI_PROVIDER"]="ollama"
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"enabled":False}).encode()); return
+        if self.path=="/api/room/actions":
+            data=json.loads(body.decode("utf-8")); room=(data.get("room") or "")
+            ROOM_ACTIONS = {
+              "Wohnzimmer": ["Füttern","Reden"],
+              "Schlafzimmer": ["Schlafen","Lesen"],
+              "Küche": ["Kochen"],
+              "Badezimmer": ["Toilette","Waschen"],
+              "Garten": ["Gießen","Ernten","Garten-Spiel"],
+              "Musikraum": ["Rhythmus-Spiel"],
+              "Medizin": ["Heilen"],
+              "Terminal": ["Cloud","Status","Besen-Lieferung"],
+              "Studieren & Crafting": ["Studieren","Crafting"],
+              "Trainingszimmer": ["Reflex-Spiel","Trainieren"],
+              "Kampfarena": ["Kampf starten"],
+              "Schwarze Mühle – Keller": ["Kampf starten","Erkunden"]
+            }
+            battle = room in ("Kampfarena","Schwarze Mühle – Keller")
+            actions = ROOM_ACTIONS.get(room, [])
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"battle":battle,"actions":actions}).encode()); return
+        if self.path=="/api/battle/start":
+            STATE["battle"]={"hp":100,"wave":1,"enemies":3}
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True}).encode()); return
+        if self.path=="/api/battle/attack":
+            b=STATE["battle"]; 
+            if b["enemies"]>0: b["enemies"]-=1
+            if b["enemies"]==0: b["wave"]+=1; b["enemies"]=2+b["wave"]
+            dmg=max(0,b["enemies"]-1); b["hp"]=max(0,b["hp"]-dmg)
+            msg="Treffer!" if dmg<2 else "Du wirst getroffen!"
+            done = b["hp"]==0
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":not done,"msg":msg,"hp":b["hp"],"enemies":b["enemies"],"wave":b["wave"]}).encode()); return
+        if self.path=="/api/minigame/rhythm":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(20,80)}}).encode()); return
+        if self.path=="/api/minigame/garden":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(15,60)}}).encode()); return
+        if self.path=="/api/minigame/reflex":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(10,50)}}).encode()); return
+        if self.path=="/api/crafting":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"msg":"Crafting durchgeführt."}).encode()); return
+        if self.path=="/api/heal":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"hp":100}).encode()); return
+        if self.path=="/api/event/next":
+            ev=next_event()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(ev).encode()); return
+        if self.path=="/api/user/update":
+            # Update User Stats (XP, Level, Points, Inventory)
+            data=json.loads(body.decode("utf-8"))
+            if "xp" in data: STATE["user"]["xp"] = data["xp"]
+            if "level" in data: STATE["user"]["level"] = data["level"]
+            if "points" in data: STATE["user"]["points"] = data["points"]
+            if "inventory" in data: STATE["user"]["inventory"] = data["inventory"]
+            if "achievements" in data: STATE["user"]["achievements"] = data["achievements"]
+            save_state()  # Save immediately on user update
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"user":STATE["user"]}).encode()); return
+        if self.path=="/api/progress/update":
+            # Update Progress (Dungeon Level, Quests)
+            data=json.loads(body.decode("utf-8"))
+            if "dungeon_level" in data: STATE["progress"]["dungeon_level"] = data["dungeon_level"]
+            if "quests_completed" in data: STATE["progress"]["quests_completed"] = data["quests_completed"]
+            save_state()  # Save immediately on progress update
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"progress":STATE["progress"]}).encode()); return
+        # NAJIKA TRAINING SYSTEM ENDPOINTS
+        if self.path=="/api/najika/feed":
+            result = feed_najika()
+            save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+        if self.path=="/api/najika/wash":
+            result = wash_najika()
+            save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+        if self.path=="/api/najika/sleep":
+            result = sleep_najika()
+            save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+        if self.path=="/api/najika/train":
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")
+            data=json.loads(body_str)
+            stat = data.get("stat", "strength")
+            result = train_stat(stat)
+            save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(result).encode()); return
+        if self.path=="/api/memory/import":
+            # Memory Import: Importiert History aus JSON
+            try:
+                body_str = body.decode("utf-8")
+            except UnicodeDecodeError:
+                body_str = body.decode("latin-1")
+            data=json.loads(body_str)
+
+            # Validiere Import-Daten
+            if "history" not in data:
+                self.send_error(400,"Missing 'history' field in import data"); return
+
+            # Optionale Merge-Strategien
+            merge_mode = data.get("merge", False)  # True = append, False = replace
+
+            if merge_mode:
+                # Merge: Füge neue Messages hinzu (dedupliziere nach timestamp)
+                existing_timestamps = {m.get("timestamp", 0) for m in STATE["history"]}
+                new_messages = [m for m in data["history"] if m.get("timestamp", 0) not in existing_timestamps]
+                STATE["history"].extend(new_messages)
+                STATE["history"].sort(key=lambda m: m.get("timestamp", 0))
+                imported_count = len(new_messages)
+            else:
+                # Replace: Ersetze komplette History
+                STATE["history"] = data["history"]
+                imported_count = len(STATE["history"])
+
+            # Importiere Bond-Strength & Interactions (optional)
+            if "bond_strength" in data:
+                STATE["bond_strength"] = data["bond_strength"]
+            if "behavior_mode" in data:
+                STATE["behavior_mode"] = data["behavior_mode"]
+            if "total_interactions" in data:
+                STATE["total_interactions"] = data["total_interactions"]
+
+            # Speichere sofort
+            save_state()
+
+            log("INFO", f"Importiert: {imported_count} Messages (Mode: {'Merge' if merge_mode else 'Replace'})", "MEMORY")
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"imported":imported_count,"mode":"merge" if merge_mode else "replace"}).encode()); return
+        if self.path=="/api/living/activity/start":
+            # Starte autonome Aktivität
+            living_state = STATE.get("living", {})
+            message = start_autonomous_activity(living_state, STATE["najika"])
+            STATE["living"] = living_state
+            save_state()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok": True, "message": message, "activity": living_state.get("current_activity")}).encode()); return
+        self.send_error(404,"unknown")
+
+# ===== BACKGROUND THREAD FÜR LIVING SYSTEM =====
+
+def living_system_loop():
+    """Background Thread: Prüft regelmäßig proaktive Messages und autonome Aktivitäten"""
+    log("INFO", "Living System Thread gestartet", "LIVING")
+
+    while True:
+        try:
+            time.sleep(60)  # Check alle 60 Sekunden
+
+            living_state = STATE.get("living", {})
+
+            # 1. Check ob autonome Aktivität starten soll (wenn keine aktiv ist)
+            if not living_state.get("current_activity"):
+                # Chance basierend auf Autonomy Level
+                autonomy = living_state.get("autonomy_level", 50)
+                if random.random() < (autonomy / 200.0):  # Niedrigere Chance (50% autonomy = 25% chance)
+                    message = start_autonomous_activity(living_state, STATE["najika"])
+                    if message:
+                        log("INFO", f"Autonome Aktivität gestartet: {living_state.get('current_activity')}", "LIVING")
+                        STATE["living"] = living_state
+                        save_state()
+
+            # 2. Check ob Aktivität abgeschlossen ist
+            completion = check_activity_completion(living_state, STATE["najika"])
+            if completion:
+                log("INFO", f"Aktivität abgeschlossen: {completion}", "LIVING")
+                STATE["living"] = living_state
+                save_state()
+
+            # 3. Check ob proaktive Message gesendet werden sollte
+            if should_send_proactive_message(living_state):
+                proactive_msg = get_proactive_message(living_state)
+                living_state["last_proactive_message"] = time.time()
+                STATE["living"] = living_state
+
+                # Logge proaktive Message (könnte später an Frontend geschickt werden)
+                log("INFO", f"Proaktive Message: {proactive_msg}", "LIVING")
+
+                # Füge zur History hinzu als "assistant" Message
+                add_message_with_importance("assistant", f"[PROAKTIV] {proactive_msg}")
+                save_state()
+
+            # 4. Update Needs (alle 5 Minuten wird in update_needs() gecheckt)
+            if update_needs():
+                save_state()
+
+        except Exception as e:
+            log("ERROR", f"Fehler im Living System Loop: {e}", "LIVING")
+            time.sleep(5)  # Bei Fehler kurz warten
+
+# Load State on Startup
+load_state()
+
+# Start Living System Background Thread
+living_thread = threading.Thread(target=living_system_loop, daemon=True)
+living_thread.start()
+log("INFO", "Living System Background Thread gestartet! Najika ist jetzt LEBENDIG! ✨", "LIVING")
+
+# KILL EXISTING SERVER: Tötet alle laufenden Prozesse auf PORT
+def kill_existing_server():
+    """Killt alle Python-Prozesse die Port 8000 belegen (Windows)"""
+    import subprocess, platform
+    try:
+        if platform.system() == "Windows":
+            # Finde PIDs die Port nutzen (robust gegen Encoding-Issues)
+            result = subprocess.run(
+                ['netstat', '-ano'],
+                capture_output=True,
+                timeout=5,
+                encoding='cp850',  # Windows-Codepage für deutsche Systeme
+                errors='replace'   # Ersetze fehlerhafte Zeichen
+            )
+            pids = set()
+            for line in result.stdout.splitlines():
+                # Prüfe auf Port UND "ABH" (Teil von ABHÖREN/LISTENING)
+                if f":{PORT} " in line and "ABH" in line:
+                    parts = line.split()
+                    if parts and parts[-1].isdigit():
+                        pids.add(parts[-1])
+
+            # Töte gefundene Prozesse
+            for pid in pids:
+                try:
+                    subprocess.run(['taskkill', '/F', '/PID', pid],
+                                 capture_output=True, timeout=3)
+                    print(f"[CLEANUP] Alter Server-Prozess (PID {pid}) beendet")
+                except:
+                    pass
+        else:
+            # Linux/Mac: fuser oder lsof nutzen
+            subprocess.run(['fuser', '-k', f'{PORT}/tcp'],
+                         capture_output=True, timeout=3)
+            print(f"[CLEANUP] Port {PORT} freigegeben")
+    except Exception as e:
+        print(f"[INFO] Kein alter Server gefunden oder Cleanup fehlgeschlagen: {e}")
+
+kill_existing_server()
+
+# THREADING: Mehrere Requests parallel bedienen (wichtig für SSE!)
+server = ThreadingHTTPServer((HOST,PORT), Handler)
+print(f"Najika Server: http://{HOST}:{PORT}")
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    print("\n[SHUTDOWN] Server wird heruntergefahren...")
+    save_state()
+    print("[SHUTDOWN] Auf Wiedersehen!")
+

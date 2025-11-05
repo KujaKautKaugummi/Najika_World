@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""Update najika-update.md mit neuem System"""
+
+import time
+
+FILE = r"C:\Users\0KKK0\.claude\commands\najika-update.md"
+
+NEW = """# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Smart Update System.
+
+## PFLICHT-ABLAUF (KEINE ABKUERZUNGEN!):
+
+1. Rufe `python C:/NajikaCore/najika_smart_update.py` auf
+2. Warte bis Sync abgeschlossen
+3. **LIES KOMPLETT:** `C:/NajikaCore/CLAUDE_SMART_UPDATE.md` (Read Tool OHNE offset/limit!)
+4. Das Smart Update enthaelt:
+   - Letzte 3 User-Messages aus vorheriger Session (VOLLSTAENDIG)
+   - Erkannte offene Aufgaben
+   - Kontext was User als letztes wollte
+5. Pruefe ob offene Aufgaben erledigt sind
+6. Fasse NUR die relevantesten Aenderungen zusammen (max 3 Bullet Points)
+7. Frage User was als naechstes zu tun ist
+
+**TOKEN-EFFIZIENZ-REGELN:**
+
+- Lies Files IMMER komplett vor Edit (Read ohne offset)!
+- KEINE Trial-and-Error Edits - lies zuerst!
+- Nutze Grep fuer Suchen statt blindes File-Reading
+- Wenn User Textstueck sendet: `grep -F "TEXT" SESSION.jsonl` nutzen!
+- Halte Antworten kurz - User kennt Kontext bereits!
+"""
+
+time.sleep(1)
+with open(FILE, 'w', encoding='utf-8') as f:
+    f.write(NEW)
+
+print("[OK] najika-update.md aktualisiert mit SMART UPDATE SYSTEM!")

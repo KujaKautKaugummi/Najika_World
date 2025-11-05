@@ -1,0 +1,17 @@
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"effa4cd3-7c4a-4480-b5ed-e7145a56ca8c"}
+{"parentUuid":null,"isSidechain":true,"userType":"external","cwd":"C:\\NajikaCore","sessionId":"4e8db4a5-45cd-4c8a-b002-fa75cd42c2d3","version":"2.0.27","gitBranch":"","type":"user","message":{"role":"user","content":"Warmup"},"uuid":"6cfe73a6-61c5-4bd7-8273-0d3f1a30bf29","timestamp":"2025-10-27T18:17:34.968Z"}
+{"parentUuid":"6cfe73a6-61c5-4bd7-8273-0d3f1a30bf29","isSidechain":true,"userType":"external","cwd":"C:\\NajikaCore","sessionId":"4e8db4a5-45cd-4c8a-b002-fa75cd42c2d3","version":"2.0.27","gitBranch":"","type":"assistant","uuid":"a2110502-ba60-4869-b146-a94017015320","timestamp":"2025-10-27T18:17:36.770Z","message":{"id":"ece9e14b-92aa-4d27-aa2d-6223e2e71ba5","container":null,"model":"<synthetic>","role":"assistant","stop_reason":"stop_sequence","stop_sequence":"","type":"message","usage":{"input_tokens":0,"output_tokens":0,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"server_tool_use":{"web_search_requests":0},"service_tier":null,"cache_creation":{"ephemeral_1h_input_tokens":0,"ephemeral_5m_input_tokens":0}},"content":[{"type":"text","text":"Weekly limit reached ∙ resets Oct 31, 6pm"}]},"isApiErrorMessage":true}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"25af6737-04c1-4522-9723-6ab6aa051a8c"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"d7a5de38-5550-45bf-9425-3cd09b93d7e9"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"349a87b7-e800-4c11-8dbf-713fe7d1a357"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"2b294843-80cc-4f50-a362-39bdc1f1f66d"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"551bf7f7-cded-4611-885a-bd8efbe2dc07"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"60fd83b6-01b0-4e55-830f-abc0a7fbb7cb"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"53dd8669-63d6-4eb4-a7d1-75869e7595a3"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"327715b3-1dcf-46dd-be0b-9e646a5e5304"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"0d1cc509-4695-4f74-a994-2f8f52096e2e"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"e7bc41c7-e4c7-4dba-8d23-1d7a887d9d3b"}
+{"type":"summary","summary":"Weekly limit reached ∙ resets Oct 31, 6pm","leafUuid":"361c441a-7587-4936-a81a-406bbf56eae8"}
+{"type":"summary","summary":"Invalid API key · Please run /login","leafUuid":"78710d4a-a1a8-43d7-ab84-b0620566bc0e"}
+{"type":"summary","summary":"Invalid API key · Please run /login","leafUuid":"66994d55-1f98-45a8-9cdc-223d59f44c13"}
+{"type":"summary","summary":"Invalid API key · Please run /login","leafUuid":"5bc6d7f8-bf2f-4067-9f4f-8af2b7d1c6f8"}

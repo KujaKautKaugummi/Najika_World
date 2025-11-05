@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""Fix najika-update.md"""
+
+FILE = r"C:\Users\0KKK0\.claude\commands\najika-update.md"
+
+NEW_CONTENT = """# Najika Update Command
+
+Bringt Claude auf den aktuellen Stand mit Najika's Auto-Sync System.
+
+## Ablauf:
+
+1. Rufe `python C:/NajikaCore/najika_sync.py` auf
+2. Warte bis Sync abgeschlossen
+3. Lies `C:/NajikaCore/CLAUDE_UPDATE.md`
+4. **KRITISCH:** Lies vorherige Session um offene Aufgaben zu finden:
+   - Finde Sessions: `ls -lt C:/Users/0KKK0/.claude/projects/C--NajikaCore/*.jsonl | head -3`
+   - Die ZWEITE Datei ist die vorherige Session (erste = aktuelle)
+   - Extrahiere letzte User-Nachrichten mit grep
+5. Fasse wichtigste Änderungen + offene Aufgaben zusammen
+6. Frage den User was er als nächstes tun möchte
+
+**EFFIZIENZ-REGELN:**
+- Lies IMMER komplette Files (Read Tool OHNE offset/limit) bevor du editierst!
+- KEINE Token-Verschwendung mit Trial-and-Error!
+- Bei Unklarheit: FRAGE direkt statt zu raten!
+- Vorherige Session = Kontext für offene Aufgaben!
+"""
+
+import time
+
+print("Warte 2 Sekunden falls Datei gesperrt...")
+time.sleep(2)
+
+with open(FILE, 'w', encoding='utf-8') as f:
+    f.write(NEW_CONTENT)
+
+print("[OK] najika-update.md aktualisiert!")

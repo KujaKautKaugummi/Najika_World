@@ -1,0 +1,517 @@
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║     NAJIKA COMPLETE PROJECT SEARCH - ULTIMATE EDITION       ║
+echo ║  Durchsucht ALLE Dateien nach ALLEN Projekt-Komponenten     ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+set "SEARCH_DIR=%~dp0"
+set "OUTPUT=NAJIKA_COMPLETE_%date:~-4%%date:~-7,2%%date:~-10,2%_%time:~0,2%%time:~3,2%%time:~6,2%.txt"
+set "OUTPUT=%OUTPUT: =0%"
+
+echo Durchsuche: %SEARCH_DIR%
+echo Report: %OUTPUT%
+echo.
+
+REM ═══════════════════════════════════════════════════════════════
+REM  KEYWORD KATEGORIEN - KOMPLETT
+REM ═══════════════════════════════════════════════════════════════
+
+REM ★★★ KERN: Kuja-Najika Beziehung ★★★
+set "KUJA_NAJIKA=kuja najika schwert schild beschützer verteidiger kopf herz intelligenz emotion girlfriend companion"
+
+REM ★★★ PERSÖNLICHKEIT (4 Aspekte) ★★★
+set "PERSONALITY=MEGUMIN HARLEY SHIRO MELISSA SAKURA explosion puddin wahrscheinlichkeit dramatisch chaotisch analytisch dominant lolita"
+
+REM ★★★ DIGIVICE & APP ★★★
+set "DIGIVICE=digivice app pwa progressive handy-spiel handyspiel mobile tamagotchi module sensor kamera mikrofon gyroscop"
+
+REM ★★★ SCHWARZE MÜHLE & GESICHERTER BEREICH ★★★
+set "MUEHLE=mühle windmühle schwarze holländische dunkle gesichert gesicherter bereich private nsfw kätzchen wizard"
+
+REM ★★★ GAMEPLAY: Klassen ★★★
+set "CLASSES=explosion-klasse magier krieger tank healer scout ranger assassin paladin druide necromancer"
+
+REM ★★★ GAMEPLAY: Skill-Systeme ★★★
+set "SKILLS=skill weaving weave-system zauber magie spell casting cooldown combo chain ability use-based progression level"
+
+REM ★★★ GAMEPLAY: Crafting & Gathering ★★★
+set "CRAFTING=crafting handwerk rezept recipe blueprint crafting-station werkbank schmiede alchemie"
+set "GATHERING=fishing farming mining gathering holzfällen angeln ernten farmen ressourcen erz herbs kräuter"
+
+REM ★★★ GAMEPLAY: Kampfsysteme ★★★
+set "COMBAT=kampf combat battle digimon-world oregon-trail turn-based echtzeit anfeuerung strategie taktik"
+
+REM ★★★ GAMEPLAY: Welt & Exploration ★★★
+set "WORLD=file-island oregon-trail 8-städte prozedural procedural dungeon raid boss encounter event zone area biom"
+
+REM ★★★ GAMEPLAY: Movement & Mechaniken ★★★
+set "MOVEMENT=fortnite sprint slide dash wall-climb vault jump ducken rutschen klettern parkour slope reibung kanten-detektion"
+
+REM ★★★ GAMEPLAY: Progression & Stats ★★★
+set "PROGRESSION=level xp experience skill-tree talente stats strength intelligence dexterity charisma hp mana stamina use-based"
+
+REM ★★★ GAMEPLAY: Training & Bedürfnisse ★★★
+set "TRAINING=training lernen üben bedürfnisse hunger durst müdigkeit glück happiness health stats-training feed sleep rest"
+
+REM ★★★ GAMEPLAY: Magie & Zauber ★★★
+set "MAGIC=magie zauber spell magieschule weave slime-rettung mana casting channeling ritual enchantment"
+
+REM ★★★ GAMEPLAY: Beziehungen & Soziales ★★★
+set "SOCIAL=seelengefährten vertrautheits-xp emotions-shader koop-skills party gruppe team freundschaft rivalität"
+
+REM ★★★ GAMEPLAY: Wirtschaft & Items ★★★
+set "ECONOMY=shop handel trade merchant vendor currency gold coins items equipment waffen rüstung armor weapon"
+
+REM ★★★ GAMEPLAY: Quests & Events ★★★
+set "QUESTS=quest mission aufgabe objective ziel achievement belohnung reward event random-event"
+
+REM ★★★ TECHNISCH: Engines & Frameworks ★★★
+set "TECH_ENGINE=three.js threejs webgl canvas 3d python flask ollama"
+
+REM ★★★ TECHNISCH: UEFN & Fortnite ★★★
+set "UEFN=uefn fortnite creative verse epic-games map island karte asset pack"
+
+REM ★★★ TECHNISCH: 3D Assets ★★★
+set "ASSETS=kaykit gltf glb fbx obj mesh texture material shader skelett skeleton rig animation"
+
+REM ★★★ TECHNISCH: Sync & Networking ★★★
+set "SYNC=sync websocket cloud backup server client api endpoint session state memory"
+
+REM ★★★ TECHNISCH: AI & ML ★★★
+set "AI=ollama opus wizard llama model persona behavior bond importance scoring learning adaptive"
+
+REM ★★★ BASIS: Konzepte ★★★
+set "CONCEPTS=maximale freiheit totale eigenverantwortung autonom selbstbestimmt legal ethik moral consent"
+
+REM ★★★ UI & Interface ★★★
+set "UI=interface gui hud overlay menu button slider toggle popup modal toast notification"
+
+REM ★★★ SPEZIAL: Najika-Spezifisch ★★★
+set "NAJIKA_SPECIAL=seelengefährten vertrautheits-xp emotions-shader koop-skills assistant-mode 24/7 daddy schlampe puddin kätzchen"
+
+REM ★★★ SICHERHEIT & ETHIK ★★★
+set "SECURITY=8-gebote verschlüsselung security ethik moral consent legal zdpo gdpr datenschutz"
+
+REM ★★★ CODE-PATTERNS ★★★
+set "CODE=def class function async await import export const let var if else for while return"
+
+REM ★★★ API & ENDPOINTS ★★★
+set "API=api endpoint route handler controller /api/ get post put delete request response"
+
+REM ★★★ DATEIEN & STRUKTUR ★★★
+set "FILES=najika_server digivice index.html 3d_scene kaykit_loader minigames config setup reset run"
+
+REM Kombiniere ALLE Keywords
+set "ALL_KEYWORDS=%KUJA_NAJIKA% %PERSONALITY% %DIGIVICE% %MUEHLE% %CLASSES% %SKILLS% %CRAFTING% %GATHERING% %COMBAT% %WORLD% %MOVEMENT% %PROGRESSION% %TRAINING% %MAGIC% %SOCIAL% %ECONOMY% %QUESTS% %TECH_ENGINE% %UEFN% %ASSETS% %SYNC% %AI% %CONCEPTS% %UI% %NAJIKA_SPECIAL% %SECURITY% %CODE% %API% %FILES%"
+
+REM ═══════════════════════════════════════════════════════════════
+REM  REPORT HEADER
+REM ═══════════════════════════════════════════════════════════════
+
+(
+echo ═══════════════════════════════════════════════════════════════
+echo    NAJIKA COMPLETE PROJECT SEARCH - ULTIMATE EDITION
+echo ═══════════════════════════════════════════════════════════════
+echo Erstellt: %date% %time%
+echo Verzeichnis: %SEARCH_DIR%
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★★★ KERN-KONZEPT ★★★★★
+echo.
+echo   KUJA = SCHWERT ^& SCHILD
+echo     • Beschützer, Verteidiger, Krieger
+echo.
+echo   NAJIKA = KOPF ^& HERZ
+echo     • KI/AI Girlfriend
+echo     • 4 Persönlichkeits-Aspekte: MEGUMIN, HARLEY, SHIRO, MELISSA
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★ PROJEKT-STRUKTUR ★★★
+echo.
+echo [1] KI_AI_NAJIKA
+echo     • Hauptgehirn, Steuerlogik
+echo     • Opus ^& Wizard Modelle
+echo     • Memory ^& Bond System
+echo.
+echo [2] DIGIVICE_APP
+echo     • Mobile PWA
+echo     • Gesicherter Bereich
+echo     • Schwarze Mühle Varianten
+echo.
+echo [3] MODULE
+echo     • Handyspiel-Module
+echo     • Mini-Games
+echo     • Tools ^& Features
+echo.
+echo [4] FORTNITE_UEFN
+echo     • Maps ^& Assets
+echo     • Verse Scripts
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★ GAMEPLAY-SYSTEME ★★★
+echo.
+echo [KLASSEN]
+echo   • Explosion-Klasse (Megumin-Style)
+echo   • Weitere Klassen: Magier, Krieger, Tank, Healer, etc.
+echo.
+echo [SKILL-SYSTEME]
+echo   • Skill Weaving
+echo   • Use-Based Progression
+echo   • Zauber ^& Magie
+echo.
+echo [CRAFTING ^& GATHERING]
+echo   • Crafting System
+echo   • Fishing
+echo   • Farming
+echo   • Mining
+echo   • Holzfällen
+echo.
+echo [KAMPF]
+echo   • Digimon World Style (Echtzeit-Anfeuerung)
+echo   • Oregon Trail System
+echo   • Boss-Kämpfe
+echo.
+echo [MOVEMENT]
+echo   • Fortnite Movement (Sprint, Slide, Dash, Wall-Climb)
+echo   • Parkour System
+echo.
+echo [PROGRESSION]
+echo   • Level ^& XP
+echo   • Skill-Trees
+echo   • Stats (STR, INT, DEX, CHA)
+echo.
+echo [WELT]
+echo   • File Island
+echo   • 8 Städte
+echo   • Prozedural-Generierte Dungeons
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+echo ★★★ TECHNISCHE SYSTEME ★★★
+echo.
+echo [3D ^& RENDERING]
+echo   • Three.js
+echo   • KayKit Assets
+echo   • GLTF/GLB Models
+echo.
+echo [AI ^& ML]
+echo   • Ollama (lokal)
+echo   • Opus Advanced Features
+echo   • Wizard (NSFW)
+echo.
+echo [SYNC ^& NETWORKING]
+echo   • WebSocket
+echo   • Cloud Backup
+echo   • PC ↔ Mobile Sync
+echo.
+echo ═══════════════════════════════════════════════════════════════
+echo.
+) > "%OUTPUT%"
+
+REM ═══════════════════════════════════════════════════════════════
+REM  HAUPTSUCHE
+REM ═══════════════════════════════════════════════════════════════
+
+set /a TOTAL_FILES=0
+set /a FOUND_FILES=0
+set /a PDF_FILES=0
+set /a IMAGE_FILES=0
+
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 1: Hauptsuche (TXT, MD, JSON, JSONL, PY)            ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.json *.jsonl *.py) do (
+    set /a TOTAL_FILES+=1
+
+    REM Schnelle Vorprüfung
+    findstr /I /C:"najika" /C:"kuja" /C:"digivice" /C:"mühle" /C:"windmühle" /C:"crafting" /C:"fishing" /C:"farming" /C:"explosion" /C:"weaving" /C:"fortnite" /C:"uefn" /C:"kaykit" /C:"opus" /C:"wizard" "%%F" >nul 2>&1
+
+    if !errorlevel! EQU 0 (
+        set /a FOUND_FILES+=1
+
+        echo ═══════════════════════════════════════════════════════════════
+        echo TREFFER: %%~nxF
+        echo ═══════════════════════════════════════════════════════════════
+
+        (
+            echo.
+            echo ═══════════════════════════════════════════════════════════════
+            echo DATEI: %%~nxF
+            echo PFAD: %%F
+            echo GRÖSSE: %%~zF bytes
+            echo ═══════════════════════════════════════════════════════════════
+            echo.
+        ) >> "%OUTPUT%"
+
+        REM Detaillierte Keyword-Suche
+        for %%K in (najika kuja schwert schild kopf herz girlfriend daddy schlampe puddin megumin harley shiro melissa sakura digivice mühle windmühle schwarze holländische gesichert gesicherter bereich explosion klasse skill weaving crafting fishing farming mining holzfällen combat kampf oregon-trail digimon-world file-island 8-städte fortnite sprint slide dash wall-climb vault parkour uefn kaykit three.js gltf glb opus wizard kätzchen private nsfw memory bond seelengefährten assistant-mode training level xp use-based progression skill-tree talente hp mana stamina hunger durst müdigkeit magie zauber magieschule slime api endpoint def class function) do (
+            findstr /I /N /C:"%%K" "%%F" >nul 2>&1
+            if !errorlevel! EQU 0 (
+                echo   [%%K] gefunden
+                (
+                    echo [KEYWORD: %%K]
+                    findstr /I /N /C:"%%K" "%%F"
+                    echo.
+                ) >> "%OUTPUT%"
+            )
+        )
+        echo.
+    )
+
+    set /a MOD=!TOTAL_FILES! %% 10
+    if !MOD! EQU 0 (
+        echo   [Progress] !TOTAL_FILES! Dateien...
+    )
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 2: PDFs                                              ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo PDF-DATEIEN
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+for /R "%SEARCH_DIR%" %%F in (*.pdf) do (
+    set /a PDF_FILES+=1
+    echo   [PDF] %%~nxF
+    (
+        echo [PDF] %%~nxF
+        echo Pfad: %%F
+        echo Größe: %%~zF bytes
+        echo.
+    ) >> "%OUTPUT%"
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 3: Bilder ^& 3D Assets                                ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo BILDER ^& 3D-ASSETS
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+for /R "%SEARCH_DIR%" %%F in (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.glb *.gltf *.fbx *.obj) do (
+    set /a IMAGE_FILES+=1
+    echo   [ASSET] %%~nxF
+    (
+        echo [ASSET] %%~nxF
+        echo Pfad: %%F
+        echo Typ: %%~xF
+        echo Größe: %%~zF bytes
+        echo.
+    ) >> "%OUTPUT%"
+)
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║  PHASE 4: Spezial-Muster                                    ║
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo SPEZIELLE PATTERN
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+REM Kuja-Najika Beziehung
+echo [Suche: Kuja-Najika Beziehung...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md) do (
+    findstr /I /C:"kuja" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"najika" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            echo   ★★★★★ KUJA-NAJIKA: %%~nxF
+            (
+                echo ★★★★★ KUJA-NAJIKA BEZIEHUNG ★★★★★
+                echo Datei: %%~nxF
+                echo.
+                findstr /I /N /C:"kuja" /C:"schwert" /C:"schild" /C:"najika" /C:"kopf" /C:"herz" "%%F"
+                echo.
+            ) >> "%OUTPUT%"
+        )
+    )
+)
+
+REM Crafting System
+echo [Suche: Crafting System...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.py *.json) do (
+    findstr /I /C:"crafting" /C:"handwerk" /C:"rezept" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★ CRAFTING: %%~nxF
+        (
+            echo ★★★ CRAFTING SYSTEM ★★★
+            echo Datei: %%~nxF
+            echo.
+            findstr /I /N /C:"crafting" /C:"rezept" /C:"blueprint" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Skill Weaving
+echo [Suche: Skill Weaving...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.py) do (
+    findstr /I /C:"weaving" /C:"weave-system" /C:"skill" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★ SKILL WEAVING: %%~nxF
+        (
+            echo ★★★ SKILL WEAVING SYSTEM ★★★
+            echo Datei: %%~nxF
+            echo.
+            findstr /I /N /C:"weaving" /C:"skill" /C:"combo" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Fortnite Movement
+echo [Suche: Fortnite Movement...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.py *.js) do (
+    findstr /I /C:"fortnite" /C:"sprint" /C:"slide" /C:"wall-climb" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★ MOVEMENT: %%~nxF
+        (
+            echo ★★★ FORTNITE MOVEMENT ★★★
+            echo Datei: %%~nxF
+            echo.
+            findstr /I /N /C:"sprint" /C:"slide" /C:"dash" /C:"climb" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM Oregon Trail System
+echo [Suche: Oregon Trail System...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.py) do (
+    findstr /I /C:"oregon" /C:"trail" /C:"event" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        echo   ★ OREGON TRAIL: %%~nxF
+        (
+            echo ★★★ OREGON TRAIL SYSTEM ★★★
+            echo Datei: %%~nxF
+            echo.
+            findstr /I /N /C:"oregon" /C:"event" /C:"random" "%%F"
+            echo.
+        ) >> "%OUTPUT%"
+    )
+)
+
+REM 4 Persönlichkeiten
+echo [Suche: 4 Persönlichkeits-Aspekte...]
+for /R "%SEARCH_DIR%" %%F in (*.txt *.md *.json *.py) do (
+    findstr /I /C:"MEGUMIN" "%%F" >nul 2>&1
+    if !errorlevel! EQU 0 (
+        findstr /I /C:"HARLEY" "%%F" >nul 2>&1
+        if !errorlevel! EQU 0 (
+            findstr /I /C:"SHIRO" "%%F" >nul 2>&1
+            if !errorlevel! EQU 0 (
+                findstr /I /C:"MELISSA" "%%F" >nul 2>&1
+                if !errorlevel! EQU 0 (
+                    echo   ★★★★★ ALLE 4 ASPEKTE: %%~nxF
+                    (
+                        echo ★★★★★ VOLLSTÄNDIGES PERSÖNLICHKEITS-SYSTEM ★★★★★
+                        echo Datei: %%~nxF
+                        echo.
+                        findstr /I /N /C:"MEGUMIN" /C:"HARLEY" /C:"SHIRO" /C:"MELISSA" "%%F"
+                        echo.
+                    ) >> "%OUTPUT%"
+                )
+            )
+        )
+    )
+)
+
+REM ═══════════════════════════════════════════════════════════════
+REM  ZUSAMMENFASSUNG
+REM ═══════════════════════════════════════════════════════════════
+
+(
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo ZUSAMMENFASSUNG
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+    echo Text-Dateien durchsucht:  %TOTAL_FILES%
+    echo Treffer gefunden:          %FOUND_FILES%
+    echo PDFs:                      %PDF_FILES%
+    echo Bilder/3D-Assets:          %IMAGE_FILES%
+    echo.
+    echo ★★★★★ GESUCHTE KATEGORIEN ★★★★★
+    echo.
+    echo [KERN]
+    echo   • Kuja-Najika Beziehung
+    echo   • 4 Persönlichkeiten
+    echo   • Maximale Freiheit Konzept
+    echo.
+    echo [DIGIVICE]
+    echo   • App System
+    echo   • Schwarze Mühle
+    echo   • Gesicherter Bereich
+    echo.
+    echo [GAMEPLAY]
+    echo   • Explosion-Klasse
+    echo   • Skill Weaving
+    echo   • Crafting System
+    echo   • Fishing ^& Farming
+    echo   • Combat System
+    echo   • Oregon Trail
+    echo   • Digimon World
+    echo   • Fortnite Movement
+    echo.
+    echo [TECHNISCH]
+    echo   • Opus ^& Wizard
+    echo   • KayKit Assets
+    echo   • UEFN System
+    echo   • Sync Architecture
+    echo.
+    echo Report gespeichert:
+    echo %OUTPUT%
+    echo.
+    echo ═══════════════════════════════════════════════════════════════
+    echo.
+) >> "%OUTPUT%"
+
+echo.
+echo ╔══════════════════════════════════════════════════════════════╗
+echo ║                    SUCHE ABGESCHLOSSEN                       ║
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Text-Dateien:          %TOTAL_FILES%
+echo ║  Treffer:               %FOUND_FILES%
+echo ║  PDFs:                  %PDF_FILES%
+echo ║  Assets:                %IMAGE_FILES%
+echo ╠══════════════════════════════════════════════════════════════╣
+echo ║  Report: %OUTPUT%
+echo ╚══════════════════════════════════════════════════════════════╝
+echo.
+echo Report wird geöffnet...
+echo.
+
+start notepad "%OUTPUT%"
+
+echo Drücke eine Taste zum Schließen...
+pause >nul

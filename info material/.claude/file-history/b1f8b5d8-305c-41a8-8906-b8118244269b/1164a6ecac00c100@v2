@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+TEST: Ein Video verarbeiten (FFmpeg + Whisper)
+"""
+
+import sys
+import os
+
+# Import aus NAJIKA_VIDEO_TO_VOICE_TRAINING (encoding wird dort gehandhabt)
+from NAJIKA_VIDEO_TO_VOICE_TRAINING import (
+    log, check_dependencies, find_all_videos,
+    extract_audio_from_video, transcribe_audio_with_whisper,
+    PERSONALITIES_DIR
+)
+
+def test_single_video():
+    """Test mit einem einzelnen Video"""
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("VIDEO TRAINING TEST", 'INFO')
+    log("="*60, 'INFO')
+
+    # Check Dependencies
+    if not check_dependencies():
+        log("Dependencies fehlen!", 'ERROR')
+        return
+
+    # Finde erstes Video
+    personalities = ['megumin', 'harley', 'shiro', 'melissa']
+    test_video = None
+    test_personality = None
+
+    for p in personalities:
+        videos = find_all_videos(p)
+        if videos:
+            test_video = videos[0]
+            test_personality = p
+            break
+
+    if not test_video:
+        log("Kein Test-Video gefunden!", 'ERROR')
+        return
+
+    log("", 'INFO')
+    log(f"TEST-VIDEO: {test_video.name}", 'INFO')
+    log(f"PERSÖNLICHKEIT: {test_personality.upper()}", 'INFO')
+    log("", 'INFO')
+
+    # Lade Whisper Model
+    try:
+        import whisper
+        log("Lade Whisper Model (base)...", 'INFO')
+        whisper_model = whisper.load_model("base")
+        log("Model geladen!", 'SUCCESS')
+    except Exception as e:
+        log(f"Model-Loading fehlgeschlagen: {e}", 'ERROR')
+        return
+
+    # SCHRITT 1: Audio extrahieren
+    log("", 'INFO')
+    log("SCHRITT 1: Audio extrahieren...", 'INFO')
+    audio_file = extract_audio_from_video(test_video, test_personality)
+
+    if not audio_file:
+        log("Audio-Extraktion fehlgeschlagen!", 'ERROR')
+        return
+
+    log(f"Audio extrahiert: {audio_file}", 'SUCCESS')
+
+    # SCHRITT 2: Transkribieren
+    log("", 'INFO')
+    log("SCHRITT 2: Transkribieren...", 'INFO')
+    transcript_file = transcribe_audio_with_whisper(audio_file, test_personality, whisper_model)
+
+    if not transcript_file:
+        log("Transkription fehlgeschlagen!", 'ERROR')
+        return
+
+    # Zeige Transkript
+    transcript_text = transcript_file.read_text(encoding='utf-8')
+    log("", 'INFO')
+    log("="*60, 'INFO')
+    log("TRANSKRIPT:", 'SUCCESS')
+    log("="*60, 'INFO')
+    log(transcript_text[:500], 'INFO')
+    log("...", 'INFO')
+    log("="*60, 'INFO')
+    log(f"Gesamt-Länge: {len(transcript_text)} Zeichen", 'INFO')
+    log("="*60, 'INFO')
+    log("", 'INFO')
+    log("TEST ERFOLGREICH!", 'SUCCESS')
+
+if __name__ == "__main__":
+    test_single_video()

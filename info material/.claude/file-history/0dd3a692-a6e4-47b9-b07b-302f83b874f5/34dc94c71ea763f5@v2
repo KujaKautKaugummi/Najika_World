@@ -1,0 +1,72 @@
+# NAJIKA INTENSIVE TRAINING SCHEDULE
+# 6x taglich Training wahrend Pre-Training Phase
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "NAJIKA INTENSIVE TRAINING SETUP (6x DAILY)" -ForegroundColor Cyan
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "WARNUNG: Intensive Training-Phase!" -ForegroundColor Yellow
+Write-Host "- 6x daily Training (~2h GPU-Last)" -ForegroundColor Yellow
+Write-Host "- Empfohlen for Pre-Training (1-2 Weeks)" -ForegroundColor Yellow
+Write-Host "- Danach back to 2x daily`n" -ForegroundColor Yellow
+
+# Delete ALL old Training-Tasks
+Write-Host "Delete old Training-Tasks..." -ForegroundColor Yellow
+schtasks /Delete /TN "NajikaLoRAMorning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAEvening" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Midnight" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_EarlyMorning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Morning" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Noon" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Afternoon" /F 2>$null
+schtasks /Delete /TN "NajikaLoRAIntensive_Evening" /F 2>$null
+
+Write-Host "`nCreate 6 Training-Tasks...`n" -ForegroundColor Yellow
+
+# Training-Times: 00:00, 04:00, 08:00, 12:00, 16:00, 20:00
+$times = @("00:00", "04:00", "08:00", "12:00", "16:00", "20:00")
+$names = @("Midnight", "EarlyMorning", "Morning", "Noon", "Afternoon", "Evening")
+
+for ($i = 0; $i -lt $times.Length; $i++) {
+    $taskName = "NajikaLoRAIntensive_$($names[$i])"
+    $time = $times[$i]
+
+    Write-Host "[$($i+1)/6] $taskName ($time)..." -ForegroundColor Green
+
+    $action = New-ScheduledTaskAction -Execute "python" -Argument "C:\NajikaCore\najika_lora_training.py"
+    $trigger = New-ScheduledTaskTrigger -Daily -At $time
+    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Force | Out-Null
+
+    if ($?) {
+        Write-Host "      [OK] Task created" -ForegroundColor Green
+    } else {
+        Write-Host "      [ERROR] Task creation failed" -ForegroundColor Red
+    }
+}
+
+Write-Host "`n============================================================" -ForegroundColor Cyan
+Write-Host "INTENSIVE TRAINING-SCHEDULE" -ForegroundColor Cyan
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "00:00 - Midnight Training" -ForegroundColor White
+Write-Host "04:00 - Early Morning Training" -ForegroundColor White
+Write-Host "08:00 - Morning Training" -ForegroundColor White
+Write-Host "12:00 - Noon Training" -ForegroundColor White
+Write-Host "16:00 - Afternoon Training" -ForegroundColor White
+Write-Host "20:00 - Evening Training`n" -ForegroundColor White
+
+Write-Host "= 6x daily, every 4 hours!" -ForegroundColor Yellow
+Write-Host "= ~2h GPU load per day (6x ~21 Min)`n" -ForegroundColor Yellow
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "IMPORTANT - BACK TO NORMAL:" -ForegroundColor Red
+Write-Host "============================================================`n" -ForegroundColor Cyan
+
+Write-Host "After 1-2 weeks Pre-Training:" -ForegroundColor Yellow
+Write-Host "powershell -File 'C:/NajikaCore/install_scheduler.ps1'`n" -ForegroundColor White
+
+Write-Host "This returns to 2x daily (08:00 + 20:00)`n" -ForegroundColor Yellow
+
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "SETUP COMPLETE!" -ForegroundColor Green
+Write-Host "============================================================`n" -ForegroundColor Cyan

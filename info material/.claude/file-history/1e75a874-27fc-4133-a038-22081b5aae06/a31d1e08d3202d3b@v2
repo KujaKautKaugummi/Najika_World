@@ -1,0 +1,309 @@
+# 🎬 NAJIKA VIDEO-TRAINING - HEUTE ABEND
+
+## 🎯 ZIEL
+Najika mit Megumin-Videos trainieren für bessere Persönlichkeit!
+
+---
+
+## 📋 SCHNELL-ANLEITUNG
+
+### **SCHRITT 1: VIDEOS BESORGEN (5-10 Min)**
+
+**Option A: YouTube (einfachste):**
+```
+1. Gehe zu YouTube
+2. Suche: "Konosuba Megumin Szenen Deutsch"
+3. Download mit: https://ytdl.org/ (kostenlos)
+4. Oder: yt-dlp (CLI-Tool)
+
+Empfohlene Videos:
+- "Megumin EXPLOSION Compilation"
+- "Megumin beste Szenen"
+- "Konosuba Folge 2" (erste EXPLOSION!)
+```
+
+**Option B: Anime-Files (wenn vorhanden):**
+```
+Falls du Konosuba-Folgen hast:
+- Staffel 1, Folge 2-10 (viel Megumin!)
+- Megumin-fokussierte Episoden
+```
+
+---
+
+### **SCHRITT 2: VIDEOS KOPIEREN**
+
+```batch
+1. Öffne Ordner:
+   C:\NajikaCore\training_data\input\video\
+
+2. Kopiere deine Videos rein:
+   - konosuba_s1e02.mp4
+   - megumin_explosion.mp4
+   - megumin_scenes.mp4
+   - etc.
+
+3. Akzeptierte Formate:
+   ✅ .mp4
+   ✅ .mkv
+   ✅ .avi
+   ✅ .webm
+```
+
+---
+
+### **SCHRITT 3: UNTERTITEL (OPTIONAL aber empfohlen!)**
+
+**Falls Videos deutsche Untertitel haben:**
+
+```
+1. Extrahiere Untertitel (.srt):
+   - VLC Player → Tools → Codec Information
+   - Oder online: https://subtitle-extractor.com/
+
+2. Kopiere .srt Dateien nach:
+   C:\NajikaCore\training_data\input\text\
+
+3. Gleicher Name wie Video:
+   konosuba_s1e02.mp4 → konosuba_s1e02.srt
+```
+
+**WICHTIG:** Deutsche Untertitel sind BESSER als Audio-Transkription!
+
+---
+
+### **SCHRITT 4: PROCESSING STARTEN**
+
+```batch
+1. Rechtsklick auf:
+   C:\NajikaCore\PROCESS_TRAINING_DATA.bat
+
+2. "Als Administrator ausführen"
+
+3. Warten (~5-15 Min pro Video)
+
+4. Script macht automatisch:
+   ✅ Audio-Extraktion
+   ✅ Sprache zu Text (falls keine .srt)
+   ✅ Untertitel parsen
+   ✅ Megumin-Dialoge extrahieren
+   ✅ In ChromaDB speichern
+```
+
+**AUSGABE:**
+```
+C:\NajikaCore\training_data\output\processed\
+├── konosuba_transcript.txt
+├── megumin_dialogs.json
+└── processing_log.json
+```
+
+---
+
+### **SCHRITT 5: NAJIKA NEU TRAINIEREN**
+
+**Das passiert automatisch!**
+
+```python
+# ChromaDB speichert Megumin-Dialoge
+# Bei jedem Chat holt Najika relevante Beispiele
+# Lernt Megumin's Sprachstil, Sprüche, Verhalten!
+
+Beispiel:
+User: "Wie geht's dir?"
+ChromaDB findet: "Ich bin bereit für EXPLOSION!"
+Najika antwortet: "*hüpft* Mir geht's super! Bereit für Abenteuer?"
+```
+
+---
+
+## 🔧 TROUBLESHOOTING
+
+### **Problem 1: BAT-File öffnet nur kurz und schließt**
+
+**Lösung:**
+```batch
+1. Öffne CMD als Admin
+2. Navigiere:
+   cd C:\NajikaCore
+3. Manuell starten:
+   python process_training_data.py
+```
+
+---
+
+### **Problem 2: "Python nicht gefunden"**
+
+**Lösung:**
+```batch
+# Prüfe Python-Installation:
+python --version
+
+# Falls nicht gefunden:
+# Rechtsklick START_NAJIKA.bat → Pfad anschauen
+# Nutze gleichen Python-Pfad
+```
+
+---
+
+### **Problem 3: Audio-Transkription funktioniert nicht**
+
+**Lösung:**
+```
+Nutze Untertitel statt Audio!
+→ Schneller & genauer
+→ .srt-Dateien nach training_data/input/text/
+```
+
+---
+
+### **Problem 4: Zu große Video-Dateien**
+
+**Lösung:**
+```
+Schneide nur Megumin-Szenen:
+1. VLC Player → Media → Convert
+2. Start/End-Zeit setzen
+3. Nur Megumin-Parts exportieren
+```
+
+---
+
+## 📊 ERWARTETE VERBESSERUNGEN
+
+**VORHER (aktuell):**
+```
+❌ Text-Wiederholungen
+❌ Komische Tags [SHIRO-ANALYSE]
+❌ "Puddin'" zu oft
+❌ EXPLOSION bei allem
+❌ Unnatürliche Antworten
+```
+
+**NACHHER (nach Training):**
+```
+✅ Natürliche Megumin-Sprüche
+✅ Korrekte Emoticons/Actions
+✅ Bessere Kontext-Antworten
+✅ EXPLOSION nur situativ
+✅ Originale Konosuba-Dialoge als Referenz
+```
+
+---
+
+## 🎯 OPTIMALE VIDEO-AUSWAHL
+
+**Priorität 1 (Must-Have):**
+```
+- Folge 2: Megumins Einführung & erste EXPLOSION
+- Folge 9: Megumin vs. Mobile Fortress Destroyer
+- Movie: Legend of Crimson (viel Megumin!)
+```
+
+**Priorität 2 (Nice-to-Have):**
+```
+- Alle Folgen wo Megumin EXPLOSION macht
+- Dialoge zwischen Megumin & Kazuma
+- Megumin alleine (Monologe)
+```
+
+**Priorität 3 (Bonus):**
+```
+- OVAs
+- Spin-offs
+- Megumin-fokussierte Compilations
+```
+
+---
+
+## ⏱️ ZEITPLAN
+
+```
+18:00 - Videos downloaden (10 Min)
+18:10 - Videos nach training_data kopieren (2 Min)
+18:12 - Untertitel extrahieren (5 Min)
+18:17 - PROCESS_TRAINING_DATA.bat starten (2 Min)
+18:19 - Warten auf Processing (10-30 Min - kannst nebenbei was machen)
+18:49 - Fertig! ✅
+19:00 - Najika testen mit neuem Wissen!
+```
+
+---
+
+## 🧪 TEST NACH TRAINING
+
+**Teste ob Najika besser geworden ist:**
+
+```
+1. Starte najika_server.py neu (wichtig!)
+
+2. Chat öffnen, teste:
+   "Hey Najika, wie geht's?"
+   "Was willst du heute machen?"
+   "Zeig mir deine EXPLOSION!" (Kampf-Context)
+
+3. Achte auf:
+   ✅ Weniger Wiederholungen
+   ✅ Megumin-typische Sprüche
+   ✅ Natürlichere Emoticons
+   ✅ Besseres Timing für EXPLOSION
+```
+
+---
+
+## 💾 BACKUP
+
+**Sichere alte Version (falls Training schief geht):**
+
+```batch
+# Vor Training:
+1. Kopiere ChromaDB:
+   C:\NajikaCore\chroma_db\
+   → C:\NajikaCore\chroma_db_backup\
+
+# Falls Probleme:
+2. Restore:
+   Lösche chroma_db\
+   Kopiere chroma_db_backup\ zurück
+```
+
+---
+
+## 📝 CHECKLISTE
+
+```
+VORBEREITUNG:
+☐ Videos gedownloaded (min. 1-2 Folgen)
+☐ In training_data/input/video/ kopiert
+☐ Optional: Untertitel (.srt) in text/
+☐ najika_server.py läuft NICHT (schließen!)
+
+PROCESSING:
+☐ PROCESS_TRAINING_DATA.bat als Admin gestartet
+☐ Warten bis "VERARBEITUNG ABGESCHLOSSEN"
+☐ Log-File prüfen (training_data/output/processed/processing_log.json)
+
+NACH TRAINING:
+☐ najika_server.py neu starten (START_NAJIKA.bat)
+☐ Chat testen
+☐ Persönlichkeit besser? ✅
+☐ Falls nicht: Mehr Videos hinzufügen & nochmal!
+```
+
+---
+
+## 🎉 VIEL ERFOLG!
+
+**Nach dem Training wird Najika:**
+- Mehr wie echte Megumin sprechen! 💥
+- Natürlichere Antworten geben! ✨
+- Weniger Wiederholungen! 🎯
+- Bessere Emoticons nutzen! 😊
+
+**LOS GEHT'S!** 🚀
+
+---
+
+**Erstellt**: 2025-10-18
+**Dauer**: ~30-45 Min (inkl. Video-Download)
+**Schwierigkeit**: ⭐⭐☆☆☆ (Einfach!)

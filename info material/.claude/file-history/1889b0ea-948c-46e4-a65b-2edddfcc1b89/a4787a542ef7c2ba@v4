@@ -1,0 +1,84 @@
+{
+  "history": [],
+  "battle": {
+    "hp": 100,
+    "wave": 0,
+    "enemies": 0
+  },
+  "user": {
+    "level": 1,
+    "xp": 0,
+    "points": 0,
+    "inventory": [],
+    "achievements": [],
+    "skills": []
+  },
+  "progress": {
+    "dungeon_level": 1,
+    "quests_completed": []
+  },
+  "najika": {
+    "hunger": 0,
+    "energy": 100,
+    "hygiene": 0,
+    "happiness": 0,
+    "strength": 10,
+    "intelligence": 10,
+    "dexterity": 12,
+    "charisma": 10,
+    "care_mistakes": 16,
+    "fatigue": 0,
+    "weight": 50,
+    "discipline": 0,
+    "level": 1,
+    "xp": 0,
+    "evolution_stage": "base",
+    "equipment": {
+      "weapon": null,
+      "armor": null,
+      "accessory": null
+    },
+    "last_fed": 0,
+    "last_trained": 0,
+    "last_sleep": 0,
+    "last_update": 1760637210.5124326
+  },
+  "bond_strength": 2,
+  "behavior_mode": "explosion",
+  "personality_weights": {
+    "megumin": 35,
+    "harley": 25,
+    "shiro": 20,
+    "melissa": 20
+  },
+  "total_interactions": 11,
+  "living": {
+    "current_mood": "excited",
+    "mood_intensity": 60,
+    "last_proactive_message": 0,
+    "proactive_cooldown": 1800,
+    "autonomy_level": 50,
+    "personality_evolution": {
+      "megumin": 25.98039215686275,
+      "harley": 25.0,
+      "shiro": 24.509803921568626,
+      "melissa": 24.509803921568626
+    },
+    "growth_stage": "developing",
+    "relationship_stage": "getting_to_know",
+    "emotional_bond": 2,
+    "shared_memories": [],
+    "last_interaction": 1760637417.6890976,
+    "total_time_together": 540,
+    "days_since_meeting": 0,
+    "current_activity": "exploring",
+    "activity_started": 1760636649.5392659,
+    "activities_completed": [
+      {
+        "name": "exploring",
+        "completed_at": 1760636529.525773
+      }
+    ]
+  },
+  "saved_at": "2025-10-16 20:15:00"
+}

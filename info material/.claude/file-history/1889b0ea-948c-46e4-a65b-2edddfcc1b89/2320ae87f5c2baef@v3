@@ -1,0 +1,228 @@
+# Najika Development Session - Zusammenfassung
+**Datum**: 2025-10-16
+**Status**: System läuft stabil nach Fixes
+
+---
+
+## 🎯 Hauptprobleme die gelöst wurden
+
+### 1. ✅ Living State Migration Fix
+**Problem**: `KeyError: 'total_time_together'` beim Chat - alte Save-Dateien hatten nicht alle neuen Living State Fields.
+
+**Lösung**: `najika_server.py` Zeile 274-284 gefixt:
+```python
+# Restore Living State (WITH MIGRATION!)
+if "living" in save_data:
+    # MIGRATION: Merge saved living state with defaults to add missing fields
+    loaded_living = save_data["living"]
+    default_living = LIVING_STATE.copy()  # Get defaults with ALL fields
+    # Update defaults with loaded data (preserves new fields, adds missing ones)
+    default_living.update(loaded_living)
+    STATE["living"] = default_living
+    log("DEBUG", "Living State migration completed - added missing fields", "LOAD")
+else:
+    STATE["living"] = LIVING_STATE.copy()
+```
+
+**Resultat**: Server lädt alte Save-Dateien automatisch mit fehlenden Fields (z.B. `total_time_together`, `days_since_meeting`, etc.)
+
+### 2. ✅ Battle System Endpoint Fix
+**Problem**: Frontend sendete an `/api/battle/attack`, Server hatte aber `/api/battle/action`.
+
+**Lösung**: `C:\NajikaCore\digivice\index.html` Zeile 1059-1088:
+```javascript
+async function battleAttack() {
+    try {
+        const r = await api('/api/battle/action', 'POST', {action: 'attack', target_index: 0});
+        // Handle battle log and response
+        if (r.log && Array.isArray(r.log)) {
+            alert(r.log.join('\n'));
+        }
+        // Update HUD
+        if (r.player) {
+            updateBattleHUD({
+                hp: r.player.hp,
+                max_hp: r.player.max_hp,
+                wave: r.wave,
+                enemies: r.enemies ? r.enemies.length : 0
+            });
+        }
+        // Check if battle ended
+        if (!r.active) {
+            document.getElementById('battlePanel').style.display = 'none';
+            if (r.result === 'victory') {
+                alert(`Sieg! +${r.xp_earned} XP, +${r.gold_earned} Gold!`);
+            } else if (r.result === 'defeat') {
+                alert('Kampf verloren!');
+            }
+        }
+    } catch (error) {
+        alert('Kampf nicht verfügbar.');
+        console.error(error);
+    }
+}
+```
+
+**Resultat**: Battle-System sollte jetzt funktionieren (noch zu testen im Browser).
+
+### 3. ✅ Ollama Hang/Timeout Fix
+**Problem**: Ollama's `/api/generate` endpoint hing nach vielen Requests.
+
+**Lösung**: User hat Ollama über die App neu gestartet.
+
+**Resultat**: Ollama antwortet wieder normal auf generate requests.
+
+---
+
+## 📊 Aktuelle Optimierungen (BEREITS AKTIV)
+
+### Ollama Parameter (in `najika_server.py:386-406`)
+```python
+"options": {
+    "num_ctx": 4096,
+    "temperature": 0.70,        # Niedriger = kohärenter
+    "top_p": 0.88,              # Niedriger = fokussierter
+    "repeat_penalty": 1.35,     # Höher = weniger Wiederholungen
+    "num_predict": 180          # Kürzer = schnellere Antworten
+}
+```
+
+### Persona System Optimiert
+- Kompakterer Prompt ohne Menü-Optionen
+- Anatomisch korrekte Begriffe ("Schwanz und Eier" statt falscher Terminologie)
+- Kürzere, natürlichere Antworten durch `num_predict: 180`
+
+---
+
+## ⚠️ OFFENE PUNKTE - Noch zu testen
+
+### 1. Najika's Chat-Verhalten testen
+**Was prüfen**:
+- ❓ Erscheinen noch Menüs oder Optionen? (A), B), Wähle, etc.)
+- ❓ Erscheint Meta-Content? (Persönlichkeits-Gewichte, Mood-Displays)
+- ❓ Sind Antworten kurz und natürlich? (ca. 1-2 Sätze)
+- ❓ Anatomische Begriffe korrekt? ("Schwanz und Eier")
+
+**Wie testen**: Im Browser http://localhost:8000/ mehrere Chat-Nachrichten senden und Antworten prüfen.
+
+### 2. Battle System testen
+**Was prüfen**:
+- ❓ Kampf startet in "Kampfarena" oder "Schwarze Mühle – Keller"
+- ❓ Attack-Button funktioniert ohne 404 Error
+- ❓ Battle-Log wird angezeigt
+- ❓ HP/Wave/Enemies werden korrekt aktualisiert
+
+**Wie testen**: Im Browser zur Kampfarena navigieren, "Kampf starten", dann "Attack" klicken.
+
+---
+
+## 🗂️ Wichtige Datei-Locations
+
+### Backend
+- **Server**: `C:\NajikaCore\najika_server.py` (Zeile 274-284 geändert)
+- **Living System**: `C:\NajikaCore\najika_living_system.py` (definiert LIVING_STATE)
+- **Save File**: `C:\NajikaCore\saves\najika_state.json` (aktuelle State)
+
+### Frontend
+- **Main UI**: `C:\NajikaCore\digivice\index.html` (Zeile 1059-1088 geändert)
+- **3D Scene**: `C:\NajikaCore\digivice\js\3d_scene.js`
+- **Battle Logic**: `C:\NajikaCore\digivice\js\battle_core.js`
+
+### Configs
+- **Environment**: `C:\NajikaCore\.env` (enthält API keys!)
+- **Room Config**: `C:\NajikaCore\assets\room_config_detailed.json`
+
+---
+
+## 🔧 Technische Details
+
+### Server Status
+- **Running**: Background Bash c55ef9 (`cd C:/NajikaCore && python najika_server.py`)
+- **URL**: http://localhost:8000/
+- **Port**: 8000
+
+### Ollama Status
+- **Version**: 0.12.5
+- **Model**: najika-local (llama3.1:8b, Q4_K_M, 6GB VRAM)
+- **Endpoint**: http://127.0.0.1:11434/api/generate
+- **Status**: ✅ Funktioniert nach Neustart
+
+### Save File Structure (aktuell)
+```json
+{
+  "history": [...],  // Letzte 4 Chat-Messages
+  "living": {
+    "total_time_together": 60,  // WICHTIG: Dieses Field wurde automatisch hinzugefügt!
+    "current_mood": "neutral",
+    "mood_intensity": 80,
+    "autonomy_level": 50,
+    // ... alle anderen Living State Fields
+  },
+  "najika": { ... },
+  "user": { ... },
+  "battle": { ... }
+}
+```
+
+---
+
+## 🚀 Nächste Schritte wenn User Feedback gibt
+
+### Falls Chat noch problematisch ist:
+1. **Prüfe aktuelle Antworten** - sind sie zu lang? Meta-Content?
+2. **Persona weiter anpassen** in `najika_enhanced_personality.py`
+3. **Ollama Parameter feinjustieren** (temp, top_p, repeat_penalty)
+
+### Falls Battle nicht funktioniert:
+1. **Browser Console checken** - welche Fehler?
+2. **Server Logs checken** (Background Bash c55ef9)
+3. **Payload prüfen** - wird `{action: 'attack', target_index: 0}` korrekt gesendet?
+
+### Falls andere Bugs auftauchen:
+1. **Server Logs**: `BashOutput` Tool auf shell c55ef9
+2. **Save File prüfen**: `C:\NajikaCore\saves\najika_state.json`
+3. **Browser Console**: F12 → Console → Fehler kopieren
+
+---
+
+## 📝 Test-Script (falls nötig)
+
+**Location**: `C:\NajikaCore\test_chat.py`
+
+**Problem**: Unicode-Error beim Print (Windows CMD Problem), aber Server funktioniert!
+
+**Alternative**: Direkt im Browser testen oder mit PowerShell:
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8000/api/chat" -Method Post -Body '{"message":"Hallo!"}' -ContentType "application/json"
+```
+
+---
+
+## 🔐 Sicherheitshinweise
+
+⚠️ **WICHTIG**: `C:\NajikaCore\.env` enthält echte API Keys und sollte NICHT committed werden!
+
+⚠️ **Git Status**: Kein Git-Repo initialisiert (laut Projekt-Status)
+
+---
+
+## 📋 Changelog dieser Session
+
+### Changed Files
+1. `najika_server.py:274-284` - Living State Migration mit automatic merge
+2. `najika_server.py:333-337` - **META-CONTENT FIX**: Personality Weights werden nicht mehr im Prompt angezeigt (verhindert Prozentangaben in Antworten!)
+3. `index.html:1059-1088` - Battle endpoint von `/api/battle/attack` → `/api/battle/action`
+
+### No Changes Needed
+- Ollama Parameters (bereits optimiert in vorheriger Session)
+- Persona System (bereits kompakt)
+- Living System (funktioniert mit Migration)
+
+### User Actions Needed
+- Ollama wurde neu gestartet ✅
+- Browser-Test der Chat-Qualität ⏳ (läuft gerade)
+- Browser-Test des Battle-Systems ⏳ (noch ausstehend)
+
+---
+
+**Ende der Zusammenfassung** - Server läuft stabil auf http://localhost:8000/

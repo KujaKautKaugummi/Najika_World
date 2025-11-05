@@ -1,0 +1,495 @@
+/**
+ * DUNGEON COMBAT SYSTEM
+ * Verbindet Dungeon-Generator + Enemy-System + Player-Combat
+ */
+
+(function() {
+    'use strict';
+
+    let currentDungeon = null;
+    let playerHealth = 100;
+    let playerMaxHealth = 100;
+    let playerDamage = 15;
+    let combatActive = false;
+    let lastHitNotification = 0; // Throttle hit notifications
+    // Auto-attack removed - manual only via SPACE
+
+    // CommandSystem Integration
+    let commandSystem = null;
+    if (typeof CommandSystem !== 'undefined') {
+        commandSystem = new CommandSystem();
+        console.log('✅ CommandSystem initialized for combat');
+    } else {
+        console.warn('⚠️ CommandSystem not available');
+    }
+
+    /**
+     * Startet Dungeon mit Gegnern
+     */
+    function startDungeonCombat(level = 1, scene) {
+        if (!window.DungeonGenerator || !window.DungeonEnemies) {
+            console.error('❌ DungeonGenerator or DungeonEnemies not loaded!');
+            return null;
+        }
+
+        console.log(`🏰 Starting Dungeon Combat - Level ${level}`);
+
+        // Clear old enemies
+        if (window.DungeonEnemies) {
+            DungeonEnemies.clearAllEnemies();
+        }
+
+        // Generate new dungeon
+        const dungeonConfig = DungeonGenerator.regenerateDungeon('Schwarze Mühle – Keller', level);
+        if (!dungeonConfig || !dungeonConfig.dungeon) {
+            console.error('❌ Failed to generate dungeon config');
+            return null;
+        }
+
+        currentDungeon = dungeonConfig.dungeon;
+        currentDungeon.level = level;
+
+        // Spawn enemies
+        DungeonEnemies.spawnEnemies(currentDungeon, scene);
+
+        // Reset player health
+        playerHealth = playerMaxHealth;
+        combatActive = true;
+
+        // Update UI
+        updateCombatUI();
+
+        // Setup event listeners
+        setupCombatEvents();
+
+        console.log(`✅ Dungeon Combat started! ${currentDungeon.enemies.length} enemies spawned`);
+        return currentDungeon;
+    }
+
+    /**
+     * Player attacks nearest enemy
+     */
+    function playerAttack(playerPosition) {
+        if (!combatActive || !playerPosition) return;
+
+        const enemy = DungeonEnemies.damageNearestEnemy(playerPosition, playerDamage, 5);
+
+        if (enemy) {
+            console.log(`⚔️ Player hit ${enemy.data.name}!`);
+
+            // Visual feedback - throttled to max 1 per 8 seconds
+            const now = Date.now();
+            if (typeof notify === 'function' && now - lastHitNotification > 8000) {
+                notify(`⚔️ Hit! -${playerDamage} HP`, 'success');
+                lastHitNotification = now;
+            }
+
+            // Check if all enemies dead -> WIN
+            checkVictoryCondition();
+        }
+        // Removed "No enemy in range" spam notification
+
+        updateCombatUI();
+    }
+
+    /**
+     * Auto-Attack toggle
+     */
+    // Auto-attack function removed - manual combat only
+
+    /**
+     * Enemy attacks player (called from enemy system)
+     */
+    window.onEnemyAttack = function(damage, enemyPosition) {
+        if (!combatActive) return;
+
+        playerHealth = Math.max(0, playerHealth - damage);
+        console.log(`💥 Player took ${damage} damage! HP: ${playerHealth}/${playerMaxHealth}`);
+
+        if (typeof notify === 'function') {
+            notify(`💥 Took ${damage} damage!`, 'error');
+        }
+
+        updateCombatUI();
+
+        if (playerHealth <= 0) {
+            gameOver();
+        }
+    };
+
+    /**
+     * Enemy killed (called from enemy system)
+     */
+    window.onEnemyKilled = function(xp, loot, position) {
+        console.log(`💀 Enemy defeated! +${xp} XP, Loot:`, loot);
+
+        if (typeof notify === 'function') {
+            notify(`+${xp} XP | Loot: ${loot.join(', ')}`, 'success');
+        }
+
+        // Add XP to player (TODO: Connect to backend)
+        // Update UI
+        updateCombatUI();
+
+        // Check victory
+        checkVictoryCondition();
+    };
+
+    /**
+     * Check if all enemies dead
+     */
+    function checkVictoryCondition() {
+        const livingEnemies = DungeonEnemies.getLivingEnemies();
+
+        if (livingEnemies.length === 0 && combatActive) {
+            victory();
+        }
+    }
+
+    /**
+     * Victory!
+     */
+    function victory() {
+        combatActive = false;
+        // Auto-attack removed
+
+        // Remove combat UI
+        const healthDisplay = document.getElementById('player-health-display');
+        if (healthDisplay) {
+            healthDisplay.remove();
+        }
+
+        console.log('🎉 VICTORY! Dungeon cleared!');
+
+        if (typeof notify === 'function') {
+            notify(`🎉 VICTORY! Level ${currentDungeon.level} cleared!`, 'success');
+        }
+
+        // Show victory UI (TODO)
+        showVictoryScreen();
+    }
+
+    /**
+     * Game Over
+     */
+    function gameOver() {
+        combatActive = false;
+        // Auto-attack removed
+
+        // Remove combat UI
+        const healthDisplay = document.getElementById('player-health-display');
+        if (healthDisplay) {
+            healthDisplay.remove();
+        }
+
+        console.log('💀 GAME OVER');
+
+        if (typeof notify === 'function') {
+            notify('💀 DEFEATED! Dungeon failed...', 'error');
+        }
+
+        // Clear enemies
+        DungeonEnemies.clearAllEnemies();
+
+        // Show game over UI (TODO)
+        setTimeout(() => {
+            if (confirm('💀 Defeated! Try again?')) {
+                startDungeonCombat(currentDungeon?.level || 1, window.Scene3D?.scene);
+            }
+        }, 1000);
+    }
+
+    /**
+     * Update Combat UI
+     */
+    function updateCombatUI() {
+        // Update health bar in header
+        const healthPercent = Math.floor((playerHealth / playerMaxHealth) * 100);
+
+        // Find or create health display (under chat input)
+        let healthDisplay = document.getElementById('player-health-display');
+        if (!healthDisplay) {
+            healthDisplay = document.createElement('div');
+            healthDisplay.id = 'player-health-display';
+            healthDisplay.style.cssText = `
+                position: fixed;
+                bottom: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.9);
+                padding: 8px 20px;
+                color: white;
+                font-family: monospace;
+                z-index: 900;
+                border-top: 2px solid #667eea;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.9rem;
+            `;
+            document.body.appendChild(healthDisplay);
+        }
+
+        // Color based on health
+        let healthColor;
+        if (healthPercent > 60) healthColor = '#00ff00';
+        else if (healthPercent > 30) healthColor = '#ffff00';
+        else healthColor = '#ff0000';
+
+        const enemyCount = DungeonEnemies.getLivingEnemies().length;
+
+        // CommandSystem Buttons
+        let commandButtons = '';
+        if (commandSystem) {
+            const commands = commandSystem.getAvailableCommands();
+
+            // Get happiness/discipline directly from DOM (Najika Status display)
+            const happinessEl = document.getElementById('najikaHappiness');
+            const disciplineEl = document.getElementById('najikaDiscipline');
+            const happiness = happinessEl ? parseInt(happinessEl.textContent) : 50;
+            const discipline = disciplineEl ? parseInt(disciplineEl.textContent) : 50;
+
+            commandButtons = `
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="color: #ffcc00;">😊${happiness}</span>
+                    <span style="color: #cc88ff;">💪${discipline}</span>
+                    ${commands.commands.map(cmd => `
+                        <button class="cmd-btn" data-key="${cmd.key}" style="background: #667eea; color: white; border: none; padding: 6px 14px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">
+                            ${cmd.icon} ${cmd.label}
+                        </button>
+                    `).join('')}
+                    <button id="praise-btn" style="background: #00ff00; color: black; border: none; padding: 4px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem;">👍</button>
+                    <button id="scold-btn" style="background: #ff0000; color: white; border: none; padding: 4px 10px; cursor: pointer; border-radius: 4px; font-size: 0.8rem;">👎</button>
+                </div>
+            `;
+        }
+
+        healthDisplay.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; gap: 15px;">
+                    <span style="font-weight: bold;">⚔️ COMBAT</span>
+                    <span style="color: ${healthColor};">HP: ${playerHealth}/${playerMaxHealth}</span>
+                    <span style="color: #ff8888;">Enemies: ${enemyCount}</span>
+                    <span style="color: #88ff88;">Lv ${currentDungeon?.level || 1}</span>
+                </div>
+                ${commandButtons}
+            </div>
+        `;
+
+        // Attach button listeners
+        if (commandSystem) {
+            // Command Buttons (1-4)
+            document.querySelectorAll('.cmd-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const key = btn.dataset.key;
+                    const result = commandSystem.executeCommand(key, 'idle');
+
+                    if (result.success) {
+                        // Execute actual attack via battle API
+                        if (window.Scene3D?.character?.position) {
+                            playerAttack(window.Scene3D.character.position);
+                        }
+
+                        if (typeof notify === 'function' && result.timing) {
+                            notify(`${result.timing.message || 'Command executed'}`,
+                                   result.timing.quality === 'perfect' ? 'success' : 'info');
+                        }
+                    } else {
+                        if (typeof notify === 'function') {
+                            notify(result.message, 'error');
+                        }
+                    }
+
+                    updateCombatUI();
+                };
+            });
+
+            // Praise/Scold
+            const praiseBtn = document.getElementById('praise-btn');
+            const scoldBtn = document.getElementById('scold-btn');
+
+            if (praiseBtn) {
+                praiseBtn.onclick = async () => {
+                    const result = await commandSystem.praise('after_good_move');
+                    if (typeof notify === 'function') {
+                        notify(`💚 ${result.message}`, 'success');
+                    }
+
+                    // Update Najika Status HUD (happiness/discipline in DOM)
+                    if (typeof updateNajikaHUD === 'function' && result.happiness !== undefined) {
+                        updateNajikaHUD({
+                            happiness: result.happiness,
+                            discipline: result.discipline
+                        });
+                    }
+
+                    updateCombatUI();
+                };
+            }
+
+            if (scoldBtn) {
+                scoldBtn.onclick = async () => {
+                    const result = await commandSystem.scold('after_mistake');
+                    if (typeof notify === 'function') {
+                        notify(`💢 ${result.message}`, 'error');
+                    }
+
+                    // Update Najika Status HUD (happiness/discipline in DOM)
+                    if (typeof updateNajikaHUD === 'function' && result.happiness !== undefined) {
+                        updateNajikaHUD({
+                            happiness: result.happiness,
+                            discipline: result.discipline
+                        });
+                    }
+
+                    updateCombatUI();
+                };
+            }
+        }
+    }
+
+    /**
+     * Show victory screen
+     */
+    function showVictoryScreen() {
+        const victoryDiv = document.createElement('div');
+        victoryDiv.style.cssText = `
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s;
+        `;
+
+        victoryDiv.innerHTML = `
+            <div style="
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                padding: 40px;
+                border-radius: 20px;
+                text-align: center;
+                color: white;
+                max-width: 500px;
+            ">
+                <h1 style="font-size: 3rem; margin: 0 0 20px 0;">🎉 VICTORY! 🎉</h1>
+                <p style="font-size: 1.5rem; margin: 10px 0;">Dungeon Level ${currentDungeon.level} Cleared!</p>
+                <p style="font-size: 1rem; margin: 20px 0; opacity: 0.9;">
+                    Health Remaining: ${playerHealth}/${playerMaxHealth}
+                </p>
+                <button id="nextLevelBtn" style="
+                    padding: 15px 30px;
+                    font-size: 1.2rem;
+                    background: #00ff00;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin: 10px;
+                    font-weight: bold;
+                ">Next Level ➡️</button>
+                <button id="exitDungeonBtn" style="
+                    padding: 15px 30px;
+                    font-size: 1.2rem;
+                    background: #ff4444;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin: 10px;
+                    color: white;
+                    font-weight: bold;
+                ">Exit Dungeon</button>
+            </div>
+        `;
+
+        document.body.appendChild(victoryDiv);
+
+        // Event listeners
+        document.getElementById('nextLevelBtn').onclick = () => {
+            document.body.removeChild(victoryDiv);
+            const nextLevel = (currentDungeon?.level || 1) + 1;
+            startDungeonCombat(nextLevel, window.Scene3D?.scene);
+        };
+
+        document.getElementById('exitDungeonBtn').onclick = () => {
+            document.body.removeChild(victoryDiv);
+            exitDungeon();
+        };
+    }
+
+    /**
+     * Exit dungeon (clean up)
+     */
+    function exitDungeon() {
+        combatActive = false;
+        // Auto-attack removed
+
+        DungeonEnemies.clearAllEnemies();
+
+        const healthDisplay = document.getElementById('player-health-display');
+        if (healthDisplay) {
+            healthDisplay.remove();
+        }
+
+        console.log('🚪 Exited dungeon');
+    }
+
+    /**
+     * Setup combat event listeners
+     */
+    function setupCombatEvents() {
+        // Keyboard: Space = Attack (nur wenn kein Input aktiv ist)
+        const attackHandler = (e) => {
+            // Ignore wenn Input/Textarea fokussiert ist
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+                return;
+            }
+
+            if (e.code === 'Space' && combatActive) {
+                e.preventDefault();
+                if (window.Scene3D && Scene3D.characterGroup) {
+                    const playerPos = Scene3D.characterGroup.position.clone();
+                    playerAttack(playerPos);
+                }
+            }
+        };
+
+        document.addEventListener('keydown', attackHandler);
+
+        // Store handlers for cleanup
+        window._dungeonCombatHandlers = { attackHandler };
+    }
+
+    /**
+     * Update combat (call every frame)
+     */
+    function updateCombat() {
+        if (!combatActive) return;
+
+        // Get player position
+        if (window.Scene3D && Scene3D.characterGroup) {
+            const playerPos = Scene3D.characterGroup.position.clone();
+
+            // Update all enemies
+            DungeonEnemies.updateEnemies(playerPos);
+        }
+    }
+
+    // Public API
+    window.DungeonCombat = {
+        startDungeonCombat,
+        playerAttack,
+        updateCombat,
+        exitDungeon,
+        isActive: () => combatActive,
+        getPlayerHealth: () => playerHealth,
+        healPlayer: (amount) => {
+            playerHealth = Math.min(playerMaxHealth, playerHealth + amount);
+            updateCombatUI();
+        }
+    };
+
+    console.log('⚔️ Dungeon Combat System initialized');
+    console.log('Controls: SPACE = Attack');
+})();

@@ -1,0 +1,50 @@
+===============================================
+NAJIKA TRAINING - START HIER!
+===============================================
+
+ALLES BEREIT! HIER DIE SCHRITTE:
+
+SCHRITT 1: VIDEOS VORBEREITEN
+------------------------------
+Lege deine Videos in:
+
+C:\NajikaCore\training_data\personalities\
+  - megumin\    <- Alle Konosuba (deutsch!)
+  - harley\     <- Alle Harley Quinn (deutsch!)
+  - shiro\      <- Alle NGNL (deutsch!)
+  - melissa\    <- Alle Melissa Videos
+
+SCHRITT 2: SETUP (einmalig)
+---------------------------
+Doppelklick: SETUP_VOICE_TRAINING.bat
+
+SCHRITT 3: TRAINING STARTEN
+---------------------------
+VOICE TRAINING (auto, über Nacht):
+  python NAJIKA_VIDEO_TO_VOICE_TRAINING.py train
+
+MELISSA INTERACTIVE (morgen, mit deinen Beschreibungen):
+  python MELISSA_INTERACTIVE_TRAINING.py train
+
+===============================================
+DETAILS: Siehe VOICE_TRAINING_ANLEITUNG.md
+===============================================
+
+WAS PASSIERT:
+- Najika HÖRT die deutschen Sprecherinnen
+- Lernt ECHTE Dialoge aus Videos
+- Du beschreibst Melissa's sexuelle Szenen
+- 10x Wiederholung = tief verankert!
+
+KOSTEN: 0 EUR (alles lokal!)
+ZEIT: 2-3 Tage (läuft automatisch)
+
+KORREKTUREN:
+- Schwarze Windmühle = Zuhause (nicht ständig erwähnt)
+- KUJA = Hauptperson für alle Persönlichkeiten!
+
+===============================================
+FRAGEN? Lies:
+- VOICE_TRAINING_ANLEITUNG.md
+- TRAINING_ANLEITUNG.md
+===============================================

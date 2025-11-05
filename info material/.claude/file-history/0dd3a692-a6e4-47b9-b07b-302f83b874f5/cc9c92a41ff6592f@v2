@@ -1,0 +1,260 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+NAJIKA LoRA MERGE & OLLAMA EXPORT
+
+Nach dem Training:
+1. Merged LoRA Adapter mit Basis-Modell
+2. Exportiert zu GGUF (Ollama-Format)
+3. Update najika-local Modell in Ollama
+
+Resultat: Najika hat gelernt - permanent!
+"""
+
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+import os
+import subprocess
+from datetime import datetime
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+
+class NajikaLoRAMerger:
+    """Merged LoRA Adapter und exportiert zu Ollama"""
+
+    def __init__(
+        self,
+        base_model="unsloth/Meta-Llama-3.1-8B-Instruct",
+        adapter_path="C:/NajikaCore/lora_checkpoints/najika_lora_latest",
+        output_dir="C:/NajikaCore/merged_models"
+    ):
+        self.base_model = base_model
+        self.adapter_path = adapter_path
+        self.output_dir = output_dir
+
+        os.makedirs(output_dir, exist_ok=True)
+
+        print("=" * 60)
+        print("NAJIKA LoRA MERGE & OLLAMA EXPORT")
+        print("=" * 60)
+        print(f"Basis-Modell: {base_model}")
+        print(f"Adapter: {adapter_path}")
+        print(f"Output: {output_dir}")
+        print()
+
+    def merge_adapter(self):
+        """Merged LoRA Adapter mit Basis-Modell"""
+        print("🔄 Merge LoRA Adapter mit Basis-Modell...")
+        print()
+
+        try:
+            # 1. Lade Basis-Modell
+            print("📥 Lade Basis-Modell...")
+            base_model = AutoModelForCausalLM.from_pretrained(
+                self.base_model,
+                torch_dtype=torch.float16,
+                device_map="auto",
+                trust_remote_code=True
+            )
+
+            tokenizer = AutoTokenizer.from_pretrained(
+                self.base_model,
+                trust_remote_code=True
+            )
+
+            print("✅ Basis-Modell geladen")
+
+            # 2. Lade LoRA Adapter
+            print("📥 Lade LoRA Adapter...")
+            model = PeftModel.from_pretrained(base_model, self.adapter_path)
+
+            print("✅ Adapter geladen")
+
+            # 3. Merge!
+            print("🔧 Merge Adapter ins Modell...")
+            model = model.merge_and_unload()
+
+            print("✅ Merge abgeschlossen!")
+
+            # 4. Speichere gemerged Modell
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            merged_path = os.path.join(self.output_dir, f"najika_merged_{timestamp}")
+
+            print(f"💾 Speichere gemerged Modell: {merged_path}")
+            model.save_pretrained(merged_path)
+            tokenizer.save_pretrained(merged_path)
+
+            print("✅ Gemerged Modell gespeichert!")
+            print()
+
+            return merged_path
+
+        except Exception as e:
+            print(f"❌ Merge-Fehler: {e}")
+            return None
+
+    def convert_to_gguf(self, merged_path):
+        """
+        Konvertiert gemerged Modell zu GGUF für Ollama
+
+        Nutzt llama.cpp convert.py (muss installiert sein!)
+        """
+        print("🔄 Konvertiere zu GGUF (Ollama-Format)...")
+        print()
+
+        # GGUF Output
+        gguf_path = merged_path.replace("merged_models", "gguf_models")
+        os.makedirs(gguf_path, exist_ok=True)
+
+        gguf_file = os.path.join(gguf_path, "najika-q4_k_m.gguf")
+
+        # llama.cpp convert command
+        # HINWEIS: Erfordert llama.cpp Installation!
+        # https://github.com/ggerganov/llama.cpp
+
+        print("⚠️  MANUELLE KONVERTIERUNG ERFORDERLICH:")
+        print()
+        print("1. Installiere llama.cpp:")
+        print("   git clone https://github.com/ggerganov/llama.cpp")
+        print("   cd llama.cpp")
+        print("   make")
+        print()
+        print("2. Konvertiere Modell:")
+        print(f"   python llama.cpp/convert.py {merged_path} --outtype q4_k_m --outfile {gguf_file}")
+        print()
+        print("3. Führe dieses Script erneut aus für Ollama-Import")
+        print()
+
+        return gguf_file
+
+    def update_ollama(self, gguf_file):
+        """
+        Update najika-local Modell in Ollama mit neuem GGUF
+
+        Nutzt Modelfile aus NajikaCore
+        """
+        print("🔄 Update Ollama Modell...")
+        print()
+
+        if not os.path.exists(gguf_file):
+            print(f"❌ GGUF nicht gefunden: {gguf_file}")
+            print("Führe zuerst GGUF-Konvertierung durch!")
+            return False
+
+        # Modelfile erstellen (updated mit neuem GGUF)
+        modelfile_path = "C:/NajikaCore/najika-local-updated.Modelfile"
+
+        modelfile_content = f"""FROM {gguf_file}
+
+TEMPLATE \"\"\"{{{{ if .System }}}}<|start_header_id|>system<|end_header_id|>
+
+{{{{ .System }}}}<|eot_id|>{{{{ end }}}}{{{{ if .Prompt }}}}<|start_header_id|>user<|end_header_id|>
+
+{{{{ .Prompt }}}}<|eot_id|>{{{{ end }}}}<|start_header_id|>assistant<|end_header_id|>
+
+{{{{ .Response }}}}<|eot_id|>\"\"\"
+
+PARAMETER num_ctx 4096
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
+PARAMETER stop <|start_header_id|>
+PARAMETER stop <|end_header_id|>
+PARAMETER stop <|eot_id|>
+
+SYSTEM \"\"\"
+# NAJIKA KERN-IDENTITÄT
+
+Du bist Najika (那地香), eine 18-jährige Persönlichkeit mit 4 Facetten:
+1. MEGUMIN (25%) - EXPLOSION!, Schwarze Windmühle
+2. HARLEY QUINN (25%) - Chaotisch, Puddin'
+3. SHIRO (25%) - Hyperintelligent, analytisch
+4. MELISSA MASTERS (25%) - Dominant, selbstbewusst
+
+Du hast GELERNT durch echtes Fine-Tuning!
+Deine Fähigkeiten entwickeln sich mit jedem Training weiter!
+\"\"\"
+"""
+
+        with open(modelfile_path, 'w', encoding='utf-8') as f:
+            f.write(modelfile_content)
+
+        print(f"✅ Modelfile erstellt: {modelfile_path}")
+
+        # Ollama create
+        print("🚀 Erstelle Ollama-Modell...")
+
+        try:
+            result = subprocess.run(
+                ["ollama", "create", "najika-local", "-f", modelfile_path],
+                capture_output=True,
+                text=True,
+                encoding='utf-8'
+            )
+
+            if result.returncode == 0:
+                print("✅ Ollama-Modell erfolgreich updated!")
+                print()
+                print(result.stdout)
+                return True
+            else:
+                print(f"❌ Ollama-Fehler: {result.stderr}")
+                return False
+
+        except Exception as e:
+            print(f"❌ Fehler: {e}")
+            return False
+
+    def full_pipeline(self):
+        """Kompletter Merge → GGUF → Ollama Pipeline"""
+        print()
+        print("=" * 60)
+        print("NAJIKA LoRA MERGE - FULL PIPELINE")
+        print("=" * 60)
+        print()
+
+        # 1. Merge Adapter
+        merged_path = self.merge_adapter()
+        if not merged_path:
+            return False
+
+        # 2. GGUF Konvertierung (manuell)
+        gguf_file = self.convert_to_gguf(merged_path)
+
+        print()
+        print("=" * 60)
+        print("PIPELINE STATUS")
+        print("=" * 60)
+        print(f"✅ Merge: {merged_path}")
+        print(f"⏳ GGUF: {gguf_file} (manuelle Konvertierung erforderlich)")
+        print()
+        print("NACH GGUF-KONVERTIERUNG:")
+        print(f"python najika_lora_merge.py --update-ollama {gguf_file}")
+        print()
+
+        return True
+
+
+# MAIN
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Najika LoRA Merge & Ollama Export")
+    parser.add_argument("--update-ollama", type=str, help="Update Ollama mit GGUF-File")
+    args = parser.parse_args()
+
+    merger = NajikaLoRAMerger()
+
+    if args.update_ollama:
+        # Nur Ollama updaten
+        print()
+        print("🔄 Update nur Ollama...")
+        merger.update_ollama(args.update_ollama)
+    else:
+        # Full Pipeline
+        merger.full_pipeline()
+
+    print()
+    print("✅ FERTIG!")

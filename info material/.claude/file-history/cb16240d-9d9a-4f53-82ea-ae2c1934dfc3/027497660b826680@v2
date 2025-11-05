@@ -1,0 +1,16 @@
+@echo off
+REM ============================================
+REM NAJIKA TRAINING SETUP - ADMIN ERFORDERLICH
+REM ============================================
+
+echo.
+echo Starte Training Setup als Administrator...
+echo.
+
+powershell -ExecutionPolicy Bypass -Command "Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -File C:\Najika\SETUP_TRAINING_COMPLETE.ps1' -Verb RunAs"
+
+echo.
+echo PowerShell-Fenster sollte sich als Admin oeffnen.
+echo Bitte dort die Installation abschliessen!
+echo.
+pause

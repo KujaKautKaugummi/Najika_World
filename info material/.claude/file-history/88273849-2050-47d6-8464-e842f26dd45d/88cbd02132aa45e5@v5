@@ -1,0 +1,399 @@
+﻿import os, json, random, hashlib, time
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+from collections import OrderedDict
+
+try:
+    import requests
+except ImportError:  # requests ist optional; wir fallen auf urllib zurück
+    requests = None
+import urllib.request
+import urllib.error
+
+try:
+    from dotenv import load_dotenv
+except ImportError:  # .env Handling ist nice to have, aber kein Muss
+    def load_dotenv():
+        return
+load_dotenv()
+
+HOST=os.getenv("HOST","0.0.0.0"); PORT=int(os.getenv("PORT","8000"))
+AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
+CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
+CLOUD_PIN=os.getenv("CLOUD_PIN","")
+OLLAMA_ALIAS=os.getenv("OLLAMA_MODEL_ALIAS","najika-local")
+NSFW_LOCAL=os.getenv("NSFW_LOCAL","false").lower()=="true"
+
+PERSONA_SYSTEM = """Du bist Najika, eine einzelne Persona mit vier Facetten:
+[MEGUMIN] Explosiv, dramatisch, theatralisch.
+[HARLEY] Verspielt, chaotisch, kichert.
+[SHIRO] Analytisch, präzise, probabilistisch.
+[MELISSA] Führend, entschlossen, direkt.
+Regeln: Sicher, respektvoll, SFW. Antworte knapp. Sprich als "Najika"."""
+
+ROOMS = ["Wohnzimmer","Schlafzimmer","Küche","Badezimmer","Garten","Musikraum","Medizin","Terminal","Studieren & Crafting","Trainingszimmer","Kampfarena","Schwarze Mühle – Keller"]
+
+STATE = {
+    "history": [],
+    "battle": {"hp":100,"wave":0,"enemies":0},
+    "private_mode": False,
+    "sse_clients": [],
+    "user": {
+        "level": 1,
+        "xp": 0,
+        "points": 0,
+        "inventory": [],
+        "achievements": []
+    },
+    "progress": {
+        "dungeon_level": 0,
+        "quests_completed": []
+    }
+}
+
+# AI RESPONSE CACHE (LRU with TTL)
+CACHE_MAX_SIZE = 100
+CACHE_TTL = 3600  # 1 hour
+AI_CACHE = OrderedDict()
+CACHE_STATS = {"hits": 0, "misses": 0, "total_requests": 0}
+
+# PERSISTENT STORAGE
+SAVE_DIR = os.path.join(os.path.dirname(__file__), "saves")
+SAVE_FILE = os.path.join(SAVE_DIR, "najika_state.json")
+BACKUP_COUNT = 3  # Keep last 3 backups
+AUTO_SAVE_INTERVAL = 30  # seconds
+LAST_SAVE_TIME = 0
+
+def save_state():
+    """Speichert STATE persistent auf Disk mit Backup-Rotation"""
+    global LAST_SAVE_TIME
+    try:
+        # Erstelle saves/ Verzeichnis falls nicht vorhanden
+        os.makedirs(SAVE_DIR, exist_ok=True)
+
+        # Erstelle Backup der letzten Save-Datei
+        if os.path.exists(SAVE_FILE):
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            backup_file = os.path.join(SAVE_DIR, f"najika_state_{timestamp}.json")
+            import shutil
+            shutil.copy2(SAVE_FILE, backup_file)
+
+            # Lösche alte Backups (behalte nur letzte BACKUP_COUNT)
+            backups = sorted([f for f in os.listdir(SAVE_DIR) if f.startswith("najika_state_") and f.endswith(".json")])
+            while len(backups) > BACKUP_COUNT:
+                old_backup = os.path.join(SAVE_DIR, backups.pop(0))
+                os.remove(old_backup)
+
+        # Speichere aktuellen STATE (ohne transiente Daten)
+        save_data = {
+            "history": STATE["history"][-50:],  # Nur letzte 50 Messages
+            "battle": STATE["battle"],
+            "user": STATE["user"],
+            "progress": STATE["progress"],
+            "saved_at": time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        with open(SAVE_FILE, "w", encoding="utf-8") as f:
+            json.dump(save_data, f, indent=2, ensure_ascii=False)
+
+        LAST_SAVE_TIME = time.time()
+        print(f"💾 State gespeichert: {SAVE_FILE}")
+        return True
+    except Exception as e:
+        print(f"❌ Fehler beim Speichern: {e}")
+        return False
+
+def load_state():
+    """Lädt STATE von Disk"""
+    try:
+        if not os.path.exists(SAVE_FILE):
+            print("ℹ️ Keine Save-Datei gefunden, starte mit leerem State")
+            return False
+
+        with open(SAVE_FILE, "r", encoding="utf-8") as f:
+            save_data = json.load(f)
+
+        # Restore STATE
+        STATE["history"] = save_data.get("history", [])
+        STATE["battle"] = save_data.get("battle", {"hp":100,"wave":0,"enemies":0})
+        STATE["user"] = save_data.get("user", {"level":1,"xp":0,"points":0,"inventory":[],"achievements":[]})
+        STATE["progress"] = save_data.get("progress", {"dungeon_level":0,"quests_completed":[]})
+
+        saved_at = save_data.get("saved_at", "unknown")
+        print(f"✅ State geladen von: {saved_at}")
+        return True
+    except Exception as e:
+        print(f"❌ Fehler beim Laden: {e}")
+        return False
+
+def auto_save_check():
+    """Prüft ob Auto-Save nötig ist"""
+    global LAST_SAVE_TIME
+    if time.time() - LAST_SAVE_TIME > AUTO_SAVE_INTERVAL:
+        save_state()
+
+def build_prompt(history, user_text):
+    ctx = "\n".join([f"{h['role'].capitalize()}: {h['content']}" for h in history[-4:]])
+    return f"{PERSONA_SYSTEM}\n\nKontext:\n{ctx}\n\nBenutzer: {user_text}\nNajika:"
+
+def generate_cache_key(history, user_text, use_wizard):
+    """Generiert einen Cache-Key aus Kontext + Message + Model"""
+    # Letzten 4 Messages + aktuelle Message + Model-Flag
+    ctx_str = json.dumps(history[-4:], sort_keys=True) if history else ""
+    key_str = f"{ctx_str}|{user_text}|{use_wizard}"
+    return hashlib.sha256(key_str.encode()).hexdigest()
+
+def get_cached_response(cache_key):
+    """Holt Response aus Cache, prüft TTL"""
+    if cache_key in AI_CACHE:
+        entry = AI_CACHE[cache_key]
+        if time.time() - entry["timestamp"] < CACHE_TTL:
+            # Move to end (LRU)
+            AI_CACHE.move_to_end(cache_key)
+            CACHE_STATS["hits"] += 1
+            return entry["response"]
+        else:
+            # Expired, remove
+            del AI_CACHE[cache_key]
+    CACHE_STATS["misses"] += 1
+    return None
+
+def cache_response(cache_key, response):
+    """Speichert Response im Cache (LRU)"""
+    # Entferne ältesten Eintrag wenn voll
+    if len(AI_CACHE) >= CACHE_MAX_SIZE:
+        AI_CACHE.popitem(last=False)  # FIFO: remove oldest
+    AI_CACHE[cache_key] = {
+        "response": response,
+        "timestamp": time.time()
+    }
+
+def _post_json(url, payload, timeout=90):
+    if requests:
+        r = requests.post(url, json=payload, timeout=timeout)
+        r.raise_for_status()
+        return r.json()
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            text = resp.read().decode("utf-8")
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"HTTP error contacting {url}: {e}") from e
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Invalid JSON from {url}: {text[:120]}") from e
+
+def call_ollama(prompt, use_wizard=False):
+    model = "najika-wizard" if use_wizard else OLLAMA_ALIAS
+    response = _post_json(
+        "http://127.0.0.1:11434/api/generate",
+        {
+            "model": model,
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "num_ctx": 4096,
+                "temperature": 0.88,
+                "top_p": 0.93,
+                "repeat_penalty": 1.18
+            }
+        },
+    )
+    return response.get("response","")
+
+OREGON_EVENTS = [
+  {"title":"Leise Schritte","text":"Du hörst Schritte im Flur der Mühle. Prüfen oder ignorieren?"},
+  {"title":"Kerze flackert","text":"Eine Kerze flackert stark. Versteckte Luftschächte?"},
+  {"title":"Geheimes Fach","text":"Hinter einem Ziegel wackelt etwas. Hebeln?"},
+  {"title":"Rattennest","text":"Ein Nest raschelt. Ressourcen oder Gefahr?"},
+  {"title":"Staubige Bücher","text":"Ein Buch mit Runen. Lesen oder mitnehmen?"}
+]
+def next_event():
+    ev=random.choice(OREGON_EVENTS)
+    return ev
+
+def broadcast_state_update():
+    """Benachrichtigt alle SSE-Clients über State-Änderungen"""
+    data = json.dumps({"private_mode": STATE["private_mode"], "provider": AI_PROVIDER, "cloud": CLOUD_ENABLED})
+    # SSE-Clients werden beim nächsten Check benachrichtigt
+    STATE["_last_broadcast"] = data
+
+class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Access-Control-Allow-Origin","*")
+        self.send_header("Access-Control-Allow-Methods","GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers","*")
+        super().end_headers()
+    def do_OPTIONS(self): self.send_response(200); self.end_headers()
+    def translate_path(self, path):
+        import posixpath, urllib, os as _os
+        path = path.split('?',1)[0].split('#',1)[0]
+        path = posixpath.normpath(urllib.parse.unquote(path))
+        if path in ("/","/digivice","/index.html"):
+            return _os.path.join(r"C:\NajikaCore","digivice","index.html")
+        return _os.path.join(r"C:\NajikaCore", path.lstrip("/"))
+    def do_GET(self):
+        if self.path == "/health":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"status":"ok","provider":AI_PROVIDER,"cloud":CLOUD_ENABLED}).encode()); return
+        if self.path == "/api/rooms":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(ROOMS).encode()); return
+        if self.path == "/api/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"status":"ok","provider":AI_PROVIDER,"private_mode":STATE.get("private_mode",False),"cloud":CLOUD_ENABLED}).encode()); return
+        if self.path == "/api/status/stream":
+            # SSE Endpoint für Live-Updates
+            self.send_response(200)
+            self.send_header("Content-Type","text/event-stream")
+            self.send_header("Cache-Control","no-cache")
+            self.send_header("Connection","keep-alive")
+            self.end_headers()
+            try:
+                # Initiales Event senden
+                data = json.dumps({"status":"ok","provider":AI_PROVIDER,"private_mode":STATE.get("private_mode",False),"cloud":CLOUD_ENABLED})
+                self.wfile.write(f"data: {data}\n\n".encode())
+                self.wfile.flush()
+                # Client in Liste speichern für spätere Updates
+                # (Vereinfachte Version: Client bleibt 60s verbunden, dann reconnect)
+                import time
+                for _ in range(20):  # 20 x 3s = 60s
+                    time.sleep(3)
+                    data = json.dumps({"status":"ok","provider":AI_PROVIDER,"private_mode":STATE.get("private_mode",False),"cloud":CLOUD_ENABLED})
+                    self.wfile.write(f"data: {data}\n\n".encode())
+                    self.wfile.flush()
+            except (ConnectionAbortedError, BrokenPipeError):
+                pass  # Client disconnected
+            return
+        if self.path == "/api/cloud/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"enabled":CLOUD_ENABLED,"provider":AI_PROVIDER}).encode()); return
+        if self.path == "/api/cache/stats":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            hit_rate = (CACHE_STATS["hits"] / CACHE_STATS["total_requests"] * 100) if CACHE_STATS["total_requests"] > 0 else 0
+            stats = {
+                "hits": CACHE_STATS["hits"],
+                "misses": CACHE_STATS["misses"],
+                "total_requests": CACHE_STATS["total_requests"],
+                "hit_rate_percent": round(hit_rate, 2),
+                "cache_size": len(AI_CACHE),
+                "cache_max_size": CACHE_MAX_SIZE
+            }
+            self.wfile.write(json.dumps(stats).encode()); return
+        return super().do_GET()
+    def do_POST(self):
+        n=int(self.headers.get("Content-Length","0")); body=self.rfile.read(n) or b"{}"
+        if self.path=="/api/chat":
+            data=json.loads(body.decode("utf-8")); msg=(data.get("message") or "").strip()
+            if not msg: self.send_error(400,"no message"); return
+            private_trigger=("kätzchen" in msg.lower()) and NSFW_LOCAL
+            # Private Mode State updaten
+            old_private = STATE.get("private_mode", False)
+            STATE["private_mode"] = private_trigger
+            if old_private != private_trigger:
+                broadcast_state_update()
+
+            # Cache-Lookup (NICHT für Private Mode!)
+            CACHE_STATS["total_requests"] += 1
+            cached = None
+            cache_key = None
+            if not private_trigger:  # Nur cachen wenn NICHT Private Mode
+                cache_key = generate_cache_key(STATE["history"], msg, private_trigger)
+                cached = get_cached_response(cache_key)
+
+            if cached:
+                out = cached
+                print(f"💾 Cache HIT ({CACHE_STATS['hits']}/{CACHE_STATS['total_requests']} requests)")
+            else:
+                STATE["history"].append({"role":"user","content":msg})
+                prompt=build_prompt(STATE["history"], msg)
+                try:
+                    out=call_ollama(prompt, use_wizard=private_trigger)
+                    # Cache speichern (nur wenn nicht Private Mode)
+                    if not private_trigger and cache_key:
+                        cache_response(cache_key, out)
+                except Exception as e:
+                    out=f"Fehler: {e}"
+                STATE["history"].append({"role":"assistant","content":out})
+
+            # Auto-Save Check
+            auto_save_check()
+
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"response":out}).encode()); return
+        if self.path=="/api/cloud/status":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"enabled":CLOUD_ENABLED,"provider":AI_PROVIDER}).encode()); return
+        if self.path=="/api/cloud/enable":
+            data=json.loads(body.decode("utf-8")); 
+            if data.get("pin","")!=CLOUD_PIN: self.send_error(401,"PIN falsch"); return
+            globals()["CLOUD_ENABLED"]=True; globals()["AI_PROVIDER"]="openai"
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"enabled":True}).encode()); return
+        if self.path=="/api/cloud/disable":
+            globals()["CLOUD_ENABLED"]=False; globals()["AI_PROVIDER"]="ollama"
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"enabled":False}).encode()); return
+        if self.path=="/api/room/actions":
+            data=json.loads(body.decode("utf-8")); room=(data.get("room") or "")
+            ROOM_ACTIONS = {
+              "Wohnzimmer": ["Füttern","Reden"],
+              "Schlafzimmer": ["Schlafen","Lesen"],
+              "Küche": ["Kochen"],
+              "Badezimmer": ["Toilette","Waschen"],
+              "Garten": ["Gießen","Ernten","Garten-Spiel"],
+              "Musikraum": ["Rhythmus-Spiel"],
+              "Medizin": ["Heilen"],
+              "Terminal": ["Cloud","Status","Besen-Lieferung"],
+              "Studieren & Crafting": ["Studieren","Crafting"],
+              "Trainingszimmer": ["Reflex-Spiel","Trainieren"],
+              "Kampfarena": ["Kampf starten"],
+              "Schwarze Mühle – Keller": ["Kampf starten","Erkunden"]
+            }
+            battle = room in ("Kampfarena","Schwarze Mühle – Keller")
+            actions = ROOM_ACTIONS.get(room, [])
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"battle":battle,"actions":actions}).encode()); return
+        if self.path=="/api/battle/start":
+            STATE["battle"]={"hp":100,"wave":1,"enemies":3}
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True}).encode()); return
+        if self.path=="/api/battle/attack":
+            b=STATE["battle"]; 
+            if b["enemies"]>0: b["enemies"]-=1
+            if b["enemies"]==0: b["wave"]+=1; b["enemies"]=2+b["wave"]
+            dmg=max(0,b["enemies"]-1); b["hp"]=max(0,b["hp"]-dmg)
+            msg="Treffer!" if dmg<2 else "Du wirst getroffen!"
+            done = b["hp"]==0
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":not done,"msg":msg,"hp":b["hp"],"enemies":b["enemies"],"wave":b["wave"]}).encode()); return
+        if self.path=="/api/minigame/rhythm":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(20,80)}}).encode()); return
+        if self.path=="/api/minigame/garden":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(15,60)}}).encode()); return
+        if self.path=="/api/minigame/reflex":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(10,50)}}).encode()); return
+        if self.path=="/api/crafting":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"msg":"Crafting durchgeführt."}).encode()); return
+        if self.path=="/api/heal":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"ok":True,"hp":100}).encode()); return
+        if self.path=="/api/event/next":
+            ev=next_event()
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps(ev).encode()); return
+        self.send_error(404,"unknown")
+
+server = HTTPServer((HOST,PORT), Handler)
+print(f"Najika Server: http://{HOST}:{PORT}")
+server.serve_forever()
+

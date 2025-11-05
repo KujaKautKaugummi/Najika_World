@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Lese NAJIKA_GAME_DESIGN_COMPLETE.md",
+    "status": "completed",
+    "activeForm": "Lese NAJIKA_GAME_DESIGN_COMPLETE.md"
+  },
+  {
+    "content": "Lese qwqwqwqwqwqwqwqwq.txt (Soulframe/Ragnarok)",
+    "status": "completed",
+    "activeForm": "Lese qwqwqwqwqwqwqwqwq.txt"
+  },
+  {
+    "content": "Lese 22.txt und 23.txt (Skill-Weaving)",
+    "status": "in_progress",
+    "activeForm": "Lese 22.txt und 23.txt"
+  },
+  {
+    "content": "Lese claude 1.txt",
+    "status": "pending",
+    "activeForm": "Lese claude 1.txt"
+  },
+  {
+    "content": "Lese Projekt Najika Allumfassende Übersicht.pdf",
+    "status": "pending",
+    "activeForm": "Lese Projekt Najika PDF"
+  },
+  {
+    "content": "Lese weitere große .txt Dateien (>10KB)",
+    "status": "pending",
+    "activeForm": "Lese große .txt Dateien"
+  },
+  {
+    "content": "Durchsuche alle .md Dateien in NajikaCore",
+    "status": "pending",
+    "activeForm": "Durchsuche .md Dateien"
+  },
+  {
+    "content": "Erstelle vollständige Übersicht NAJIKA_COMPLETE_OVERVIEW.md",
+    "status": "pending",
+    "activeForm": "Erstelle Übersicht"
+  }
+]

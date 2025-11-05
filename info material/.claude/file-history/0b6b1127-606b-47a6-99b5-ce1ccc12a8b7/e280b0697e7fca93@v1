@@ -1,0 +1,292 @@
+// DUNGEON GENERATOR - Procedural Schwarze Mühle
+(function() {
+    // Verfügbare Props für Dungeons
+    const DUNGEON_PROPS = {
+        obstacles: [
+            'KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/coffin.gltf',
+            'KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/crate_small_A.gltf',
+            'KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/crate_small_B.gltf',
+            'KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel.gltf',
+            'KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/debris_B.gltf',
+            'KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/debris_C.gltf'
+        ],
+        decorations: [
+            'KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/lantern_standing.gltf',
+            'KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/pumpkin_face.gltf',
+            'KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/tree_thin_A.gltf',
+            'KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/pillar.gltf'
+        ],
+        loot: [
+            'KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Assets/gltf/chest_gold_opened.gltf',
+            'KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Assets/gltf/chest_gold_closed.gltf',
+            'KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Assets/gltf/potion_simple_red.gltf'
+        ]
+    };
+
+    // Seed für reproduzierbare Dungeons
+    let seed = Date.now();
+
+    // Seeded Random (simple LCG)
+    function seededRandom() {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+    }
+
+    function randomInt(min, max) {
+        return Math.floor(seededRandom() * (max - min + 1)) + min;
+    }
+
+    function randomFloat(min, max) {
+        return seededRandom() * (max - min) + min;
+    }
+
+    function pickRandom(array) {
+        return array[randomInt(0, array.length - 1)];
+    }
+
+    /**
+     * Generiert ein Dungeon-Layout
+     * @param {number} level - Dungeon Level (1-10)
+     * @param {number} span - Raum-Größe (z.B. 48 für Schwarze Mühle)
+     * @param {string} seedString - Optional: Seed für Reproduzierbarkeit
+     * @returns {Object} - Generiertes Dungeon mit props, enemies, loot
+     */
+    function generateDungeon(level = 1, span = 48, seedString = null) {
+        // Set seed
+        if (seedString) {
+            seed = hashString(seedString);
+        } else {
+            seed = Date.now() + level * 1000;
+        }
+
+        console.log(`🏰 Generating Dungeon Level ${level} (seed: ${seed})`);
+
+        const dungeon = {
+            level,
+            span,
+            seed,
+            props: [],
+            enemies: [],
+            loot: [],
+            spawn: [0, 0, span * 0.3] // Spawn am unteren Rand
+        };
+
+        // Schwierigkeit skaliert mit Level
+        const difficulty = Math.min(level / 10, 1); // 0.1 bis 1.0
+        const propCount = Math.floor(10 + difficulty * 20); // 10-30 Props
+        const enemyCount = Math.floor(3 + difficulty * 10); // 3-13 Enemies
+        const lootCount = Math.floor(2 + difficulty * 5); // 2-7 Loot
+
+        // Generiere Grid für Prop-Verteilung
+        const gridSize = 4; // 4x4 Units pro Grid-Cell
+        const grid = createGrid(span, gridSize);
+
+        // 1. Props platzieren (Hindernisse + Dekoration)
+        for (let i = 0; i < propCount; i++) {
+            const isObstacle = seededRandom() > 0.3; // 70% obstacles, 30% deco
+            const propList = isObstacle ? DUNGEON_PROPS.obstacles : DUNGEON_PROPS.decorations;
+            const model = pickRandom(propList);
+
+            const pos = getRandomGridPosition(grid, span, gridSize);
+            if (!pos) continue; // Grid voll
+
+            dungeon.props.push({
+                model,
+                position: [pos.x, 0, pos.z],
+                rotation: [0, randomFloat(0, Math.PI * 2), 0],
+                scale: randomFloat(1.4, 2.4)
+            });
+        }
+
+        // 2. Enemy Spawn Points platzieren
+        for (let i = 0; i < enemyCount; i++) {
+            const pos = getRandomGridPosition(grid, span, gridSize);
+            if (!pos) continue;
+
+            dungeon.enemies.push({
+                type: pickRandom(['skeleton', 'ghost', 'spider', 'bat']),
+                position: [pos.x, 0, pos.z],
+                level: randomInt(level, level + 2),
+                patrol: seededRandom() > 0.5 // 50% patrouillieren
+            });
+        }
+
+        // 3. Loot platzieren (Truhen, Tränke)
+        for (let i = 0; i < lootCount; i++) {
+            const model = pickRandom(DUNGEON_PROPS.loot);
+            const pos = getRandomGridPosition(grid, span, gridSize);
+            if (!pos) continue;
+
+            dungeon.loot.push({
+                model,
+                position: [pos.x, 0, pos.z],
+                rotation: [0, randomFloat(0, Math.PI * 2), 0],
+                scale: 1.8,
+                rarity: pickRandom(['common', 'uncommon', 'rare', 'legendary'])
+            });
+
+            // Loot-Props auch in Props-Liste (für Rendering)
+            dungeon.props.push({
+                model,
+                position: [pos.x, 0, pos.z],
+                rotation: [0, randomFloat(0, Math.PI * 2), 0],
+                scale: 1.8
+            });
+        }
+
+        console.log(`✅ Dungeon generated: ${dungeon.props.length} props, ${dungeon.enemies.length} enemies, ${dungeon.loot.length} loot`);
+        return dungeon;
+    }
+
+    /**
+     * Erstellt Grid für Kollisionsvermeidung
+     */
+    function createGrid(span, gridSize) {
+        const cells = Math.ceil(span / gridSize);
+        const grid = new Set();
+        return { cells, size: gridSize, occupied: grid };
+    }
+
+    /**
+     * Holt eine zufällige freie Grid-Position
+     */
+    function getRandomGridPosition(grid, span, gridSize) {
+        const halfSpan = span / 2;
+        const maxAttempts = 50;
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            const x = randomFloat(-halfSpan + 4, halfSpan - 4);
+            const z = randomFloat(-halfSpan + 4, halfSpan - 4);
+
+            // Grid-Cell berechnen
+            const cellX = Math.floor((x + halfSpan) / gridSize);
+            const cellZ = Math.floor((z + halfSpan) / gridSize);
+            const cellKey = `${cellX},${cellZ}`;
+
+            // Prüfe ob Cell frei
+            if (!grid.occupied.has(cellKey)) {
+                grid.occupied.add(cellKey);
+                return { x, z };
+            }
+        }
+
+        return null; // Kein Platz gefunden
+    }
+
+    /**
+     * String zu Seed Hash
+     */
+    function hashString(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash);
+    }
+
+    /**
+     * Wendet generiertes Dungeon auf Room-Config an
+     */
+    function applyDungeonToRoom(roomConfig, dungeon) {
+        if (!roomConfig) return roomConfig;
+
+        // Clone config
+        const newConfig = JSON.parse(JSON.stringify(roomConfig));
+
+        // Ersetze Props durch generierte Props
+        newConfig.props = dungeon.props;
+
+        // Setze Spawn-Point
+        newConfig.spawn = dungeon.spawn;
+
+        // Füge Meta-Daten hinzu
+        newConfig.dungeon = {
+            level: dungeon.level,
+            seed: dungeon.seed,
+            enemies: dungeon.enemies,
+            loot: dungeon.loot
+        };
+
+        return newConfig;
+    }
+
+    /**
+     * Generiert neues Dungeon für aktuellen Room
+     */
+    function regenerateDungeon(roomName = 'Schwarze Mühle – Keller', level = 1) {
+        if (!window.KayKitLoader || typeof KayKitLoader.getRoomConfig !== 'function') {
+            console.warn('KayKitLoader not available');
+            return null;
+        }
+
+        const baseConfig = KayKitLoader.getRoomConfig(roomName);
+        if (!baseConfig) {
+            console.warn(`Room "${roomName}" not found`);
+            return null;
+        }
+
+        const span = baseConfig.span || baseConfig.floor?.span || 48;
+        const dungeon = generateDungeon(level, span);
+        const newConfig = applyDungeonToRoom(baseConfig, dungeon);
+
+        console.log(`🏰 Dungeon Level ${level} ready for "${roomName}"`);
+        return newConfig;
+    }
+
+    /**
+     * Lädt alle Dungeon-Assets in KayKitLoader
+     */
+    function preloadDungeonAssets() {
+        if (!window.KayKitLoader || typeof KayKitLoader.getModel !== 'function') {
+            console.warn('KayKitLoader not available for dungeon preload');
+            return;
+        }
+
+        const allAssets = [
+            ...DUNGEON_PROPS.obstacles,
+            ...DUNGEON_PROPS.decorations,
+            ...DUNGEON_PROPS.loot
+        ];
+
+        console.log(`🏰 Preloading ${allAssets.length} dungeon assets...`);
+
+        allAssets.forEach(assetPath => {
+            // KayKitLoader hat bereits preloadAsset, aber es ist nicht public
+            // Wir simulieren das Laden durch direkten Zugriff
+            if (KayKitLoader.hasModel && !KayKitLoader.hasModel(assetPath)) {
+                // Asset noch nicht geladen, lade es
+                if (typeof KayKitLoader.loadRoomOnDemand === 'function') {
+                    // Nutze den internen Loader
+                    const loader = new THREE.GLTFLoader();
+                    loader.load(
+                        '/assets/' + assetPath,
+                        gltf => {
+                            if (KayKitLoader.loadedModels) {
+                                KayKitLoader.loadedModels[assetPath] = gltf.scene;
+                                console.log(`✅ Dungeon asset loaded: ${assetPath}`);
+                            }
+                        },
+                        undefined,
+                        error => console.warn(`⚠️ Could not load dungeon asset: ${assetPath}`)
+                    );
+                }
+            }
+        });
+    }
+
+    // Public API
+    window.DungeonGenerator = {
+        generateDungeon,
+        applyDungeonToRoom,
+        regenerateDungeon,
+        preloadDungeonAssets,
+        setDungeonLevel(level) {
+            // Speichere Level für nächste Generation
+            this.currentLevel = Math.max(1, Math.min(10, level));
+        },
+        currentLevel: 1
+    };
+
+    console.log('🏰 Dungeon Generator initialized');
+})();

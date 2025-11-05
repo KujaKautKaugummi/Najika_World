@@ -1,0 +1,158 @@
+{
+  "Wohnzimmer": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 10,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#8B4513",
+      "secondary": "#D2691E",
+      "accent": "#FFD700"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Badezimmer": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 8,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#4682B4",
+      "secondary": "#87CEEB",
+      "accent": "#FFFFFF"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Schlafzimmer": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 10,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#2F4F4F",
+      "secondary": "#696969",
+      "accent": "#FFB6C1"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Küche": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 10,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#F5DEB3",
+      "secondary": "#DEB887",
+      "accent": "#CD853F"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Garten": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 15,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#228B22",
+      "secondary": "#32CD32",
+      "accent": "#FFD700"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Musikraum": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 10,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#4B0082",
+      "secondary": "#8A2BE2",
+      "accent": "#FFD700"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Medizin": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 8,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#FFFFFF",
+      "secondary": "#F0F0F0",
+      "accent": "#FF0000"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Terminal": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 10,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#000000",
+      "secondary": "#1E1E1E",
+      "accent": "#00FF00"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Studieren & Crafting": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 12,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#8B4513",
+      "secondary": "#A0522D",
+      "accent": "#FFD700"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Trainingszimmer": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 15,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#696969",
+      "secondary": "#808080",
+      "accent": "#FF4500"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Kampfarena": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 20,
+    "wallHeight": 5,
+    "palette": {
+      "primary": "#8B0000",
+      "secondary": "#B22222",
+      "accent": "#FFD700"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  },
+  "Schwarze Mühle – Keller": {
+    "floor": "floor_tile_large.glb",
+    "wall": "wall.glb",
+    "span": 15,
+    "wallHeight": 3,
+    "palette": {
+      "primary": "#1C1C1C",
+      "secondary": "#2F4F4F",
+      "accent": "#8B0000"
+    },
+    "props": [],
+    "spawn": [0, 0, 0]
+  }
+}
