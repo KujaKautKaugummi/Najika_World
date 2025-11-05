@@ -399,12 +399,33 @@ ENDGAME: VOIDFALL WASTES (Dark Zone)
 - Holzkreuz-Gräber (Friedhof)
 - Alte Laternen (rustikal, nicht Western-spezifisch)
 
-**WICHTIG - WAFFEN:**
-- ✅ **Schusswaffen allgemein OK** (Gewehre, Pistolen, Armbrüste)
-- ✅ **Mit Magie kombinierbar** (wie ALLE Waffen!)
-- ❌ **KEINE "Revolver-Magie"** als festes Konzept!
-- **Beispiele:** Fire-Bullets, Ice-Arrows, Lightning-Shots
-- **Jede Waffe** kann mit jeder Magie kombiniert werden!
+**WICHTIG - WAFFEN + MAGIE SYSTEM:**
+
+**Revolver & Schusswaffen:**
+- ✅ **Revolver sind im Spiel!** (Teil des Western-Feelings)
+- ✅ **Kombinierbar mit Magie** (Fire-Bullets, Ice-Shots, Lightning-Rounds)
+- ✅ **Cool und stylisch!**
+
+**ABER - WICHTIGE REGEL:**
+- ❌ **Revolver ist NICHT Zauberstab-Ersatz!**
+- ❌ **NICHT: "Du musst Revolver nutzen für Magie"**
+- ✅ **Magie funktioniert OHNE Waffen** (Pure Caster Build möglich!)
+- ✅ **Waffen funktionieren OHNE Magie** (Pure Warrior Build möglich!)
+
+**Build-Freiheit (ALLE möglich!):**
+1. **Pure Caster** → Nur Magie, keine Waffen (wie Megumin!)
+2. **Pure Warrior** → Nur Schwert/Axt, keine Magie
+3. **Magic Gunslinger** → Revolver + Magie Kombination (Hybrid!)
+4. **Spellblade** → Schwert + Magie (klassisch!)
+5. **Archer-Mage** → Bogen + Magie
+6. **Jede andere Kombination!**
+
+**Beispiele:**
+- Fire-Bullets (Revolver + Fire Magic)
+- Ice-Arrows (Bogen + Ice Magic)
+- Lightning-Blade (Schwert + Lightning Magic)
+- Pure Fireball (nur Magie, keine Waffe!)
+- Pure Sword Combo (nur Schwert, keine Magie!)
 
 **Fantasy dominiert total! (70%+)**
 - Magische Runen überall
