@@ -12,28 +12,30 @@
 ### **SETTING BESCHREIBUNG:**
 **Zentrale Windmühle (Najikas Zuhause):**
 - Große schwarze Windmühle am Fluss
-- Gothic-Architektur mit Western-Akzenten
+- **Gothic-Architektur dominiert!** (mystisch, gruselig)
 - Flügel drehen sich langsam
 - Dunkles Holz, rote Akzente
+- Magische Runen am Eingang (Schutz)
+- Nebel um die Mühle herum
 
 **Umgebung:**
 - Kleines Dorf am Flussufer
-- Wald im Hintergrund
+- Dichter Wald im Hintergrund
 - NPCs im Dorf (trauen sich NICHT zur Mühle!)
-- Sanfter Fluss mit Brücke
-- Wildblumen, alte Bäume
+- Sanfter Fluss mit alter Steinbrücke
+- Wildblumen, uralte Bäume (teilweise mystisch)
 
 **Atmosphäre:**
-- Mysteriös aber gemütlich
-- Safe Zone (100% sicher)
+- **Mystisch, gruselig, verboten**
+- Safe Zone (100% sicher) - aber Außenstehende wissen das nicht!
 - Najika's privates Refugium
-- "Verbotener" Ort für NPCs
+- "Verfluchter" Ort für NPCs (Gerüchte!)
+- Gothic-Horror-Ästhetik (wie Bloodborne/Dark Souls)
 
-**Western-Akzente:**
-- Holzplanken-Gehwege
-- Saloon-Style Türen (Swingtüren)
-- Laternenpfähle im Western-Stil
-- Verwittertes Holz, Eisen-Beschläge
+**Dezente Western-Akzente (minimal!):**
+- Altes Holz (verwittert)
+- Eisen-Beschläge (rustikal)
+- Nicht mehr! Gothic dominiert total!
 
 ---
 
@@ -292,15 +294,23 @@
 - Muss "erobert" werden (Combat/Stealth) - **MK Krypt Style!**
 - Nach Freischaltung: Safe Zone
 - **Minigames (MK-inspired):**
-  - Triple Triad (Final Fantasy)
-  - Poker, Dice (Western)
   - Test Your Might (Mortal Kombat) - Button-Mashing
   - Puzzle Kombat Style (Match-3 meets Combat)
-- Musik-Box (Jukebox im Western-Stil)
+  - Poker, Dice (Glücksspiel)
+  - **NICHT Triple Triad** (das ist weltweites Spiel, siehe unten!)
+- Musik-Box (Jukebox)
 - NPC-Händler (rare Items)
 - Portal-Türen für Dungeon-Runs
 - **Krypt-Chests** (unlock mit Koins/Keys wie MK!)
 - Secret Areas (wie MK Krypt-Exploration)
+
+**WICHTIG - TRIPLE TRIAD:**
+- Triple Triad ist ein **weltweites Spiel** (wie in FF8!)
+- Spielbar in **ALLEN Städten/Dörfern/Tavernen**
+- NPCs überall spielen es
+- Karten sammelbar überall
+- Turniere in verschiedenen Städten
+- **NICHT exklusiv für Forsaken Inn!**
 
 **Western-Akzente:**
 - Saloon-Style Bar
@@ -376,27 +386,33 @@ ENDGAME: VOIDFALL WASTES (Dark Zone)
 
 ---
 
-## 🎨 WESTERN-STIL ELEMENTE (30% der Ästhetik)
+## 🎨 WESTERN-STIL ELEMENTE (30% der Ästhetik - NUR AKZENTE!)
 
-**Architektur:**
-- Saloon-Doors (Swingtüren)
-- Wooden Boardwalks
-- Hitching Posts
-- Log Cabins
-- Verwittertes Holz
+**Architektur (wo passend):**
+- Wooden Boardwalks (Städte)
+- Log Cabins (Wald, Eis)
+- Verwittertes Holz (alt, rustikal)
+- **NICHT:** Saloon-Doors überall!
 
-**Details:**
-- Laternenpfähle (Western-Stil)
-- Tumbleweeds (wo passend)
-- Ore Carts, Minecart Tracks
-- Holzkreuz-Gräber
-- Sheriff-Badges, Revolver (Deko)
+**Details (dezent eingestreut):**
+- Mining-Elemente (Ore Carts, Tracks)
+- Holzkreuz-Gräber (Friedhof)
+- Alte Laternen (rustikal, nicht Western-spezifisch)
 
-**ABER:** Magie dominiert! (70%)
+**WICHTIG - WAFFEN:**
+- ✅ **Schusswaffen allgemein OK** (Gewehre, Pistolen, Armbrüste)
+- ✅ **Mit Magie kombinierbar** (wie ALLE Waffen!)
+- ❌ **KEINE "Revolver-Magie"** als festes Konzept!
+- **Beispiele:** Fire-Bullets, Ice-Arrows, Lightning-Shots
+- **Jede Waffe** kann mit jeder Magie kombiniert werden!
+
+**Fantasy dominiert total! (70%+)**
 - Magische Runen überall
 - Kristalle, Portale
 - Elementar-Effekte
 - Fantasy-Kreaturen
+- Gothic-Horror-Ästhetik (Black Windmill!)
+- Mystische Atmosphäre
 
 ---
 
