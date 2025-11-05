@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika Digivice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #0a0e27; overflow: hidden; height: 100vh; }
+        #digivice-container { width: 100%; max-width: 450px; min-height: 100vh; height: 100vh; margin: 0 auto; display: flex; flex-direction: column; background: linear-gradient(145deg, #2a2a2a, #1a1a1a); box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .header { background: #16213e; padding: 10px; border-bottom: 2px solid #00ff41; position: relative; z-index: 100; }
+        .menu-btn { background: linear-gradient(145deg, #444, #222); border: 2px solid #555; border-radius: 10px; color: #fff; padding: 10px 20px; cursor: pointer; font-size: 16px; width: 100%; }
+        .room-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #1a1a2e; border: 2px solid #00ff41; border-top: none; max-height: 400px; overflow-y: auto; z-index: 99; }
+        .room-menu.active { display: block; }
+        .room-item { padding: 15px; border-bottom: 1px solid #333; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; }
+        .room-item:hover { background: #2a2a3e; }
+        .room-item.current { background: #00ff41; color: #000; }
+        .room-icon { font-size: 24px; width: 40px; text-align: center; }
+        .room-name { flex: 1; font-weight: bold; }
+        #canvas-container { flex: 1; position: relative; background: #0a0e27; overflow: hidden; }
+        #three-canvas { width: 100%; height: 100%; display: block; }
+        .room-info { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 10px 15px; border-radius: 8px; color: #00ff41; font-size: 14px; font-weight: bold; pointer-events: none; }
+        .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #00ff41; text-align: center; }
+        .stats-bar { background: rgba(0,0,0,0.9); padding: 12px; display: flex; justify-content: space-around; color: #fff; font-size: 13px; border-top: 1px solid #333; }
+        .stat { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .stat-label { font-size: 10px; color: #888; }
+        .stat-value { font-weight: bold; color: #00ff41; font-size: 16px; }
+        .controls { background: #16213e; padding: 15px; display: flex; gap: 10px; }
+        .control-btn { flex: 1; background: linear-gradient(145deg, #444, #222); border: 2px solid #555; border-radius: 15px; color: #fff; padding: 18px 10px; cursor: pointer; font-size: 22px; transition: 0.2s; }
+        .control-btn.action { flex: 1.5; background: linear-gradient(145deg, #e74c3c, #c0392b); font-size: 28px; }
+        .control-btn:active { transform: scale(0.95); }
+        .room-actions { background: #0f1419; padding: 10px; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #333; }
+        .room-action-btn { flex: 1; min-width: 80px; background: linear-gradient(145deg, #555, #333); border: 2px solid #666; border-radius: 10px; color: #fff; padding: 12px 8px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .room-action-btn:active { transform: scale(0.95); }
+        .room-action-btn.sleep { background: linear-gradient(145deg, #9b59b6, #8e44ad); }
+        .room-action-btn.food { background: linear-gradient(145deg, #e67e22, #d35400); }
+        .room-action-btn.toilet { background: linear-gradient(145deg, #3498db, #2980b9); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.show { display: flex; }
+        .modal-box { background: #1a1a2e; border: 2px solid #00ff41; border-radius: 15px; padding: 20px; max-width: 400px; width: 90%; }
+        .modal-title { color: #00ff41; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .modal-input { width: 100%; background: #0f1419; border: 2px solid #555; border-radius: 8px; color: #fff; padding: 12px; font-size: 16px; margin-bottom: 15px; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .modal-btn { flex: 1; background: linear-gradient(145deg, #444, #222); border: 2px solid #555; border-radius: 10px; color: #fff; padding: 12px; cursor: pointer; font-size: 16px; }
+        .modal-btn.primary { background: linear-gradient(145deg, #00ff41, #00cc33); color: #000; }
+        .modal-btn:active { transform: scale(0.95); }
+        .chat-messages { max-height: 200px; overflow-y: auto; background: #0f1419; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .chat-msg { margin-bottom: 8px; padding: 8px; background: #1a1a2e; border-radius: 5px; }
+        .chat-msg.najika { color: #00ff41; }
+        .chat-msg.user { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div id="digivice-container">
+        <div class="header">
+            <button class="menu-btn" id="menu-btn">Wohnraum</button>
+            <div class="room-menu" id="room-menu">
+                <div class="room-item current" data-room="living"><div class="room-icon">🏠</div><div class="room-name">Wohnraum</div></div>
+                <div class="room-item" data-room="training"><div class="room-icon">💪</div><div class="room-name">Training</div></div>
+                <div class="room-item" data-room="study"><div class="room-icon">📚</div><div class="room-name">Studienraum</div></div>
+                <div class="room-item" data-room="hospital"><div class="room-icon">🏥</div><div class="room-name">Krankenstation</div></div>
+                <div class="room-item" data-room="battle"><div class="room-icon">⚔️</div><div class="room-name">Kampfarena</div></div>
+                <div class="room-item" data-room="music"><div class="room-icon">🎵</div><div class="room-name">Musikraum</div></div>
+                <div class="room-item" data-room="terminal"><div class="room-icon">💻</div><div class="room-name">Terminal</div></div>
+            </div>
+        </div>
+        <div id="canvas-container">
+            <canvas id="three-canvas"></canvas>
+            <div class="room-info" id="room-info">Wohnraum</div>
+            <div class="loading" id="loading">Lade Najika...</div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat"><div class="stat-label">HP</div><div class="stat-value" id="hp-stat">100</div></div>
+            <div class="stat"><div class="stat-label">Hunger</div><div class="stat-value" id="hunger-stat">10</div></div>
+            <div class="stat"><div class="stat-label">Energy</div><div class="stat-value" id="energy-stat">10</div></div>
+            <div class="stat"><div class="stat-label">Mood</div><div class="stat-value" id="mood-stat">Happy</div></div>
+        </div>
+        <div class="room-actions" id="room-actions"></div>
+        <div class="controls">
+            <button class="control-btn" id="btn-chat">💬</button>
+            <button class="control-btn" id="btn-left">◄</button>
+            <button class="control-btn action" id="btn-action">●</button>
+            <button class="control-btn" id="btn-right">►</button>
+        </div>
+    </div><div class="modal-overlay" id="chat-modal">
+        <div class="modal-box">
+            <div class="modal-title">💬 Chat mit Najika</div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg najika">Najika: Hallo! Wie geht es dir?</div>
+            </div>
+            <input type="text" class="modal-input" id="chat-input" placeholder="Nachricht...">
+            <div class="modal-buttons">
+                <button class="modal-btn" id="chat-close-btn">Schließen</button>
+                <button class="modal-btn primary" id="chat-send-btn">Senden</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="terminal-modal">
+        <div class="modal-box">
+            <div class="modal-title">💻 Terminal Zugriff</div>
+            <input type="password" class="modal-input" id="terminal-password" placeholder="Passwort...">
+            <div class="modal-buttons">
+                <button class="modal-btn" id="terminal-cancel-btn">Abbrechen</button>
+                <button class="modal-btn primary" id="terminal-access-btn">Zugriff</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="terminal-content">
+        <div class="modal-box" style="max-width: 500px;">
+            <div class="modal-title">💻 NAJIKA TERMINAL</div>
+            <div class="chat-messages" id="terminal-display">
+                <div class="chat-msg">System bereit</div>
+                <div class="chat-msg">Stats: HP=<span id="term-hp">100</span> Hunger=<span id="term-hunger">10</span> Energy=<span id="term-energy">10</span></div>
+            </div>
+            
+            <div style="margin: 15px 0; padding: 15px; background: #0f1419; border-radius: 8px;">
+                <div style="color: #00ff41; font-weight: bold; margin-bottom: 10px;">🔑 API Keys</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <div style="color: #888; font-size: 12px; margin-bottom: 5px;">OpenAI Key:</div>
+                        <input type="password" id="openai-key-input" class="modal-input" style="margin: 0;" placeholder="sk-...">
+                    </div>
+                    <div>
+                        <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Claude Key:</div>
+                        <input type="password" id="claude-key-input" class="modal-input" style="margin: 0;" placeholder="sk-ant-...">
+                    </div>
+                    <button class="modal-btn primary" id="save-keys-btn">💾 Keys Speichern</button>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn" id="terminal-close-btn">Schließen</button>
+                <button class="modal-btn" id="terminal-reset-btn">Reset</button>
+                <button class="modal-btn" id="terminal-heal-btn">Heal</button>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn" id="terminal-export-btn">Export</button>
+                <button class="modal-btn primary" id="terminal-test-ai-btn">🔍 Test KI</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0e27);
+        scene.fog = new THREE.Fog(0x0a0e27, 10, 50);
+        
+        const canvas = document.getElementById('three-canvas');
+        const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+        camera.position.set(0, 4, 12);
+        
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        
+        const controls = new OrbitControls(camera, canvas);
+        controls.enableDamping = true;
+        controls.minDistance = 1;
+        controls.maxDistance = 30;
+        
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+        
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        dirLight.position.set(5, 10, 5);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+        
+        const pointLight = new THREE.PointLight(0x00ff41, 0.4, 10);
+        pointLight.position.set(0, 2, 2);
+        scene.add(pointLight);
+        
+        const ground = new THREE.Mesh(
+            new THREE.CircleGeometry(15, 64),
+            new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.8 })
+        );
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+        
+        const grid = new THREE.GridHelper(30, 30, 0x00ff41, 0x333333);
+        grid.position.y = 0.01;
+        scene.add(grid);
+        
+        let najika = null;
+        const loader = new GLTFLoader();
+        
+        loader.load('assets/characters/najika.glb', (gltf) => {
+            najika = gltf.scene;
+            najika.position.set(0, 0.5, 0);
+            najika.scale.set(1, 1, 1);
+            najika.traverse(child => {
+                if (child.isMesh) child.castShadow = true;
+            });
+            scene.add(najika);
+            document.getElementById('loading').style.display = 'none';
+        });
+        
+        const keys = {};
+        window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
+        window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
+        
+        function updateMovement() {
+            if (!najika) return;
+            const speed = 0.15;
+            let moved = false;
+            const direction = {x: 0, z: 0};
+            
+            if (keys['w']) { direction.z -= 1; moved = true; }
+            if (keys['s']) { direction.z += 1; moved = true; }
+            if (keys['a']) { direction.x -= 1; moved = true; }
+            if (keys['d']) { direction.x += 1; moved = true; }
+            
+            if (moved) {
+                const length = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
+                if (length > 0) {
+                    direction.x /= length;
+                    direction.z /= length;
+                }
+                
+                najika.position.x += direction.x * speed;
+                najika.position.z += direction.z * speed;
+                
+                const targetAngle = Math.atan2(direction.x, direction.z);
+                const currentAngle = najika.rotation.y;
+                let angleDiff = targetAngle - currentAngle;
+                let shortestAngle = ((angleDiff + Math.PI) % (Math.PI * 2)) - Math.PI;
+                najika.rotation.y += shortestAngle * 0.15;
+                
+                najika.position.x = Math.max(-20, Math.min(20, najika.position.x));
+                najika.position.z = Math.max(-20, Math.min(20, najika.position.z));
+                
+                const time = Date.now() * 0.005;
+                najika.position.y = 0.5 + Math.sin(time) * 0.05;
+            } else {
+                najika.position.y += (0.5 - najika.position.y) * 0.1;
+            }
+        }let currentRoom = 'living';
+        let environmentObjects = [];
+        
+        const rooms = {
+            living: { name: 'Wohnraum', camera: [0, 4, 12], actions: [{id: 'sleep', label: '🛏️ Schlafen', class: 'sleep'},{id: 'eat', label: '🍽️ Essen', class: 'food'},{id: 'toilet', label: '🚽 Toilette', class: 'toilet'}]},
+            training: { name: 'Training', camera: [0, 2, 14], actions: [{id: 'strength', label: '💪 Kraft', class: ''},{id: 'agility', label: '🏃 Geschick', class: ''}]},
+            study: { name: 'Studienraum', camera: [0, 3, 10], actions: [{id: 'learn', label: '📖 Lernen', class: ''},{id: 'craft', label: '🔨 Craften', class: ''}]},
+            hospital: { name: 'Krankenstation', camera: [2, 4, 10], actions: [{id: 'heal', label: '💊 Heilen', class: ''}]},
+            battle: { name: 'Kampfarena', camera: [6, 4, 16], actions: [{id: 'fight', label: '⚔️ Kämpfen', class: ''}]},
+            music: { name: 'Musikraum', camera: [0, 3, 10], actions: [{id: 'relax', label: '🎵 Entspannen', class: ''}]},
+            terminal: { name: 'Terminal', camera: [0, 3, 8], actions: [{id: 'access', label: '💻 Zugriff', class: ''}]}
+        };
+        
+        function loadRoomEnvironment(roomId) {
+            environmentObjects.forEach(obj => {
+                scene.remove(obj);
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) obj.material.dispose();
+            });
+            environmentObjects = [];
+            
+            fetch('assets/room_config_detailed.json').then(r => r.json()).then(config => {
+                const roomData = config[roomId];
+                if (!roomData || !roomData.objects) return;
+                roomData.objects.forEach(objData => {
+                    loader.load('assets/rooms/' + roomId + '/' + objData.model, (gltf) => {
+                        const obj = gltf.scene;
+                        obj.position.set(objData.position[0], objData.position[1], objData.position[2]);
+                        obj.rotation.set(objData.rotation[0], objData.rotation[1], objData.rotation[2]);
+                        obj.scale.setScalar(objData.scale);
+                        obj.traverse(child => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; }});
+                        scene.add(obj);
+                        environmentObjects.push(obj);
+                    });
+                });
+            });
+        }
+        
+        function updateRoomActions(roomId) {
+            const actionsDiv = document.getElementById('room-actions');
+            const room = rooms[roomId];
+            if (!room || !room.actions || room.actions.length === 0) { actionsDiv.style.display = 'none'; return; }
+            actionsDiv.style.display = 'flex';
+            actionsDiv.innerHTML = '';
+            room.actions.forEach(action => {
+                const btn = document.createElement('button');
+                btn.className = 'room-action-btn ' + action.class;
+                btn.textContent = action.label;
+                btn.onclick = () => performAction(action.id);
+                actionsDiv.appendChild(btn);
+            });
+        }
+        
+        function performAction(actionId) {
+            if (!najikaStats) return;
+            switch(actionId) {
+                case 'sleep': najikaStats.energy = 20; najikaStats.updateUI(); najikaStats.save(); break;
+                case 'eat': najikaStats.hunger = Math.max(0, najikaStats.hunger - 5); najikaStats.updateUI(); najikaStats.save(); break;
+                case 'toilet': console.log('Toilette!'); break;
+                case 'strength':
+                case 'agility': if (najikaStats.energy >= 3) { najikaStats.energy -= 3; najikaStats.hunger = Math.min(20, najikaStats.hunger + 2); najikaStats.updateUI(); najikaStats.save(); } break;
+                case 'learn': if (najikaStats.energy >= 2) { najikaStats.energy -= 2; najikaStats.updateUI(); najikaStats.save(); } break;
+                case 'craft': console.log('Crafting später!'); break;
+                case 'heal': najikaStats.hp = Math.min(100, najikaStats.hp + 20); najikaStats.updateUI(); najikaStats.save(); break;
+                case 'fight': console.log('Kampf später!'); break;
+                case 'relax': najikaStats.happiness = Math.min(100, najikaStats.happiness + 15); najikaStats.updateUI(); najikaStats.save(); break;
+                case 'access': openTerminal(); break;
+            }
+        }
+        
+        function switchRoom(roomId) {
+            if (!rooms[roomId]) return;
+            currentRoom = roomId;
+            loadRoomEnvironment(roomId);
+            updateRoomActions(roomId);
+            const room = rooms[roomId];
+            const start = {x: camera.position.x, y: camera.position.y, z: camera.position.z};
+            const duration = 1000, startTime = Date.now();
+            const animateCamera = () => {
+                const elapsed = Date.now() - startTime, progress = Math.min(elapsed / duration, 1), eased = 1 - Math.pow(1 - progress, 3);
+                camera.position.x = start.x + (room.camera[0] - start.x) * eased;
+                camera.position.y = start.y + (room.camera[1] - start.y) * eased;
+                camera.position.z = start.z + (room.camera[2] - start.z) * eased;
+                if (progress < 1) requestAnimationFrame(animateCamera);
+            };
+            animateCamera();
+            document.getElementById('room-info').textContent = room.name;
+            document.getElementById('menu-btn').textContent = room.name;
+        }
+        
+        class NajikaStats {
+            constructor() { 
+                this.hp = 100; this.hunger = 10; this.energy = 10; this.happiness = 80; 
+                this.lastHungerUpdate = Date.now(); this.lastEnergyUpdate = Date.now(); 
+                setTimeout(() => this.init(), 1000); 
+            }
+            init() { 
+                this.hpEl = document.getElementById('hp-stat'); 
+                this.hungerEl = document.getElementById('hunger-stat'); 
+                this.energyEl = document.getElementById('energy-stat'); 
+                this.moodEl = document.getElementById('mood-stat'); 
+                this.load(); this.updateUI(); 
+                setInterval(() => this.autoUpdate(), 5000); 
+                setInterval(() => this.save(), 30000); 
+                window.addEventListener('beforeunload', () => this.save()); 
+            }
+            updateUI() { 
+                if (!this.hpEl) return; 
+                this.hpEl.textContent = Math.floor(this.hp); 
+                this.hungerEl.textContent = this.hunger; 
+                this.energyEl.textContent = this.energy; 
+                let mood = 'Happy'; 
+                if (this.hunger > 15) mood = 'Hungry'; 
+                else if (this.energy < 5) mood = 'Tired'; 
+                else if (this.happiness > 80) mood = 'Joy'; 
+                this.moodEl.textContent = mood; 
+                this.hpEl.style.color = this.hp > 50 ? '#00ff41' : '#ff4444'; 
+                this.hungerEl.style.color = this.hunger < 15 ? '#00ff41' : '#ff4444'; 
+            }
+            autoUpdate() { 
+                const now = Date.now(); 
+                if (now - this.lastHungerUpdate > 60000) { 
+                    this.hunger = Math.min(20, this.hunger + 1); 
+                    this.lastHungerUpdate = now; 
+                    if (this.hunger > 15) this.hp = Math.max(0, this.hp - 2); 
+                } 
+                if (now - this.lastEnergyUpdate > 120000) { 
+                    this.energy = Math.max(0, this.energy - 1); 
+                    this.lastEnergyUpdate = now; 
+                } 
+                this.updateUI(); 
+            }
+            save() { 
+                const data = {hp: this.hp, hunger: this.hunger, energy: this.energy, happiness: this.happiness, lastHungerUpdate: this.lastHungerUpdate, lastEnergyUpdate: this.lastEnergyUpdate, timestamp: Date.now()}; 
+                localStorage.setItem('najikaStats', JSON.stringify(data)); 
+                return true; 
+            }
+            load() { 
+                const saved = localStorage.getItem('najikaStats'); 
+                if (!saved) return false; 
+                try { 
+                    const data = JSON.parse(saved); 
+                    this.hp = data.hp; this.hunger = data.hunger; this.energy = data.energy; this.happiness = data.happiness; 
+                    this.lastHungerUpdate = data.lastHungerUpdate || Date.now(); 
+                    this.lastEnergyUpdate = data.lastEnergyUpdate || Date.now(); 
+                    return true; 
+                } catch (e) { return false; }
+            }
+            clearSave() { localStorage.removeItem('najikaStats'); }
+        }
+        
+        let najikaStats = null;function openChat() { 
+            document.getElementById('chat-modal').classList.add('show'); 
+            setTimeout(() => document.getElementById('chat-input').focus(), 100); 
+        }
+        
+        function closeChat() { 
+            document.getElementById('chat-modal').classList.remove('show'); 
+        }
+        
+        function sendChatMessage() { 
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim(); 
+            if (!msg) return; 
+            const messagesDiv = document.getElementById('chat-messages');
+            const userMsg = document.createElement('div'); 
+            userMsg.className = 'chat-msg user'; 
+            userMsg.textContent = 'Du: ' + msg; 
+            messagesDiv.appendChild(userMsg); 
+            
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'chat-msg najika';
+            loadingMsg.textContent = 'Najika denkt...';
+            loadingMsg.id = 'loading-msg';
+            messagesDiv.appendChild(loadingMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            input.value = '';
+            
+            if (window.najikaAI) {
+                window.najikaAI.sendMessage(msg).then(response => {
+                    const loading = document.getElementById('loading-msg');
+                    if (loading) loading.remove();
+                    const najikaMsg = document.createElement('div');
+                    najikaMsg.className = 'chat-msg najika';
+                    najikaMsg.textContent = 'Najika: ' + response;
+                    messagesDiv.appendChild(najikaMsg);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    if (najikaStats) { najikaStats.happiness = Math.min(100, najikaStats.happiness + 5); najikaStats.updateUI(); }
+                }).catch(error => {
+                    const loading = document.getElementById('loading-msg');
+                    if (loading) loading.remove();
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'chat-msg';
+                    errorMsg.style.color = '#ff4444';
+                    errorMsg.textContent = 'Fehler: ' + error.message;
+                    messagesDiv.appendChild(errorMsg);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+            } else {
+                const loading = document.getElementById('loading-msg');
+                if (loading) loading.remove();
+                const fallbackMsg = document.createElement('div');
+                fallbackMsg.className = 'chat-msg najika';
+                fallbackMsg.textContent = 'Najika: KI lädt noch... Versuch es gleich nochmal!';
+                messagesDiv.appendChild(fallbackMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        }
+        
+        function openTerminal() { 
+            document.getElementById('terminal-modal').classList.add('show'); 
+            setTimeout(() => { 
+                const input = document.getElementById('terminal-password'); 
+                input.value = ''; 
+                input.focus(); 
+            }, 100); 
+        }
+        
+        function closeTerminal() { 
+            document.getElementById('terminal-modal').classList.remove('show'); 
+        }
+        
+        function checkTerminalPassword() { 
+            const pw = document.getElementById('terminal-password').value; 
+            if (pw === 'najika2025') { 
+                closeTerminal(); 
+                setTimeout(() => showTerminalContent(), 200); 
+            } else { 
+                alert('Falsches Passwort!'); 
+                document.getElementById('terminal-password').value = ''; 
+                document.getElementById('terminal-password').focus(); 
+            }
+        }
+        
+        function showTerminalContent() { 
+            if (najikaStats) { 
+                document.getElementById('term-hp').textContent = Math.floor(najikaStats.hp); 
+                document.getElementById('term-hunger').textContent = najikaStats.hunger; 
+                document.getElementById('term-energy').textContent = najikaStats.energy; 
+            }
+            loadSavedKeys();
+            document.getElementById('terminal-content').classList.add('show'); 
+        }
+        
+        function closeTerminalContent() { 
+            document.getElementById('terminal-content').classList.remove('show'); 
+        }
+        
+        function resetStats() { 
+            if (najikaStats && confirm('Stats zurücksetzen?')) { 
+                najikaStats.hp = 100; najikaStats.hunger = 10; najikaStats.energy = 10; najikaStats.happiness = 80; 
+                najikaStats.updateUI(); najikaStats.save(); showTerminalContent(); 
+            }
+        }
+        
+        function fullHeal() { 
+            if (najikaStats) { 
+                najikaStats.hp = 100; najikaStats.hunger = 0; najikaStats.energy = 20; najikaStats.happiness = 100; 
+                najikaStats.updateUI(); najikaStats.save(); showTerminalContent(); 
+            }
+        }
+        
+        function clearAllData() { 
+            if (confirm('ACHTUNG: Alle Daten löschen?')) { 
+                if (najikaStats) { 
+                    najikaStats.clearSave(); 
+                    najikaStats.hp = 100; najikaStats.hunger = 10; najikaStats.energy = 10; najikaStats.happiness = 80; 
+                    najikaStats.lastHungerUpdate = Date.now(); najikaStats.lastEnergyUpdate = Date.now(); 
+                    najikaStats.updateUI(); 
+                } 
+                closeTerminalContent(); 
+            }
+        }
+        
+        function exportStats() { 
+            if (!najikaStats) return; 
+            const data = {hp: najikaStats.hp, hunger: najikaStats.hunger, energy: najikaStats.energy, happiness: najikaStats.happiness, timestamp: Date.now(), version: '1.0'}; 
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'}); 
+            const url = URL.createObjectURL(blob); 
+            const a = document.createElement('a'); 
+            a.href = url; a.download = 'najika_' + Date.now() + '.json'; a.click(); 
+            URL.revokeObjectURL(url); 
+        }
+        
+        function loadSavedKeys() {
+            const openaiInput = document.getElementById('openai-key-input');
+            const claudeInput = document.getElementById('claude-key-input');
+            if (openaiInput) {
+                const savedOpenAI = localStorage.getItem('openai_key');
+                if (savedOpenAI) openaiInput.value = savedOpenAI;
+            }
+            if (claudeInput) {
+                const savedClaude = localStorage.getItem('claude_key');
+                if (savedClaude) claudeInput.value = savedClaude;
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            najikaStats = new NajikaStats();
+            window.najikaStats = najikaStats;
+            loadRoomEnvironment('living');
+            updateRoomActions('living');
+            
+            const menuBtn = document.getElementById('menu-btn');
+            const roomMenu = document.getElementById('room-menu');
+            menuBtn.addEventListener('click', () => roomMenu.classList.toggle('active'));
+            
+            document.querySelectorAll('.room-item').forEach(item => { 
+                item.addEventListener('click', () => { 
+                    switchRoom(item.dataset.room); 
+                    document.querySelectorAll('.room-item').forEach(r => r.classList.remove('current')); 
+                    item.classList.add('current'); 
+                    roomMenu.classList.remove('active'); 
+                }); 
+            });
+            
+            document.getElementById('btn-chat').addEventListener('click', openChat);
+            document.getElementById('btn-left').addEventListener('click', () => { 
+                const roomList = Object.keys(rooms), idx = roomList.indexOf(currentRoom);
+                const prev = roomList[(idx - 1 + roomList.length) % roomList.length]; 
+                switchRoom(prev); 
+            });
+            document.getElementById('btn-right').addEventListener('click', () => { 
+                const roomList = Object.keys(rooms), idx = roomList.indexOf(currentRoom);
+                const next = roomList[(idx + 1) % roomList.length]; 
+                switchRoom(next); 
+            });
+            document.getElementById('btn-action').addEventListener('click', () => { 
+                if (najika) najika.rotation.y += Math.PI / 4; 
+            });
+            
+            document.getElementById('chat-close-btn').addEventListener('click', closeChat);
+            document.getElementById('chat-send-btn').addEventListener('click', sendChatMessage);
+            document.getElementById('terminal-cancel-btn').addEventListener('click', closeTerminal);
+            document.getElementById('terminal-access-btn').addEventListener('click', checkTerminalPassword);
+            document.getElementById('terminal-close-btn').addEventListener('click', closeTerminalContent);
+            document.getElementById('terminal-reset-btn').addEventListener('click', resetStats);
+            document.getElementById('terminal-heal-btn').addEventListener('click', fullHeal);
+            document.getElementById('terminal-export-btn').addEventListener('click', exportStats);
+            
+            const saveKeysBtn = document.getElementById('save-keys-btn');
+            if (saveKeysBtn) {
+                saveKeysBtn.addEventListener('click', () => {
+                    const openaiKey = document.getElementById('openai-key-input').value.trim();
+                    const claudeKey = document.getElementById('claude-key-input').value.trim();
+                    let saved = false;
+                    if (openaiKey) { localStorage.setItem('openai_key', openaiKey); saved = true; }
+                    if (claudeKey) { localStorage.setItem('claude_key', claudeKey); saved = true; }
+                    if (saved) {
+                        alert('Keys gespeichert!');
+                        saveKeysBtn.textContent = '✓ Gespeichert!';
+                        setTimeout(() => { saveKeysBtn.textContent = '💾 Keys Speichern'; }, 2000);
+                    } else {
+                        alert('Bitte Keys eingeben!');
+                    }
+                });
+            }
+            
+            const testAiBtn = document.getElementById('terminal-test-ai-btn');
+            if (testAiBtn) {
+                testAiBtn.addEventListener('click', async () => {
+                    const display = document.getElementById('terminal-display');
+                    if (!display) return;
+                    display.innerHTML = '<div class="chat-msg">Teste KI...</div>';
+                    try {
+                        const llamaTest = await fetch('http://localhost:11434/api/tags');
+                        if (llamaTest.ok) {
+                            const data = await llamaTest.json();
+                            const hasNajika = data.models && data.models.some(m => m.name.includes('najika'));
+                            if (hasNajika) {
+                                display.innerHTML += '<div class="chat-msg" style="color: #00ff41;">✓ Ollama + Najika OK</div>';
+                            } else {
+                                display.innerHTML += '<div class="chat-msg" style="color: #ffaa00;">⚠ Ollama OK, aber Najika Model fehlt</div>';
+                            }
+                        } else {
+                            display.innerHTML += '<div class="chat-msg" style="color: #ff4444;">✗ Ollama nicht erreichbar</div>';
+                        }
+                    } catch (e) {
+                        display.innerHTML += '<div class="chat-msg" style="color: #ff4444;">✗ Ollama offline</div>';
+                    }
+                    const openaiKey = localStorage.getItem('openai_key');
+                    if (openaiKey && openaiKey.length > 10) {
+                        display.innerHTML += '<div class="chat-msg" style="color: #00ff41;">✓ OpenAI Key OK</div>';
+                    } else {
+                        display.innerHTML += '<div class="chat-msg" style="color: #ffaa00;">⚠ OpenAI Key fehlt</div>';
+                    }
+                    const claudeKey = localStorage.getItem('claude_key');
+                    if (claudeKey && claudeKey.length > 10) {
+                        display.innerHTML += '<div class="chat-msg" style="color: #00ff41;">✓ Claude Key OK</div>';
+                    } else {
+                        display.innerHTML += '<div class="chat-msg" style="color: #ffaa00;">⚠ Claude Key fehlt</div>';
+                    }
+                });
+            }
+        });
+        
+        document.addEventListener('click', (e) => { 
+            if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('show'); 
+        });
+        
+        document.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') { 
+                const chatModal = document.getElementById('chat-modal'), termModal = document.getElementById('terminal-modal'); 
+                if (chatModal && chatModal.classList.contains('show')) { sendChatMessage(); e.preventDefault(); } 
+                else if (termModal && termModal.classList.contains('show')) { checkTerminalPassword(); e.preventDefault(); }
+            } 
+            if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show')); 
+        });
+        
+        function animate() { 
+            requestAnimationFrame(animate); 
+            updateMovement(); 
+            controls.update(); 
+            renderer.render(scene, camera); 
+        }
+        animate();
+        
+        window.addEventListener('resize', () => { 
+            camera.aspect = canvas.clientWidth / canvas.clientHeight; 
+            camera.updateProjectionMatrix(); 
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight); 
+        });
+    </script>
+    <script src="js/najika_ai.js"></script>
+</body>
+</html>

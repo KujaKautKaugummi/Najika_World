@@ -1,0 +1,69 @@
+# ============================================================================
+# PROMPT CONVERTER - Template → Ollama Modelfile
+# ============================================================================
+
+$Base = "C:\NajikaCore"
+
+Write-Host "Konvertiere Custom-Prompt..." -ForegroundColor Yellow
+
+# Lese Custom-Prompt
+$customPath = "$Base\najika-brain\prompts\custom.txt"
+
+if (-not (Test-Path $customPath)) {
+    Write-Host "✗ custom.txt nicht gefunden!" -ForegroundColor Red
+    Write-Host "Erstelle erst die Datei aus template.txt" -ForegroundColor Yellow
+    exit 1
+}
+
+$customContent = Get-Content $customPath -Raw
+
+# Extrahiere Werte (simple Regex)
+function Get-Value($key) {
+    if ($customContent -match "$key\s*:\s*\[\[(.+?)\]\]") {
+        return $matches[1].Trim()
+    }
+    return ""
+}
+
+$name = Get-Value "NAME"
+$owner = Get-Value "OWNER"
+$traits = Get-Value "CORE_TRAITS"
+$philosophy = Get-Value "PHILOSOPHY"
+# ... etc
+
+# Generiere finalen Prompt
+$finalPrompt = @"
+Du bist $name.
+
+PERSÖNLICHKEIT:
+$traits
+
+PHILOSOPHIE:
+$philosophy
+
+[... Rest basierend auf Template ...]
+
+Bleib im Charakter als $name.
+"@
+
+# Schreibe in system.txt
+Set-Content -Path "$Base\najika-brain\prompts\system.txt" -Value $finalPrompt -Encoding UTF8
+
+# Update Modelfile
+$modelfile = @"
+FROM C:\NajikaCore\najika-brain\models\Meta-Llama-3.1-8B-Base-Q5_K_M.gguf
+
+TEMPLATE """{{ .Prompt }}"""
+
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+
+SYSTEM """$finalPrompt"""
+"@
+
+Set-Content -Path "$Base\najika-brain\Modelfile" -Value $modelfile -Encoding UTF8
+
+Write-Host "✓ Prompt konvertiert" -ForegroundColor Green
+Write-Host "✓ Modelfile aktualisiert" -ForegroundColor Green
+Write-Host ""
+Write-Host "Jetzt: ollama create najika -f Modelfile" -ForegroundColor Cyan

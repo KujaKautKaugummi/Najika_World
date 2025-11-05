@@ -1,0 +1,1879 @@
+================================================================================
+NAJIKACORE - TECHNISCHER STATUS (REIN FAKTISCH)
+================================================================================
+
+Erstellt: 2025-10-19 20:58:59
+Basis-Verzeichnis: C:\NajikaCore
+
+================================================================================
+HINWEIS: Nur technische Fakten - keine Interpretationen!
+================================================================================
+
+================================================================================
+1. VERZEICHNISSTRUKTUR
+================================================================================
+
+
+[.] - 164 Dateien
+--------------------------------------------------------------------------------
+  file_structure.txt                            697.7 KB  .txt     2025-10-14 16:03
+  temp_last_messages.txt                        410.4 KB  .txt     2025-10-18 20:05
+  temp_last_20.txt                               82.1 KB  .txt     2025-10-18 20:05
+  najika_server.py                               77.2 KB  .py      2025-10-18 08:54
+  ALLE_SESSIONS_KEYWORD_FUNDE.md                 70.3 KB  .md      2025-10-19 20:49
+  najika_create_complete_training.py             28.1 KB  .py      2025-10-19 09:57
+  najika_battle.py                               27.6 KB  .py      2025-10-16 17:48
+  najika_create_coding_training.py               27.3 KB  .py      2025-10-19 09:35
+  NAJIKA_MASTER_ZUSAMMENFASSUNG.md               21.9 KB  .md      2025-10-19 08:41
+  MOBILE_APP_ARCHITECTURE.md                     21.5 KB  .md      2025-10-18 09:28
+
+[.claude] - 1 Dateien
+--------------------------------------------------------------------------------
+  settings.local.json                             1.9 KB  .json    2025-10-19 19:09
+
+[PATCHES] - 2 Dateien
+--------------------------------------------------------------------------------
+  01_notification_system.css                      1.5 KB  .css     2025-10-18 01:10
+  01_notification_system.js                       1.2 KB  .js      2025-10-18 01:10
+
+[__pycache__] - 10 Dateien
+--------------------------------------------------------------------------------
+  najika_server.cpython-311.pyc                  34.2 KB  .pyc     2025-10-15 13:32
+  najika_battle.cpython-311.pyc                  31.0 KB  .pyc     2025-10-16 17:51
+  najika_living_system.cpython-311.pyc           21.7 KB  .pyc     2025-10-16 13:42
+  najika_security.cpython-311.pyc                15.2 KB  .pyc     2025-10-16 17:15
+  najika_memory.cpython-311.pyc                  14.9 KB  .pyc     2025-10-16 17:00
+  najika_tor.cpython-311.pyc                     13.1 KB  .pyc     2025-10-16 17:15
+  knowledge_loader.cpython-311.pyc               10.2 KB  .pyc     2025-10-16 21:24
+  najika_search.cpython-311.pyc                   9.9 KB  .pyc     2025-10-18 01:19
+  najika_tools.cpython-311.pyc                    8.1 KB  .pyc     2025-10-16 21:00
+  najika_enhanced_personality.cpython-311.pyc        7.3 KB  .pyc     2025-10-18 10:16
+
+[assets] - 2 Dateien
+--------------------------------------------------------------------------------
+  room_config_detailed.json                      17.2 KB  .json    2025-10-15 08:36
+  room_config_detailed.json.sample                0.9 KB  .sample  2025-10-12 20:17
+
+[assets\CastleWallKit_blend_fbx_gltf_textures\Godot] - 1 Dateien
+--------------------------------------------------------------------------------
+  CastleWallsKit.gltf                           761.6 KB  .gltf    2023-08-01 10:33
+
+[assets\CastleWall_Kit_Godot\LoafbrrAssets\CastleWallKit\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  CastleWallsKit.gltf                           761.6 KB  .gltf    2023-08-01 10:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\All] - 231 Dateien
+--------------------------------------------------------------------------------
+  cutensils_mesh_strainer.glb                   609.3 KB  .glb     2022-01-17 23:33
+  cutensils_box_grater.glb                      370.2 KB  .glb     2022-01-17 23:33
+  cutensils_grater.glb                          352.5 KB  .glb     2022-01-17 23:33
+  misc_strainer.glb                             344.2 KB  .glb     2022-01-17 23:29
+  appliance_rice_cooker.glb                     261.4 KB  .glb     2022-01-17 21:59
+  cutensils_skimmer.glb                         138.6 KB  .glb     2022-01-17 23:33
+  appliance_oven.glb                            112.1 KB  .glb     2022-01-17 22:13
+  appliance_refrigerator.glb                     98.2 KB  .glb     2022-01-17 22:05
+  knife_bread_knife.glb                          80.9 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_all_w_ring.glb       73.6 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Appliances] - 14 Dateien
+--------------------------------------------------------------------------------
+  appliance_rice_cooker.glb                     261.4 KB  .glb     2022-01-17 21:59
+  appliance_oven.glb                            112.1 KB  .glb     2022-01-17 22:13
+  appliance_refrigerator.glb                     98.2 KB  .glb     2022-01-17 22:05
+  appliance_cooler_box.glb                       63.8 KB  .glb     2022-01-17 22:19
+  appliance_toaster.glb                          41.9 KB  .glb     2022-01-17 21:20
+  appliance_microwave.glb                        40.3 KB  .glb     2022-01-17 22:13
+  appliance_blender.glb                          40.1 KB  .glb     2022-01-17 22:20
+  appliance_food_processor.glb                   35.7 KB  .glb     2022-01-17 22:19
+  appliance_electric_oven.glb                    34.4 KB  .glb     2022-01-17 22:19
+  appliance_stove_001.glb                        33.1 KB  .glb     2022-01-17 21:55
+
+[assets\Cooking Assets\Cooking Assets\GLB\Boards] - 4 Dateien
+--------------------------------------------------------------------------------
+  board_charcuterie_board.glb                    13.1 KB  .glb     2022-01-17 22:33
+  board_cutting_board_plastic.glb                 9.5 KB  .glb     2022-01-17 22:33
+  board_cutting_board_001.glb                     7.9 KB  .glb     2022-01-17 22:33
+  board_cutting_board_002.glb                     4.1 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Chopsticks] - 24 Dateien
+--------------------------------------------------------------------------------
+  chopsticks_crossed_003.glb                     16.5 KB  .glb     2022-01-17 22:33
+  chopsticks_crossed.glb                         16.5 KB  .glb     2022-01-17 22:33
+  chopsticks_003.glb                             16.5 KB  .glb     2022-01-17 22:33
+  chopsticks.glb                                 16.5 KB  .glb     2022-01-17 22:33
+  chopsticks_crossed_002.glb                     13.9 KB  .glb     2022-01-17 22:33
+  chopsticks_crossed_005.glb                     13.9 KB  .glb     2022-01-17 22:33
+  chopsticks_002.glb                             13.9 KB  .glb     2022-01-17 22:33
+  chopsticks_005.glb                             13.9 KB  .glb     2022-01-17 22:33
+  chopstick_003.glb                               9.3 KB  .glb     2022-01-17 22:33
+  chopstick.glb                                   9.3 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Cooking Utensils] - 39 Dateien
+--------------------------------------------------------------------------------
+  cutensils_mesh_strainer.glb                   609.3 KB  .glb     2022-01-17 23:33
+  cutensils_box_grater.glb                      370.2 KB  .glb     2022-01-17 23:33
+  cutensils_grater.glb                          352.5 KB  .glb     2022-01-17 23:33
+  cutensils_skimmer.glb                         138.6 KB  .glb     2022-01-17 23:33
+  cutensil_grind_pepper_grinder.glb              55.2 KB  .glb     2022-01-17 22:33
+  cutensils_whisk.glb                            40.7 KB  .glb     2022-01-17 23:33
+  cutensils_pasta_spoon.glb                      38.6 KB  .glb     2022-01-17 23:33
+  cutensils_can_opener.glb                       35.9 KB  .glb     2022-01-17 23:33
+  cutensils_meat_mallet.glb                      34.2 KB  .glb     2022-01-17 23:33
+  cutensils_tongs.glb                            29.0 KB  .glb     2022-01-17 23:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Gadgets] - 2 Dateien
+--------------------------------------------------------------------------------
+  immersion_blender.glb                          17.1 KB  .glb     2022-01-17 22:33
+  thermometer.glb                                11.2 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Insulators] - 4 Dateien
+--------------------------------------------------------------------------------
+  insulator_pot_holder.glb                       26.9 KB  .glb     2022-01-17 22:33
+  insulator_oven_mitts.glb                       19.4 KB  .glb     2022-01-17 22:33
+  insulator_oven_right.glb                       10.8 KB  .glb     2022-01-17 22:33
+  insulator_oven_left.glb                        10.8 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Knives] - 16 Dateien
+--------------------------------------------------------------------------------
+  knife_bread_knife.glb                          80.9 KB  .glb     2022-01-17 22:33
+  knife_cleaver_w_hole.glb                       29.1 KB  .glb     2022-01-17 22:33
+  knife_filleting_knife.glb                      24.5 KB  .glb     2022-01-17 22:33
+  knife_boning_knife.glb                         23.3 KB  .glb     2022-01-17 22:33
+  knife_tomato_knife.glb                         22.8 KB  .glb     2022-01-17 22:33
+  knife_utility_knife.glb                        21.8 KB  .glb     2022-01-17 22:33
+  knife_cleaver.glb                              19.9 KB  .glb     2022-01-17 22:33
+  knife_peeling_knife.glb                        19.6 KB  .glb     2022-01-17 22:33
+  knife_santoku_knife.glb                        18.3 KB  .glb     2022-01-17 22:33
+  knife_peeling_knife_001.glb                    18.2 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Measuring Cups] - 2 Dateien
+--------------------------------------------------------------------------------
+  mcup_measuring_cup_large.glb                   10.7 KB  .glb     2022-01-17 22:33
+  mcup_measuring_cup_small.glb                   10.7 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Measuring Spoons] - 20 Dateien
+--------------------------------------------------------------------------------
+  mspoon_measuring_spoon_stack_all_w_ring.glb       73.6 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_small_medium_w_ring.glb       40.0 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_large_w_ring.glb       37.1 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_large.glb         30.5 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_medium_w_ring.glb       23.5 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoon_stack_small_w_ring.glb       22.7 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoons_stack_medium.glb       19.4 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoons_stack_small.glb        18.6 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoons_large_003.glb           9.2 KB  .glb     2022-01-17 22:33
+  mspoon_measuring_spoons_large_001.glb           9.2 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Misc] - 8 Dateien
+--------------------------------------------------------------------------------
+  misc_strainer.glb                             344.2 KB  .glb     2022-01-17 23:29
+  misc_ice_tray.glb                              37.9 KB  .glb     2022-01-17 22:14
+  misc_kettle.glb                                22.8 KB  .glb     2022-01-17 23:29
+  misc_scissors_open.glb                         19.1 KB  .glb     2022-01-17 23:29
+  misc_scissors.glb                              19.0 KB  .glb     2022-01-17 23:29
+  misc_cloche.glb                                16.5 KB  .glb     2022-01-17 23:29
+  misc_rolling_pin.glb                            8.9 KB  .glb     2022-01-17 23:29
+  misc_wooden_spoon.glb                           5.5 KB  .glb     2022-01-17 23:29
+
+[assets\Cooking Assets\Cooking Assets\GLB\Misc\Funnels] - 3 Dateien
+--------------------------------------------------------------------------------
+  funnel_large.glb                                9.9 KB  .glb     2022-01-17 23:30
+  funnel_medium.glb                               9.9 KB  .glb     2022-01-17 23:30
+  funnel_small.glb                                9.9 KB  .glb     2022-01-17 23:30
+
+[assets\Cooking Assets\Cooking Assets\GLB\Misc\Hangers] - 2 Dateien
+--------------------------------------------------------------------------------
+  misc_hanger_10.glb                             48.9 KB  .glb     2022-01-17 23:29
+  misc_hanger_5.glb                              24.0 KB  .glb     2022-01-17 23:29
+
+[assets\Cooking Assets\Cooking Assets\GLB\Misc\Juicers] - 2 Dateien
+--------------------------------------------------------------------------------
+  juicer_mechanical.glb                          53.6 KB  .glb     2022-01-17 22:31
+  juicer_manual.glb                              28.1 KB  .glb     2022-01-17 22:31
+
+[assets\Cooking Assets\Cooking Assets\GLB\Misc\Trays] - 2 Dateien
+--------------------------------------------------------------------------------
+  muffin_tray.glb                                45.1 KB  .glb     2022-01-17 23:32
+  loaf_pan.glb                                    4.2 KB  .glb     2022-01-17 23:32
+
+[assets\Cooking Assets\Cooking Assets\GLB\Mixing Bowls] - 10 Dateien
+--------------------------------------------------------------------------------
+  mbowl_mixing_bowl_001.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_005.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_006.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_008.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_009.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl.glb                           9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_002.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_004.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_007.glb                       9.0 KB  .glb     2022-01-17 22:33
+  mbowl_mixing_bowl_003.glb                       9.0 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Pans] - 15 Dateien
+--------------------------------------------------------------------------------
+  pan_stock_pot.glb                              22.0 KB  .glb     2022-01-17 22:28
+  pan_skillet.glb                                19.4 KB  .glb     2022-01-17 22:28
+  pan_wok.glb                                    18.6 KB  .glb     2022-01-17 22:28
+  pan_sauce_pan_small_001.glb                    18.2 KB  .glb     2022-01-17 22:29
+  pan_saute_pan.glb                              17.8 KB  .glb     2022-01-17 22:28
+  pan_sauce_pan_large_001.glb                    17.1 KB  .glb     2022-01-17 22:29
+  pan_casserole_pot.glb                          16.5 KB  .glb     2022-01-17 22:30
+  pan_frying_pan_001.glb                         16.0 KB  .glb     2022-01-17 22:29
+  pan_dutch_oven.glb                             15.7 KB  .glb     2022-01-17 22:29
+  pan_frying_pan.glb                             15.0 KB  .glb     2022-01-17 22:29
+
+[assets\Cooking Assets\Cooking Assets\GLB\Plates] - 28 Dateien
+--------------------------------------------------------------------------------
+  plate_oval_001.glb                             10.7 KB  .glb     2022-01-17 22:33
+  plate_oval_002.glb                             10.7 KB  .glb     2022-01-17 22:33
+  plate_oval_003.glb                             10.7 KB  .glb     2022-01-17 22:33
+  plate_oval.glb                                 10.7 KB  .glb     2022-01-17 22:33
+  plate_oval_004.glb                             10.7 KB  .glb     2022-01-17 22:33
+  plate_023.glb                                   8.2 KB  .glb     2022-01-17 22:33
+  plate_020.glb                                   8.2 KB  .glb     2022-01-17 22:33
+  plate_021.glb                                   8.2 KB  .glb     2022-01-17 22:33
+  plate_024.glb                                   8.2 KB  .glb     2022-01-17 22:33
+  plate_022.glb                                   8.2 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Serving Bowls] - 9 Dateien
+--------------------------------------------------------------------------------
+  serving_bowl_2_002.glb                         12.6 KB  .glb     2022-01-17 23:28
+  serving_bowl_2.glb                             12.5 KB  .glb     2022-01-17 22:27
+  serving_bowl_2_001.glb                         12.5 KB  .glb     2022-01-17 23:28
+  serving_bowl_3_001.glb                         11.6 KB  .glb     2022-01-17 22:24
+  serving_bowl_3_002.glb                         11.6 KB  .glb     2022-01-17 22:27
+  serving_bowl_3.glb                             11.6 KB  .glb     2022-01-17 22:23
+  serving_bowl_1_002.glb                          8.1 KB  .glb     2022-01-17 22:27
+  serving_bowl_1.glb                              8.1 KB  .glb     2022-01-17 22:27
+  serving_bowl_1_001.glb                          8.1 KB  .glb     2022-01-17 22:27
+
+[assets\Cooking Assets\Cooking Assets\GLB\Serving Cups] - 19 Dateien
+--------------------------------------------------------------------------------
+  sercups_irish_coffee_glass.glb                 15.1 KB  .glb     2022-01-17 22:33
+  sercups_teacup.glb                             12.8 KB  .glb     2022-01-17 22:33
+  sercups_demitasse.glb                          11.7 KB  .glb     2022-01-17 22:33
+  sercups_hurricane_glass.glb                    10.5 KB  .glb     2022-01-17 22:33
+  sercups_margarita_glass.glb                    10.1 KB  .glb     2022-01-17 22:33
+  sercups_mug.glb                                 8.3 KB  .glb     2022-01-17 22:33
+  sercups_cognac_balloon.glb                      8.2 KB  .glb     2022-01-17 22:33
+  sercups_beer_mug.glb                            8.2 KB  .glb     2022-01-17 22:33
+  sercups_mug_001.glb                             8.0 KB  .glb     2022-01-17 22:33
+  sercups_mug_002.glb                             8.0 KB  .glb     2022-01-17 22:33
+
+[assets\Cooking Assets\Cooking Assets\GLB\Serving Spoons] - 3 Dateien
+--------------------------------------------------------------------------------
+  sspoon_serving_spoon_metal.glb                 12.4 KB  .glb     2022-01-17 23:27
+  sspoon_serving_spoon_plastic.glb               10.9 KB  .glb     2022-01-17 23:27
+  sspoon_rice_paddle.glb                          9.6 KB  .glb     2022-01-17 23:27
+
+[assets\Cooking Assets\Cooking Assets\GLB\Utensils] - 8 Dateien
+--------------------------------------------------------------------------------
+  utensil_fork_001.glb                           17.7 KB  .glb     2022-01-17 22:33
+  utensil_fork.glb                               17.4 KB  .glb     2022-01-17 22:33
+  utensil_shaker.glb                             17.1 KB  .glb     2022-01-17 22:33
+  utensil_spoon_small.glb                        11.2 KB  .glb     2022-01-17 22:33
+  utensil_spoon.glb                              11.2 KB  .glb     2022-01-17 22:33
+  utensil_butter_knife_002.glb                    8.2 KB  .glb     2022-01-17 22:33
+  utensil_butter_knife.glb                        8.0 KB  .glb     2022-01-17 22:33
+  utensil_butter_knife_001.glb                    7.6 KB  .glb     2022-01-17 22:33
+
+[assets\DungeonTiles_Godot\DungeonTiles\GLTF] - 2 Dateien
+--------------------------------------------------------------------------------
+  ModularDungeonTiles_Props.gltf             166566.1 KB  .gltf    2023-06-02 09:06
+  ModularDungeonTiles.gltf                    42724.9 KB  .gltf    2023-06-02 09:05
+
+[assets\FreeKitchen\FreeKitchen\glb] - 25 Dateien
+--------------------------------------------------------------------------------
+  Sink.glb                                       76.1 KB  .glb     2024-12-03 12:09
+  SmallPotLid.glb                                65.7 KB  .glb     2024-12-03 12:09
+  SmallPot.glb                                   46.2 KB  .glb     2024-12-03 12:09
+  KitchenKnife.glb                               38.1 KB  .glb     2024-12-03 12:09
+  DoubleCupboard.glb                             35.6 KB  .glb     2024-12-03 12:09
+  Chair.glb                                      35.1 KB  .glb     2024-12-03 12:09
+  SmallPan.glb                                   25.8 KB  .glb     2024-12-03 12:09
+  Cupboard.glb                                   24.8 KB  .glb     2024-12-03 12:09
+  Bowl.glb                                       23.8 KB  .glb     2024-12-03 12:09
+  PepperShaker.glb                               22.4 KB  .glb     2024-12-03 12:09
+
+[assets\Furnitures_Godot\Furnitures\GLTF] - 1 Dateien
+--------------------------------------------------------------------------------
+  Furnitures.gltf                              1868.6 KB  .gltf    2022-08-19 15:49
+
+[assets\Godot_4\Furnitures\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  Furnitures.gltf                              1868.6 KB  .gltf    2022-08-19 15:49
+
+[assets\HouseAndProps_AssetPack_Godot\LoafbrrAssets\HouseAndPropsPack\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  HouseAndPropsAssetPack.gltf                  3190.4 KB  .gltf    2023-09-29 08:16
+
+[assets\HousesAndProps_blend_Gltf_Textures\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  HouseAndPropsAssetPack.gltf                  3190.4 KB  .gltf    2023-09-29 08:16
+
+[assets\KayKit Character Animations 1.2\Animations\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  KayKit_AnimatedCharacter_v1.2.glb             449.0 KB  .glb     2022-02-05 14:23
+
+[assets\KayKit Character Animations 1.2\Models\gltf] - 3 Dateien
+--------------------------------------------------------------------------------
+  PrototypePete.gltf                            187.5 KB  .gltf    2021-02-03 13:59
+  Case.gltf.glb                                  16.9 KB  .glb     2021-02-03 14:01
+  Pencil.gltf.glb                                11.5 KB  .glb     2021-02-03 14:01
+
+[assets\KayKit Character Pack - Skeletons 1.0\Models\assets\gltf] - 29 Dateien
+--------------------------------------------------------------------------------
+  skull_broken.glb                              160.4 KB  .glb     2021-09-18 17:02
+  skull.glb                                     148.5 KB  .glb     2021-09-18 17:02
+  skeleton_staff.gltf.glb                       120.1 KB  .glb     2021-09-18 16:45
+  body_broken.gltf.glb                           64.9 KB  .glb     2021-09-18 16:45
+  skeleton_staff_broken.gltf.glb                 44.7 KB  .glb     2021-09-18 16:45
+  skeleton_helmet_full.gltf.glb                  40.5 KB  .glb     2021-09-18 16:45
+  skeleton_bow.gltf.glb                          40.2 KB  .glb     2021-09-18 16:45
+  shield_arrows.gltf.glb                         34.5 KB  .glb     2021-09-18 16:45
+  skeleton_helmet.gltf.glb                       31.2 KB  .glb     2021-09-18 16:45
+  shield.gltf.glb                                26.0 KB  .glb     2021-09-18 16:45
+
+[assets\KayKit Character Pack - Skeletons 1.0\Models\characters\gltf] - 8 Dateien
+--------------------------------------------------------------------------------
+  character_skeleton_mage_broken.gltf           477.0 KB  .gltf    2021-09-18 17:27
+  character_skeleton_minion_broken.gltf         474.1 KB  .gltf    2021-09-18 17:26
+  character_skeleton_warrior_broken.gltf        472.1 KB  .gltf    2021-09-18 17:26
+  character_skeleton_archer_broken.gltf         451.8 KB  .gltf    2021-09-18 17:27
+  character_skeleton_warrior.gltf               429.1 KB  .gltf    2021-09-18 17:26
+  character_skeleton_archer.gltf                414.7 KB  .gltf    2021-09-18 17:27
+  character_skeleton_mage.gltf                  408.5 KB  .gltf    2021-09-18 17:27
+  character_skeleton_minion.gltf                375.4 KB  .gltf    2021-09-18 17:25
+
+[assets\KayKit Dungeon Pack 1.0\Models\Characters\gltf] - 4 Dateien
+--------------------------------------------------------------------------------
+  character_barbarian.gltf                      255.4 KB  .gltf    2020-11-12 13:42
+  character_mage.gltf                           238.9 KB  .gltf    2020-11-12 13:42
+  character_knight.gltf                         230.8 KB  .gltf    2020-11-12 13:42
+  character_rogue.gltf                          189.6 KB  .gltf    2020-11-12 13:42
+
+[assets\KayKit Dungeon Pack 1.0\Models\Characters\gltf\extra heads] - 13 Dateien
+--------------------------------------------------------------------------------
+  mageHeadA.gltf                                124.4 KB  .gltf    2020-11-12 14:47
+  mageHeadB.gltf                                124.3 KB  .gltf    2020-11-12 14:49
+  mageHeadC.gltf                                123.9 KB  .gltf    2020-11-12 14:49
+  rogueHeadC.gltf                                81.3 KB  .gltf    2020-11-12 14:50
+  rogueHeadB.gltf                                81.3 KB  .gltf    2020-11-12 14:50
+  rogueHeadA.gltf                                80.9 KB  .gltf    2020-11-12 14:49
+  barbarianHeadA.gltf.glb                        69.8 KB  .glb     2020-11-12 14:46
+  barbarianHeadB.gltf.glb                        69.8 KB  .glb     2020-11-12 14:46
+  barbarianHeadC.gltf.glb                        69.8 KB  .glb     2020-11-12 14:46
+  knightHeadB.gltf.glb                           57.3 KB  .glb     2020-11-12 14:46
+
+[assets\KayKit Dungeon Pack 1.0\Models\gltf] - 185 Dateien
+--------------------------------------------------------------------------------
+  wallIntersection.gltf.glb                     341.7 KB  .glb     2020-11-12 12:54
+  wall_windowGate.gltf.glb                      337.0 KB  .glb     2020-11-12 12:54
+  wall_door.gltf.glb                            324.7 KB  .glb     2020-11-12 12:54
+  wall_window.gltf.glb                          323.4 KB  .glb     2020-11-12 12:54
+  wallSplit.gltf.glb                            280.7 KB  .glb     2020-11-12 12:54
+  wallDecorationA.gltf.glb                      252.4 KB  .glb     2020-11-12 12:54
+  wallCorner.gltf.glb                           229.8 KB  .glb     2020-11-12 12:54
+  wall.gltf.glb                                 218.5 KB  .glb     2020-11-12 12:54
+  wallDecorationB.gltf.glb                      193.6 KB  .glb     2020-11-12 12:54
+  wallSingle_windowGate.gltf.glb                176.2 KB  .glb     2020-11-12 12:54
+
+[assets\KayKit Mini-Game Variety Pack 1.2\Models\Characters\Bear\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  character_bear.gltf                           104.6 KB  .gltf    2021-02-03 14:20
+
+[assets\KayKit Mini-Game Variety Pack 1.2\Models\Characters\Dog\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  character_dog.gltf                            109.8 KB  .gltf    2021-02-03 14:20
+
+[assets\KayKit Mini-Game Variety Pack 1.2\Models\Characters\Duck\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  character_duck.gltf                           105.8 KB  .gltf    2021-02-03 14:21
+
+[assets\KayKit Mini-Game Variety Pack 1.2\Models\gltf] - 131 Dateien
+--------------------------------------------------------------------------------
+  detail_desert.gltf.glb                         86.4 KB  .glb     2020-09-10 13:43
+  detail_forest.gltf.glb                         86.4 KB  .glb     2020-09-10 13:43
+  swiperDouble_teamYellow.gltf.glb               79.9 KB  .glb     2020-09-10 13:43
+  swiperDouble_teamBlue.gltf.glb                 79.9 KB  .glb     2020-09-10 13:43
+  swiperDouble_teamRed.gltf.glb                  79.9 KB  .glb     2020-09-10 13:43
+  spikeRoller.gltf.glb                           74.2 KB  .glb     2020-09-10 13:43
+  blaster_teamYellow.gltf.glb                    63.1 KB  .glb     2020-09-10 13:43
+  blaster_teamBlue.gltf.glb                      63.1 KB  .glb     2020-09-10 13:43
+  blaster_teamRed.gltf.glb                       63.1 KB  .glb     2020-09-10 13:43
+  swiperLong_teamYellow.gltf.glb                 59.9 KB  .glb     2020-09-10 13:43
+
+[assets\KayKit Spooktober Seasonal Pack 1.1\Models\Characters\Jack\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  character_jack.gltf                           164.8 KB  .gltf    2021-02-03 14:20
+
+[assets\KayKit Spooktober Seasonal Pack 1.1\Models\Characters\Witch\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  character_witch.gltf                          189.2 KB  .gltf    2021-02-03 14:20
+
+[assets\KayKit Spooktober Seasonal Pack 1.1\Models\gltf] - 46 Dateien
+--------------------------------------------------------------------------------
+  cauldron.gltf.glb                              73.4 KB  .glb     2020-09-30 20:34
+  candyBucket.gltf.glb                           62.0 KB  .glb     2020-09-30 20:34
+  jackolantern_small.gltf.glb                    60.6 KB  .glb     2020-09-30 20:34
+  fenceCorner.gltf.glb                           53.4 KB  .glb     2020-09-30 20:34
+  candyBag.gltf.glb                              52.8 KB  .glb     2020-09-30 20:34
+  jackolantern_big.gltf.glb                      47.2 KB  .glb     2020-09-30 20:34
+  candleBundle.gltf.glb                          44.6 KB  .glb     2020-09-30 20:34
+  fenceDouble.gltf.glb                           42.0 KB  .glb     2020-09-30 20:34
+  gravestone.gltf.glb                            35.3 KB  .glb     2020-09-30 20:34
+  pumpkinLarge.gltf.glb                          33.3 KB  .glb     2020-09-30 20:34
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE] - 1 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                  709.2 KB  .png     2023-07-14 20:39
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Assets\fbx] - 4 Dateien
+--------------------------------------------------------------------------------
+  rogue_texture.png                              16.3 KB  .png     2023-07-13 15:30
+  mage_texture.png                               15.9 KB  .png     2023-07-13 15:30
+  barbarian_texture.png                          14.7 KB  .png     2023-07-13 15:30
+  knight_texture.png                             13.8 KB  .png     2023-07-13 15:30
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Assets\gltf] - 58 Dateien
+--------------------------------------------------------------------------------
+  crossbow_2handed.bin                           34.1 KB  .bin     2023-07-13 20:16
+  crossbow_1handed.bin                           24.6 KB  .bin     2023-07-13 20:16
+  axe_2handed.bin                                21.4 KB  .bin     2023-07-13 20:16
+  shield_spikes.bin                              21.0 KB  .bin     2023-07-13 20:16
+  shield_spikes_color.bin                        21.0 KB  .bin     2023-07-13 20:16
+  sword_2handed.bin                              19.4 KB  .bin     2023-07-13 20:16
+  sword_2handed_color.bin                        19.4 KB  .bin     2023-07-13 20:16
+  staff.bin                                      18.1 KB  .bin     2023-07-13 20:16
+  rogue_texture.png                              16.3 KB  .png     2023-07-13 20:16
+  mage_texture.png                               15.9 KB  .png     2023-07-13 20:16
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Characters\fbx] - 4 Dateien
+--------------------------------------------------------------------------------
+  rogue_texture.png                              16.3 KB  .png     2023-07-13 15:30
+  mage_texture.png                               15.9 KB  .png     2023-07-13 15:30
+  barbarian_texture.png                          14.7 KB  .png     2023-07-13 15:30
+  knight_texture.png                             13.8 KB  .png     2023-07-13 15:30
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Characters\gltf] - 9 Dateien
+--------------------------------------------------------------------------------
+  Knight.glb                                   3573.8 KB  .glb     2023-08-21 14:51
+  Rogue.glb                                    3531.5 KB  .glb     2023-08-21 14:47
+  Barbarian.glb                                3528.6 KB  .glb     2023-08-21 14:50
+  Rogue_Hooded.glb                             3513.3 KB  .glb     2023-08-21 14:48
+  Mage.glb                                     3505.1 KB  .glb     2023-08-21 15:12
+  rogue_texture.png                              16.3 KB  .png     2023-07-13 15:30
+  mage_texture.png                               15.9 KB  .png     2023-07-13 15:30
+  barbarian_texture.png                          14.7 KB  .png     2023-07-13 15:30
+  knight_texture.png                             13.8 KB  .png     2023-07-13 15:30
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Samples] - 6 Dateien
+--------------------------------------------------------------------------------
+  engineer.png                                  776.1 KB  .png     2023-07-14 20:39
+  druid.png                                     733.4 KB  .png     2023-07-14 20:39
+  knight.png                                    686.5 KB  .png     2023-07-14 20:39
+  barbarian.png                                 621.0 KB  .png     2023-07-14 20:39
+  mage.png                                      610.4 KB  .png     2023-07-14 20:39
+  rogue.png                                     554.9 KB  .png     2023-07-14 20:39
+
+[assets\KayKit_Adventurers_1.0_FREE\KayKit_Adventurers_1.0_FREE\Textures] - 4 Dateien
+--------------------------------------------------------------------------------
+  rogue_texture.png                              16.3 KB  .png     2023-07-13 15:30
+  mage_texture.png                               15.9 KB  .png     2023-07-13 15:30
+  barbarian_texture.png                          14.7 KB  .png     2023-07-13 15:30
+  knight_texture.png                             13.8 KB  .png     2023-07-13 15:30
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE] - 4 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                  951.5 KB  .png     2023-03-15 16:45
+  More KayKit Assets.url                          0.1 KB  .url     2023-08-25 08:53
+  Patreon.url                                     0.1 KB  .url     2020-09-10 13:52
+  Discord Server.url                              0.1 KB  .url     2024-04-02 09:33
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Assets\fbx] - 212 Dateien
+--------------------------------------------------------------------------------
+  table_long_decorated_C.fbx                    129.4 KB  .fbx     2024-05-09 16:14
+  stairs_wood_decorated.fbx                      96.3 KB  .fbx     2024-05-09 16:14
+  box_stacked.fbx                                90.6 KB  .fbx     2024-05-09 16:14
+  wall_cracked.fbx                               86.0 KB  .fbx     2024-05-09 16:14
+  table_long_tablecloth_decorated_A.fbx          84.9 KB  .fbx     2024-05-09 16:14
+  keg_decorated.fbx                              84.2 KB  .fbx     2024-05-09 16:14
+  table_long_decorated_A.fbx                     83.0 KB  .fbx     2024-05-09 16:14
+  wall_shelves.fbx                               69.7 KB  .fbx     2024-05-09 16:14
+  coin_stack_large.fbx                           66.1 KB  .fbx     2024-05-09 16:14
+  chest_gold.fbx                                 65.8 KB  .fbx     2024-05-09 16:14
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Assets\fbx(unity)] - 212 Dateien
+--------------------------------------------------------------------------------
+  table_long_decorated_C.fbx                    130.8 KB  .fbx     2024-05-09 16:14
+  stairs_wood_decorated.fbx                      98.6 KB  .fbx     2024-05-09 16:14
+  box_stacked.fbx                                93.0 KB  .fbx     2024-05-09 16:14
+  wall_cracked.fbx                               87.4 KB  .fbx     2024-05-09 16:14
+  table_long_tablecloth_decorated_A.fbx          86.4 KB  .fbx     2024-05-09 16:14
+  keg_decorated.fbx                              85.6 KB  .fbx     2024-05-09 16:14
+  table_long_decorated_A.fbx                     84.1 KB  .fbx     2024-05-09 16:14
+  wall_shelves.fbx                               70.9 KB  .fbx     2024-05-09 16:14
+  coin_stack_large.fbx                           67.7 KB  .fbx     2024-05-09 16:14
+  chest_gold.fbx                                 66.4 KB  .fbx     2024-05-09 16:14
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Assets\gltf] - 423 Dateien
+--------------------------------------------------------------------------------
+  table_long_decorated_C.bin                    186.8 KB  .bin     2024-05-09 16:14
+  stairs_wood_decorated.bin                     136.1 KB  .bin     2024-05-09 16:14
+  box_stacked.bin                               120.5 KB  .bin     2024-05-09 16:14
+  keg_decorated.bin                             112.6 KB  .bin     2024-05-09 16:14
+  wall_cracked.bin                              100.8 KB  .bin     2024-05-09 16:14
+  wall_shelves.bin                               99.4 KB  .bin     2024-05-09 16:14
+  table_long_tablecloth_decorated_A.bin          92.3 KB  .bin     2024-05-09 16:14
+  table_long_decorated_A.bin                     89.0 KB  .bin     2024-05-09 16:14
+  table_small_decorated_B.bin                    84.5 KB  .bin     2024-05-09 16:14
+  coin_stack_large.bin                           80.5 KB  .bin     2024-05-09 16:14
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Assets\obj] - 433 Dateien
+--------------------------------------------------------------------------------
+  table_long_decorated_C.obj                    288.6 KB  .obj     2024-05-09 16:14
+  stairs_wood_decorated.obj                     203.4 KB  .obj     2024-05-09 16:14
+  box_stacked.obj                               187.3 KB  .obj     2024-05-09 16:14
+  wall_cracked.obj                              182.2 KB  .obj     2024-05-09 16:14
+  keg_decorated.obj                             175.4 KB  .obj     2024-05-09 16:14
+  table_long_tablecloth_decorated_A.obj         163.2 KB  .obj     2024-05-09 16:14
+  table_long_decorated_A.obj                    156.5 KB  .obj     2024-05-09 16:14
+  wall_shelves.obj                              136.8 KB  .obj     2024-05-09 16:14
+  coin_stack_large.obj                          128.9 KB  .obj     2024-05-09 16:14
+  crates_stacked.obj                            116.7 KB  .obj     2024-05-09 16:14
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Assets\textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  dungeon_texture.png                            16.6 KB  .png     2024-05-09 16:32
+
+[assets\KayKit_DungeonRemastered_1.1_FREE\KayKit_DungeonRemastered_1.1_FREE\Samples] - 15 Dateien
+--------------------------------------------------------------------------------
+  source_content.png                           2061.8 KB  .png     2023-03-23 08:59
+  dungeon_remastered_sample6.png               1527.1 KB  .png     2023-03-22 19:08
+  extra_content1.png                           1483.6 KB  .png     2023-03-20 14:57
+  dungeon_remastered_sample7.png               1432.2 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample11.png              1311.9 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample4.png               1309.5 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample2.png               1218.2 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample9.png               1208.6 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample10.png              1163.2 KB  .png     2023-03-22 19:08
+  dungeon_remastered_sample3.png               1124.2 KB  .png     2023-03-22 19:08
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE] - 1 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                  760.4 KB  .png     2025-04-14 17:28
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Assets\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  forest_texture.png                             47.5 KB  .png     2025-04-11 10:33
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Assets\fbx(unity)] - 1 Dateien
+--------------------------------------------------------------------------------
+  forest_texture.png                             47.5 KB  .png     2025-04-11 10:33
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Assets\gltf] - 211 Dateien
+--------------------------------------------------------------------------------
+  Tree_3_C_Color1.bin                            69.6 KB  .bin     2025-04-09 16:27
+  forest_texture.png                             47.5 KB  .png     2025-04-11 10:33
+  Tree_1_C_Color1.bin                            45.2 KB  .bin     2025-04-09 16:27
+  Tree_2_E_Color1.bin                            35.2 KB  .bin     2025-04-09 16:27
+  Tree_Bare_1_C_Color1.bin                       34.8 KB  .bin     2025-04-09 16:27
+  Tree_2_D_Color1.bin                            32.1 KB  .bin     2025-04-09 16:27
+  Tree_4_C_Color1.bin                            30.4 KB  .bin     2025-04-09 16:27
+  Rock_1_K_Color1.bin                            30.3 KB  .bin     2025-04-09 16:27
+  Rock_1_J_Color1.bin                            30.1 KB  .bin     2025-04-09 16:27
+  Rock_1_M_Color1.bin                            29.5 KB  .bin     2025-04-09 16:27
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Assets\obj] - 1 Dateien
+--------------------------------------------------------------------------------
+  forest_texture.png                             47.5 KB  .png     2025-04-11 10:33
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Samples] - 1 Dateien
+--------------------------------------------------------------------------------
+  Forest_Nature_Pack_sample1.png                693.8 KB  .png     2025-04-14 17:28
+
+[assets\KayKit_Forest_Nature_Pack_1.0_FREE\KayKit_Forest_Nature_Pack_1.0_FREE\Textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  forest_texture.png                             47.5 KB  .png     2025-04-11 10:33
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE] - 4 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                  925.9 KB  .png     2023-08-08 14:45
+  sample.png                                    741.6 KB  .png     2023-08-08 14:45
+  More KayKit Assets.url                          0.1 KB  .url     2023-08-25 08:53
+  Patreon.url                                     0.1 KB  .url     2020-09-10 13:52
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE\Assets\fbx] - 54 Dateien
+--------------------------------------------------------------------------------
+  cabinet_medium_decorated.fbx                   49.5 KB  .fbx     2023-08-10 18:01
+  couch_pillows.fbx                              40.1 KB  .fbx     2023-08-10 18:01
+  armchair_pillows.fbx                           34.7 KB  .fbx     2023-08-10 18:01
+  couch.fbx                                      34.0 KB  .fbx     2023-08-10 18:01
+  shelf_B_small_decorated.fbx                    34.0 KB  .fbx     2023-08-10 18:01
+  bed_double_B.fbx                               33.9 KB  .fbx     2023-08-10 18:01
+  bed_double_A.fbx                               32.4 KB  .fbx     2023-08-10 18:01
+  bed_single_B.fbx                               32.2 KB  .fbx     2023-08-10 18:01
+  shelf_B_large_decorated.fbx                    32.0 KB  .fbx     2023-08-10 18:01
+  cabinet_small_decorated.fbx                    31.7 KB  .fbx     2023-08-10 18:01
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE\Assets\fbx (unity)] - 54 Dateien
+--------------------------------------------------------------------------------
+  cabinet_medium_decorated.fbx                   49.1 KB  .fbx     2023-08-10 18:01
+  couch_pillows.fbx                              40.0 KB  .fbx     2023-08-10 18:01
+  armchair_pillows.fbx                           34.7 KB  .fbx     2023-08-10 18:01
+  couch.fbx                                      34.0 KB  .fbx     2023-08-10 18:01
+  shelf_B_small_decorated.fbx                    33.9 KB  .fbx     2023-08-10 18:01
+  bed_double_B.fbx                               33.9 KB  .fbx     2023-08-10 18:01
+  bed_double_A.fbx                               32.5 KB  .fbx     2023-08-10 18:01
+  bed_single_B.fbx                               32.5 KB  .fbx     2023-08-10 18:01
+  shelf_B_large_decorated.fbx                    32.3 KB  .fbx     2023-08-10 18:01
+  cabinet_small_decorated.fbx                    31.9 KB  .fbx     2023-08-10 18:01
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE\Assets\gltf] - 107 Dateien
+--------------------------------------------------------------------------------
+  cabinet_medium_decorated.bin                   47.9 KB  .bin     2023-08-10 18:01
+  bed_double_B.bin                               27.2 KB  .bin     2023-08-10 18:01
+  couch_pillows.bin                              27.0 KB  .bin     2023-08-10 18:01
+  cabinet_small_decorated.bin                    26.9 KB  .bin     2023-08-10 18:01
+  shelf_B_large_decorated.bin                    25.2 KB  .bin     2023-08-10 18:01
+  bed_single_B.bin                               24.8 KB  .bin     2023-08-10 18:01
+  bed_double_A.bin                               24.1 KB  .bin     2023-08-10 18:01
+  shelf_B_small_decorated.bin                    22.9 KB  .bin     2023-08-10 18:01
+  cabinet_medium.bin                             22.8 KB  .bin     2023-08-10 18:01
+  bed_single_A.bin                               21.5 KB  .bin     2023-08-10 18:01
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE\Assets\obj] - 107 Dateien
+--------------------------------------------------------------------------------
+  cabinet_medium_decorated.obj                   79.0 KB  .obj     2023-08-10 18:01
+  couch_pillows.obj                              55.1 KB  .obj     2023-08-10 18:01
+  bed_double_B.obj                               45.3 KB  .obj     2023-08-10 18:01
+  armchair_pillows.obj                           42.1 KB  .obj     2023-08-10 18:01
+  bed_single_B.obj                               41.4 KB  .obj     2023-08-10 18:01
+  couch.obj                                      41.3 KB  .obj     2023-08-10 18:01
+  bed_double_A.obj                               40.6 KB  .obj     2023-08-10 18:01
+  shelf_B_small_decorated.obj                    39.0 KB  .obj     2023-08-10 18:01
+  cabinet_small_decorated.obj                    37.7 KB  .obj     2023-08-10 18:01
+  bed_single_A.obj                               36.6 KB  .obj     2023-08-10 18:01
+
+[assets\KayKit_Furniture_Bits_1.0_FREE\KayKit_Furniture_Bits_1.0_FREE\Assets\texture] - 1 Dateien
+--------------------------------------------------------------------------------
+  furniturebits_texture.png                      15.2 KB  .png     2023-08-09 13:15
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE] - 2 Dateien
+--------------------------------------------------------------------------------
+  sample.png                                   1465.3 KB  .png     2023-09-21 17:21
+  contents.png                                  817.0 KB  .png     2023-09-21 17:21
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE\Assets\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  halloweenbits_texture.png                      14.7 KB  .png     2023-09-21 15:39
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE\Assets\fbx(unity)] - 1 Dateien
+--------------------------------------------------------------------------------
+  halloweenbits_texture.png                      14.7 KB  .png     2023-09-21 15:39
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE\Assets\gltf] - 127 Dateien
+--------------------------------------------------------------------------------
+  coffin_decorated.bin                           77.4 KB  .bin     2023-09-21 16:43
+  crypt.bin                                      57.3 KB  .bin     2023-09-21 16:43
+  arch_gate.bin                                  56.9 KB  .bin     2023-09-21 16:43
+  ribcage.bin                                    51.0 KB  .bin     2023-09-21 16:43
+  tree_dead_large_decorated.bin                  48.5 KB  .bin     2023-09-21 16:43
+  bench_decorated.bin                            46.3 KB  .bin     2023-09-21 16:43
+  fence_gate.bin                                 41.1 KB  .bin     2023-09-21 16:43
+  post_skull.bin                                 29.1 KB  .bin     2023-09-21 16:43
+  fence_broken.bin                               28.4 KB  .bin     2023-09-21 16:43
+  arch.bin                                       28.2 KB  .bin     2023-09-21 16:43
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE\Assets\obj] - 1 Dateien
+--------------------------------------------------------------------------------
+  halloweenbits_texture.png                      14.7 KB  .png     2023-09-21 16:43
+
+[assets\KayKit_HalloweenBits_1.0_FREE\KayKit_HalloweenBits_1.0_FREE\Assets\textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  halloweenbits_texture.png                      14.7 KB  .png     2023-09-21 15:39
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE] - 1 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                 1970.3 KB  .png     2025-02-21 15:41
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx(unity)\blue] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:18
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx(unity)\green] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:22
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx(unity)\neutral] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 14:40
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx(unity)\red] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:19
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx(unity)\yellow] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:21
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx\blue] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:18
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx\green] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:22
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx\neutral] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 14:40
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx\red] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:19
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\fbx\yellow] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:21
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\gltf\blue] - 167 Dateien
+--------------------------------------------------------------------------------
+  signage_arrows_left_blue.bin                   43.9 KB  .bin     2024-09-11 15:18
+  signage_arrows_right_blue.bin                  43.9 KB  .bin     2024-09-11 15:18
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:18
+  hoop_angled_blue.bin                           36.9 KB  .bin     2024-09-11 15:18
+  pipe_180_B_blue.bin                            34.7 KB  .bin     2024-09-11 15:18
+  bomb_B_blue.bin                                29.5 KB  .bin     2024-09-11 15:18
+  arch_wide_blue.bin                             27.9 KB  .bin     2024-09-11 15:18
+  arch_blue.bin                                  27.4 KB  .bin     2024-09-11 15:18
+  arch_tall_blue.bin                             27.4 KB  .bin     2024-09-11 15:18
+  pipe_180_A_blue.bin                            25.4 KB  .bin     2024-09-11 15:18
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\gltf\green] - 167 Dateien
+--------------------------------------------------------------------------------
+  signage_arrows_left_green.bin                  43.9 KB  .bin     2024-09-11 15:22
+  signage_arrows_right_green.bin                 43.9 KB  .bin     2024-09-11 15:22
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:22
+  hoop_angled_green.bin                          36.9 KB  .bin     2024-09-11 15:22
+  pipe_180_B_green.bin                           33.5 KB  .bin     2024-09-11 15:21
+  bomb_B_green.bin                               29.5 KB  .bin     2024-09-11 15:22
+  arch_wide_green.bin                            27.9 KB  .bin     2024-09-11 15:22
+  arch_green.bin                                 27.4 KB  .bin     2024-09-11 15:22
+  arch_tall_green.bin                            27.4 KB  .bin     2024-09-11 15:22
+  pipe_180_A_green.bin                           25.4 KB  .bin     2024-09-11 15:21
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\gltf\neutral] - 77 Dateien
+--------------------------------------------------------------------------------
+  signage_arrows_left.bin                        43.9 KB  .bin     2024-09-11 14:40
+  signage_arrows_right.bin                       43.9 KB  .bin     2024-09-11 14:40
+  signage_finish_wide.bin                        43.7 KB  .bin     2024-09-11 14:40
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 14:40
+  signage_finish.bin                             33.8 KB  .bin     2024-09-11 14:40
+  spring.bin                                     26.5 KB  .bin     2024-09-11 14:40
+  floor_wood_1x1.bin                             25.0 KB  .bin     2024-09-11 14:40
+  floor_wood_2x2.bin                             25.0 KB  .bin     2024-09-11 14:40
+  floor_wood_2x6.bin                             25.0 KB  .bin     2024-09-11 14:40
+  floor_wood_4x4.bin                             25.0 KB  .bin     2024-09-11 14:40
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\gltf\red] - 167 Dateien
+--------------------------------------------------------------------------------
+  signage_arrows_left_red.bin                    43.9 KB  .bin     2024-09-11 15:19
+  signage_arrows_right_red.bin                   43.9 KB  .bin     2024-09-11 15:19
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:19
+  hoop_angled_red.bin                            36.9 KB  .bin     2024-09-11 15:19
+  pipe_180_B_red.bin                             33.9 KB  .bin     2024-09-11 15:19
+  bomb_B_red.bin                                 29.5 KB  .bin     2024-09-11 15:19
+  arch_wide_red.bin                              27.9 KB  .bin     2024-09-11 15:19
+  arch_red.bin                                   27.4 KB  .bin     2024-09-11 15:19
+  arch_tall_red.bin                              27.4 KB  .bin     2024-09-11 15:19
+  pipe_180_A_red.bin                             25.4 KB  .bin     2024-09-11 15:19
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\gltf\yellow] - 167 Dateien
+--------------------------------------------------------------------------------
+  signage_arrows_left_yellow.bin                 43.9 KB  .bin     2024-09-11 15:21
+  signage_arrows_right_yellow.bin                43.9 KB  .bin     2024-09-11 15:21
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:21
+  hoop_angled_yellow.bin                         36.9 KB  .bin     2024-09-11 15:21
+  pipe_180_B_yellow.bin                          33.5 KB  .bin     2024-09-11 15:21
+  bomb_B_yellow.bin                              29.5 KB  .bin     2024-09-11 15:21
+  arch_wide_yellow.bin                           27.9 KB  .bin     2024-09-11 15:21
+  arch_tall_yellow.bin                           27.4 KB  .bin     2024-09-11 15:21
+  arch_yellow.bin                                27.4 KB  .bin     2024-09-11 15:21
+  pipe_180_A_yellow.bin                          25.4 KB  .bin     2024-09-11 15:21
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\obj\blue] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:18
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\obj\green] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:22
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\obj\neutral] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 14:40
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\obj\red] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:19
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Assets\obj\yellow] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 15:21
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Samples] - 4 Dateien
+--------------------------------------------------------------------------------
+  sample3.png                                  1951.9 KB  .png     2025-02-24 11:39
+  sample2.png                                  1805.7 KB  .png     2025-02-24 11:39
+  sample4.png                                  1763.2 KB  .png     2025-02-24 11:39
+  sample1.png                                  1632.0 KB  .png     2025-02-24 11:39
+
+[assets\KayKit_Platformer_Pack_1.0_FREE\KayKit_Platformer_Pack_1.0_FREE\Textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  platformer_texture.png                         37.7 KB  .png     2024-09-11 13:56
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE] - 2 Dateien
+--------------------------------------------------------------------------------
+  sample.png                                   1375.5 KB  .png     2023-08-13 12:58
+  contents.png                                 1175.7 KB  .png     2023-08-13 12:58
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE\Assets\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  prototypebits_texture.png                      29.0 KB  .png     2023-08-16 10:10
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE\Assets\fbx(unity)] - 1 Dateien
+--------------------------------------------------------------------------------
+  prototypebits_texture.png                      29.0 KB  .png     2023-08-13 21:02
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE\Assets\gltf] - 145 Dateien
+--------------------------------------------------------------------------------
+  Pallet_Small_Decorated_B.bin                  128.9 KB  .bin     2023-08-16 10:10
+  Dummy_Base.bin                                 98.4 KB  .bin     2023-08-16 10:10
+  target_stand_A_Decorated.bin                   70.0 KB  .bin     2023-08-16 10:10
+  Pallet_Small_Decorated_A.bin                   66.3 KB  .bin     2023-08-16 10:10
+  table_medium_Decorated.bin                     45.2 KB  .bin     2023-08-16 10:10
+  prototypebits_texture.png                      29.0 KB  .png     2023-08-16 10:10
+  Door_A_Decorated.bin                           17.8 KB  .bin     2023-08-16 10:10
+  Door_A.bin                                     14.4 KB  .bin     2023-08-16 10:10
+  Barrel_A.bin                                   14.3 KB  .bin     2023-08-16 10:10
+  Barrel_B.bin                                   14.3 KB  .bin     2023-08-16 10:10
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE\Assets\obj] - 1 Dateien
+--------------------------------------------------------------------------------
+  prototypebits_texture.png                      29.0 KB  .png     2023-08-16 10:10
+
+[assets\KayKit_Prototype_Bits_1.0_FREE\KayKit_Prototype_Bits_1.0_FREE\Assets\textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  prototypebits_texture.png                      29.0 KB  .png     2023-08-13 21:02
+
+[assets\KayKit_ResourceBits_1.0_FREE\KayKit_ResourceBits_1.0_FREE\Assets\gltf] - 76 Dateien
+--------------------------------------------------------------------------------
+  Textiles_Stack_Large_Colored.gltf               3.0 KB  .gltf    2025-03-20 13:49
+  Stone_Bricks_Stack_Medium.gltf                  3.0 KB  .gltf    2025-03-20 13:49
+  Stone_Bricks_Stack_Large.gltf                   3.0 KB  .gltf    2025-03-20 13:49
+  Wood_Planks_Stack_Medium.gltf                   3.0 KB  .gltf    2025-03-20 13:49
+  Wood_Planks_Stack_Large.gltf                    3.0 KB  .gltf    2025-03-20 13:49
+  Stone_Bricks_Stack_Small.gltf                   3.0 KB  .gltf    2025-03-20 13:49
+  Wood_Planks_Stack_Small.gltf                    3.0 KB  .gltf    2025-03-20 13:49
+  Textiles_Stack_Large.gltf                       3.0 KB  .gltf    2025-03-20 13:49
+  Textiles_Stack_Small.gltf                       3.0 KB  .gltf    2025-03-20 13:49
+  Copper_Bars_Stack_Large.gltf                    3.0 KB  .gltf    2025-03-20 13:49
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE] - 2 Dateien
+--------------------------------------------------------------------------------
+  sample.png                                   1227.9 KB  .png     2023-09-13 12:51
+  contents.png                                 1079.8 KB  .png     2023-09-13 12:51
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE\Assets\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  restaurantbits_texture.png                     20.6 KB  .png     2023-09-13 09:00
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE\Assets\fbx (unity)] - 1 Dateien
+--------------------------------------------------------------------------------
+  restaurantbits_texture.png                     20.6 KB  .png     2023-09-13 09:00
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE\Assets\gltf] - 289 Dateien
+--------------------------------------------------------------------------------
+  wall_decorated.bin                            169.3 KB  .bin     2023-09-13 11:15
+  table_round_A_decorated.bin                   168.6 KB  .bin     2023-09-13 11:15
+  kitchentable_sink_large_decorated.bin         103.3 KB  .bin     2023-09-13 11:15
+  stove_multi_decorated.bin                     100.8 KB  .bin     2023-09-13 11:15
+  crate_buns.bin                                100.4 KB  .bin     2023-09-13 11:15
+  fridge_A_decorated.bin                         86.1 KB  .bin     2023-09-13 11:15
+  crate_tomatoes.bin                             80.0 KB  .bin     2023-09-13 11:15
+  kitchentable_A_large_decorated.bin             76.0 KB  .bin     2023-09-13 11:15
+  crate_lettuce.bin                              67.8 KB  .bin     2023-09-13 11:15
+  food_vegetableburger.bin                       67.8 KB  .bin     2023-09-13 11:15
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE\Assets\obj] - 1 Dateien
+--------------------------------------------------------------------------------
+  restaurantbits_texture.png                     20.6 KB  .png     2023-09-13 11:15
+
+[assets\KayKit_Restaurant_Bits_1.0_FREE\KayKit_Restaurant_Bits_1.0_FREE\Assets\textures] - 1 Dateien
+--------------------------------------------------------------------------------
+  restaurantbits_texture.png                     20.6 KB  .png     2023-09-13 09:00
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE] - 1 Dateien
+--------------------------------------------------------------------------------
+  contents.png                                 1518.8 KB  .png     2024-02-02 14:08
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\assets\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 14:23
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\assets\fbx(unity)] - 1 Dateien
+--------------------------------------------------------------------------------
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 14:23
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\assets\gltf] - 27 Dateien
+--------------------------------------------------------------------------------
+  Skeleton_Staff.bin                             67.6 KB  .bin     2024-01-10 14:23
+  Skeleton_Shield_Large_A.bin                    32.5 KB  .bin     2024-01-10 14:23
+  Skeleton_Shield_Small_B.bin                    28.0 KB  .bin     2024-01-10 14:23
+  Skeleton_Crossbow.bin                          28.0 KB  .bin     2024-01-10 14:23
+  Skeleton_Axe.bin                               24.8 KB  .bin     2024-01-10 14:23
+  Skeleton_Shield_Small_A.bin                    21.2 KB  .bin     2024-01-10 14:23
+  Skeleton_Blade.bin                             19.6 KB  .bin     2024-01-10 14:23
+  Skeleton_Shield_Large_B.bin                    18.4 KB  .bin     2024-01-10 14:23
+  Skeleton_Quiver.bin                            18.2 KB  .bin     2024-01-10 14:23
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 14:23
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\assets\obj] - 1 Dateien
+--------------------------------------------------------------------------------
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 14:23
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\characters\fbx] - 1 Dateien
+--------------------------------------------------------------------------------
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 09:59
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\characters\gltf] - 5 Dateien
+--------------------------------------------------------------------------------
+  Skeleton_Warrior.glb                         4749.6 KB  .glb     2024-01-10 10:59
+  Skeleton_Rogue.glb                           4713.9 KB  .glb     2024-01-10 11:03
+  Skeleton_Minion.glb                          4701.5 KB  .glb     2024-01-10 10:58
+  Skeleton_Mage.glb                            4649.5 KB  .glb     2024-01-10 10:57
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 09:59
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\samples] - 4 Dateien
+--------------------------------------------------------------------------------
+  warrior.png                                  1604.0 KB  .png     2024-02-02 14:09
+  mage.png                                     1513.9 KB  .png     2024-02-02 14:08
+  rogue.png                                     732.1 KB  .png     2024-02-02 14:08
+  minion.png                                    692.8 KB  .png     2024-02-02 14:08
+
+[assets\KayKit_Skeletons_1.0_FREE\KayKit_Skeletons_1.0_FREE\texture] - 1 Dateien
+--------------------------------------------------------------------------------
+  skeleton_texture.png                           16.6 KB  .png     2024-01-10 09:59
+
+[assets\KloWorks_Healthy&Junk_Food_Pack\KloWorks_Healthy&Junk_Food_Kit\Gltf\Healthy_Food] - 21 Dateien
+--------------------------------------------------------------------------------
+  Salad_042.glb                                1020.1 KB  .glb     2024-04-11 16:59
+  Fruits_Salad.glb                              913.7 KB  .glb     2024-04-11 16:59
+  Rice.glb                                      893.8 KB  .glb     2024-04-11 16:59
+  Meat_Cooking.glb                              415.4 KB  .glb     2024-04-11 16:59
+  Chicken_Cooking_B.glb                         349.0 KB  .glb     2024-04-11 16:59
+  Chicken_Cooking_A.glb                         344.2 KB  .glb     2024-04-11 16:59
+  Salmon.glb                                    293.4 KB  .glb     2024-04-11 16:59
+  Scrambled_Eggs.glb                            213.8 KB  .glb     2024-04-11 16:59
+  Bottle_Water_a.glb                            186.6 KB  .glb     2024-04-11 16:59
+  Bottle_Water_b.glb                            140.7 KB  .glb     2024-04-11 16:59
+
+[assets\KloWorks_Healthy&Junk_Food_Pack\KloWorks_Healthy&Junk_Food_Kit\Gltf\Junk_Food] - 34 Dateien
+--------------------------------------------------------------------------------
+  Waffle.glb                                    180.1 KB  .glb     2024-04-11 17:06
+  Pizza.glb                                     121.0 KB  .glb     2024-04-11 17:06
+  Burger.glb                                    112.7 KB  .glb     2024-04-11 17:06
+  Pancake.glb                                    94.0 KB  .glb     2024-04-11 17:06
+  Popcorn.glb                                    91.6 KB  .glb     2024-04-11 17:06
+  Hotdog.glb                                     90.5 KB  .glb     2024-04-11 17:06
+  Onion.glb                                      82.7 KB  .glb     2024-04-11 17:06
+  chicken_nuggets.glb                            77.0 KB  .glb     2024-04-11 17:06
+  Potato_Chips.glb                               74.1 KB  .glb     2024-04-11 17:06
+  Ice_Cream_Sprinkles_Cup.glb                    69.4 KB  .glb     2024-04-11 17:06
+
+[assets\ModularDungeonTiles_Blend_fbx__gltf\GLTF] - 2 Dateien
+--------------------------------------------------------------------------------
+  ModularDungeonTiles_Props.gltf             166566.1 KB  .gltf    2023-06-02 09:06
+  ModularDungeonTiles.gltf                    42724.0 KB  .gltf    2023-06-03 09:06
+
+[assets\PIpes_Pack_Godot_40\PIpes_Pack\Gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  PipePack.gltf                                 170.4 KB  .gltf    2024-06-08 03:33
+
+[assets\PipeWalls_FBX_GLTF_Blend_Textures\PipeWalls_FBX_GLTF_Blend_Textures\Gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  PipePack.gltf                                 170.4 KB  .gltf    2024-06-08 03:33
+
+[assets\RockSet_Pack_Godot\RockSet_Pack\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  RockSet.gltf                                49199.8 KB  .gltf    2023-04-10 14:40
+
+[assets\RocksSet_Blend_fbx_gltf_textures\gltf] - 1 Dateien
+--------------------------------------------------------------------------------
+  RockSet.gltf                                49199.8 KB  .gltf    2023-04-10 14:40
+
+[assets\Small Props Pack\Small Props Pack\gLTF\Props] - 115 Dateien
+--------------------------------------------------------------------------------
+  Cart_1_A.glb                                  684.4 KB  .glb     2025-04-09 21:07
+  Cart_1_B.glb                                  684.4 KB  .glb     2025-04-09 21:07
+  Cart_1_C.glb                                  684.4 KB  .glb     2025-04-09 21:07
+  DriedFish_1_A.glb                             666.0 KB  .glb     2025-04-09 21:07
+  DriedFish_1_B.glb                             666.0 KB  .glb     2025-04-09 21:07
+  DriedFish_1_C.glb                             666.0 KB  .glb     2025-04-09 21:07
+  Manequin_2_A_002.glb                          629.5 KB  .glb     2025-04-09 21:03
+  Manequin_2_A.glb                              629.5 KB  .glb     2025-04-09 21:07
+  Manequin_2_C.glb                              629.5 KB  .glb     2025-04-09 21:07
+  Manequin_2_A_001.glb                          629.5 KB  .glb     2025-04-09 21:03
+
+[assets\SpookyPropSet_Blend_Fbx_Glb\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  SpookyPropSet.glb                            1889.9 KB  .glb     2024-10-08 11:20
+
+[assets\SpookyPropSet_Godot\LoafbrrAssets\SpookyPropSet\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  SpookyPropSet.glb                            1889.9 KB  .glb     2024-10-08 11:20
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\ArtRoom\glb] - 26 Dateien
+--------------------------------------------------------------------------------
+  demoscene.glb                                 675.9 KB  .glb     2024-02-08 17:57
+  statue.glb                                    111.9 KB  .glb     2024-02-08 17:57
+  paintingbig.glb                                45.5 KB  .glb     2024-02-08 17:57
+  paintingreference_001.glb                      43.4 KB  .glb     2024-02-08 17:57
+  paintingreference_002.glb                      43.4 KB  .glb     2024-02-08 17:57
+  paintingreference_003.glb                      43.4 KB  .glb     2024-02-08 17:57
+  paintingreference_004.glb                      43.4 KB  .glb     2024-02-08 17:57
+  paintingreference_005.glb                      43.4 KB  .glb     2024-02-08 17:57
+  paintingreal_001.glb                           43.4 KB  .glb     2024-02-08 17:57
+  paintingreference.glb                          43.4 KB  .glb     2024-02-08 17:57
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\catferia\GLTF] - 25 Dateien
+--------------------------------------------------------------------------------
+  CAFETERIAdemoscene.glb                       5825.7 KB  .glb     2023-12-22 11:17
+  CAFETERIApingpongtable.glb                    634.4 KB  .glb     2023-12-22 11:08
+  CAFETERIAshowcasetable.glb                    105.9 KB  .glb     2023-12-22 11:08
+  CAFETERIAcoffemaker.glb                        93.0 KB  .glb     2023-12-22 11:08
+  CAFETERIAvendingmachine.glb                    85.5 KB  .glb     2023-12-22 11:08
+  CAFETERIAshowcasewood.glb                      45.6 KB  .glb     2023-12-22 11:08
+  CAFETERIAtraycafet.glb                         40.6 KB  .glb     2023-12-22 11:08
+  CAFETERIAcan_001.glb                           35.1 KB  .glb     2023-12-22 11:08
+  CAFETERIAcan_002.glb                           35.1 KB  .glb     2023-12-22 11:08
+  CAFETERIAcan_003.glb                           35.1 KB  .glb     2023-12-22 11:08
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\chemestry lab\GLTF] - 21 Dateien
+--------------------------------------------------------------------------------
+  CHEMISTRYlabdemoscene.glb                   11974.2 KB  .glb     2023-12-22 12:00
+  CHESMISTRYatoms.glb                          1744.7 KB  .glb     2023-12-22 11:45
+  CHEMISTRYsolarsystem_9.glb                    589.2 KB  .glb     2023-12-22 11:45
+  CHEMISTRYmicroscope.glb                       339.1 KB  .glb     2023-12-22 11:45
+  CHEMISTRYvialholders.glb                      314.7 KB  .glb     2023-12-22 11:45
+  CHEMISTRYchairwithwheels.glb                  282.2 KB  .glb     2023-12-22 11:45
+  CHEMISTRYcupboard_3.glb                       145.6 KB  .glb     2023-12-22 11:45
+  CHEMESTRYtable.glb                            118.2 KB  .glb     2023-12-22 11:45
+  CHEMISTRYglobe_1.glb                           93.3 KB  .glb     2023-12-22 11:45
+  CHEMISTRYfireextinguisher.glb                  81.5 KB  .glb     2023-12-22 11:45
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\classroom\GLTF] - 55 Dateien
+--------------------------------------------------------------------------------
+  classroom_demoscene.glb                      3066.1 KB  .glb     2023-12-22 11:53
+  schoolbus.glb                                1857.4 KB  .glb     2023-12-22 11:32
+  watch.glb                                     191.2 KB  .glb     2023-12-22 11:45
+  shelfwithwheels.glb                           184.0 KB  .glb     2023-12-22 11:45
+  TV.glb                                        183.6 KB  .glb     2023-12-22 11:45
+  markers_001.glb                               150.6 KB  .glb     2023-12-22 11:45
+  markers_002.glb                               150.4 KB  .glb     2023-12-22 11:45
+  markers.glb                                   150.4 KB  .glb     2023-12-22 11:45
+  chairtable.glb                                134.9 KB  .glb     2023-12-22 11:45
+  pencilcase.glb                                133.2 KB  .glb     2023-12-22 11:45
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\computer\GLTF] - 14 Dateien
+--------------------------------------------------------------------------------
+  COMPUTERdemoscene.glb                        6334.0 KB  .glb     2023-12-22 11:58
+  COMPUTERkeyboard.glb                          527.9 KB  .glb     2023-12-22 11:45
+  COMPUTERscreenold.glb                         454.2 KB  .glb     2023-12-22 11:45
+  COMPUTERchair.glb                             347.2 KB  .glb     2023-12-22 11:45
+  COMPUTERpc.glb                                277.9 KB  .glb     2023-12-22 11:45
+  COMPUTERprojector.glb                         152.3 KB  .glb     2023-12-22 11:45
+  COMPUTERrouter.glb                            148.5 KB  .glb     2023-12-22 11:45
+  COMPUTERprinter.glb                           129.2 KB  .glb     2023-12-22 11:45
+  COMPUTERusb.glb                                83.9 KB  .glb     2023-12-22 11:45
+  COMPUTERmouse.glb                              75.9 KB  .glb     2023-12-22 11:45
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\principal office\GLTF] - 17 Dateien
+--------------------------------------------------------------------------------
+  PRINCIPALOFFICEdemoscene.glb                 4126.7 KB  .glb     2023-12-22 11:28
+  PRINCIPALOFFICEtelephone.glb                  842.4 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEprincipalchair.glb             291.2 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEshelf.glb                      272.9 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEnotebook_001.glb               231.5 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEnotebook_002.glb               231.5 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEnotebook.glb                   231.5 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEdrawer.glb                     206.1 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEpenholder.glb                  203.6 KB  .glb     2023-12-22 11:29
+  PRINCIPALOFFICEdesk.glb                       135.8 KB  .glb     2023-12-22 11:29
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\toilet\GLTF] - 18 Dateien
+--------------------------------------------------------------------------------
+  toiletdemoscene.glb                          2422.8 KB  .glb     2023-12-22 11:23
+  toiletwallsfloor.glb                          263.2 KB  .glb     2023-12-22 11:21
+  toiletbasictoilet.glb                         164.1 KB  .glb     2023-12-22 11:21
+  toiletwater_1.glb                             135.8 KB  .glb     2023-12-22 11:21
+  toiletpipeforsink.glb                          69.5 KB  .glb     2023-12-22 11:21
+  toiletpartition.glb                            67.7 KB  .glb     2023-12-22 11:21
+  toiletpoop.glb                                 45.2 KB  .glb     2023-12-22 11:21
+  toileturinal.glb                               44.9 KB  .glb     2023-12-22 11:21
+  toiletpaper.glb                                34.3 KB  .glb     2023-12-22 11:21
+  toiletsoap_001.glb                             31.7 KB  .glb     2023-12-22 11:21
+
+[assets\StylooClassroomAssetPack GLTF & FBX\StylooClassroomAssetPack GLTF & FBX\walls\GLB] - 13 Dateien
+--------------------------------------------------------------------------------
+  walldoor_003.glb                             2080.6 KB  .glb     2024-09-07 19:33
+  wallwindow_003.glb                           2080.5 KB  .glb     2024-09-07 19:33
+  wall_003.glb                                 2078.5 KB  .glb     2024-09-07 19:33
+  walldoor_001.glb                             1803.0 KB  .glb     2024-09-07 19:33
+  wallwindow_001.glb                           1802.9 KB  .glb     2024-09-07 19:33
+  wall_001.glb                                 1800.9 KB  .glb     2024-09-07 19:33
+  walldoor_002.glb                             1474.4 KB  .glb     2024-09-07 19:33
+  wallwindow_002.glb                           1474.3 KB  .glb     2024-09-07 19:33
+  wall_002.glb                                 1472.3 KB  .glb     2024-09-07 19:33
+  door.glb                                      941.3 KB  .glb     2024-09-07 21:20
+
+[assets\Tiny_Treats_Homely_House_1.0_FREE\Tiny_Treats_Homely_House_1.0_FREE\Assets\gltf] - 27 Dateien
+--------------------------------------------------------------------------------
+  house.gltf                                      9.5 KB  .gltf    2024-08-26 11:15
+  mailbox.gltf                                    7.5 KB  .gltf    2024-08-26 11:15
+  fence_open_wide_long.gltf                       3.5 KB  .gltf    2024-08-26 11:15
+  fence_straight_long.gltf                        3.5 KB  .gltf    2024-08-26 11:15
+  fence_wide_long.gltf                            3.5 KB  .gltf    2024-08-26 11:15
+  fence_open_long.gltf                            3.5 KB  .gltf    2024-08-26 11:15
+  fence_straight.gltf                             3.5 KB  .gltf    2024-08-26 11:15
+  fence_corner.gltf                               3.5 KB  .gltf    2024-08-26 11:15
+  fence_rails_long.gltf                           3.5 KB  .gltf    2024-08-26 11:15
+  cobblestones.gltf                               3.5 KB  .gltf    2024-08-26 11:15
+
+[assets\Tiny_Treats_House_Plants_1.0_FREE\Tiny_Treats_House_Plants_1.0_FREE\Assets\gltf] - 113 Dateien
+--------------------------------------------------------------------------------
+  sansevieria_plant_medium_potted.gltf            3.5 KB  .gltf    2025-04-11 09:40
+  sansevieria_plant_large_potted.gltf             3.5 KB  .gltf    2025-04-11 09:40
+  sansevieria_plant_small_potted.gltf             3.5 KB  .gltf    2025-04-11 09:40
+  zzplant_plant_large_potted.gltf                 3.5 KB  .gltf    2025-04-11 09:40
+  monstera_plant_large_potted.gltf                3.5 KB  .gltf    2025-04-11 09:40
+  monstera_plant_medium_potted.gltf               3.5 KB  .gltf    2025-04-11 09:40
+  zzplant_plant_medium_potted.gltf                3.5 KB  .gltf    2025-04-11 09:40
+  pothos_plant_medium_potted.gltf                 3.5 KB  .gltf    2025-04-11 09:40
+  zzplant_plant_small_potted.gltf                 3.5 KB  .gltf    2025-04-11 09:40
+  monstera_plant_small_potted.gltf                3.5 KB  .gltf    2025-04-11 09:40
+
+[assets\Tiny_Treats_Pretty_Park_1.0_FREE\Tiny_Treats_Pretty_Park_1.0_FREE\Assets\gltf] - 28 Dateien
+--------------------------------------------------------------------------------
+  fountain.gltf                                   7.3 KB  .gltf    2024-08-26 11:19
+  cobble_stones_large.gltf                        3.5 KB  .gltf    2024-08-26 11:19
+  cobble_stones.gltf                              3.5 KB  .gltf    2024-08-26 11:19
+  street_lantern.gltf                             3.5 KB  .gltf    2024-08-26 11:19
+  hedge_straight_long.gltf                        3.5 KB  .gltf    2024-08-26 11:19
+  bush_large.gltf                                 3.5 KB  .gltf    2024-08-26 11:19
+  tree_large.gltf                                 3.5 KB  .gltf    2024-08-26 11:19
+  trashcan.gltf                                   3.5 KB  .gltf    2024-08-26 11:19
+  flower_B.gltf                                   3.5 KB  .gltf    2024-08-26 11:19
+  hedge_corner.gltf                               3.5 KB  .gltf    2024-08-26 11:19
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Character\glTF] - 2 Dateien
+--------------------------------------------------------------------------------
+  Character_Gun.gltf                           1081.0 KB  .gltf    2021-12-12 17:41
+  Character.gltf                               1011.0 KB  .gltf    2021-12-12 17:42
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Cubes\glTF] - 8 Dateien
+--------------------------------------------------------------------------------
+  Cube_Bricks.gltf                               67.7 KB  .gltf    2021-12-12 20:02
+  Cube_Question.gltf                             50.5 KB  .gltf    2021-12-12 20:03
+  Cube_Exclamation.gltf                          47.9 KB  .gltf    2021-12-12 20:03
+  Cube_Grass_Single.gltf                         27.0 KB  .gltf    2021-12-12 20:03
+  Cube_Spikes.gltf                               20.6 KB  .gltf    2021-12-12 20:03
+  Cube_Dirt_Single.gltf                          19.1 KB  .gltf    2021-12-12 20:03
+  Cube_Crate.gltf                                17.3 KB  .gltf    2021-12-12 20:02
+  Cube_Default.gltf                              13.1 KB  .gltf    2021-12-12 20:03
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Enemies\glTF] - 4 Dateien
+--------------------------------------------------------------------------------
+  Crab.gltf                                     323.8 KB  .gltf    2021-12-12 19:23
+  Bee.gltf                                      272.8 KB  .gltf    2021-12-12 19:51
+  Enemy.gltf                                    251.0 KB  .gltf    2021-12-12 19:08
+  Skull.gltf                                    197.0 KB  .gltf    2021-12-12 19:16
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Level and Mechanics\glTF] - 44 Dateien
+--------------------------------------------------------------------------------
+  Chest.gltf                                    484.6 KB  .gltf    2021-12-12 20:08
+  Tower.gltf                                    152.3 KB  .gltf    2021-12-12 20:11
+  Bridge_Small.gltf                              94.9 KB  .gltf    2021-12-12 20:08
+  Cannon.gltf                                    76.4 KB  .gltf    2021-12-12 20:08
+  Pipe_End.gltf                                  66.0 KB  .gltf    2021-12-12 20:10
+  Hazard_Saw.gltf                                50.8 KB  .gltf    2021-12-12 20:09
+  Bridge_Modular.gltf                            50.4 KB  .gltf    2021-12-12 20:08
+  Spikes.gltf                                    49.8 KB  .gltf    2021-12-12 20:10
+  Bouncer.gltf                                   45.9 KB  .gltf    2021-12-12 20:08
+  Stairs_Small.gltf                              45.1 KB  .gltf    2021-12-12 20:11
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Modular Platforms\2D\glTF] - 4 Dateien
+--------------------------------------------------------------------------------
+  Cube_Grass_1x1End.gltf                         20.9 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_1x1Center.gltf                      14.9 KB  .gltf    2021-12-12 20:12
+  Cube_Dirt_1x1End.gltf                          14.7 KB  .gltf    2021-12-12 20:12
+  Cube_Dirt_1x1Center.gltf                       10.2 KB  .gltf    2021-12-12 20:12
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Modular Platforms\3D\glTF] - 11 Dateien
+--------------------------------------------------------------------------------
+  Cube_Grass_Corner_Tall.gltf                    12.1 KB  .gltf    2021-12-12 20:12
+  Cube_Dirt_Corner_Tall.gltf                      9.1 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_CornerBottom_Tall.gltf               9.1 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_Side_Tall.gltf                       8.8 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_CornerCenter_Tall.gltf               8.3 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_SideBottom_Tall.gltf                 6.9 KB  .gltf    2021-12-12 20:12
+  Cube_Dirt_Side_Tall.gltf                        6.9 KB  .gltf    2021-12-12 20:12
+  Cube_Grass_SideCenter_Tall.gltf                 6.5 KB  .gltf    2021-12-12 20:12
+  Cube_Dirt_Center_Tall.gltf                      2.6 KB  .gltf    2021-12-14 01:04
+  Cube_Grass_Center_Tall.gltf                     2.5 KB  .gltf    2021-12-12 20:12
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Modular Platforms\Single Cube\glTF] - 2 Dateien
+--------------------------------------------------------------------------------
+  Cube_Grass_Single.gltf                         27.0 KB  .gltf    2021-12-12 20:13
+  Cube_Dirt_Single.gltf                          19.1 KB  .gltf    2021-12-12 20:13
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Modular Platforms\Single Height\glTF] - 6 Dateien
+--------------------------------------------------------------------------------
+  Cube_Grass_Corner.gltf                         12.9 KB  .gltf    2021-12-12 20:13
+  Cube_Dirt_Corner.gltf                           9.7 KB  .gltf    2021-12-12 20:13
+  Cube_Grass_Side.gltf                            9.2 KB  .gltf    2021-12-12 20:13
+  Cube_Dirt_Side.gltf                             7.2 KB  .gltf    2021-12-12 20:13
+  Cube_Grass_Center.gltf                          4.2 KB  .gltf    2021-12-12 20:13
+  Cube_Dirt_Center.gltf                           2.6 KB  .gltf    2021-12-12 20:13
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Nature\glTF] - 19 Dateien
+--------------------------------------------------------------------------------
+  Tree_Fruit.gltf                               121.3 KB  .gltf    2021-12-12 20:17
+  Tree.gltf                                      84.9 KB  .gltf    2021-12-12 20:16
+  Bush_Fruit.gltf                                52.9 KB  .gltf    2021-12-12 20:16
+  RockPlatforms_2.gltf                           49.2 KB  .gltf    2021-12-12 20:16
+  Bush.gltf                                      46.8 KB  .gltf    2021-12-12 20:16
+  RockPlatforms_3.gltf                           28.9 KB  .gltf    2021-12-12 20:16
+  RockPlatforms_1.gltf                           27.3 KB  .gltf    2021-12-12 20:17
+  Fruit.gltf                                     19.3 KB  .gltf    2021-12-12 20:16
+  Cloud_3.gltf                                   19.1 KB  .gltf    2021-12-12 20:16
+  Cloud_2.gltf                                   16.9 KB  .gltf    2021-12-12 20:16
+
+[assets\Ultimate Platformer Pack by Quaternius\Ultimate Platformer Pack - Dec 2021\Powerups and Pickups\glTF] - 11 Dateien
+--------------------------------------------------------------------------------
+  Star_Outline.gltf                              21.1 KB  .gltf    2021-12-12 20:18
+  Coin.gltf                                      20.4 KB  .gltf    2021-12-12 20:17
+  Key.gltf                                       17.0 KB  .gltf    2021-12-12 20:18
+  Heart.gltf                                     15.7 KB  .gltf    2021-12-12 20:18
+  Star.gltf                                      15.4 KB  .gltf    2021-12-12 20:18
+  Heart_Outline.gltf                             14.5 KB  .gltf    2021-12-12 20:18
+  Heart_Half.gltf                                10.0 KB  .gltf    2021-12-12 20:18
+  Thunder.gltf                                    6.6 KB  .gltf    2021-12-12 20:18
+  Gem_Green.gltf                                  6.3 KB  .gltf    2021-12-12 20:18
+  Gem_Blue.gltf                                   5.7 KB  .gltf    2021-12-12 20:18
+
+[assets\WoodFurnitures2_glb_blend\glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodFurnitures_2.glb                          742.4 KB  .glb     2023-12-03 14:04
+
+[assets\WoodFurnitures_2_Godot\LoafbrrAssets\WoodFurnitures_2\glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodFurnitures_2.glb                          742.4 KB  .glb     2023-12-03 14:04
+
+[assets\WoodPropsAndMaterials\Godot] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodProps.gltf                               1368.4 KB  .gltf    2023-07-10 10:46
+
+[assets\WoodStuff_Godot\LoafbrrAssets\WoodStuff\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodStuff.glb                                1064.0 KB  .glb     2025-02-27 07:40
+
+[assets\WoodStuff_blend_fbx_glb_textures\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodStuff.glb                                1064.0 KB  .glb     2025-02-27 07:40
+
+[assets\WoodenDockSet_Godot\LoafbrrAssets\WoodenDockSet\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodenDockSet.glb                            1332.6 KB  .glb     2024-01-03 08:09
+
+[assets\WoodenDock_blend_glb_Fbx\Glb] - 1 Dateien
+--------------------------------------------------------------------------------
+  WoodenDockSet.glb                            1332.6 KB  .glb     2024-01-03 08:09
+
+[assets\WoodenFurnitures_FBX_Blend\GLTF] - 1 Dateien
+--------------------------------------------------------------------------------
+  Furnitures.gltf                              1868.6 KB  .gltf    2022-08-19 15:49
+
+[assets\fox] - 1 Dateien
+--------------------------------------------------------------------------------
+  fox.glb                                      1171.7 KB  .glb     2021-06-23 16:23
+
+[assets\fox(1)] - 1 Dateien
+--------------------------------------------------------------------------------
+  fox.glb                                      1171.7 KB  .glb     2021-06-23 16:23
+
+[assets\kaykit] - 7 Dateien
+--------------------------------------------------------------------------------
+  wall.glb                                      218.5 KB  .glb     2020-11-12 12:54
+  pillar.glb                                    117.5 KB  .glb     2020-11-12 12:54
+  crate.glb                                      59.9 KB  .glb     2020-11-12 12:54
+  barrel.glb                                     44.5 KB  .glb     2020-11-12 12:54
+  door.glb                                       24.6 KB  .glb     2020-11-12 12:54
+  floor_tile_large.glb                           24.0 KB  .glb     2020-11-12 12:54
+  torch.glb                                      20.4 KB  .glb     2020-11-12 12:54
+
+[assets\kaykit\characters] - 5 Dateien
+--------------------------------------------------------------------------------
+  Knight.glb                                   3573.8 KB  .glb     2023-08-21 14:51
+  Rogue.glb                                    3531.5 KB  .glb     2023-08-21 14:47
+  Barbarian.glb                                3528.6 KB  .glb     2023-08-21 14:50
+  Rogue_Hooded.glb                             3513.3 KB  .glb     2023-08-21 14:48
+  Mage.glb                                     3505.1 KB  .glb     2023-08-21 15:12
+
+[assets\kenney_building-kit\Models\GLB format] - 79 Dateien
+--------------------------------------------------------------------------------
+  door-rotate-round-d.glb                        41.5 KB  .glb     2024-06-19 14:56
+  door-rotate-round-c.glb                        39.0 KB  .glb     2024-06-19 14:56
+  door-rotate-round-b.glb                        32.4 KB  .glb     2024-06-19 14:56
+  door-rotate-square-d.glb                       30.2 KB  .glb     2024-06-19 14:56
+  door-rotate-square-c.glb                       28.4 KB  .glb     2024-06-19 14:56
+  door-rotate-square-a.glb                       25.0 KB  .glb     2024-06-19 14:56
+  door-rotate-square-b.glb                       23.9 KB  .glb     2024-06-19 14:56
+  wall-window-wide-round-detailed.glb            22.8 KB  .glb     2024-06-19 14:56
+  door-rotate-round-a.glb                        22.7 KB  .glb     2024-06-19 14:56
+  wall-window-round-detailed.glb                 19.6 KB  .glb     2024-06-19 14:56
+
+[assets\kenney_castle-kit(1)\Models\GLB format] - 76 Dateien
+--------------------------------------------------------------------------------
+  siege-tower.glb                               140.8 KB  .glb     2024-03-27 13:37
+  siege-trebuchet.glb                           136.6 KB  .glb     2024-03-27 13:37
+  siege-tower-demolished.glb                    116.9 KB  .glb     2024-03-27 13:37
+  siege-ram.glb                                 101.2 KB  .glb     2024-03-27 13:37
+  siege-catapult.glb                             84.1 KB  .glb     2024-03-27 13:37
+  wall-corner-half-tower.glb                     78.1 KB  .glb     2024-03-27 13:37
+  siege-catapult-demolished.glb                  69.6 KB  .glb     2024-03-27 13:37
+  siege-ram-demolished.glb                       66.4 KB  .glb     2024-03-27 13:37
+  siege-trebuchet-demolished.glb                 64.5 KB  .glb     2024-03-27 13:37
+  siege-ballista.glb                             63.1 KB  .glb     2024-03-27 13:37
+
+[assets\kenney_castle-kit\Models\GLB format] - 76 Dateien
+--------------------------------------------------------------------------------
+  siege-tower.glb                               140.8 KB  .glb     2024-03-27 13:37
+  siege-trebuchet.glb                           136.6 KB  .glb     2024-03-27 13:37
+  siege-tower-demolished.glb                    116.9 KB  .glb     2024-03-27 13:37
+  siege-ram.glb                                 101.2 KB  .glb     2024-03-27 13:37
+  siege-catapult.glb                             84.1 KB  .glb     2024-03-27 13:37
+  wall-corner-half-tower.glb                     78.1 KB  .glb     2024-03-27 13:37
+  siege-catapult-demolished.glb                  69.6 KB  .glb     2024-03-27 13:37
+  siege-ram-demolished.glb                       66.4 KB  .glb     2024-03-27 13:37
+  siege-trebuchet-demolished.glb                 64.5 KB  .glb     2024-03-27 13:37
+  siege-ballista.glb                             63.1 KB  .glb     2024-03-27 13:37
+
+[assets\kenney_food-kit(1)\Models\GLB format] - 200 Dateien
+--------------------------------------------------------------------------------
+  cake-birthday.glb                             112.6 KB  .glb     2024-06-26 01:21
+  pizza.glb                                     104.3 KB  .glb     2024-06-26 01:21
+  watermelon.glb                                 91.7 KB  .glb     2024-06-26 01:21
+  cake.glb                                       71.2 KB  .glb     2024-06-26 01:21
+  plate-sauerkraut.glb                           63.2 KB  .glb     2024-06-26 01:21
+  cheese.glb                                     59.5 KB  .glb     2024-06-26 01:21
+  fries.glb                                      57.8 KB  .glb     2024-06-26 01:21
+  grapes.glb                                     57.6 KB  .glb     2024-06-26 01:21
+  sub.glb                                        57.0 KB  .glb     2024-06-26 01:21
+  burger-double.glb                              54.4 KB  .glb     2024-06-26 01:21
+
+[assets\kenney_food-kit\Models\GLB format] - 200 Dateien
+--------------------------------------------------------------------------------
+  cake-birthday.glb                             112.6 KB  .glb     2024-06-26 01:21
+  pizza.glb                                     104.3 KB  .glb     2024-06-26 01:21
+  watermelon.glb                                 91.7 KB  .glb     2024-06-26 01:21
+  cake.glb                                       71.2 KB  .glb     2024-06-26 01:21
+  plate-sauerkraut.glb                           63.2 KB  .glb     2024-06-26 01:21
+  cheese.glb                                     59.5 KB  .glb     2024-06-26 01:21
+  fries.glb                                      57.8 KB  .glb     2024-06-26 01:21
+  grapes.glb                                     57.6 KB  .glb     2024-06-26 01:21
+  sub.glb                                        57.0 KB  .glb     2024-06-26 01:21
+  burger-double.glb                              54.4 KB  .glb     2024-06-26 01:21
+
+[assets\kenney_graveyard-kit\Models\GLB format] - 87 Dateien
+--------------------------------------------------------------------------------
+  character-digger.glb                          147.9 KB  .glb     2023-10-03 17:40
+  character-vampire.glb                         132.8 KB  .glb     2023-10-03 17:40
+  character-skeleton.glb                        128.7 KB  .glb     2023-10-03 17:40
+  character-zombie.glb                          124.4 KB  .glb     2023-10-03 17:40
+  lightpost-all.glb                             107.1 KB  .glb     2023-10-03 17:40
+  character-ghost.glb                            76.8 KB  .glb     2023-10-03 17:40
+  grave-border.glb                               74.4 KB  .glb     2023-10-03 17:40
+  iron-fence-curve.glb                           62.0 KB  .glb     2023-10-03 17:40
+  lightpost-double.glb                           58.1 KB  .glb     2023-10-03 17:40
+  iron-fence-border-curve.glb                    57.7 KB  .glb     2023-10-03 17:40
+
+[assets\kenney_marble-kit\Models\GLB format] - 162 Dateien
+--------------------------------------------------------------------------------
+  helix-large-right.glb                         159.8 KB  .glb     2024-05-22 15:36
+  helix-large-left.glb                          159.8 KB  .glb     2024-05-22 15:36
+  helix-right.glb                                87.0 KB  .glb     2024-05-22 15:36
+  helix-left.glb                                 87.0 KB  .glb     2024-05-22 15:36
+  helix-large-half-right.glb                     81.4 KB  .glb     2024-05-22 15:36
+  helix-large-half-left.glb                      81.4 KB  .glb     2024-05-22 15:36
+  helix-half-left.glb                            45.0 KB  .glb     2024-05-22 15:36
+  helix-half-right.glb                           45.0 KB  .glb     2024-05-22 15:36
+  bend-large.glb                                 43.5 KB  .glb     2024-05-22 15:36
+  s-curve-right-large.glb                        43.5 KB  .glb     2024-05-22 15:36
+
+[assets\kenney_mini-dungeon\Models\GLB format] - 21 Dateien
+--------------------------------------------------------------------------------
+  character-human.glb                           148.5 KB  .glb     2023-09-19 01:41
+  character-orc.glb                             137.5 KB  .glb     2023-09-19 01:41
+  chest.glb                                      24.6 KB  .glb     2023-09-19 01:41
+  stones.glb                                     23.8 KB  .glb     2023-09-19 01:41
+  wall-narrow.glb                                22.7 KB  .glb     2023-09-19 01:41
+  coin.glb                                       21.6 KB  .glb     2023-09-19 01:41
+  wall-opening.glb                               18.8 KB  .glb     2023-09-19 01:41
+  trap.glb                                       18.4 KB  .glb     2023-09-19 01:41
+  rocks.glb                                      18.0 KB  .glb     2023-09-19 01:41
+  wall.glb                                       17.7 KB  .glb     2023-09-19 01:41
+
+[assets\kenney_modular-buildings\Models\GLB format] - 108 Dateien
+--------------------------------------------------------------------------------
+  building-sample-tower-d.glb                    43.8 KB  .glb     2024-02-08 14:01
+  building-sample-tower-a.glb                    34.4 KB  .glb     2024-02-08 14:01
+  building-sample-tower-c.glb                    33.2 KB  .glb     2024-02-08 14:01
+  building-sample-house-b.glb                    33.0 KB  .glb     2024-02-08 14:01
+  building-sample-house-c.glb                    30.8 KB  .glb     2024-02-08 14:01
+  building-sample-tower-b.glb                    28.2 KB  .glb     2024-02-08 14:01
+  building-sample-house-a.glb                    27.7 KB  .glb     2024-02-08 14:01
+  building-steps-narrow-windows-round.glb        11.9 KB  .glb     2024-02-08 14:01
+  building-window-awnings.glb                    10.7 KB  .glb     2024-02-08 14:01
+  building-steps-narrow-windows.glb              10.1 KB  .glb     2024-02-08 14:01
+
+[assets\kenney_platformer-kit(1)\Models\GLB format] - 142 Dateien
+--------------------------------------------------------------------------------
+  tree-snow.glb                                  61.4 KB  .glb     2024-05-15 08:53
+  tree.glb                                       61.4 KB  .glb     2024-05-15 08:53
+  crate-strong.glb                               40.9 KB  .glb     2024-05-15 08:53
+  flowers-tall.glb                               38.4 KB  .glb     2024-05-15 08:53
+  door-rotate-large.glb                          37.7 KB  .glb     2024-05-15 08:53
+  door-rotate.glb                                37.5 KB  .glb     2024-05-15 08:53
+  crate-item-strong.glb                          36.6 KB  .glb     2024-05-15 08:53
+  flowers.glb                                    27.2 KB  .glb     2024-05-15 08:53
+  spike-block-wide.glb                           26.4 KB  .glb     2024-05-15 08:53
+  trap-spikes-large.glb                          25.7 KB  .glb     2024-05-15 08:53
+
+[assets\kenney_platformer-kit\Models\GLB format] - 142 Dateien
+--------------------------------------------------------------------------------
+  tree-snow.glb                                  61.4 KB  .glb     2024-05-15 08:53
+  tree.glb                                       61.4 KB  .glb     2024-05-15 08:53
+  crate-strong.glb                               40.9 KB  .glb     2024-05-15 08:53
+  flowers-tall.glb                               38.4 KB  .glb     2024-05-15 08:53
+  door-rotate-large.glb                          37.7 KB  .glb     2024-05-15 08:53
+  door-rotate.glb                                37.5 KB  .glb     2024-05-15 08:53
+  crate-item-strong.glb                          36.6 KB  .glb     2024-05-15 08:53
+  flowers.glb                                    27.2 KB  .glb     2024-05-15 08:53
+  spike-block-wide.glb                           26.4 KB  .glb     2024-05-15 08:53
+  trap-spikes-large.glb                          25.7 KB  .glb     2024-05-15 08:53
+
+[assets\kenney_retro-urban-kit(1)\Models\GLB format] - 124 Dateien
+--------------------------------------------------------------------------------
+  detail-light-traffic.glb                       11.1 KB  .glb     2025-01-29 11:43
+  scaffolding-structure.glb                      10.9 KB  .glb     2025-01-29 11:43
+  detail-bench.glb                               10.0 KB  .glb     2025-01-29 11:43
+  pallet.glb                                      9.8 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-b.glb                        9.8 KB  .glb     2025-01-29 11:43
+  detail-light-double.glb                         9.1 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-a.glb                        9.0 KB  .glb     2025-01-29 11:43
+  tree-park-pine-large.glb                        7.8 KB  .glb     2025-01-29 11:43
+  tree-park-large.glb                             7.8 KB  .glb     2025-01-29 11:43
+  pallet-small.glb                                7.5 KB  .glb     2025-01-29 11:43
+
+[assets\kenney_retro-urban-kit(2)\Models\GLB format] - 124 Dateien
+--------------------------------------------------------------------------------
+  detail-light-traffic.glb                       11.1 KB  .glb     2025-01-29 11:43
+  scaffolding-structure.glb                      10.9 KB  .glb     2025-01-29 11:43
+  detail-bench.glb                               10.0 KB  .glb     2025-01-29 11:43
+  pallet.glb                                      9.8 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-b.glb                        9.8 KB  .glb     2025-01-29 11:43
+  detail-light-double.glb                         9.1 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-a.glb                        9.0 KB  .glb     2025-01-29 11:43
+  tree-park-pine-large.glb                        7.8 KB  .glb     2025-01-29 11:43
+  tree-park-large.glb                             7.8 KB  .glb     2025-01-29 11:43
+  pallet-small.glb                                7.5 KB  .glb     2025-01-29 11:43
+
+[assets\kenney_retro-urban-kit\Models\GLB format] - 124 Dateien
+--------------------------------------------------------------------------------
+  detail-light-traffic.glb                       11.1 KB  .glb     2025-01-29 11:43
+  scaffolding-structure.glb                      10.9 KB  .glb     2025-01-29 11:43
+  detail-bench.glb                               10.0 KB  .glb     2025-01-29 11:43
+  pallet.glb                                      9.8 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-b.glb                        9.8 KB  .glb     2025-01-29 11:43
+  detail-light-double.glb                         9.1 KB  .glb     2025-01-29 11:43
+  detail-bricks-type-a.glb                        9.0 KB  .glb     2025-01-29 11:43
+  tree-park-pine-large.glb                        7.8 KB  .glb     2025-01-29 11:43
+  tree-park-large.glb                             7.8 KB  .glb     2025-01-29 11:43
+  pallet-small.glb                                7.5 KB  .glb     2025-01-29 11:43
+
+[assets\kenney_tower-defense-kit\Models\GLB format] - 160 Dateien
+--------------------------------------------------------------------------------
+  snow-tile-corner-large.glb                    103.8 KB  .glb     2024-09-16 09:24
+  tile-corner-large.glb                         103.8 KB  .glb     2024-09-16 09:24
+  tower-round-build-f.glb                       100.4 KB  .glb     2024-09-16 09:24
+  enemy-ufo-a-weapon.glb                         94.8 KB  .glb     2024-09-16 09:24
+  snow-tile-tree-quad.glb                        92.7 KB  .glb     2024-09-16 09:24
+  tile-tree-quad.glb                             92.7 KB  .glb     2024-09-16 09:24
+  enemy-ufo-d-weapon.glb                         88.8 KB  .glb     2024-09-16 09:24
+  enemy-ufo-b-weapon.glb                         87.9 KB  .glb     2024-09-16 09:24
+  tower-square-build-e.glb                       87.2 KB  .glb     2024-09-16 09:24
+  tower-round-build-e.glb                        86.4 KB  .glb     2024-09-16 09:24
+
+[assets\nature\exports\rocks] - 4 Dateien
+--------------------------------------------------------------------------------
+  rock_grassy.glb                                16.4 KB  .glb     2021-03-03 16:55
+  small_rock_grassy.glb                          15.2 KB  .glb     2021-03-03 16:55
+  rock.glb                                       15.1 KB  .glb     2021-03-03 16:56
+  small_rock.glb                                 13.9 KB  .glb     2021-03-03 16:55
+
+[assets\nature\exports\trees] - 2 Dateien
+--------------------------------------------------------------------------------
+  pine_tree_snow.glb                             54.4 KB  .glb     2021-03-03 16:45
+  pine_tree.glb                                  53.2 KB  .glb     2021-03-03 16:45
+
+[assets\stylooanimalassetpack\stylooanimalassetpack\glb] - 7 Dateien
+--------------------------------------------------------------------------------
+  Cow.glb                                      1591.7 KB  .glb     2024-02-10 10:35
+  dog.glb                                      1530.1 KB  .glb     2024-02-10 11:07
+  chichen.glb                                   996.5 KB  .glb     2024-01-30 18:38
+  cat.glb                                       340.5 KB  .glb     2024-01-31 21:14
+  girafe.glb                                    293.1 KB  .glb     2024-02-10 10:58
+  butterfly.glb                                 150.6 KB  .glb     2024-01-30 19:11
+  ladybug.glb                                    98.7 KB  .glb     2024-01-30 19:08
+
+[digivice] - 2 Dateien
+--------------------------------------------------------------------------------
+  index.html                                     49.1 KB  .html    2025-10-18 15:36
+  hubba_bubba_icon.svg                            0.9 KB  .svg     2025-10-18 01:31
+
+[digivice\js] - 15 Dateien
+--------------------------------------------------------------------------------
+  minigames.js                                   35.9 KB  .js      2025-10-18 15:29
+  3d_scene.js                                    34.1 KB  .js      2025-10-18 17:05
+  dungeon_enemies.js                             22.6 KB  .js      2025-10-18 15:34
+  code_editor.js                                 11.7 KB  .js      2025-10-18 08:54
+  dungeon_combat.js                              11.5 KB  .js      2025-10-18 17:31
+  dungeon_generator.js                           10.4 KB  .js      2025-10-15 08:44
+  terminal_modules.js                             8.0 KB  .js      2025-10-18 08:57
+  kaykit_loader.js                                4.9 KB  .js      2025-10-14 20:47
+  safe_functions.js                               3.8 KB  .js      2025-10-12 18:36
+  private_mode.js                                 1.3 KB  .js      2025-10-14 20:26
+
+[digivice\static\css] - 4 Dateien
+--------------------------------------------------------------------------------
+  minigames.css                                  11.5 KB  .css     2025-10-15 20:04
+  code_editor.css                                 6.7 KB  .css     2025-10-18 08:46
+  chat.css                                        4.8 KB  .css     2025-10-15 23:45
+  terminal_modules.css                            3.4 KB  .css     2025-10-18 08:58
+
+[knowledge] - 5 Dateien
+--------------------------------------------------------------------------------
+  complete_project_context.json                8253.7 KB  .json    2025-10-16 21:41
+  sync_state.json                              2438.5 KB  .json    2025-10-19 19:03
+  najika_session.json                            12.6 KB  .json    2025-10-16 22:42
+  project_summary.txt                             1.1 KB  .txt     2025-10-16 21:41
+  task_tracking.json                              0.1 KB  .json    2025-10-19 19:05
+
+[logs] - 4 Dateien
+--------------------------------------------------------------------------------
+  najika_20251018.log                            74.3 KB  .log     2025-10-19 10:34
+  najika_20251017.log                            53.3 KB  .log     2025-10-18 01:04
+  najika_20251016.log                            45.1 KB  .log     2025-10-17 01:00
+  najika_20251019.log                            18.1 KB  .log     2025-10-19 20:58
+
+[memory_db] - 1 Dateien
+--------------------------------------------------------------------------------
+  chroma.sqlite3                               2836.0 KB  .sqlite3 2025-10-19 16:47
+
+[memory_db\7732c1b7-823f-4f1e-bb9e-fc98596b74a6] - 4 Dateien
+--------------------------------------------------------------------------------
+  data_level0.bin                               163.7 KB  .bin     2025-10-18 21:04
+  length.bin                                      0.4 KB  .bin     2025-10-18 21:04
+  header.bin                                      0.1 KB  .bin     2025-10-18 21:04
+  link_lists.bin                                  0.0 KB  .bin     2025-10-18 21:04
+
+[memory_db\e31f721f-8e43-4e86-a5cc-ac9bf5986ecf] - 4 Dateien
+--------------------------------------------------------------------------------
+  data_level0.bin                               163.7 KB  .bin     2025-10-18 21:03
+  length.bin                                      0.4 KB  .bin     2025-10-18 21:03
+  header.bin                                      0.1 KB  .bin     2025-10-18 21:03
+  link_lists.bin                                  0.0 KB  .bin     2025-10-18 21:03
+
+[saves] - 4 Dateien
+--------------------------------------------------------------------------------
+  najika_state_20251019_205337.json             146.6 KB  .json    2025-10-19 20:48
+  najika_state_20251019_205637.json             146.6 KB  .json    2025-10-19 20:53
+  najika_state.json                             146.5 KB  .json    2025-10-19 20:58
+  najika_state_20251019_205837.json             146.5 KB  .json    2025-10-19 20:56
+
+[training] - 5 Dateien
+--------------------------------------------------------------------------------
+  CODE_KATAS_DAILY.md                             2.3 KB  .md      2025-10-19 09:57
+  ARCHITECTURE_PATTERNS.md                        2.0 KB  .md      2025-10-19 09:57
+  PERFORMANCE_PATTERNS.md                         1.8 KB  .md      2025-10-19 09:57
+  COMMON_PITFALLS.md                              1.7 KB  .md      2025-10-19 09:57
+  README.md                                       1.0 KB  .md      2025-10-19 09:57
+
+[training_data\examples] - 3 Dateien
+--------------------------------------------------------------------------------
+  verse_basics.verse                             10.6 KB  .verse   2025-10-16 21:12
+  java_basics.java                               10.3 KB  .java    2025-10-16 21:11
+  python_basics.py                                5.7 KB  .py      2025-10-16 21:10
+
+[training_data\output] - 1 Dateien
+--------------------------------------------------------------------------------
+  knowledge_index.json                            0.2 KB  .json    2025-10-16 21:24
+
+================================================================================
+2. PYTHON-DATEIEN (HAUPTVERZEICHNIS)
+================================================================================
+
+Gesamt: 77 Dateien
+
+Name                                       Zeilen   Func  Class       KB
+--------------------------------------------------------------------------------
+najika_server.py                             1744     39      1     77.2
+najika_create_complete_training.py            696      0      0     28.1
+najika_battle.py                              888     21      1     27.6
+najika_create_coding_training.py              831      0      0     27.3
+najika_living_system.py                       560     13      0     19.4
+najika_create_advanced_training.py            508      0      0     17.7
+process_training_data.py                      418     14      1     12.4
+najika_interactive.py                         375     11      1     12.1
+najika_technical_inventory.py                 404      8      0     11.8
+najika_smart_update_v2.py                     315     10      1     11.8
+najika_security.py                            373      9      1     11.8
+najika_memory.py                              329     11      1     11.1
+najika_sync.py                                292      9      1      9.5
+najika_tor.py                                 300     11      1      9.5
+analyze_all.py                                289      8      1      9.1
+najika_handoff.py                             275      8      1      8.8
+najika_training_scheduler.py                  280      7      0      8.7
+najika_smart_update.py                        211      6      1      7.7
+najika_search.py                              232      7      1      7.6
+najika_analyze_all_recent.py                  206      0      0      7.3
+najika_enhanced_personality.py                165      1      0      7.1
+najika_create_master_summary.py               198      0      0      6.9
+create_najika_base.py                         233      0      0      6.8
+knowledge_loader.py                           231     11      1      6.7
+najika_sammle_alle_roadmaps.py                182      0      0      6.5
+najika_apply_changes.py                       235      0      0      6.4
+apply_fixes.py                                214      0      0      6.1
+najika_extract_summaries_to_desktop.py        190      2      0      6.0
+najika_search_all_sessions_for_keywords.py      183      2      0      5.9
+najika_cli.py                                 186      4      0      5.7
+najika_learn_from_good_claude.py              158      0      0      5.4
+najika_extract_texts.py                       134      0      0      5.3
+najika_finde_funktionierende_codes.py         160      0      0      5.0
+najika_read_basis.py                          141      0      0      4.8
+najika_tools.py                               152      6      1      4.7
+najika_finde_alle_uebersichten_MIT_PDF.py      159      0      0      4.6
+najika_compress_for_claude.py                 132      0      0      4.3
+najika_pyramid_compress.py                    122      0      0      3.8
+najika_finde_alle_uebersichten.py             131      0      0      3.7
+temp_search_sessions.py                        97      0      0      3.6
+najika_schritt3.py                             96      0      0      3.5
+najika_daily_training.py                      112      4      0      3.5
+najika_show_progress.py                       120      1      0      3.5
+fix_w_room_dropdown_focus.py                   93      0      0      3.5
+quick_fix.py                                  111      0      0      3.3
+najika_smart_extract.py                        92      0      0      3.3
+najika_update_claude_md.py                    116      0      0      3.1
+final_fixes.py                                 97      0      0      3.1
+copy_assets.py                                107      0      0      3.0
+najika_phase1_search.py                       103      3      0      3.0
+fix_all.py                                    103      0      0      3.0
+najika_complete_search.py                      84      0      0      2.9
+test_storage.py                                72      0      0      2.8
+najika_read_pdfs.py                            86      0      0      2.7
+final_server_fix_v2.py                         58      0      0      2.5
+najika_complete_training_session.py            85      1      0      2.4
+extract_last_messages.py                       64      0      0      2.0
+test_caching_stateless.py                      52      1      0      1.9
+test_cache_hit_demo.py                         51      0      0      1.7
+test_caching_reset.py                          41      1      0      1.6
+extract_user_messages.py                       42      0      0      1.5
+get_slime_context.py                           50      0      0      1.5
+fix_fixierung_final.py                         38      0      0      1.4
+test_chat.py                                   54      0      0      1.4
+final_server_fix.py                            32      0      0      1.3
+fix_kaetzchen_nsfw.py                          39      0      0      1.2
+update_command_v2.py                           48      0      0      1.2
+update_command_final.py                        39      0      0      1.2
+fix_update_command.py                          38      0      0      1.2
+ui_redesign.py                                 32      0      0      1.1
+fix_fixierung.py                               33      0      0      1.1
+test_caching.py                                29      0      0      1.1
+block_w_room_change.py                         36      0      0      1.0
+najika_complete_daily_task.py                  26      0      0      0.7
+fix_remaining_alerts.py                        30      0      0      0.7
+fix_harley_puddin.py                           23      0      0      0.7
+test_private_mode.py                           12      0      0      0.2
+
+================================================================================
+3. JSON KONFIGURATIONSDATEIEN
+================================================================================
+
+Gesamt: 13 Dateien
+
+
+Datei: BAUSTEIN_SYSTEM.json
+  Größe: 12.8 KB
+  Keys: META, GRUNDSTEIN, NEUE_BAUSTEINE, ÄNDERBARE_GRUNDSTEIN_TEILE, ZUSAMMENFASSUNG
+  Items: 5
+
+Datei: ZIP_ORDNER_KOMPLETT_INVENTAR.json
+  Größe: 15.8 KB
+  Keys: CODEX, SKILL_SYSTEME, COMBAT, SPELL_MAGIC, SPIEL_IDEEN, 8_GEBIETE, SLIME_BEGLEITER, FORTNITE_UEFN, CRAFTING_HOUSING, PERSOENLICHKEIT
+  Items: 12
+
+Datei: .claude\settings.local.json
+  Größe: 1.9 KB
+  Keys: permissions
+  Items: 1
+
+Datei: assets\room_config_detailed.json
+  Größe: 17.2 KB
+  Keys: defaults, rooms
+  Items: 2
+
+Datei: knowledge\complete_project_context.json
+  Größe: 8253.7 KB
+  Keys: analyzed_at, statistics, file_index, code_files, text_files, config_files, errors
+  Items: 7
+
+Datei: knowledge\najika_session.json
+  Größe: 12.6 KB
+  Keys: history, message_count
+  Items: 2
+
+Datei: knowledge\sync_state.json
+  Größe: 2438.5 KB
+  Keys: .env, analyze_all.py, ANATOMIE_UND_KAETZCHEN_UPDATE.md, ANLEITUNG_BAUSTEIN_SYSTEM.md, apply_fixes.py, BAUSTEIN_SYSTEM.json, block_w_room_change.py, CHECK_AUTO_TRAINING.bat, CLAUDE.md, CLAUDE_MASTER_WORKINGDOC.md
+  Items: 7489
+
+Datei: knowledge\task_tracking.json
+  Größe: 0.1 KB
+  Keys: open, completed, last_update
+  Items: 3
+
+Datei: saves\najika_state.json
+  Größe: 146.5 KB
+  Keys: history, battle, user, progress, najika, bond_strength, behavior_mode, personality_weights, total_interactions, living
+  Items: 11
+
+Datei: saves\najika_state_20251019_205337.json
+  Größe: 146.6 KB
+  Keys: history, battle, user, progress, najika, bond_strength, behavior_mode, personality_weights, total_interactions, living
+  Items: 11
+
+Datei: saves\najika_state_20251019_205637.json
+  Größe: 146.6 KB
+  Keys: history, battle, user, progress, najika, bond_strength, behavior_mode, personality_weights, total_interactions, living
+  Items: 11
+
+Datei: saves\najika_state_20251019_205837.json
+  Größe: 146.5 KB
+  Keys: history, battle, user, progress, najika, bond_strength, behavior_mode, personality_weights, total_interactions, living
+  Items: 11
+
+Datei: training_data\output\knowledge_index.json
+  Größe: 0.2 KB
+  Keys: programming, text, general
+  Items: 3
+
+
+================================================================================
+5. NAJIKA_SERVER.PY
+================================================================================
+
+Zeilen: 1744
+
+Imports (erste 10):
+  from http.server import SimpleHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
+  from collections import OrderedDict
+  from najika_living_system import (
+  from najika_enhanced_personality import generate_enhanced_persona
+  from najika_memory import NajikaMemory
+  from najika_search import NajikaSearch
+  from najika_tor import NajikaTor
+  from najika_security import NajikaSecurity
+  from najika_battle import BATTLE_SYSTEM, SKILL_DB, ITEM_DB
+  import requests
+
+ROOMS Array (12 Räume):
+  - Wohnzimmer
+  - Schlafzimmer
+  - Küche
+  - Badezimmer
+  - Garten
+  - Musikraum
+  - Medizin
+  - Terminal
+  - Studieren & Crafting
+  - Trainingszimmer
+  - Kampfarena
+  - Schwarze Mühle – Keller
+
+================================================================================
+6. DIGIVICE/INDEX.HTML
+================================================================================
+
+Zeilen: 1422
+Größe: 49.1 KB
+
+Eingebundene Scripts:
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="/digivice/js/kaykit_loader.js"></script>
+  <script src="/digivice/js/dungeon_generator.js"></script>
+  <script src="/digivice/js/dungeon_enemies.js"></script>
+  <script src="/digivice/js/dungeon_combat.js"></script>
+  <script src="/digivice/js/minigames.js"></script>
+  <script src="/digivice/js/chat_ui.js"></script>
+  <script src="/digivice/js/touch_controls.js"></script>
+  <script src="/digivice/js/private_mode.js"></script>
+  <script src="/digivice/js/code_editor.js"></script>
+  <script src="/digivice/js/terminal_modules.js"></script>
+  <script src="/digivice/js/3d_scene.js"></script>
+
+================================================================================
+7. ENVIRONMENT-KONFIGURATION (.env)
+================================================================================
+
+Konfigurationszeilen: 13
+
+Definierte Keys (OHNE Werte):
+  ﻿HOST
+  PORT
+  DEBUG
+  SECRET_KEY
+  AI_PROVIDER
+  CLOUD_ENABLED
+  CLOUD_PIN
+  NSFW_LOCAL
+  OLLAMA_MODEL_ALIAS
+  GGUF_LLAMA
+  GGUF_WIZARD
+  OPENAI_API_KEY
+  ANTHROPIC_API_KEY
+
+================================================================================
+8. GESAMT-STATISTIK
+================================================================================
+
+Gesamt Dateien: 7053
+Gesamt Größe: 911.8 MB
+Python-Dateien (Hauptverzeichnis): 77
+JSON-Dateien: 13
+
+================================================================================
+ENDE TECHNISCHES INVENTAR
+================================================================================

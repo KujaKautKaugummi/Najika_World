@@ -1,0 +1,23 @@
+{
+  "root": "C:\\NajikaCore",
+  "generated_at": "2025-10-13T09:18:30.999272Z",
+  "count_files": 6831,
+  "count_chunks": 3,
+  "supported_ext": [
+    ".bmp",
+    ".csv",
+    ".docx",
+    ".jpeg",
+    ".jpg",
+    ".log",
+    ".md",
+    ".pdf",
+    ".png",
+    ".pptx",
+    ".tif",
+    ".tiff",
+    ".txt",
+    ".webp",
+    ".xlsx"
+  ]
+}
