@@ -1,21 +1,29 @@
 # ðŸš€ NAJIKA V7 - FINALER ENTWICKLUNGSPLAN
 **Datum:** 2025-10-26
 **Basis:** Alle vorhandenen Docs (V3, V4, V5, V6) + Aktueller Status
-**Strategie:** DIGIVICE ERST â†’ Keller als Testbed â†’ Handyspiel spÃ¤ter
+**Strategie:** DIGIVICE ERST â†' 3 Dungeons als Testbed â†' Handyspiel spÃ¤ter
 
 ---
 
-## ðŸŽ¯ STRATEGIE (FESTGELEGT)
+## ðŸŽ¯ STRATEGIE (FESTGELEGT) - **UPDATED 2025-11-05**
 
 ```
 PHASE 1: DIGIVICE VOLL FUNKTIONSFÃ„HIG
-  â†“
-PHASE 2: KELLER = TESTBED (Handyspiel-Mechaniken KLEIN)
-  â†“
-PHASE 3: HANDYSPIEL als GROáºžES MODUL (basiert auf Keller)
-  â†“
+  â†"
+PHASE 2: 3 DUNGEONS = TESTBED (Handyspiel-Mechaniken testen)
+  â†"
+PHASE 3: HANDYSPIEL als GROáºžES MODUL (basiert auf Dungeon-Tests)
+  â†"
 PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 ```
+
+**🚨 WICHTIGE Ã„NDERUNG (2025-11-05):**
+- ❌ **KEIN KELLER mehr** in Schwarze Mühle!
+- ✅ **3 DUNGEONS** ersetzen Keller als Testbed
+- ✅ 2 der 3 Dungeons = MEGA-GROáºž (wie alter Keller-Plan)
+- ✅ Nicht-Kampf-Mechaniken: auf Open Mini World testen
+- ✅ Najikas Lebensraum (Map) = SAFE ZONE (keine Gefahr!)
+- ✅ Gefahr NUR in: Dungeons + Kampfarena
 
 ---
 
@@ -103,11 +111,45 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 
 ---
 
-### **PHASE 2: KELLER ALS TESTBED (V7.1)**
-**Dauer:** 2-3 Wochen
-**Ziel:** ALLE Handyspiel-Mechaniken in KLEIN im Keller testen
+### **PHASE 2: 3 DUNGEONS ALS TESTBED (V7.1)** - **UPDATED 2025-11-05**
+**Dauer:** 3-4 Wochen
+**Ziel:** ALLE Handyspiel-Mechaniken in 3 Dungeons testen
 
-**Strategie:** Schwarze WindmÃ¼hle - Keller = Sandbox fÃ¼r:
+**🚨 NEUE STRATEGIE (Keller-Konzept verworfen!):**
+
+**3 DUNGEONS SYSTEM:**
+1. **Dungeon 1: MEGA-DUNGEON** (wie alter Keller geplant)
+   - Riesig, verzweigt, komplex
+   - Alle Kampf-Mechaniken testen
+   - Boss-Encounters
+
+2. **Dungeon 2: MEGA-DUNGEON** (wie alter Keller geplant)
+   - Ebenfalls riesig
+   - Alternative Mechaniken
+   - Verschiedene Biome
+
+3. **Dungeon 3: NORMAL-DUNGEON**
+   - Kleiner, fokussierter
+   - Spezielle Mechaniken
+   - Schnelle Tests
+
+**OPEN MINI WORLD (2400×2400):**
+- **Najikas Lebensraum = SAFE ZONE**
+- Keine Gefahr auf der Map!
+- Nicht-Kampf-Mechaniken hier testen:
+  - Oregon Trail Events
+  - NPC-Interaktionen
+  - Crafting/Gathering
+  - Exploration
+- **5 Städte + 3 Spezialorte** platzieren
+
+**GEFAHR NUR IN:**
+- ✅ 3 Dungeons
+- ✅ Kampfarena
+
+**Strategie:** Dungeons = Combat Testing, Open World = Non-Combat Features
+
+**Mechaniken zum Testen:**
 
 #### 2.1 Konosuba Oregon Events (Mini)
 **Basis:** NAJIKA_GAME_DESIGN_KOMPLETT.md - Oregon Trail Ã— Konosuba Chaos
@@ -120,7 +162,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 **Tasks:**
 - [ ] 10 Konosuba-Events schreiben
 - [ ] Najika dramatische Reaktionen
-- [ ] Im Keller zwischen RÃ¤umen testen
+- [ ] **Auf Open Mini World testen** (Nicht-Kampf Events!)
 
 **GeschÃ¤tzte Zeit:** 3 Tage
 
@@ -156,7 +198,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 - Pickpocketing (optional)
 
 **Tasks:**
-- [ ] Chest-System im Keller
+- [ ] Chest-System in Dungeons
 - [ ] Loot-Tables
 - [ ] Inventory-Integration
 
@@ -182,7 +224,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 
 ### **PHASE 3: HANDYSPIEL ALS MODUL (V7.2)**
 **Dauer:** 4-6 Wochen
-**Ziel:** GroÃŸes Handyspiel-Modul (basierend auf Keller-Tests)
+**Ziel:** GroÃŸes Handyspiel-Modul (basierend auf Dungeon-Tests)
 
 **Wartet auf:** Phase 2 Completion
 
@@ -195,7 +237,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 - Achievement & Titles
 - Secret Areas & Hidden Bosses
 
-**Strategie:** Keller-Mechaniken Ã— 1000 = Handyspiel!
+**Strategie:** Dungeon-Mechaniken Ã— 1000 = Handyspiel!
 
 ---
 
@@ -261,7 +303,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 **Option A: Digivice zuerst**
 1. Secure Messenger Modul (2-3 Tage)
 2. Browser Modul (nach User-Specs)
-3. Keller-Testbed (Konosuba Events + EXPLOSION)
+3. Dungeon-Testbed (Konosuba Events + EXPLOSION)
 
 **Option B: KI zuerst**
 1. KI-Modell auswÃ¤hlen (RTX 3060 Ti optimiert)
@@ -277,7 +319,7 @@ PHASE 4: Ã–FFENTLICHER RELEASE (8 Digivices Total)
 3. âœ… Open World = 8 feste Orte + prozedural
 4. âœ… Najika = exklusiv fÃ¼r Kuja (gesperrt fÃ¼r andere)
 5. âœ… NSFW nur lokal (KÃ¤tzchen-Modus)
-6. âœ… Keller = Testbed fÃ¼r alles
+6. âœ… 3 Dungeons = Testbed fÃ¼r Combat, Open World = Testbed fÃ¼r Rest
 
 ---
 
