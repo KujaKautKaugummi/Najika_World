@@ -1,9 +1,10 @@
-# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN
+# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V2
 
 **Created:** 2025-11-06
-**Status:** Design Phase
-**Map Size:** 2400×2400 units (Mini Open World)
-**Style:** Fantasy Western × Konosuba × Digimon World
+**Updated:** 2025-11-06 (Major Revision!)
+**Status:** Design Phase - Name Selection
+**Map Style:** Fantasy Western × Konosuba × Digimon World (File Island!)
+**World Structure:** 8 Regions + Central Mountain (Zeit Stadt!)
 
 ---
 
@@ -37,16 +38,102 @@
 
 ---
 
-## 🌍 DIE 8 REGIONEN - NEU BENANNT!
+## ⛰️ **ZENTRALER BERG - DAS HERZ DER WELT** 🔥
 
-> **OLD NAMES WAREN GRÄẞLICH!** 🚫
-> Neue Namen inspiriert von: Konosuba + Fantasy Western + Digimon World
+> **WICHTIG:** Der Berg ist NICHT eine der 8 Regionen!
+> **Inspiration:** Digimon World - File Island Central Mountain!
 
-### **REGION 1: DUSTHAVEN DUNES (Die Staubheimat)**
-**Former Name:** ~~Bernstein-Dünen~~
+### **BERG-NAMEN (Wähle einen!):**
+
+1. **Zentral-Gipfel** (Central Peak) - Direkt & klar
+2. **File-Berg** (File Mountain) - Digimon-Referenz
+3. **Acht-Wege-Berg** (Eight Paths Mountain) - 8 Zugänge
+4. **Endberg** (End Mountain) - Endgame-Berg
+5. **Zeit-Gipfel** (Time Peak) - Wegen Zeit Stadt
+6. **Ewigkeits-Berg** (Eternity Mountain) - Episch
+7. **Zentralmassiv** (Central Massif) - Geologisch
+8. **Krone der Welt** (Crown of the World) - Höchster Punkt
+9. **Herz-Berg** (Heart Mountain) - Herz der Welt
+10. **Meister-Gipfel** (Master Peak) - Für Meister
+
+---
+
+### **BERG-STRUKTUR:**
+
+**UNTEN (Basis):**
+- **LAVA-BEREICH** 🌋
+- Extreme Hitze, Gefahren
+- Entry Points von allen 8 Regionen
+- Jede Region hat UNTERSCHIEDLICHEN WEG zum Berg!
+
+**MITTE (Aufstieg):**
+- Verschiedene Routen je nach Startregion
+- Platforming, Combat, Puzzles
+- Höchste Schwierigkeit!
+
+**OBEN (Spitze):**
+- **ZEIT STADT (Time City)** ⏰
+- **Geheime kleine Stadt**
+- Von außen NICHT sichtbar!
+- Nur für diejenigen, die den Berg bezwingen
+- **Belohnungen:**
+  - Spezielle Ausrüstung
+  - Einzigartige Güter
+  - Endgame-Items
+  - Exklusive NPCs
+
+**ENDGAME-MECHANIK:**
+- Berg = Endgame-Challenge
+- Alle 8 Wege sind unterschiedlich schwer
+- Zeit Stadt = Exklusive Hub für Champions
+- Permanent unlock nach erstem Erreichen
+
+---
+
+## 🎮 PLAYER START MECHANIC
+
+**START-WAHL:**
+- Spieler wählt FREI oder ZUFÄLLIG in welcher Region sie starten
+- Jede der 8 Regionen ist möglicher Start!
+
+**SLIME COLOR:**
+- **Startregion = Slime Farbe!**
+- Region 1 (Wüste) → Dusty Gold Slime
+- Region 2 (Wald) → Moss Green Slime
+- Region 3 (Küste) → Ocean Blue Slime
+- Region 4 (Highland) → Lightning Purple Slime
+- Region 5 (Sumpf) → Midnight Black Slime
+- Region 6 (Eis) → Crystal White Slime
+- Region 7 (Vulkan) → Molten Red Slime
+- Region 8 (Void) → Void Purple Slime
+
+**BALANCE:**
+- Kein "bester" Start - nur andere Routen!
+- Alle Regionen zugänglich nach Start
+- Berg in der Mitte von überall erreichbar
+
+---
+
+## 🌍 DIE 8 REGIONEN - NAMEN ZUR AUSWAHL!
+
+### **REGION 1: WÜSTE** 🏜️
 **Biome:** Desert / Western Town
 **Level Range:** 1-15 (Starter Region)
 **Slime Color:** Dusty Gold
+
+**BEACHTE:** Besonderer Wüstenort (Pyramiden-Labyrinth) ist ENDGAME!
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Sonnenglut-Wüste** (Sun Blaze Desert) - Extreme Hitze
+2. **Anfänger-Dünen** (Beginner Dunes) - Startet easy
+3. **Goldene Einöde** (Golden Wasteland) - Schön aber gefährlich
+4. **Sandsturm-Start** (Sandstorm Start) - Herausfordernd
+5. **Erste Wüste** (First Desert) - Klar für Startgebiet
+6. **Glutwind-Land** (Hot Wind Land) - Heißer Wind
+7. **Pyramiden-Vorfeld** (Pyramid Outskirts) - Vor dem Endgame
+8. **Start der Hitze** (Heat's Beginning) - Tutorial-Wüste
+9. **Sandhimmel-Gebiet** (Sand Sky Region) - Sandstürme
+10. **Wüsten-Anfang** (Desert Beginning) - Klarer Startpunkt
 
 **Visual Style:**
 - Wild West Ghost Town Ästhetik
@@ -54,23 +141,26 @@
 - Saloons, Sheriff's Office, Stables
 - Tumbleweeds, Wooden Fences
 
-**Features:**
-- Tutorial Area
-- First Quest Hub
-- Easy Enemies (Desert Rats, Scorpions)
-- Bandit Camps
-
-**Special Location:** Abandoned Mineshaft (Secret Dungeon)
-
-**Konosuba Reference:** Starter-Town-Vibe (wie Axel, aber Western!)
-
 ---
 
-### **REGION 2: WHISPERING GROVES (Die Flüsterhaine)**
-**Former Name:** ~~Smaragd-Hain~~
+### **REGION 2: WALD** 🌲
 **Biome:** Forest / Druid Settlement
 **Level Range:** 10-25
 **Slime Color:** Moss Green
+
+**BEACHTE:** Muss "Moos" und/oder "Hain" enthalten!
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Moosgrüner Hain** (Moss Green Grove) - Beide Wörter!
+2. **Hainmoos-Wald** (Grove Moss Forest) - Kombiniert
+3. **Samtmoos-Gebiet** (Velvet Moss Region) - Weiches Moos
+4. **Hain der tausend Moose** (Grove of Thousand Mosses)
+5. **Mooshain** (Moss Grove) - Kurz & prägnant
+6. **Grünmoos-Territorium** (Green Moss Territory)
+7. **Hain des weichen Grüns** (Grove of Soft Green) - Poetisch
+8. **Mooswald-Hain** (Moss Forest Grove) - Alle Elemente
+9. **Tiefmoos-Wald** (Deep Moss Forest) - Dichtes Moos
+10. **Haingrün** (Grove Green) - Simple Eleganz
 
 **Visual Style:**
 - Dichte Wälder, sprechende Bäume
@@ -78,32 +168,28 @@
 - Mystische Runen, Elfenarchitektur
 - Nebel am Morgen
 
-**Features:**
-- Gathering (Herbs, Wood, Mushrooms)
-- Alchemy Focus
-- Druid NPCs
-- Nature Magic Training
-
-**Special Events:**
-- Lost in the Woods (Oregon Trail)
-- Talking Trees Quest
-- Mushroom Festival
-
 **Digimon Reference:** File Forest Vibe!
 
 ---
 
-### **REGION 3: CRIMSON SHORES (Die Karmesinküsten)**
-**Former Name:** ~~Azur-Klippen~~
+### **REGION 3: KÜSTE** 🌊
 **Biome:** Coast / Pirate Harbor
 **Level Range:** 20-35
 **Slime Color:** Ocean Blue
 
-**Visual Style:**
-- Hafen mit Piratenschiffen
-- Klippen, Leuchttürme, Sandbänke
-- Schiffswracks im Wasser
-- Möwen, Meeresrauschen
+**BEACHTE:** Mit "Salzbrandung" oder "Salzküste"!
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Salzbrandung** (Salt Surf) - USER VORSCHLAG!
+2. **Salzküste** (Salt Coast) - USER VORSCHLAG!
+3. **Brandungs-Küste** (Surf Coast) - Wellenreich
+4. **Salzmeer-Rand** (Salt Sea Edge) - Salzwasser
+5. **Küste der Salzgischt** (Coast of Salt Spray) - Sprühnebel
+6. **Salzwind-Küste** (Salt Wind Coast) - Salziger Wind
+7. **Brandungssalz-Gebiet** (Surf Salt Region) - Kombiniert
+8. **Salzschaumküste** (Salt Foam Coast) - Schaumige Wellen
+9. **Gischtküste** (Spray Coast) - Wilde Wellen
+10. **Salz-Horizont** (Salt Horizon) - Endlose Salzküste
 
 **Features:**
 - **FISHING (Ocarina of Time Style!)** 🎣
@@ -111,17 +197,14 @@
 - Pirate Quests
 - Naval Combat (später)
 
-**Special Location:** Sunken Temple (Hidden Boss)
-
-**Oregon Trail Event:** "The Flooded Bridge" (Konosuba-Chaos!)
-
 ---
 
-### **REGION 4: STORMBREAK HIGHLANDS (Die Sturmbruchberge)**
-**Former Name:** ~~Amethyst-Steppe~~
+### **REGION 4: HIGHLAND** ⚡
 **Biome:** Highland / Storm Peaks
 **Level Range:** 30-45
 **Slime Color:** Lightning Purple
+
+**✅ NAME APPROVED:** **Blitzebene** (Lightning Plain) - "klassisch aber geil"
 
 **Visual Style:**
 - Hochebenen mit Gewitter
@@ -135,17 +218,28 @@
 - Stamina Challenges (Klettern!)
 - Wind Puzzles
 
-**Special Location:** Sky Temple (Electro Bosses)
-
 **Konosuba Reference:** Megumin würde hier EXPLOSION üben!
 
 ---
 
-### **REGION 5: SHADOWFEN MARSHES (Die Schattenbruch-Sümpfe)**
-**Former Name:** ~~Onyx-Morast~~
+### **REGION 5: SUMPF** 🌿
 **Biome:** Swamp / Witch Territory
 **Level Range:** 40-55
 **Slime Color:** Midnight Black
+
+**⚠️ WICHTIG:** KEINE NEKROMANTIE! (Das ist Region 6!)
+
+**NAMEN ZUR AUSWAHL (10) - OHNE UNTOTE:**
+1. **Nebelmoor** (Fog Moor) - Mysteriös aber nicht untot
+2. **Sumpfnebel-Land** (Swamp Fog Land) - Atmosphärisch
+3. **Morasgrün** (Morass Green) - Lebendiger Sumpf
+4. **Sumpflichter-Gebiet** (Swamp Lights Region) - Irrlichter
+5. **Feuchtmoor** (Wet Moor) - Natürlicher Sumpf
+6. **Lebend-Moor** (Living Moor) - LEBEN statt Tod!
+7. **Grünschlamm-Sumpf** (Green Slime Swamp) - Algen
+8. **Nebel der Täuschung** (Fog of Deception) - Mystisch
+9. **Dschungel-Sumpf** (Jungle Swamp) - Tropisch
+10. **Licht im Moor** (Light in the Moor) - Hoffnung
 
 **Visual Style:**
 - Dunkle Sümpfe, Nebel
@@ -154,46 +248,69 @@
 - Miasma (sichtbarer Gifteffekt)
 
 **Features:**
-- Necromancy Research
-- Poison/Dark Magic
+- Poison/Dark Magic (NICHT Necromancy!)
 - Witch Coven NPCs
 - Disease/Miasma Hazards
-
-**Special Location:** Witch's Cauldron (Quest Hub)
-
-**Horror Vibe:** Ähnlich wie das Hotel-Konzept!
+- Alchemie Focus
 
 ---
 
-### **REGION 6: FROSTPEAK EXPANSE (Das Frostgipfelreich)**
-**Former Name:** ~~Perl-Gletscher~~
+### **REGION 6: EIS** ❄️
 **Biome:** Ice / Frozen Wasteland
 **Level Range:** 50-65
 **Slime Color:** Crystal White
+
+**✅ WICHTIG:** NEKROMANTIE IST HIER! (Aus Sumpf verschoben!)
+
+**NAMEN ZUR AUSWAHL (13) - MIT NEKROMANTIE:**
+
+**Aus alten Vorschlägen (User mochte #6, #7, #9):**
+- **#6: Frostgrab-Ödnis** (Frost Grave Wasteland) ✅
+- **#7: Untoten-Gletscher** (Undead Glacier) ✅
+- **#9: Eisige Totenruhe** (Icy Death Rest) ✅
+
+**7 NEUE mit Nekromantie:**
+1. **Nekro-Frost** (Necro Frost) - Direkt & klar
+2. **Gefrorenes Grab-Reich** (Frozen Grave Realm) - Untote im Eis
+3. **Eisnekropole** (Ice Necropolis) - Stadt der Toten
+4. **Todesgletscher** (Death Glacier) - Gletscher voller Untoten
+5. **Frostlich-Gebiet** (Frosty Lich Region) - Liches im Eis
+6. **Ewiges Grab** (Eternal Grave) - Untote erwachen nicht
+7. **Kältegrab-Zone** (Cold Grave Zone) - Tote durch Kälte
 
 **Visual Style:**
 - Eisige Tundra, Schneestürme
 - Iglus, Eishöhlen
 - Gefrorene Wasserfälle
 - Aurora Borealis am Nachthimmel!
+- **NEU:** Gefrorene Untote, Eis-Liches
 
 **Features:**
-- Ice Magic Experiments
+- Ice Magic + Necromancy!
 - Cryo-Labs (Science Fiction touch!)
-- Avalanche Events
-- Cold Resistance Training
+- Undead Enemies (gefroren!)
+- Lich Bosses
 
-**Special Location:** Frozen Citadel (Ice Queen Boss)
-
-**Digimon Reference:** Frigimon Territory!
+**Digimon Reference:** Frigimon Territory + Graveyard!
 
 ---
 
-### **REGION 7: EMBER CANYON (Die Glutschlucht)**
-**Former Name:** ~~Rubin-Schlucht~~
+### **REGION 7: VULKAN** 🌋
 **Biome:** Volcano / Forge
 **Level Range:** 60-75
 **Slime Color:** Molten Red
+
+**NAMEN ZUR AUSWAHL (aus vorherigen):**
+1. Ember Canyon (Die Glutschlucht)
+2. Lavaschlund (Lava Chasm)
+3. Feuerschmiede (Fire Forge)
+4. Aschenwüste (Ash Desert)
+5. Gluthölle (Ember Hell)
+6. Pyroklast-Zone (Pyroclast Zone)
+7. Feuerberg (Fire Mountain)
+8. Eruptionsfeld (Eruption Field)
+9. Magmaströme (Magma Streams)
+10. Höllenglut (Hell Blaze)
 
 **Features:**
 - **SMITHING CAPITAL!** 🔨
@@ -201,17 +318,26 @@
 - Master Forges
 - Fire Magic + Weapon Smithing
 
-**Special Location:** Heart of the Mountain (Fire Titan Boss)
-
 **Konosuba Reference:** EXPROOOOOSIOOOON! ≠ Fire (aber cooles Visual!)
 
 ---
 
-### **REGION 8: THE VOIDRIFT (Der Leereriss)**
-**Former Name:** ~~Obsidian-Nacht~~
+### **REGION 8: VOID/ENDGAME** 🌌
 **Biome:** Endgame / Nightmare Realm
 **Level Range:** 70-MAX
 **Slime Color:** Void Purple
+
+**NAMEN ZUR AUSWAHL (braucht Revision!):**
+1. The Voidrift (Der Leereriss)
+2. Chaoszone (Chaos Zone)
+3. Alptraum-Reich (Nightmare Realm)
+4. Zerbrochene Welt (Shattered World)
+5. Endlose Leere (Endless Void)
+6. Najika's Spur (Najika's Trace) - EXPLOSION Aftermath!
+7. Realitätsbruch (Reality Break)
+8. Ultima-Feld (Ultima Field)
+9. Void-Labyrinth (Void Labyrinth)
+10. Die letzte Zone (The Final Zone)
 
 **Visual Style:**
 - Alptraumhafte Landschaft
@@ -222,22 +348,29 @@
 **Features:**
 - **ENDGAME CONTENT**
 - Hardest Bosses
-- Najika's EXPROOOOOSIOOOON! Spuren überall
 - Reality-Breaking Events
 - Guild Wars Territory (später)
 
-**Special Location:** The Chaos Incarnate (Level 10 Chaos Boss!)
-
-**Digimon Reference:** Dark Area / Infinity Mountain!
-
 ---
 
-## 🏛️ DIE 5 STÄDTE (Feste Anlaufpunkte)
+## 🏛️ DIE 5 STÄDTE - NAMEN ZUR AUSWAHL!
 
-### **1. ARCANUM ACADEMY (Die Akademie der Arkanen Künste)**
-**Region:** Stormbreak Highlands (Region 4)
+### **STADT 1: AKADEMIE-STADT** 📚
+**Region:** Blitzebene (Region 4)
 **Function:** Magic Training Hub
 **Size:** Large
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Grimoire-Stadt** (Grimoire City) - Stadt der Zauberbücher
+2. **Wissenshain** (Knowledge Grove) - Gelehrten-Oase
+3. **Magieakademie Runenspitz** (Rune Peak Magic Academy)
+4. **Studienhain** (Study Grove) - Akademische Idylle
+5. **Buchwald-Akademie** (Bookwood Academy) - Bibliothek-Stadt
+6. **Zauberturm-Stadt** (Spell Tower City) - Magische Türme
+7. **Gelehrten-Hort** (Scholar's Hoard) - Wissensschatz
+8. **Kristall-Akademie** (Crystal Academy) - Klare Weisheit
+9. **Runenheim** (Rune Home) - Heimat der Magie
+10. **Wissensnest** (Knowledge Nest) - Geborgenheit & Lernen
 
 **Features:**
 - **9 MAGIC SCHOOLS TRAINING!** ✨
@@ -246,20 +379,46 @@
 - Alchemy Labs
 - Enchanting Stations
 
-**Visual Style:**
-- Hogwarts meets Konosuba
-- Große Türme, magische Runen
-- Studenten-NPCs
-- Explosions-Übungsplatz (Krater!)
+---
 
-**Quest Hub:** "Learn EXPLOSION Magic" (Level 50 Quest!)
+### **STADT 2: NORMALE STADT** 🏘️
+**Region:** TBD
+**Function:** General Purpose City
+**Size:** Medium
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Weidenhain** (Willow Grove) - Friedliche Siedlung
+2. **Frühlingsruh** (Spring Rest) - Ruhige Stadt
+3. **Blütental** (Blossom Valley) - Blühende Gemeinde
+4. **Abendstern** (Evening Star) - Romantische Stadt
+5. **Heimathafen** (Home Harbor) - Geborgenheit
+6. **Sanftwind** (Gentle Wind) - Ruhige Atmosphäre
+7. **Rosenbucht** (Rose Bay) - Schöne Küstenstadt
+8. **Morgentau** (Morning Dew) - Frische Stadt
+9. **Friedensnest** (Peace Nest) - Geborgen & sicher
+10. **Steinbrück** (Stone Bridge) - Klassische Kleinstadt
 
 ---
 
-### **2. GOLDMARCH TRADING POST (Handelsstadt mit Arena)**
-**Region:** Dusthaven Dunes (Region 1)
-**Function:** Economy Hub + PvP
-**Size:** Large
+### **STADT 3: HAUPTSTADT** 👑
+**Region:** Wüste (Region 1)
+**Function:** CAPITAL CITY - Trading + Arena + Guild Home
+**Size:** LARGEST CITY!
+
+**⚠️ WICHTIG:** Größte Stadt, Handelszentrum, Kampfarena, Gilden-Heimat!
+**USER FEEDBACK:** "Krakenbucht ein bisschen was hat"
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Kronen-Markt** (Crown Market) - Königliche Handelsmetropole
+2. **Handelsthron** (Trading Throne) - Zentrum von Macht & Handel
+3. **Arenahafen** (Arena Harbor) - Kämpfer & Händler
+4. **Gildenkrone** (Guild Crown) - Hauptstadt der Gilden
+5. **Prunkbazar** (Splendor Bazaar) - Prachtvolle Handelsstadt
+6. **Wettkampf-Zentrum** (Competition Center) - Arena & Handel
+7. **Marktpalast** (Market Palace) - Königlicher Handelsplatz
+8. **Handelsfestung** (Trading Fortress) - Befestigte Metropole
+9. **Ruhmesbazar** (Glory Bazaar) - Handel trifft Kämpferehre
+10. **Zentral-Gilde** (Central Guild) - Herz aller Gilden
 
 **Features:**
 - **PLAYER SHOPS** (Fallout 76 Style!)
@@ -267,95 +426,62 @@
   - PvP Turniere
   - 1v1, 2v2, Free-for-All
   - Najika als Kommentatorin!
-  - "Give all to live" Option bei Hardcore
+- **GILDEN-HAUPTQUARTIER**
 - Auction House
 - Banks & Storage
-- Merchant NPCs
-
-**Visual Style:**
-- Western meets Fantasy
-- Large Colosseum in center
-- Market Stalls everywhere
-- Lively, crowded
-
-**Special Event:** Weekly Tournaments, Najika schreit "EXPROOOOOSIOOOON!" bei Finisher!
 
 ---
 
-### **3. HARBORWATCH (Hafenstadt)**
-**Region:** Crimson Shores (Region 3)
-**Function:** Fishing + Naval Content
+### **STADT 4: NORMALE STADT (mit Schmiede-Akzenten)** 🔨
+**Region:** Vulkan (Region 7)
+**Function:** General City with Smithing
 **Size:** Medium
 
-**Features:**
-- **FISHING CAPITAL** 🎣
-  - 10+ Fishing Spots
-  - Fishing Tournaments
-  - Rare Fish Quests
-- Ship Customization (später)
-- Pirate Quests
-- Underwater Dungeon Entrances
+**⚠️ WICHTIG:** KEINE Schmiedestadt! Nur normale Stadt mit Schmiede-Akzenten!
 
-**Visual Style:**
-- Pirate Bay Ästhetik
-- Docks, Boats, Taverns
-- Seagulls, Shanties
-
-**Oregon Trail Events:** "The Sea Storm", "Kraken Attack!"
+**NAMEN ZUR AUSWAHL (10):**
+1. **Amboss-Ecke** (Anvil Corner) - Subtiler Akzent
+2. **Hammersiedlung** (Hammer Settlement) - Subtile Referenz
+3. **Funkenstadt** (Spark City) - Handwerk & Leben
+4. **Werkstattdorf** (Workshop Village) - Arbeit & Gemeinschaft
+5. **Esse-Hain** (Forge Grove) - Natur trifft Handwerk
+6. **Handwerksruh** (Craftsman's Rest) - Entspannt
+7. **Stahlwind** (Steel Wind) - Leichter Metallakzent
+8. **Meisterstadt** (Master City) - Qualität & Handwerk
+9. **Gusstal** (Casting Valley) - Subtile Referenz
+10. **Eisenblick** (Iron Glance) - Kaum sichtbar
 
 ---
 
-### **4. EMBERFORGE CITADEL (Schmiedestadt)**
-**Region:** Ember Canyon (Region 7)
-**Function:** Crafting + Gear
-**Size:** Medium
-
-**Features:**
-- **SMITHING CAPITAL** 🔨
-  - Master Forges (Legendary Gear!)
-  - Weapon-Morphs Training
-  - Mining Quests
-- Blacksmith NPCs
-- Smelters, Anvils, Grinding Wheels
-
-**Visual Style:**
-- Dwarven-inspired
-- Lava-lit Forges
-- Massive Hammers, Anvils
-- Hot, industrial
-
-**Weapon-Morphs:** 9 EXPLOSION STYLES HIER LERNEN!
-
----
-
-### **5. SANCTUM OF ECHOES (Heilige Stadt)**
-**Region:** Whispering Groves (Region 2)
-**Function:** Healing + Quests
+### **STADT 5: NORMALE STADT (mit Tempel-Akzenten)** 🕌
+**Region:** Wald (Region 2)
+**Function:** General City with Temple
 **Size:** Small-Medium
 
-**Features:**
-- **QUEST HUB**
-- Temples, Shrines
-- Resurrection NPCs (Softy Mode)
-- Blessing Buffs
-- Meditation (Chaos-Level senken!)
+**⚠️ WICHTIG:** KEINE Tempelstadt! Nur normale Stadt mit Tempel-Akzenten!
 
-**Visual Style:**
-- Peaceful, serene
-- White marble buildings
-- Gardens, fountains
-- Soft music
-
-**Special:** Najika mag diesen Ort nicht ("zu langweilig!")
+**NAMEN ZUR AUSWAHL (10):**
+1. **Glockenstadt** (Bell City) - Tempelglocken im Hintergrund
+2. **Sonnenhain** (Sun Grove) - Spirituelle Atmosphäre
+3. **Segen-Ecke** (Blessing Corner) - Leichte Heiligkeit
+4. **Lichtviertel** (Light Quarter) - Warme Ausstrahlung
+5. **Gebetswind** (Prayer Wind) - Sanfte Spiritualität
+6. **Heilquell** (Healing Spring) - Erholung & Segen
+7. **Sternenwacht** (Star Watch) - Tempel beobachtet Sterne
+8. **Andachtsdorf** (Devotion Village) - Zurückhaltend
+9. **Schreinhain** (Shrine Grove) - Kleiner Schrein, große Stadt
+10. **Weihstadt** (Consecrate City) - Gesegneter Ort
 
 ---
 
-## 🎭 DIE 3 BESONDEREN ORTE (Hidden Locations)
+## 🎭 DIE 3 BESONDEREN ORTE
 
-### **1. THE GLITTERING GROTTO (Die Glitzernde Grotte)**
-**Type:** Schatzhöhle
-**Region:** Shadowfen Marshes (versteckt!)
+### **ORT 1: SCHATZHÖHLE** 💎
+**Type:** Treasure Cave
+**Region:** Sumpf (versteckt!)
 **Level:** 45-60
+
+**✅ NAME APPROVED:** **Funkelnest** (#6 - "ist witzig")
 
 **Visual Style:**
 - Dunkle Höhle mit leuchtenden Kristallen
@@ -370,88 +496,81 @@
 - Trap-filled Rooms
 - Mini-Boss: Crystal Golem
 
-**Oregon Trail Event:** "The Treasure Map"
-
 **Konosuba Reference:** Kazuma würde hier ALLES stehlen!
 
 ---
 
-### **2. THE HOLLOW HAVEN HOTEL (Das Hohle Hafen-Hotel)**
+### **ORT 2: HORROR-HOTEL** 🏚️
 **Type:** Horror-Hotel mit Secret Hub
 **Region:** Between Frostpeak & Voidrift
 **Level:** 60-MAX
 
+**NAMEN ZUR AUSWAHL (10):**
+1. **Schatten-Herberge** (Shadow Inn) - Düster außen, schick innen
+2. **Geister-Gasthaus** (Ghost Inn) - Horror/Luxus Kontrast
+3. **Verlassenes Grand Hotel** (Abandoned Grand Hotel)
+4. **Nacht-Palast** (Night Palace) - Dunkel außen, prachtvoll innen
+5. **Zwielicht-Resort** (Twilight Resort) - Übergang Hell/Dunkel
+6. **Verfallene Pracht** (Decayed Splendor) - Kontrast
+7. **Phantom-Villa** (Phantom Villa) - Geisterhafte Eleganz
+8. **Grusel-Grandhotel** (Creepy Grand Hotel)
+9. **Schauder-Schloss** (Shudder Castle) - Schloss-Hotel Hybrid
+10. **Dunkel-Residenz** (Dark Residence) - Mysteriös
+
 **OUTSIDE (Horror Phase):**
-- **HORROR AESTHETIK!** 🏚️
 - Zerfallenes, altes Hotel
 - Zerbrochene Fenster, Efeu
 - Geister-NPCs (feindlich!)
-- Fog, Dunkelheit
-- Boss-Encounter: "The Forgotten Guest"
+- Boss: "The Forgotten Guest"
 
 **INSIDE (Nach Victory):**
 - **LUXURY HOTEL!** 🏨
 - Plötzlich neu & schick!
-- Funktionale Zimmer
-- **MINIGAMES ZONE:**
-  - Triple Triad (Kartenspiel)
-  - Billard, Darts
-  - Chess, Poker
-  - Rhythm Game (Najika spielt!)
-- **CHILL LOUNGE:**
-  - Sofas, Kamine
-  - Free Buffs (Rested XP)
-  - NPCs zum Reden
-- **PORTAL DOORS:** 🚪
-  - Türen mit Symbolen
-  - Führen zu festen Farming-Dungeons:
-    * Fire Dungeon (Ember Cores)
-    * Ice Dungeon (Frozen Shards)
-    * Shadow Dungeon (Void Essence)
-    * Boss Rush (Endgame)
-
-**Unlock Requirement:**
-- Defeat "The Forgotten Guest" Boss
-- One-time unlock (permanent!)
+- **MINIGAMES ZONE** (Triple Triad, Billard, etc.)
+- **PORTAL DOORS** 🚪 (zu Farming-Dungeons)
 - **ENDGAME HUB!**
-
-**Konosuba Reference:** "Wiz's Magic Shop" meets "The Shining"!
 
 ---
 
-### **3. GRAVEYARD OF ECHOES (Friedhofswelt)**
-**Type:** Friedhof / Necromancy Zone
-**Region:** Shadowfen Marshes
-**Level:** 50-70
+### **ORT 3: WESTERN WÜSTE / PYRAMIDEN-LABYRINTH** 🏜️
+**Type:** Western Prairie + Desert + Pyramid Dungeon
+**Region:** Wüste (Region 1) - Spezialbereich
+**Level:** ENDGAME (70-MAX)
+
+**⚠️ WICHTIG:** KEIN HORROR! Western/Prärie/Wüste/Pyramiden!
+
+**NAMEN ZUR AUSWAHL (10):**
+1. **Sandsturm-Prärie** (Sandstorm Prairie) - Hardcore Wüste
+2. **Goldgräber-Öde** (Gold Digger Wasteland) - Western Vibes
+3. **Pyramiden-Staub** (Pyramid Dust) - Alte Zivilisation
+4. **Prärie der verlorenen Schätze** (Prairie of Lost Treasures)
+5. **Wüstenreiter-Land** (Desert Rider Land) - Western Nomaden
+6. **Sandsee mit Pyramidenspitzen** (Sand Sea with Pyramid Peaks)
+7. **Sturmwüste Khephri** (Storm Desert Khephri) - Ägyptisch
+8. **Prairie des ewigen Sands** (Prairie of Eternal Sands)
+9. **Goldstaub-Öde** (Gold Dust Wasteland) - Western + Pyramiden
+10. **Labyrinth unter Sand** (Labyrinth beneath Sand)
 
 **Visual Style:**
-- **GOTHIC HORROR!** ⚰️
-- Riesiger Friedhof, Nebel
-- Mausoleen, Krypten
-- Grabsteine mit Namen (NPCs?)
-- Geister schweben umher
-- Roter Mond am Himmel
+- **Western/Prärie Ästhetik** (KEIN Horror!)
+- Hardcore Sandstürme
+- Sichtbare Pyramidenspitzen aus Sand
+- Altes Ägypten meets Wild West
 
 **Features:**
-- **NECROMANCY QUESTS**
-- Undead Enemies (Zombies, Skeletons, Ghosts)
-- Summoning Rituals
-- Dark Magic Training
-- **Hidden Catacombs:**
-  - 5 Levels Deep
-  - Lich Boss at Bottom
-  - Legendary Dark Items
+- **PYRAMIDEN-LABYRINTH** (Event!)
+  - Spieler sieht kleine Spitze aus Boden
+  - Event: Eingang öffnet sich
+  - Labyrinth im Inneren
+  - Endgame Loot & Bosses
+- Sandstürme (Sicht-Reduktion)
+- Western Ghost Towns
+- Nomaden-NPCs
 
-**Special Event:**
-- "The Restless Dead" (Oregon Trail)
-- Najika: "EXPLOSION auf Zombies? JAAAA!"
-
-**Atmosphere:**
-- Gruselig aber faszinierend
-- Gothic-Lolita Najika LIEBT diesen Ort!
-- Boss: "The Eternal Lich"
-
-**Digimon Reference:** Graveyard + Myotismon Vibe!
+**Endgame-Mechanik:**
+- Nur für High-Level Spieler
+- Pyramiden-Labyrinth = Instanz
+- Rare Ägyptische Items
 
 ---
 
@@ -463,7 +582,7 @@
 **Levels:** 10-15 Floors
 
 **Features:**
-- **Procedural Generation** (neu bei jedem Betreten)
+- **Procedural Generation**
 - Fire-themed Enemies
 - Lava Hazards
 - Boss: "The Crimson Tyrant"
@@ -472,7 +591,6 @@
 - Konosuba Oregon Events (10 Events)
 - **EXPROOOOOSIOOOON! Ultimate Skill**
 - Weapon-Morphs (Fire Style)
-- Trap Mechanics
 
 ---
 
@@ -490,7 +608,6 @@
 **Testing:**
 - Skyrim Plundering (Chests!)
 - Weapon-Morphs (Ice Style)
-- Puzzle Mechanics
 
 ---
 
@@ -507,7 +624,6 @@
 
 **Testing:**
 - Combat Speed Balancing
-- Stealth Mechanics (später)
 - Darkness Mechanic (Torch needed!)
 
 ---
@@ -517,13 +633,15 @@
 **SAFE AREAS (No Combat):**
 - Black Windmill Village ✅
 - Inside All 5 Cities ✅
+- Zeit Stadt (Time City) on Berg ✅
 - Inside Hollow Haven Hotel (after unlock) ✅
 
 **DANGER AREAS (Combat Possible):**
 - All 8 Regions (Open World) ⚔️
+- Central Mountain (Berg) ⚔️
 - 3 Dungeons ⚔️
-- Kampfarena (Goldmarch Trading Post) ⚔️
-- Special Locations (Grotte, Graveyard) ⚔️
+- Kampfarena (Stadt 3) ⚔️
+- Special Locations (Funkelnest, Pyramiden-Labyrinth) ⚔️
 
 **PvP Rules:**
 - Optional Toggle (außer Hardcore)
@@ -532,54 +650,57 @@
 
 ---
 
-## 🎯 IMPLEMENTATION PRIORITY
+## 🎯 WORLD STRUCTURE SUMMARY
 
-### **Phase 1: Core Map (NOW!)**
-1. ✅ Black Windmill Village (bereits da!)
-2. ⬜ 8 Regions placed on 2400×2400 map
-3. ⬜ 5 Cities placed
-4. ⬜ 3 Dungeons entrance objects
+```
+NAJIKA WORLD LAYOUT:
 
-### **Phase 2: Testing (V7.1)**
-1. ⬜ 3 Dungeons procedural generation
-2. ⬜ Combat testing in Dungeons
-3. ⬜ Non-Combat testing on Map
-4. ⬜ Konosuba Events (10 Events)
-5. ⬜ EXPROOOOOSIOOOON! Ultimate Skill
+        [REGION 6: EIS + NEKROMANTIE]
+                    |
+[REGION 5: SUMPF] ← [BERG] → [REGION 7: VULKAN]
+                    ↓
+            [REGION 4: BLITZEBENE]
+                    ↓
+[REGION 2: WALD] ← [MÜHLE] → [REGION 3: KÜSTE]
+                    ↓
+            [REGION 1: WÜSTE]
+                    ↓
+          [REGION 8: VOID/ENDGAME]
 
-### **Phase 3: Special Locations (V7.2)**
-1. ⬜ Glittering Grotto
-2. ⬜ Hollow Haven Hotel
-3. ⬜ Graveyard of Echoes
-
-### **Phase 4: Content Expansion (Handyspiel)**
-1. ⬜ All Dungeons × 1000
-2. ⬜ Full 8-Region World
-3. ⬜ All Quest Lines
-4. ⬜ Endgame Content
+BERG = ZENTRAL, von allen 8 Regionen erreichbar!
+MÜHLE = Najika's Home (SAFE!)
+```
 
 ---
 
-## 📋 SUMMARY
+## 📋 ZUSAMMENFASSUNG DER ÄNDERUNGEN
 
-**What Changed:**
-- ❌ Removed terrible region names ("Bernstein-Dünen" etc.)
-- ✅ Added inspired names (Dusthaven, Whispering Groves, etc.)
-- ✅ Defined 5 Cities (Akademie, Handelsstadt + Arena, Hafen, Schmiede, Heilige Stadt)
-- ✅ Defined 3 Special Locations (Grotte, Horror-Hotel, Friedhof)
-- ✅ Kampfarena = Teil der Handelsstadt!
-- ✅ Hotel = Endgame Hub mit Portal-Dungeons!
-- ✅ 3 Dungeons = Testing Environment (statt Keller!)
+**V2 Änderungen:**
+- ✅ ZENTRALER BERG hinzugefügt (File Island Style!)
+- ✅ Zeit Stadt dokumentiert (Endgame Secret City!)
+- ✅ Nekromantie verschoben: Sumpf → Eis
+- ✅ Player Start Mechanic (8 Startpunkte!)
+- ✅ Slime Color = Startregion
+- ✅ Stadt 3 = HAUPTSTADT (größte!)
+- ✅ Stadt 4/5 = Normale Städte (nur Akzente!)
+- ✅ Ort 1 = "Funkelnest" (approved!)
+- ✅ Ort 3 = Western/Pyramiden (KEIN Horror!)
+- ✅ Region 4 = "Blitzebene" (approved!)
+- ✅ Region 2 = Moos/Hain Namen
+- ✅ Region 3 = Salzbrandung/Salzküste Namen
+- ✅ Alle Namen: 10 Vorschläge pro Location!
 
-**What's Next:**
-- User feedback on region/city names
-- Asset placement on map
-- Implementation start!
+**Nächste Schritte:**
+1. ⬜ User wählt Namen aus allen Vorschlägen
+2. ⬜ Berg-Name festlegen
+3. ⬜ Asset placement on map
+4. ⬜ Implementation start!
 
 ---
 
 **Created by:** Claude Code
-**Inspired by:** Konosuba, Digimon World, Fantasy Western, No Game No Life
+**Inspired by:** Konosuba, Digimon World (File Island!), Fantasy Western, No Game No Life
 **For:** Najika World V7.0 Development
 
 🔥 EXPROOOOOSIOOOON! 🔥
+⛰️ ZEIT STADT WARTET! ⏰
