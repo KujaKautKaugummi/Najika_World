@@ -1,10 +1,10 @@
-# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V2
+# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V3
 
 **Created:** 2025-11-06
-**Updated:** 2025-11-06 (Major Revision!)
-**Status:** Design Phase - Name Selection
+**Updated:** 2025-11-06 (V3 - Major Updates!)
+**Status:** Design Phase - Final Name Selection
 **Map Style:** Fantasy Western × Konosuba × Digimon World (File Island!)
-**World Structure:** 8 Regions + Central Mountain (Zeit Stadt!)
+**World Structure:** 8 Regions + Central Mountain (Zeit Stadt!) + Lava-Welt (Inneres Gebiet!)
 
 ---
 
@@ -38,38 +38,70 @@
 
 ---
 
-## ⛰️ **ZENTRALER BERG - DAS HERZ DER WELT** 🔥
+## ⛰️ **ZENTRALER BERG - TURM DER 100 PRÜFUNGEN (ZUKUNFT!)** 🔥
 
 > **WICHTIG:** Der Berg ist NICHT eine der 8 Regionen!
-> **Inspiration:** Digimon World - File Island Central Mountain!
+> **Inspiration:** Digimon World - File Island Central Mountain (bei Meramon Episode!)
+> **ZUKUNFT:** Najika sprengt den Berg später zum **TURM DER 100 PRÜFUNGEN** um!
 
-### **BERG-NAMEN (Wähle einen!):**
+### **BERG-NAMEN ZUR AUSWAHL (10):**
 
-1. **Zentral-Gipfel** (Central Peak) - Direkt & klar
-2. **File-Berg** (File Mountain) - Digimon-Referenz
-3. **Acht-Wege-Berg** (Eight Paths Mountain) - 8 Zugänge
-4. **Endberg** (End Mountain) - Endgame-Berg
-5. **Zeit-Gipfel** (Time Peak) - Wegen Zeit Stadt
-6. **Ewigkeits-Berg** (Eternity Mountain) - Episch
-7. **Zentralmassiv** (Central Massif) - Geologisch
-8. **Krone der Welt** (Crown of the World) - Höchster Punkt
-9. **Herz-Berg** (Heart Mountain) - Herz der Welt
-10. **Meister-Gipfel** (Master Peak) - Für Meister
+1. **Prüfungs-Berg** (Trial Mountain) - Zukunft eingebaut
+2. **Zentral-Berg** (Central Mountain) - Zentral
+3. **Herz-Gipfel** (Heart Peak) - Herz der Welt
+4. **Wächter-Berg** (Guardian Mountain) - Wächter
+5. **Ewiger Berg** (Eternal Mountain) - Ewig
+6. **Turm-Berg** (Tower Mountain) - Wird Turm
+7. **Hundert-Berg** (Hundred Mountain) - 100 Prüfungen
+8. **Najika's Berg** (Najika's Mountain) - Ihr Berg
+9. **Schicksals-Gipfel** (Destiny Peak) - Schicksal
+10. **Kern-Berg** (Core Mountain) - Kern der Welt
 
 ---
 
 ### **BERG-STRUKTUR:**
 
-**UNTEN (Basis):**
-- **LAVA-BEREICH** 🌋
-- Extreme Hitze, Gefahren
+**AUẞEN (Normaler Berg):**
+- ⚠️ **VON AUẞEN: NORMALER BERG!**
+- Kein sichtbares Lava/Feuer
+- **AUSNAHME:** Von Wüste (Region 1) aus sieht man **Hitze in der Luft** als einziges Anzeichen!
+- Sonst: Normaler Berg, grau, Felsen, Schnee auf Spitze
+
+**INNEN (Lava-Welt!):**
+- **LAVA-WELT** = Eigenes Gebiet im Berg!
+- Wie bei Digimon (Meramon Episode)
+- Größe: Wie eine ganze Region!
+- Nicht "Gebiet" genannt, aber quasi eine eigene Welt
+
+**LAVA-WELT NAMEN ZUR AUSWAHL (10):**
+
+1. **Lava-Kern** (Lava Core) - Kern des Berges
+2. **Glutkammer** (Ember Chamber) - Kammer
+3. **Magma-Herz** (Magma Heart) - Herz
+4. **Innere Glut** (Inner Ember) - Innen
+5. **Lava-Tiefe** (Lava Depths) - Tiefe
+6. **Feuerkern** (Fire Core) - Feuer im Kern
+7. **Schmelz-Welt** (Melting World) - Schmelzend
+8. **Glutzentrum** (Ember Center) - Zentrum
+9. **Lava-Labyrinth** (Lava Labyrinth) - Labyrinth
+10. **Magma-Kammer** (Magma Chamber) - Kammer
+
+---
+
+### **BERG-STRUKTUR DETAILS:**
+
+**UNTEN (Basis - LAVA-WELT):**
+- **LAVA-WELT GEBIET** 🌋
+- Extreme Hitze, Lavaströme
 - Entry Points von allen 8 Regionen
 - Jede Region hat UNTERSCHIEDLICHEN WEG zum Berg!
+- **Von Wüste:** Hitze in Luft sichtbar!
 
 **MITTE (Aufstieg):**
 - Verschiedene Routen je nach Startregion
 - Platforming, Combat, Puzzles
 - Höchste Schwierigkeit!
+- Aufstieg durch Lava-Welt
 
 **OBEN (Spitze):**
 - **ZEIT STADT (Time City)** ⏰
@@ -88,6 +120,11 @@
 - Zeit Stadt = Exklusive Hub für Champions
 - Permanent unlock nach erstem Erreichen
 
+**ZUKUNFT:**
+- **NAJIKA SPRENGT DEN BERG ZUM TURM DER 100 PRÜFUNGEN UM!**
+- Später: Tower of 100 Trials
+- Extreme Endgame Content
+
 ---
 
 ## 🎮 PLAYER START MECHANIC
@@ -99,11 +136,11 @@
 **SLIME COLOR:**
 - **Startregion = Slime Farbe!**
 - Region 1 (Wüste) → Dusty Gold Slime
-- Region 2 (Wald) → Moss Green Slime
-- Region 3 (Küste) → Ocean Blue Slime
-- Region 4 (Highland) → Lightning Purple Slime
-- Region 5 (Sumpf) → Midnight Black Slime
-- Region 6 (Eis) → Crystal White Slime
+- Region 2 (Tiefmoos-Wald) → Moss Green Slime
+- Region 3 (Salzwind-Küste) → Ocean Blue Slime
+- Region 4 (Blitzebene) → Lightning Purple Slime
+- Region 5 (Grünschlamm-Sumpf) → Midnight Black Slime
+- Region 6 (Eis + Nekromantie) → Crystal White Slime
 - Region 7 (Vulkan) → Molten Red Slime
 - Region 8 (Void) → Void Purple Slime
 
@@ -114,97 +151,105 @@
 
 ---
 
-## 🌍 DIE 8 REGIONEN - NAMEN ZUR AUSWAHL!
+## 🌍 DIE 8 REGIONEN - FINAL NAMES!
 
 ### **REGION 1: WÜSTE** 🏜️
 **Biome:** Desert / Western Town
 **Level Range:** 1-15 (Starter Region)
 **Slime Color:** Dusty Gold
 
-**BEACHTE:** Besonderer Wüstenort (Pyramiden-Labyrinth) ist ENDGAME!
+**BEACHTE:** Besonderer Wüstenort (Pyramiden-Labyrinth = Goldstaub-Öde) ist ENDGAME!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Sonnenglut-Wüste** (Sun Blaze Desert) - Extreme Hitze
-2. **Anfänger-Dünen** (Beginner Dunes) - Startet easy
-3. **Goldene Einöde** (Golden Wasteland) - Schön aber gefährlich
-4. **Sandsturm-Start** (Sandstorm Start) - Herausfordernd
-5. **Erste Wüste** (First Desert) - Klar für Startgebiet
-6. **Glutwind-Land** (Hot Wind Land) - Heißer Wind
-7. **Pyramiden-Vorfeld** (Pyramid Outskirts) - Vor dem Endgame
-8. **Start der Hitze** (Heat's Beginning) - Tutorial-Wüste
-9. **Sandhimmel-Gebiet** (Sand Sky Region) - Sandstürme
-10. **Wüsten-Anfang** (Desert Beginning) - Klarer Startpunkt
+**NEUE NAMEN ZUR AUSWAHL (10):**
+
+1. **Dürre-Wüste** (Drought Desert) - Extreme Trockenheit
+2. **Sand-Anfang** (Sand Beginning) - Startgebiet
+3. **Heiße Dünen** (Hot Dunes) - Heiß
+4. **Wüsten-Eingang** (Desert Entrance) - Eingang zur Welt
+5. **Sonnen-Wüste** (Sun Desert) - Sonne
+6. **Trocken-Land** (Dry Land) - Trocken
+7. **Erste Hitze** (First Heat) - Erste Region
+8. **Staubland** (Dust Land) - Staub
+9. **Goldene Sande** (Golden Sands) - Gold
+10. **Wüsten-Beginn** (Desert Start) - Start
 
 **Visual Style:**
 - Wild West Ghost Town Ästhetik
 - Rote Sandwüste mit Kakteen
 - Saloons, Sheriff's Office, Stables
 - Tumbleweeds, Wooden Fences
+- **Besonderheit:** Hitze in Luft beim Berg sichtbar!
 
 ---
 
-### **REGION 2: WALD** 🌲
+### **REGION 2: ✅ TIEFMOOS-WALD + VARIATIONEN** 🌲
 **Biome:** Forest / Druid Settlement
 **Level Range:** 10-25
 **Slime Color:** Moss Green
 
-**BEACHTE:** Muss "Moos" und/oder "Hain" enthalten!
+**✅ BASIS-NAME:** **Tiefmoos-Wald** (#9) - APPROVED!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Moosgrüner Hain** (Moss Green Grove) - Beide Wörter!
-2. **Hainmoos-Wald** (Grove Moss Forest) - Kombiniert
-3. **Samtmoos-Gebiet** (Velvet Moss Region) - Weiches Moos
-4. **Hain der tausend Moose** (Grove of Thousand Mosses)
-5. **Mooshain** (Moss Grove) - Kurz & prägnant
-6. **Grünmoos-Territorium** (Green Moss Territory)
-7. **Hain des weichen Grüns** (Grove of Soft Green) - Poetisch
-8. **Mooswald-Hain** (Moss Forest Grove) - Alle Elemente
-9. **Tiefmoos-Wald** (Deep Moss Forest) - Dichtes Moos
-10. **Haingrün** (Grove Green) - Simple Eleganz
+**VARIATIONEN ZUR AUSWAHL (10):**
+
+1. **Tiefmoos-Wald** (Deep Moss Forest) - ✅ ORIGINAL
+2. **Tiefmoos-Hain** (Deep Moss Grove) - Mit Hain
+3. **Tiefmoos-Gebiet** (Deep Moss Region) - Gebiet
+4. **Tiefmooswald** (Deepmoss Forest) - Ein Wort
+5. **Tief-Moos-Gebiet** (Deep Moss Territory) - Territory
+6. **Tiefgrüner Mooswald** (Deep Green Moss Forest) - Mit "grün"
+7. **Samtmoos-Tiefwald** (Velvet Moss Deep Forest) - Samt + Tief
+8. **Moostiefen** (Moss Depths) - Kurz & prägnant
+9. **Tiefwald mit Moos** (Deep Forest with Moss) - Beschreibend
+10. **Moos-Tiefland** (Moss Deepland) - Tiefland
 
 **Visual Style:**
 - Dichte Wälder, sprechende Bäume
 - Baumhäuser, Holzbrücken
 - Mystische Runen, Elfenarchitektur
 - Nebel am Morgen
+- **Tiefes Moos überall!**
+
+**Features:**
+- Gathering (Herbs, Wood, Mushrooms)
+- Alchemy Focus
+- Druid NPCs
+- Nature Magic Training
 
 **Digimon Reference:** File Forest Vibe!
 
 ---
 
-### **REGION 3: KÜSTE** 🌊
+### **REGION 3: ✅ SALZWIND-KÜSTE** 🌊
 **Biome:** Coast / Pirate Harbor
 **Level Range:** 20-35
 **Slime Color:** Ocean Blue
 
-**BEACHTE:** Mit "Salzbrandung" oder "Salzküste"!
+**✅ NAME APPROVED:** **Salzwind-Küste** (Salt Wind Coast) - #6!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Salzbrandung** (Salt Surf) - USER VORSCHLAG!
-2. **Salzküste** (Salt Coast) - USER VORSCHLAG!
-3. **Brandungs-Küste** (Surf Coast) - Wellenreich
-4. **Salzmeer-Rand** (Salt Sea Edge) - Salzwasser
-5. **Küste der Salzgischt** (Coast of Salt Spray) - Sprühnebel
-6. **Salzwind-Küste** (Salt Wind Coast) - Salziger Wind
-7. **Brandungssalz-Gebiet** (Surf Salt Region) - Kombiniert
-8. **Salzschaumküste** (Salt Foam Coast) - Schaumige Wellen
-9. **Gischtküste** (Spray Coast) - Wilde Wellen
-10. **Salz-Horizont** (Salt Horizon) - Endlose Salzküste
+**Visual Style:**
+- Hafen mit Piratenschiffen
+- Klippen, Leuchttürme, Sandbänke
+- Schiffswracks im Wasser
+- Möwen, Meeresrauschen
+- **Salziger Wind weht ständig!**
 
 **Features:**
 - **FISHING (Ocarina of Time Style!)** 🎣
 - Underwater Caves (Special Gear needed)
 - Pirate Quests
 - Naval Combat (später)
+- **Fischer-Stadt hier!** (Stadt 2)
+
+**Special Location:** Sunken Temple (Hidden Boss)
 
 ---
 
-### **REGION 4: HIGHLAND** ⚡
+### **REGION 4: ✅ BLITZEBENE** ⚡
 **Biome:** Highland / Storm Peaks
 **Level Range:** 30-45
 **Slime Color:** Lightning Purple
 
-**✅ NAME APPROVED:** **Blitzebene** (Lightning Plain) - "klassisch aber geil"
+**✅ NAME APPROVED:** **Blitzebene** (Lightning Plain) - "klassisch aber geil"!
 
 **Visual Style:**
 - Hochebenen mit Gewitter
@@ -217,66 +262,58 @@
 - Lightning Magic Training
 - Stamina Challenges (Klettern!)
 - Wind Puzzles
+- **Akademie-Stadt hier!** (Stadt 1)
 
 **Konosuba Reference:** Megumin würde hier EXPLOSION üben!
 
 ---
 
-### **REGION 5: SUMPF** 🌿
+### **REGION 5: ✅ GRÜNSCHLAMM-SUMPF** 🌿
 **Biome:** Swamp / Witch Territory
 **Level Range:** 40-55
 **Slime Color:** Midnight Black
 
-**⚠️ WICHTIG:** KEINE NEKROMANTIE! (Das ist Region 6!)
+**✅ NAME APPROVED:** **Grünschlamm-Sumpf** (Green Slime Swamp) - #7!
 
-**NAMEN ZUR AUSWAHL (10) - OHNE UNTOTE:**
-1. **Nebelmoor** (Fog Moor) - Mysteriös aber nicht untot
-2. **Sumpfnebel-Land** (Swamp Fog Land) - Atmosphärisch
-3. **Morasgrün** (Morass Green) - Lebendiger Sumpf
-4. **Sumpflichter-Gebiet** (Swamp Lights Region) - Irrlichter
-5. **Feuchtmoor** (Wet Moor) - Natürlicher Sumpf
-6. **Lebend-Moor** (Living Moor) - LEBEN statt Tod!
-7. **Grünschlamm-Sumpf** (Green Slime Swamp) - Algen
-8. **Nebel der Täuschung** (Fog of Deception) - Mystisch
-9. **Dschungel-Sumpf** (Jungle Swamp) - Tropisch
-10. **Licht im Moor** (Light in the Moor) - Hoffnung
+**⚠️ WICHTIG:** KEINE NEKROMANTIE! (Das ist Region 6!)
 
 **Visual Style:**
 - Dunkle Sümpfe, Nebel
 - Hexenhütten, Totems
 - Leuchtende Pilze, Irrlichter
 - Miasma (sichtbarer Gifteffekt)
+- **Grüner Schlamm überall!**
 
 **Features:**
 - Poison/Dark Magic (NICHT Necromancy!)
 - Witch Coven NPCs
 - Disease/Miasma Hazards
 - Alchemie Focus
+- **Schatzhöhle versteckt!** (Funkelnest)
 
 ---
 
-### **REGION 6: EIS** ❄️
-**Biome:** Ice / Frozen Wasteland
+### **REGION 6: EIS + NEKROMANTIE** ❄️
+**Biome:** Ice / Frozen Wasteland + Necromancy
 **Level Range:** 50-65
 **Slime Color:** Crystal White
 
 **✅ WICHTIG:** NEKROMANTIE IST HIER! (Aus Sumpf verschoben!)
 
-**NAMEN ZUR AUSWAHL (13) - MIT NEKROMANTIE:**
+**⚠️ NAMEN MÜSSEN ENTHALTEN: KÄLTE + FROST + EIS (ALLE 3!)**
 
-**Aus alten Vorschlägen (User mochte #6, #7, #9):**
-- **#6: Frostgrab-Ödnis** (Frost Grave Wasteland) ✅
-- **#7: Untoten-Gletscher** (Undead Glacier) ✅
-- **#9: Eisige Totenruhe** (Icy Death Rest) ✅
+**NAMEN ZUR AUSWAHL (10) - MIT ALLEN 3 WÖRTERN:**
 
-**7 NEUE mit Nekromantie:**
-1. **Nekro-Frost** (Necro Frost) - Direkt & klar
-2. **Gefrorenes Grab-Reich** (Frozen Grave Realm) - Untote im Eis
-3. **Eisnekropole** (Ice Necropolis) - Stadt der Toten
-4. **Todesgletscher** (Death Glacier) - Gletscher voller Untoten
-5. **Frostlich-Gebiet** (Frosty Lich Region) - Liches im Eis
-6. **Ewiges Grab** (Eternal Grave) - Untote erwachen nicht
-7. **Kältegrab-Zone** (Cold Grave Zone) - Tote durch Kälte
+1. **Kälte-Frost-Eis-Land** (Cold Frost Ice Land) - Alle 3 direkt
+2. **Eisige Frost-Kälte** (Icy Frost Cold) - Adjektiv-Form
+3. **Kältezone mit Frost und Eis** (Cold Zone with Frost and Ice)
+4. **Frost-Eis-Kälte-Gebiet** (Frost Ice Cold Region)
+5. **Land der Kälte, Frost und Eis** (Land of Cold, Frost and Ice)
+6. **Kälte-Eis unter Frost** (Cold Ice under Frost)
+7. **Frostiges Eis der Kälte** (Frosty Ice of Cold)
+8. **Eis-Kälte-Frost-Welt** (Ice Cold Frost World)
+9. **Kältefrost-Eisland** (Coldfrost Iceland) - Kompakt
+10. **Eiskalter Frost** (Ice Cold Frost) - Kurz
 
 **Visual Style:**
 - Eisige Tundra, Schneestürme
@@ -300,7 +337,7 @@
 **Level Range:** 60-75
 **Slime Color:** Molten Red
 
-**NAMEN ZUR AUSWAHL (aus vorherigen):**
+**NAMEN ZUR AUSWAHL (10):**
 1. Ember Canyon (Die Glutschlucht)
 2. Lavaschlund (Lava Chasm)
 3. Feuerschmiede (Fire Forge)
@@ -313,10 +350,10 @@
 10. Höllenglut (Hell Blaze)
 
 **Features:**
-- **SMITHING CAPITAL!** 🔨
 - Lava Channels (Platforming!)
 - Master Forges
 - Fire Magic + Weapon Smithing
+- **Stadt 4 hier!** (Normal mit Schmiede-Akzent)
 
 **Konosuba Reference:** EXPROOOOOSIOOOON! ≠ Fire (aber cooles Visual!)
 
@@ -327,7 +364,7 @@
 **Level Range:** 70-MAX
 **Slime Color:** Void Purple
 
-**NAMEN ZUR AUSWAHL (braucht Revision!):**
+**NAMEN ZUR AUSWAHL (10):**
 1. The Voidrift (Der Leereriss)
 2. Chaoszone (Chaos Zone)
 3. Alptraum-Reich (Nightmare Realm)
@@ -353,24 +390,34 @@
 
 ---
 
-## 🏛️ DIE 5 STÄDTE - NAMEN ZUR AUSWAHL!
+## 🏛️ DIE 5 STÄDTE - FINAL SELECTION + NEW OPTIONS!
 
-### **STADT 1: AKADEMIE-STADT** 📚
+### **STADT 1: RUNEN-AKADEMIE** 📚
 **Region:** Blitzebene (Region 4)
 **Function:** Magic Training Hub
 **Size:** Large
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Grimoire-Stadt** (Grimoire City) - Stadt der Zauberbücher
-2. **Wissenshain** (Knowledge Grove) - Gelehrten-Oase
-3. **Magieakademie Runenspitz** (Rune Peak Magic Academy)
-4. **Studienhain** (Study Grove) - Akademische Idylle
-5. **Buchwald-Akademie** (Bookwood Academy) - Bibliothek-Stadt
-6. **Zauberturm-Stadt** (Spell Tower City) - Magische Türme
-7. **Gelehrten-Hort** (Scholar's Hoard) - Wissensschatz
-8. **Kristall-Akademie** (Crystal Academy) - Klare Weisheit
-9. **Runenheim** (Rune Home) - Heimat der Magie
-10. **Wissensnest** (Knowledge Nest) - Geborgenheit & Lernen
+**19 NAMEN MIT "RUNEN" ZUR AUSWAHL:**
+
+1. **Runenstadt** (Rune City) - Direkt & klar
+2. **Runen-Akademie** (Rune Academy) - Klassisch
+3. **Runenhort** (Rune Hoard) - Schatzsammlung
+4. **Runenturm-Stadt** (Rune Tower City) - Mit Türmen
+5. **Runenwald-Akademie** (Rune Forest Academy) - Natur + Magie
+6. **Runenspitz** (Rune Peak) - Auf Bergspitze
+7. **Runen-Zirkel** (Rune Circle) - Magischer Kreis
+8. **Runenheim** (Rune Home) - Heimat der Runen
+9. **Runenkrone** (Rune Crown) - Königliche Akademie
+10. **Runen-Bibliothek** (Rune Library) - Fokus auf Wissen
+11. **Runenhain** (Rune Grove) - Friedlicher Hain
+12. **Runenfeuer** (Rune Fire) - Magisches Feuer
+13. **Runen-Garten** (Rune Garden) - Garten-Akademie
+14. **Runenschloss** (Rune Castle) - Schloss-Akademie
+15. **Runen-Weisheit** (Rune Wisdom) - Weisheits-Fokus
+16. **Runenquell** (Rune Spring) - Quelle der Runen
+17. **Runengipfel** (Rune Summit) - Höchster Punkt
+18. **Runen-Orden** (Rune Order) - Magischer Orden
+19. **Runenlicht** (Rune Light) - Leuchtendes Licht
 
 **Features:**
 - **9 MAGIC SCHOOLS TRAINING!** ✨
@@ -381,44 +428,53 @@
 
 ---
 
-### **STADT 2: NORMALE STADT** 🏘️
-**Region:** TBD
-**Function:** General Purpose City
+### **STADT 2: FISCHERSTADT AM HAFEN** 🎣
+**Region:** Salzwind-Küste (Region 3)
+**Function:** Fishing Hub + Harbor
 **Size:** Medium
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Weidenhain** (Willow Grove) - Friedliche Siedlung
-2. **Frühlingsruh** (Spring Rest) - Ruhige Stadt
-3. **Blütental** (Blossom Valley) - Blühende Gemeinde
-4. **Abendstern** (Evening Star) - Romantische Stadt
-5. **Heimathafen** (Home Harbor) - Geborgenheit
-6. **Sanftwind** (Gentle Wind) - Ruhige Atmosphäre
-7. **Rosenbucht** (Rose Bay) - Schöne Küstenstadt
-8. **Morgentau** (Morning Dew) - Frische Stadt
-9. **Friedensnest** (Peace Nest) - Geborgen & sicher
-10. **Steinbrück** (Stone Bridge) - Klassische Kleinstadt
+**⚠️ NEU:** Jetzt FISCHERSTADT am Hafen!
+
+**10 NAMEN PASSEND ZU "SALZWIND-KÜSTE":**
+
+1. **Salzwind-Hafen** (Salt Wind Harbor) - ✅ PERFEKT passend!
+2. **Windbucht** (Wind Bay) - Kurz
+3. **Salzfischer-Stadt** (Saltfish City) - Salt + Fischer
+4. **Küsten-Wind** (Coast Wind) - Küste + Wind
+5. **Fischer im Wind** (Fisher in Wind) - Poetisch
+6. **Salz-Anker** (Salt Anchor) - Anker am Salzwasser
+7. **Windhafen** (Wind Harbor) - Hafen im Wind
+8. **Salzige Bucht** (Salty Bay) - Salzig
+9. **Küsten-Fischer** (Coast Fisher) - Küstenfischer
+10. **Windwellen-Hafen** (Wind Wave Harbor) - Wind + Wellen
+
+**ALTERNATIVE NAMEN (allgemein Fischer):**
+
+1. **Fischer-Bucht** (Fisher Bay) - Direkt
+2. **Netz-Hafen** (Net Harbor) - Fischernetze
+3. **Ankerbucht** (Anchor Bay) - Anker-Thema
+4. **Fischerdorf-Hafen** (Fisher Village Harbor)
+5. **Wellen-Hafen** (Wave Harbor) - Wellen
+6. **Salzfisch-Stadt** (Saltfish City) - Salzfisch
+7. **Gischt-Hafen** (Spray Harbor) - Gischt
+8. **Fischer-Wind** (Fisher Wind) - Wind
+
+**Features:**
+- **FISHING CAPITAL!** 🎣
+- 10+ Fishing Spots
+- Fishing Tournaments
+- Rare Fish Quests
+- Ship Customization (später)
+- Pirate Quests
 
 ---
 
-### **STADT 3: HAUPTSTADT** 👑
+### **STADT 3: ✅ HANDELSFESTUNG** 👑
 **Region:** Wüste (Region 1)
 **Function:** CAPITAL CITY - Trading + Arena + Guild Home
 **Size:** LARGEST CITY!
 
-**⚠️ WICHTIG:** Größte Stadt, Handelszentrum, Kampfarena, Gilden-Heimat!
-**USER FEEDBACK:** "Krakenbucht ein bisschen was hat"
-
-**NAMEN ZUR AUSWAHL (10):**
-1. **Kronen-Markt** (Crown Market) - Königliche Handelsmetropole
-2. **Handelsthron** (Trading Throne) - Zentrum von Macht & Handel
-3. **Arenahafen** (Arena Harbor) - Kämpfer & Händler
-4. **Gildenkrone** (Guild Crown) - Hauptstadt der Gilden
-5. **Prunkbazar** (Splendor Bazaar) - Prachtvolle Handelsstadt
-6. **Wettkampf-Zentrum** (Competition Center) - Arena & Handel
-7. **Marktpalast** (Market Palace) - Königlicher Handelsplatz
-8. **Handelsfestung** (Trading Fortress) - Befestigte Metropole
-9. **Ruhmesbazar** (Glory Bazaar) - Handel trifft Kämpferehre
-10. **Zentral-Gilde** (Central Guild) - Herz aller Gilden
+**✅ NAME APPROVED:** **Handelsfestung** (Trading Fortress) - #8!
 
 **Features:**
 - **PLAYER SHOPS** (Fallout 76 Style!)
@@ -429,59 +485,77 @@
 - **GILDEN-HAUPTQUARTIER**
 - Auction House
 - Banks & Storage
+- **GRÖẞTE STADT!**
+
+**Visual Style:**
+- Western meets Fantasy
+- Large Colosseum in center
+- Market Stalls everywhere
+- Lively, crowded
+- Befestigt (Fortress!)
 
 ---
 
-### **STADT 4: NORMALE STADT (mit Schmiede-Akzenten)** 🔨
+### **STADT 4: NORMALE STADT IM VULKANGEBIET** 🌋
 **Region:** Vulkan (Region 7)
-**Function:** General City with Smithing
+**Function:** General City with Smithing Accents
 **Size:** Medium
 
 **⚠️ WICHTIG:** KEINE Schmiedestadt! Nur normale Stadt mit Schmiede-Akzenten!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Amboss-Ecke** (Anvil Corner) - Subtiler Akzent
-2. **Hammersiedlung** (Hammer Settlement) - Subtile Referenz
-3. **Funkenstadt** (Spark City) - Handwerk & Leben
-4. **Werkstattdorf** (Workshop Village) - Arbeit & Gemeinschaft
-5. **Esse-Hain** (Forge Grove) - Natur trifft Handwerk
-6. **Handwerksruh** (Craftsman's Rest) - Entspannt
-7. **Stahlwind** (Steel Wind) - Leichter Metallakzent
-8. **Meisterstadt** (Master City) - Qualität & Handwerk
-9. **Gusstal** (Casting Valley) - Subtile Referenz
-10. **Eisenblick** (Iron Glance) - Kaum sichtbar
+**10 NEUE NAMEN ZUR AUSWAHL:**
+
+1. **Bergfried** (Mountain Peace) - Friedlich am Berg
+2. **Feuerdorf** (Fire Village) - Nähe Vulkan
+3. **Glutheim** (Ember Home) - Warme Heimat
+4. **Lavarand** (Lava Edge) - Am Rand der Lava
+5. **Funken-Dorf** (Spark Village) - Funken vom Vulkan
+6. **Aschenstadt** (Ash City) - Vulkanasche
+7. **Heißwind-Siedlung** (Hot Wind Settlement) - Heißer Wind
+8. **Rauch-Dorf** (Smoke Village) - Rauch vom Vulkan
+9. **Vulkan-Schatten** (Volcano Shadow) - Im Schatten
+10. **Glut-Siedlung** (Ember Settlement) - Glühende Siedlung
 
 ---
 
-### **STADT 5: NORMALE STADT (mit Tempel-Akzenten)** 🕌
-**Region:** Wald (Region 2)
-**Function:** General City with Temple
+### **STADT 5: HEIẞE QUELLEN STADT** ♨️
+**Region:** Wald (Region 2 - Tiefmoos-Wald)
+**Function:** Healing + Hot Springs + Relaxation
 **Size:** Small-Medium
 
-**⚠️ WICHTIG:** KEINE Tempelstadt! Nur normale Stadt mit Tempel-Akzenten!
+**⚠️ NEU:** Jetzt heiße heilende Quellen Stadt!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Glockenstadt** (Bell City) - Tempelglocken im Hintergrund
-2. **Sonnenhain** (Sun Grove) - Spirituelle Atmosphäre
-3. **Segen-Ecke** (Blessing Corner) - Leichte Heiligkeit
-4. **Lichtviertel** (Light Quarter) - Warme Ausstrahlung
-5. **Gebetswind** (Prayer Wind) - Sanfte Spiritualität
-6. **Heilquell** (Healing Spring) - Erholung & Segen
-7. **Sternenwacht** (Star Watch) - Tempel beobachtet Sterne
-8. **Andachtsdorf** (Devotion Village) - Zurückhaltend
-9. **Schreinhain** (Shrine Grove) - Kleiner Schrein, große Stadt
-10. **Weihstadt** (Consecrate City) - Gesegneter Ort
+**10 NAMEN ZUR AUSWAHL:**
+
+1. **Heilquellen-Stadt** (Healing Springs City) - Direkt
+2. **Thermalquell** (Thermal Spring) - Thermal
+3. **Heißquell-Hain** (Hot Spring Grove) - Mit Hain
+4. **Quellen-Oase** (Spring Oasis) - Oase
+5. **Dampfquellen** (Steam Springs) - Dampfend
+6. **Heilwasser-Stadt** (Healing Water City) - Heilwasser
+7. **Thermenstadt** (Thermal City) - Thermen
+8. **Quellenhort** (Spring Hoard) - Viele Quellen
+9. **Heiß-Heilung** (Hot Healing) - Heiß & Heilend
+10. **Wellness-Quellen** (Wellness Springs) - Wellness-Fokus
+
+**Features:**
+- **HEIẞE HEILENDE QUELLEN!** ♨️
+- Healing Baths
+- Buffs (Rested XP, Health Regen)
+- Meditation (Chaos-Level senken!)
+- Wellness & Relaxation
+- Spa NPCs
 
 ---
 
 ## 🎭 DIE 3 BESONDEREN ORTE
 
-### **ORT 1: SCHATZHÖHLE** 💎
+### **ORT 1: ✅ FUNKELNEST** 💎
 **Type:** Treasure Cave
-**Region:** Sumpf (versteckt!)
+**Region:** Grünschlamm-Sumpf (versteckt!)
 **Level:** 45-60
 
-**✅ NAME APPROVED:** **Funkelnest** (#6 - "ist witzig")
+**✅ NAME APPROVED:** **Funkelnest** (#6 - "ist witzig")!
 
 **Visual Style:**
 - Dunkle Höhle mit leuchtenden Kristallen
@@ -502,20 +576,21 @@
 
 ### **ORT 2: HORROR-HOTEL** 🏚️
 **Type:** Horror-Hotel mit Secret Hub
-**Region:** Between Frostpeak & Voidrift
+**Region:** Between Eis & Void
 **Level:** 60-MAX
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Schatten-Herberge** (Shadow Inn) - Düster außen, schick innen
-2. **Geister-Gasthaus** (Ghost Inn) - Horror/Luxus Kontrast
-3. **Verlassenes Grand Hotel** (Abandoned Grand Hotel)
-4. **Nacht-Palast** (Night Palace) - Dunkel außen, prachtvoll innen
-5. **Zwielicht-Resort** (Twilight Resort) - Übergang Hell/Dunkel
-6. **Verfallene Pracht** (Decayed Splendor) - Kontrast
-7. **Phantom-Villa** (Phantom Villa) - Geisterhafte Eleganz
-8. **Grusel-Grandhotel** (Creepy Grand Hotel)
-9. **Schauder-Schloss** (Shudder Castle) - Schloss-Hotel Hybrid
-10. **Dunkel-Residenz** (Dark Residence) - Mysteriös
+**10 NEUE NAMEN ZUR AUSWAHL:**
+
+1. **Düster-Hotel** (Gloomy Hotel) - Düster
+2. **Nacht-Herberge** (Night Inn) - Nacht
+3. **Schatten-Palast** (Shadow Palace) - Schatten
+4. **Vergessenes Hotel** (Forgotten Hotel) - Vergessen
+5. **Geister-Schloss** (Ghost Castle) - Geister
+6. **Nebel-Residenz** (Fog Residence) - Nebelig
+7. **Stille Herberge** (Silent Inn) - Still & gruselig
+8. **Verlassene Villa** (Abandoned Villa) - Verlassen
+9. **Zwielicht-Gasthaus** (Twilight Inn) - Zwielicht
+10. **Finster-Hotel** (Dark Hotel) - Finster
 
 **OUTSIDE (Horror Phase):**
 - Zerfallenes, altes Hotel
@@ -532,24 +607,14 @@
 
 ---
 
-### **ORT 3: WESTERN WÜSTE / PYRAMIDEN-LABYRINTH** 🏜️
+### **ORT 3: ✅ GOLDSTAUB-ÖDE** 🏜️
 **Type:** Western Prairie + Desert + Pyramid Dungeon
 **Region:** Wüste (Region 1) - Spezialbereich
 **Level:** ENDGAME (70-MAX)
 
-**⚠️ WICHTIG:** KEIN HORROR! Western/Prärie/Wüste/Pyramiden!
+**✅ NAME APPROVED:** **Goldstaub-Öde** (Gold Dust Wasteland) - #9!
 
-**NAMEN ZUR AUSWAHL (10):**
-1. **Sandsturm-Prärie** (Sandstorm Prairie) - Hardcore Wüste
-2. **Goldgräber-Öde** (Gold Digger Wasteland) - Western Vibes
-3. **Pyramiden-Staub** (Pyramid Dust) - Alte Zivilisation
-4. **Prärie der verlorenen Schätze** (Prairie of Lost Treasures)
-5. **Wüstenreiter-Land** (Desert Rider Land) - Western Nomaden
-6. **Sandsee mit Pyramidenspitzen** (Sand Sea with Pyramid Peaks)
-7. **Sturmwüste Khephri** (Storm Desert Khephri) - Ägyptisch
-8. **Prairie des ewigen Sands** (Prairie of Eternal Sands)
-9. **Goldstaub-Öde** (Gold Dust Wasteland) - Western + Pyramiden
-10. **Labyrinth unter Sand** (Labyrinth beneath Sand)
+**⚠️ WICHTIG:** KEIN HORROR! Western/Prärie/Wüste/Pyramiden!
 
 **Visual Style:**
 - **Western/Prärie Ästhetik** (KEIN Horror!)
@@ -638,10 +703,10 @@
 
 **DANGER AREAS (Combat Possible):**
 - All 8 Regions (Open World) ⚔️
-- Central Mountain (Berg) ⚔️
+- Central Mountain (Berg) + Lava-Welt ⚔️
 - 3 Dungeons ⚔️
-- Kampfarena (Stadt 3) ⚔️
-- Special Locations (Funkelnest, Pyramiden-Labyrinth) ⚔️
+- Kampfarena (Handelsfestung) ⚔️
+- Special Locations (Funkelnest, Goldstaub-Öde) ⚔️
 
 **PvP Rules:**
 - Optional Toggle (außer Hardcore)
@@ -656,51 +721,64 @@
 NAJIKA WORLD LAYOUT:
 
         [REGION 6: EIS + NEKROMANTIE]
+        (Kälte+Frost+Eis Namen)
                     |
-[REGION 5: SUMPF] ← [BERG] → [REGION 7: VULKAN]
+[REGION 5: Grünschlamm-Sumpf] ← [BERG] → [REGION 7: VULKAN]
+   (Funkelnest versteckt!)      (Lava innen!)      (Stadt 4)
                     ↓
-            [REGION 4: BLITZEBENE]
+            [REGION 4: Blitzebene]
+                (Stadt 1: Runen-Akademie!)
                     ↓
-[REGION 2: WALD] ← [MÜHLE] → [REGION 3: KÜSTE]
+[REGION 2: Tiefmoos-Wald] ← [MÜHLE] → [REGION 3: Salzwind-Küste]
+   (Stadt 5: Heiße Quellen!)  (SAFE!)    (Stadt 2: Fischer-Hafen!)
                     ↓
             [REGION 1: WÜSTE]
+         (Stadt 3: Handelsfestung!)
+        (Goldstaub-Öde Endgame!)
                     ↓
           [REGION 8: VOID/ENDGAME]
 
 BERG = ZENTRAL, von allen 8 Regionen erreichbar!
 MÜHLE = Najika's Home (SAFE!)
+LAVA-WELT = Im Berg (eigenes Gebiet wie Digimon!)
 ```
 
 ---
 
-## 📋 ZUSAMMENFASSUNG DER ÄNDERUNGEN
+## 📋 ZUSAMMENFASSUNG DER ÄNDERUNGEN V3
 
-**V2 Änderungen:**
-- ✅ ZENTRALER BERG hinzugefügt (File Island Style!)
-- ✅ Zeit Stadt dokumentiert (Endgame Secret City!)
-- ✅ Nekromantie verschoben: Sumpf → Eis
-- ✅ Player Start Mechanic (8 Startpunkte!)
-- ✅ Slime Color = Startregion
-- ✅ Stadt 3 = HAUPTSTADT (größte!)
-- ✅ Stadt 4/5 = Normale Städte (nur Akzente!)
-- ✅ Ort 1 = "Funkelnest" (approved!)
-- ✅ Ort 3 = Western/Pyramiden (KEIN Horror!)
-- ✅ Region 4 = "Blitzebene" (approved!)
-- ✅ Region 2 = Moos/Hain Namen
-- ✅ Region 3 = Salzbrandung/Salzküste Namen
-- ✅ Alle Namen: 10 Vorschläge pro Location!
+**V3 Änderungen:**
+- ✅ Stadt 3 = **"Handelsfestung"** (#8) - APPROVED!
+- ✅ Stadt 1 = 19 NEUE Namen mit "RUNEN"!
+- ✅ Stadt 2 = **FISCHERSTADT AM HAFEN** (NEU!)
+- ✅ Stadt 4 = 10 komplett neue Namen
+- ✅ Stadt 5 = **HEIẞE QUELLEN STADT** (NEU!)
+- ✅ Ort 1 = **"Funkelnest"** - APPROVED!
+- ✅ Ort 3 = **"Goldstaub-Öde"** (#9) - APPROVED!
+- ✅ Ort 2 = 10 neue Namen
+- ✅ Region 1 = 10 komplett neue Namen
+- ✅ Region 2 = **"Tiefmoos-Wald"** + 10 Variationen!
+- ✅ Region 3 = **"Salzwind-Küste"** (#6) - APPROVED!
+- ✅ Region 5 = **"Grünschlamm-Sumpf"** (#7) - APPROVED!
+- ✅ Region 6 = Namen mit **KÄLTE + FROST + EIS** (alle 3!)
+- ✅ Berg = 10 Namen (wird **TURM DER 100 PRÜFUNGEN**!)
+- ✅ Lava-Welt = 10 Namen (im Berg, wie Digimon Meramon!)
+- ✅ Berg Struktur: **AUẞEN NORMAL, INNEN LAVA!**
+- ✅ Von Wüste: **Hitze in Luft sichtbar!**
 
 **Nächste Schritte:**
-1. ⬜ User wählt Namen aus allen Vorschlägen
+1. ⬜ User wählt finale Namen aus allen Vorschlägen
 2. ⬜ Berg-Name festlegen
-3. ⬜ Asset placement on map
-4. ⬜ Implementation start!
+3. ⬜ Lava-Welt Name festlegen
+4. ⬜ Asset placement on map
+5. ⬜ Implementation start!
 
 ---
 
 **Created by:** Claude Code
-**Inspired by:** Konosuba, Digimon World (File Island!), Fantasy Western, No Game No Life
+**Inspired by:** Konosuba, Digimon World (File Island + Meramon!), Fantasy Western, No Game No Life
 **For:** Najika World V7.0 Development
 
 🔥 EXPROOOOOSIOOOON! 🔥
 ⛰️ ZEIT STADT WARTET! ⏰
+🌋 LAVA-WELT IM INNEREN! 🌋
