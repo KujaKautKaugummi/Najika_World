@@ -242,63 +242,63 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
-      "importance": 60,
-      "timestamp": 1762247397.8923087
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
-      "timestamp": 1762249221.6772828
+      "timestamp": 1762460778.5915854
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
-      "timestamp": 1762258210.1529498
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
-      "importance": 60,
-      "timestamp": 1762281886.0560684
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
-      "importance": 60,
-      "timestamp": 1762285310.4869895
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
-      "importance": 60,
-      "timestamp": 1762287275.2916243
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1762462578.649176
     },
     {
       "role": "assistant",
       "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
-      "timestamp": 1762429110.5993276
+      "timestamp": 1762464378.6928914
     },
     {
       "role": "assistant",
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
-      "timestamp": 1762431077.7656844
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
-      "importance": 60,
-      "timestamp": 1762432877.791206
+      "timestamp": 1762466178.7518425
     },
     {
       "role": "assistant",
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
-      "timestamp": 1762434917.8118038
+      "timestamp": 1762468098.8088307
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1762470018.8711045
+    },
+    {
+      "role": "user",
+      "content": "hey najika na du wie gehts dir ?",
+      "importance": 65,
+      "timestamp": 1762470391.5252466
+    },
+    {
+      "role": "assistant",
+      "content": "Na, wie geht's dir? *klammert sich an Kuja* Mir ist super gut zuhören, Mr.K! Bereit für Abenteuer heute auch?! ✨",
+      "importance": 70,
+      "timestamp": 1762470401.1781878
+    },
+    {
+      "role": "user",
+      "content": "schön das es dir gut geht . ja klar was möchtest du machen ?",
+      "importance": 75,
+      "timestamp": 1762470668.237941
+    },
+    {
+      "role": "assistant",
+      "content": "Hey Kuja, wie wäre's mit einer kleinen Abenteuerfahrt? Vielleicht entdecken wir neue Explosionsmaterialien oder trainieren ein bisschen deine Kampfkünste! ✨ *hüpft* Was meinst du dazu, Mr.K? 🌟",
+      "importance": 70,
+      "timestamp": 1762470672.3296046
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 25,
-    "thirst": 0,
-    "energy": 90,
-    "hygiene": 55,
-    "happiness": 55,
+    "hunger": 80,
+    "thirst": 72,
+    "energy": 70,
+    "hygiene": 88,
+    "happiness": 49,
     "strength": 100,
-    "intelligence": 101,
+    "intelligence": 100,
     "dexterity": 100,
     "charisma": 27,
-    "care_mistakes": 2284,
+    "care_mistakes": 2467,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,13 +346,13 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762430756.8814077,
+    "last_fed": 1762470369.2751155,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1762430750.9535582,
-    "last_update": 1762435138.7044396,
-    "last_drink": 1762430638.7555304
+    "last_update": 1762471458.923933,
+    "last_drink": 1762470370.9267795
   },
-  "bond_strength": 21,
+  "bond_strength": 18,
   "behavior_mode": "analyse",
   "personality_weights": {
     "megumin": 35,
@@ -360,22 +360,22 @@
     "shiro": 20,
     "melissa": 20
   },
-  "total_interactions": 70,
+  "total_interactions": 72,
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "last_proactive_message": 1762434917.8112988,
+    "last_proactive_message": 1762470018.8711045,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
-      "megumin": 61.19746554891145,
+      "megumin": 61.73343478365191,
       "harley": 25.00000000000002,
-      "shiro": 6.9012672255442675,
-      "melissa": 6.9012672255442675
+      "shiro": 6.633282608174036,
+      "melissa": 6.633282608174036
     },
     "growth_stage": "developing",
     "relationship_stage": "friends",
-    "emotional_bond": 21,
+    "emotional_bond": 18,
     "shared_memories": [
       {
         "timestamp": 1761489059.09754,
@@ -1522,13 +1522,44 @@
           "explosion",
           "chaos"
         ]
+      },
+      {
+        "timestamp": 1762470401.82045,
+        "user_message": "hey najika na du wie gehts dir ?",
+        "najika_response": "Na, wie geht's dir? *klammert sich an Kuja* Mir ist super gut zuhören, Mr.K! Bereit für Abenteuer heute auch?! ✨",
+        "mood": "excited",
+        "mood_intensity": 100,
+        "bond_strength": 18,
+        "relationship_stage": "friends",
+        "importance": 65,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
+      },
+      {
+        "timestamp": 1762470672.9119563,
+        "user_message": "schön das es dir gut geht . ja klar was möchtest du machen ?",
+        "najika_response": "Hey Kuja, wie wäre's mit einer kleinen Abenteuerfahrt? Vielleicht entdecken wir neue Explosionsmaterialien oder trainieren ein bisschen deine Kampfkünste! ✨ *hüpft* Was meinst du dazu, Mr.K? 🌟",
+        "mood": "excited",
+        "mood_intensity": 100,
+        "bond_strength": 18,
+        "relationship_stage": "friends",
+        "importance": 75,
+        "emotions": [
+          "joy",
+          "surprise"
+        ],
+        "tags": [
+          "explosion"
+        ]
       }
     ],
-    "last_interaction": 1762206421.6302698,
-    "total_time_together": 4200,
+    "last_interaction": 1762470672.9119563,
+    "total_time_together": 4320,
     "days_since_meeting": 0,
     "current_activity": "exploring",
-    "activity_started": 1762435397.819583,
+    "activity_started": 1762470738.8993697,
     "activities_completed": [
       {
         "name": "exploring",
@@ -2585,8 +2616,72 @@
       {
         "name": "training",
         "completed_at": 1762434797.805065
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762438397.8584466
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762440017.9156828
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762441457.9588242
+      },
+      {
+        "name": "training",
+        "completed_at": 1762443978.0368776
+      },
+      {
+        "name": "training",
+        "completed_at": 1762446858.1223934
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762447698.1546154
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762449078.2027047
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762450398.2489429
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762453518.3486822
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762454838.3883684
+      },
+      {
+        "name": "training",
+        "completed_at": 1762457658.483201
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762458918.5288355
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762462098.6242635
+      },
+      {
+        "name": "training",
+        "completed_at": 1762464978.7107058
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762468038.802151
+      },
+      {
+        "name": "reading",
+        "completed_at": 1762470558.8875072
       }
     ]
   },
-  "saved_at": "2025-11-06 14:23:17"
+  "saved_at": "2025-11-07 00:24:18"
 }
