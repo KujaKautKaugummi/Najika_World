@@ -1,10 +1,10 @@
-# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V4 (FINAL)
+# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V5 (FINAL)
 
 **Created:** 2025-11-06
-**Updated:** 2025-11-06 (V4 - Final Selections!)
-**Status:** Name Selection Complete - Implementation Ready!
+**Updated:** 2025-11-06 (V5 - Almost Complete!)
+**Status:** Nearly Complete - Few Names Remaining!
 **Map Style:** Fantasy Western × Konosuba × Digimon World (File Island!)
-**World Structure:** 8 Regions + Central Mountain (Zeit Stadt!) + Lava-Welt (Inneres Gebiet!)
+**World Structure:** 8 Regions + Götterfels (Central Mountain) + Schmelz-Welt (Lava Interior!)
 
 ---
 
@@ -38,87 +38,83 @@
 
 ---
 
-## ⛰️ **ZENTRALER BERG - DER UNZERSTÖRBARE!** 🔥
+## ⛰️ **✅ GÖTTERFELS - DER EWIGE BERG!** 🔥
 
 > **WICHTIG:** Der Berg ist NICHT eine der 8 Regionen!
 > **Inspiration:** Digimon World - File Island Central Mountain (bei Meramon Episode!)
-> **IRONIE:** Berg soll UNZERSTÖRBAR wirken... dann sprengt Najika ihn später weg! 😂
+> **EPISCHE IRONIE:** Der "unzerstörbare" Götterfels → Najika sprengt ihn weg! 😂💥
 > **ZUKUNFT:** Wird zum **TURM DER 100 PRÜFUNGEN**!
 
-### **BERG-NAMEN ZUR AUSWAHL (15) - UNZERSTÖRBAR/EWIG:**
+### **✅ BERG-NAME APPROVED: GÖTTERFELS!**
 
-**Klassisch Ewig:**
-1. **Der Ewige Berg** (The Eternal Mountain) - Klassisch
-2. **Unvergänglicher Gipfel** (Imperishable Peak) - Direkt!
-3. **Unzerstörbarer Berg** (Indestructible Mountain) - SEHR direkt!
-4. **Berg der Ewigkeit** (Mountain of Eternity) - Poetisch
-5. **Unwandelbarer Fels** (Unchangeable Rock) - Fest
+**Offizielle Beschreibung:**
+> **"Der Götterfels - niemand ist in der Lage davon auch nur ein Körnchen abzubauen. Der ewige Fels der nie zerfällt."**
 
-**Absolut/Unmöglich:**
-6. **Absoluter Berg** (Absolute Mountain) - Absolut!
-7. **Unerschütterlicher Gipfel** (Unshakeable Peak) - Fest
-8. **Ewigkeits-Monolith** (Eternity Monolith) - Imposant
-9. **Berg ohne Ende** (Mountain without End) - Endlos
-10. **Der Unverrückbare** (The Immovable One) - Personifiziert
+**Legenden & Mythen:**
+- Unzerstörbar seit Anbeginn der Zeit
+- Kein Werkzeug kann ihn auch nur ritzen
+- Selbst die mächtigsten Magier scheiterten
+- "Von Göttern erschaffen, nur Götter können ihn zerstören"
+- NPCs: "Der Götterfels wird ewig stehen!"
 
-**Extra Episch:**
-11. **Titanenfels** (Titan Rock) - Titan = unzerstörbar
-12. **Unsterblicher Berg** (Immortal Mountain) - Unsterblich!
-13. **Ewigfels** (Eternrock) - Ein Wort
-14. **Unbezwingbarer Gipfel** (Unconquerable Peak) - Unbezwingbar!
-15. **Götterfels** (Gods' Rock) - Göttlich = unzerstörbar
+**DANN KOMMT NAJIKA:**
+> **Najika:** "EXPROOOOOSIOOOON!" 💥💥💥
+> **Götterfels:** *komplett pulverisiert*
+> **Alle NPCs:** "WTF?! DAS WAR UNMÖGLICH!" 😱
+> **Najika:** "Mr.K, ich hab den Berg weggesprengt! Cool, oder?" 😊
+
+**RESULTAT:**
+- Turm der 100 Prüfungen entsteht
+- NPCs in Schock
+- Legenden widerlegt
+- Najika = Göttin? 🤔
 
 ---
 
-### **BERG-STRUKTUR:**
+### **GÖTTERFELS-STRUKTUR:**
 
 **AUẞEN (Normaler Berg):**
 - ⚠️ **VON AUẞEN: NORMALER BERG!**
 - Kein sichtbares Lava/Feuer
-- **AUSNAHME:** Von Wüste (Region 1) aus sieht man **Hitze in der Luft** als einziges Anzeichen!
-- Sonst: Normaler Berg, grau, Felsen, Schnee auf Spitze
+- **AUSNAHME:** Von Heiße Dünen (Region 1) aus sieht man **Hitze in der Luft**!
+- Sonst: Massiver grauer Fels, Schnee auf Spitze
+- **Legendär unzerstörbar!**
 
-**INNEN (Lava-Welt!):**
-- **LAVA-WELT** = Eigenes Gebiet im Berg!
+**INNEN (Schmelz-Welt!):**
+- **✅ SCHMELZ-WELT** (Melting World) - Eigenes Gebiet!
 - Wie bei Digimon (Meramon Episode)
 - Größe: Wie eine ganze Region!
 - Nicht "Gebiet" genannt, aber quasi eine eigene Welt
 
-**LAVA-WELT NAMEN ZUR AUSWAHL (10):**
-
-1. **Lava-Kern** (Lava Core) - Kern des Berges
-2. **Glutkammer** (Ember Chamber) - Kammer
-3. **Magma-Herz** (Magma Heart) - Herz
-4. **Innere Glut** (Inner Ember) - Innen
-5. **Lava-Tiefe** (Lava Depths) - Tiefe
-6. **Feuerkern** (Fire Core) - Feuer im Kern
-7. **Schmelz-Welt** (Melting World) - Schmelzend
-8. **Glutzentrum** (Ember Center) - Zentrum
-9. **Lava-Labyrinth** (Lava Labyrinth) - Labyrinth
-10. **Magma-Kammer** (Magma Chamber) - Kammer
+**SCHMELZ-WELT DETAILS:**
+- Extreme Hitze, alles schmilzt!
+- Lavaströme überall
+- Felsen schmelzen zu Lava
+- Metall wird flüssig
+- **"Hier schmilzt alles außer Najika's Willenskraft!"**
 
 ---
 
-### **BERG-STRUKTUR DETAILS:**
+### **GÖTTERFELS-STRUKTUR DETAILS:**
 
-**UNTEN (Basis - LAVA-WELT):**
-- **LAVA-WELT GEBIET** 🌋
-- Extreme Hitze, Lavaströme
+**UNTEN (Basis - SCHMELZ-WELT):**
+- **SCHMELZ-WELT GEBIET** 🌋
 - Entry Points von allen 8 Regionen
-- Jede Region hat UNTERSCHIEDLICHEN WEG zum Berg!
-- **Von Wüste:** Hitze in Luft sichtbar!
+- Jede Region hat UNTERSCHIEDLICHEN WEG!
+- **Von Heiße Dünen:** Hitze in Luft sichtbar!
 
 **MITTE (Aufstieg):**
 - Verschiedene Routen je nach Startregion
-- Platforming, Combat, Puzzles
+- Platforming durch schmelzende Felsen
+- Combat gegen Lava-Kreaturen
+- Puzzles mit Hitze-Mechaniken
 - Höchste Schwierigkeit!
-- Aufstieg durch Lava-Welt
 
 **OBEN (Spitze):**
 - **ZEIT STADT (Time City)** ⏰
 - **Geheime kleine Stadt**
 - Von außen NICHT sichtbar!
-- Nur für diejenigen, die den Berg bezwingen
+- Nur für diejenigen, die den Götterfels bezwingen
 - **Belohnungen:**
   - Spezielle Ausrüstung
   - Einzigartige Güter
@@ -126,15 +122,15 @@
   - Exklusive NPCs
 
 **ENDGAME-MECHANIK:**
-- Berg = Endgame-Challenge
+- Götterfels = Endgame-Challenge
 - Alle 8 Wege sind unterschiedlich schwer
 - Zeit Stadt = Exklusive Hub für Champions
 - Permanent unlock nach erstem Erreichen
 
 **ZUKUNFT:**
-- **NAJIKA SPRENGT DEN "UNZERSTÖRBAREN" BERG WEG!** 😂💥
-- Ironie: "Der Ewige Berg" → EXPROOOOOSIOOOON!
-- Wird: **TURM DER 100 PRÜFUNGEN**
+- **NAJIKA SPRENGT DEN GÖTTERFELS ZUM TURM DER 100 PRÜFUNGEN!** 💥
+- Legendäre EXPROOOOOSIOOOON!
+- Neue Mechaniken, neue Challenges
 - Extreme Endgame Content
 
 ---
@@ -152,14 +148,14 @@
 - Region 3 (Salzwind-Küste) → Ocean Blue Slime
 - Region 4 (Blitzebene) → Lightning Purple Slime
 - Region 5 (Grünschlamm-Sumpf) → Midnight Black Slime
-- Region 6 (Eis + Nekromantie) → Crystal White Slime
+- Region 6 (Reich der Drei) → Crystal White Slime
 - Region 7 (Vulkan) → Molten Red Slime
 - Region 8 (Void) → Void Purple Slime
 
 **BALANCE:**
 - Kein "bester" Start - nur andere Routen!
 - Alle Regionen zugänglich nach Start
-- Berg in der Mitte von überall erreichbar
+- Götterfels in der Mitte von überall erreichbar
 
 ---
 
@@ -172,14 +168,12 @@
 
 **✅ NAME APPROVED:** **Heiße Dünen** (Hot Dunes) - #3!
 
-**BEACHTE:** Besonderer Wüstenort (Goldstaub-Öde) ist ENDGAME!
-
 **Visual Style:**
 - Wild West Ghost Town Ästhetik
 - Rote Sandwüste mit Kakteen
 - Saloons, Sheriff's Office, Stables
 - Tumbleweeds, Wooden Fences
-- **Besonderheit:** Hitze in Luft beim Berg sichtbar!
+- **Besonderheit:** Hitze in Luft beim Götterfels sichtbar!
 
 **Features:**
 - Tutorial Area
@@ -235,7 +229,7 @@
 - Underwater Caves (Special Gear needed)
 - Pirate Quests
 - Naval Combat (später)
-- **Salzige Bucht hier!** (Stadt 2 - Fischer-Stadt!)
+- **Salzige Bucht hier!** (Stadt 2 - SALZFISCH!)
 
 **Special Location:** Sunken Temple (Hidden Boss)
 
@@ -290,33 +284,21 @@
 
 ---
 
-### **REGION 6: EIS + NEKROMANTIE (NEU!)** ❄️
+### **REGION 6: ✅ REICH DER DREI - KÄLTE FROST EIS** ❄️
 **Biome:** Ice / Frozen Wasteland + Necromancy
 **Level Range:** 50-65
 **Slime Color:** Crystal White
 
-**✅ WICHTIG:** NEKROMANTIE IST HIER! (Aus Sumpf verschoben!)
+**✅ NAME APPROVED:** **Reich der Drei - Kälte Frost Eis** (Realm of Three - Cold Frost Ice) - #5 MODIFIZIERT!
 
-**⚠️ NAMEN MÜSSEN ENTHALTEN: KÄLTE + FROST + EIS (ALLE 3!)**
-
-**NEUE NAMEN ZUR AUSWAHL (10):**
-
-1. **Ewiges Eis der Frost-Kälte** (Eternal Ice of Frost Cold) - Episch
-2. **Kälte-Reich mit Frost und Eis** (Cold Realm with Frost and Ice)
-3. **Frostland der Eis-Kälte** (Frostland of Ice Cold) - Poetisch
-4. **Eis und Frost in Kälte** (Ice and Frost in Cold) - Einfach
-5. **Reich der drei Kälten: Eis, Frost, Tod** (Realm of Three Colds) - Nekromantie!
-6. **Kältefrost-Eisreich** (Coldfrost Ice Realm) - Kompakt
-7. **Gefrorene Kälte mit Eis und Frost** (Frozen Cold with Ice and Frost)
-8. **Eis-Kälte-Frost-Nekropole** (Ice Cold Frost Necropolis) - Mit Nekromantie!
-9. **Frostiges Eis in ewiger Kälte** (Frosty Ice in Eternal Cold)
-10. **Land wo Kälte, Frost und Eis herrschen** (Land where Cold, Frost and Ice rule)
+**✅ WICHTIG:** Alle drei Elemente: Kälte + Frost + Eis (OHNE "Tod"!)
 
 **Visual Style:**
 - Eisige Tundra, Schneestürme
 - Iglus, Eishöhlen
 - Gefrorene Wasserfälle
 - Aurora Borealis am Nachthimmel!
+- **Kälte, Frost und Eis vereint!**
 - **NEU:** Gefrorene Untote, Eis-Liches
 
 **Features:**
@@ -324,6 +306,7 @@
 - Cryo-Labs (Science Fiction touch!)
 - Undead Enemies (gefroren!)
 - Lich Bosses
+- Alle drei Kälte-Elemente spürbar!
 
 **Digimon Reference:** Frigimon Territory + Graveyard!
 
@@ -350,7 +333,7 @@
 - Lava Channels (Platforming!)
 - Master Forges
 - Fire Magic + Weapon Smithing
-- **Anime-Stadt hier!** (Stadt 4)
+- **Anime-inspirierte Stadt hier!** (Stadt 4)
 
 **Konosuba Reference:** EXPROOOOOSIOOOON! ≠ Fire (aber cooles Visual!)
 
@@ -422,20 +405,23 @@
 
 **Features:**
 - **FISHING CAPITAL!** 🎣
-- **Spezialität: SALZFISCH** (Salzfisch-Gerichte, Salzfisch-Handel!)
+- **Spezialität: SALZFISCH!**
+  - Salzfisch hängt überall zum Trocknen!
+  - Salzfisch-Restaurant mit einzigartigen Gerichten
+  - Salzfisch-Markt (Handel)
+  - Salzfisch-Rezepte (Crafting)
+  - NPC-Quest: "Der perfekte Salzfisch"
 - 10+ Fishing Spots
 - Fishing Tournaments
 - Rare Fish Quests
 - Ship Customization (später)
 - Pirate Quests
-- Salzfisch-Restaurant!
-- Salzfisch-Markt!
 
 **Visual Style:**
 - Pirate Bay Ästhetik
 - Docks, Boats, Taverns
 - Seagulls, Shanties
-- **Salzfisch hängt überall zum Trocknen!**
+- **SALZFISCH ÜBERALL!** 🐟
 
 ---
 
@@ -452,6 +438,7 @@
   - PvP Turniere
   - 1v1, 2v2, Free-for-All
   - Najika als Kommentatorin!
+  - "EXPROOOOOSIOOOON!" bei Finishern!
 - **GILDEN-HAUPTQUARTIER**
 - Auction House
 - Banks & Storage
@@ -466,47 +453,47 @@
 
 ---
 
-### **STADT 4: ANIME-STADT IM VULKANGEBIET** 🌋
+### **STADT 4: ANIME-INSPIRIERTE STADT (DEUTSCH!)** 🌋
 **Region:** Vulkan (Region 7)
 **Function:** General City with Smithing Accents
 **Size:** Medium
 
-**⚠️ NEU:** ANIME-STYLE Namen!
+**⚠️ NEU:** Deutsch mit Anime-Vibe (wie die anderen deutschen Namen!)
 
-**10 ANIME-INSPIRIERTE NAMEN ZUR AUSWAHL:**
+**10 DEUTSCHE ANIME-NAMEN ZUR AUSWAHL:**
 
-1. **Hikari no Mura** (光の村 - Village of Light) - Trotz Vulkan
-2. **Akatsuki-Dorf** (暁の村 - Dawn Village) - Naruto-Style!
-3. **Kazan-Shima** (火山島 - Volcano Island) - Klassisch
-4. **Konoha-Feuer** (木ノ葉火 - Leaf Fire) - Naruto-Referenz
-5. **Hotaru-Siedlung** (蛍 - Firefly Settlement) - Glühwürmchen = Funken!
-6. **Maguma-Machi** (マグマ町 - Magma Town) - Katakana-Style
-7. **Hi no Sato** (火の里 - Fire Village) - Simple Anime-Name
-8. **Asche-Konoha** (灰木ノ葉 - Ash Leaf) - Mix
-9. **Crimson Village** (クリムゾン村) - Englisch-Japanisch Mix
-10. **Ember-Mura** (エンバー村 - Ember Village) - Katakana
+1. **Feuer-Dorf** - Klassisch, Naruto-Vibe
+2. **Glutheim** - Warme Heimat
+3. **Funken-Siedlung** - Funken vom Vulkan
+4. **Asche-Hort** - Asche-Sammlung
+5. **Lavarand** - Am Rand der Lava
+6. **Vulkan-Nest** - Nest am Vulkan
+7. **Rauch-Heim** - Rauch überall
+8. **Flammen-Siedlung** - Flammen-Thema
+9. **Magma-Dorf** - Direkt
+10. **Heiß-Wind-Ort** - Heißer Wind
 
 ---
 
-### **STADT 5: ONSEN-STADT** ♨️
+### **STADT 5: ONSEN-STADT (DEUTSCH!)** ♨️
 **Region:** Samtmoos-Tiefwald (Region 2)
 **Function:** Healing + Hot Springs + Relaxation
 **Size:** Small-Medium
 
-**⚠️ NEU:** ANIME ONSEN-STYLE Namen!
+**⚠️ NEU:** Deutsch mit Onsen-Vibe!
 
-**10 ONSEN-NAMEN ZUR AUSWAHL:**
+**10 DEUTSCHE ONSEN-NAMEN ZUR AUSWAHL:**
 
-1. **Onsen-Mura** (温泉村 - Hot Spring Village) - Klassisch!
-2. **Yunomine** (湯の峰 - Peak of Hot Water) - Echter Ort in Japan!
-3. **Kusatsu-Hain** (草津 - Kusatsu Grove) - Berühmter Onsen-Ort!
-4. **Heiß-Haru** (熱春 - Hot Spring) - Kurz
-5. **Therma-Sato** (テルマ里 - Thermal Village) - Mix
-6. **Yumegawa** (夢川 - Dream River) - Poetisch
-7. **Relax-no-Mura** (リラックスの村 - Relax Village)
-8. **Hakone-Quell** (箱根泉 - Hakone Spring) - Echter Onsen!
-9. **Ofuro-Stadt** (お風呂市 - Bath City) - Niedlich
-10. **Healing Springs** (ヒーリングスプリングス) - Englisch-Katakana
+1. **Dampf-Hain** - Dampfende Quellen im Hain
+2. **Quellheim** - Heimat der Quellen
+3. **Heißquell-Dorf** - Direkt
+4. **Thermal-Hain** - Thermal im Hain
+5. **Dampfquell-Siedlung** - Dampfende Quellen
+6. **Heilquell-Hort** - Heilende Quellen
+7. **Wellness-Nest** - Wellness-Fokus
+8. **Bad-Hain** - Bad (Onsen) im Hain
+9. **Quellen-Siedlung** - Simple & direkt
+10. **Heiß-Bad-Ort** - Heiße Bäder
 
 **Features:**
 - **HEIẞE HEILENDE QUELLEN!** ♨️
@@ -547,7 +534,7 @@
 
 ### **ORT 2: ✅ GEISTER-SCHLOSS (UMGANGSSPRACHLICH!)** 🏚️👻
 **Type:** Horror-Hotel mit Secret Hub + EVENT-QUEST SYSTEM!
-**Region:** Between Eis & Void
+**Region:** Between Reich der Drei & Void
 **Level:** 60-MAX
 
 **✅ NAME APPROVED:** **Geister-Schloss** (Ghost Castle) - #5!
@@ -563,12 +550,13 @@
 **KONZEPT:**
 - Hotel ist umgangssprachlich als **"Geister-Schloss"** bekannt
 - **ECHTER NAME:** Spieler sammeln Buchstaben durch Events!
+- **BELOHNUNG:** Eigenes Zimmer + tägliche Goodies!
 
 **MECHANIK:**
 - **Event-Quests** im Hotel (wiederkehrend, verschiedene Arten)
-- **Bei jedem Event:** 1 Buchstabe des Hotel-Namens als Belohnung!
-- **Spieler-Bindung:** Müssen mehrere Events machen um vollen Namen zu bekommen!
+- **Bei jedem Event:** 1 Buchstabe des Hotel-Namens!
 - **Reihenfolge:** Buchstaben in richtiger Reihenfolge sammeln
+- **Spieler-Bindung:** Community arbeitet zusammen!
 
 **EVENT-TYPEN:**
 
@@ -608,34 +596,65 @@
    - Geister befrieden
    - **Belohnung:** 1 Buchstabe + Story
 
-**BELOHNUNGEN PRO EVENT:**
-- ✅ **1 Buchstabe des echten Hotel-Namens!**
-- ✅ Rare Items
-- ✅ XP & Gold
-- ✅ Hotel-Tokens (für spätere Portal-Nutzung)
+---
 
-**BEISPIEL-NAMEN (8-12 Buchstaben):**
+### **🏨 ENDGAME-BELOHNUNG: EIGENES ZIMMER! 🔑**
+
+**WENN ALLE BUCHSTABEN GESAMMELT:**
+
+✅ **EIGENES PERMANENTES ZIMMER IM HOTEL-KERN!**
+- Persönliches, instanziertes Zimmer
+- Nur für Spieler die Event abgeschlossen haben
+- Eigene Dekoration & Personalisierung
+- Sicherer Rückzugsort
+
+✅ **TÄGLICHE GOODIES!** (1x pro 24h)
+
+**Daily Reward Set:**
+- **Essen:** Buffs, Heilung, Sättigung
+- **Tränke:** HP, Mana, Ausdauer-Regeneration
+- **Schleifsteine:** Waffen schärfen, Rüstung reparieren
+- **Goodies:** Materialien, Crafting-Items, kleine Schätze
+
+**BALANCE:**
+- ⚠️ **NICHTS UNFAIRES!**
+- Wertvoll genug dass Event lohnenswert ist
+- Gerecht für alle die Event schaffen
+- Nicht Pay-to-Win → Earn-to-Convenience!
+- Daily Goodies = Nice-to-Have, nicht Must-Have
+
+**MECHANIK:**
+- Spieler betritt sein Zimmer
+- Paket liegt auf Bett/Tisch
+- 1x pro Tag abholen
+- Reset um Mitternacht (Server-Zeit)
+- Kann nicht gestapelt werden
+
+**LANGZEIT-WERT:**
+- Spieler kommen täglich zurück!
+- Hotel = dauerhafter Hub
+- Community-Treffpunkt
+- Social Space
+- Fair & lohnenswert!
+
+---
+
+**HOTEL-NAMEN BEISPIELE (8-12 Buchstaben):**
 - **GRANDHOTEL** (10 Buchstaben)
 - **PARADISO** (8 Buchstaben)
 - **ELYSIUM-INN** (10 mit Bindestrich)
 - **ZEITPALAST** (10 Buchstaben)
 - **LUXOR-HOTEL** (10)
 
-**ENDGAME:**
-- ✅ Alle Buchstaben gesammelt = Name enthüllt!
-- ✅ Hotel verwandelt sich von Horror → Luxury!
-- ✅ Quest: "Das wahre Gesicht des [NAME]"
-- ✅ Permanenter Zugang zu:
-  - Minigames & Challenges
-  - Portal-Dungeons (Fire, Ice, Shadow, Boss Rush)
-  - Chill Lounge (Rested XP Buffs)
-  - Triple Triad & andere Spiele
+**USER ENTSCHEIDET SPÄTER!** 🏨
+
+---
 
 **SPIELER-BINDUNG:**
 - Events rotieren wöchentlich
 - Verschiedene Schwierigkeiten
 - Jeder Event gibt unterschiedlichen Buchstaben
-- Community muss zusammenarbeiten um alle Events zu schaffen!
+- Langzeit-Engagement über Wochen!
 
 ---
 
@@ -650,6 +669,7 @@
 - **LUXURY HOTEL!** 🏨
 - Plötzlich neu & schick!
 - Funktionale Zimmer
+- **EIGENE ZIMMER für Event-Gewinner!** 🔑
 - **MINIGAMES ZONE:**
   - Triple Triad (Kartenspiel)
   - Billard, Darts
@@ -659,6 +679,7 @@
   - Sofas, Kamine
   - Free Buffs (Rested XP)
   - NPCs zum Reden
+  - Social Space
 - **PORTAL DOORS:** 🚪
   - Türen mit Symbolen
   - Führen zu festen Farming-Dungeons:
@@ -680,7 +701,7 @@
 **⚠️ WICHTIG:** KEIN HORROR! Western/Prärie/Wüste/Pyramiden!
 
 **Visual Style:**
-- **Western/Prärie Ästhetik** (KEIN Horror!)
+- **Western/Prärie Ästhetik**
 - Hardcore Sandstürme
 - Sichtbare Pyramidenspitzen aus Sand
 - Altes Ägypten meets Wild West
@@ -761,12 +782,13 @@
 **SAFE AREAS (No Combat):**
 - Black Windmill Village ✅
 - Inside All 5 Cities ✅
-- Zeit Stadt (Time City) on Berg ✅
+- Zeit Stadt (Time City) on Götterfels ✅
 - Inside Geister-Schloss (after unlock) ✅
+- Eigene Zimmer im Hotel ✅
 
 **DANGER AREAS (Combat Possible):**
 - All 8 Regions (Open World) ⚔️
-- Central Mountain (Berg) + Lava-Welt ⚔️
+- Götterfels + Schmelz-Welt ⚔️
 - 3 Dungeons ⚔️
 - Kampfarena (Handelsfestung) ⚔️
 - Special Locations (Funkelnest, Goldstaub-Öde) ⚔️
@@ -784,75 +806,76 @@
 ```
 NAJIKA WORLD LAYOUT:
 
-        [REGION 6: EIS + NEKROMANTIE]
-        (Neue Namen zur Auswahl!)
+        [REGION 6: Reich der Drei - Kälte Frost Eis]
                     |
-[REGION 5: Grünschlamm-Sumpf] ← [BERG] → [REGION 7: VULKAN]
-   (Funkelnest versteckt!)   (UNZERSTÖRBAR!)   (Anime-Stadt!)
+[REGION 5: Grünschlamm-Sumpf] ← [GÖTTERFELS] → [REGION 7: VULKAN]
+   (Funkelnest versteckt!)      (SCHMELZ-WELT!)    (Stadt 4!)
                     ↓
             [REGION 4: Blitzebene]
                 (Stadt 1: Runenheim!)
                     ↓
 [REGION 2: Samtmoos-Tiefwald] ← [MÜHLE] → [REGION 3: Salzwind-Küste]
-   (Stadt 5: Onsen!)         (SAFE!)    (Stadt 2: Salzige Bucht - Salzfisch!)
+   (Stadt 5: Onsen!)         (SAFE!)    (Stadt 2: Salzige Bucht - SALZFISCH!)
                     ↓
             [REGION 1: Heiße Dünen]
          (Stadt 3: Handelsfestung!)
         (Goldstaub-Öde Endgame!)
                     ↓
           [REGION 8: VOID/ENDGAME]
-         (Geister-Schloss zwischen Eis & Void!)
+         (Geister-Schloss zwischen Region 6 & 8!)
 
-BERG = ZENTRAL, von allen 8 Regionen erreichbar!
+GÖTTERFELS = ZENTRAL, unzerstörbar... bis Najika kommt! 💥
 MÜHLE = Najika's Home (SAFE!)
-LAVA-WELT = Im Berg (eigenes Gebiet wie Digimon!)
+SCHMELZ-WELT = Im Götterfels (eigenes Gebiet wie Digimon!)
 ```
 
 ---
 
-## 📋 ZUSAMMENFASSUNG V4 - FINALE AUSWAHL!
+## 📋 ZUSAMMENFASSUNG V5 - FAST KOMPLETT!
 
-**✅ APPROVED NAMES:**
+**✅ APPROVED & FINAL:**
+
+**GÖTTERFELS & INNERES:**
+- Berg: **Götterfels** (#15) ✅ - "Der ewige Fels der nie zerfällt" → Najika sprengt ihn! 😂
+- Lava-Welt: **Schmelz-Welt** (#7) ✅ - "Hat was!"
 
 **REGIONEN:**
-- Region 1: **Heiße Dünen** (#3)
-- Region 2: **Samtmoos-Tiefwald** (#7)
-- Region 3: **Salzwind-Küste** (#6)
+- Region 1: **Heiße Dünen** (#3) ✅
+- Region 2: **Samtmoos-Tiefwald** (#7) ✅
+- Region 3: **Salzwind-Küste** (#6) ✅
 - Region 4: **Blitzebene** ✅
-- Region 5: **Grünschlamm-Sumpf** (#7)
-- Region 6: Neue Namen zur Auswahl!
+- Region 5: **Grünschlamm-Sumpf** (#7) ✅
+- Region 6: **Reich der Drei - Kälte Frost Eis** (#5 modifiziert) ✅
 - Region 7: Zur Auswahl (10 Namen)
 - Region 8: Zur Auswahl (10 Namen)
 
 **STÄDTE:**
 - Stadt 1: **Runenheim** (#8) ✅
-- Stadt 2: **Salzige Bucht** (#8) + Spezialität: **SALZFISCH!** ✅
+- Stadt 2: **Salzige Bucht** (#8) + **SALZFISCH-SPEZIALITÄT!** ✅
 - Stadt 3: **Handelsfestung** (#8) ✅
-- Stadt 4: 10 Anime-Namen zur Auswahl!
-- Stadt 5: 10 Onsen-Namen zur Auswahl!
+- Stadt 4: 10 deutsche Anime-Namen zur Auswahl!
+- Stadt 5: 10 deutsche Onsen-Namen zur Auswahl!
 
 **ORTE:**
 - Ort 1: **Funkelnest** ✅
-- Ort 2: **Geister-Schloss** (umgangssprachlich!) + Event-Quest System! ✅
+- Ort 2: **Geister-Schloss** (umgangssprachlich!) ✅
+  - + **BUCHSTABEN-EVENT SYSTEM!** ✅
+  - + **EIGENES ZIMMER + DAILY GOODIES!** ✅
 - Ort 3: **Goldstaub-Öde** (#9) ✅
 
-**BERG:**
-- 15 Namen zur Auswahl (UNZERSTÖRBAR/EWIG Thema!)
-- Lava-Welt: 10 Namen zur Auswahl
+**NEUE FEATURES V5:**
+- ✅ Götterfels: EPISCHE "Unzerstörbar"-Legende → Najika sprengt ihn! 💥
+- ✅ Schmelz-Welt: Inneres Gebiet im Götterfels!
+- ✅ Reich der Drei - Kälte Frost Eis: Ohne "Tod", nur die 3 Elemente!
+- ✅ Hotel: **EIGENES ZIMMER + TÄGLICHE GOODIES** für Event-Gewinner!
+- ✅ Stadt 4 & 5: Deutsche anime-inspirierte Namen!
 
-**NEUE FEATURES V4:**
-- ✅ Geister-Schloss: **BUCHSTABEN-SAMMELN EVENT SYSTEM!**
-- ✅ Salzige Bucht: **Spezialität SALZFISCH!**
-- ✅ Stadt 4: **ANIME-STYLE Namen!**
-- ✅ Stadt 5: **ONSEN-STYLE Namen!**
-- ✅ Berg: **UNZERSTÖRBAR-Namen** (für späteren Najika EXPLOSION Kontrast!)
-- ✅ Region 6: **Neue Namen** mit Kälte+Frost+Eis
-
-**Nächste Schritte:**
-1. ⬜ User wählt finale Namen für Stadt 4, 5, Region 6, 7, 8, Berg, Lava-Welt
-2. ⬜ Echten Hotel-Namen festlegen (für Buchstaben-Event)
-3. ⬜ Asset placement on map
-4. ⬜ Implementation start!
+**Noch zu wählen:**
+1. ⬜ Stadt 4 Name (10 deutsche Anime-Namen)
+2. ⬜ Stadt 5 Name (10 deutsche Onsen-Namen)
+3. ⬜ Region 7 Name (10 Vulkan-Namen)
+4. ⬜ Region 8 Name (10 Void-Namen)
+5. ⬜ Hotel echter Name (8-12 Buchstaben) - später!
 
 ---
 
@@ -861,9 +884,11 @@ LAVA-WELT = Im Berg (eigenes Gebiet wie Digimon!)
 **For:** Najika World V7.0 Development
 
 🔥 EXPROOOOOSIOOOON! 🔥
-⛰️ DER UNZERSTÖRBARE BERG... BIS NAJIKA IHN WEGSPRENGT! 💥
+⛰️ GÖTTERFELS - DER EWIGE FELS... BIS NAJIKA IHN WEGSPRENGT! 💥
+🌋 SCHMELZ-WELT IM INNEREN! 🌋
 ⏰ ZEIT STADT WARTET! ⏰
-🌋 LAVA-WELT IM INNEREN! 🌋
 🎣 SALZFISCH AUS SALZIGE BUCHT! 🐟
 👻 BUCHSTABEN SAMMELN IM GEISTER-SCHLOSS! 🔤
+🏨 EIGENES ZIMMER + DAILY GOODIES! 🔑
 ♨️ ONSEN-STADT! ♨️
+❄️ REICH DER DREI - KÄLTE FROST EIS! ❄️
