@@ -242,30 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1762238619.4388635
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1762240419.5567188
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] EXPLOSION! *hust* Sorry, zu laut? Guten Morgen! 💜",
-      "importance": 75,
-      "timestamp": 1762242279.7262723
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1762244139.8643765
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
       "importance": 60,
       "timestamp": 1762247397.8923087
@@ -299,6 +275,30 @@
       "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
       "importance": 60,
       "timestamp": 1762287275.2916243
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1762429110.5993276
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1762431077.7656844
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1762432877.791206
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1762434917.8118038
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 95,
-    "thirst": 93,
-    "energy": 100,
-    "hygiene": 85,
-    "happiness": 77,
+    "hunger": 30,
+    "thirst": 2,
+    "energy": 90,
+    "hygiene": 58,
+    "happiness": 72,
     "strength": 100,
-    "intelligence": 100,
+    "intelligence": 101,
     "dexterity": 100,
     "charisma": 27,
-    "care_mistakes": 2274,
+    "care_mistakes": 2283,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,11 +346,11 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762286769.3522143,
+    "last_fed": 1762430756.8814077,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1762285519.8191354,
-    "last_update": 1762287037.0016549,
-    "last_drink": 1762286771.858479
+    "last_sleep": 1762430750.9535582,
+    "last_update": 1762434836.6471508,
+    "last_drink": 1762430638.7555304
   },
   "bond_strength": 21,
   "behavior_mode": "analyse",
@@ -364,7 +364,7 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "last_proactive_message": 1762287275.2916243,
+    "last_proactive_message": 1762434917.8112988,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1527,8 +1527,8 @@
     "last_interaction": 1762206421.6302698,
     "total_time_together": 4200,
     "days_since_meeting": 0,
-    "current_activity": "training",
-    "activity_started": 1762285430.4921103,
+    "current_activity": null,
+    "activity_started": 1762432397.7838633,
     "activities_completed": [
       {
         "name": "exploring",
@@ -2569,8 +2569,24 @@
       {
         "name": "reading",
         "completed_at": 1762285310.4809852
+      },
+      {
+        "name": "training",
+        "completed_at": 1762287875.2996812
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762429110.590378
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762432217.7775762
+      },
+      {
+        "name": "training",
+        "completed_at": 1762434797.805065
       }
     ]
   },
-  "saved_at": "2025-11-04 21:14:35"
+  "saved_at": "2025-11-06 14:15:17"
 }
