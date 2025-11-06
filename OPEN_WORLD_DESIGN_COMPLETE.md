@@ -1,8 +1,8 @@
-# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V3
+# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V4 (FINAL)
 
 **Created:** 2025-11-06
-**Updated:** 2025-11-06 (V3 - Major Updates!)
-**Status:** Design Phase - Final Name Selection
+**Updated:** 2025-11-06 (V4 - Final Selections!)
+**Status:** Name Selection Complete - Implementation Ready!
 **Map Style:** Fantasy Western × Konosuba × Digimon World (File Island!)
 **World Structure:** 8 Regions + Central Mountain (Zeit Stadt!) + Lava-Welt (Inneres Gebiet!)
 
@@ -38,24 +38,35 @@
 
 ---
 
-## ⛰️ **ZENTRALER BERG - TURM DER 100 PRÜFUNGEN (ZUKUNFT!)** 🔥
+## ⛰️ **ZENTRALER BERG - DER UNZERSTÖRBARE!** 🔥
 
 > **WICHTIG:** Der Berg ist NICHT eine der 8 Regionen!
 > **Inspiration:** Digimon World - File Island Central Mountain (bei Meramon Episode!)
-> **ZUKUNFT:** Najika sprengt den Berg später zum **TURM DER 100 PRÜFUNGEN** um!
+> **IRONIE:** Berg soll UNZERSTÖRBAR wirken... dann sprengt Najika ihn später weg! 😂
+> **ZUKUNFT:** Wird zum **TURM DER 100 PRÜFUNGEN**!
 
-### **BERG-NAMEN ZUR AUSWAHL (10):**
+### **BERG-NAMEN ZUR AUSWAHL (15) - UNZERSTÖRBAR/EWIG:**
 
-1. **Prüfungs-Berg** (Trial Mountain) - Zukunft eingebaut
-2. **Zentral-Berg** (Central Mountain) - Zentral
-3. **Herz-Gipfel** (Heart Peak) - Herz der Welt
-4. **Wächter-Berg** (Guardian Mountain) - Wächter
-5. **Ewiger Berg** (Eternal Mountain) - Ewig
-6. **Turm-Berg** (Tower Mountain) - Wird Turm
-7. **Hundert-Berg** (Hundred Mountain) - 100 Prüfungen
-8. **Najika's Berg** (Najika's Mountain) - Ihr Berg
-9. **Schicksals-Gipfel** (Destiny Peak) - Schicksal
-10. **Kern-Berg** (Core Mountain) - Kern der Welt
+**Klassisch Ewig:**
+1. **Der Ewige Berg** (The Eternal Mountain) - Klassisch
+2. **Unvergänglicher Gipfel** (Imperishable Peak) - Direkt!
+3. **Unzerstörbarer Berg** (Indestructible Mountain) - SEHR direkt!
+4. **Berg der Ewigkeit** (Mountain of Eternity) - Poetisch
+5. **Unwandelbarer Fels** (Unchangeable Rock) - Fest
+
+**Absolut/Unmöglich:**
+6. **Absoluter Berg** (Absolute Mountain) - Absolut!
+7. **Unerschütterlicher Gipfel** (Unshakeable Peak) - Fest
+8. **Ewigkeits-Monolith** (Eternity Monolith) - Imposant
+9. **Berg ohne Ende** (Mountain without End) - Endlos
+10. **Der Unverrückbare** (The Immovable One) - Personifiziert
+
+**Extra Episch:**
+11. **Titanenfels** (Titan Rock) - Titan = unzerstörbar
+12. **Unsterblicher Berg** (Immortal Mountain) - Unsterblich!
+13. **Ewigfels** (Eternrock) - Ein Wort
+14. **Unbezwingbarer Gipfel** (Unconquerable Peak) - Unbezwingbar!
+15. **Götterfels** (Gods' Rock) - Göttlich = unzerstörbar
 
 ---
 
@@ -121,8 +132,9 @@
 - Permanent unlock nach erstem Erreichen
 
 **ZUKUNFT:**
-- **NAJIKA SPRENGT DEN BERG ZUM TURM DER 100 PRÜFUNGEN UM!**
-- Später: Tower of 100 Trials
+- **NAJIKA SPRENGT DEN "UNZERSTÖRBAREN" BERG WEG!** 😂💥
+- Ironie: "Der Ewige Berg" → EXPROOOOOSIOOOON!
+- Wird: **TURM DER 100 PRÜFUNGEN**
 - Extreme Endgame Content
 
 ---
@@ -135,8 +147,8 @@
 
 **SLIME COLOR:**
 - **Startregion = Slime Farbe!**
-- Region 1 (Wüste) → Dusty Gold Slime
-- Region 2 (Tiefmoos-Wald) → Moss Green Slime
+- Region 1 (Heiße Dünen) → Dusty Gold Slime
+- Region 2 (Samtmoos-Tiefwald) → Moss Green Slime
 - Region 3 (Salzwind-Küste) → Ocean Blue Slime
 - Region 4 (Blitzebene) → Lightning Purple Slime
 - Region 5 (Grünschlamm-Sumpf) → Midnight Black Slime
@@ -153,25 +165,14 @@
 
 ## 🌍 DIE 8 REGIONEN - FINAL NAMES!
 
-### **REGION 1: WÜSTE** 🏜️
+### **REGION 1: ✅ HEIẞE DÜNEN** 🏜️
 **Biome:** Desert / Western Town
 **Level Range:** 1-15 (Starter Region)
 **Slime Color:** Dusty Gold
 
-**BEACHTE:** Besonderer Wüstenort (Pyramiden-Labyrinth = Goldstaub-Öde) ist ENDGAME!
+**✅ NAME APPROVED:** **Heiße Dünen** (Hot Dunes) - #3!
 
-**NEUE NAMEN ZUR AUSWAHL (10):**
-
-1. **Dürre-Wüste** (Drought Desert) - Extreme Trockenheit
-2. **Sand-Anfang** (Sand Beginning) - Startgebiet
-3. **Heiße Dünen** (Hot Dunes) - Heiß
-4. **Wüsten-Eingang** (Desert Entrance) - Eingang zur Welt
-5. **Sonnen-Wüste** (Sun Desert) - Sonne
-6. **Trocken-Land** (Dry Land) - Trocken
-7. **Erste Hitze** (First Heat) - Erste Region
-8. **Staubland** (Dust Land) - Staub
-9. **Goldene Sande** (Golden Sands) - Gold
-10. **Wüsten-Beginn** (Desert Start) - Start
+**BEACHTE:** Besonderer Wüstenort (Goldstaub-Öde) ist ENDGAME!
 
 **Visual Style:**
 - Wild West Ghost Town Ästhetik
@@ -180,40 +181,36 @@
 - Tumbleweeds, Wooden Fences
 - **Besonderheit:** Hitze in Luft beim Berg sichtbar!
 
+**Features:**
+- Tutorial Area
+- First Quest Hub
+- Easy Enemies (Desert Rats, Scorpions)
+- Bandit Camps
+- **Handelsfestung hier!** (Stadt 3)
+- **Goldstaub-Öde hier!** (Ort 3 - Endgame)
+
 ---
 
-### **REGION 2: ✅ TIEFMOOS-WALD + VARIATIONEN** 🌲
+### **REGION 2: ✅ SAMTMOOS-TIEFWALD** 🌲
 **Biome:** Forest / Druid Settlement
 **Level Range:** 10-25
 **Slime Color:** Moss Green
 
-**✅ BASIS-NAME:** **Tiefmoos-Wald** (#9) - APPROVED!
-
-**VARIATIONEN ZUR AUSWAHL (10):**
-
-1. **Tiefmoos-Wald** (Deep Moss Forest) - ✅ ORIGINAL
-2. **Tiefmoos-Hain** (Deep Moss Grove) - Mit Hain
-3. **Tiefmoos-Gebiet** (Deep Moss Region) - Gebiet
-4. **Tiefmooswald** (Deepmoss Forest) - Ein Wort
-5. **Tief-Moos-Gebiet** (Deep Moss Territory) - Territory
-6. **Tiefgrüner Mooswald** (Deep Green Moss Forest) - Mit "grün"
-7. **Samtmoos-Tiefwald** (Velvet Moss Deep Forest) - Samt + Tief
-8. **Moostiefen** (Moss Depths) - Kurz & prägnant
-9. **Tiefwald mit Moos** (Deep Forest with Moss) - Beschreibend
-10. **Moos-Tiefland** (Moss Deepland) - Tiefland
+**✅ NAME APPROVED:** **Samtmoos-Tiefwald** (Velvet Moss Deep Forest) - #7!
 
 **Visual Style:**
 - Dichte Wälder, sprechende Bäume
 - Baumhäuser, Holzbrücken
 - Mystische Runen, Elfenarchitektur
 - Nebel am Morgen
-- **Tiefes Moos überall!**
+- **Samtiges Moos überall!**
 
 **Features:**
 - Gathering (Herbs, Wood, Mushrooms)
 - Alchemy Focus
 - Druid NPCs
 - Nature Magic Training
+- **Heiße Quellen Stadt hier!** (Stadt 5)
 
 **Digimon Reference:** File Forest Vibe!
 
@@ -238,7 +235,7 @@
 - Underwater Caves (Special Gear needed)
 - Pirate Quests
 - Naval Combat (später)
-- **Fischer-Stadt hier!** (Stadt 2)
+- **Salzige Bucht hier!** (Stadt 2 - Fischer-Stadt!)
 
 **Special Location:** Sunken Temple (Hidden Boss)
 
@@ -262,7 +259,7 @@
 - Lightning Magic Training
 - Stamina Challenges (Klettern!)
 - Wind Puzzles
-- **Akademie-Stadt hier!** (Stadt 1)
+- **Runenheim hier!** (Stadt 1 - Akademie!)
 
 **Konosuba Reference:** Megumin würde hier EXPLOSION üben!
 
@@ -289,11 +286,11 @@
 - Witch Coven NPCs
 - Disease/Miasma Hazards
 - Alchemie Focus
-- **Schatzhöhle versteckt!** (Funkelnest)
+- **Funkelnest versteckt!** (Ort 1 - Schatzhöhle!)
 
 ---
 
-### **REGION 6: EIS + NEKROMANTIE** ❄️
+### **REGION 6: EIS + NEKROMANTIE (NEU!)** ❄️
 **Biome:** Ice / Frozen Wasteland + Necromancy
 **Level Range:** 50-65
 **Slime Color:** Crystal White
@@ -302,18 +299,18 @@
 
 **⚠️ NAMEN MÜSSEN ENTHALTEN: KÄLTE + FROST + EIS (ALLE 3!)**
 
-**NAMEN ZUR AUSWAHL (10) - MIT ALLEN 3 WÖRTERN:**
+**NEUE NAMEN ZUR AUSWAHL (10):**
 
-1. **Kälte-Frost-Eis-Land** (Cold Frost Ice Land) - Alle 3 direkt
-2. **Eisige Frost-Kälte** (Icy Frost Cold) - Adjektiv-Form
-3. **Kältezone mit Frost und Eis** (Cold Zone with Frost and Ice)
-4. **Frost-Eis-Kälte-Gebiet** (Frost Ice Cold Region)
-5. **Land der Kälte, Frost und Eis** (Land of Cold, Frost and Ice)
-6. **Kälte-Eis unter Frost** (Cold Ice under Frost)
-7. **Frostiges Eis der Kälte** (Frosty Ice of Cold)
-8. **Eis-Kälte-Frost-Welt** (Ice Cold Frost World)
-9. **Kältefrost-Eisland** (Coldfrost Iceland) - Kompakt
-10. **Eiskalter Frost** (Ice Cold Frost) - Kurz
+1. **Ewiges Eis der Frost-Kälte** (Eternal Ice of Frost Cold) - Episch
+2. **Kälte-Reich mit Frost und Eis** (Cold Realm with Frost and Ice)
+3. **Frostland der Eis-Kälte** (Frostland of Ice Cold) - Poetisch
+4. **Eis und Frost in Kälte** (Ice and Frost in Cold) - Einfach
+5. **Reich der drei Kälten: Eis, Frost, Tod** (Realm of Three Colds) - Nekromantie!
+6. **Kältefrost-Eisreich** (Coldfrost Ice Realm) - Kompakt
+7. **Gefrorene Kälte mit Eis und Frost** (Frozen Cold with Ice and Frost)
+8. **Eis-Kälte-Frost-Nekropole** (Ice Cold Frost Necropolis) - Mit Nekromantie!
+9. **Frostiges Eis in ewiger Kälte** (Frosty Ice in Eternal Cold)
+10. **Land wo Kälte, Frost und Eis herrschen** (Land where Cold, Frost and Ice rule)
 
 **Visual Style:**
 - Eisige Tundra, Schneestürme
@@ -353,7 +350,7 @@
 - Lava Channels (Platforming!)
 - Master Forges
 - Fire Magic + Weapon Smithing
-- **Stadt 4 hier!** (Normal mit Schmiede-Akzent)
+- **Anime-Stadt hier!** (Stadt 4)
 
 **Konosuba Reference:** EXPROOOOOSIOOOON! ≠ Fire (aber cooles Visual!)
 
@@ -390,34 +387,14 @@
 
 ---
 
-## 🏛️ DIE 5 STÄDTE - FINAL SELECTION + NEW OPTIONS!
+## 🏛️ DIE 5 STÄDTE - FINAL SELECTIONS!
 
-### **STADT 1: RUNEN-AKADEMIE** 📚
+### **STADT 1: ✅ RUNENHEIM** 📚
 **Region:** Blitzebene (Region 4)
 **Function:** Magic Training Hub
 **Size:** Large
 
-**19 NAMEN MIT "RUNEN" ZUR AUSWAHL:**
-
-1. **Runenstadt** (Rune City) - Direkt & klar
-2. **Runen-Akademie** (Rune Academy) - Klassisch
-3. **Runenhort** (Rune Hoard) - Schatzsammlung
-4. **Runenturm-Stadt** (Rune Tower City) - Mit Türmen
-5. **Runenwald-Akademie** (Rune Forest Academy) - Natur + Magie
-6. **Runenspitz** (Rune Peak) - Auf Bergspitze
-7. **Runen-Zirkel** (Rune Circle) - Magischer Kreis
-8. **Runenheim** (Rune Home) - Heimat der Runen
-9. **Runenkrone** (Rune Crown) - Königliche Akademie
-10. **Runen-Bibliothek** (Rune Library) - Fokus auf Wissen
-11. **Runenhain** (Rune Grove) - Friedlicher Hain
-12. **Runenfeuer** (Rune Fire) - Magisches Feuer
-13. **Runen-Garten** (Rune Garden) - Garten-Akademie
-14. **Runenschloss** (Rune Castle) - Schloss-Akademie
-15. **Runen-Weisheit** (Rune Wisdom) - Weisheits-Fokus
-16. **Runenquell** (Rune Spring) - Quelle der Runen
-17. **Runengipfel** (Rune Summit) - Höchster Punkt
-18. **Runen-Orden** (Rune Order) - Magischer Orden
-19. **Runenlicht** (Rune Light) - Leuchtendes Licht
+**✅ NAME APPROVED:** **Runenheim** (Rune Home) - #8!
 
 **Features:**
 - **9 MAGIC SCHOOLS TRAINING!** ✨
@@ -425,52 +402,45 @@
 - Library (Skill-Books kaufen)
 - Alchemy Labs
 - Enchanting Stations
+- Runen-Architektur überall!
+
+**Visual Style:**
+- Hogwarts meets Konosuba
+- Große Türme mit Runen verziert
+- Studenten-NPCs
+- Explosions-Übungsplatz (Krater!)
 
 ---
 
-### **STADT 2: FISCHERSTADT AM HAFEN** 🎣
+### **STADT 2: ✅ SALZIGE BUCHT** 🎣
 **Region:** Salzwind-Küste (Region 3)
 **Function:** Fishing Hub + Harbor
 **Size:** Medium
 
-**⚠️ NEU:** Jetzt FISCHERSTADT am Hafen!
-
-**10 NAMEN PASSEND ZU "SALZWIND-KÜSTE":**
-
-1. **Salzwind-Hafen** (Salt Wind Harbor) - ✅ PERFEKT passend!
-2. **Windbucht** (Wind Bay) - Kurz
-3. **Salzfischer-Stadt** (Saltfish City) - Salt + Fischer
-4. **Küsten-Wind** (Coast Wind) - Küste + Wind
-5. **Fischer im Wind** (Fisher in Wind) - Poetisch
-6. **Salz-Anker** (Salt Anchor) - Anker am Salzwasser
-7. **Windhafen** (Wind Harbor) - Hafen im Wind
-8. **Salzige Bucht** (Salty Bay) - Salzig
-9. **Küsten-Fischer** (Coast Fisher) - Küstenfischer
-10. **Windwellen-Hafen** (Wind Wave Harbor) - Wind + Wellen
-
-**ALTERNATIVE NAMEN (allgemein Fischer):**
-
-1. **Fischer-Bucht** (Fisher Bay) - Direkt
-2. **Netz-Hafen** (Net Harbor) - Fischernetze
-3. **Ankerbucht** (Anchor Bay) - Anker-Thema
-4. **Fischerdorf-Hafen** (Fisher Village Harbor)
-5. **Wellen-Hafen** (Wave Harbor) - Wellen
-6. **Salzfisch-Stadt** (Saltfish City) - Salzfisch
-7. **Gischt-Hafen** (Spray Harbor) - Gischt
-8. **Fischer-Wind** (Fisher Wind) - Wind
+**✅ NAME APPROVED:** **Salzige Bucht** (Salty Bay) - #8!
+**✅ SPEZIALITÄT:** **SALZFISCH!** 🐟
 
 **Features:**
 - **FISHING CAPITAL!** 🎣
+- **Spezialität: SALZFISCH** (Salzfisch-Gerichte, Salzfisch-Handel!)
 - 10+ Fishing Spots
 - Fishing Tournaments
 - Rare Fish Quests
 - Ship Customization (später)
 - Pirate Quests
+- Salzfisch-Restaurant!
+- Salzfisch-Markt!
+
+**Visual Style:**
+- Pirate Bay Ästhetik
+- Docks, Boats, Taverns
+- Seagulls, Shanties
+- **Salzfisch hängt überall zum Trocknen!**
 
 ---
 
 ### **STADT 3: ✅ HANDELSFESTUNG** 👑
-**Region:** Wüste (Region 1)
+**Region:** Heiße Dünen (Region 1)
 **Function:** CAPITAL CITY - Trading + Arena + Guild Home
 **Size:** LARGEST CITY!
 
@@ -496,47 +466,47 @@
 
 ---
 
-### **STADT 4: NORMALE STADT IM VULKANGEBIET** 🌋
+### **STADT 4: ANIME-STADT IM VULKANGEBIET** 🌋
 **Region:** Vulkan (Region 7)
 **Function:** General City with Smithing Accents
 **Size:** Medium
 
-**⚠️ WICHTIG:** KEINE Schmiedestadt! Nur normale Stadt mit Schmiede-Akzenten!
+**⚠️ NEU:** ANIME-STYLE Namen!
 
-**10 NEUE NAMEN ZUR AUSWAHL:**
+**10 ANIME-INSPIRIERTE NAMEN ZUR AUSWAHL:**
 
-1. **Bergfried** (Mountain Peace) - Friedlich am Berg
-2. **Feuerdorf** (Fire Village) - Nähe Vulkan
-3. **Glutheim** (Ember Home) - Warme Heimat
-4. **Lavarand** (Lava Edge) - Am Rand der Lava
-5. **Funken-Dorf** (Spark Village) - Funken vom Vulkan
-6. **Aschenstadt** (Ash City) - Vulkanasche
-7. **Heißwind-Siedlung** (Hot Wind Settlement) - Heißer Wind
-8. **Rauch-Dorf** (Smoke Village) - Rauch vom Vulkan
-9. **Vulkan-Schatten** (Volcano Shadow) - Im Schatten
-10. **Glut-Siedlung** (Ember Settlement) - Glühende Siedlung
+1. **Hikari no Mura** (光の村 - Village of Light) - Trotz Vulkan
+2. **Akatsuki-Dorf** (暁の村 - Dawn Village) - Naruto-Style!
+3. **Kazan-Shima** (火山島 - Volcano Island) - Klassisch
+4. **Konoha-Feuer** (木ノ葉火 - Leaf Fire) - Naruto-Referenz
+5. **Hotaru-Siedlung** (蛍 - Firefly Settlement) - Glühwürmchen = Funken!
+6. **Maguma-Machi** (マグマ町 - Magma Town) - Katakana-Style
+7. **Hi no Sato** (火の里 - Fire Village) - Simple Anime-Name
+8. **Asche-Konoha** (灰木ノ葉 - Ash Leaf) - Mix
+9. **Crimson Village** (クリムゾン村) - Englisch-Japanisch Mix
+10. **Ember-Mura** (エンバー村 - Ember Village) - Katakana
 
 ---
 
-### **STADT 5: HEIẞE QUELLEN STADT** ♨️
-**Region:** Wald (Region 2 - Tiefmoos-Wald)
+### **STADT 5: ONSEN-STADT** ♨️
+**Region:** Samtmoos-Tiefwald (Region 2)
 **Function:** Healing + Hot Springs + Relaxation
 **Size:** Small-Medium
 
-**⚠️ NEU:** Jetzt heiße heilende Quellen Stadt!
+**⚠️ NEU:** ANIME ONSEN-STYLE Namen!
 
-**10 NAMEN ZUR AUSWAHL:**
+**10 ONSEN-NAMEN ZUR AUSWAHL:**
 
-1. **Heilquellen-Stadt** (Healing Springs City) - Direkt
-2. **Thermalquell** (Thermal Spring) - Thermal
-3. **Heißquell-Hain** (Hot Spring Grove) - Mit Hain
-4. **Quellen-Oase** (Spring Oasis) - Oase
-5. **Dampfquellen** (Steam Springs) - Dampfend
-6. **Heilwasser-Stadt** (Healing Water City) - Heilwasser
-7. **Thermenstadt** (Thermal City) - Thermen
-8. **Quellenhort** (Spring Hoard) - Viele Quellen
-9. **Heiß-Heilung** (Hot Healing) - Heiß & Heilend
-10. **Wellness-Quellen** (Wellness Springs) - Wellness-Fokus
+1. **Onsen-Mura** (温泉村 - Hot Spring Village) - Klassisch!
+2. **Yunomine** (湯の峰 - Peak of Hot Water) - Echter Ort in Japan!
+3. **Kusatsu-Hain** (草津 - Kusatsu Grove) - Berühmter Onsen-Ort!
+4. **Heiß-Haru** (熱春 - Hot Spring) - Kurz
+5. **Therma-Sato** (テルマ里 - Thermal Village) - Mix
+6. **Yumegawa** (夢川 - Dream River) - Poetisch
+7. **Relax-no-Mura** (リラックスの村 - Relax Village)
+8. **Hakone-Quell** (箱根泉 - Hakone Spring) - Echter Onsen!
+9. **Ofuro-Stadt** (お風呂市 - Bath City) - Niedlich
+10. **Healing Springs** (ヒーリングスプリングス) - Englisch-Katakana
 
 **Features:**
 - **HEIẞE HEILENDE QUELLEN!** ♨️
@@ -545,6 +515,7 @@
 - Meditation (Chaos-Level senken!)
 - Wellness & Relaxation
 - Spa NPCs
+- Anime Onsen Atmosphäre!
 
 ---
 
@@ -574,42 +545,134 @@
 
 ---
 
-### **ORT 2: HORROR-HOTEL** 🏚️
-**Type:** Horror-Hotel mit Secret Hub
+### **ORT 2: ✅ GEISTER-SCHLOSS (UMGANGSSPRACHLICH!)** 🏚️👻
+**Type:** Horror-Hotel mit Secret Hub + EVENT-QUEST SYSTEM!
 **Region:** Between Eis & Void
 **Level:** 60-MAX
 
-**10 NEUE NAMEN ZUR AUSWAHL:**
+**✅ NAME APPROVED:** **Geister-Schloss** (Ghost Castle) - #5!
 
-1. **Düster-Hotel** (Gloomy Hotel) - Düster
-2. **Nacht-Herberge** (Night Inn) - Nacht
-3. **Schatten-Palast** (Shadow Palace) - Schatten
-4. **Vergessenes Hotel** (Forgotten Hotel) - Vergessen
-5. **Geister-Schloss** (Ghost Castle) - Geister
-6. **Nebel-Residenz** (Fog Residence) - Nebelig
-7. **Stille Herberge** (Silent Inn) - Still & gruselig
-8. **Verlassene Villa** (Abandoned Villa) - Verlassen
-9. **Zwielicht-Gasthaus** (Twilight Inn) - Zwielicht
-10. **Finster-Hotel** (Dark Hotel) - Finster
+**⚠️ WICHTIG: UMGANGSSPRACHLICHER NAME!**
+- NPCs nennen es: **"Das alte verfallene Hotel"** / **"Das Geister-Schloss"** / **"Das Spukhotel"**
+- **ECHTER NAME:** Unbekannt! Spieler müssen ihn durch Events herausfinden!
 
-**OUTSIDE (Horror Phase):**
+---
+
+### **🎮 EVENT-QUEST SYSTEM - BUCHSTABEN SAMMELN! 🔤**
+
+**KONZEPT:**
+- Hotel ist umgangssprachlich als **"Geister-Schloss"** bekannt
+- **ECHTER NAME:** Spieler sammeln Buchstaben durch Events!
+
+**MECHANIK:**
+- **Event-Quests** im Hotel (wiederkehrend, verschiedene Arten)
+- **Bei jedem Event:** 1 Buchstabe des Hotel-Namens als Belohnung!
+- **Spieler-Bindung:** Müssen mehrere Events machen um vollen Namen zu bekommen!
+- **Reihenfolge:** Buchstaben in richtiger Reihenfolge sammeln
+
+**EVENT-TYPEN:**
+
+1. **GEGNERWELLEN + RÄTSEL:**
+   - Kämpfe durch Hotelzimmer
+   - Rätsel lösen zwischen Wellen
+   - Boss am Ende
+   - **Belohnung:** 1 Buchstabe + Loot
+
+2. **LAUFSPIELE DURCHS HOTEL:**
+   - Parkour durch Zimmer
+   - Zeitlimit!
+   - Geister vermeiden
+   - **Belohnung:** 1 Buchstabe + XP
+
+3. **SERVICE-SPIELE:**
+   - Kellner-Mini-Game
+   - Gäste bedienen (Geister-NPCs!)
+   - Ordnung halten
+   - **Belohnung:** 1 Buchstabe + Gold
+
+4. **AUFRÄUM-SPIELE:**
+   - Zimmer aufräumen (Tetris-Style!)
+   - Schmutz entfernen
+   - Möbel ordnen
+   - **Belohnung:** 1 Buchstabe + Items
+
+5. **KOCH-SPIELE:**
+   - Küchen-Mini-Game
+   - Geister-Gäste beliefern
+   - Rezepte finden
+   - **Belohnung:** 1 Buchstabe + Rezepte
+
+6. **DETEKTIV-RÄTSEL:**
+   - Hinweise im Hotel finden
+   - Geschichte des Hotels enthüllen
+   - Geister befrieden
+   - **Belohnung:** 1 Buchstabe + Story
+
+**BELOHNUNGEN PRO EVENT:**
+- ✅ **1 Buchstabe des echten Hotel-Namens!**
+- ✅ Rare Items
+- ✅ XP & Gold
+- ✅ Hotel-Tokens (für spätere Portal-Nutzung)
+
+**BEISPIEL-NAMEN (8-12 Buchstaben):**
+- **GRANDHOTEL** (10 Buchstaben)
+- **PARADISO** (8 Buchstaben)
+- **ELYSIUM-INN** (10 mit Bindestrich)
+- **ZEITPALAST** (10 Buchstaben)
+- **LUXOR-HOTEL** (10)
+
+**ENDGAME:**
+- ✅ Alle Buchstaben gesammelt = Name enthüllt!
+- ✅ Hotel verwandelt sich von Horror → Luxury!
+- ✅ Quest: "Das wahre Gesicht des [NAME]"
+- ✅ Permanenter Zugang zu:
+  - Minigames & Challenges
+  - Portal-Dungeons (Fire, Ice, Shadow, Boss Rush)
+  - Chill Lounge (Rested XP Buffs)
+  - Triple Triad & andere Spiele
+
+**SPIELER-BINDUNG:**
+- Events rotieren wöchentlich
+- Verschiedene Schwierigkeiten
+- Jeder Event gibt unterschiedlichen Buchstaben
+- Community muss zusammenarbeiten um alle Events zu schaffen!
+
+---
+
+**OUTSIDE (Horror Phase - BEFORE Events):**
 - Zerfallenes, altes Hotel
 - Zerbrochene Fenster, Efeu
 - Geister-NPCs (feindlich!)
 - Boss: "The Forgotten Guest"
+- Nebel, Dunkelheit, Spuk
 
-**INSIDE (Nach Victory):**
+**INSIDE (Luxury Phase - AFTER alle Buchstaben):**
 - **LUXURY HOTEL!** 🏨
 - Plötzlich neu & schick!
-- **MINIGAMES ZONE** (Triple Triad, Billard, etc.)
-- **PORTAL DOORS** 🚪 (zu Farming-Dungeons)
+- Funktionale Zimmer
+- **MINIGAMES ZONE:**
+  - Triple Triad (Kartenspiel)
+  - Billard, Darts
+  - Chess, Poker
+  - Rhythm Game (Najika spielt!)
+- **CHILL LOUNGE:**
+  - Sofas, Kamine
+  - Free Buffs (Rested XP)
+  - NPCs zum Reden
+- **PORTAL DOORS:** 🚪
+  - Türen mit Symbolen
+  - Führen zu festen Farming-Dungeons:
+    * Fire Dungeon (Ember Cores)
+    * Ice Dungeon (Frozen Shards)
+    * Shadow Dungeon (Void Essence)
+    * Boss Rush (Endgame)
 - **ENDGAME HUB!**
 
 ---
 
 ### **ORT 3: ✅ GOLDSTAUB-ÖDE** 🏜️
 **Type:** Western Prairie + Desert + Pyramid Dungeon
-**Region:** Wüste (Region 1) - Spezialbereich
+**Region:** Heiße Dünen (Region 1) - Spezialbereich
 **Level:** ENDGAME (70-MAX)
 
 **✅ NAME APPROVED:** **Goldstaub-Öde** (Gold Dust Wasteland) - #9!
@@ -699,7 +762,7 @@
 - Black Windmill Village ✅
 - Inside All 5 Cities ✅
 - Zeit Stadt (Time City) on Berg ✅
-- Inside Hollow Haven Hotel (after unlock) ✅
+- Inside Geister-Schloss (after unlock) ✅
 
 **DANGER AREAS (Combat Possible):**
 - All 8 Regions (Open World) ⚔️
@@ -707,6 +770,7 @@
 - 3 Dungeons ⚔️
 - Kampfarena (Handelsfestung) ⚔️
 - Special Locations (Funkelnest, Goldstaub-Öde) ⚔️
+- Geister-Schloss (Horror Phase - before unlock) ⚔️
 
 **PvP Rules:**
 - Optional Toggle (außer Hardcore)
@@ -721,22 +785,23 @@
 NAJIKA WORLD LAYOUT:
 
         [REGION 6: EIS + NEKROMANTIE]
-        (Kälte+Frost+Eis Namen)
+        (Neue Namen zur Auswahl!)
                     |
 [REGION 5: Grünschlamm-Sumpf] ← [BERG] → [REGION 7: VULKAN]
-   (Funkelnest versteckt!)      (Lava innen!)      (Stadt 4)
+   (Funkelnest versteckt!)   (UNZERSTÖRBAR!)   (Anime-Stadt!)
                     ↓
             [REGION 4: Blitzebene]
-                (Stadt 1: Runen-Akademie!)
+                (Stadt 1: Runenheim!)
                     ↓
-[REGION 2: Tiefmoos-Wald] ← [MÜHLE] → [REGION 3: Salzwind-Küste]
-   (Stadt 5: Heiße Quellen!)  (SAFE!)    (Stadt 2: Fischer-Hafen!)
+[REGION 2: Samtmoos-Tiefwald] ← [MÜHLE] → [REGION 3: Salzwind-Küste]
+   (Stadt 5: Onsen!)         (SAFE!)    (Stadt 2: Salzige Bucht - Salzfisch!)
                     ↓
-            [REGION 1: WÜSTE]
+            [REGION 1: Heiße Dünen]
          (Stadt 3: Handelsfestung!)
         (Goldstaub-Öde Endgame!)
                     ↓
           [REGION 8: VOID/ENDGAME]
+         (Geister-Schloss zwischen Eis & Void!)
 
 BERG = ZENTRAL, von allen 8 Regionen erreichbar!
 MÜHLE = Najika's Home (SAFE!)
@@ -745,40 +810,60 @@ LAVA-WELT = Im Berg (eigenes Gebiet wie Digimon!)
 
 ---
 
-## 📋 ZUSAMMENFASSUNG DER ÄNDERUNGEN V3
+## 📋 ZUSAMMENFASSUNG V4 - FINALE AUSWAHL!
 
-**V3 Änderungen:**
-- ✅ Stadt 3 = **"Handelsfestung"** (#8) - APPROVED!
-- ✅ Stadt 1 = 19 NEUE Namen mit "RUNEN"!
-- ✅ Stadt 2 = **FISCHERSTADT AM HAFEN** (NEU!)
-- ✅ Stadt 4 = 10 komplett neue Namen
-- ✅ Stadt 5 = **HEIẞE QUELLEN STADT** (NEU!)
-- ✅ Ort 1 = **"Funkelnest"** - APPROVED!
-- ✅ Ort 3 = **"Goldstaub-Öde"** (#9) - APPROVED!
-- ✅ Ort 2 = 10 neue Namen
-- ✅ Region 1 = 10 komplett neue Namen
-- ✅ Region 2 = **"Tiefmoos-Wald"** + 10 Variationen!
-- ✅ Region 3 = **"Salzwind-Küste"** (#6) - APPROVED!
-- ✅ Region 5 = **"Grünschlamm-Sumpf"** (#7) - APPROVED!
-- ✅ Region 6 = Namen mit **KÄLTE + FROST + EIS** (alle 3!)
-- ✅ Berg = 10 Namen (wird **TURM DER 100 PRÜFUNGEN**!)
-- ✅ Lava-Welt = 10 Namen (im Berg, wie Digimon Meramon!)
-- ✅ Berg Struktur: **AUẞEN NORMAL, INNEN LAVA!**
-- ✅ Von Wüste: **Hitze in Luft sichtbar!**
+**✅ APPROVED NAMES:**
+
+**REGIONEN:**
+- Region 1: **Heiße Dünen** (#3)
+- Region 2: **Samtmoos-Tiefwald** (#7)
+- Region 3: **Salzwind-Küste** (#6)
+- Region 4: **Blitzebene** ✅
+- Region 5: **Grünschlamm-Sumpf** (#7)
+- Region 6: Neue Namen zur Auswahl!
+- Region 7: Zur Auswahl (10 Namen)
+- Region 8: Zur Auswahl (10 Namen)
+
+**STÄDTE:**
+- Stadt 1: **Runenheim** (#8) ✅
+- Stadt 2: **Salzige Bucht** (#8) + Spezialität: **SALZFISCH!** ✅
+- Stadt 3: **Handelsfestung** (#8) ✅
+- Stadt 4: 10 Anime-Namen zur Auswahl!
+- Stadt 5: 10 Onsen-Namen zur Auswahl!
+
+**ORTE:**
+- Ort 1: **Funkelnest** ✅
+- Ort 2: **Geister-Schloss** (umgangssprachlich!) + Event-Quest System! ✅
+- Ort 3: **Goldstaub-Öde** (#9) ✅
+
+**BERG:**
+- 15 Namen zur Auswahl (UNZERSTÖRBAR/EWIG Thema!)
+- Lava-Welt: 10 Namen zur Auswahl
+
+**NEUE FEATURES V4:**
+- ✅ Geister-Schloss: **BUCHSTABEN-SAMMELN EVENT SYSTEM!**
+- ✅ Salzige Bucht: **Spezialität SALZFISCH!**
+- ✅ Stadt 4: **ANIME-STYLE Namen!**
+- ✅ Stadt 5: **ONSEN-STYLE Namen!**
+- ✅ Berg: **UNZERSTÖRBAR-Namen** (für späteren Najika EXPLOSION Kontrast!)
+- ✅ Region 6: **Neue Namen** mit Kälte+Frost+Eis
 
 **Nächste Schritte:**
-1. ⬜ User wählt finale Namen aus allen Vorschlägen
-2. ⬜ Berg-Name festlegen
-3. ⬜ Lava-Welt Name festlegen
-4. ⬜ Asset placement on map
-5. ⬜ Implementation start!
+1. ⬜ User wählt finale Namen für Stadt 4, 5, Region 6, 7, 8, Berg, Lava-Welt
+2. ⬜ Echten Hotel-Namen festlegen (für Buchstaben-Event)
+3. ⬜ Asset placement on map
+4. ⬜ Implementation start!
 
 ---
 
 **Created by:** Claude Code
-**Inspired by:** Konosuba, Digimon World (File Island + Meramon!), Fantasy Western, No Game No Life
+**Inspired by:** Konosuba, Digimon World (File Island + Meramon!), Fantasy Western, No Game No Life, Naruto, Anime Onsen Culture
 **For:** Najika World V7.0 Development
 
 🔥 EXPROOOOOSIOOOON! 🔥
-⛰️ ZEIT STADT WARTET! ⏰
+⛰️ DER UNZERSTÖRBARE BERG... BIS NAJIKA IHN WEGSPRENGT! 💥
+⏰ ZEIT STADT WARTET! ⏰
 🌋 LAVA-WELT IM INNEREN! 🌋
+🎣 SALZFISCH AUS SALZIGE BUCHT! 🐟
+👻 BUCHSTABEN SAMMELN IM GEISTER-SCHLOSS! 🔤
+♨️ ONSEN-STADT! ♨️
