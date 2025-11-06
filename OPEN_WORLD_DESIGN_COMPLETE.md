@@ -447,14 +447,36 @@
 
 **SPEZIALITÄTEN-FEATURES:**
 - **Fleisch-lastige Küche!** 🍖
-- **Fleisch-Restaurants:** Große Mengen, herzhaft
-  - Steaks, Braten, Spieße
+- **Fleisch-Restaurants:** Große Mengen, herzhaft, Fast-Food-Vibe + Western BBQ!
+
+  **STREET FOOD:**
+  - **Arena-Happen:** Fleisch-Scheibe zwischen Brot (Burger-Style!)
+  - **Gold-Stäbchen:** Knusprige Kartoffel-Stäbe (Pommes!)
+  - **Händler-Wurst:** Wurst in Brot-Rolle (Hotdog!)
+  - **Dreh-Braten:** Fleisch vom Spieß geschnitten (Döner!)
+  - **Händler-Fladen:** Flaches Brot mit Fleisch & Gewürzen (Türkische Pizza!)
+
+  **WESTERN BBQ & KLASSISCH:**
+  - **Rauch-Rippchen:** Langsam geräucherte Rippen (BBQ Ribs!)
+  - **Glut-Steak:** Perfekt gegrilltes Steak
+  - **Wüsten-Dörrfleisch:** Getrocknetes Fleisch für unterwegs (Jerky!)
+  - **⭐ CHAMPION-KEULE:** Die legendäre GROẞE FLEISCHKEULE! 🍖
+    * Anime-Classic!
+    * Riesig, am Knochen
+    * Mit beiden Händen essen!
+    * "Najika beißt rein wie in jedem guten Anime!" 😂
+
+  **FESTMÄHLER:**
   - Arena-Sieger-Mahlzeiten
   - Händler-Festmähler
+  - Große Braten & Spieße
+
 - **Fleisch-Markt:** Frisches Fleisch kaufen
+- **Street Food Stände:** Schnelles Essen für Händler & Krieger!
+- **Western BBQ Pits:** Langsam geräuchert, traditionell!
 - **Rezepte:** Spieler können Fleisch-Gerichte kochen!
 - **NPC-Quest:** "Das Festmahl des Champions"
-- **Visual:** Grills & Spieße überall, rauchende Feuerstellen!
+- **Visual:** Grills & Spieße überall, rauchende Feuerstellen, Street Food Buden, BBQ Smoke!
 
 **Visual Style:**
 - Western meets Fantasy
@@ -846,24 +868,21 @@
 - Najika World wird RIESIG!
 - Spieler braucht Rastplätze unterwegs!
 - **Lager aufschlagen = Temporäres Camp!**
+- ⚠️ **WICHTIG:** Camps sind TEMPORÄR! Welt regeneriert sich!
 
 **HINTERGRUND:**
 - Mobile/Handy-Version soll später sehr groß werden
 - Lange Reisen zwischen Regionen
 - Notwendigkeit für Zwischenstopps
 - Überlebensgefühl & Abenteuer
+- **Online-Game = Echtzeit-Speicherung automatisch!**
 
 **CAMP-FEATURES (Konzept):**
 
 **RUHEPUNKT:**
 - HP/Mana regenerieren
 - Ausdauer wiederherstellen
-- Temporärer Safe-Spot
-
-**SPEICHERPUNKT:**
-- Save Game unterwegs
-- Wichtig für Mobile-Version
-- Verhindert Fortschrittsverlust
+- ⚠️ **KEIN Safe-Spot! Spieler ist ANGREIFBAR!**
 
 **CRAFTING:**
 - Einfache Crafting-Station
@@ -882,16 +901,77 @@
 - Tag/Nacht-Zyklus überbrücken
 - Rollenspiel-Moment
 
-**BALANCING:**
-- ⚠️ **WICHTIG:** Mechanik muss noch ausgearbeitet werden!
-- Wie oft kann man campen?
-- Cooldowns?
-- Kosten (Materialien)?
-- Feind-Spawn-Schutz?
+---
 
-**ZUKUNFT:**
-- Details werden später entwickelt
-- Wichtig für Mobile-Version
+### **⚠️ RISIKO & VULNERABILITY SYSTEM:**
+
+**SPIELER IST ANGREIFBAR:**
+- **Camp = KEIN Safe-Spot!**
+- Feinde können angreifen!
+- Andere Spieler können überfallen (PvP)!
+- Risiko von Diebstahl/Raub!
+
+**GRUPPENSPIEL - WACHE HALTEN:**
+- **Ein Spieler muss Wache halten!**
+- Wächter kann nicht rasten/craften
+- Schutz der Gruppe
+- Schichten-System (Spieler wechseln sich ab)
+
+**SOLO-SPIEL - STRATEGISCHE PLATZIERUNG:**
+- **Guten Ort finden ist wichtig!**
+- Versteckte Spots = sicherer
+- Offene Orte = gefährlich!
+- **Orbit Cam nutzen!**
+  - Kamera schwenken
+  - Umgebung beobachten
+  - Feinde früh erkennen
+  - Wachsam bleiben!
+
+**UMGEBUNG SICHERN (Optional):**
+- Vielleicht: Erst Umgebung von Feinden befreien?
+- Dann Camp aufschlagen
+- Aber Feinde könnten respawnen!
+- Strategie & Timing wichtig!
+
+---
+
+### **BALANCING & EINSCHRÄNKUNGEN:**
+
+**COOLDOWN-SYSTEM:**
+- ✅ **JA, Cooldown vorhanden!**
+- Nicht zu oft campen
+- Balance zwischen Bequemlichkeit & Risiko
+- Details noch festzulegen
+
+**KOSTEN:**
+- Materialien zum Camp aufschlagen?
+- Feuerholz, Zelt-Material?
+- Noch zu entscheiden
+
+**CAMP-DAUER:**
+- Wie lange bleibt Camp?
+- Automatischer Abbau nach Zeit?
+- Manuelles Abbauen?
+
+**TEMPORÄR - KEINE PERMANENTEN CAMPS:**
+- ⚠️ **Camps verschwinden!**
+- Welt regeneriert sich
+- Server-Restart = Camps weg
+- Kein permanentes Base-Building hier
+- (Housing = separate Mechanik!)
+
+---
+
+### **ZUKUNFT & ENTWICKLUNG:**
+
+**STATUS:**
+- ⚠️ **System ist NICHT finalisiert!**
+- Konzept-Phase
+- Details müssen ausgearbeitet werden
+- Balancing-Tests notwendig
+
+**WICHTIG FÜR:**
+- Mobile-Version (Hauptfokus!)
 - Könnte auch Desktop-Version bekommen
 - Community-Feedback einbeziehen
 
@@ -899,6 +979,7 @@
 - The Legend of Zelda: Breath of the Wild (Lagerfeuer!)
 - Skyrim (Camping Mods)
 - Monster Hunter (Camp-System)
+- Dark Souls (Riskante Rastplätze!)
 - Anime-Reise-Szenen (Charaktere campen unterwegs)
 
 ---
