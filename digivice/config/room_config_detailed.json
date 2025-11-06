@@ -66,7 +66,9 @@
           "model": "KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/bed_double_A.gltf",
           "position": [0, 0, 5],
           "rotation": [0, 1.5708, 0],
-          "scale": 1.6
+          "scale": 1.6,
+          "interaction": "bed",
+          "interactionRadius": 5
         },
         {
           "model": "KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cabinet_small_decorated.gltf",
@@ -114,7 +116,9 @@
           "model": "KayKit_Restaurant_Bits_1.0_FREE/KayKit_Restaurant_Bits_1.0_FREE/Assets/gltf/stove_multi_countertop.gltf",
           "position": [6, 0, -2],
           "rotation": [0, 1.5708, 0],
-          "scale": 1.6
+          "scale": 1.6,
+          "interaction": "stove",
+          "interactionRadius": 5
         },
         {
           "model": "KayKit_Restaurant_Bits_1.0_FREE/KayKit_Restaurant_Bits_1.0_FREE/Assets/gltf/crate_tomatoes.gltf",
@@ -150,7 +154,9 @@
         {
           "model": "KayKit_Restaurant_Bits_1.0_FREE/KayKit_Restaurant_Bits_1.0_FREE/Assets/gltf/kitchencounter_sink.gltf",
           "position": [0, 0, -6],
-          "scale": 1.8
+          "scale": 1.8,
+          "interaction": "shower",
+          "interactionRadius": 5
         },
         {
           "model": "KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Pillar.gltf",
@@ -355,7 +361,9 @@
         {
           "model": "KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/table_long_tablecloth_decorated_A.gltf",
           "position": [0, 0, 4],
-          "scale": 1.9
+          "scale": 1.9,
+          "interaction": "table",
+          "interactionRadius": 5
         },
         {
           "model": "KayKit_Adventurers_1.0_FREE/KayKit_Adventurers_1.0_FREE/Assets/gltf/spellbook_open.gltf",
