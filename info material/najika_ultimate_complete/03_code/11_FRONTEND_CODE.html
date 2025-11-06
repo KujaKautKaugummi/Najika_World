@@ -1,0 +1,1966 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Najika Digivice v2</title>
+<link rel="stylesheet" href="/digivice/static/css/chat.css">
+<link rel="stylesheet" href="/digivice/static/css/minigames.css">
+<link rel="stylesheet" href="/digivice/static/css/code_editor.css">
+<link rel="stylesheet" href="/digivice/static/css/terminal_modules.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    background: #0b0b0f;
+    color: #eaeaea;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+}
+
+header {
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, #13131a, #1e1e2e);
+    border-bottom: 2px solid #667eea;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.status-bar {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2ecc71;
+    animation: pulse-dot 2s infinite;
+}
+
+.status-dot.offline {
+    background: #e74c3c;
+    animation: none;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#scene {
+    position: relative;
+    background: #1a1a2e;
+    overflow: hidden;
+}
+
+#scene canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#hud {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999 !important;
+    max-width: 260px;
+    pointer-events: auto !important;
+}
+
+.hud-panel {
+    background: rgba(10, 10, 18, 0.95);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid rgba(102, 126, 234, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 126, 234, 0.3);
+    pointer-events: auto !important;
+}
+
+.hud-panel h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: #a3b3ff;
+}
+
+#cameraPanel button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.camera-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cam-btn {
+    flex: 1;
+}
+
+.cam-btn.active {
+    background: linear-gradient(135deg, #4ecdc4, #45a9f0);
+    color: #0b0b0f;
+}
+
+#faceNajika {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+#webcamToggle {
+    background: linear-gradient(135deg, #ffb347, #ff6b6b);
+}
+
+#webcamFeed {
+    display: none;
+    width: 100%;
+    margin-top: 0.75rem;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+}
+
+.hp-bar {
+    width: 100%;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.hp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    transition: width 0.3s ease;
+    width: 100%;
+}
+
+.hud-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.room-actions {
+    padding: 1rem;
+    background: #13131a;
+    border-top: 2px solid #667eea;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.room-actions label {
+    font-weight: bold;
+    color: #667eea;
+    white-space: nowrap;
+}
+
+#room-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.chat-footer {
+    padding: 1rem;
+    background: #1a1a2e;
+    border-top: 2px solid #764ba2;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+select, button, input {
+    padding: 0.6rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #eaeaea;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+select:hover, input:hover, button:hover {
+    border-color: rgba(102, 126, 234, 0.8);
+}
+
+button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button.action-btn {
+    background: linear-gradient(135deg, #2a2adf, #3a3af5);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+button.battle-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+}
+
+button.cloud-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+input {
+    flex: 1;
+}
+
+.private-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    border-radius: 25px;
+    font-weight: bold;
+    display: none;
+    animation: pulse 2s infinite;
+    z-index: 1000;
+    box-shadow: 0 5px 30px rgba(255, 75, 87, 0.6);
+}
+
+.private-indicator.active {
+    display: block;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 5px 30px rgba(255, 75, 87, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 5px 40px rgba(255, 75, 87, 0.8);
+    }
+}
+
+
+/* Notification System */
+#notification-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 350px;
+    pointer-events: none;
+}
+.notification {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+    color: white;
+    font-size: 0.95rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.3s;
+    pointer-events: auto;
+    cursor: pointer;
+}
+.notification.success {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.95), rgba(39, 174, 96, 0.95));
+    border-left-color: #2ecc71;
+}
+.notification.error {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.95), rgba(192, 57, 43, 0.95));
+    border-left-color: #e74c3c;
+}
+.notification.warning {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.95), rgba(243, 156, 18, 0.95));
+    border-left-color: #f1c40f;
+    color: #2c3e50;
+}
+@keyframes slideInRight {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(400px); opacity: 0; }
+}
+
+@media (max-width: 900px) {
+    #app {
+        grid-template-rows: auto 1fr auto auto;
+    }
+    #hud {
+        position: fixed;
+        top: 80px;
+        left: 10px;
+        right: 10px;
+        max-width: 100%;
+        flex-direction: row;
+        gap: 8px;
+        z-index: 9999 !important;
+        pointer-events: auto;
+    }
+    .hud-panel {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .status-bar {
+        margin-left: 0;
+        width: 100%;
+    }
+    #scene {
+        min-height: 320px;
+    }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+
+<div class="private-indicator" id="privateIndicator">PRIVATE MODE AKTIV</div>
+
+<div id="app">
+    <header>
+        <h1>NAJIKA DIGIVICE v2</h1>
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <span id="statusText">Online</span>
+            </div>
+            <div class="status-item">
+                <span id="providerLabel">Provider: lokal</span>
+            </div>
+            <div class="status-item">
+                <label for="room">Raum:</label>
+                <select id="room" onkeydown="event.preventDefault(); return false;"></select>
+            </div>
+            <div class="status-item" id="dungeonLevelControl" style="display:none">
+                <label for="dungeonLevel">Level:</label>
+                <select id="dungeonLevel">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <button id="cam-orbit" class="cloud-btn cam-btn active">Orbit</button>
+            <button id="cam-third" class="cloud-btn cam-btn">Third</button>
+            <button id="cam-first" class="cloud-btn cam-btn">First</button>
+            <button id="faceNajikaBtn" class="cloud-btn">Najika ausrichten</button>
+            <button id="webcamBtn" class="cloud-btn">Webcam</button>
+            <button id="cloud" class="cloud-btn" style="display:none">Cloud aktivieren</button>
+        </div>
+    </header>
+
+    <main id="scene">
+    </main>
+
+    <div id="hud">
+        <div class="hud-panel" id="najikaPanel">
+            <h3 style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" id="najikaHeader">
+                <span>Najika Status</span>
+                <button id="najikaToggle" style="background: none; border: none; color: #a3b3ff; font-size: 1.2rem; cursor: pointer; padding: 0; margin: 0;">â–¼</button>
+            </h3>
+            <div id="najikaContent">
+            <div style="font-size: 0.85rem; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                    <span>Lvl <strong id="najikaLevel">1</strong></span>
+                    <span style="font-size: 0.75rem; color: #a3b3ff;">XP: <span id="najikaXP">0</span>/100</span>
+                </div>
+                <div style="font-size: 0.75rem; display: flex; justify-content: space-between; opacity: 0.8;">
+                    <span>Care: <span id="najikaCM">0</span></span>
+                    <span>MÃ¼de: <span id="najikaFatigue">0</span>%</span>
+                </div>
+            </div>
+            <!-- NEEDS -->
+            <div class="need-bar" title="Hunger">
+                <span style="font-size: 0.8rem;">ðŸ– <span id="najikaHunger">100</span>%</span>
+                <div class="hp-bar" style="height: 10px; margin-top: 0.25rem;">
+                    <div class="hp-fill" id="hungerFill" style="background: linear-gradient(90deg, #f39c12, #e67e22); width: 100%;"></div>
+                </div>
+            </div>
+            <div class="need-bar" title="Energie">
+                <span style="font-size: 0.8rem;">âš¡ <span id="najikaEnergy">100</span>%</span>
+                <div class="hp-bar" style="height: 10px; margin-top: 0.25rem;">
+                    <div class="hp-fill" id="energyFill" style="background: linear-gradient(90deg, #3498db, #2980b9); width: 100%;"></div>
+                </div>
+            </div>
+            <div class="need-bar" title="Hygiene">
+                <span style="font-size: 0.8rem;">ðŸš¿ <span id="najikaHygiene">100</span>%</span>
+                <div class="hp-bar" style="height: 10px; margin-top: 0.25rem;">
+                    <div class="hp-fill" id="hygieneFill" style="background: linear-gradient(90deg, #1abc9c, #16a085); width: 100%;"></div>
+                </div>
+            </div>
+            <div class="need-bar" title="Stimmung">
+                <span style="font-size: 0.8rem;">ðŸ˜Š <span id="najikaHappiness">100</span>%</span>
+                <div class="hp-bar" style="height: 10px; margin-top: 0.25rem;">
+                    <div class="hp-fill" id="happinessFill" style="background: linear-gradient(90deg, #e91e63, #c2185b); width: 100%;"></div>
+                </div>
+            </div>
+            <!-- STATS -->
+            <div style="margin-top: 0.75rem; font-size: 0.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem;">
+                <div>ðŸ’ª <span id="najikaStr">10</span></div>
+                <div>ðŸ§  <span id="najikaInt">10</span></div>
+                <div>ðŸŽ¯ <span id="najikaDex">10</span></div>
+                <div>âœ¨ <span id="najikaCha">10</span></div>
+            </div>
+            <!-- DISCIPLINE -->
+            <div style="margin-top: 0.5rem; font-size: 0.75rem; display: flex; justify-content: space-between;">
+                <span>ðŸŽ“ Discipline:</span>
+                <strong><span id="najikaDiscipline">0</span>%</strong>
+            </div>
+            <!-- PRAISE/SCOLD BUTTONS -->
+            <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;">
+                <button id="praiseBtn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: linear-gradient(135deg, #2ecc71, #27ae60);">ðŸ‘ Loben</button>
+                <button id="scoldBtn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: linear-gradient(135deg, #e74c3c, #c0392b);">ðŸ‘Ž Tadeln</button>
+            </div>
+            </div>
+        </div>
+
+        <!-- EQUIPMENT PANEL -->
+        <div class="hud-panel" id="equipmentPanel">
+            <h3 style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" id="equipmentHeader">
+                <span>âš”ï¸ Equipment</span>
+                <button id="equipmentToggle" style="background: none; border: none; color: #a3b3ff; font-size: 1.2rem; cursor: pointer; padding: 0; margin: 0;">â–¼</button>
+            </h3>
+            <div id="equipmentContent">
+                <div style="font-size: 0.75rem; margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>ðŸ—¡ï¸ Waffe:</span>
+                        <span id="equipWeapon" style="color: #f39c12;">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>ðŸ›¡ï¸ RÃ¼stung:</span>
+                        <span id="equipArmor" style="color: #3498db;">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>ðŸ’ Accessoire:</span>
+                        <span id="equipAccessory" style="color: #9b59b6;">-</span>
+                    </div>
+                </div>
+                <div style="font-size: 0.7rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem;">
+                        <div>âš”ï¸ ATK: +<span id="equipAtk">0</span></div>
+                        <div>ðŸ›¡ï¸ DEF: +<span id="equipDef">0</span></div>
+                        <div>â¤ï¸ HP: +<span id="equipHP">0</span></div>
+                        <div>âœ¨ MP: +<span id="equipMP">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-panel" id="battlePanel" style="display:none">
+            <h3>Kampf</h3>
+            <div>HP: <span id="battleHP">100</span> / <span id="battleMaxHP">100</span></div>
+            <div class="hp-bar">
+                <div class="hp-fill" id="hpFill"></div>
+            </div>
+            <div class="hud-stat">
+                <span>Welle:</span>
+                <strong id="battleWave">1</strong>
+            </div>
+            <div class="hud-stat">
+                <span>Gegner:</span>
+                <strong id="battleEnemies">0</strong>
+            </div>
+            <!-- SKILLS DISPLAY -->
+            <div id="skillsList" style="margin-top: 0.5rem; font-size: 0.7rem; max-height: 100px; overflow-y: auto; display: none;">
+                <div style="font-weight: bold; margin-bottom: 0.25rem; color: #a3b3ff;">VerfÃ¼gbare Skills:</div>
+                <div id="skillsContent"></div>
+            </div>
+            <button id="battleBtn" class="battle-btn">Angreifen</button>
+        </div>
+    </div>
+
+    <video id="webcamFeed" autoplay playsinline muted style="display:none; position:fixed; top:20px; right:20px; width:240px; border-radius:10px; border:2px solid rgba(255,255,255,0.2); z-index:9998;"></video>
+
+    <div class="room-actions" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: transparent; display: flex; gap: 8px; align-items: center;">
+        
+        <div id="room-actions"></div>
+    </div>
+
+    <div class="chat-footer">
+        <button id="chatToggle" class="cloud-btn" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; padding: 0; font-size: 2rem; z-index: 1000;">ðŸ’¬</button>
+    </div>
+</div>
+
+<!-- SNAPCHAT-STYLE CHAT OVERLAY -->
+<div class="chat-overlay" id="chatOverlay">
+    <div class="chat-window">
+        <div class="chat-header">
+            <h2>ðŸ’¬ Chat mit Najika</h2>
+            <button class="chat-close" id="chatClose">Ã—</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-typing" id="chatTyping">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Nachricht an Najika..." autocomplete="off">
+            <button id="chatVoice" title="Najika hÃ¶ren">ðŸ”Š</button>
+            <button id="chatSend">Senden</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const ORIGIN = location.origin;
+// NOTIFICATION SYSTEM
+let notificationContainer = null;
+function notify(msg, type = 'info') {
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+    }
+    const notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    notif.textContent = msg;
+    notif.onclick = () => { notif.style.animation = 'slideOutRight 0.3s'; setTimeout(() => notif.remove(), 300); };
+    notificationContainer.appendChild(notif);
+    setTimeout(() => { if (notif.parentElement) { notif.style.animation = 'slideOutRight 0.3s'; setTimeout(() => notif.remove(), 300); } }, 5000);
+}
+
+
+const ROOM_ACTIONS_FALLBACK = {
+    "Wohnzimmer": ["FÃ¼ttern", "Reden"],
+    "Schlafzimmer": ["Schlafen", "Lesen"],
+    "KÃ¼che": ["Kochen"],
+    "Badezimmer": ["Toilette", "Waschen"],
+    "Garten": ["GieÃŸen", "Ernten", "Garten-Spiel"],
+    "Musikraum": ["Rhythmus-Spiel"],
+    "Medizin": ["Heilen"],
+    "Terminal": ["Cloud", "Status", "Besen-Lieferung", "Hacker-Modus", "LoRA Training"],
+    "Studieren & Crafting": ["Studieren", "Crafting"],
+    "Trainingszimmer": ["Reflex-Spiel", "Trainieren"],
+    "Kampfarena": ["Kampf starten"],
+    "Schwarze MÃ¼hle - Keller": ["Kampf starten", "Erkunden"]
+};
+const BATTLE_ROOMS = new Set(["Kampfarena", "Schwarze MÃ¼hle - Keller"]);
+
+const statusDot = document.querySelector('.status-dot');
+const statusText = document.getElementById('statusText');
+const providerLabel = document.getElementById('providerLabel');
+const cameraButtons = [
+    document.getElementById('cam-orbit'),
+    document.getElementById('cam-third'),
+    document.getElementById('cam-first')
+];
+const faceBtn = document.getElementById('faceNajikaBtn');
+const webcamToggle = document.getElementById('webcamBtn');
+const webcamFeed = document.getElementById('webcamFeed');
+let webcamActive = false;
+let availableRooms = [];
+
+// Terminal-Raum Passwort-Schutz
+let terminalUnlocked = false;
+const TERMINAL_PASSWORD = '123456';
+
+function setServerStatus(online) {
+    if (!statusDot || !statusText) return;
+    if (online) {
+        statusDot.classList.remove('offline');
+        statusText.textContent = 'Online';
+    } else {
+        statusDot.classList.add('offline');
+        statusText.textContent = 'Offline';
+    }
+}
+
+window.setServerStatus = setServerStatus;
+
+async function api(path, method = 'GET', body) {
+    const options = {
+        method,
+        headers: {'Content-Type': 'application/json'}
+    };
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+    try {
+        const response = await fetch(path, options);
+        if (!response.ok) {
+            throw new Error(response.status + ' ' + response.statusText);
+        }
+        const data = await response.json();
+        setServerStatus(true);
+        return data;
+    } catch (error) {
+        setServerStatus(false);
+        throw error;
+    }
+}
+
+async function cloudStatus() {
+    return api('/api/cloud/status');
+}
+
+async function toggleCloud() {
+    try {
+        const info = await cloudStatus();
+        if (!info.enabled) {
+            const pin = prompt('PIN eingeben:');
+            if (!pin) return;
+            await api('/api/cloud/enable', 'POST', {pin});
+        } else {
+            await api('/api/cloud/disable', 'POST');
+        }
+    } catch (error) {
+        console.warn('Cloud-Umschaltung fehlgeschlagen.', error);
+        notify('Cloud aktuell nicht erreichbar.');
+    } finally {
+        applyCloudBtn();
+    }
+}
+
+async function applyCloudBtn() {
+    const btn = document.getElementById('cloud');
+    if (!btn) return;
+    try {
+        const info = await cloudStatus();
+        btn.style.display = 'inline-block';
+        btn.textContent = info.enabled ? 'Cloud deaktivieren' : 'Cloud aktivieren';
+        if (providerLabel) {
+            providerLabel.textContent = 'Provider: ' + (info.provider || 'lokal');
+        }
+    } catch (error) {
+        btn.style.display = 'none';
+        if (providerLabel) {
+            providerLabel.textContent = 'Provider: offline';
+        }
+    }
+}
+
+function setCamButtonState(mode) {
+    const modeMap = { orbit: 'cam-orbit', third: 'cam-third', first: 'cam-first' };
+    cameraButtons.forEach(btn => {
+        if (btn && btn.id === modeMap[mode]) {
+            btn.classList.add('active');
+        } else if (btn) {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+function applyCameraMode(mode) {
+    setCamButtonState(mode);
+    if (window.Scene3D && typeof window.Scene3D.setCameraMode === 'function') {
+        window.Scene3D.setCameraMode(mode);
+    }
+}
+
+if (cameraButtons[0]) cameraButtons[0].addEventListener('click', () => applyCameraMode('orbit'));
+if (cameraButtons[1]) cameraButtons[1].addEventListener('click', () => applyCameraMode('third'));
+if (cameraButtons[2]) cameraButtons[2].addEventListener('click', () => applyCameraMode('first'));
+
+if (faceBtn) {
+    faceBtn.addEventListener('click', () => {
+        if (window.Scene3D && typeof window.Scene3D.faceCharacter === 'function') {
+            window.Scene3D.faceCharacter();
+        }
+    });
+}
+
+if (webcamToggle) {
+    webcamToggle.addEventListener('click', async () => {
+        if (!window.Scene3D || typeof window.Scene3D.toggleWebcam !== 'function') {
+            notify('Webcam-Steuerung nicht verfÃ¼gbar.');
+            return;
+        }
+        webcamToggle.disabled = true;
+        try {
+            const active = await window.Scene3D.toggleWebcam(webcamFeed);
+            webcamActive = active;
+            if (active) {
+                webcamFeed.style.display = 'block';
+                webcamToggle.textContent = 'Webcam AUS';
+            } else {
+                webcamFeed.style.display = 'none';
+                webcamFeed.srcObject = null;
+                webcamToggle.textContent = 'Webcam';
+            }
+        } catch (error) {
+            console.warn('Webcam konnte nicht gestartet werden.', error);
+            notify('Webcam konnte nicht gestartet werden.');
+        } finally {
+            webcamToggle.disabled = false;
+        }
+    });
+}
+
+async function handleAction(room, action) {
+    // Terminal-Raum: Passwort-Check fÃ¼r ALLE Actions (aber NUR einmal beim ersten Zugriff)
+    if (room === 'Terminal' && !terminalUnlocked) {
+        const password = prompt('ðŸ”’ TERMINAL-ZUGRIFF GESPERRT\n\nPasswort eingeben:');
+        if (password === TERMINAL_PASSWORD) {
+            terminalUnlocked = true;
+            notify('âœ… Terminal freigeschaltet! WÃ¤hle eine Aktion.', 'success');
+            // NICHT automatisch Ã¶ffnen - User muss Aktion wÃ¤hlen
+            return; // ZurÃ¼ck zur Action-Auswahl
+        } else {
+            notify('âŒ Falsches Passwort!', 'error');
+            return; // Abbrechen
+        }
+    }
+
+    switch (action) {
+        case 'FÃ¼ttern':
+            try {
+                const r = await api('/api/najika/feed', 'POST', {});
+                notify(r.msg || 'Najika wurde gefÃ¼ttert!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('FÃ¼ttern nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Reden':
+            openChat();
+            break;
+        case 'Schlafen':
+            try {
+                const r = await api('/api/najika/sleep', 'POST', {});
+                notify(r.msg || 'Najika hat gut geschlafen!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Schlafen nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Lesen':
+            notify('Najika liest ein Buch.');
+            break;
+        case 'Kochen':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('cooking');
+            } else {
+                notify('Najika kocht etwas Leckeres.');
+            }
+            break;
+        case 'Toilette':
+            notify('Kurze Pause.');
+            break;
+        case 'Waschen':
+            try {
+                const r = await api('/api/najika/wash', 'POST', {});
+                notify(r.msg || 'Najika ist jetzt sauber!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Waschen nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'GieÃŸen':
+            try {
+                await api('/api/minigame/garden', 'POST', {mode: 'water'});
+            } catch (error) {
+                console.warn('GieÃŸen offline.', error);
+            }
+            notify('Der Garten ist versorgt.');
+            break;
+        case 'Ernten':
+            notify('Ernte eingesammelt.');
+            break;
+        case 'Garten-Spiel':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('garden');
+            } else {
+                try {
+                    const gg = await api('/api/minigame/garden', 'POST', {});
+                    notify('Garten-Spiel Score: ' + (gg?.result?.score ?? 0));
+                } catch (error) {
+                    notify('Garten-Spiel nicht verfÃ¼gbar.');
+                }
+            }
+            break;
+        case 'Rhythmus-Spiel':
+            try {
+                const r = await api('/api/najika/train', 'POST', {stat: 'charisma'});
+                notify(r.msg || 'Rhythmus-Training abgeschlossen!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Rhythmus-Spiel nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Heilen':
+            try {
+                const h = await api('/api/heal', 'POST', {});
+                notify('Geheilt! HP: ' + h.hp);
+                updateBattleHUD({hp: h.hp, max_hp: 100});
+            } catch (error) {
+                notify('Heilung nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Cloud':
+            await toggleCloud();
+            break;
+        case 'Status':
+            try {
+                const s = await api('/health');
+                notify('Status:\n' + JSON.stringify(s, null, 2));
+            } catch (error) {
+                notify('Status aktuell offline.');
+            }
+            break;
+        case 'Studieren':
+            try {
+                const r = await api('/api/najika/train', 'POST', {stat: 'intelligence'});
+                notify(r.msg || 'Studieren abgeschlossen!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Studieren nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Crafting':
+            try {
+                const r = await api('/api/najika/train', 'POST', {stat: 'dexterity'});
+                notify(r.msg || 'Crafting abgeschlossen!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Crafting nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Reflex-Spiel':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('reflex');
+            } else {
+                try {
+                    const rx = await api('/api/minigame/reflex', 'POST', {});
+                    notify('Reflex-Spiel Score: ' + (rx?.result?.score ?? 0));
+                } catch (error) {
+                    notify('Reflex-Spiel nicht verfÃ¼gbar.');
+                }
+            }
+            break;
+        case 'Trainieren':
+            try {
+                const r = await api('/api/najika/train', 'POST', {stat: 'strength'});
+                notify(r.msg || 'Training abgeschlossen!', 'success');
+                await fetchNajikaStatus();
+            } catch (error) {
+                notify('Training nicht verfÃ¼gbar.');
+            }
+            break;
+        case 'Besen-Lieferung':
+            if (window.MiniGames && typeof window.MiniGames.open === 'function') {
+                MiniGames.open('broom');
+            } else {
+                notify('Besen-Lieferung startet.');
+            }
+            break;
+        case 'Hacker-Modus':
+            // Ã–ffnet Code-Editor UI (grÃ¼ne Matrix-Ã„sthetik)
+            notify('ðŸŸ¢ HACKER-MODUS AKTIVIERT', 'success');
+            if (window.CodeEditor && typeof window.CodeEditor.open === 'function') {
+                CodeEditor.open();
+            } else {
+                notify('Code-Editor nicht geladen!', 'error');
+            }
+            break;
+        case 'LoRA Training':
+            openLoRATraining();
+            break;
+        case 'Kampf starten':
+            try {
+                // NEW: 3D Dungeon Combat System
+                if (window.DungeonCombat && window.Scene3D) {
+                    // Determine dungeon level (from backend or default 1)
+                    let dungeonLevel = 1;
+                    try {
+                        const statusRes = await api('/api/status', 'GET');
+                        dungeonLevel = statusRes.progress?.dungeon_level || 1;
+                    } catch (e) {
+                        console.warn('Could not fetch dungeon level, using 1');
+                    }
+
+                    // Start 3D dungeon combat
+                    DungeonCombat.startDungeonCombat(dungeonLevel, Scene3D.scene);
+                    notify(`ðŸ° Dungeon Level ${dungeonLevel} gestartet!`, 'success');
+                } else {
+                    // Fallback: Old battle system
+                    const kb = await api('/api/battle/start', 'POST', {room});
+                    if (kb.active) {
+                        document.getElementById('battlePanel').style.display = 'block';
+                        updateBattleHUD({
+                            hp: kb.player.hp,
+                            max_hp: kb.player.max_hp,
+                            wave: kb.wave,
+                            enemies: kb.enemies.length
+                        });
+                        notify('Kampf gestartet! Wave ' + kb.wave + ' mit ' + kb.enemies.length + ' Gegnern!');
+                    }
+                }
+            } catch (error) {
+                notify('Kampf kann nicht gestartet werden.', 'error');
+            }
+            break;
+        case 'Erkunden':
+            notify('Du erkundest den Keller der Schwarzen MÃ¼hle.');
+            break;
+        default:
+            notify('Aktion: ' + action);
+    }
+}
+
+async function renderActions(room) {
+    let resp;
+    try {
+        resp = await api('/api/room/actions', 'POST', {room});
+    } catch (error) {
+        console.warn('Nutze Fallback-Aktionen fÃ¼r "' + room + '".', error);
+        resp = {
+            battle: BATTLE_ROOMS.has(room),
+            actions: ROOM_ACTIONS_FALLBACK[room] || []
+        };
+    }
+    const wrap = document.getElementById('room-actions');
+    wrap.innerHTML = '';
+    const actions = resp && resp.actions ? resp.actions : ROOM_ACTIONS_FALLBACK[room] || [];
+    actions.forEach(a => {
+        const b = document.createElement('button');
+        b.className = 'action-btn';
+        b.textContent = a;
+        b.onclick = () => handleAction(room, a);
+        wrap.appendChild(b);
+    });
+    const battlePanel = document.getElementById('battlePanel');
+    if (battlePanel) {
+        if (!resp || !resp.battle) {
+            battlePanel.style.display = 'none';
+        }
+    }
+}
+
+async function applyRoom(name) {
+    // BLOCK: Verhindere versehentliche Aufrufe durch Tasten
+    // Nur erlaubt wenn durch Dropdown ausgeloest
+    if (!name || typeof name !== 'string') {
+        console.warn('applyRoom: Ungueltige Raumaenderung blockiert');
+        return;
+    }
+
+    if (!name) return;
+    try {
+        await renderActions(name);
+    } catch (error) {
+        console.warn('Aktionen konnten nicht geladen werden.', error);
+    }
+
+    // Zeige Dungeon-Level Selector bei Schwarze MÃ¼hle
+    const dungeonControl = document.getElementById('dungeonLevelControl');
+    if (dungeonControl) {
+        if (name === 'Schwarze MÃ¼hle â€“ Keller') {
+            dungeonControl.style.display = 'flex';
+        } else {
+            dungeonControl.style.display = 'none';
+        }
+    }
+
+    if (window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+        window.Scene3D.changeRoom(name);
+    }
+}
+
+function updateBattleHUD(data) {
+    const hpEl = document.getElementById('battleHP');
+    const hpMaxEl = document.getElementById('battleMaxHP');
+    const waveEl = document.getElementById('battleWave');
+    const enemyEl = document.getElementById('battleEnemies');
+    const fillEl = document.getElementById('hpFill');
+    if (!hpEl || !hpMaxEl || !fillEl) return;
+    if (data.hp !== undefined) {
+        hpEl.textContent = data.hp;
+        hpMaxEl.textContent = data.max_hp || 100;
+        const percentage = Math.max(0, Math.min(100, (data.hp / (data.max_hp || 100)) * 100));
+        fillEl.style.width = percentage + '%';
+        if (percentage > 60) {
+            fillEl.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+        } else if (percentage > 30) {
+            fillEl.style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
+        } else {
+            fillEl.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+        }
+    }
+    if (waveEl && data.wave !== undefined) {
+        waveEl.textContent = data.wave;
+    }
+    if (enemyEl && data.enemies !== undefined) {
+        enemyEl.textContent = data.enemies;
+    }
+}
+
+function updateNajikaHUD(data) {
+    if (!data) return;
+    // Level & XP
+    const levelEl = document.getElementById('najikaLevel');
+    const xpEl = document.getElementById('najikaXP');
+    if (levelEl && data.level !== undefined) levelEl.textContent = data.level;
+    if (xpEl && data.xp !== undefined) {
+        const xpNeeded = data.level * 100;
+        xpEl.textContent = data.xp;
+        xpEl.parentElement.innerHTML = `XP: <span id="najikaXP">${data.xp}</span>/${xpNeeded}`;
+    }
+    // Care Mistakes & Fatigue
+    const cmEl = document.getElementById('najikaCM');
+    const fatigueEl = document.getElementById('najikaFatigue');
+    if (cmEl && data.care_mistakes !== undefined) cmEl.textContent = data.care_mistakes;
+    if (fatigueEl && data.fatigue !== undefined) fatigueEl.textContent = Math.round(data.fatigue);
+    // Needs
+    const updateBar = (id, fillId, value) => {
+        const el = document.getElementById(id);
+        const fill = document.getElementById(fillId);
+        if (el) el.textContent = Math.round(value);
+        if (fill) fill.style.width = Math.max(0, Math.min(100, value)) + '%';
+    };
+    if (data.hunger !== undefined) updateBar('najikaHunger', 'hungerFill', data.hunger);
+    if (data.energy !== undefined) updateBar('najikaEnergy', 'energyFill', data.energy);
+    if (data.hygiene !== undefined) updateBar('najikaHygiene', 'hygieneFill', data.hygiene);
+    if (data.happiness !== undefined) updateBar('najikaHappiness', 'happinessFill', data.happiness);
+    // Stats
+    const strEl = document.getElementById('najikaStr');
+    const intEl = document.getElementById('najikaInt');
+    const dexEl = document.getElementById('najikaDex');
+    const chaEl = document.getElementById('najikaCha');
+    if (strEl && data.strength !== undefined) strEl.textContent = data.strength;
+    if (intEl && data.intelligence !== undefined) intEl.textContent = data.intelligence;
+    if (dexEl && data.dexterity !== undefined) dexEl.textContent = data.dexterity;
+    if (chaEl && data.charisma !== undefined) chaEl.textContent = data.charisma;
+    // Discipline
+    const disciplineEl = document.getElementById('najikaDiscipline');
+    if (disciplineEl && data.discipline !== undefined) disciplineEl.textContent = Math.round(data.discipline);
+    // Equipment
+    if (data.equipment) {
+        const weaponEl = document.getElementById('equipWeapon');
+        const armorEl = document.getElementById('equipArmor');
+        const accessoryEl = document.getElementById('equipAccessory');
+        if (weaponEl) weaponEl.textContent = data.equipment.weapon || '-';
+        if (armorEl) armorEl.textContent = data.equipment.armor || '-';
+        if (accessoryEl) accessoryEl.textContent = data.equipment.accessory || '-';
+    }
+}
+
+async function fetchEquipmentStats() {
+    try {
+        const data = await api('/api/najika/equipment', 'POST');
+        if (data && data.stats) {
+            const atkEl = document.getElementById('equipAtk');
+            const defEl = document.getElementById('equipDef');
+            const hpEl = document.getElementById('equipHP');
+            const mpEl = document.getElementById('equipMP');
+            if (atkEl) atkEl.textContent = data.stats.atk || 0;
+            if (defEl) defEl.textContent = data.stats.def || 0;
+            if (hpEl) hpEl.textContent = data.stats.hp || 0;
+            if (mpEl) mpEl.textContent = data.stats.mp || 0;
+        }
+    } catch (error) {
+        console.warn('Equipment-Stats konnten nicht geladen werden.', error);
+    }
+}
+
+async function praiseNajika() {
+    try {
+        const r = await api('/api/najika/praise', 'POST');
+        notify(r.msg || 'Najika freut sich!', 'success');
+        await fetchNajikaStatus();
+    } catch (error) {
+        notify('Loben nicht verfÃ¼gbar.');
+    }
+}
+
+async function scoldNajika() {
+    try {
+        const r = await api('/api/najika/scold', 'POST');
+        notify(r.msg || 'Najika wurde getadelt!', 'warning');
+        await fetchNajikaStatus();
+    } catch (error) {
+        notify('Tadeln nicht verfÃ¼gbar.');
+    }
+}
+
+function toggleEquipmentPanel() {
+    const content = document.getElementById('equipmentContent');
+    const toggle = document.getElementById('equipmentToggle');
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        toggle.textContent = 'â–¼';
+    } else {
+        content.style.display = 'none';
+        toggle.textContent = 'â–¶';
+    }
+}
+
+async function fetchNajikaStatus() {
+    try {
+        const data = await api('/api/najika/status');
+        updateNajikaHUD(data);
+    } catch (error) {
+        console.warn('Najika-Status konnte nicht geladen werden.', error);
+    }
+}
+
+// Auto-update Najika status alle 10 Sekunden
+setInterval(fetchNajikaStatus, 10000);
+
+
+async function battleAttack() {
+    try {
+        // ðŸ”¥ FINISHER QTE! (10% Chance)
+        let damageMultiplier = 1.0;
+        if (Math.random() < 0.1 && finisherQTE && !finisherQTE.isActive()) {
+            notify('ðŸ”¥ FINISHER CHANCE! ðŸ”¥', 'info');
+
+            // Starte QTE und warte auf Ergebnis
+            await new Promise((resolve) => {
+                finisherQTE.start((result) => {
+                    if (result.completed) {
+                        damageMultiplier = result.multiplier;
+                        notify(result.message, 'info');
+                        console.log(`Finisher Multiplier: ${damageMultiplier.toFixed(2)}x`);
+                    }
+                    resolve();
+                });
+            });
+        }
+
+        // API Call mit Multiplier
+        const r = await api('/api/battle/action', 'POST', {
+            action: 'attack',
+            target_index: 0,
+            damage_multiplier: damageMultiplier
+        });
+
+        if (r.log && Array.isArray(r.log)) {
+            // Zeige Battle-Log
+            notify(r.log.join(' | '), 'info');
+        }
+        // Update HUD mit neuen Daten
+        if (r.player) {
+            updateBattleHUD({
+                hp: r.player.hp,
+                max_hp: r.player.max_hp,
+                wave: r.wave,
+                enemies: r.enemies ? r.enemies.length : 0
+            });
+        }
+        // Kampf beendet?
+        if (!r.active) {
+            document.getElementById('battlePanel').style.display = 'none';
+            if (r.result === 'victory') {
+                notify(`Sieg! +${r.xp_earned} XP, +${r.gold_earned} Gold!`);
+
+                // Evolution System: FÃ¼ge XP hinzu
+                if (evolutionSystem && r.xp_earned) {
+                    const evolutionResult = evolutionSystem.addXP(r.xp_earned);
+                    evolutionSystem.addVictory();
+
+                    // Zeige Evolution Notification
+                    if (evolutionResult.evolved) {
+                        showEvolutionNotification(evolutionResult);
+                    }
+                }
+            } else if (r.result === 'defeat') {
+                notify('Kampf verloren!');
+            }
+        }
+    } catch (error) {
+        notify('Kampf nicht verfÃ¼gbar.');
+        console.error(error);
+    }
+}
+
+// ===== VOICE SYSTEM (TTS) =====
+let currentAudio = null;
+
+async function playVoice() {
+    const voiceBtn = document.getElementById('chatVoice');
+
+    // Hole letzte Najika-Nachricht
+    const lastMessage = chatHistory.filter(m => m.role === 'assistant').pop();
+    if (!lastMessage) {
+        notify('Keine Nachricht zum Abspielen', 'info');
+        return;
+    }
+
+    voiceBtn.disabled = true;
+    voiceBtn.textContent = 'â³';
+
+    try {
+        // Generiere Voice
+        const r = await api('/api/tts', 'POST', {
+            text: lastMessage.content,
+            personality: 'megumin' // TODO: Dynamisch basierend auf Najika-State
+        });
+
+        if (r.ok && r.audio) {
+            // Stop alte Audio falls vorhanden
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            // Spiele neue Audio
+            currentAudio = new Audio(r.audio);
+            currentAudio.play();
+
+            currentAudio.onended = () => {
+                voiceBtn.textContent = 'ðŸ”Š';
+                voiceBtn.disabled = false;
+                currentAudio = null;
+            };
+
+            currentAudio.onerror = () => {
+                notify('Audio konnte nicht abgespielt werden', 'error');
+                voiceBtn.textContent = 'ðŸ”Š';
+                voiceBtn.disabled = false;
+                currentAudio = null;
+            };
+
+        } else {
+            notify('Voice-System nicht verfÃ¼gbar', 'error');
+            voiceBtn.textContent = 'ðŸ”Š';
+            voiceBtn.disabled = false;
+        }
+
+    } catch (error) {
+        console.error('TTS Error:', error);
+        notify('Voice-System Fehler', 'error');
+        voiceBtn.textContent = 'ðŸ”Š';
+        voiceBtn.disabled = false;
+    }
+}
+
+// ===== SNAPCHAT-STYLE CHAT =====
+let chatHistory = [];
+
+function renderChatMessage(role, content, animate = true) {
+    const messagesDiv = document.getElementById('chatMessages');
+    const typingDiv = document.getElementById('chatTyping');
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${role}`;
+    if (!animate) msgDiv.style.animation = 'none';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.textContent = role === 'user' ? 'ðŸ‘¤' : 'ðŸŒ¸';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.textContent = content;
+
+    msgDiv.appendChild(avatar);
+    msgDiv.appendChild(bubble);
+
+    messagesDiv.insertBefore(msgDiv, typingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+async function loadChatHistory() {
+    try {
+        const data = await api('/api/chat/history');
+        if (data.history && Array.isArray(data.history)) {
+            chatHistory = data.history;
+            // Render history ohne Animation
+            data.history.forEach(msg => {
+                renderChatMessage(msg.role, msg.content, false);
+            });
+        }
+    } catch (error) {
+        console.warn('Chat-History konnte nicht geladen werden.', error);
+    }
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('chatSend');
+    const typingDiv = document.getElementById('chatTyping');
+
+    if (!input) return;
+    const text = (input.value || '').trim();
+    if (!text) return;
+
+    input.value = '';
+    sendBtn.disabled = true;
+
+    // User-Message anzeigen
+    renderChatMessage('user', text);
+    chatHistory.push({role: 'user', content: text});
+
+    // Typing-Indikator
+    typingDiv.classList.add('active');
+
+    try {
+        const r = await api('/api/chat', 'POST', {message: text});
+        typingDiv.classList.remove('active');
+
+        // Najika-Response anzeigen
+        const response = r.response || '...';
+        renderChatMessage('assistant', response);
+        chatHistory.push({role: 'assistant', content: response});
+
+        // Update Najika Status nach Chat
+        await fetchNajikaStatus();
+    } catch (error) {
+        typingDiv.classList.remove('active');
+        renderChatMessage('assistant', 'Verbindung fehlgeschlagen...');
+    } finally {
+        sendBtn.disabled = false;
+        input.focus();
+    }
+}
+
+function openChat() {
+    const overlay = document.getElementById('chatOverlay');
+    const input = document.getElementById('chatInput');
+    overlay.classList.add('active');
+    setTimeout(() => input.focus(), 300);
+}
+
+function closeChat() {
+    const overlay = document.getElementById('chatOverlay');
+    overlay.classList.remove('active');
+}
+
+// Najika-Panel Toggle
+function toggleNajikaPanel() {
+    const content = document.getElementById('najikaContent');
+    const toggle = document.getElementById('najikaToggle');
+
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        toggle.textContent = 'â–¼';
+    } else {
+        content.style.display = 'none';
+        toggle.textContent = 'â–¶';
+    }
+}
+
+// Event Listeners fÃ¼r Chat
+document.getElementById('chatToggle').addEventListener('click', openChat);
+document.getElementById('chatClose').addEventListener('click', closeChat);
+document.getElementById('chatSend').addEventListener('click', sendChatMessage);
+document.getElementById('chatVoice').addEventListener('click', playVoice);
+document.getElementById('chatInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+});
+
+// Event Listener fÃ¼r Najika-Panel Toggle
+document.getElementById('najikaHeader').addEventListener('click', toggleNajikaPanel);
+document.getElementById('najikaToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleNajikaPanel();
+});
+
+// Event Listener fÃ¼r Praise/Scold Buttons
+document.getElementById('praiseBtn').addEventListener('click', praiseNajika);
+document.getElementById('scoldBtn').addEventListener('click', scoldNajika);
+
+// Event Listener fÃ¼r Equipment-Panel Toggle
+document.getElementById('equipmentHeader').addEventListener('click', toggleEquipmentPanel);
+document.getElementById('equipmentToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleEquipmentPanel();
+});
+
+async function init() {
+    setCamButtonState('orbit');
+    const sel = document.getElementById('room');
+    try {
+        availableRooms = await api('/api/rooms');
+    } catch (error) {
+        console.warn('Falle auf lokale RÃ¤ume zurÃ¼ck.', error);
+        availableRooms = Object.keys(ROOM_ACTIONS_FALLBACK);
+    }
+    if (!Array.isArray(availableRooms) || !availableRooms.length) {
+        availableRooms = Object.keys(ROOM_ACTIONS_FALLBACK);
+    }
+    sel.innerHTML = '';
+    availableRooms.forEach(r => {
+        const o = document.createElement('option');
+        o.value = r;
+        o.textContent = r;
+        sel.appendChild(o);
+    });
+    sel.onchange = () => applyRoom(sel.value);
+
+    // Load Najika status initial
+    await fetchNajikaStatus();
+
+    // Load Equipment stats initial
+    await fetchEquipmentStats();
+
+    // Load Chat history initial
+    await loadChatHistory();
+
+    // Dungeon Level Selector
+    const dungeonLevelSel = document.getElementById('dungeonLevel');
+    if (dungeonLevelSel) {
+        dungeonLevelSel.onchange = () => {
+            const level = parseInt(dungeonLevelSel.value, 10) || 1;
+            if (window.DungeonGenerator) {
+                DungeonGenerator.setDungeonLevel(level);
+                console.log(`ðŸ° Dungeon Level set to ${level}`);
+                // Raum neu laden um neues Dungeon zu generieren
+                const current = sel.value;
+                if (current === 'Schwarze MÃ¼hle â€“ Keller') {
+                    applyRoom(current);
+                }
+            }
+        };
+    }
+
+    await applyRoom(sel.value || availableRooms[0]);
+    await applyCloudBtn();
+    document.getElementById('cloud').onclick = toggleCloud;
+
+    const battleBtn = document.getElementById('battleBtn');
+    if (battleBtn) {
+        battleBtn.onclick = battleAttack;
+    }
+    document.addEventListener('scene3d:ready', () => {
+        const current = sel.value || availableRooms[0];
+        if (current && window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+            window.Scene3D.changeRoom(current);
+        }
+        if (window.Scene3D && typeof window.Scene3D.getCameraMode === 'function') {
+            setCamButtonState(window.Scene3D.getCameraMode());
+        }
+    });
+    console.log('Najika Digivice initialisiert');
+}
+
+init();
+</script>
+
+<!-- FINISHER QTE SYSTEM -->
+<script>
+// Finisher QTE - Vanilla JS (konvertiert von React)
+let finisherQTE = null;
+
+class FinisherQTE {
+  constructor() {
+    this.active = false;
+    this.meter = 0;
+    this.duration = 3000;
+    this.startTime = 0;
+    this.mashCount = 0;
+    this.lastMashTime = 0;
+    this.mashCooldown = 100;
+    this.updateInterval = null;
+    this.onCompleteCallback = null;
+    this.keyListener = null;
+  }
+
+  start(onComplete) {
+    this.active = true;
+    this.meter = 0;
+    this.startTime = Date.now();
+    this.mashCount = 0;
+    this.lastMashTime = 0;
+    this.onCompleteCallback = onComplete;
+
+    console.log('ðŸ”¥ FINISHER QTE GESTARTET!');
+
+    this.showUI();
+    this.updateInterval = setInterval(() => this.update(0.016), 16);
+
+    this.keyListener = (e) => {
+      if (e.code === 'Space' && this.active) {
+        e.preventDefault();
+        this.onMash();
+      }
+    };
+    document.addEventListener('keydown', this.keyListener);
+
+    return { active: true, message: 'ðŸ”¥ FINISH!!! ðŸ”¥', instruction: 'SPACE schnell drÃ¼cken!' };
+  }
+
+  onMash() {
+    if (!this.active) return { success: false };
+
+    const now = Date.now();
+    if (now - this.lastMashTime < this.mashCooldown) return { success: false };
+
+    this.lastMashTime = now;
+    this.mashCount++;
+    this.meter = Math.min(100, this.meter + 5);
+
+    console.log(`Mash ${this.mashCount}: Meter ${this.meter}%`);
+    this.updateUI();
+
+    return { success: true, meter: this.meter, mashCount: this.mashCount };
+  }
+
+  update(delta) {
+    if (!this.active) return null;
+
+    const now = Date.now();
+    const elapsed = now - this.startTime;
+
+    if (elapsed >= this.duration) {
+      this.finish();
+      return null;
+    }
+
+    if (now - this.lastMashTime > 200) {
+      this.meter = Math.max(0, this.meter - (delta * 10));
+    }
+
+    this.updateUI();
+    return { active: true, meter: this.meter, timeLeft: this.duration - elapsed, mashCount: this.mashCount };
+  }
+
+  finish() {
+    if (!this.active) return null;
+
+    this.active = false;
+    if (this.updateInterval) clearInterval(this.updateInterval);
+    if (this.keyListener) document.removeEventListener('keydown', this.keyListener);
+
+    const multiplier = 1.0 + (this.meter / 100);
+    let rank = 'C';
+    if (this.meter >= 90) rank = 'S';
+    else if (this.meter >= 70) rank = 'A';
+    else if (this.meter >= 50) rank = 'B';
+
+    console.log(`âœ¨ FINISHER! Meter: ${this.meter}%, Multiplier: ${multiplier.toFixed(2)}x, Rank: ${rank}`);
+
+    const messages = {
+      'S': 'âœ¨ PERFEKT! MAXIMALER SCHADEN! âœ¨',
+      'A': 'ðŸ”¥ EXCELLENT! KRITISCHER TREFFER! ðŸ”¥',
+      'B': 'âš¡ GOOD! STARKER ANGRIFF! âš¡',
+      'C': 'ðŸ’¥ OK! Treffer gelandet! ðŸ’¥'
+    };
+
+    const result = {
+      active: false,
+      completed: true,
+      meter: this.meter,
+      multiplier: multiplier,
+      mashCount: this.mashCount,
+      rank: rank,
+      message: messages[rank] || messages['C']
+    };
+
+    this.hideUI();
+    if (this.onCompleteCallback) this.onCompleteCallback(result);
+
+    return result;
+  }
+
+  cancel() {
+    if (!this.active) return null;
+    this.active = false;
+    if (this.updateInterval) clearInterval(this.updateInterval);
+    if (this.keyListener) document.removeEventListener('keydown', this.keyListener);
+    this.hideUI();
+    return { active: false, completed: false, cancelled: true, message: 'Finisher abgebrochen!' };
+  }
+
+  isActive() { return this.active; }
+
+  showUI() {
+    let overlay = document.getElementById('qteOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'qteOverlay';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:10000;animation:qteFlash 0.5s;';
+      overlay.innerHTML = `
+        <div style="background:linear-gradient(135deg,#1a1a2e,#2d2d44);border:3px solid #ff6b00;border-radius:20px;padding:2rem;text-align:center;box-shadow:0 0 40px rgba(255,107,0,0.6);animation:qteShake 0.3s infinite;">
+          <div style="font-size:3rem;font-weight:bold;color:#ff6b00;text-shadow:0 0 20px #ff6b00;margin-bottom:1rem;animation:qtePulse 0.5s infinite;">ðŸ”¥ FINISH!!! ðŸ”¥</div>
+          <div style="font-size:1.5rem;color:#fff;margin-bottom:2rem;font-weight:bold;">SPACE SCHNELL DRÃœCKEN!</div>
+          <div style="position:relative;width:400px;height:50px;background:#1a1a2e;border:2px solid #ff6b00;border-radius:25px;overflow:hidden;margin:0 auto 1rem;">
+            <div id="qteMeterBar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#ff6b00,#ff0000);transition:width 0.1s;box-shadow:0 0 20px rgba(255,107,0,0.8);"></div>
+            <div id="qteMeterText" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold;color:#fff;text-shadow:2px 2px 4px #000;">0%</div>
+          </div>
+          <div style="font-size:1.2rem;color:#ccc;"><span id="qteTime">3.0s</span> | <span id="qteMashes">0 Mashes</span></div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      // CSS Animations
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes qteFlash { 0% { background: rgba(255,100,0,0.8); } 100% { background: rgba(0,0,0,0.8); } }
+        @keyframes qteShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes qtePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+      `;
+      document.head.appendChild(style);
+    }
+    overlay.style.display = 'flex';
+    this.updateUI();
+  }
+
+  updateUI() {
+    const bar = document.getElementById('qteMeterBar');
+    const text = document.getElementById('qteMeterText');
+    const time = document.getElementById('qteTime');
+    const mash = document.getElementById('qteMashes');
+
+    if (bar) bar.style.width = `${this.meter}%`;
+    if (text) text.textContent = `${Math.floor(this.meter)}%`;
+    if (time && this.active) {
+      const left = Math.max(0, this.duration - (Date.now() - this.startTime));
+      time.textContent = `${(left / 1000).toFixed(1)}s`;
+    }
+    if (mash) mash.textContent = `${this.mashCount} Mashes`;
+  }
+
+  hideUI() {
+    const overlay = document.getElementById('qteOverlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+}
+
+// Globale Instanz
+finisherQTE = new FinisherQTE();
+</script>
+
+<!-- EVOLUTION SYSTEM -->
+<script>
+// Evolution System - Simplified Digimon World Style
+let evolutionSystem = null;
+
+class EvolutionSystem {
+  constructor() {
+    this.battleXP = 0;
+    this.evolutionStage = 'rookie'; // rookie â†’ champion â†’ ultimate â†’ mega
+    this.totalVictories = 0;
+  }
+
+  // Berechne Stage basierend auf XP
+  calculateStage() {
+    if (this.battleXP >= 1000) return 'mega';
+    if (this.battleXP >= 500) return 'ultimate';
+    if (this.battleXP >= 100) return 'champion';
+    return 'rookie';
+  }
+
+  // FÃ¼ge XP hinzu und prÃ¼fe Evolution
+  addXP(xp) {
+    const oldStage = this.evolutionStage;
+    this.battleXP += xp;
+    this.evolutionStage = this.calculateStage();
+
+    console.log(`+${xp} XP! Total: ${this.battleXP} XP | Stage: ${this.evolutionStage}`);
+
+    // Evolution passiert?
+    if (oldStage !== this.evolutionStage) {
+      return {
+        evolved: true,
+        oldStage,
+        newStage: this.evolutionStage,
+        message: this.getEvolutionMessage(this.evolutionStage),
+        battleXP: this.battleXP
+      };
+    }
+
+    return { evolved: false, battleXP: this.battleXP };
+  }
+
+  // Evolution Messages
+  getEvolutionMessage(stage) {
+    const messages = {
+      'champion': 'â­ Kuja! Ich verstehe jetzt besser was du willst!',
+      'ultimate': 'âœ¨ Wir sind ein Team, Kuja! Ich kann fast alleine kÃ¤mpfen!',
+      'mega': 'ðŸŒŸ PERFEKT! Ich kenne dich jetzt so gut, Kuja!'
+    };
+    return messages[stage] || '';
+  }
+
+  // Hole Stage-Icon
+  getStageIcon(stage = null) {
+    const icons = {
+      'rookie': 'ðŸŒ±',
+      'champion': 'â­',
+      'ultimate': 'âœ¨',
+      'mega': 'ðŸŒŸ'
+    };
+    return icons[stage || this.evolutionStage] || 'ðŸŒ±';
+  }
+
+  // Hole XP fÃ¼r nÃ¤chste Evolution
+  getXPForNextStage() {
+    const thresholds = {
+      'rookie': 100,
+      'champion': 500,
+      'ultimate': 1000,
+      'mega': Infinity
+    };
+    return thresholds[this.evolutionStage];
+  }
+
+  // Hole Progress %
+  getProgressPercent() {
+    const next = this.getXPForNextStage();
+    if (next === Infinity) return 100;
+
+    const prev = this.evolutionStage === 'ultimate' ? 500 :
+                 this.evolutionStage === 'champion' ? 100 : 0;
+
+    return Math.floor(((this.battleXP - prev) / (next - prev)) * 100);
+  }
+
+  // Siege zÃ¤hlen
+  addVictory() {
+    this.totalVictories++;
+  }
+
+  // Hole Status
+  getStatus() {
+    return {
+      stage: this.evolutionStage,
+      icon: this.getStageIcon(),
+      battleXP: this.battleXP,
+      nextStageXP: this.getXPForNextStage(),
+      progress: this.getProgressPercent(),
+      victories: this.totalVictories
+    };
+  }
+}
+
+// Globale Instanz
+evolutionSystem = new EvolutionSystem();
+
+// Zeige Evolution Notification
+function showEvolutionNotification(evolutionResult) {
+  if (!evolutionResult.evolved) return;
+
+  notify(`ðŸŽ‰ EVOLUTION! ${evolutionResult.oldStage.toUpperCase()} â†’ ${evolutionResult.newStage.toUpperCase()}!`, 'info');
+  notify(evolutionResult.message, 'info');
+
+  console.log('âœ¨ EVOLUTION!', evolutionResult);
+
+  // TODO: Visual Evolution Effect (Fullscreen Animation)
+}
+
+// ===== LORA TRAINING UI =====
+let trainingModal = null;
+let trainingInterval = null;
+
+async function openLoRATraining() {
+    // Checke Status
+    try {
+        const status = await api('/api/training/status');
+
+        // Erstelle Modal
+        if (trainingModal) trainingModal.remove();
+
+        trainingModal = document.createElement('div');
+        trainingModal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 10000; display: flex;
+            align-items: center; justify-content: center; font-family: monospace;
+        `;
+
+        trainingModal.innerHTML = `
+            <div style="background: linear-gradient(135deg, #1a1a2e, #16213e);
+                        border: 2px solid #0ff; padding: 30px; border-radius: 10px;
+                        max-width: 600px; width: 90%; color: #0ff;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">ðŸš€ LoRA TRAINING</h2>
+                    <button onclick="closeLoRATraining()" style="background: #f00; color: #fff; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px;">âœ•</button>
+                </div>
+
+                <div id="trainingContent"></div>
+            </div>
+        `;
+
+        document.body.appendChild(trainingModal);
+        updateTrainingUI(status);
+
+        // Auto-Update alle 3 Sekunden wenn Training aktiv
+        if (status.active) {
+            trainingInterval = setInterval(async () => {
+                const s = await api('/api/training/status');
+                updateTrainingUI(s);
+                if (!s.active) clearInterval(trainingInterval);
+            }, 3000);
+        }
+
+    } catch (error) {
+        notify('Training System nicht verfÃ¼gbar', 'error');
+    }
+}
+
+function updateTrainingUI(status) {
+    const content = document.getElementById('trainingContent');
+    if (!content) return;
+
+    if (status.active) {
+        // Training lÃ¤uft
+        content.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 48px; margin: 20px 0;">âš¡</div>
+                <div style="font-size: 20px; margin-bottom: 20px;">TRAINING AKTIV</div>
+                <div style="background: rgba(0,255,255,0.1); padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <div style="margin: 10px 0;">Status: ${status.status}</div>
+                    <div style="margin: 10px 0;">Progress: ${status.progress}%</div>
+                    <div style="margin: 10px 0;">Gestartet: ${new Date(status.start_time * 1000).toLocaleTimeString()}</div>
+                </div>
+
+                <div style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; text-align: left; font-size: 12px;">
+                    ${status.logs.map(log => `<div style="margin: 5px 0;">${log}</div>`).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        // Training bereit
+        content.innerHTML = `
+            <div>
+                <div style="margin: 20px 0; padding: 15px; background: rgba(0,255,255,0.1); border-radius: 5px;">
+                    <div style="margin: 10px 0;">ðŸ“Š Model: Llama-3.2-3B-Instruct</div>
+                    <div style="margin: 10px 0;">ðŸ’¾ VRAM: ~8GB</div>
+                    <div style="margin: 10px 0;">â±ï¸ Dauer: ~30-60min (10 Epochs)</div>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <label style="display: block; margin: 10px 0;">
+                        Epochs: <input type="number" id="trainingEpochs" value="10" min="1" max="50" style="background: #000; color: #0ff; border: 1px solid #0ff; padding: 5px; width: 80px;">
+                    </label>
+                    <label style="display: block; margin: 10px 0;">
+                        Batch Size: <input type="number" id="trainingBatch" value="2" min="1" max="8" style="background: #000; color: #0ff; border: 1px solid #0ff; padding: 5px; width: 80px;">
+                    </label>
+                </div>
+
+                <button onclick="startTraining()" style="width: 100%; padding: 15px; font-size: 18px; background: linear-gradient(135deg, #00ff00, #00aa00); color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    ðŸš€ TRAINING STARTEN
+                </button>
+
+                ${status.error ? `<div style="margin-top: 20px; padding: 10px; background: rgba(255,0,0,0.2); border: 1px solid #f00; border-radius: 5px;">âŒ ${status.error}</div>` : ''}
+            </div>
+        `;
+    }
+}
+
+async function startTraining() {
+    const epochs = parseInt(document.getElementById('trainingEpochs').value);
+    const batchSize = parseInt(document.getElementById('trainingBatch').value);
+
+    try {
+        notify('Training wird gestartet...', 'info');
+        await api('/api/training/start', 'POST', { epochs, batch_size: batchSize });
+
+        // Warte kurz und update UI
+        setTimeout(async () => {
+            const status = await api('/api/training/status');
+            updateTrainingUI(status);
+
+            // Starte Auto-Update
+            trainingInterval = setInterval(async () => {
+                const s = await api('/api/training/status');
+                updateTrainingUI(s);
+                if (!s.active) {
+                    clearInterval(trainingInterval);
+                    notify('Training abgeschlossen!', 'success');
+                }
+            }, 3000);
+        }, 1000);
+
+    } catch (error) {
+        notify('Training konnte nicht gestartet werden', 'error');
+        console.error(error);
+    }
+}
+
+function closeLoRATraining() {
+    if (trainingModal) {
+        trainingModal.remove();
+        trainingModal = null;
+    }
+    if (trainingInterval) {
+        clearInterval(trainingInterval);
+        trainingInterval = null;
+    }
+}
+
+</script>
+
+<script src="/digivice/js/kaykit_loader.js"></script>
+<script src="/digivice/js/dungeon_generator.js"></script>
+<script src="/digivice/js/dungeon_enemies.js"></script>
+<script src="/digivice/js/dungeon_combat.js"></script>
+<script src="/digivice/js/minigames.js"></script>
+<script src="/digivice/js/chat_ui.js"></script>
+<script src="/digivice/js/touch_controls.js"></script>
+<script src="/digivice/js/private_mode.js"></script>
+<script src="/digivice/js/code_editor.js"></script>
+<script src="/digivice/js/terminal_modules.js"></script>
+<script src="/digivice/js/3d_scene.js"></script>
+
+</body>
+</html>
