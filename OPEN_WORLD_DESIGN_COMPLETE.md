@@ -1,8 +1,8 @@
-# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V5 (FINAL)
+# 🗺️ NAJIKA WORLD - COMPLETE OPEN WORLD DESIGN V6
 
 **Created:** 2025-11-06
-**Updated:** 2025-11-06 (V5 - Almost Complete!)
-**Status:** Nearly Complete - Few Names Remaining!
+**Updated:** 2025-11-06 (V6 - All Cities Complete!)
+**Status:** All 5 Cities Named! Only 2 Regions Remaining!
 **Map Style:** Fantasy Western × Konosuba × Digimon World (File Island!)
 **World Structure:** 8 Regions + Götterfels (Central Mountain) + Schmelz-Welt (Lava Interior!)
 
@@ -425,12 +425,13 @@
 
 ---
 
-### **STADT 3: ✅ HANDELSFESTUNG** 👑
+### **STADT 3: ✅ HANDELSFESTUNG** 👑🍖
 **Region:** Heiße Dünen (Region 1)
 **Function:** CAPITAL CITY - Trading + Arena + Guild Home
 **Size:** LARGEST CITY!
 
 **✅ NAME APPROVED:** **Handelsfestung** (Trading Fortress) - #8!
+**✅ SPEZIALITÄT:** **FLEISCH!** 🍖
 
 **Features:**
 - **PLAYER SHOPS** (Fallout 76 Style!)
@@ -444,56 +445,58 @@
 - Banks & Storage
 - **GRÖẞTE STADT!**
 
+**SPEZIALITÄTEN-FEATURES:**
+- **Fleisch-lastige Küche!** 🍖
+- **Fleisch-Restaurants:** Große Mengen, herzhaft
+  - Steaks, Braten, Spieße
+  - Arena-Sieger-Mahlzeiten
+  - Händler-Festmähler
+- **Fleisch-Markt:** Frisches Fleisch kaufen
+- **Rezepte:** Spieler können Fleisch-Gerichte kochen!
+- **NPC-Quest:** "Das Festmahl des Champions"
+- **Visual:** Grills & Spieße überall, rauchende Feuerstellen!
+
 **Visual Style:**
 - Western meets Fantasy
 - Large Colosseum in center
 - Market Stalls everywhere
 - Lively, crowded
 - Befestigt (Fortress!)
+- **Fleisch wird gegrillt & gebraten überall!** 🍖
 
 ---
 
-### **STADT 4: ANIME-INSPIRIERTE STADT (DEUTSCH!)** 🌋
+### **STADT 4: ✅ FUNKEN-SIEDLUNG** 🌋
 **Region:** Vulkan (Region 7)
 **Function:** General City with Smithing Accents
 **Size:** Medium
 
-**⚠️ NEU:** Deutsch mit Anime-Vibe (wie die anderen deutschen Namen!)
+**✅ NAME APPROVED:** **Funken-Siedlung** (Spark Settlement) - #3!
 
-**10 DEUTSCHE ANIME-NAMEN ZUR AUSWAHL:**
+**Visual Style:**
+- Funken fliegen durch die Luft (vom Vulkan!)
+- Warme Atmosphäre, rötliches Licht
+- Anime-inspirierte Architektur
+- Schmieden & Werkstätten (aber KEINE "Schmiedestadt"!)
+- Deutsche Fantasy meets Anime
 
-1. **Feuer-Dorf** - Klassisch, Naruto-Vibe
-2. **Glutheim** - Warme Heimat
-3. **Funken-Siedlung** - Funken vom Vulkan
-4. **Asche-Hort** - Asche-Sammlung
-5. **Lavarand** - Am Rand der Lava
-6. **Vulkan-Nest** - Nest am Vulkan
-7. **Rauch-Heim** - Rauch überall
-8. **Flammen-Siedlung** - Flammen-Thema
-9. **Magma-Dorf** - Direkt
-10. **Heiß-Wind-Ort** - Heißer Wind
+**Features:**
+- General Trading Hub
+- Weapon & Armor Shops
+- Smithing NPCs (nicht im Fokus!)
+- Volcano View (spektakulär!)
+- Quest Hub für Region 7
 
 ---
 
-### **STADT 5: ONSEN-STADT (DEUTSCH!)** ♨️
+### **STADT 5: ✅ DAMPF-HAIN** ♨️🥟
 **Region:** Samtmoos-Tiefwald (Region 2)
 **Function:** Healing + Hot Springs + Relaxation
 **Size:** Small-Medium
 
-**⚠️ NEU:** Deutsch mit Onsen-Vibe!
-
-**10 DEUTSCHE ONSEN-NAMEN ZUR AUSWAHL:**
-
-1. **Dampf-Hain** - Dampfende Quellen im Hain
-2. **Quellheim** - Heimat der Quellen
-3. **Heißquell-Dorf** - Direkt
-4. **Thermal-Hain** - Thermal im Hain
-5. **Dampfquell-Siedlung** - Dampfende Quellen
-6. **Heilquell-Hort** - Heilende Quellen
-7. **Wellness-Nest** - Wellness-Fokus
-8. **Bad-Hain** - Bad (Onsen) im Hain
-9. **Quellen-Siedlung** - Simple & direkt
-10. **Heiß-Bad-Ort** - Heiße Bäder
+**✅ NAME APPROVED:** **Dampf-Hain** (Steam Grove) - #1!
+**✅ ALT BESCHREIBUNG:** **"Heimat der Quellen der Erneuerung"** (Home of Springs of Renewal)
+**✅ SPEZIALITÄT:** **GEDÄMPFTE BRÖTCHEN & HEFEKLÖẞE!** 🥟
 
 **Features:**
 - **HEIẞE HEILENDE QUELLEN!** ♨️
@@ -503,6 +506,59 @@
 - Wellness & Relaxation
 - Spa NPCs
 - Anime Onsen Atmosphäre!
+
+**SPEZIALITÄTEN-FEATURES:**
+- **Gedämpfte Brötchen & Hefeklöße überall!** 🥟
+- **Dampf-Restaurant:** Einzigartige Dampf-Gerichte
+  - Gedämpfte Fleischbrötchen
+  - Süße Hefeklöße
+  - Dampf-Gemüse
+  - Quell-Wasser-Tee
+- **Dampf-Markt:** Gedämpfte Spezialitäten kaufen
+- **Rezepte:** Spieler können Dampf-Kochen lernen!
+- **NPC-Quest:** "Die perfekte Dämpf-Kunst"
+- **Visual:** Dampf steigt überall auf (Quellen + Kochen!)
+
+**Visual Style:**
+- Dampf steigt von heißen Quellen auf
+- Bambus-Architektur, japanische Inspiration
+- Laternen, Holzstege über Quellen
+- Friedlich, entspannend
+- **Gedämpfte Brötchen in Dampfkörben sichtbar!** 🥟
+
+---
+
+## 🍽️ DIE 3 STADT-SPEZIALITÄTEN - KULINARISCHES SYSTEM!
+
+**KONZEPT:**
+- 3 Städte mit einzigartigen kulinarischen Spezialitäten!
+- Teil des Food/Cooking-Systems
+- Regionale Identität & Charakter
+- Crafting, Trading & Quest-Fokus
+
+**3 STADT-SPEZIALITÄTEN:**
+
+1. **Salzige Bucht:** SALZFISCH 🐟
+   - Hafenstadt, Fischerei-Fokus
+   - Salzfisch hängt überall zum Trocknen
+   - Einzigartige Salzfisch-Gerichte
+
+2. **Dampf-Hain:** GEDÄMPFTE BRÖTCHEN & HEFEKLÖẞE 🥟
+   - Onsen-Stadt, Dampf-Fokus
+   - Gedämpfte Spezialitäten überall
+   - Süße & herzhafte Varianten
+
+3. **Handelsfestung:** FLEISCH 🍖
+   - Hauptstadt, Händler & Krieger
+   - Fleisch-lastige, herzhafte Küche
+   - Große Portionen für Champions
+
+**GAME DESIGN:**
+- Jede Spezialität hat eigene Rezepte
+- Verschiedene Buffs & Effekte
+- Regional verfügbar (Hauptquelle)
+- Handel zwischen Städten möglich
+- NPC-Quests rund um Spezialitäten
 
 ---
 
@@ -605,8 +661,15 @@
 ✅ **EIGENES PERMANENTES ZIMMER IM HOTEL-KERN!**
 - Persönliches, instanziertes Zimmer
 - Nur für Spieler die Event abgeschlossen haben
-- Eigene Dekoration & Personalisierung
+- **Eigene Dekoration & Personalisierung (nutzt vorhandenes Housing-System!)**
 - Sicherer Rückzugsort
+
+**HOUSING INTEGRATION:**
+- **Nutzt das tiefe Housing-System des Spiels!**
+- Möbel platzieren, Dekoration anpassen
+- Persönlicher Stil & Ausdruck
+- Wie eigenes Haus, aber im Hotel
+- Housing-Mechaniken übertragen!
 
 ✅ **TÄGLICHE GOODIES!** (1x pro 24h)
 
@@ -777,6 +840,69 @@
 
 ---
 
+## ⛺ **NEUE MECHANIK: LAGER AUFSCHLAGEN!** 🏕️
+
+**KONZEPT:**
+- Najika World wird RIESIG!
+- Spieler braucht Rastplätze unterwegs!
+- **Lager aufschlagen = Temporäres Camp!**
+
+**HINTERGRUND:**
+- Mobile/Handy-Version soll später sehr groß werden
+- Lange Reisen zwischen Regionen
+- Notwendigkeit für Zwischenstopps
+- Überlebensgefühl & Abenteuer
+
+**CAMP-FEATURES (Konzept):**
+
+**RUHEPUNKT:**
+- HP/Mana regenerieren
+- Ausdauer wiederherstellen
+- Temporärer Safe-Spot
+
+**SPEICHERPUNKT:**
+- Save Game unterwegs
+- Wichtig für Mobile-Version
+- Verhindert Fortschrittsverlust
+
+**CRAFTING:**
+- Einfache Crafting-Station
+- Reparaturen
+- Basic Items herstellen
+
+**KOCHEN:**
+- Lagerfeuer zum Kochen
+- Essen zubereiten (Buffs!)
+- Rohes Fleisch braten
+- Survival-Atmosphäre
+
+**LAGERFEUER:**
+- Gemütliche Atmosphäre
+- Najika sitzt am Feuer
+- Tag/Nacht-Zyklus überbrücken
+- Rollenspiel-Moment
+
+**BALANCING:**
+- ⚠️ **WICHTIG:** Mechanik muss noch ausgearbeitet werden!
+- Wie oft kann man campen?
+- Cooldowns?
+- Kosten (Materialien)?
+- Feind-Spawn-Schutz?
+
+**ZUKUNFT:**
+- Details werden später entwickelt
+- Wichtig für Mobile-Version
+- Könnte auch Desktop-Version bekommen
+- Community-Feedback einbeziehen
+
+**INSPIRATION:**
+- The Legend of Zelda: Breath of the Wild (Lagerfeuer!)
+- Skyrim (Camping Mods)
+- Monster Hunter (Camp-System)
+- Anime-Reise-Szenen (Charaktere campen unterwegs)
+
+---
+
 ## ⚔️ DANGER ZONES
 
 **SAFE AREAS (No Combat):**
@@ -831,7 +957,7 @@ SCHMELZ-WELT = Im Götterfels (eigenes Gebiet wie Digimon!)
 
 ---
 
-## 📋 ZUSAMMENFASSUNG V5 - FAST KOMPLETT!
+## 📋 ZUSAMMENFASSUNG V6 - ALLE STÄDTE KOMPLETT!
 
 **✅ APPROVED & FINAL:**
 
@@ -851,10 +977,10 @@ SCHMELZ-WELT = Im Götterfels (eigenes Gebiet wie Digimon!)
 
 **STÄDTE:**
 - Stadt 1: **Runenheim** (#8) ✅
-- Stadt 2: **Salzige Bucht** (#8) + **SALZFISCH-SPEZIALITÄT!** ✅
-- Stadt 3: **Handelsfestung** (#8) ✅
-- Stadt 4: 10 deutsche Anime-Namen zur Auswahl!
-- Stadt 5: 10 deutsche Onsen-Namen zur Auswahl!
+- Stadt 2: **Salzige Bucht** (#8) + **SALZFISCH-SPEZIALITÄT!** 🐟 ✅
+- Stadt 3: **Handelsfestung** (#8) + **FLEISCH-SPEZIALITÄT!** 🍖 ✅
+- Stadt 4: **Funken-Siedlung** (#3) ✅
+- Stadt 5: **Dampf-Hain** (#1) + **GEDÄMPFTE BRÖTCHEN & HEFEKLÖẞE-SPEZIALITÄT!** 🥟 ✅
 
 **ORTE:**
 - Ort 1: **Funkelnest** ✅
@@ -868,14 +994,16 @@ SCHMELZ-WELT = Im Götterfels (eigenes Gebiet wie Digimon!)
 - ✅ Schmelz-Welt: Inneres Gebiet im Götterfels!
 - ✅ Reich der Drei - Kälte Frost Eis: Ohne "Tod", nur die 3 Elemente!
 - ✅ Hotel: **EIGENES ZIMMER + TÄGLICHE GOODIES** für Event-Gewinner!
-- ✅ Stadt 4 & 5: Deutsche anime-inspirierte Namen!
+- ✅ Hotel: **HOUSING-SYSTEM INTEGRATION** für Zimmer-Dekoration!
+- ✅ Stadt 4: **Funken-Siedlung** - Deutsche anime-inspirierte Stadt!
+- ✅ Stadt 5: **Dampf-Hain** - Deutsche Onsen-Stadt mit Gedämpfte Brötchen & Hefeklöße!
+- ✅ **3 STADT-SPEZIALITÄTEN SYSTEM:** Salzfisch 🐟 + Gedämpfte Brötchen 🥟 + Fleisch 🍖
+- ✅ **CAMPING MECHANIK:** "Lager aufschlagen" für Mobile-Version (Konzept)!
 
 **Noch zu wählen:**
-1. ⬜ Stadt 4 Name (10 deutsche Anime-Namen)
-2. ⬜ Stadt 5 Name (10 deutsche Onsen-Namen)
-3. ⬜ Region 7 Name (10 Vulkan-Namen)
-4. ⬜ Region 8 Name (10 Void-Namen)
-5. ⬜ Hotel echter Name (8-12 Buchstaben) - später!
+1. ⬜ Region 7 Name (10 Vulkan-Namen)
+2. ⬜ Region 8 Name (10 Void-Namen)
+3. ⬜ Hotel echter Name (8-12 Buchstaben) - später!
 
 ---
 
@@ -888,7 +1016,11 @@ SCHMELZ-WELT = Im Götterfels (eigenes Gebiet wie Digimon!)
 🌋 SCHMELZ-WELT IM INNEREN! 🌋
 ⏰ ZEIT STADT WARTET! ⏰
 🎣 SALZFISCH AUS SALZIGE BUCHT! 🐟
+🥟 GEDÄMPFTE BRÖTCHEN & HEFEKLÖẞE AUS DAMPF-HAIN! 🥟
+🍖 FLEISCH AUS HANDELSFESTUNG! 🍖
 👻 BUCHSTABEN SAMMELN IM GEISTER-SCHLOSS! 🔤
-🏨 EIGENES ZIMMER + DAILY GOODIES! 🔑
-♨️ ONSEN-STADT! ♨️
+🏨 EIGENES ZIMMER + DAILY GOODIES + HOUSING SYSTEM! 🔑
+♨️ DAMPF-HAIN - HEIMAT DER QUELLEN DER ERNEUERUNG! ♨️
+🌋 FUNKEN-SIEDLUNG IM VULKAN! 🌋
+⛺ LAGER AUFSCHLAGEN FÜR MOBILE! 🏕️
 ❄️ REICH DER DREI - KÄLTE FROST EIS! ❄️
