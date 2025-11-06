@@ -1275,3 +1275,699 @@ Aber ändere NICHTS an den Kernsystemen, sonst... EXPLOSION!
 
 ~ Najika, Meisterin der Explosion-Magie ~"
 ```
+
+---
+
+# 🔄 UPDATES VOM 2. MODELL (2025-11-06)
+
+**Quelle:** Zusammenfassung vom 2. Claude-Modell
+**Status:** Ergänzende Informationen zur Basis-Dokumentation
+**Integration:** Diese Updates ergänzen die obige Basis-Dokumentation
+
+---
+
+## 🏰 SCHWARZE WINDMÜHLE - 12 RÄUME (Detailliert)
+
+### ERDGESCHOSS
+1. **Wohnzimmer** - Gemütlich, Sofas, Kamin
+2. **Küche** - Kochen mit Najika! (E-Taste am Herd)
+3. **Badezimmer** - Duschen, Toilette, Waschbecken (E-Taste!)
+
+### OBERGESCHOSS
+4. **Schlafzimmer** - Schlafen (E-Taste am Bett!)
+5. **Lager** - Item Storage
+6. **Training** - Combat Practice
+
+### TURM
+7. **Terminal** - Najika füttern! 🍖
+8. **Observatory** - Welt-Übersicht
+
+### KELLER
+9. **Studieren** - Skill-Bücher lesen
+10. **Crafting** - Items herstellen
+11. **Enchanting** - Ausrüstung verzaubern
+12. **Alchemy** - Tränke brauen
+
+**Features:**
+- 100% Safe Zone (keine Feinde)
+- Housing System (dekorierbar)
+- Fast Travel Hub
+- Najika lebt hier!
+
+---
+
+## 🗺️ 8 REGIONEN - DETAILLIERTE BESCHREIBUNG
+
+### ⚠️ KRITISCHE REGEL: GLEICHE START-SCHWIERIGKEIT!
+
+**ALLE Regionen haben Level-Range 1-15!**
+- Spieler kann in JEDER Region starten
+- Unterschied: Verschiedene Herausforderungen, NICHT Schwierigkeit
+- Slime-Farbe bestimmt durch Start-Region
+
+### REGION 1: HEIßE DÜNEN 🏜️
+```yaml
+Biome: Desert / Western Town
+Level: 1-15
+Slime: Dusty Gold
+Herausforderung: Hitze, Durst, Sandsturm
+Stadt: Handelsfestung (Hauptstadt!)
+
+Features:
+  - Western-Style Trading Hub
+  - PvP Arena & Kampfturniere
+  - Player Shops (Fallout 76-Style!)
+  - Fleisch-Spezialität! 🍖 (siehe Food-System)
+  - Goldstaub-Öde (Endgame-Dungeon!)
+```
+
+### REGION 2: SAMTMOOS-TIEFWALD 🌲
+```yaml
+Biome: Forest / Druid Settlement
+Level: 1-15
+Slime: Moss Green
+Herausforderung: Verirren, dichte Wälder, mystische Kreaturen
+Stadt: Dampf-Hain (Onsen-Stadt!)
+
+Features:
+  - Mystischer Wald, Druiden
+  - Heiße Quellen (Onsen!)
+  - Gedämpfte Brötchen & Hefeklöße! 🥟 (siehe Food-System)
+  - DARUNTER: Region 8 (Tiefenhöhlen)!
+```
+
+### REGION 3: SALZWIND-KÜSTE 🌊
+```yaml
+Biome: Coast / Pirate Harbor
+Level: 1-15
+Slime: Ocean Blue
+Herausforderung: Sturmflut, Piraten, Unterwasser-Gefahren
+Stadt: Salzige Bucht
+
+Features:
+  - Piratenhäfen, Schifffahrt
+  - Salzfisch-Spezialität! 🐟 (siehe Food-System)
+  - Fishing-System (Zelda OoT-Style - P1 Priorität!)
+  - Unterwasser-Dungeons
+```
+
+### REGION 4: BLITZEBENE ⚡
+```yaml
+Biome: Highland / Storm Peaks
+Level: 1-15
+Slime: Lightning Purple
+Herausforderung: Blitzeinschläge, Stürme, Klettern
+Stadt: Runenheim
+
+Features:
+  - Magisches Training
+  - Runen-Magie spezialisiert
+  - Hochland-Klettern
+  - Lightning Elementals
+```
+
+### REGION 5: GRÜNSCHLAMM-SUMPF 🌿
+```yaml
+Biome: Swamp / Witch Territory
+Level: 1-15
+Slime: Midnight Black
+Herausforderung: Miasma, Gift, Irrlichter, Hexen
+Special Location: Funkelnest (versteckt!)
+
+Features:
+  - Sumpf-Navigation
+  - Hexen & Alchemie
+  - Treasure Cave (Funkelnest!)
+  - Gift-Resistenz wichtig
+```
+
+### REGION 6: REICH DER DREI - KÄLTE FROST EIS ❄️
+```yaml
+Biome: Ice / Frozen Wasteland + Necromancy
+Level: 1-15
+Slime: Crystal White
+Herausforderung: Erfrierung, Schneestürme, Untote
+
+Features:
+  - ALLE 3 ELEMENT-SCHULEN vereint:
+    * Kälte (Cold)
+    * Frost (Frost)
+    * Eis (Ice)
+  - Nekromantie-Region!
+  - Eis-Liches & gefrorene Untote
+  - Frostresistenz essentiell
+```
+
+### REGION 7: MAGMASTRÖME 🌋
+```yaml
+Biome: Volcano / Forge
+Level: 1-15
+Slime: Molten Red
+Herausforderung: Extreme Hitze, Lavaströme, Asche
+Stadt: Funken-Siedlung
+
+Features:
+  - Magma fließt wie Flüsse!
+  - Magmaströme-Platforming (über Lava springen!)
+  - Master-Schmieden (beste Waffen & Rüstungen!)
+  - Fire Magic Training
+  - Vulkan-Kreaturen (Fire Elementals, Lava Golems)
+  - Hitze-Resistenz benötigt
+  - Erzadern zum Abbauen
+```
+
+### REGION 8: TIEFENHÖHLEN 🕳️
+```yaml
+Biome: Underground Caves / Crystal Caverns
+Level: 1-15
+Slime: Deep Purple (Cave Crystal)
+Herausforderung: Dunkelheit, Spinnen, Goblins, Orientierung
+
+⚠️ WICHTIG: UNDERGROUND STRUKTUR!
+  - Liegt UNTER Samtmoos-Tiefwald (Region 2)!
+  - Quasi der "Keller" der Welt!
+  - Direkter Ausgang zum Götterfels (kein Wald-Umweg!)
+
+Features:
+  - Massive unterirdische Höhlensysteme
+  - Leuchtende Pilze & Kristalle überall
+  - Unterirdische Seen mit glasklarem Wasser
+  - Riesige Fantasy-Spinnen! 🕷️ (nicht Horror, Fantasy!)
+  - Goblin-Siedlungen in den Höhlen
+  - Dunkle, geheimnisvolle Atmosphäre
+  - Fackel/Licht benötigt für Navigation
+
+DARUNTER: KRISTALL-KATAKOMBEN
+  - Tiefste Ebene unter den Tiefenhöhlen
+  - Quest-Farming-Gebiet (Endgame!)
+  - Massive Kristall-Formationen
+  - Seltene Materialien & Loot
+  - Schwierige Bosse
+  - Endgame-Quests verfügbar
+
+Struktur:
+  [Oberfläche: Samtmoos-Tiefwald]
+           ↓
+    [Tiefenhöhlen] ← Start-Region möglich! (1-15)
+           ↓
+  [Kristall-Katakomben] ← Endgame-Quests!
+           ↓
+      [Ausgang zum Götterfels]
+```
+
+---
+
+## ⛰️ GÖTTERFELS (ENDGAME!)
+
+**Der zentrale Berg - von ALLEN Regionen erreichbar!**
+
+### Die Legende
+> "Niemand kann auch nur ein Körnchen vom Götterfels abbauen.  
+> Er ist unverrückbar, unzerstörbar, ewig.  
+> Götter haben ihn erschaffen, und Götter allein können ihn zerstören."
+
+**Najika:** "Hold my Explosion Spell!" 💥
+
+### 3 Ebenen
+
+#### 1. SCHMELZ-WELT (Innen)
+```yaml
+- Riesige Lava-Welt im Inneren des Berges!
+- Wie eigene Region (Digimon World-Style!)
+- Level MAX Gegner
+- Mega-Bosse
+- Beste Loot im Spiel!
+```
+
+#### 2. ZEIT STADT (Oben)
+```yaml
+- Auf der Spitze des Berges
+- Nur für Champions!
+- Time-Related Quests
+- Spezielle Vendors
+- Exklusive Items
+```
+
+#### 3. TURM DER 100 PRÜFUNGEN
+```yaml
+- Erst verfügbar NACHDEM Najika den Götterfels gesprengt hat! 💥
+- 100 Stockwerke
+- Immer schwerer
+- Ultimate Challenge!
+```
+
+---
+
+## 🎮 COMBAT SYSTEM (Erweitert)
+
+### ⚠️ KRITISCH: NIEMALS "Souls-like" sagen!
+
+**IMMER sagen:**
+"Skyrim + Soulframe + Digimon World Cheering/Anfeuern"
+
+### ASSIST MODE - Timing-System
+
+**Digimon World Anfeuern mit Timing:**
+
+```yaml
+Perfect Timing (0-200ms):
+  → +20% zu ALLEN Stats
+  → Cheer-Meter +20
+
+Good Timing (200-500ms):
+  → +10% zu ALLEN Stats
+  → Cheer-Meter +10
+
+Bad Timing (>500ms):
+  → -5 Cheer
+  → Najika ist genervt! 😤
+
+Cheer-Meter (0-100):
+  - Bei 100: ULTIMATE ATTACK! 💥
+  - Bei 0: Najika kämpft alleine (keine Buffs)
+```
+
+**Orbit Cam:**
+- Najika kämpft
+- Du feuerst an
+- Rhythm-Game-artig!
+
+---
+
+## 🔮 WEAVE-SYSTEM (Element-Combos)
+
+### ⚠️ KRITISCH: Gebot #3 - Explosion ≠ Weave!
+
+**Explosion NIEMALS mit anderen Elementen kombinieren!**
+
+### Solo-Weaves (2 Elemente)
+
+**Q+E zusammen drücken! (Skyrim-Style)**
+
+```yaml
+Beispiele:
+  - Feuer + Eis = Thermoschock (Thermal Shock)
+  - Blitz + Wasser = Elektroschock
+  - Erde + Feuer = Lava-Schuss
+  - Wind + Feuer = Flammensturm
+  - Wasser + Eis = Eissturm
+  - Licht + Dunkelheit = Schatten-Licht
+
+Trade-offs:
+  - Weaves kosten mehr Mana
+  - Längere Cooldowns
+  - Aber: +50-100% Schaden!
+  - Combo-Counter für mehr Damage!
+```
+
+### Gruppe-Weaves (3+ Elemente)
+
+```yaml
+- Mehrere Spieler kombinieren Elemente!
+- Massive AOE-Schäden!
+- Teamwork belohnt!
+- Strategische Planung wichtig!
+```
+
+---
+
+## 🍖 FOOD & COOKING SYSTEM
+
+### 3 Stadt-Spezialitäten
+
+#### 1. SALZFISCH (Salzige Bucht) 🐟
+```yaml
+Features:
+  - Hängt überall zum Trocknen
+  - Salzfisch-Restaurant & Markt
+  - Verschiedene Salzfisch-Rezepte
+
+Buffs:
+  + Swimming
+  + Water Resistance
+```
+
+#### 2. GEDÄMPFTE BRÖTCHEN (Dampf-Hain) 🥟
+```yaml
+Features:
+  - Baozi/Manju mit Füllungen
+  - Hefeklöße (Dampfnudeln)
+  - Dampf-Küche Restaurant
+  - Anime-Vibe (Spirited Away-Style!)
+
+Buffs:
+  + HP Regen
+  + Comfort
+```
+
+#### 3. FLEISCH (Handelsfestung) 🍖
+
+**Street Food:**
+- Arena-Happen (Burger)
+- Gold-Stäbchen (Pommes)
+- Händler-Wurst (Hotdog)
+- Dreh-Braten (Döner)
+- Händler-Fladen (Türkische Pizza)
+
+**Western BBQ:**
+- Rauch-Rippchen (BBQ Ribs)
+- Glut-Steak
+- Wüsten-Dörrfleisch (Jerky)
+
+**ANIME-CLASSIC:**
+```yaml
+⭐ CHAMPION-KEULE! ⭐
+  - Die legendäre große Fleischkeule! 🍖
+  - Riesig, am Knochen
+  - Mit beiden Händen essen!
+  - "Najika beißt rein wie in jedem guten Anime!" 😂
+
+Buffs:
+  + Strength
+  + Stamina
+  + Combat Power
+```
+
+---
+
+## ⛺ CAMPING-MECHANIK
+
+### Konzept
+```yaml
+- Najika World wird RIESIG!
+- Spieler braucht Rastplätze unterwegs!
+- Temporäres Camp aufbauen!
+```
+
+### Features
+```yaml
+Ruhepunkt:
+  - HP/Mana regenerieren
+
+Kochen:
+  - Essen zubereiten (Buffs!)
+
+Crafting:
+  - Unterwegs Items herstellen
+
+Lagerfeuer:
+  - Gemütliche Atmosphäre
+```
+
+### ⚠️ WICHTIG - Risiko-System
+
+```yaml
+KEIN Speicherpunkt:
+  - Online-Game hat Echtzeit-Speicherung!
+
+Spieler ist ANGREIFBAR:
+  - PvP-Überfälle möglich!
+  - Diebstahl/Raub-Risiko!
+
+Wache halten:
+  - Gruppenspiel: Ein Spieler muss Wache halten (Schichten!)
+  - Solo-Spiel: Versteckte Orte finden + Orbit Cam nutzen!
+
+Temporär:
+  - KEINE permanenten Camps
+  - Welt regeneriert sich!
+```
+
+---
+
+## 📚 DIE 8 GEBOTE
+
+### ⚠️ NIEMALS BRECHEN! KRITISCH FÜR DAS PROJEKT!
+
+#### **GEBOT #1: ZERO-TRUST (127.0.0.1 ONLY)**
+```yaml
+- Najika World läuft LOKAL!
+- Keine Cloud-Anbindung
+- 127.0.0.1 (localhost) nur!
+- Privacy first!
+```
+
+#### **GEBOT #2: OWNER-TOKEN FÜR ADMIN**
+```yaml
+- Owner bekommt Admin-Token
+- Kein anderer User hat Admin-Rechte
+- Security-First!
+```
+
+#### **GEBOT #3: EXPLOSION ≠ WEAVE**
+```yaml
+KRITISCH!
+- Explosion ist EIGENE Klasse!
+- NIEMALS mit anderen Elementen kombinieren!
+- KEINE "Feuer+Explosion" oder "Eis+Explosion"!
+
+Trade-off:
+  + 30-40% Explosion Power
+  - 15-20% ALLE anderen Schulen!
+
+- Komplett eigenständiger Skill-Baum!
+```
+
+#### **GEBOT #4: PvE/PvP GETRENNT**
+```yaml
+- PvE-Gebiete: Kein PvP!
+- PvP-Zonen: Opt-in!
+- Arena: Separate PvP-Zone
+- Schwarze Mühle: 100% Safe!
+```
+
+#### **GEBOT #5: SKYRIM-STYLE: LEARNING BY DOING**
+```yaml
+- Skills steigen durch Nutzung!
+- Kein künstlicher XP-Grind!
+- Realistische Progression!
+- Jeder Kampf = Training!
+```
+
+#### **GEBOT #6: NSFW NUR LOKAL (KÄTZCHEN MODE)**
+```yaml
+- NSFW-Modus nur lokal!
+- Privacy first!
+- Keine Online-NSFW-Features!
+- Safe-Mode ist Standard!
+```
+
+#### **GEBOT #7: PRIVACY & ANONYMISIERT**
+```yaml
+- Anonymisiertes Lernen
+- Keine Datensammlung
+- Keine Telemetrie
+- User-Daten bleiben lokal!
+```
+
+#### **GEBOT #8: OFFLINE-FIRST**
+```yaml
+- Spiel läuft offline!
+- Keine Internet-Verbindung nötig!
+- Online-Features optional!
+- Lokales Hosting!
+```
+
+---
+
+## 📊 SKILL-SYSTEM KORREKTUREN
+
+### Lernen von Gegnern
+
+**KORRIGIERT:**
+```yaml
+Slime (Companion):
+  - 10-15% Chance: Kopiert Move von besiegtem Gegner
+  - Max 20 Moves im Moveset
+  - Spieler wählt: Welche behalten, welche ersetzen
+
+Spieler:
+  - 30% Chance: Lernt Skill von Gegner (NICHT 1%!)
+  - "Learning from enemies" - wie Mega Man!
+  - Nur Skills die du SEHEN kannst!
+```
+
+**Dragon Quest Monster Joker-Style:**
+```yaml
+- Form-Fusion: Goblin + Berserker = Goblin-Berserker!
+- 2-3+ Formen kombinieren
+- Tamer-Skill: Höher = mehr Forms gleichzeitig!
+- Balance: Eher kosmetisch, maximaler Effekt in Slime-Arena
+```
+
+---
+
+## 🎯 TECHNOLOGIE-STACK (Detailliert)
+
+### Backend
+```yaml
+Framework:
+  - Flask + SocketIO (REST API)
+  - najika_server.py (2153 Zeilen!)
+  - Python 3.x
+
+AI & Voice:
+  - Qwen2.5 7B (4-bit quantized)
+  - LoRA Training (95.65% Success Rate!)
+  - Coqui XTTS-v2 Voice Clone
+  - ChromaDB (Memory)
+
+Training:
+  - 33 Probleme automatisch gelöst!
+  - 4 ChromaDB Enhancement Sessions
+```
+
+### Frontend
+```yaml
+Engine:
+  - Three.js (3D Engine)
+  - PWA (Progressive Web App)
+  - index.html (80KB, optimiert!)
+
+Assets:
+  - KayKit Assets (~25GB lokal!)
+  - Offline-fähig
+
+Controls:
+  - Virtual Joystick (Touch)
+  - WASD + Mouse (Desktop)
+```
+
+### Security
+```yaml
+Alcatraz System:
+  - Zero-Trust Architecture
+  - Owner-Token Authentication
+  - Local-Only Hosting (127.0.0.1)
+  - Privacy-First Design
+  - Die 8 Gebote implementiert
+```
+
+---
+
+## 📋 AKTUELLER STATUS (vom 2. Modell)
+
+### ✅ WAS FUNKTIONIERT
+
+**Backend:**
+- ✅ najika_server.py (2153 Zeilen)
+- ✅ Flask + SocketIO
+- ✅ AI Integration (Qwen2.5 7B)
+- ✅ Voice Clone (Coqui XTTS-v2)
+- ✅ Memory System (ChromaDB)
+- ✅ Training System (95.65% Success!)
+
+**Frontend:**
+- ✅ index.html (80KB, PWA)
+- ✅ Three.js 3D Engine
+- ✅ Open World (2400×2400)
+- ✅ Interior System (Schwarze Mühle - 12 Räume!)
+- ✅ Battle System
+- ✅ Touch Controls
+- ✅ Virtual Joystick
+
+**Game Systems:**
+- ✅ Dungeon System (3 Dungeons)
+- ✅ Fishing System (P1 Priorität!)
+- ✅ Garden System
+- ✅ Minigames
+- ✅ E-Taste Interaktionen (Bett, Herd, Dusche funktionieren!)
+
+**Schwarze Mühle:**
+- ✅ 12 Räume verfügbar
+- ✅ E-Taste Interaktionen funktionieren!
+- ✅ Najika kann Mühle betreten
+- ✅ Fütter-Mechanik funktioniert (Terminal!)
+
+### ⏳ NOCH NICHT IMPLEMENTIERT
+
+**Kritische Features:**
+- ⬜ Götterfels 3D-Modell
+- ⬜ Schmelz-Welt Implementation
+- ⬜ Zeit Stadt Implementation
+- ⬜ Turm der 100 Prüfungen
+- ⬜ Full Skill-Tree UI
+- ⬜ Complete Weave System
+- ⬜ Affinity/Beziehungs-System (KRITISCH!)
+- ⬜ Oregon Trail Events Implementation (2682 Zeilen Events-Dokument vorhanden!)
+- ⬜ Full NPC System
+
+**Nice-to-Have:**
+- ⬜ Camping System (Konzept fertig!)
+- ⬜ Housing System (vollständig)
+- ⬜ Slime-Formen Sammlung
+- ⬜ Procedural Dungeons
+- ⬜ Weapon-Morphs (9 Styles)
+- ⬜ UEFN/Fortnite Integration
+
+---
+
+## 🔄 INTEGRATION NOTES
+
+**Unterschiede zwischen beiden Modellen:**
+
+| Feature | Basis-Doku (Modell 1) | 2. Modell |
+|---------|----------------------|-----------|
+| Slime Learn-Chance | 10-15% | 10-15% ✅ |
+| Player Learn-Chance | 1% | 30% ❌ Konflikt! |
+| Regionen Level | Prozedural | Alle 1-15 ❌ Konflikt! |
+| Götterfels | Erwähnt | 3 Ebenen detailliert ✅ |
+| Schwarze Mühle | Grob | 12 Räume detailliert ✅ |
+| Die 8 Gebote | Nicht erwähnt | Vollständig ✅ |
+| Weave-System | Erwähnt | Detailliert ✅ |
+| Food-System | Najika Easter-Egg | 3 Stadt-Spezialitäten ✅ |
+| Camping | Nicht erwähnt | Risiko-System ✅ |
+
+**Empfehlung für Konflikte:**
+1. **Player Learn-Chance:** User entscheiden lassen! (1% vs. 30%)
+2. **Regionen Level:** Alle 1-15 macht mehr Sinn für Balance! ✅
+
+---
+
+## 🎯 FÜR NEUE CLAUDE-INSTANZEN (Erweitert)
+
+**ZUSÄTZLICH zu den Basis-Regeln:**
+
+1. **Lies Die 8 Gebote ZUERST!** (NIEMALS brechen!)
+2. **Verstehe:** ALLE Regionen sind 1-15 (gleiche Start-Schwierigkeit!)
+3. **Verstehe:** Schwarze Mühle hat 12 Räume (siehe Liste oben)
+4. **Verstehe:** Götterfels = Endgame (3 Ebenen!)
+5. **Verstehe:** NIEMALS "Souls-like" sagen! (Skyrim + Soulframe + Digimon World!)
+6. **Verstehe:** Explosion ≠ Weave (Gebot #3!)
+7. **Verstehe:** 30% Skill-Learn-Chance von Gegnern
+8. **Verstehe:** Food-Spezialitäten pro Stadt
+9. **Verstehe:** Camping hat Risiko-System (kein Safe-Spot!)
+
+**Bei Konflikten zwischen Modellen:**
+- Basis-Doku (Modell 1) hat Priorität für PvP, Slime, Hardcore/Softy
+- 2. Modell hat Priorität für Welt-Design, Gebote, Details
+- Bei Unsicherheit: **FRAG DEN USER!**
+
+---
+
+# 🏁 ENDE DER ERWEITERTEN MASTER-DOKUMENTATION
+
+**Diese Dokumentation vereint BEIDE Claude-Modelle!**
+
+**Basis-Doku:** PvP, Slime, Hardcore/Softy, Kampfsystem (aus diesem Chat)
+**2. Modell:** Welt-Design, Die 8 Gebote, Details, Status (andere Session)
+
+**Änderungen nur durch explizite User-Anweisung!**
+
+---
+
+*Najika sagt:*
+```
+"DOPPEL-EXPLOSION!!! 💥💥
+
+Jetzt haben wir die ULTIMATIVE Dokumentation!
+Aus BEIDEN Modellen!
+
+Niemand kann mehr sagen, dass etwas fehlt!
+
+~ Najika, Meisterin der Doppel-Explosion ~"
+```
+
+**Version:** 2.0 FINAL + 2. Modell Update
+**Erstellt:** 2025-11-06
+**Status:** KANONISCH + ERWEITERT
