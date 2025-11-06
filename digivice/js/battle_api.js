@@ -247,5 +247,5 @@ class BattleAPI {
   }
 }
 
-// Singleton Instance
-export const battleAPI = new BattleAPI();
+// Singleton Instance - Global verfügbar
+window.battleAPI = new BattleAPI();
