@@ -139,33 +139,36 @@ Najika ist **LEBENDIG:**
 
 ### Die Schwarze Windmühle
 
-**Najika's Zuhause - 12 Räume:**
+**Najika's Zuhause - Mini Open World mit 7 Räumen:**
+
+**KELLER:**
+1. **Studieren** - Skill-Bücher lesen
+2. **Crafting** - Items herstellen
 
 **ERDGESCHOSS:**
-1. **Wohnzimmer** - Gemütlich, Sofas, Kamin
-2. **Küche** - Kochen mit Najika! (E-Taste am Herd)
-3. **Badezimmer** - Duschen, Toilette, Waschbecken (E-Taste!)
+3. **Wohnzimmer** - Gemütlich, Sofas, Kamin
+4. **Küche** - Kochen mit Najika! (E-Taste am Herd)
+5. **Bad** - Duschen, Toilette, Waschbecken (E-Taste!)
 
 **OBERGESCHOSS:**
-4. **Schlafzimmer** - Schlafen (E-Taste am Bett!)
-5. **Lager** - Item Storage
-6. **Training** - Combat Practice
+6. **Schlafzimmer** - Schlafen (E-Taste am Bett!)
 
 **TURM:**
 7. **Terminal** - Najika füttern! 🍖
-8. **Observatory** - Welt-Übersicht
-
-**KELLER:**
-9. **Studieren** - Skill-Bücher lesen
-10. **Crafting** - Items herstellen
-11. **Enchanting** - Ausrüstung verzaubern
-12. **Alchemy** - Tränke brauen
 
 **Features:**
+- **Mini Open World!** - Frei begehbar, keine isolierten Räume
 - **100% Safe Zone!** - Keine Feinde
 - **Housing System** - Dekorierbar!
 - **Fast Travel Hub** - Zu allen Regionen
 - **Najika lebt hier!**
+
+### Die 3 Dungeons (Open World Map)
+
+**Auf der großen Open World Map (NICHT in der Mühle!):**
+1. **Dungeon 1** (Blau) - Position [-720, 0, -720]
+2. **Dungeon 2** (Grün) - Position [720, 0, -720]
+3. **Dungeon 3** (Gold) - Position [0, 0, 720]
 
 ### PWA (Progressive Web App)
 
@@ -380,14 +383,9 @@ Najika ist **LEBENDIG:**
 2. **Geister-Schloss** - Event-Quest Location (Horror→Luxury Hub!)
 3. **Goldstaub-Öde** (Region 1) - Western/Pyramid Dungeon
 
-### Die 3 Dungeons
+### Dungeon Features
 
-**Auf der Open World Map:**
-1. **Dungeon 1** (Blau) - Position [-720, 0, -720]
-2. **Dungeon 2** (Grün) - Position [720, 0, -720]
-3. **Dungeon 3** (Gold) - Position [0, 0, 720]
-
-**Features:**
+**Die 3 Dungeons auf der Open World Map haben:**
 - Procedural Generation
 - Multi-Floor
 - Boss-Räume
@@ -887,7 +885,7 @@ Najika ist **LEBENDIG:**
 - ✅ Virtual Joystick
 
 **Schwarze Mühle:**
-- ✅ 12 Räume verfügbar
+- ✅ 7 Räume verfügbar (Mini Open World)
 - ✅ E-Taste Interaktionen funktionieren!
 - ✅ Najika kann Mühle betreten
 - ✅ Fütter-Mechanik funktioniert
