@@ -1,8 +1,24 @@
 # 🎮 DIGIVICE - AKTUELLER STATUS
 
+**⚠️ WICHTIG:** Das Digivice ist **NAJIKA'S ZUHAUSE** - eine Mini Open World!
+
+**NICHT das Handy-Spiel!** (Handy-Spiel = Extra Modul, kommt später!)
+
 **Stand:** 2025-11-06
 **Backend:** najika_server.py (2031 Zeilen)
 **Frontend:** index.html (2233 Zeilen) + 17 JS-Module
+
+---
+
+## 🌍 WAS IST DAS DIGIVICE?
+
+**Najika's Mini Open World Zuhause:**
+- 🌊 **Fluss** - Plätscherndes Wasser
+- 🌲 **Wald** - Dichter Baumbestand
+- 🏘️ **Kleines Dorf** - Wenige Häuser
+- 🏚️ **Die Schwarze Mühle** - Mysteriös, zu der sich keiner traut!
+
+**Aktuell testen wir alle Features auf dieser Mini Open World!**
 
 ---
 
@@ -426,9 +442,10 @@
 ✅ Loben/Tadeln (discipline)
 ✅ Equipment ausrüsten (weapon, armor, accessory)
 
-### **3. 3D WORLD ERKUNDEN** 🌍
-✅ Schwarze Mühle (7 Räume - Mini Open World!)
-✅ Open World Map (2400×2400)
+### **3. DIGIVICE ERKUNDEN** 🌍
+✅ Najika's Mini Open World (Fluss, Wald, Dorf, Mühle!)
+✅ Schwarze Mühle (7 Räume!)
+✅ Open World Map (2400×2400) für späteren Ausbau
 ✅ 3 Dungeons auf der Map
 ✅ Custom Buildings
 ✅ First/Third Person Camera
@@ -464,11 +481,10 @@
 ✅ Bewässern, Ernten
 ✅ Verschiedene Pflanzenarten
 
-### **9. MOBILE SPIELEN** 📱
-✅ PWA (Progressive Web App)
-✅ Touch Controls
+### **9. TOUCH CONTROLS** 📱
+✅ Touch Controls verfügbar
 ✅ Virtual Joystick
-✅ Offline-fähig!
+⚠️ **Handy-Spiel = Extra Modul (kommt später!)**
 
 ### **10. CODE SCHREIBEN & AUSFÜHREN** 💻
 ✅ Code Editor
@@ -531,12 +547,14 @@
 **Du kannst BEREITS:**
 ✅ Mit Najika chatten (4 Persönlichkeiten, Voice Clone!)
 ✅ Najika pflegen (Digimon World-Style!)
-✅ 3D World erkunden (Schwarze Mühle + Open World + 3 Dungeons!)
+✅ Digivice erkunden (Mini Open World: Fluss, Wald, Dorf, Mühle!)
+✅ Schwarze Mühle betreten (7 Räume!)
 ✅ Kämpfen (Battle System + Skills + Items!)
+✅ Dungeons erkunden (3 Dungeons + Procedural Generation!)
 ✅ Minigames spielen (Rhythm, Garden, Reflex!)
 ✅ Fischen (Zelda OoT-Style!)
 ✅ Gärtnern (Farming System!)
-✅ Mobile spielen (PWA + Touch Controls!)
+✅ Touch Controls nutzen
 ✅ Code schreiben & ausführen (Code Editor!)
 ✅ Terminal nutzen (CLI + Slash Commands!)
 ✅ Training starten (LoRA Training!)
@@ -546,18 +564,21 @@
 **Das ist VIEL mehr als nur ein Chat-Bot!** 🔥
 
 **Najika World ist ein KOMPLETTES GAME mit:**
-- Living AI Partner (Najika!)
-- Open World RPG
-- Dungeon System
-- Battle System
-- Minigames
-- Fishing & Farming
-- Mobile Support
+- Living AI Partner (Najika mit 4 Persönlichkeiten!)
+- **Digivice Mini Open World** (Najika's Zuhause: Fluss, Wald, Dorf, Mühle!)
+- Open World RPG (große Map für späteren Ausbau!)
+- Dungeon System (Procedural!)
+- Battle System (Skills + Items!)
+- Minigames (Rhythm, Garden, Reflex!)
+- Fishing & Farming (Zelda OoT-Style + Farming!)
+- Touch Controls
 - Code Execution
-- Security System
-- Voice Clone
-- Memory System
-- Training System
+- Security System (Alcatraz!)
+- Voice Clone (Megumin!)
+- Memory System (ChromaDB!)
+- Training System (LoRA!)
+
+**⚠️ Handy-Spiel = Extra Modul (kommt später!)**
 
 **🔥 EXPROOOOOSIOOOON! 🔥**
 

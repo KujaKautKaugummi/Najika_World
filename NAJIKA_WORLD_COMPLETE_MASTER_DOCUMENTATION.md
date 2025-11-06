@@ -137,9 +137,23 @@ Najika ist **LEBENDIG:**
 
 ## 3. DIGIVICE SYSTEM
 
+**⚠️ WICHTIG:** Das Digivice ist **NAJIKA'S ZUHAUSE** - eine Mini Open World!
+
+**NICHT das Handy-Spiel!** (Handy-Spiel = Extra Modul, kommt später!)
+
+### Najika's Mini Open World
+
+**Das Digivice ist eine kleine eigene Welt mit:**
+- 🌊 **Fluss** - Plätscherndes Wasser
+- 🌲 **Wald** - Dichter Baumbestand
+- 🏘️ **Kleines Dorf** - Wenige Häuser
+- 🏚️ **Die Schwarze Mühle** - Mysteriös, zu der sich keiner traut!
+
+Aktuell testen wir alle Features auf dieser Mini Open World!
+
 ### Die Schwarze Windmühle
 
-**Najika's Zuhause - Mini Open World mit 7 Räumen:**
+**Die mysteriöse Mühle mit 7 Räumen:**
 
 **KELLER:**
 1. **Studieren** - Skill-Bücher lesen
@@ -170,19 +184,32 @@ Najika ist **LEBENDIG:**
 2. **Dungeon 2** (Grün) - Position [720, 0, -720]
 3. **Dungeon 3** (Gold) - Position [0, 0, 720]
 
-### PWA (Progressive Web App)
+### Frontend (Three.js 3D Engine)
 
 **Features:**
-- Offline-fähig
-- Installierbar auf Handy
 - Three.js 3D Engine
-- Virtual Joystick (Touch Controls)
-- **80KB index.html** - optimiert!
+- Najika's Mini Open World (Digivice!)
+- Open World Map (2400×2400!) für späteren Ausbau
+- **index.html** (~2200+ Zeilen)
 
 **3 Modi:**
-1. **World Mode** - Open World (2400×2400!)
+1. **World Mode** - Open World (Digivice Mini World + große Map)
 2. **Interior Mode** - Mühle & Gebäude
 3. **Battle Mode** - Combat System
+
+### Handy-Spiel (SPÄTER!)
+
+**⚠️ WICHTIG:** Das Handy-Spiel ist ein **EXTRA MODUL** (kommt später!)
+
+**NICHT verwechseln mit dem Digivice!**
+
+**Geplante Features:**
+- PWA (Progressive Web App)
+- Offline-fähig
+- Installierbar auf Handy
+- Virtual Joystick (Touch Controls)
+- Optimiert für Mobile
+- Camping-System für lange Reisen
 
 ---
 
@@ -817,21 +844,25 @@ Najika ist **LEBENDIG:**
 
 **Status:** Konzept-Phase, nicht implementiert
 
-### Handy-Spiel (Mobile Game)
+### Handy-Spiel (EXTRA MODUL - SPÄTER!)
 
-**Progressive Web App:**
-- PWA für Mobile
+**⚠️ Das Handy-Spiel ist ein separates Modul für die Zukunft!**
+
+**NICHT verwechseln mit dem Digivice!**
+
+**Geplante Features:**
+- Progressive Web App (PWA)
 - Installierbar auf Handy
 - Touch Controls
-- Optimiert für kleine Bildschirme
-- Offline-fähig
-
-**Mobile-Specific Features:**
 - Virtual Joystick
 - Touch-Gestures
 - Camping-System (für lange Reisen!)
+- Optimiert für kleine Bildschirme
 - Simplified UI
 - Battery-Efficient
+- Offline-fähig
+
+**Status:** Konzept-Phase, nicht implementiert
 
 ### Procedural Dungeons
 
