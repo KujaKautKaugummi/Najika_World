@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
@@ -7,6 +8,7 @@ import '../../../services/crypto/double_ratchet.dart';
 import '../../../services/crypto/post_quantum_crypto.dart';
 import '../../../services/network/connection_manager.dart';
 import '../../../services/storage/secure_storage_service.dart';
+import '../../../services/database/database_service.dart';
 import '../../../core/constants/app_constants.dart';
 import '../models/message_model.dart';
 import '../models/conversation_model.dart';
@@ -329,7 +331,13 @@ class MessengerService extends ChangeNotifier {
     _messages.putIfAbsent(conversationId, () => []);
     _messages[conversationId]!.add(message);
 
-    // TODO: Persist to database
+    // Persist to database
+    try {
+      await DatabaseService.instance.saveMessage(message, conversationId);
+      debugPrint('💾 Message saved to database');
+    } catch (e) {
+      debugPrint('❌ Failed to save message to database: $e');
+    }
   }
 
   /// Update conversation
@@ -338,15 +346,25 @@ class MessengerService extends ChangeNotifier {
       _conversations[contactId] = Conversation(
         id: contactId,
         contactId: contactId,
-        contactName: 'User $contactId', // TODO: Get actual name
+        contactName: 'User $contactId', // TODO: Get actual name from ContactService
         lastMessage: lastMessage,
         unreadCount: 0,
+        lastActivity: DateTime.now(),
       );
     } else {
       _conversations[contactId]!.lastMessage = lastMessage;
+      _conversations[contactId]!.lastActivity = DateTime.now();
       if (lastMessage.senderId != _userId) {
         _conversations[contactId]!.unreadCount++;
       }
+    }
+
+    // Persist to database
+    try {
+      await DatabaseService.instance.saveConversation(_conversations[contactId]!);
+      debugPrint('💾 Conversation saved to database');
+    } catch (e) {
+      debugPrint('❌ Failed to save conversation to database: $e');
     }
 
     notifyListeners();
@@ -354,13 +372,43 @@ class MessengerService extends ChangeNotifier {
 
   /// Load conversations from storage
   Future<void> _loadConversations() async {
-    // TODO: Load from database
-    debugPrint('Loading conversations...');
+    try {
+      debugPrint('📥 Loading conversations from database...');
+      final conversations = await DatabaseService.instance.getConversations();
+
+      for (final conversation in conversations) {
+        _conversations[conversation.contactId] = conversation;
+
+        // Load messages for this conversation
+        final messages = await DatabaseService.instance.getMessages(conversation.id);
+        _messages[conversation.contactId] = messages;
+      }
+
+      debugPrint('✅ Loaded ${conversations.length} conversations');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Failed to load conversations: $e');
+    }
   }
 
   /// Get messages for conversation
   List<Message> getMessages(String conversationId) {
+    // If not in memory, try loading from database
+    if (_messages[conversationId] == null) {
+      _loadMessagesForConversation(conversationId);
+    }
     return _messages[conversationId] ?? [];
+  }
+
+  /// Load messages for a specific conversation
+  Future<void> _loadMessagesForConversation(String conversationId) async {
+    try {
+      final messages = await DatabaseService.instance.getMessages(conversationId);
+      _messages[conversationId] = messages;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Failed to load messages for $conversationId: $e');
+    }
   }
 
   /// Mark conversation as read
@@ -422,9 +470,35 @@ class MessengerService extends ChangeNotifier {
         : message.senderId;
 
     _messages[conversationId]?.remove(message);
-    notifyListeners();
 
-    debugPrint('🗑️ Message deleted (disappeared)');
+    // Delete from database
+    try {
+      await DatabaseService.instance.deleteMessage(message.id);
+      debugPrint('🗑️ Message deleted (disappeared) from memory and database');
+    } catch (e) {
+      debugPrint('❌ Failed to delete message from database: $e');
+    }
+
+    notifyListeners();
+  }
+
+  /// Upload media file (encrypted)
+  Future<String> uploadMedia(File file) async {
+    // TODO: Implement actual upload to server
+    // For now, this is a placeholder that would upload the encrypted file
+    // to the server and return the URL
+
+    // In production:
+    // 1. Upload encrypted file to server
+    // 2. Server returns URL without decrypting
+    // 3. Return URL to be included in message
+
+    debugPrint('📤 Uploading media: ${file.path}');
+
+    // Placeholder - would use dio/http to upload
+    await Future.delayed(const Duration(seconds: 2));
+
+    return 'https://najika.example.com/media/${DateTime.now().millisecondsSinceEpoch}.enc';
   }
 
   /// Disconnect

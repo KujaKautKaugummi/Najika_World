@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'dart:io';
 
 import '../services/messenger_service.dart';
 import '../models/conversation_model.dart';
 import '../models/message_model.dart';
 import './widgets/message_bubble.dart';
+import '../../../services/media/media_picker_service.dart';
+import '../../../services/media/media_encryption_service.dart';
 
 /// Chat Screen
 ///
@@ -439,7 +442,15 @@ class _ChatScreenState extends State<ChatScreen> {
             title: const Text('Camera'),
             onTap: () {
               Navigator.pop(context);
-              // TODO: Open camera
+              _handleCamera();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.videocam),
+            title: const Text('Video'),
+            onTap: () {
+              Navigator.pop(context);
+              _handleVideo();
             },
           ),
           ListTile(
@@ -447,7 +458,7 @@ class _ChatScreenState extends State<ChatScreen> {
             title: const Text('Gallery'),
             onTap: () {
               Navigator.pop(context);
-              // TODO: Pick from gallery
+              _handleGallery();
             },
           ),
           ListTile(
@@ -455,11 +466,117 @@ class _ChatScreenState extends State<ChatScreen> {
             title: const Text('File'),
             onTap: () {
               Navigator.pop(context);
-              // TODO: Pick file
+              _handleFile();
             },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _handleCamera() async {
+    try {
+      final file = await MediaPickerService.instance.pickImageFromCamera();
+      if (file != null) {
+        await _sendMediaFile(file, MessageType.image);
+      }
+    } catch (e) {
+      _showError('Camera error: $e');
+    }
+  }
+
+  Future<void> _handleVideo() async {
+    try {
+      final file = await MediaPickerService.instance.recordVideo();
+      if (file != null) {
+        await _sendMediaFile(file, MessageType.video);
+      }
+    } catch (e) {
+      _showError('Video error: $e');
+    }
+  }
+
+  Future<void> _handleGallery() async {
+    try {
+      final file = await MediaPickerService.instance.pickImageFromGallery();
+      if (file != null) {
+        await _sendMediaFile(file, MessageType.image);
+      }
+    } catch (e) {
+      _showError('Gallery error: $e');
+    }
+  }
+
+  Future<void> _handleFile() async {
+    try {
+      final file = await MediaPickerService.instance.pickFile();
+      if (file != null) {
+        await _sendMediaFile(file, MessageType.file);
+      }
+    } catch (e) {
+      _showError('File error: $e');
+    }
+  }
+
+  Future<void> _sendMediaFile(File file, MessageType type) async {
+    final messenger = Provider.of<MessengerService>(context, listen: false);
+
+    try {
+      // Show uploading indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              SizedBox(width: 16),
+              Text('Encrypting and uploading...'),
+            ],
+          ),
+          duration: Duration(minutes: 5),
+        ),
+      );
+
+      // Encrypt the file
+      final encryptionService = MediaEncryptionService.instance;
+
+      // Derive encryption key from conversation
+      // In production, this would use the shared secret from the ratchet
+      final encryptionKey = await encryptionService.deriveKeyFromPassword(
+        'shared-secret-${widget.conversation.contactId}',
+      );
+
+      final encryptedFile = await encryptionService.encryptFile(file, encryptionKey);
+
+      // Upload encrypted file
+      final mediaUrl = await messenger.uploadMedia(encryptedFile);
+
+      // Send message with media URL
+      await messenger.sendMessage(
+        recipientId: widget.conversation.contactId,
+        content: file.path.split('/').last, // Original filename
+        type: type,
+        mediaUrl: mediaUrl,
+        disappearAfterSeconds: _disappearingMode ? _disappearSeconds : null,
+      );
+
+      // Cleanup
+      await encryptedFile.delete();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sent!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      _scrollToBottom();
+    } catch (e) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      _showError('Failed to send media: $e');
+    }
   }
 }

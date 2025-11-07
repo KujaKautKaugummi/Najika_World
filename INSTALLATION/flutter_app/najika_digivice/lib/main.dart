@@ -9,9 +9,11 @@ import 'core/theme/app_theme.dart';
 import 'services/security/security_service.dart';
 import 'services/storage/secure_storage_service.dart';
 import 'services/network/connection_manager.dart';
+import 'services/database/database_service.dart';
 import 'modules/security/security_check_screen.dart';
 import 'modules/panic/panic_service.dart';
 import 'modules/messenger/services/messenger_service.dart';
+import 'modules/contacts/contact_service.dart';
 import 'services/calls/voice_call_service.dart';
 
 /// Najika Digivice - Main Entry Point
@@ -39,6 +41,12 @@ void main() async {
   // Initialize security service
   await SecurityService.instance.initialize();
 
+  // Initialize database (with master password from secure storage)
+  // In production, this password is derived from user's PIN during first setup
+  final dbPassword = await SecureStorageService.instance.read('db_master_password') ??
+      'default-master-password-change-me';
+  await DatabaseService.instance.initialize(dbPassword);
+
   // Check for root/jailbreak BEFORE starting app
   final isCompromised = await SecurityService.instance.checkDeviceSecurity();
   if (isCompromised) {
@@ -62,6 +70,7 @@ class NajikaDigiviceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ConnectionManager.instance),
         ChangeNotifierProvider(create: (_) => PanicService.instance),
         ChangeNotifierProvider(create: (_) => MessengerService.instance),
+        ChangeNotifierProvider(create: (_) => ContactService.instance),
         ChangeNotifierProvider(create: (_) => VoiceCallService.instance),
       ],
       child: MaterialApp(
