@@ -1021,9 +1021,18 @@ class Handler(SimpleHTTPRequestHandler):
         import posixpath, urllib, os as _os
         path = path.split('?',1)[0].split('#',1)[0]
         path = posixpath.normpath(urllib.parse.unquote(path))
+
+        # Get the project root directory (works on both Windows and Linux)
+        project_root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+
         if path in ("/","/digivice","/index.html"):
-            return _os.path.join(r"C:\Najika-World","digivice","index.html")
-        return _os.path.join(r"C:\Najika-World", path.lstrip("/"))
+            return _os.path.join(project_root,"digivice","index.html")
+
+        # Map /assets/ to digivice/static/assets/
+        if path.startswith("/assets/"):
+            return _os.path.join(project_root, "digivice", "static", path.lstrip("/"))
+
+        return _os.path.join(project_root, path.lstrip("/"))
     def do_GET(self):
         if self.path == "/health":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
