@@ -90,3 +90,4 @@ assets/
 
 # Savegame-Dateien (automatisch generiert beim Spielen)
 backend/saves/*.json
+backend/saves/*.json
