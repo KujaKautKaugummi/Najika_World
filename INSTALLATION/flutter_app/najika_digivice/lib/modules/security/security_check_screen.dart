@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../../services/security/security_service.dart';
 import '../../services/network/connection_manager.dart';
+import '../../modules/messenger/services/messenger_service.dart';
+import '../home/home_screen.dart';
 
 /// Security Check Screen
 ///
@@ -73,11 +77,21 @@ class _SecurityCheckScreenState extends State<SecurityCheckScreen> {
       _isChecking = false;
     });
 
+    // Initialize Messenger Service
+    try {
+      await Provider.of<MessengerService>(context, listen: false).initialize();
+    } catch (e) {
+      debugPrint('⚠️ Failed to initialize messenger: $e');
+      // Continue anyway - can initialize later
+    }
+
     // Navigate to main app
     await Future.delayed(const Duration(milliseconds: 500));
     if (mounted) {
-      // TODO: Navigate to login or home screen
-      // Navigator.pushReplacement(context, MaterialPageRoute(...));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
     }
   }
 

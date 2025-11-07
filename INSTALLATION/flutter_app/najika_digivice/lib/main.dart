@@ -11,6 +11,8 @@ import 'services/storage/secure_storage_service.dart';
 import 'services/network/connection_manager.dart';
 import 'modules/security/security_check_screen.dart';
 import 'modules/panic/panic_service.dart';
+import 'modules/messenger/services/messenger_service.dart';
+import 'services/calls/voice_call_service.dart';
 
 /// Najika Digivice - Main Entry Point
 ///
@@ -56,9 +58,11 @@ class NajikaDigiviceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ConnectionManager()),
-        ChangeNotifierProvider(create: (_) => PanicService()),
-        // Add more providers as needed
+        ChangeNotifierProvider(create: (_) => SecurityService.instance),
+        ChangeNotifierProvider(create: (_) => ConnectionManager.instance),
+        ChangeNotifierProvider(create: (_) => PanicService.instance),
+        ChangeNotifierProvider(create: (_) => MessengerService.instance),
+        ChangeNotifierProvider(create: (_) => VoiceCallService.instance),
       ],
       child: MaterialApp(
         title: AppConstants.appName,
