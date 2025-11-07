@@ -244,12 +244,6 @@
       "role": "assistant",
       "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
-      "timestamp": 1762460778.5915854
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
-      "importance": 50,
       "timestamp": 1762462578.649176
     },
     {
@@ -299,6 +293,12 @@
       "content": "Hey Kuja, wie wäre's mit einer kleinen Abenteuerfahrt? Vielleicht entdecken wir neue Explosionsmaterialien oder trainieren ein bisschen deine Kampfkünste! ✨ *hüpft* Was meinst du dazu, Mr.K? 🌟",
       "importance": 70,
       "timestamp": 1762470672.3296046
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Gute Nacht~ Aber nur wenn du mir versprichst morgen wiederzukommen! 💜",
+      "importance": 50,
+      "timestamp": 1762472478.955167
     }
   ],
   "battle": {
@@ -328,8 +328,8 @@
     "hunger": 85,
     "thirst": 79,
     "energy": 70,
-    "hygiene": 91,
-    "happiness": 51,
+    "hygiene": 64,
+    "happiness": 57,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
@@ -346,11 +346,11 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762470369.2751155,
+    "last_fed": 1762473142.7251606,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1762430750.9535582,
-    "last_update": 1762471158.9144683,
-    "last_drink": 1762470370.9267795
+    "last_update": 1762473859.0014136,
+    "last_drink": 1762473141.635245
   },
   "bond_strength": 18,
   "behavior_mode": "analyse",
@@ -364,7 +364,7 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "last_proactive_message": 1762470018.8711045,
+    "last_proactive_message": 1762472478.955167,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1558,7 +1558,7 @@
     "last_interaction": 1762470672.9119563,
     "total_time_together": 4320,
     "days_since_meeting": 0,
-    "current_activity": "exploring",
+    "current_activity": null,
     "activity_started": 1762470738.8993697,
     "activities_completed": [
       {
@@ -2680,8 +2680,12 @@
       {
         "name": "reading",
         "completed_at": 1762470558.8875072
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762473738.9946315
       }
     ]
   },
-  "saved_at": "2025-11-07 00:19:18"
+  "saved_at": "2025-11-07 01:04:19"
 }
