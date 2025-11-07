@@ -7,6 +7,21 @@
 
 ## 2025-11-07 - Session: claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 
+### 13:15 - 🔧 GITIGNORE: Savegame-Dateien ausgeschlossen
+**Was:** Savegame-Dateien werden jetzt von Git ignoriert
+**Problem:** Bei jedem Spielstart wurden Savegames (`backend/saves/*.json`) als geändert angezeigt, blockierte Git-Operationen wie `--teleport`
+**Lösung:** `.gitignore` ergänzt:
+
+```gitignore
+# Savegame-Dateien (automatisch generiert beim Spielen)
+backend/saves/*.json
+```
+
+**Geänderte Datei:** `.gitignore`
+**Vorteil:** Git-Status bleibt sauber, keine Konflikte mehr durch automatisch generierte Savegames
+
+---
+
 ### 10:52 - ✅ BACKUP: Funktionierender Stand gesichert
 **Was:** Komplettes Backup des funktionierenden Zustands erstellt
 **Wo:** `BACKUPS/WORKING_BACKUP_2025-11-07_10-52/`
@@ -130,6 +145,6 @@ if path.startswith("/assets/"):
 
 ---
 
-**Letzte Aktualisierung:** 2025-11-07 10:52
+**Letzte Aktualisierung:** 2025-11-07 13:15
 **Session:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 **Branch:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX

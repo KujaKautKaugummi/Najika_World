@@ -87,3 +87,6 @@ assets/
 *.gltf
 *.fbx
 *.obj
+
+# Savegame-Dateien (automatisch generiert beim Spielen)
+backend/saves/*.json
