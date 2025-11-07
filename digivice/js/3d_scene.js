@@ -493,7 +493,7 @@
     async function loadRoomConfigs() {
         if (roomConfigs) return roomConfigs;
         try {
-            const response = await fetch('/assets/room_config_detailed.json');
+            const response = await fetch('/digivice/config/room_config_detailed.json');
             roomConfigs = await response.json();
             console.log('✅ Room configs loaded:', roomConfigs.rooms.length, 'rooms');
             return roomConfigs;
