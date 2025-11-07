@@ -1,0 +1,439 @@
+/* NAJIKA FILE MANAGER - Matrix-Style File Browser */
+
+#fileManagerOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.file-manager-container {
+    width: 95vw;
+    height: 95vh;
+    background: #000000;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', 'Courier', monospace;
+    color: #0f0;
+}
+
+/* ===== HEADER ===== */
+.file-manager-header {
+    background: #000;
+    border-bottom: 1px solid #0f0;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.header-btn {
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.header-btn:hover {
+    background: #0f0;
+    color: #000;
+}
+
+.terminal-icon {
+    color: #0f0;
+    font-size: 20px;
+}
+
+.status-indicator {
+    color: #0f0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.close-btn {
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* ===== PATH BAR ===== */
+.path-bar {
+    background: #000;
+    border-bottom: 1px solid #0f0;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.path-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f0;
+}
+
+#filePathInput {
+    flex: 1;
+    background: #000;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 6px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
+#filePathInput:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.path-bar button {
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 6px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.path-bar button:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* ===== MAIN AREA ===== */
+.file-manager-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 1px;
+    background: #0f0;
+    overflow: hidden;
+}
+
+/* ===== FILE LIST ===== */
+.file-list-container {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.file-list-header {
+    background: #000;
+    border-bottom: 1px solid #0f0;
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 1fr 100px 100px 120px;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #0f0;
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.file-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 100px 120px;
+    gap: 10px;
+    padding: 10px 20px;
+    margin-bottom: 2px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-items: center;
+}
+
+.file-row:hover {
+    background: rgba(0, 255, 0, 0.05);
+    border-color: rgba(0, 255, 0, 0.3);
+}
+
+.file-row.selected {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: #0f0;
+}
+
+.file-row.folder {
+    font-weight: 600;
+}
+
+.col-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.col-type {
+    font-size: 11px;
+    color: rgba(0, 255, 0, 0.7);
+}
+
+.col-size {
+    font-size: 12px;
+    text-align: right;
+}
+
+.col-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 0, 0.5);
+    color: #0f0;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #0f0;
+    color: #000;
+    border-color: #0f0;
+}
+
+.file-icon {
+    font-size: 16px;
+}
+
+.loading-indicator {
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+    color: #0f0;
+    animation: pulse 2s infinite;
+}
+
+.error-message {
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+    color: #f00;
+}
+
+.empty-folder {
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+    color: rgba(0, 255, 0, 0.5);
+}
+
+/* ===== PREVIEW PANEL ===== */
+.file-preview-panel {
+    background: #000;
+    border-left: 1px solid #0f0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.preview-header {
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #0f0;
+    background: #000;
+    border-bottom: 1px solid #0f0;
+}
+
+.preview-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.preview-empty {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+    color: rgba(0, 255, 0, 0.5);
+}
+
+.preview-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.preview-header-info strong {
+    font-size: 14px;
+    color: #0f0;
+}
+
+.preview-header-info button {
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.preview-header-info button:hover {
+    background: #0f0;
+    color: #000;
+}
+
+.preview-text {
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    border-radius: 3px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.preview-binary {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+    color: rgba(0, 255, 0, 0.7);
+}
+
+.preview-binary button {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.preview-binary button:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* ===== FOOTER ===== */
+.file-manager-footer {
+    background: #000;
+    border-top: 1px solid #0f0;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.selection-info {
+    display: flex;
+    gap: 10px;
+    color: rgba(0, 255, 0, 0.7);
+}
+
+#selectedCountDisplay {
+    color: #0f0;
+    font-weight: 600;
+}
+
+.clipboard-info {
+    color: rgba(0, 255, 0, 0.7);
+    font-size: 11px;
+}
+
+/* ===== SCROLLBAR ===== */
+.file-list::-webkit-scrollbar,
+.preview-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.file-list::-webkit-scrollbar-track,
+.preview-content::-webkit-scrollbar-track {
+    background: #000;
+    border-left: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.file-list::-webkit-scrollbar-thumb,
+.preview-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 0, 0.3);
+    border-radius: 5px;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover,
+.preview-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 0, 0.5);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

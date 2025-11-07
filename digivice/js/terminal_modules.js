@@ -27,11 +27,14 @@ const TerminalModules = {
             icon: '💬',
             color: '#0f0',
             init: () => {
-                // TODO: Messenger-Modul implementieren
-                TerminalModules.showPlaceholder('Secure Messenger', 'Verschlüsselte Kommunikation');
+                if (window.SecureMessenger && typeof window.SecureMessenger.open === 'function') {
+                    SecureMessenger.open();
+                }
             },
             close: () => {
-                TerminalModules.closePlaceholder();
+                if (window.SecureMessenger && typeof window.SecureMessenger.close === 'function') {
+                    SecureMessenger.close();
+                }
             }
         },
         'system-monitor': {
@@ -39,11 +42,14 @@ const TerminalModules = {
             icon: '📊',
             color: '#0f0',
             init: () => {
-                // TODO: System-Monitor implementieren
-                TerminalModules.showPlaceholder('System Monitor', 'CPU, RAM, Netzwerk');
+                if (window.SystemMonitor && typeof window.SystemMonitor.open === 'function') {
+                    SystemMonitor.open();
+                }
             },
             close: () => {
-                TerminalModules.closePlaceholder();
+                if (window.SystemMonitor && typeof window.SystemMonitor.close === 'function') {
+                    SystemMonitor.close();
+                }
             }
         },
         'file-manager': {
@@ -51,11 +57,14 @@ const TerminalModules = {
             icon: '📁',
             color: '#0f0',
             init: () => {
-                // TODO: File-Manager implementieren
-                TerminalModules.showPlaceholder('File Manager', 'Datei-Verwaltung');
+                if (window.FileManager && typeof window.FileManager.open === 'function') {
+                    FileManager.open();
+                }
             },
             close: () => {
-                TerminalModules.closePlaceholder();
+                if (window.FileManager && typeof window.FileManager.close === 'function') {
+                    FileManager.close();
+                }
             }
         }
     },
