@@ -1028,9 +1028,9 @@ class Handler(SimpleHTTPRequestHandler):
         if path in ("/","/digivice","/index.html"):
             return _os.path.join(project_root,"digivice","index.html")
 
-        # Map /assets/ to digivice/static/assets/
+        # Map /assets/ to root assets/ folder (3D models)
         if path.startswith("/assets/"):
-            return _os.path.join(project_root, "digivice", "static", path.lstrip("/"))
+            return _os.path.join(project_root, path.lstrip("/"))
 
         return _os.path.join(project_root, path.lstrip("/"))
     def do_GET(self):
