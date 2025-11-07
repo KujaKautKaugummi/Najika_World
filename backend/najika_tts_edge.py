@@ -32,7 +32,8 @@ try:
 except ImportError:
     EDGE_TTS_AVAILABLE = False
 
-NAJIKA_DIR = Path('C:/Najika-World')
+# Project Root Directory (dynamisch für alle Systeme)
+NAJIKA_DIR = Path(__file__).resolve().parent.parent
 VOICE_DIR = NAJIKA_DIR / 'voice_data'
 CACHE_DIR = VOICE_DIR / 'cache_edge'
 OUTPUT_DIR = VOICE_DIR / 'output'
@@ -244,5 +245,5 @@ if __name__ == "__main__":
 
         print("\n" + "="*60)
         print("Test abgeschlossen!")
-        print("Alle Audio-Files: C:/NajikaCore/voice_data/output/")
+        print(f"Alle Audio-Files: {OUTPUT_DIR}/")
         print("="*60)

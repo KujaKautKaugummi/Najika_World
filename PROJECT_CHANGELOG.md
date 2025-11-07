@@ -7,6 +7,63 @@
 
 ## 2025-11-07 - Session: claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 
+### 14:30 - ✅ MAJOR FIX: Alle hardcoded Pfade dynamisch gemacht
+**Was:** Komplette Umstellung von hardcoded `C:/Najika-World` Pfaden auf dynamische Pfade
+**Problem:** Nach Umbenennung von `Najika-World` zu `Najika_World` funktionierten Backend, TTS und Training-Scripts nicht mehr
+**Lösung:** Alle Pfade mit `Path(__file__).resolve().parent.parent` dynamisch gemacht
+
+**Geänderte Dateien (15 Dateien):**
+
+1. **Server & Core:**
+   - `backend/najika_server.py`
+     - `PROJECT_ROOT` global definiert (Zeile 75)
+     - `translate_path()` nutzt jetzt `PROJECT_ROOT` statt hardcoded Pfad
+     - TTS Audio-Pfad (Zeile 1501) nutzt jetzt `PROJECT_ROOT`
+
+2. **TTS-System (3 Dateien):**
+   - `backend/najika_tts_coqui.py` - Zeile 28
+   - `backend/najika_tts_edge.py` - Zeile 36 + Zeile 248
+   - `backend/najika_voice_clone.py` - Zeile 39
+
+3. **Audio-Processing (9 Dateien):**
+   - `backend/CLEANUP_TRAINING_DATA.py`
+   - `backend/cut_audio_segments.py`
+   - `backend/cut_megumin_quick.py`
+   - `backend/cut_megumin_simple.py`
+   - `backend/extract_megumin_manual.py`
+   - `backend/extract_megumin_only.py`
+   - `backend/prepare_voice_cloning_MANUAL.py`
+   - `backend/prepare_voice_cloning_NAJIKA.py`
+   - `backend/separate_voice_samples.py`
+
+4. **Training-Scripts (3 Dateien):**
+   - `backend/train_voice_clone_NAJIKA.py`
+   - `backend/NAJIKA_VIDEO_TO_VOICE_TRAINING.py`
+   - `backend/najika_code_training_real.py`
+   - `backend/najika_smart_training_scheduler.py`
+
+**Pattern vorher:**
+```python
+NAJIKA_DIR = Path('C:/Najika-World')  # ❌ Hardcoded
+```
+
+**Pattern nachher:**
+```python
+# Project Root Directory (dynamisch für alle Systeme)
+NAJIKA_DIR = Path(__file__).resolve().parent.parent  # ✅ Dynamisch
+```
+
+**Vorteil:**
+- ✅ Funktioniert auf ALLEN Systemen (Windows, Linux, Mac)
+- ✅ Ordner kann beliebig umbenannt werden
+- ✅ Ordner kann überall liegen (nicht nur C:\)
+- ✅ Keine Anpassungen mehr nötig bei Umbenennung
+
+**Tool erstellt:**
+- `backend/fix_hardcoded_paths.py` - Automatisches Fix-Script für zukünftige Batch-Fixes
+
+---
+
 ### 13:15 - 🔧 GITIGNORE: Savegame-Dateien ausgeschlossen
 **Was:** Savegame-Dateien werden jetzt von Git ignoriert
 **Problem:** Bei jedem Spielstart wurden Savegames (`backend/saves/*.json`) als geändert angezeigt, blockierte Git-Operationen wie `--teleport`
@@ -145,6 +202,6 @@ if path.startswith("/assets/"):
 
 ---
 
-**Letzte Aktualisierung:** 2025-11-07 13:15
+**Letzte Aktualisierung:** 2025-11-07 14:30
 **Session:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 **Branch:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
