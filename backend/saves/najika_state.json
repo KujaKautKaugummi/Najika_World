@@ -244,24 +244,6 @@
       "role": "assistant",
       "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
       "importance": 50,
-      "timestamp": 1762238619.4388635
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1762240419.5567188
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] EXPLOSION! *hust* Sorry, zu laut? Guten Morgen! 💜",
-      "importance": 75,
-      "timestamp": 1762242279.7262723
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
       "timestamp": 1762244139.8643765
     },
     {
@@ -299,6 +281,24 @@
       "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
       "importance": 60,
       "timestamp": 1762287275.2916243
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1762522185.2420962
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1762524045.273292
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1762525952.748414
     }
   ],
   "battle": {
@@ -328,13 +328,13 @@
     "hunger": 80,
     "thirst": 72,
     "energy": 90,
-    "hygiene": 76,
-    "happiness": 71,
+    "hygiene": 88,
+    "happiness": 36,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 27,
-    "care_mistakes": 2274,
+    "care_mistakes": 2298,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,11 +346,11 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762286769.3522143,
+    "last_fed": 1762524596.3132513,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1762285519.8191354,
-    "last_update": 1762287946.6901572,
-    "last_drink": 1762286771.858479
+    "last_update": 1762525774.4991848,
+    "last_drink": 1762524597.4133184
   },
   "bond_strength": 21,
   "behavior_mode": "analyse",
@@ -364,7 +364,7 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "last_proactive_message": 1762287275.2916243,
+    "last_proactive_message": 1762525952.748414,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1528,7 +1528,7 @@
     "total_time_together": 4200,
     "days_since_meeting": 0,
     "current_activity": "exploring",
-    "activity_started": 1762288055.306546,
+    "activity_started": 1762523625.2634792,
     "activities_completed": [
       {
         "name": "exploring",
@@ -2573,8 +2573,16 @@
       {
         "name": "training",
         "completed_at": 1762287875.2996812
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762522065.2239068
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762523385.2559
       }
     ]
   },
-  "saved_at": "2025-11-04 21:27:35"
+  "saved_at": "2025-11-07 15:32:32"
 }

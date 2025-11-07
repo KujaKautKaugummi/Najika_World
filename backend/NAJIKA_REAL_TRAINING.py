@@ -31,8 +31,9 @@ if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
-NAJIKA_DIR = Path('C:/NajikaCore')
-TRAINING_DIR = NAJIKA_DIR / 'training_data'
+# Project Root Directory (dynamisch)
+NAJIKA_DIR = Path(__file__).resolve().parent.parent
+TRAINING_DIR = NAJIKA_DIR / 'backend' / 'training_data_real'
 PERSONALITIES_DIR = TRAINING_DIR / 'personalities'
 PROGRESS_FILE = TRAINING_DIR / 'training_progress.json'
 BERLIN_TZ = pytz.timezone('Europe/Berlin')

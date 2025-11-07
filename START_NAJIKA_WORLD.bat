@@ -1,7 +1,7 @@
 @echo off
 title NAJIKA WORLD v1.1
 color 0A
-cd /d "C:\Najika-World"
+cd /d "%~dp0"
 
 cls
 echo.

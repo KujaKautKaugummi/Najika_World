@@ -7,6 +7,49 @@
 
 ## 2025-11-07 - Session: claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 
+### 15:45 - 🚀 TRAINING: System komplett repariert und eingerichtet
+**Was:** Najika Training-System wieder funktionsfähig gemacht
+**Problem:** Training lief seit 6 Tagen nicht mehr (letzte Aktivität: 2. November)
+**Ursache:** Alle Training-Scripts verwendeten hardcoded Pfade zu `C:/NajikaCore`
+
+**Geänderte Training-Scripts (3 Dateien):**
+1. **NAJIKA_REAL_TRAINING.py** - Ollama-Training mit echten Daten
+   - Pfad: `C:/NajikaCore` → dynamisch `Path(__file__).resolve().parent.parent`
+   - Training-Dir: `backend/training_data_real/` (71.874 Dateien)
+
+2. **NAJIKA_AUTO_TRAINING.py** - Personality Video Training
+   - Pfad: `C:/NajikaCore` → dynamisch
+   - 148 Videos: Megumin (68), Harley (4), Shiro (24), Melissa (52)
+
+3. **NAJIKA_VIDEO_TO_VOICE_TRAINING.py** - Voice Cloning Training
+   - FFmpeg Path: hardcoded → `shutil.which()` mit Fallback
+   - Fix: FFmpeg wird jetzt korrekt gefunden
+
+**Neue Tools erstellt (2 Dateien):**
+- **START_TRAINING.bat** - Interaktives Menü für manuelles Training
+- **najika_auto_scheduler.py** - Automatischer Scheduler mit Zeitsteuerung
+
+**Training-Zeiten (wie hinterlegt):**
+- **Nacht-Training:** 00:00-08:00 Uhr (JEDEN TAG, Mo-So)
+- **Tag-Training:** 08:00-15:00 Uhr (Mo-Fr, pausierbar)
+
+**Ollama-Status:**
+- ✅ Läuft (Port 11434)
+- ✅ Modell: `najika-local:latest` (Qwen2.5 7.6B, Q4_K_M)
+- ✅ Getestet: Antwortet korrekt
+
+**Trainingsdaten verfügbar:**
+- **71.874 Dateien** in 10 Kategorien
+- **Kategorien:** Python, Security, ML/AI, Databases, DevOps, Code, Patterns, Best Practices, System Design, Web Dev
+- **Persönlichkeiten:** Megumin (35%), Harley (25%), Shiro (20%), Melissa (20%)
+
+**Nächste Schritte für User:**
+1. Training manuell starten: `backend/START_TRAINING.bat`
+2. Auto-Scheduler einrichten: Windows Task Scheduler → `najika_auto_scheduler.py` (alle 30 Min.)
+3. Oder manuell prüfen: `python backend/najika_auto_scheduler.py`
+
+---
+
 ### 14:30 - ✅ MAJOR FIX: Alle hardcoded Pfade dynamisch gemacht
 **Was:** Komplette Umstellung von hardcoded `C:/Najika-World` Pfaden auf dynamische Pfade
 **Problem:** Nach Umbenennung von `Najika-World` zu `Najika_World` funktionierten Backend, TTS und Training-Scripts nicht mehr
@@ -202,6 +245,6 @@ if path.startswith("/assets/"):
 
 ---
 
-**Letzte Aktualisierung:** 2025-11-07 14:30
+**Letzte Aktualisierung:** 2025-11-07 15:45
 **Session:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
 **Branch:** claude/check-session-visibility-011CUt9qHZKYjXoEQiSMhmWX
