@@ -39,13 +39,18 @@ PROGRESS_FILE = TRAINING_DIR / 'voice_training_progress.json'
 LOG_FILE = TRAINING_DIR / 'voice_training.log'
 BERLIN_TZ = pytz.timezone('Europe/Berlin')
 
-# FFmpeg direkter Pfad (winget Installation)
-FFMPEG_PATH = r"C:\Users\0KKK0\AppData\Local\Microsoft\WinGet\Links\ffmpeg.exe"
-FFMPEG_DIR = Path(FFMPEG_PATH).parent
-
-# Füge FFmpeg zum PATH hinzu (damit Whisper es findet!)
-if str(FFMPEG_DIR) not in os.environ.get('PATH', ''):
-    os.environ['PATH'] = str(FFMPEG_DIR) + os.pathsep + os.environ.get('PATH', '')
+# FFmpeg Path (versuche zu finden)
+import shutil
+FFMPEG_PATH = shutil.which('ffmpeg')
+if not FFMPEG_PATH:
+    # Fallback: winget Installation
+    fallback_path = r"C:\Users\0KKK0\AppData\Local\Microsoft\WinGet\Links\ffmpeg.exe"
+    if Path(fallback_path).exists():
+        FFMPEG_PATH = fallback_path
+        FFMPEG_DIR = Path(FFMPEG_PATH).parent
+        # Füge zum PATH hinzu
+        if str(FFMPEG_DIR) not in os.environ.get('PATH', ''):
+            os.environ['PATH'] = str(FFMPEG_DIR) + os.pathsep + os.environ.get('PATH', '')
 
 REPETITIONS = 10
 
