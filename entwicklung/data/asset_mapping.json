@@ -1,0 +1,193 @@
+{
+  "version": "1.0.0",
+  "description": "Asset mapping for Najika World - Maps 3D models to biomes and buildings",
+
+  "biomes": {
+    "desert": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_sand.glb",
+      "tree": [
+        "/digivice/static/assets/jellysquish/oasis/palm_tree_01.glb",
+        "/digivice/static/assets/jellysquish/oasis/palm_tree_02.glb"
+      ],
+      "cactus": [
+        "/digivice/static/assets/jellysquish/oasis/cactus_01.glb",
+        "/digivice/static/assets/jellysquish/oasis/cactus_02.glb",
+        "/digivice/static/assets/jellysquish/oasis/cactus_03.glb"
+      ],
+      "rock": [
+        "/digivice/static/assets/quaternius/nature/rock_desert_01.glb",
+        "/digivice/static/assets/quaternius/nature/rock_desert_02.glb"
+      ],
+      "bush": "/digivice/static/assets/jellysquish/oasis/dry_bush.glb",
+      "grass": "/digivice/static/assets/quaternius/nature/grass_dry.glb"
+    },
+
+    "forest": {
+      "terrain": "/digivice/static/assets/kaykit/nature/ground_grass.glb",
+      "tree": [
+        "/digivice/static/assets/kaykit/nature/tree_oak.glb",
+        "/digivice/static/assets/kaykit/nature/tree_pine.glb",
+        "/digivice/static/assets/quaternius/nature/tree_forest_01.glb"
+      ],
+      "bush": [
+        "/digivice/static/assets/kaykit/nature/bush_01.glb",
+        "/digivice/static/assets/kaykit/nature/bush_02.glb"
+      ],
+      "mushroom": "/digivice/static/assets/kaykit/nature/mushroom.glb",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_moss.glb",
+      "fern": "/digivice/static/assets/quaternius/nature/fern.glb",
+      "flower": "/digivice/static/assets/kaykit/nature/flower.glb"
+    },
+
+    "coast": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_sand_beach.glb",
+      "tree": "/digivice/static/assets/jellysquish/oasis/palm_tree_01.glb",
+      "rock": [
+        "/digivice/static/assets/quaternius/nature/rock_beach_01.glb",
+        "/digivice/static/assets/quaternius/nature/rock_beach_02.glb"
+      ],
+      "grass": "/digivice/static/assets/quaternius/nature/grass_beach.glb",
+      "bush": "/digivice/static/assets/kaykit/nature/bush_coastal.glb"
+    },
+
+    "highland": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_rocky.glb",
+      "rock": [
+        "/digivice/static/assets/quaternius/nature/rock_highland_01.glb",
+        "/digivice/static/assets/kaykit/nature/rock_large.glb"
+      ],
+      "grass": "/digivice/static/assets/quaternius/nature/grass_tough.glb",
+      "totem": "/digivice/static/assets/misc/totem_wood.glb"
+    },
+
+    "swamp": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_mud.glb",
+      "tree": [
+        "/digivice/static/assets/quaternius/nature/tree_dead_01.glb",
+        "/digivice/static/assets/quaternius/nature/tree_dead_02.glb"
+      ],
+      "grass": "/digivice/static/assets/quaternius/nature/grass_swamp.glb",
+      "mushroom": "/digivice/static/assets/kaykit/nature/mushroom_red.glb",
+      "rock": "/digivice/static/assets/quaternius/nature/rock_mossy.glb",
+      "vine": "/digivice/static/assets/quaternius/nature/vine.glb"
+    },
+
+    "ice": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_snow.glb",
+      "tree": [
+        "/digivice/static/assets/quaternius/nature/tree_frozen_01.glb",
+        "/digivice/static/assets/quaternius/nature/tree_pine_snow.glb"
+      ],
+      "rock": "/digivice/static/assets/quaternius/nature/rock_ice.glb",
+      "crystal": "/digivice/static/assets/misc/crystal_ice.glb",
+      "grass": "/digivice/static/assets/quaternius/nature/grass_frozen.glb"
+    },
+
+    "volcano": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_volcanic.glb",
+      "rock": [
+        "/digivice/static/assets/quaternius/nature/rock_volcanic_01.glb",
+        "/digivice/static/assets/quaternius/nature/rock_volcanic_02.glb"
+      ],
+      "lava_pool": "/digivice/static/assets/misc/lava_pool.glb",
+      "dead_tree": "/digivice/static/assets/quaternius/nature/tree_burnt.glb"
+    },
+
+    "mountain": {
+      "terrain": "/digivice/static/assets/quaternius/nature/ground_mountain.glb",
+      "rock": [
+        "/digivice/static/assets/kaykit/nature/rock_large.glb",
+        "/digivice/static/assets/quaternius/nature/rock_mountain.glb"
+      ],
+      "tree": "/digivice/static/assets/kaykit/nature/tree_pine.glb",
+      "grass": "/digivice/static/assets/quaternius/nature/grass_alpine.glb"
+    },
+
+    "caves": {
+      "wall": "/digivice/static/assets/kaykit/dungeon/wall_stone.glb",
+      "floor": "/digivice/static/assets/kaykit/dungeon/floor_stone.glb",
+      "rock": "/digivice/static/assets/kaykit/dungeon/rock_cave.glb",
+      "crystal": [
+        "/digivice/static/assets/kaykit/dungeon/crystal_purple.glb",
+        "/digivice/static/assets/kaykit/dungeon/crystal_blue.glb"
+      ],
+      "torch": "/digivice/static/assets/kaykit/dungeon/torch.glb",
+      "stalagmite": "/digivice/static/assets/kaykit/dungeon/stalagmite.glb"
+    }
+  },
+
+  "buildings": {
+    "house": [
+      "/digivice/static/assets/kaykit/medieval/house_small_01.glb",
+      "/digivice/static/assets/kaykit/medieval/house_small_02.glb"
+    ],
+    "large_house": [
+      "/digivice/static/assets/kaykit/medieval/house_large_01.glb",
+      "/digivice/static/assets/kaykit/medieval/house_large_02.glb"
+    ],
+    "trading_post": "/digivice/static/assets/kaykit/medieval/market.glb",
+    "player_shop": "/digivice/static/assets/kaykit/medieval/tent.glb",
+    "pvp_arena": "/digivice/static/assets/misc/arena.glb",
+    "inn": "/digivice/static/assets/kaykit/medieval/tavern.glb",
+    "onsen": "/digivice/static/assets/misc/onsen.glb",
+    "restaurant": "/digivice/static/assets/misc/restaurant_japanese.glb",
+    "druid_hut": "/digivice/static/assets/misc/hut_round.glb",
+    "harbor_building": "/digivice/static/assets/kaykit/medieval/warehouse.glb",
+    "lighthouse": "/digivice/static/assets/misc/lighthouse.glb",
+    "ship": "/digivice/static/assets/misc/ship_wooden.glb",
+    "magic_academy": "/digivice/static/assets/misc/tower_magic.glb",
+    "rune_shop": "/digivice/static/assets/kaykit/medieval/shop_small.glb",
+    "totem": "/digivice/static/assets/misc/totem_runic.glb",
+    "forge": "/digivice/static/assets/kaykit/medieval/forge.glb",
+    "blacksmith": "/digivice/static/assets/kaykit/medieval/blacksmith.glb",
+    "lava_dock": "/digivice/static/assets/misc/dock_lava.glb",
+    "fireproof_house": "/digivice/static/assets/misc/house_obsidian.glb"
+  },
+
+  "props": {
+    "barrel": "/digivice/static/assets/kaykit/medieval/barrel.glb",
+    "crate": "/digivice/static/assets/kaykit/medieval/crate.glb",
+    "chest": "/digivice/static/assets/kaykit/dungeon/chest.glb",
+    "torch": "/digivice/static/assets/kaykit/dungeon/torch.glb",
+    "banner": "/digivice/static/assets/kaykit/medieval/banner.glb",
+    "fence": "/digivice/static/assets/kaykit/medieval/fence.glb",
+    "well": "/digivice/static/assets/kaykit/medieval/well.glb",
+    "campfire": "/digivice/static/assets/kaykit/nature/campfire.glb",
+    "log": "/digivice/static/assets/kaykit/nature/log.glb"
+  },
+
+  "preload": {
+    "essential": [
+      "/digivice/static/assets/kaykit/medieval/house_small_01.glb",
+      "/digivice/static/assets/kaykit/nature/tree_oak.glb",
+      "/digivice/static/assets/kaykit/nature/rock_moss.glb",
+      "/digivice/static/assets/quaternius/nature/ground_grass.glb"
+    ],
+    "desert": [
+      "/digivice/static/assets/jellysquish/oasis/palm_tree_01.glb",
+      "/digivice/static/assets/jellysquish/oasis/cactus_01.glb"
+    ],
+    "forest": [
+      "/digivice/static/assets/kaykit/nature/tree_oak.glb",
+      "/digivice/static/assets/kaykit/nature/bush_01.glb"
+    ],
+    "caves": [
+      "/digivice/static/assets/kaykit/dungeon/wall_stone.glb",
+      "/digivice/static/assets/kaykit/dungeon/crystal_purple.glb"
+    ]
+  },
+
+  "fallbacks": {
+    "tree": "PLACEHOLDER_TREE",
+    "rock": "PLACEHOLDER_ROCK",
+    "building": "PLACEHOLDER_BUILDING",
+    "terrain": "PLACEHOLDER_TERRAIN"
+  },
+
+  "notes": {
+    "format": "Prefer .glb over .fbx for web performance",
+    "naming": "Asset filenames are examples - adjust based on actual downloaded assets",
+    "missing": "If asset file doesn't exist, asset_loader.js will use placeholder geometry",
+    "update": "After downloading assets, update paths in this file to match actual filenames"
+  }
+}
