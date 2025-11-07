@@ -1,0 +1,204 @@
+{
+  "biomes": {
+    "desert": {
+      "name": "Wüste",
+      "colors": {
+        "ground": "#e8d4a0",
+        "ambient": "#ffa500",
+        "fog": "#ffd700"
+      },
+      "vegetation": {
+        "types": ["cactus", "dead_tree", "dry_bush"],
+        "density": 0.0001
+      },
+      "terrain": {
+        "type": "sandy_dunes",
+        "heightVariation": 20,
+        "noiseScale": 0.01
+      },
+      "enemies": ["scorpion", "bandit", "sand_elemental"],
+      "weather": ["sandstorm", "heat_wave", "clear"],
+      "waterPresence": false
+    },
+    "forest": {
+      "name": "Wald",
+      "colors": {
+        "ground": "#2d5016",
+        "ambient": "#90ee90",
+        "fog": "#98fb98"
+      },
+      "vegetation": {
+        "types": ["tree", "mushroom", "fern", "glowing_mushroom", "bush"],
+        "density": 0.005
+      },
+      "terrain": {
+        "type": "hilly",
+        "heightVariation": 30,
+        "noiseScale": 0.02
+      },
+      "enemies": ["wolf", "druid", "forest_spirit"],
+      "weather": ["fog", "rain", "clear"],
+      "waterPresence": true
+    },
+    "coast": {
+      "name": "Küste",
+      "colors": {
+        "ground": "#c2b280",
+        "ambient": "#4a90e2",
+        "fog": "#87ceeb",
+        "water": "#1e90ff"
+      },
+      "vegetation": {
+        "types": ["palm_tree", "seaweed", "beach_grass"],
+        "density": 0.0005
+      },
+      "terrain": {
+        "type": "coastal",
+        "heightVariation": 15,
+        "noiseScale": 0.015,
+        "beach": true
+      },
+      "enemies": ["pirate", "crab", "sea_serpent"],
+      "weather": ["storm", "clear", "windy"],
+      "waterPresence": true,
+      "hasOcean": true
+    },
+    "highland": {
+      "name": "Hochebene",
+      "colors": {
+        "ground": "#8b7355",
+        "ambient": "#9370db",
+        "fog": "#9370db"
+      },
+      "vegetation": {
+        "types": ["tough_grass", "totem", "highland_flower"],
+        "density": 0.001
+      },
+      "terrain": {
+        "type": "rocky_plateau",
+        "heightVariation": 50,
+        "noiseScale": 0.025
+      },
+      "enemies": ["lightning_elemental", "wind_spirit", "raven"],
+      "weather": ["thunderstorm", "lightning", "clear", "windy"],
+      "waterPresence": false
+    },
+    "swamp": {
+      "name": "Sumpf",
+      "colors": {
+        "ground": "#556b2f",
+        "ambient": "#2f4f4f",
+        "fog": "#708090",
+        "water": "#2f4f4f"
+      },
+      "vegetation": {
+        "types": ["dead_tree", "poison_plant", "mushroom", "swamp_grass", "vines"],
+        "density": 0.003
+      },
+      "terrain": {
+        "type": "marshy",
+        "heightVariation": 10,
+        "noiseScale": 0.01,
+        "muddy": true
+      },
+      "enemies": ["witch", "swamp_creature", "miasma"],
+      "weather": ["fog", "poison_mist", "drizzle"],
+      "waterPresence": true,
+      "hazardous": true
+    },
+    "ice": {
+      "name": "Eis",
+      "colors": {
+        "ground": "#f0f8ff",
+        "ambient": "#b0e0e6",
+        "fog": "#e0ffff"
+      },
+      "vegetation": {
+        "types": ["frozen_tree", "ice_crystal", "snow_bush"],
+        "density": 0.0002
+      },
+      "terrain": {
+        "type": "glacial",
+        "heightVariation": 40,
+        "noiseScale": 0.02,
+        "icy": true
+      },
+      "enemies": ["ice_lich", "frozen_undead", "frost_elemental"],
+      "weather": ["blizzard", "snowstorm", "clear_cold"],
+      "waterPresence": false,
+      "necromancy": true
+    },
+    "volcano": {
+      "name": "Vulkan",
+      "colors": {
+        "ground": "#8b4513",
+        "ambient": "#ff4500",
+        "fog": "#ff6347",
+        "lava": "#ff4500"
+      },
+      "vegetation": {
+        "types": ["fire_flower", "volcanic_rock", "lava_moss"],
+        "density": 0.0001
+      },
+      "terrain": {
+        "type": "volcanic",
+        "heightVariation": 60,
+        "noiseScale": 0.03,
+        "rugged": true
+      },
+      "enemies": ["lava_golem", "fire_elemental", "magma_worm"],
+      "weather": ["ashfall", "heat_wave", "clear_hot"],
+      "waterPresence": false,
+      "lavaFlows": true,
+      "hazardous": true
+    },
+    "mountain": {
+      "name": "Berg",
+      "colors": {
+        "ground": "#808080",
+        "ambient": "#a9a9a9",
+        "fog": "#d3d3d3"
+      },
+      "vegetation": {
+        "types": ["mountain_grass", "alpine_flower"],
+        "density": 0.0003
+      },
+      "terrain": {
+        "type": "steep_mountain",
+        "heightVariation": 500,
+        "noiseScale": 0.05,
+        "peakHeight": 500
+      },
+      "enemies": [],
+      "weather": ["clear", "windy", "clouds"],
+      "waterPresence": false,
+      "indestructible": true,
+      "safeZone": true
+    },
+    "caves": {
+      "name": "Höhlen",
+      "colors": {
+        "ground": "#2f2f2f",
+        "ambient": "#1a1a1a",
+        "fog": "#000000",
+        "crystal": "#9370db"
+      },
+      "vegetation": {
+        "types": ["glowing_mushroom", "crystal", "cave_moss"],
+        "density": 0.002
+      },
+      "terrain": {
+        "type": "cavern",
+        "heightVariation": 25,
+        "noiseScale": 0.015,
+        "stalactites": true
+      },
+      "enemies": ["giant_spider", "goblin", "cave_bat"],
+      "weather": [],
+      "waterPresence": true,
+      "requiresLight": true,
+      "underground": true,
+      "ambientDarkness": 0.9
+    }
+  }
+}
