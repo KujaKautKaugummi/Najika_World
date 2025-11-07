@@ -1052,7 +1052,8 @@
             'shower': '🚿 Drücke [E] zum Duschen',
             'toilet': '🚽 Drücke [E] für Toilette',
             'sink': '🚰 Drücke [E] zum Waschen',
-            'table': '🪑 Drücke [E] zum Essen'
+            'table': '🪑 Drücke [E] zum Essen',
+            'door': '🚪 Drücke [E] zum Betreten'
         };
 
         interactionPromptUI.innerHTML = prompts[interactionType] || `✨ Drücke [E] für ${interactionType}`;
@@ -1089,6 +1090,9 @@
                 break;
             case 'table':
                 handleTableInteraction();
+                break;
+            case 'door':
+                handleDoorInteraction();
                 break;
             default:
                 console.log('⚠️ No handler for interaction type:', type);
@@ -1194,6 +1198,27 @@
             }
         } catch (error) {
             console.error('❌ Wash API error:', error);
+        }
+    }
+
+    async function handleDoorInteraction() {
+        console.log('🚪 Betrete Schwarze Mühle...');
+        showFloatingMessage('🏰 Willkommen in der Schwarzen Mühle!', '#8e44ad');
+
+        // Wechsle zu Interior View (Erdgeschoss - Wohnzimmer)
+        if (currentInterior) {
+            // Wenn schon drinnen, verlasse das Gebäude
+            console.log('🚪 Verlasse Gebäude...');
+            showFloatingMessage('🌍 Zurück zur Außenwelt', '#3498db');
+            exitInterior();
+        } else {
+            // Betrete die Mühle
+            enterInterior('Schwarze Mühle', 0); // Floor 0 = Erdgeschoss
+
+            // Wechsle zum Wohnzimmer (erster Raum)
+            if (typeof window.applyRoom === 'function') {
+                window.applyRoom('Wohnzimmer');
+            }
         }
     }
 
@@ -1792,7 +1817,19 @@
 
         // Schwarze Mühle (Position [0,0,0])
         if (window.CustomBuildings) {
-            window.CustomBuildings.buildWindmill([0, 0, 0], 1.0, group);
+            const windmill = window.CustomBuildings.buildWindmill([0, 0, 0], 1.0, group);
+
+            // Register Windmill Door as Interactive Object
+            if (windmill) {
+                const doorInteraction = {
+                    mesh: windmill,
+                    position: new THREE.Vector3(0, 6, 15), // Vor der Tür
+                    type: 'door',
+                    radius: 15
+                };
+                interactiveObjects.push(doorInteraction);
+                console.log('✅ Registered Windmill Door as interactive object');
+            }
         }
 
         // Kampfarena (Position [-600,0,-600])
