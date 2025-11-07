@@ -14,7 +14,8 @@ import pytz
 # Fix Windows console encoding
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-NAJIKA_DIR = Path('C:/Najika-World/backend')
+# Backend Directory (dynamisch)
+NAJIKA_DIR = Path(__file__).resolve().parent
 CONFIG_FILE = NAJIKA_DIR / 'training_config.json'
 PAUSE_FILE = NAJIKA_DIR / 'training_pause.json'
 

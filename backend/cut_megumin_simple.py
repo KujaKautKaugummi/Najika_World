@@ -19,7 +19,8 @@ if sys.platform == 'win32':
 # Mit Windows Media Player / VLC / Audacity
 INPUT_FILE = Path(r"C:\Users\0KKK0\Downloads\megumin_voice.wav")
 
-OUTPUT_DIR = Path('C:/Najika-World/voice_data/samples/megumin_reference')
+# OUTPUT DIRECTORY (dynamisch)
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / 'voice_data' / 'samples' / 'megumin_reference'
 
 # TIMESTAMPS
 SEGMENTS = [

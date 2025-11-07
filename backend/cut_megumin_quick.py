@@ -16,8 +16,8 @@ if sys.platform == 'win32':
 # INPUT FILE (von User bereitgestellt!)
 INPUT_FILE = Path(r"C:\Users\0KKK0\Downloads\KONOSUBA Synchronclip #3_ Lea Kalbhenn spricht Megumin(2) (online-audio-converter.com)_Voice Isolation.mp3")
 
-# OUTPUT DIRECTORY
-OUTPUT_DIR = Path('C:/Najika-World/voice_data/samples/megumin_reference')
+# OUTPUT DIRECTORY (dynamisch)
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / 'voice_data' / 'samples' / 'megumin_reference'
 
 # TIMESTAMPS (von User definiert!)
 SEGMENTS = [

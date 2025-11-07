@@ -11,7 +11,8 @@ from pathlib import Path
 from datetime import datetime
 
 # === KONFIGURATION ===
-NAJIKA_DIR = Path("C:/Najika-World/backend")
+# Backend Directory (dynamisch)
+NAJIKA_DIR = Path(__file__).resolve().parent
 TRAINING_DATA_DIR = NAJIKA_DIR.parent / "DOCS" / "training_data"
 PROGRESS_FILE = NAJIKA_DIR / "code_training_progress.json"
 SOLUTIONS_DIR = NAJIKA_DIR / "code_training_solutions"

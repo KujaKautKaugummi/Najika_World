@@ -71,6 +71,9 @@ except ImportError:  # .env Handling ist nice to have, aber kein Muss
         return
 load_dotenv()
 
+# Project Root Directory (dynamisch für alle Systeme)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 HOST=os.getenv("HOST","0.0.0.0"); PORT=int(os.getenv("PORT","8000"))
 AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
 CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
@@ -1018,21 +1021,18 @@ class Handler(SimpleHTTPRequestHandler):
         super().end_headers()
     def do_OPTIONS(self): self.send_response(200); self.end_headers()
     def translate_path(self, path):
-        import posixpath, urllib, os as _os
+        import posixpath, urllib
         path = path.split('?',1)[0].split('#',1)[0]
         path = posixpath.normpath(urllib.parse.unquote(path))
 
-        # Get the project root directory (works on both Windows and Linux)
-        project_root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
-
         if path in ("/","/digivice","/index.html"):
-            return _os.path.join(project_root,"digivice","index.html")
+            return os.path.join(PROJECT_ROOT,"digivice","index.html")
 
         # Map /assets/ to root assets/ folder (3D models)
         if path.startswith("/assets/"):
-            return _os.path.join(project_root, path.lstrip("/"))
+            return os.path.join(PROJECT_ROOT, path.lstrip("/"))
 
-        return _os.path.join(project_root, path.lstrip("/"))
+        return os.path.join(PROJECT_ROOT, path.lstrip("/"))
     def do_GET(self):
         if self.path == "/health":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
@@ -1494,7 +1494,8 @@ class Handler(SimpleHTTPRequestHandler):
                 if audio_file and os.path.exists(audio_file):
                     # Return file path relative to Najika directory
                     audio_path = str(audio_file).replace("\\", "/")
-                    rel_path = audio_path.replace("C:/Najika-World", "")
+                    project_path = PROJECT_ROOT.replace("\\", "/")
+                    rel_path = audio_path.replace(project_path, "")
                     self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
                     self.wfile.write(json.dumps({"ok": True, "audio": rel_path}, ensure_ascii=False).encode('utf-8')); return
                 else:

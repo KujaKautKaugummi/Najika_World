@@ -23,7 +23,8 @@ if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
-NAJIKA_DIR = Path('C:/Najika-World')
+# Project Root Directory (dynamisch für alle Systeme)
+NAJIKA_DIR = Path(__file__).resolve().parent.parent
 BACKEND_DIR = NAJIKA_DIR / 'backend'
 SAVES_DIR = BACKEND_DIR / 'saves'
 BACKUP_DIR = NAJIKA_DIR / 'training_data_backup'
