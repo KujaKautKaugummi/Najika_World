@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/constants/app_constants.dart';
 import '../../services/storage/secure_storage_service.dart';
+import '../../services/database/database_service.dart';
 import '../../services/network/connection_manager.dart';
 
 /// Panic Service
@@ -193,6 +195,11 @@ class PanicService extends ChangeNotifier {
   /// Wipe database
   Future<void> _wipeDatabase() async {
     try {
+      // First, wipe all data from database tables
+      await DatabaseService.instance.wipeAll();
+      debugPrint('✅ Database tables wiped');
+
+      // Then, securely delete the database file
       final appDir = await getApplicationDocumentsDirectory();
       final dbPath = '${appDir.path}/najika.db';
 
@@ -200,7 +207,7 @@ class PanicService extends ChangeNotifier {
       if (await dbFile.exists()) {
         // DOD 5220.22-M standard: 7-pass overwrite
         await _secureDeleteFile(dbFile);
-        debugPrint('✅ Database wiped');
+        debugPrint('✅ Database file securely deleted');
       }
     } catch (e) {
       debugPrint('❌ Database wipe error: $e');

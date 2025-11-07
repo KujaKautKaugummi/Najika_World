@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../messenger/ui/conversations_screen.dart';
 import '../messenger/services/messenger_service.dart';
+import '../contacts/contact_service.dart';
+import '../contacts/contact_discovery_screen.dart';
 import '../../services/network/connection_manager.dart';
 import '../../services/security/security_service.dart';
 
@@ -58,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-/// Contacts Screen (Placeholder)
+/// Contacts Screen
 class ContactsScreen extends StatelessWidget {
   const ContactsScreen({super.key});
 
@@ -67,34 +69,96 @@ class ContactsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contacts'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContactDiscoveryScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.people_outline,
-              size: 80,
-              color: Colors.grey[600],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'No contacts yet',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
+      body: Consumer<ContactService>(
+        builder: (context, contactService, child) {
+          final contacts = contactService.contacts;
+
+          if (contacts.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.people_outline,
+                    size: 80,
+                    color: Colors.grey[600],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No contacts yet',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tap + to add your first contact',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: () {
-                // TODO: Add contact
-              },
-              icon: const Icon(Icons.person_add),
-              label: const Text('Add Contact'),
-            ),
-          ],
-        ),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: contacts.length,
+            itemBuilder: (context, index) {
+              final contact = contacts[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: contact.avatarUrl != null
+                      ? NetworkImage(contact.avatarUrl!)
+                      : null,
+                  child: contact.avatarUrl == null
+                      ? Text(contact.name[0].toUpperCase())
+                      : null,
+                ),
+                title: Text(contact.name),
+                subtitle: contact.statusMessage != null
+                    ? Text(
+                        contact.statusMessage!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    : null,
+                trailing: contact.isOnline
+                    ? Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : null,
+                onTap: () {
+                  // TODO: Open chat with contact
+                  // Navigator.push(context, MaterialPageRoute(
+                  //   builder: (context) => ChatScreen(conversation: ...),
+                  // ));
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
