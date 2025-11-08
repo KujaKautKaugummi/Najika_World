@@ -207,23 +207,23 @@
         let loadedCount = 0;
         let autoRotate = true;
 
-        // Test Assets (Mix von GLB und GLTF) - KORRIGIERTE PFADE
+        // Test Assets (Mix von GLB und GLTF)
         const testAssets = [
-            // JellySquish Oasis (GLB) - Original-Ordnerstruktur
-            { path: 'static/assets/JellySquish Oasis Pack - Base Version/Models/palm_l.glb', name: 'Palm Tree Large (GLB)', position: [-10, 0, 0] },
-            { path: 'static/assets/JellySquish Oasis Pack - Base Version/Models/cactus_large.glb', name: 'Cactus Large (GLB)', position: [-5, 0, 0] },
-            { path: 'static/assets/JellySquish Oasis Pack - Base Version/Models/house_small.glb', name: 'Desert House (GLB)', position: [0, 0, 0] },
+            // JellySquish Oasis (GLB)
+            { path: 'static/assets/jellysquish/oasis/palm_l.glb', name: 'Palm Tree Large (GLB)', position: [-10, 0, 0] },
+            { path: 'static/assets/jellysquish/oasis/cactus_large.glb', name: 'Cactus Large (GLB)', position: [-5, 0, 0] },
+            { path: 'static/assets/jellysquish/oasis/house_small.glb', name: 'Desert House (GLB)', position: [0, 0, 0] },
 
-            // KayKit Dungeon (GLTF) - Original-Ordnerstruktur
-            { path: 'static/assets/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/chest.gltf', name: 'Chest (GLTF)', position: [5, 0, 0] },
-            { path: 'static/assets/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/torch.gltf', name: 'Torch (GLTF)', position: [8, 0, 0] },
+            // KayKit Dungeon (GLTF)
+            { path: 'static/assets/kaykit/dungeon/chest.gltf', name: 'Chest (GLTF)', position: [5, 0, 0] },
+            { path: 'static/assets/kaykit/dungeon/torch.gltf', name: 'Torch (GLTF)', position: [8, 0, 0] },
 
-            // KayKit Medieval (GLTF) - Original-Ordnerstruktur
-            { path: 'static/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/neutral/building_grain.gltf', name: 'Medieval Building (GLTF)', position: [12, 0, 0] },
+            // KayKit Medieval (GLTF)
+            { path: 'static/assets/kaykit/medieval/building_grain.gltf', name: 'Medieval Building (GLTF)', position: [12, 0, 0] },
 
-            // KayKit Nature (GLTF) - Original-Ordnerstruktur
-            { path: 'static/assets/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_4_B_Color1.gltf', name: 'Oak Tree (GLTF)', position: [-10, 0, 5] },
-            { path: 'static/assets/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Rock_2_C_Color1.gltf', name: 'Rock (GLTF)', position: [-5, 0, 5] },
+            // KayKit Nature (GLTF)
+            { path: 'static/assets/kaykit/nature/Tree_4_B_Color1.gltf', name: 'Oak Tree (GLTF)', position: [-10, 0, 5] },
+            { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Rock (GLTF)', position: [-5, 0, 5] },
         ];
 
         totalAssets = testAssets.length;
