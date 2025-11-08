@@ -70,9 +70,16 @@ class BiomeSystem {
   createGroundMaterial(biomeId) {
     const biome = this.biomes.get(biomeId);
     if (!biome) {
-      console.warn(`Biome ${biomeId} not found!`);
+      console.warn(`⚠️ Biome ${biomeId} not found! Using gray fallback.`);
+      console.warn(`⚠️ Available biomes:`, Array.from(this.biomes.keys()));
       return new THREE.MeshStandardMaterial({ color: 0x808080 });
     }
+
+    // DEBUG: Log biome color data
+    console.log(`🎨 Creating material for biome "${biomeId}":`, {
+      groundColor: biome.colors.ground,
+      groundColorHex: '#' + biome.colors.ground.getHexString()
+    });
 
     const material = new THREE.MeshStandardMaterial({
       color: biome.colors.ground,
