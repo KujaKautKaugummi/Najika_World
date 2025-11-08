@@ -2308,7 +2308,7 @@
         }
         const loader = new THREE.GLTFLoader();
         loader.load(
-            '/assets/KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
+            '/assets/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
             gltf => {
                 characterGroup = gltf.scene;
                 characterGroup.traverse(node => {
