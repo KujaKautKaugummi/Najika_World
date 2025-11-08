@@ -237,10 +237,10 @@ class VegetationSystem {
       const z = bounds.minZ + Math.random() * height;
 
       // Get terrain height at this position
-      const y = this.terrainGenerator.getHeightAt(x, z);
+      const y = this.terrainGenerator.getHeightAt(regionId, x, z);
 
       // Skip if underwater or too steep
-      if (y < 0.5 || this.isPositionTooSteep(x, z)) continue;
+      if (y < 0.5 || this.isPositionTooSteep(regionId, x, z)) continue;
 
       // Select random vegetation type from biome's types
       const type = types[Math.floor(Math.random() * types.length)];
@@ -284,11 +284,11 @@ class VegetationSystem {
   /**
    * Check if position is too steep for vegetation
    */
-  isPositionTooSteep(x, z) {
+  isPositionTooSteep(regionId, x, z) {
     const sampleDist = 2;
-    const h1 = this.terrainGenerator.getHeightAt(x, z);
-    const h2 = this.terrainGenerator.getHeightAt(x + sampleDist, z);
-    const h3 = this.terrainGenerator.getHeightAt(x, z + sampleDist);
+    const h1 = this.terrainGenerator.getHeightAt(regionId, x, z);
+    const h2 = this.terrainGenerator.getHeightAt(regionId, x + sampleDist, z);
+    const h3 = this.terrainGenerator.getHeightAt(regionId, x, z + sampleDist);
 
     const slope = Math.max(
       Math.abs(h2 - h1) / sampleDist,
