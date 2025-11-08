@@ -21,9 +21,27 @@ echo.
 echo ========================================
 echo.
 
-cd digivice
+REM Absoluter Pfad zum digivice-Ordner
+cd /d "%~dp0digivice"
 
-echo Server startet...
+REM Prüfe ob Ordner existiert
+if not exist "najika_world_v2.html" (
+    echo FEHLER: najika_world_v2.html nicht gefunden!
+    echo Stelle sicher, dass die BAT-Datei im Najika_World Root liegt.
+    pause
+    exit /b 1
+)
+
+echo Server startet in: %cd%
+echo.
+
+REM Öffne Browser nach 2 Sekunden
+start /min cmd /c "timeout /t 2 /nobreak >nul && start http://localhost:8001/najika_world_v2.html"
+
+REM Starte Server
+echo Python HTTP Server läuft auf Port 8001...
+echo Drücke Strg+C zum Beenden
+echo.
 python -m http.server 8001
 
 pause
