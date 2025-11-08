@@ -240,18 +240,40 @@
             }
         });
 
-        // Charakter erstellen (Avatar)
+        // Charakter erstellen (Avatar) - Kapsel aus Zylinder + 2 Hemispheres
         updateProgress('Erstelle Character...', 30);
-        const characterGeometry = new THREE.CapsuleGeometry(2, 3, 8, 16);
+        const character = new THREE.Group();
+
         const characterMaterial = new THREE.MeshStandardMaterial({
             color: 0x4CAF50,
             roughness: 0.7,
             metalness: 0.3
         });
-        const character = new THREE.Mesh(characterGeometry, characterMaterial);
+
+        // Körper (Zylinder)
+        const bodyGeometry = new THREE.CylinderGeometry(2, 2, 3, 16);
+        const body = new THREE.Mesh(bodyGeometry, characterMaterial);
+        body.castShadow = true;
+        body.receiveShadow = true;
+        character.add(body);
+
+        // Kopf (Halbkugel oben)
+        const headGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+        const head = new THREE.Mesh(headGeometry, characterMaterial);
+        head.position.y = 1.5;
+        head.castShadow = true;
+        head.receiveShadow = true;
+        character.add(head);
+
+        // Füße (Halbkugel unten)
+        const feetGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+        const feet = new THREE.Mesh(feetGeometry, characterMaterial);
+        feet.position.y = -1.5;
+        feet.castShadow = true;
+        feet.receiveShadow = true;
+        character.add(feet);
+
         character.position.set(4800, 3.5, 4800);
-        character.castShadow = true;
-        character.receiveShadow = true;
         scene.add(character);
 
         // Kamera an Charakter binden
