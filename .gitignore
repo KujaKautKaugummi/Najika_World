@@ -80,6 +80,9 @@ backend/code_training_solutions/
 *.pdf
 # Ausnahme: PDFs in "alles wissen" erlauben
 !alles\ wissen/**/*.pdf
+# Ausnahme: Voice-Samples für TTS erlauben (klein genug)
+!backend/voice_data/samples/*.wav
+!backend/voice_data/samples/*.mp3
 
 # 3D Assets (zu groß für GitHub)
 assets/
