@@ -1,0 +1,244 @@
+{
+  "worldSize": 9600,
+  "center": {
+    "x": 4800,
+    "z": 4800
+  },
+  "regions": {
+    "samtmoos_tiefwald": {
+      "id": "samtmoos_tiefwald",
+      "name": "Samtmoos-Tiefwald",
+      "biome": "forest",
+      "position": { "x": 4800, "z": 1200 },
+      "bounds": { "minX": 3600, "maxX": 6000, "minZ": 0, "maxZ": 2400 },
+      "level": "1-15",
+      "slimeColor": "moss_green",
+      "city": {
+        "name": "Dampf-Hain",
+        "position": { "x": 4800, "z": 1500 },
+        "size": "medium",
+        "buildings": 30,
+        "features": ["onsen", "restaurant", "druid_circle"],
+        "foodSpeciality": "steamed_buns"
+      },
+      "features": ["mystical_forest", "druids", "hot_springs", "glowing_mushrooms"],
+      "challenges": ["getting_lost", "mystical_creatures", "parasites"],
+      "undergroundConnection": "tiefenhoehlen"
+    },
+    "reich_der_drei": {
+      "id": "reich_der_drei",
+      "name": "Reich der Drei - Kälte Frost Eis",
+      "biome": "ice",
+      "position": { "x": 1200, "z": 1200 },
+      "bounds": { "minX": 0, "maxX": 2400, "minZ": 0, "maxZ": 2400 },
+      "level": "1-15",
+      "slimeColor": "crystal_white",
+      "city": null,
+      "features": [
+        "all_three_elements",
+        "necromancy_region",
+        "ice_liches",
+        "frozen_undead",
+        "ice_caves",
+        "glacier_puzzles"
+      ],
+      "challenges": ["frostbite", "blizzards", "avalanches", "undead"],
+      "elements": ["kaelte", "frost", "eis"]
+    },
+    "salzwind_kueste": {
+      "id": "salzwind_kueste",
+      "name": "Salzwind-Küste",
+      "biome": "coast",
+      "position": { "x": 1200, "z": 4800 },
+      "bounds": { "minX": 0, "maxX": 2400, "minZ": 3600, "maxZ": 6000 },
+      "level": "1-15",
+      "slimeColor": "ocean_blue",
+      "city": {
+        "name": "Salzige Bucht",
+        "position": { "x": 1500, "z": 4800 },
+        "size": "medium",
+        "buildings": 35,
+        "features": ["harbor", "fish_market", "lighthouse"],
+        "foodSpeciality": "salt_fish"
+      },
+      "features": ["pirate_harbors", "shipping", "underwater_dungeons", "tide_chests"],
+      "challenges": ["storm_surge", "pirates", "drowning"],
+      "fishing": true,
+      "fishingPriority": 1
+    },
+    "blitzebene": {
+      "id": "blitzebene",
+      "name": "Blitzebene",
+      "biome": "highland",
+      "position": { "x": 8400, "z": 4800 },
+      "bounds": { "minX": 7200, "maxX": 9600, "minZ": 3600, "maxZ": 6000 },
+      "level": "1-15",
+      "slimeColor": "lightning_purple",
+      "city": {
+        "name": "Runenheim",
+        "position": { "x": 8400, "z": 4800 },
+        "size": "small",
+        "buildings": 20,
+        "features": ["magic_academy", "rune_altar"]
+      },
+      "features": [
+        "magic_training",
+        "rune_magic",
+        "highland_climbing",
+        "lightning_elementals",
+        "weather_altars",
+        "totems"
+      ],
+      "challenges": ["lightning_strikes", "storms", "strong_wind", "climbing"]
+    },
+    "gruenschlamm_sumpf": {
+      "id": "gruenschlamm_sumpf",
+      "name": "Grünschlamm-Sumpf",
+      "biome": "swamp",
+      "position": { "x": 1200, "z": 8400 },
+      "bounds": { "minX": 0, "maxX": 2400, "minZ": 7200, "maxZ": 9600 },
+      "level": "1-15",
+      "slimeColor": "midnight_black",
+      "city": null,
+      "specialLocation": {
+        "name": "Funkelnest",
+        "position": { "x": 1800, "z": 8200 },
+        "type": "treasure_cave",
+        "hidden": true
+      },
+      "features": [
+        "swamp_navigation",
+        "witches",
+        "alchemy",
+        "witch_circles",
+        "moor_bosses"
+      ],
+      "challenges": ["miasma", "poison", "will_o_wisps", "poisonous_creatures", "disease"]
+    },
+    "magmastroeme": {
+      "id": "magmastroeme",
+      "name": "Magmaströme",
+      "biome": "volcano",
+      "position": { "x": 4800, "z": 8400 },
+      "bounds": { "minX": 3600, "maxX": 6000, "minZ": 7200, "maxZ": 9600 },
+      "level": "1-15",
+      "slimeColor": "molten_red",
+      "city": {
+        "name": "Funken-Siedlung",
+        "position": { "x": 4800, "z": 8200 },
+        "size": "small",
+        "buildings": 25,
+        "features": ["forge", "blacksmith", "lava_docks"]
+      },
+      "features": [
+        "lava_flows_like_rivers",
+        "lava_platforming",
+        "master_forges",
+        "fire_magic_training",
+        "volcano_creatures",
+        "ore_veins",
+        "lava_channels"
+      ],
+      "challenges": ["extreme_heat", "lava_flows", "ash", "overheating"]
+    },
+    "heisse_duenen": {
+      "id": "heisse_duenen",
+      "name": "Heiße Dünen",
+      "biome": "desert",
+      "position": { "x": 8400, "z": 8400 },
+      "bounds": { "minX": 7200, "maxX": 9600, "minZ": 7200, "maxZ": 9600 },
+      "level": "1-15",
+      "slimeColor": "dusty_gold",
+      "city": {
+        "name": "Handelsfestung",
+        "position": { "x": 8400, "z": 8200 },
+        "size": "large",
+        "buildings": 50,
+        "features": ["pvp_arena", "player_shops", "trading_hub"],
+        "foodSpeciality": "meat",
+        "isCapital": true
+      },
+      "features": [
+        "western_trading_hub",
+        "pvp_arena",
+        "player_shops",
+        "goldstaub_oede_dungeon"
+      ],
+      "challenges": ["heat", "thirst", "sandstorm", "mirages"]
+    },
+    "goetterfels": {
+      "id": "goetterfels",
+      "name": "Götterfels",
+      "biome": "mountain",
+      "position": { "x": 4800, "z": 4800 },
+      "bounds": { "minX": 3300, "maxX": 6300, "minZ": 3300, "maxZ": 6300 },
+      "level": "endgame",
+      "slimeColor": null,
+      "indestructible": true,
+      "height": 500,
+      "features": [
+        "schwarze_muehle",
+        "kleines_dorf",
+        "fluss",
+        "safe_zone"
+      ],
+      "specialLocations": {
+        "peak": {
+          "name": "Schwarze Mühle",
+          "position": { "x": 4800, "z": 4200 },
+          "rooms": 12,
+          "safeZone": true,
+          "fastTravelHub": true
+        },
+        "interior": {
+          "name": "Schmelz-Welt",
+          "type": "lava_world",
+          "level": "max",
+          "bosses": true,
+          "bestLoot": true
+        },
+        "tower": {
+          "name": "Turm der 100 Prüfungen",
+          "unlockCondition": "najika_explosion",
+          "floors": 100
+        }
+      },
+      "legend": "Niemand kann auch nur ein Körnchen vom Götterfels abbauen. Er ist unverrückbar, unzerstörbar, ewig. Götter haben ihn erschaffen, und Götter allein können ihn zerstören."
+    },
+    "tiefenhoehlen": {
+      "id": "tiefenhoehlen",
+      "name": "Tiefenhöhlen",
+      "biome": "caves",
+      "position": { "x": 4800, "z": 1200 },
+      "bounds": { "minX": 3600, "maxX": 6000, "minZ": 0, "maxZ": 2400 },
+      "level": "1-15",
+      "slimeColor": "deep_purple",
+      "underground": true,
+      "depth": -100,
+      "entrance": { "x": 4800, "z": 1800 },
+      "city": {
+        "type": "goblin_settlements",
+        "count": "multiple",
+        "noMainCity": true
+      },
+      "features": [
+        "massive_cave_systems",
+        "glowing_mushrooms",
+        "crystals",
+        "underground_lakes",
+        "giant_spiders",
+        "goblin_settlements",
+        "dark_atmosphere"
+      ],
+      "challenges": ["darkness", "disorientation", "spiders", "goblins"],
+      "requiresLight": true,
+      "sublevel": {
+        "name": "Kristall-Katakomben",
+        "depth": -200,
+        "type": "endgame_quest_farming",
+        "features": ["massive_crystals", "rare_materials", "difficult_bosses"],
+        "exitTo": "goetterfels"
+      }
+    }
+  }
+}

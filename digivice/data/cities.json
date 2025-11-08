@@ -1,0 +1,247 @@
+{
+  "cities": [
+    {
+      "id": "handelsfestung",
+      "name": "Handelsfestung",
+      "region": "heisse_duenen",
+      "position": { "x": 8400, "z": 8200 },
+      "isCapital": true,
+      "size": "large",
+      "population": 500,
+      "buildings": {
+        "count": 50,
+        "types": [
+          {"type": "trading_post", "count": 10},
+          {"type": "player_shop", "count": 15},
+          {"type": "pvp_arena", "count": 1},
+          {"type": "inn", "count": 3},
+          {"type": "house", "count": 21}
+        ]
+      },
+      "features": {
+        "pvpArena": {
+          "name": "Kampf-Arena",
+          "position": { "x": 8400, "z": 8300 },
+          "capacity": 100,
+          "modes": ["hardcore", "normal", "softy"]
+        },
+        "playerShops": {
+          "count": 15,
+          "style": "fallout76"
+        },
+        "tradingHub": {
+          "npcTraders": 20,
+          "specialVendors": ["rare_items", "legendary_weapons"]
+        }
+      },
+      "foodSpeciality": {
+        "name": "FLEISCH",
+        "items": {
+          "streetFood": [
+            {"name": "Arena-Happen", "type": "burger", "price": 10},
+            {"name": "Gold-Stäbchen", "type": "fries", "price": 5},
+            {"name": "Händler-Wurst", "type": "hotdog", "price": 8},
+            {"name": "Dreh-Braten", "type": "kebab", "price": 12},
+            {"name": "Händler-Fladen", "type": "turkish_pizza", "price": 15}
+          ],
+          "westernBBQ": [
+            {"name": "Rauch-Rippchen", "type": "bbq_ribs", "price": 25, "buff": "strength"},
+            {"name": "Glut-Steak", "type": "steak", "price": 30, "buff": "stamina"},
+            {"name": "Wüsten-Dörrfleisch", "type": "jerky", "price": 8, "buff": "combat"}
+          ],
+          "legendary": {
+            "name": "CHAMPION-KEULE",
+            "description": "Die legendäre große Fleischkeule!",
+            "size": "huge",
+            "eatStyle": "two_handed",
+            "quote": "Najika beißt rein wie in jedem guten Anime!",
+            "price": 100,
+            "buffs": {
+              "strength": 20,
+              "stamina": 20,
+              "combatPower": 15
+            }
+          }
+        }
+      },
+      "style": "western",
+      "theme": "trading_commerce"
+    },
+    {
+      "id": "dampf_hain",
+      "name": "Dampf-Hain",
+      "region": "samtmoos_tiefwald",
+      "position": { "x": 4800, "z": 1500 },
+      "size": "medium",
+      "population": 200,
+      "buildings": {
+        "count": 30,
+        "types": [
+          {"type": "onsen", "count": 3},
+          {"type": "restaurant", "count": 5},
+          {"type": "druid_hut", "count": 8},
+          {"type": "house", "count": 14}
+        ]
+      },
+      "features": {
+        "onsen": {
+          "count": 3,
+          "heals": true,
+          "buffs": ["hp_regen", "comfort"]
+        },
+        "restaurant": {
+          "style": "spirited_away",
+          "steamKitchen": true
+        },
+        "druidCircle": {
+          "name": "Druiden-Zirkel",
+          "position": { "x": 4700, "z": 1400 },
+          "quests": ["forest_secrets", "nature_magic"]
+        }
+      },
+      "foodSpeciality": {
+        "name": "GEDÄMPFTE BRÖTCHEN",
+        "items": [
+          {"name": "Baozi", "type": "steamed_bun", "filling": "meat", "price": 8, "buff": "hp_regen"},
+          {"name": "Manju", "type": "steamed_bun", "filling": "sweet", "price": 6, "buff": "comfort"},
+          {"name": "Hefeklöße", "type": "dumpling", "price": 10, "buff": "hp_regen"}
+        ],
+        "vibe": "anime_spirited_away"
+      },
+      "style": "japanese_mystical",
+      "theme": "healing_relaxation"
+    },
+    {
+      "id": "salzige_bucht",
+      "name": "Salzige Bucht",
+      "region": "salzwind_kueste",
+      "position": { "x": 1500, "z": 4800 },
+      "size": "medium",
+      "population": 250,
+      "buildings": {
+        "count": 35,
+        "types": [
+          {"type": "harbor_building", "count": 8},
+          {"type": "fish_market", "count": 1},
+          {"type": "lighthouse", "count": 1},
+          {"type": "ship", "count": 5},
+          {"type": "house", "count": 20}
+        ]
+      },
+      "features": {
+        "harbor": {
+          "docks": 5,
+          "ships": 10,
+          "tradingPosts": 3
+        },
+        "fishMarket": {
+          "name": "Salzfisch-Markt",
+          "position": { "x": 1400, "z": 4800 },
+          "sells": ["fresh_fish", "dried_fish", "salt"]
+        },
+        "lighthouse": {
+          "name": "Leuchtturm",
+          "position": { "x": 1600, "z": 4700 },
+          "functional": true,
+          "climbable": true
+        }
+      },
+      "foodSpeciality": {
+        "name": "SALZFISCH",
+        "items": [
+          {"name": "Getrockneter Salzfisch", "type": "dried_fish", "price": 12, "buff": "swimming"},
+          {"name": "Frischer Meerfisch", "type": "fresh_fish", "price": 15, "buff": "water_resistance"},
+          {"name": "Salzfisch-Eintopf", "type": "stew", "price": 20, "buff": "swimming"}
+        ],
+        "decoration": "hanging_fish_everywhere"
+      },
+      "style": "pirate_coastal",
+      "theme": "fishing_trading"
+    },
+    {
+      "id": "runenheim",
+      "name": "Runenheim",
+      "region": "blitzebene",
+      "position": { "x": 8400, "z": 4800 },
+      "size": "small",
+      "population": 150,
+      "buildings": {
+        "count": 20,
+        "types": [
+          {"type": "magic_academy", "count": 1},
+          {"type": "rune_shop", "count": 3},
+          {"type": "totem", "count": 5},
+          {"type": "house", "count": 11}
+        ]
+      },
+      "features": {
+        "magicAcademy": {
+          "name": "Runen-Akademie",
+          "position": { "x": 8400, "z": 4700 },
+          "teaches": ["rune_magic", "lightning_magic"],
+          "skillTrainer": true
+        },
+        "runeAltar": {
+          "name": "Runen-Altar",
+          "position": { "x": 8500, "z": 4800 },
+          "enchants": true,
+          "buffs": ["magic_power"]
+        }
+      },
+      "style": "magical_highland",
+      "theme": "magic_learning"
+    },
+    {
+      "id": "funken_siedlung",
+      "name": "Funken-Siedlung",
+      "region": "magmastroeme",
+      "position": { "x": 4800, "z": 8200 },
+      "size": "small",
+      "population": 180,
+      "buildings": {
+        "count": 25,
+        "types": [
+          {"type": "forge", "count": 5},
+          {"type": "blacksmith", "count": 1},
+          {"type": "lava_dock", "count": 2},
+          {"type": "fireproof_house", "count": 17}
+        ]
+      },
+      "features": {
+        "forge": {
+          "count": 5,
+          "masterForge": true,
+          "crafts": ["legendary_weapons", "legendary_armor"]
+        },
+        "blacksmith": {
+          "name": "Meister-Schmied",
+          "position": { "x": 4800, "z": 8100 },
+          "sells": ["best_weapons", "best_armor"],
+          "upgrades": true
+        },
+        "lavaDocks": {
+          "count": 2,
+          "lavaBoats": true,
+          "function": "transportation"
+        }
+      },
+      "style": "volcanic_industrial",
+      "theme": "forging_crafting"
+    }
+  ],
+  "noCity": [
+    {
+      "region": "reich_der_drei",
+      "reason": "Nur Untote und Nekromanten, keine lebende Stadt"
+    },
+    {
+      "region": "gruenschlamm_sumpf",
+      "reason": "Nur Hexen-Territory, keine Stadt",
+      "specialLocation": "Funkelnest (versteckte Schatzhöhle)"
+    },
+    {
+      "region": "tiefenhoehlen",
+      "reason": "Mehrere Goblin-Siedlungen, keine Hauptstadt"
+    }
+  ]
+}
