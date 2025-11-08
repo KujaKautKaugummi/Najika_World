@@ -64,7 +64,12 @@ class CameraController {
     }
 
     onPointerDown(e) {
-        this.activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        this.activePointers.set(e.pointerId, {
+            x: e.clientX,
+            y: e.clientY,
+            startX: e.clientX,
+            startY: e.clientY
+        });
 
         if (this.activePointers.size === 1) {
             this.pointerMode = 'drag';
@@ -79,15 +84,21 @@ class CameraController {
     onPointerMove(e) {
         if (!this.activePointers.has(e.pointerId)) return;
 
-        this.activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        const pointer = this.activePointers.get(e.pointerId);
+        const startX = pointer.startX;
+        const startY = pointer.startY;
+
+        this.activePointers.set(e.pointerId, {
+            x: e.clientX,
+            y: e.clientY,
+            startX: startX,
+            startY: startY
+        });
 
         if (this.pointerMode === 'drag' && this.activePointers.size === 1) {
-            const [pointerId, pointer] = [...this.activePointers.entries()][0];
-            const startPointer = { x: e.clientX, y: e.clientY };
-
             // Berechne Delta seit Start
-            const dx = pointer.x - startPointer.x;
-            const dy = pointer.y - startPointer.y;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
 
             this.orbitYaw = this.dragStartYaw - dx * 0.005;
             this.orbitPitch = this.clamp(
@@ -126,6 +137,15 @@ class CameraController {
             this.pointerMode = 'drag';
             this.dragStartYaw = this.orbitYaw;
             this.dragStartPitch = this.orbitPitch;
+
+            // Aktualisiere Start-Position des verbleibenden Pointers
+            const [pointerId, pointer] = [...this.activePointers.entries()][0];
+            this.activePointers.set(pointerId, {
+                x: pointer.x,
+                y: pointer.y,
+                startX: pointer.x,
+                startY: pointer.y
+            });
         }
     }
 
