@@ -551,9 +551,10 @@ class CityBuilder {
     const cityGroup = new THREE.Group();
     cityGroup.name = `city_${cityData.id}`;
 
-    const { position, buildings } = cityData;
+    const { position, buildings, region } = cityData;
     const centerX = position.x;
     const centerZ = position.z;
+    const regionId = region;  // Region ID for terrain height
 
     // Place buildings in a grid around the city center
     let placedCount = 0;
@@ -562,7 +563,7 @@ class CityBuilder {
 
     for (const buildingType of buildings.types) {
       for (let i = 0; i < buildingType.count; i++) {
-        const building = this.createBuilding(buildingType.type, centerX + gridX, centerZ + gridZ);
+        const building = this.createBuilding(buildingType.type, centerX + gridX, centerZ + gridZ, regionId);
 
         if (building) {
           cityGroup.add(building);
@@ -589,7 +590,7 @@ class CityBuilder {
   /**
    * Create single building
    */
-  createBuilding(type, x, z) {
+  createBuilding(type, x, z, regionId) {
     const template = this.buildingTemplates.get(type);
     if (!template) {
       console.warn(`  ⚠️ Building template not found: ${type}`);
@@ -597,7 +598,7 @@ class CityBuilder {
     }
 
     const building = template.geometry.clone();
-    const y = this.terrainGenerator.getHeightAt(x, z);
+    const y = this.terrainGenerator.getHeightAt(regionId, x, z);
     building.position.set(x, y, z);
 
     // Random rotation (90° increments)
