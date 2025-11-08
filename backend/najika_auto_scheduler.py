@@ -26,8 +26,19 @@ if sys.platform == 'win32':
 
 # Paths
 BACKEND_DIR = Path(__file__).resolve().parent
-TRAINING_SCRIPT = BACKEND_DIR / 'NAJIKA_REAL_TRAINING.py'
+VIDEO_TRAINING_SCRIPT = BACKEND_DIR / 'NAJIKA_REAL_TRAINING.py'  # Personality Videos (PRIORITÄT!)
+SESSION_TRAINING_SCRIPT = BACKEND_DIR / 'NAJIKA_SESSION_TRAINING.py'  # Session-Daten
+CODE_TRAINING_SCRIPT = BACKEND_DIR / 'NAJIKA_CODE_TRAINING.py'  # Code-Training
 BERLIN_TZ = pytz.timezone('Europe/Berlin')
+
+# Welches Training-Script nutzen? (Priorität: Video > Session > Code)
+# Videos haben Vorrang, weil sie die Personalities trainieren!
+if VIDEO_TRAINING_SCRIPT.exists():
+    TRAINING_SCRIPT = VIDEO_TRAINING_SCRIPT
+elif SESSION_TRAINING_SCRIPT.exists():
+    TRAINING_SCRIPT = SESSION_TRAINING_SCRIPT
+else:
+    TRAINING_SCRIPT = CODE_TRAINING_SCRIPT
 
 # Training Schedule
 NIGHT_START = time(0, 0)   # 00:00
@@ -107,8 +118,16 @@ def main():
     print()
 
     # Starte Training
+    if TRAINING_SCRIPT == VIDEO_TRAINING_SCRIPT:
+        training_type = "VIDEO-PERSONALITY"
+    elif TRAINING_SCRIPT == SESSION_TRAINING_SCRIPT:
+        training_type = "SESSION"
+    else:
+        training_type = "CODE"
+
     print("=" * 70)
-    print(f"🚀 STARTE {session_type}-TRAINING...")
+    print(f"🚀 STARTE {session_type}-TRAINING ({training_type})")
+    print(f"Script: {TRAINING_SCRIPT.name}")
     print("=" * 70)
     print()
 
