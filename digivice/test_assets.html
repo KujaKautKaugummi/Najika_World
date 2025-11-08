@@ -142,12 +142,13 @@
         <button onclick="resetCamera()">🎥 Kamera Reset</button>
         <button onclick="toggleRotation()">🔄 Auto-Rotation</button>
         <button onclick="toggleGrid()">📐 Grid</button>
+        <button onclick="switchCameraMode()">📷 Kamera-Modus: <span id="camera-mode">ORBIT</span></button>
     </div>
 
     <!-- Three.js via CDN (wie in index.html) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="static/js/camera_controller.js"></script>
 
     <script>
         // Three.js ist jetzt global verfügbar
@@ -167,11 +168,9 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Controls (OrbitControls ist global von CDN)
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2;
+        // Kamera-Controller (3 Modi: ORBIT, THIRD, FIRST)
+        const cameraController = new CameraController(camera, scene, renderer);
+        cameraController.setTarget(0, 2, 0);
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -322,7 +321,10 @@
                 });
             }
 
-            controls.update();
+            // Update Kamera-Controller
+            const delta = 0.016; // ~60fps
+            cameraController.update(delta);
+
             renderer.render(scene, camera);
         }
 
@@ -338,8 +340,10 @@
         // Global Functions for Buttons
         window.resetCamera = () => {
             camera.position.set(15, 10, 15);
-            controls.target.set(0, 0, 0);
-            controls.update();
+            cameraController.setTarget(0, 2, 0);
+            cameraController.orbitYaw = Math.PI;
+            cameraController.orbitPitch = 0.3;
+            cameraController.orbitDistance = 20;
         };
 
         window.toggleRotation = () => {
@@ -348,6 +352,20 @@
 
         window.toggleGrid = () => {
             gridHelper.visible = !gridHelper.visible;
+        };
+
+        window.switchCameraMode = () => {
+            const modes = [
+                cameraController.MODES.ORBIT,
+                cameraController.MODES.THIRD,
+                cameraController.MODES.FIRST
+            ];
+            const currentIndex = modes.indexOf(cameraController.getMode());
+            const nextIndex = (currentIndex + 1) % modes.length;
+            const nextMode = modes[nextIndex];
+
+            cameraController.setMode(nextMode);
+            document.getElementById('camera-mode').textContent = nextMode.toUpperCase();
         };
     </script>
 </body>
