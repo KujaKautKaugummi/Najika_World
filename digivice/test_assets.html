@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Test - Najika World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            z-index: 100;
+        }
+
+        #info h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        #info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 50px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 200;
+        }
+
+        #loading h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #progress {
+            font-size: 14px;
+            color: #4CAF50;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .warning {
+            color: #ff9800;
+        }
+
+        #asset-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .asset-item {
+            padding: 3px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        #controls button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        #controls button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="loading">
+        <h2>🌍 Lade Assets...</h2>
+        <p id="progress">Initialisiere...</p>
+    </div>
+
+    <div id="info">
+        <h1>🎮 Asset Test - Najika World</h1>
+        <p><strong>Status:</strong> <span id="status">Initialisiere...</span></p>
+        <p><strong>Geladene Assets:</strong> <span id="loaded-count">0</span> / <span id="total-count">0</span></p>
+        <p><strong>Format:</strong> <span id="format-info">-</span></p>
+        <p><strong>FPS:</strong> <span id="fps">-</span></p>
+
+        <div id="asset-list">
+            <strong>Geladene Modelle:</strong>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="resetCamera()">🎥 Kamera Reset</button>
+        <button onclick="toggleRotation()">🔄 Auto-Rotation</button>
+        <button onclick="toggleGrid()">📐 Grid</button>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "/static/node_modules/three/build/three.module.js",
+            "three/addons/": "/static/node_modules/three/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.Fog(0x87ceeb, 50, 200);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(15, 10, 15);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(50, 50, 50);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+
+        // Ground
+        const groundGeometry = new THREE.PlaneGeometry(100, 100);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+            color: 0x90EE90,
+            roughness: 0.8
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Grid
+        const gridHelper = new THREE.GridHelper(100, 20, 0x000000, 0x333333);
+        gridHelper.visible = true;
+        scene.add(gridHelper);
+
+        // Asset Loading
+        const gltfLoader = new GLTFLoader();
+        const loadedAssets = [];
+        let totalAssets = 0;
+        let loadedCount = 0;
+        let autoRotate = true;
+
+        // Test Assets (Mix von GLB und GLTF)
+        const testAssets = [
+            // JellySquish Oasis (GLB)
+            { path: '/static/assets/jellysquish/oasis/palm_l.glb', name: 'Palm Tree Large (GLB)', position: [-10, 0, 0] },
+            { path: '/static/assets/jellysquish/oasis/cactus_large.glb', name: 'Cactus Large (GLB)', position: [-5, 0, 0] },
+            { path: '/static/assets/jellysquish/oasis/house_small.glb', name: 'Desert House (GLB)', position: [0, 0, 0] },
+
+            // KayKit Dungeon (GLTF)
+            { path: '/static/assets/kaykit/dungeon/chest.gltf', name: 'Chest (GLTF)', position: [5, 0, 0] },
+            { path: '/static/assets/kaykit/dungeon/torch.gltf', name: 'Torch (GLTF)', position: [8, 0, 0] },
+
+            // KayKit Medieval (GLTF)
+            { path: '/static/assets/kaykit/medieval/house_type01.gltf', name: 'Medieval House (GLTF)', position: [12, 0, 0] },
+
+            // KayKit Nature (GLTF)
+            { path: '/static/assets/kaykit/nature/tree_oak.gltf', name: 'Oak Tree (GLTF)', position: [-10, 0, 5] },
+            { path: '/static/assets/kaykit/nature/rock.gltf', name: 'Rock (GLTF)', position: [-5, 0, 5] },
+        ];
+
+        totalAssets = testAssets.length;
+        document.getElementById('total-count').textContent = totalAssets;
+
+        // Load Assets
+        async function loadAssets() {
+            const assetListDiv = document.getElementById('asset-list');
+
+            for (const asset of testAssets) {
+                try {
+                    updateProgress(`Lade: ${asset.name}...`);
+
+                    const gltf = await new Promise((resolve, reject) => {
+                        gltfLoader.load(
+                            asset.path,
+                            resolve,
+                            (progress) => {
+                                const percent = (progress.loaded / progress.total * 100).toFixed(0);
+                                updateProgress(`${asset.name}: ${percent}%`);
+                            },
+                            reject
+                        );
+                    });
+
+                    // Add to scene
+                    const model = gltf.scene;
+                    model.position.set(...asset.position);
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+                    scene.add(model);
+
+                    loadedAssets.push({ name: asset.name, model: model });
+                    loadedCount++;
+
+                    // Update UI
+                    document.getElementById('loaded-count').textContent = loadedCount;
+
+                    const item = document.createElement('div');
+                    item.className = 'asset-item success';
+                    item.textContent = `✅ ${asset.name}`;
+                    assetListDiv.appendChild(item);
+
+                    console.log(`✅ Loaded: ${asset.name}`);
+
+                } catch (error) {
+                    console.error(`❌ Failed to load: ${asset.name}`, error);
+
+                    const item = document.createElement('div');
+                    item.className = 'asset-item error';
+                    item.textContent = `❌ ${asset.name} - ${error.message}`;
+                    assetListDiv.appendChild(item);
+                }
+            }
+
+            // Finish loading
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('status').innerHTML = `<span class="success">✅ Fertig!</span>`;
+
+            const glbCount = loadedAssets.filter(a => a.name.includes('GLB')).length;
+            const gltfCount = loadedAssets.filter(a => a.name.includes('GLTF')).length;
+            document.getElementById('format-info').textContent = `GLB: ${glbCount}, GLTF: ${gltfCount}`;
+        }
+
+        function updateProgress(message) {
+            document.getElementById('progress').textContent = message;
+        }
+
+        // Start loading
+        loadAssets();
+
+        // Animation Loop
+        let lastTime = performance.now();
+        let frameCount = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // FPS Counter
+            frameCount++;
+            const currentTime = performance.now();
+            if (currentTime - lastTime >= 1000) {
+                document.getElementById('fps').textContent = frameCount;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+
+            // Auto-rotate models
+            if (autoRotate) {
+                loadedAssets.forEach(asset => {
+                    asset.model.rotation.y += 0.005;
+                });
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Global Functions for Buttons
+        window.resetCamera = () => {
+            camera.position.set(15, 10, 15);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        };
+
+        window.toggleRotation = () => {
+            autoRotate = !autoRotate;
+        };
+
+        window.toggleGrid = () => {
+            gridHelper.visible = !gridHelper.visible;
+        };
+    </script>
+</body>
+</html>
