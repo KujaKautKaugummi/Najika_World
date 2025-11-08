@@ -1626,10 +1626,14 @@
         }
         event.preventDefault();
 
-        // FIX: Blur room dropdown to prevent W key from switching rooms
-        const roomDropdown = document.getElementById('room');
-        if (roomDropdown && document.activeElement === roomDropdown) {
-            roomDropdown.blur();
+        // FIX: Blur ANY focused input element to enable WASD controls
+        // This prevents inputs from chat, terminal modules, etc. from stealing keyboard events
+        if (document.activeElement && (
+            document.activeElement.tagName === 'INPUT' ||
+            document.activeElement.tagName === 'TEXTAREA' ||
+            document.activeElement.tagName === 'SELECT'
+        )) {
+            document.activeElement.blur();
         }
 
         activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -2304,7 +2308,7 @@
         }
         const loader = new THREE.GLTFLoader();
         loader.load(
-            '/assets/KayKit_Skeletons_1.0_FREE/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
+            '/assets/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
             gltf => {
                 characterGroup = gltf.scene;
                 characterGroup.traverse(node => {
