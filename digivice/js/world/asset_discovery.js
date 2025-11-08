@@ -2,7 +2,7 @@
 // Scannt die Asset-Ordner und erstellt ein Asset-Verzeichnis
 
 export class AssetDiscovery {
-  constructor(basePath = '/digivice/static/assets') {
+  constructor(basePath = '/static/assets') {
     this.basePath = basePath;
     this.discovered = {
       kaykit: {},
