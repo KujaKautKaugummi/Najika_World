@@ -1,7 +1,7 @@
 // 📦 ASSET LOADER - Lädt 3D-Modelle (GLB, FBX) für World-System
 // Verwaltet KayKit, Quaternius, JellySquish Assets
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
 class AssetLoader {
   constructor() {

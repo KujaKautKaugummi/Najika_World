@@ -1,7 +1,7 @@
 // 🌿 VEGETATION SYSTEM - Verwaltet Vegetation-Placement pro Biome
 // Platziert Bäume, Pflanzen, Mushrooms, Cacti basierend auf Biome-Daten
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
 class VegetationSystem {
   constructor(scene, terrainGenerator) {
