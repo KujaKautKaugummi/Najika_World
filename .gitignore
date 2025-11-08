@@ -88,6 +88,11 @@ assets/
 *.fbx
 *.obj
 
+# AUSNAHME: Web-Assets für Najika World erlauben (im digivice Ordner)
+!digivice/static/assets/**/*.glb
+!digivice/static/assets/**/*.gltf
+!digivice/static/assets/**/*.bin
+
 # Savegame-Dateien (automatisch generiert beim Spielen)
 backend/saves/*.json
 backend/saves/*.json
