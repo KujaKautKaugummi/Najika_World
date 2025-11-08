@@ -152,8 +152,7 @@ class CameraController {
     onWheel(e) {
         e.preventDefault();
 
-        if (this.currentMode !== this.MODES.ORBIT) return;
-
+        // Zoom funktioniert in allen Modi
         const delta = e.deltaY > 0 ? 1 : -1;
         this.orbitDistance = this.clamp(
             this.orbitDistance + delta,

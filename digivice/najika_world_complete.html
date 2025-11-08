@@ -155,6 +155,14 @@
         <p><strong>FPS:</strong> <span id="fps" class="stat-value">60</span></p>
         <hr style="margin: 15px 0; border-color: #333;">
         <p style="font-size: 11px; opacity: 0.9; line-height: 1.4;">
+            <strong>Steuerung:</strong><br>
+            <span class="stat-value">WASD</span> - Bewegen | <span class="stat-value">Shift</span> - Rennen<br>
+            <span class="stat-value">Maus</span> - Kamera drehen<br>
+            <span class="stat-value">Mausrad</span> - Zoom<br>
+            <span class="stat-value">📷-Button</span> - Kamera-Modus wechseln
+        </p>
+        <hr style="margin: 15px 0; border-color: #333;">
+        <p style="font-size: 11px; opacity: 0.9; line-height: 1.4;">
             <strong>8 Regionen (Level 1-15):</strong><br>
             🏜️ Heiße Dünen (N)<br>
             🌲 Samtmoos-Tiefwald (NW)<br>
@@ -209,6 +217,51 @@
         cameraController.setTarget(0, 10, 0);
         cameraController.orbitDistance = 200;
         cameraController.ORBIT_MAX_DIST = 500;
+
+        // WASD-Steuerung
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            shift: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = true; break;
+                case 'a': keys.a = true; break;
+                case 's': keys.s = true; break;
+                case 'd': keys.d = true; break;
+                case 'shift': keys.shift = true; break;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = false; break;
+                case 'a': keys.a = false; break;
+                case 's': keys.s = false; break;
+                case 'd': keys.d = false; break;
+                case 'shift': keys.shift = false; break;
+            }
+        });
+
+        // Charakter erstellen (Avatar)
+        const characterGeometry = new THREE.CapsuleGeometry(2, 3, 8, 16);
+        const characterMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4CAF50,
+            roughness: 0.7,
+            metalness: 0.3
+        });
+        const character = new THREE.Mesh(characterGeometry, characterMaterial);
+        character.position.set(0, 3.5, 0);
+        character.castShadow = true;
+        character.receiveShadow = true;
+        scene.add(character);
+
+        // Kamera an Charakter binden
+        cameraController.setCharacter(character, 7);
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -468,15 +521,15 @@
         window.teleportTo = (region) => {
             const pos = teleportPositions[region];
             if (pos) {
-                camera.position.set(pos.x, 100, pos.z + 150);
-                cameraController.setTarget(pos.x, 10, pos.z);
+                character.position.set(pos.x, 3.5, pos.z);
+                cameraController.setTarget(pos.x, 3.5, pos.z);
             }
         };
 
         // Region ermitteln
         function updateCurrentRegion() {
-            const x = camera.position.x;
-            const z = camera.position.z;
+            const x = character.position.x;
+            const z = character.position.z;
             const dist = Math.sqrt(x * x + z * z);
 
             if (dist < 100) {
@@ -533,18 +586,55 @@
             // FPS
             frameCount++;
             const currentTime = performance.now();
+            const delta = (currentTime - lastTime) / 1000;
             if (currentTime - lastTime >= 1000) {
                 document.getElementById('fps').textContent = frameCount;
                 frameCount = 0;
                 lastTime = currentTime;
             }
 
+            // WASD-Bewegung
+            let forward = 0;
+            let right = 0;
+
+            if (keys.w) forward += 1;
+            if (keys.s) forward -= 1;
+            if (keys.a) right -= 1;
+            if (keys.d) right += 1;
+
+            // Bewegung relativ zur Kamera
+            if (forward !== 0 || right !== 0) {
+                const speed = keys.shift ? 80 : 40;
+                const angle = Math.atan2(right, forward);
+                const worldAngle = cameraController.orbitYaw + angle;
+
+                const moveX = Math.sin(worldAngle) * speed * delta;
+                const moveZ = Math.cos(worldAngle) * speed * delta;
+
+                character.position.x += moveX;
+                character.position.z += moveZ;
+
+                // Charakter-Rotation
+                character.rotation.y = worldAngle + Math.PI;
+
+                // Kamera-Target nachführen
+                cameraController.setTarget(
+                    character.position.x,
+                    character.position.y,
+                    character.position.z
+                );
+
+                // Boundary Check (900x900 Map)
+                character.position.x = Math.max(-450, Math.min(450, character.position.x));
+                character.position.z = Math.max(-450, Math.min(450, character.position.z));
+            }
+
             // Update
             cameraController.update(0.016);
 
             // UI
-            const x = camera.position.x.toFixed(0);
-            const z = camera.position.z.toFixed(0);
+            const x = character.position.x.toFixed(0);
+            const z = character.position.z.toFixed(0);
             document.getElementById('position').textContent = `${x}, ${z}`;
             updateCurrentRegion();
 
