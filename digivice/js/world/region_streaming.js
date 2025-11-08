@@ -240,6 +240,14 @@ class RegionStreaming {
     // Create ground material
     const groundMaterial = this.biomeSystem.createGroundMaterial(region.biome);
 
+    // DEBUG: Log material color
+    console.log(`🎨 TERRAIN MATERIAL - ${region.name}:`, {
+      biome: region.biome,
+      colorHex: '#' + groundMaterial.color.getHexString(),
+      roughness: groundMaterial.roughness,
+      metalness: groundMaterial.metalness
+    });
+
     // Create mesh
     const terrainMesh = new THREE.Mesh(terrainGeometry, groundMaterial);
     terrainMesh.receiveShadow = true;
