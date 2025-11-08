@@ -250,7 +250,12 @@ class CameraController {
     }
 }
 
-// Export für Verwendung in anderen Skripten
+// Export für Browser (window.CameraController)
+if (typeof window !== 'undefined') {
+    window.CameraController = CameraController;
+}
+
+// Export für Node.js (optional)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CameraController;
 }
