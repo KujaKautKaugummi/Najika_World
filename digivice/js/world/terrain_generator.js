@@ -1,7 +1,7 @@
 // 🏔️ TERRAIN GENERATOR - Najikas 9600x9600 Welt
 // Generiert Terrain für alle 8 Regionen mit Biome-spezifischen Höhenprofilen
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
 class TerrainGenerator {
   constructor(worldSize = 9600) {

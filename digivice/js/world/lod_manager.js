@@ -1,7 +1,7 @@
 // 🎯 LOD MANAGER - Level of Detail Management für Performance-Optimierung
 // Passt Mesh-Details basierend auf Kamera-Distanz an
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
 class LODManager {
   constructor(scene, camera) {

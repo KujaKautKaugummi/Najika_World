@@ -1,7 +1,7 @@
 // 🌍 WORLD MANAGER - Hauptorchestrator für das 8-Regionen-System
 // Koordiniert TerrainGenerator, BiomeSystem, VegetationSystem, CityBuilder, RegionStreaming, LODManager
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 import TerrainGenerator from './terrain_generator.js';
 import BiomeSystem from './biome_system.js';
 import VegetationSystem from './vegetation_system.js';
