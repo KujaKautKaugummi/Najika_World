@@ -2,13 +2,11 @@
 // Verwaltet KayKit, Quaternius, JellySquish Assets
 
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
 class AssetLoader {
   constructor() {
-    this.gltfLoader = new GLTFLoader();
-    this.fbxLoader = new FBXLoader();
+    // Use global loaders (available from CDN)
+    this.gltfLoader = new THREE.GLTFLoader();
 
     // Cache für geladene Assets
     this.cache = new Map();
@@ -76,10 +74,8 @@ class AssetLoader {
       // Bestimme Loader anhand Extension
       if (assetPath.endsWith('.glb') || assetPath.endsWith('.gltf')) {
         model = await this.loadGLTF(assetPath);
-      } else if (assetPath.endsWith('.fbx')) {
-        model = await this.loadFBX(assetPath);
       } else {
-        throw new Error(`Unsupported format: ${assetPath}`);
+        throw new Error(`Unsupported format: ${assetPath}. Only GLB/GLTF supported.`);
       }
 
       // Cache das Model
@@ -126,27 +122,7 @@ class AssetLoader {
     });
   }
 
-  /**
-   * Lade FBX Model
-   */
-  loadFBX(path) {
-    return new Promise((resolve, reject) => {
-      this.fbxLoader.load(
-        path,
-        (fbx) => {
-          fbx.traverse((child) => {
-            if (child.isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-            }
-          });
-          resolve(fbx);
-        },
-        undefined,
-        reject
-      );
-    });
-  }
+  // FBX loading removed - only GLTF/GLB supported via CDN loader
 
   /**
    * Wende Optionen auf Model an

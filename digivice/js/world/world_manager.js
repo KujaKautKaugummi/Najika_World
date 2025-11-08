@@ -8,6 +8,8 @@ import VegetationSystem from './vegetation_system.js';
 import CityBuilder from './city_builder.js';
 import RegionStreaming from './region_streaming.js';
 import LODManager from './lod_manager.js';
+import AssetLoader from './asset_loader.js';
+import AssetDiscovery from './asset_discovery.js';
 
 class WorldManager {
   constructor(scene, camera) {
@@ -22,6 +24,8 @@ class WorldManager {
     };
 
     // Initialize subsystems
+    this.assetLoader = new AssetLoader();
+    this.assetDiscovery = new AssetDiscovery();
     this.terrainGenerator = new TerrainGenerator();
     this.biomeSystem = new BiomeSystem(scene, camera);
     this.vegetationSystem = new VegetationSystem(scene, this.terrainGenerator);
@@ -34,6 +38,10 @@ class WorldManager {
       this.cityBuilder
     );
     this.lodManager = new LODManager(scene, camera);
+
+    // Inject assetLoader into subsystems
+    this.vegetationSystem.assetLoader = this.assetLoader;
+    this.cityBuilder.assetLoader = this.assetLoader;
 
     // State
     this.initialized = false;
@@ -62,6 +70,12 @@ class WorldManager {
     if (options.enableStreaming !== undefined) this.enableStreaming = options.enableStreaming;
 
     try {
+      // Discover available assets
+      console.log('🔍 Discovering assets...');
+      await this.assetDiscovery.discover();
+      await this.assetDiscovery.loadAssetMapping(`${this.config.dataPath}asset_mapping_v2_REAL.json`);
+      this.assetDiscovery.logDiscovered();
+
       // Load world data
       const success = await this.regionStreaming.loadData(
         `${this.config.dataPath}regions.json`,
