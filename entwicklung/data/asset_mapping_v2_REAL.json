@@ -1,0 +1,268 @@
+{
+  "version": "2.0.0",
+  "description": "Asset mapping for Najika World - Updated with REAL downloaded asset filenames",
+  "source": "Based on C:\\Najika_World\\assets\\ structure (11,868 files)",
+  "lastUpdated": "2025-11-07",
+  "totalAssets": {
+    "glb": 435,
+    "fbx": 3326,
+    "total": 3761
+  },
+
+  "biomes": {
+    "desert": {
+      "source": "JellySquish Oasis Pack",
+      "tree": [
+        "/digivice/static/assets/jellysquish/oasis/palm_l.glb",
+        "/digivice/static/assets/jellysquish/oasis/palm_m.glb",
+        "/digivice/static/assets/jellysquish/oasis/palm_s.glb"
+      ],
+      "cactus": [
+        "/digivice/static/assets/jellysquish/oasis/cactus_large.glb",
+        "/digivice/static/assets/jellysquish/oasis/cactus_small.glb"
+      ],
+      "rock": [
+        "/digivice/static/assets/jellysquish/oasis/rocks_1.glb",
+        "/digivice/static/assets/jellysquish/oasis/rocks_2.glb",
+        "/digivice/static/assets/jellysquish/oasis/rocks_3.glb"
+      ],
+      "grass": [
+        "/digivice/static/assets/jellysquish/oasis/grass_1.glb",
+        "/digivice/static/assets/jellysquish/oasis/grass_2.glb",
+        "/digivice/static/assets/jellysquish/oasis/grass_3.glb",
+        "/digivice/static/assets/jellysquish/oasis/blue_grass_large.glb",
+        "/digivice/static/assets/jellysquish/oasis/blue_grass_small.glb"
+      ],
+      "house": [
+        "/digivice/static/assets/jellysquish/oasis/house_large.glb",
+        "/digivice/static/assets/jellysquish/oasis/house_small.glb"
+      ],
+      "props": {
+        "basket": [
+          "/digivice/static/assets/jellysquish/oasis/basket_large.glb",
+          "/digivice/static/assets/jellysquish/oasis/basket_small.glb"
+        ],
+        "pot": [
+          "/digivice/static/assets/jellysquish/oasis/pot_l.glb",
+          "/digivice/static/assets/jellysquish/oasis/pot_s.glb"
+        ],
+        "chest": "/digivice/static/assets/jellysquish/oasis/chest.glb",
+        "ladder": "/digivice/static/assets/jellysquish/oasis/ladder.glb",
+        "platform": [
+          "/digivice/static/assets/jellysquish/oasis/platform_l.glb",
+          "/digivice/static/assets/jellysquish/oasis/platform_m.glb",
+          "/digivice/static/assets/jellysquish/oasis/platform_s.glb"
+        ]
+      }
+    },
+
+    "forest": {
+      "source": "KayKit Forest Nature Pack",
+      "note": "Use wildcard patterns - pack has many tree/bush/rock variants",
+      "tree": "/digivice/static/assets/kaykit/nature/tree_*.glb",
+      "bush": "/digivice/static/assets/kaykit/nature/bush_*.glb",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "mushroom": "/digivice/static/assets/kaykit/nature/mushroom_*.glb",
+      "flower": "/digivice/static/assets/kaykit/nature/flower_*.glb",
+      "grass": "/digivice/static/assets/kaykit/nature/grass_*.glb",
+      "fern": "/digivice/static/assets/kaykit/nature/fern_*.glb",
+      "campfire": "/digivice/static/assets/kaykit/nature/campfire_*.glb"
+    },
+
+    "caves": {
+      "source": "KayKit Dungeon Remastered (200+ assets!)",
+      "wall": "/digivice/static/assets/kaykit/dungeon/wall_*.glb",
+      "floor": "/digivice/static/assets/kaykit/dungeon/floor_*.glb",
+      "pillar": "/digivice/static/assets/kaykit/dungeon/pillar_*.glb",
+      "stairs": "/digivice/static/assets/kaykit/dungeon/stairs_*.glb",
+      "door": "/digivice/static/assets/kaykit/dungeon/door_*.glb",
+      "crystal": "/digivice/static/assets/kaykit/dungeon/crystal_*.glb",
+      "chest": "/digivice/static/assets/kaykit/dungeon/chest_*.glb",
+      "torch": "/digivice/static/assets/kaykit/dungeon/torch_*.glb",
+      "barrel": "/digivice/static/assets/kaykit/dungeon/barrel_*.glb",
+      "crate": "/digivice/static/assets/kaykit/dungeon/crate_*.glb",
+      "trap": "/digivice/static/assets/kaykit/dungeon/trap_*.glb",
+      "banner": "/digivice/static/assets/kaykit/dungeon/banner_*.glb",
+      "rock": "/digivice/static/assets/kaykit/dungeon/rock_*.glb",
+      "stalagmite": "/digivice/static/assets/kaykit/dungeon/stalagmite_*.glb"
+    },
+
+    "coast": {
+      "source": "Mix: Oasis palms + Forest rocks",
+      "tree": [
+        "/digivice/static/assets/jellysquish/oasis/palm_l.glb",
+        "/digivice/static/assets/jellysquish/oasis/palm_m.glb"
+      ],
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "grass": "/digivice/static/assets/kaykit/nature/grass_*.glb"
+    },
+
+    "highland": {
+      "source": "Forest rocks + Prototype bits",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "grass": "/digivice/static/assets/kaykit/nature/grass_*.glb",
+      "totem": "/digivice/static/assets/kaykit/prototype/pillar_*.glb"
+    },
+
+    "swamp": {
+      "source": "Spooktober + Halloween packs (perfect for creepy swamp!)",
+      "tree": "/digivice/static/assets/kaykit/spooktober/tree_*.glb",
+      "grass": "/digivice/static/assets/kaykit/nature/grass_*.glb",
+      "mushroom": "/digivice/static/assets/kaykit/halloween/mushroom_*.glb",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "props": "/digivice/static/assets/kaykit/halloween/*.glb",
+      "note": "Halloween/Spooktober assets perfect for swamp atmosphere!"
+    },
+
+    "ice": {
+      "source": "Forest pack (use pine trees + apply blue tint)",
+      "tree": "/digivice/static/assets/kaykit/nature/tree_pine_*.glb",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "crystal": "/digivice/static/assets/kaykit/dungeon/crystal_*.glb",
+      "note": "Apply blue/white material tint for ice effect"
+    },
+
+    "volcano": {
+      "source": "Dungeon rocks + Resource bits",
+      "rock": "/digivice/static/assets/kaykit/dungeon/rock_*.glb",
+      "props": "/digivice/static/assets/kaykit/resources/rock_*.glb",
+      "note": "Apply red/orange emissive material for lava glow"
+    },
+
+    "mountain": {
+      "source": "Forest pack (rocks + pine trees)",
+      "rock": "/digivice/static/assets/kaykit/nature/rock_*.glb",
+      "tree": "/digivice/static/assets/kaykit/nature/tree_pine_*.glb",
+      "grass": "/digivice/static/assets/kaykit/nature/grass_*.glb"
+    }
+  },
+
+  "buildings": {
+    "source": "KayKit Medieval Hexagon Pack",
+    "note": "Hexagonal tile system - perfect for cities!",
+    "house": "/digivice/static/assets/kaykit/medieval/house_*.glb",
+    "large_house": "/digivice/static/assets/kaykit/medieval/house_large_*.glb",
+    "tower": "/digivice/static/assets/kaykit/medieval/tower_*.glb",
+    "wall": "/digivice/static/assets/kaykit/medieval/wall_*.glb",
+    "gate": "/digivice/static/assets/kaykit/medieval/gate_*.glb",
+    "market": "/digivice/static/assets/kaykit/medieval/market_*.glb",
+    "tent": "/digivice/static/assets/kaykit/medieval/tent_*.glb",
+    "well": "/digivice/static/assets/kaykit/medieval/well_*.glb",
+    "forge": "/digivice/static/assets/kaykit/medieval/forge_*.glb",
+    "blacksmith": "/digivice/static/assets/kaykit/medieval/blacksmith_*.glb",
+    "windmill": "/digivice/static/assets/kaykit/medieval/windmill_*.glb",
+    "barn": "/digivice/static/assets/kaykit/medieval/barn_*.glb",
+    "fence": "/digivice/static/assets/kaykit/medieval/fence_*.glb"
+  },
+
+  "restaurant": {
+    "source": "KayKit Restaurant Bits - PERFECT FOR DAMPF-HAIN!",
+    "note": "Use for Dampf-Hain restaurant (Spirited Away style)",
+    "table": "/digivice/static/assets/kaykit/restaurant/table_*.glb",
+    "chair": "/digivice/static/assets/kaykit/restaurant/chair_*.glb",
+    "counter": "/digivice/static/assets/kaykit/restaurant/counter_*.glb",
+    "stove": "/digivice/static/assets/kaykit/restaurant/stove_*.glb",
+    "food": "/digivice/static/assets/kaykit/restaurant/food_*.glb",
+    "plate": "/digivice/static/assets/kaykit/restaurant/plate_*.glb",
+    "bowl": "/digivice/static/assets/kaykit/restaurant/bowl_*.glb",
+    "props": "/digivice/static/assets/kaykit/restaurant/*.glb"
+  },
+
+  "furniture": {
+    "source": "KayKit Furniture Bits - For player housing system!",
+    "note": "Essential for Housing System (Fortnite Creative style)",
+    "bed": "/digivice/static/assets/kaykit/furniture/bed_*.glb",
+    "couch": "/digivice/static/assets/kaykit/furniture/couch_*.glb",
+    "table": "/digivice/static/assets/kaykit/furniture/table_*.glb",
+    "chair": "/digivice/static/assets/kaykit/furniture/chair_*.glb",
+    "shelf": "/digivice/static/assets/kaykit/furniture/shelf_*.glb",
+    "desk": "/digivice/static/assets/kaykit/furniture/desk_*.glb",
+    "wardrobe": "/digivice/static/assets/kaykit/furniture/wardrobe_*.glb",
+    "lamp": "/digivice/static/assets/kaykit/furniture/lamp_*.glb",
+    "cabinet": "/digivice/static/assets/kaykit/furniture/cabinet_*.glb"
+  },
+
+  "characters": {
+    "source": "KayKit Characters & Animations",
+    "note": "Ready for NPCs and enemies!",
+    "adventurer": "/digivice/static/assets/kaykit/adventurers/character_*.glb",
+    "skeleton": "/digivice/static/assets/kaykit/skeletons/skeleton_*.glb",
+    "animations": "/digivice/static/assets/kaykit/animations/*.fbx"
+  },
+
+  "props": {
+    "source": "Various KayKit packs",
+    "barrel": "/digivice/static/assets/kaykit/dungeon/barrel_*.glb",
+    "crate": "/digivice/static/assets/kaykit/dungeon/crate_*.glb",
+    "chest": "/digivice/static/assets/kaykit/dungeon/chest_*.glb",
+    "torch": "/digivice/static/assets/kaykit/dungeon/torch_*.glb",
+    "banner": "/digivice/static/assets/kaykit/medieval/banner_*.glb",
+    "campfire": "/digivice/static/assets/kaykit/nature/campfire_*.glb",
+    "log": "/digivice/static/assets/kaykit/nature/log_*.glb",
+    "resources": "/digivice/static/assets/kaykit/resources/*.glb"
+  },
+
+  "minigames": {
+    "source": "Mini-Game Variety Pack",
+    "note": "Use for mini-game arenas and content",
+    "path": "/digivice/static/assets/kaykit/minigames/*.glb"
+  },
+
+  "preload": {
+    "essential": [
+      "/digivice/static/assets/kaykit/medieval/house_small_01.glb",
+      "/digivice/static/assets/kaykit/nature/tree_oak_01.glb",
+      "/digivice/static/assets/kaykit/nature/rock_moss_01.glb"
+    ],
+    "desert": [
+      "/digivice/static/assets/jellysquish/oasis/palm_m.glb",
+      "/digivice/static/assets/jellysquish/oasis/cactus_large.glb"
+    ],
+    "forest": [
+      "/digivice/static/assets/kaykit/nature/tree_oak_01.glb",
+      "/digivice/static/assets/kaykit/nature/bush_01.glb"
+    ],
+    "caves": [
+      "/digivice/static/assets/kaykit/dungeon/wall_stone_01.glb",
+      "/digivice/static/assets/kaykit/dungeon/crystal_purple_01.glb"
+    ]
+  },
+
+  "copyCommands": {
+    "description": "Commands to copy assets from local to web deployment",
+    "windows": {
+      "jellysquish": "xcopy /E /I \"C:\\Najika_World\\assets\\JellySquish Oasis Pack - Base Version\\Models\\*.glb\" \"digivice\\static\\assets\\jellysquish\\oasis\\\"",
+      "kaykit_dungeon": "xcopy /E /I \"C:\\Najika_World\\assets\\KayKit_DungeonRemastered_1.1_FREE\\Models\\*.glb\" \"digivice\\static\\assets\\kaykit\\dungeon\\\"",
+      "kaykit_medieval": "xcopy /E /I \"C:\\Najika_World\\assets\\KayKit_Medieval_Hexagon_Pack_1.0_FREE\\Models\\*.glb\" \"digivice\\static\\assets\\kaykit\\medieval\\\"",
+      "kaykit_forest": "xcopy /E /I \"C:\\Najika_World\\assets\\KayKit_Forest_Nature_Pack_1.0_FREE\\Models\\*.glb\" \"digivice\\static\\assets\\kaykit\\nature\\\"",
+      "kaykit_restaurant": "xcopy /E /I \"C:\\Najika_World\\assets\\KayKit_Restaurant_Bits_1.0_FREE\\Models\\*.glb\" \"digivice\\static\\assets\\kaykit\\restaurant\\\"",
+      "kaykit_furniture": "xcopy /E /I \"C:\\Najika_World\\assets\\KayKit_Furniture_Bits_1.0_FREE\\Models\\*.glb\" \"digivice\\static\\assets\\kaykit\\furniture\\\""
+    },
+    "linux": {
+      "note": "For use in Docker container",
+      "jellysquish": "cp -r \"/mnt/c/Najika_World/assets/JellySquish Oasis Pack - Base Version/Models/\"*.glb digivice/static/assets/jellysquish/oasis/",
+      "kaykit_dungeon": "cp -r /mnt/c/Najika_World/assets/KayKit_DungeonRemastered_1.1_FREE/Models/*.glb digivice/static/assets/kaykit/dungeon/",
+      "kaykit_medieval": "cp -r /mnt/c/Najika_World/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Models/*.glb digivice/static/assets/kaykit/medieval/",
+      "kaykit_forest": "cp -r /mnt/c/Najika_World/assets/KayKit_Forest_Nature_Pack_1.0_FREE/Models/*.glb digivice/static/assets/kaykit/nature/",
+      "kaykit_restaurant": "cp -r /mnt/c/Najika_World/assets/KayKit_Restaurant_Bits_1.0_FREE/Models/*.glb digivice/static/assets/kaykit/restaurant/",
+      "kaykit_furniture": "cp -r /mnt/c/Najika_World/assets/KayKit_Furniture_Bits_1.0_FREE/Models/*.glb digivice/static/assets/kaykit/furniture/"
+    }
+  },
+
+  "notes": {
+    "wildcards": "Use * in asset paths to match multiple variants (e.g., tree_*.glb matches tree_01.glb, tree_02.glb, etc.)",
+    "formats": "All packs include .glb (preferred), .fbx, .obj, .mtl formats",
+    "basePath": "All source paths at C:\\Najika_World\\assets\\",
+    "webPath": "Deploy to /digivice/static/assets/",
+    "bonusPacks": "Restaurant Bits = Dampf-Hain, Furniture Bits = Housing System, Characters = NPCs!",
+    "totalDownloaded": "~3,761 3D models (435 GLB, 3,326 FBX)",
+    "readyToUse": "All assets are CC0 licensed - free for commercial use!"
+  },
+
+  "fallbacks": {
+    "tree": "PLACEHOLDER_TREE",
+    "rock": "PLACEHOLDER_ROCK",
+    "building": "PLACEHOLDER_BUILDING",
+    "terrain": "PLACEHOLDER_TERRAIN"
+  }
+}
