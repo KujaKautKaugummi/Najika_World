@@ -144,19 +144,14 @@
         <button onclick="toggleGrid()">📐 Grid</button>
     </div>
 
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "/static/node_modules/three/build/three.module.js",
-            "three/addons/": "/static/node_modules/three/examples/jsm/"
-        }
-    }
-    </script>
+    <!-- Three.js via CDN (wie in index.html) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    <script>
+        // Three.js ist jetzt global verfügbar
+        const THREE = window.THREE;
 
         // Scene Setup
         const scene = new THREE.Scene();
@@ -172,8 +167,8 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Controls
-        const controls = new OrbitControls(camera, renderer.domElement);
+        // Controls (OrbitControls ist global von CDN)
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.maxPolarAngle = Math.PI / 2;
@@ -205,8 +200,8 @@
         gridHelper.visible = true;
         scene.add(gridHelper);
 
-        // Asset Loading
-        const gltfLoader = new GLTFLoader();
+        // Asset Loading (GLTFLoader ist global von CDN)
+        const gltfLoader = new THREE.GLTFLoader();
         const loadedAssets = [];
         let totalAssets = 0;
         let loadedCount = 0;
@@ -215,20 +210,20 @@
         // Test Assets (Mix von GLB und GLTF)
         const testAssets = [
             // JellySquish Oasis (GLB)
-            { path: '/static/assets/jellysquish/oasis/palm_l.glb', name: 'Palm Tree Large (GLB)', position: [-10, 0, 0] },
-            { path: '/static/assets/jellysquish/oasis/cactus_large.glb', name: 'Cactus Large (GLB)', position: [-5, 0, 0] },
-            { path: '/static/assets/jellysquish/oasis/house_small.glb', name: 'Desert House (GLB)', position: [0, 0, 0] },
+            { path: 'static/assets/jellysquish/oasis/palm_l.glb', name: 'Palm Tree Large (GLB)', position: [-10, 0, 0] },
+            { path: 'static/assets/jellysquish/oasis/cactus_large.glb', name: 'Cactus Large (GLB)', position: [-5, 0, 0] },
+            { path: 'static/assets/jellysquish/oasis/house_small.glb', name: 'Desert House (GLB)', position: [0, 0, 0] },
 
             // KayKit Dungeon (GLTF)
-            { path: '/static/assets/kaykit/dungeon/chest.gltf', name: 'Chest (GLTF)', position: [5, 0, 0] },
-            { path: '/static/assets/kaykit/dungeon/torch.gltf', name: 'Torch (GLTF)', position: [8, 0, 0] },
+            { path: 'static/assets/kaykit/dungeon/chest.gltf', name: 'Chest (GLTF)', position: [5, 0, 0] },
+            { path: 'static/assets/kaykit/dungeon/torch.gltf', name: 'Torch (GLTF)', position: [8, 0, 0] },
 
             // KayKit Medieval (GLTF)
-            { path: '/static/assets/kaykit/medieval/house_type01.gltf', name: 'Medieval House (GLTF)', position: [12, 0, 0] },
+            { path: 'static/assets/kaykit/medieval/house_type01.gltf', name: 'Medieval House (GLTF)', position: [12, 0, 0] },
 
             // KayKit Nature (GLTF)
-            { path: '/static/assets/kaykit/nature/tree_oak.gltf', name: 'Oak Tree (GLTF)', position: [-10, 0, 5] },
-            { path: '/static/assets/kaykit/nature/rock.gltf', name: 'Rock (GLTF)', position: [-5, 0, 5] },
+            { path: 'static/assets/kaykit/nature/tree_oak.gltf', name: 'Oak Tree (GLTF)', position: [-10, 0, 5] },
+            { path: 'static/assets/kaykit/nature/rock.gltf', name: 'Rock (GLTF)', position: [-5, 0, 5] },
         ];
 
         totalAssets = testAssets.length;
