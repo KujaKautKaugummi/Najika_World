@@ -250,9 +250,11 @@ class WorldManager {
     );
 
     if (cityData) {
-      const position = new THREE.Vector3(cityData.position.x, 0, cityData.position.z);
+      // Get terrain height at city location
+      const terrainHeight = this.terrainGenerator.getHeightAt(cityData.region, cityData.position.x, cityData.position.z);
+      const position = new THREE.Vector3(cityData.position.x, terrainHeight + 10, cityData.position.z);
       this.teleportTo(position);
-      console.log(`  🏘️ Arrived at: ${cityData.name}`);
+      console.log(`  🏘️ Arrived at: ${cityData.name} (height: ${terrainHeight.toFixed(1)})`);
     } else {
       console.warn(`❌ City not found: ${cityName}`);
     }
@@ -268,9 +270,11 @@ class WorldManager {
     );
 
     if (region) {
-      const position = new THREE.Vector3(region.position.x, 0, region.position.z);
+      // Get terrain height at region center
+      const terrainHeight = this.terrainGenerator.getHeightAt(region.id, region.position.x, region.position.z);
+      const position = new THREE.Vector3(region.position.x, terrainHeight + 10, region.position.z);
       this.teleportTo(position);
-      console.log(`  🗺️ Arrived at: ${region.name}`);
+      console.log(`  🗺️ Arrived at: ${region.name} (height: ${terrainHeight.toFixed(1)})`);
     } else {
       console.warn(`❌ Region not found: ${regionName}`);
     }

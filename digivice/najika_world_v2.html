@@ -316,8 +316,16 @@
                     updateProgress('World geladen!', 100);
                     console.log('✅ Najika World V2 loaded!');
 
-                    // Starte bei Götterfels
-                    worldManager.setPlayerPosition(new THREE.Vector3(4800, 50, 4800));
+                    // Starte bei Götterfels - berechne korrekte Höhe
+                    const startX = 4800, startZ = 4800;
+                    const terrainHeight = worldManager.terrainGenerator.getHeightAt('goetterfels', startX, startZ);
+                    const startY = terrainHeight > 0 ? terrainHeight + 10 : 50;
+
+                    worldManager.setPlayerPosition(new THREE.Vector3(startX, startY, startZ));
+                    character.position.set(startX, startY, startZ);
+                    cameraController.setTarget(startX, startY, startZ);
+
+                    console.log(`📍 Starting position: (${startX}, ${startY.toFixed(1)}, ${startZ}) at ${terrainHeight.toFixed(1)}m terrain height`);
 
                     // Verstecke Loading Screen
                     setTimeout(() => {
