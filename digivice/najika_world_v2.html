@@ -99,6 +99,30 @@
             justify-content: center;
             max-width: 90vw;
             border: 2px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        #controls.collapsed {
+            padding: 10px 20px;
+        }
+
+        #controls.collapsed .controls-content {
+            display: none;
+        }
+
+        #toggle-controls {
+            width: 100%;
+            background: #FF9800 !important;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #toggle-controls:hover {
+            background: #FB8C00 !important;
+        }
+
+        .controls-content {
+            display: contents;
         }
 
         #controls button {
@@ -163,26 +187,29 @@
     </div>
 
     <div id="controls">
-        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">📍 Regionen:</h3>
-        <button onclick="teleportToRegion('Samtmoos-Tiefwald')">🌲 Wald</button>
-        <button onclick="teleportToRegion('Heiße Dünen')">🏜️ Wüste</button>
-        <button onclick="teleportToRegion('Salzwind-Küste')">🌊 Küste</button>
-        <button onclick="teleportToRegion('Blitzebene')">⚡ Hochebene</button>
-        <button onclick="teleportToRegion('Grünschlamm-Sumpf')">🌿 Sumpf</button>
-        <button onclick="teleportToRegion('Reich der Drei')">❄️ Eis</button>
-        <button onclick="teleportToRegion('Magmaströme')">🌋 Vulkan</button>
-        <button onclick="teleportToRegion('Tiefenhöhlen')">🕳️ Höhlen</button>
-        <button onclick="teleportToRegion('Götterfels')">⛰️ Berg</button>
+        <button id="toggle-controls" onclick="toggleControls()">🎮 TELEPORT MENU ▼</button>
+        <div class="controls-content">
+            <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">📍 Regionen:</h3>
+            <button onclick="teleportToRegion('Samtmoos-Tiefwald')">🌲 Wald</button>
+            <button onclick="teleportToRegion('Heiße Dünen')">🏜️ Wüste</button>
+            <button onclick="teleportToRegion('Salzwind-Küste')">🌊 Küste</button>
+            <button onclick="teleportToRegion('Blitzebene')">⚡ Hochebene</button>
+            <button onclick="teleportToRegion('Grünschlamm-Sumpf')">🌿 Sumpf</button>
+            <button onclick="teleportToRegion('Reich der Drei')">❄️ Eis</button>
+            <button onclick="teleportToRegion('Magmaströme')">🌋 Vulkan</button>
+            <button onclick="teleportToRegion('Tiefenhöhlen')">🕳️ Höhlen</button>
+            <button onclick="teleportToRegion('Götterfels')">⛰️ Berg</button>
 
-        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🏘️ Städte:</h3>
-        <button onclick="teleportToCity('Handelsfestung')">🏜️ Handelsfestung</button>
-        <button onclick="teleportToCity('Dampf-Hain')">🌲 Dampf-Hain</button>
-        <button onclick="teleportToCity('Salzige Bucht')">🌊 Salzige Bucht</button>
-        <button onclick="teleportToCity('Runenheim')">⚡ Runenheim</button>
-        <button onclick="teleportToCity('Funken-Siedlung')">🌋 Funken-Siedlung</button>
+            <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🏘️ Städte:</h3>
+            <button onclick="teleportToCity('Handelsfestung')">🏜️ Handelsfestung</button>
+            <button onclick="teleportToCity('Dampf-Hain')">🌲 Dampf-Hain</button>
+            <button onclick="teleportToCity('Salzige Bucht')">🌊 Salzige Bucht</button>
+            <button onclick="teleportToCity('Runenheim')">⚡ Runenheim</button>
+            <button onclick="teleportToCity('Funken-Siedlung')">🌋 Funken-Siedlung</button>
 
-        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🛠️ Tools:</h3>
-        <button onclick="worldManager && worldManager.logStats()">📊 Stats</button>
+            <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🛠️ Tools:</h3>
+            <button onclick="worldManager && worldManager.logStats()">📊 Stats</button>
+        </div>
     </div>
 
     <!-- Three.js (CDN) -->
@@ -353,6 +380,20 @@
                 document.getElementById('progress-fill').style.background = 'red';
             }
         }
+
+        // Toggle Controls UI
+        window.toggleControls = () => {
+            const controls = document.getElementById('controls');
+            const toggleBtn = document.getElementById('toggle-controls');
+
+            controls.classList.toggle('collapsed');
+
+            if (controls.classList.contains('collapsed')) {
+                toggleBtn.textContent = '🎮 TELEPORT MENU ▲';
+            } else {
+                toggleBtn.textContent = '🎮 TELEPORT MENU ▼';
+            }
+        };
 
         // Teleport-Funktionen (Global)
         window.teleportToCity = (cityName) => {
