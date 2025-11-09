@@ -343,16 +343,41 @@
 
         // Teleport-Funktionen (Global)
         window.teleportToCity = (cityName) => {
-            if (worldManager && worldManager.initialized) {
-                worldManager.teleportToCity(cityName);
-                console.log(`Teleport to ${cityName}`);
+            console.log(`🔵 teleportToCity called: ${cityName}`);
+            if (!worldManager) {
+                console.error('❌ worldManager not initialized yet!');
+                return;
             }
+            if (!worldManager.initialized) {
+                console.error('❌ worldManager.initialized is false!');
+                return;
+            }
+            console.log(`✅ Calling worldManager.teleportToCity(${cityName})...`);
+            worldManager.teleportToCity(cityName);
         };
 
         window.teleportToRegion = (regionName) => {
-            if (worldManager && worldManager.initialized) {
-                worldManager.teleportToRegion(regionName);
-                console.log(`Teleport to ${regionName}`);
+            console.log(`🔵 teleportToRegion called: ${regionName}`);
+            if (!worldManager) {
+                console.error('❌ worldManager not initialized yet!');
+                return;
+            }
+            if (!worldManager.initialized) {
+                console.error('❌ worldManager.initialized is false!');
+                return;
+            }
+            console.log(`✅ Calling worldManager.teleportToRegion(${regionName})...`);
+            worldManager.teleportToRegion(regionName);
+
+            // Teleportiere auch den Character
+            const region = Object.values(worldManager.regionStreaming.regionData.regions).find(
+                r => r.name.toLowerCase() === regionName.toLowerCase() || r.id.toLowerCase() === regionName.toLowerCase()
+            );
+            if (region) {
+                const terrainHeight = worldManager.terrainGenerator.getHeightAt(region.id, region.position.x, region.position.z);
+                character.position.set(region.position.x, terrainHeight + 10, region.position.z);
+                cameraController.setTarget(region.position.x, terrainHeight + 10, region.position.z);
+                console.log(`📍 Character teleported to ${region.name}`);
             }
         };
 
@@ -395,10 +420,10 @@
             let forward = 0;
             let right = 0;
 
-            if (keys.w) forward += 1;
-            if (keys.s) forward -= 1;
-            if (keys.a) right -= 1;
-            if (keys.d) right += 1;
+            if (keys.w) forward -= 1;  // W = vorwärts (Z-)
+            if (keys.s) forward += 1;  // S = rückwärts (Z+)
+            if (keys.a) right -= 1;    // A = links
+            if (keys.d) right += 1;    // D = rechts
 
             // Bewegung relativ zur Kamera
             if (forward !== 0 || right !== 0) {
