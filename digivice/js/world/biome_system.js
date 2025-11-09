@@ -75,14 +75,19 @@ class BiomeSystem {
       return new THREE.MeshStandardMaterial({ color: 0x808080 });
     }
 
+    // Parse color from hex string to THREE.Color
+    const groundColor = new THREE.Color(biome.colors.ground);
+
     // DEBUG: Log biome color data
     console.log(`🎨 Creating material for biome "${biomeId}":`, {
-      groundColor: biome.colors.ground,
-      groundColorHex: '#' + biome.colors.ground.getHexString()
+      groundColorInput: biome.colors.ground,
+      groundColorParsed: '#' + groundColor.getHexString(),
+      roughness: this.getTerrainRoughness(biome),
+      metalness: this.getTerrainMetalness(biome)
     });
 
     const material = new THREE.MeshStandardMaterial({
-      color: biome.colors.ground,
+      color: groundColor,
       roughness: this.getTerrainRoughness(biome),
       metalness: this.getTerrainMetalness(biome)
     });
@@ -95,7 +100,7 @@ class BiomeSystem {
         break;
       case 'swamp':
         material.roughness = 0.9;  // Rau (Schlamm)
-        material.color.multiplyScalar(0.7);  // Dunkler
+        // Farbe wird bereits im Material gesetzt, nicht dunkler machen
         break;
       case 'volcano':
         material.roughness = 0.8;  // Rau (Vulkangestein)
@@ -104,7 +109,7 @@ class BiomeSystem {
         break;
       case 'caves':
         material.roughness = 0.7;
-        material.color.multiplyScalar(0.5);  // Sehr dunkel
+        // Farbe wird bereits im Material gesetzt, nicht dunkler machen
         break;
     }
 
