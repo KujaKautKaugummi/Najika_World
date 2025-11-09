@@ -75,13 +75,14 @@ class BiomeSystem {
       return new THREE.MeshStandardMaterial({ color: 0x808080 });
     }
 
-    // Parse color from hex string to THREE.Color
-    const groundColor = new THREE.Color(biome.colors.ground);
+    // biome.colors.ground ist bereits ein THREE.Color (von processBiomeConfig)
+    // KEINE doppelte Konversion!
+    const groundColor = biome.colors.ground;
 
     // DEBUG: Log biome color data
     console.log(`🎨 Creating material for biome "${biomeId}":`, {
-      groundColorInput: biome.colors.ground,
-      groundColorParsed: '#' + groundColor.getHexString(),
+      groundColor: groundColor,
+      groundColorHex: '#' + groundColor.getHexString(),
       roughness: this.getTerrainRoughness(biome),
       metalness: this.getTerrainMetalness(biome)
     });
@@ -89,7 +90,8 @@ class BiomeSystem {
     const material = new THREE.MeshStandardMaterial({
       color: groundColor,
       roughness: this.getTerrainRoughness(biome),
-      metalness: this.getTerrainMetalness(biome)
+      metalness: this.getTerrainMetalness(biome),
+      side: THREE.DoubleSide  // WICHTIG: Beide Seiten rendern!
     });
 
     // Spezielle Eigenschaften pro Biome
