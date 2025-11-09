@@ -359,8 +359,63 @@ DOCS:
 ---
 
 **Erstellt:** 2025-11-09
-**Letzte Aktualisierung:** Nach Cache-Buster v3 Fix
-**Status:** ✅ BEREIT ZUM TESTEN
+**Letzte Aktualisierung:** Nach Cache-Buster v3 Fix + Übergabe an Web-Modell
+**Status:** ⚠️ BEKANNTE PROBLEME - Web-Modell muss fixen
+
+---
+
+## ❌ BEKANNTE PROBLEME (Stand: 9. Nov 2025, 21:30)
+
+### 🔴 KRITISCH: Terrain-Farben funktionieren nicht korrekt
+
+**Problem:**
+- Wüste zeigt WEIß statt Gelb (#e8d4a0)
+- Küste zeigt WEIß statt Hellbraun (#c2b280)
+- Sumpf zeigt GRAU statt Grün (#556b2f)
+
+**Ursache:** Unbekannt - muss debugged werden!
+
+**Nächste Schritte:**
+1. User soll Browser-Cache löschen
+2. Console-Output prüfen ("🎨 Creating material...")
+3. Siehe: `SESSION_UEBERGABE_WEB_MODELL.md`
+
+---
+
+### 🟡 MITTEL: Vulkan-Terrain ist wellig statt flach
+
+**Problem:**
+- Vulkan zeigt "kirkel krackel" Boden
+- Sollte flach sein (heightVariation=5)
+
+**Ursache:** Browser cached alte biomes.json (heightVariation=60)
+
+**Nächste Schritte:**
+1. Cache löschen
+2. Oder: Cache-Buster zu biomes.json
+
+---
+
+### 🟡 MITTEL: Eis-Teleport funktioniert nicht
+
+**Problem:**
+- Button "❄️ Eis" teleportiert nicht
+
+**Ursache:** Region-Name stimmt nicht überein
+
+**Nächste Schritte:**
+1. regions.json nach korrektem Namen prüfen
+2. Button-Namen anpassen
+
+---
+
+## 📋 FÜR WEB-MODELL
+
+**Siehe:**
+- `SESSION_UEBERGABE_WEB_MODELL.md` (Vollständige Anleitung)
+- `WEB_MODELL_TODO.md` (Kurz-TODO)
+
+**Priorität 1:** Terrain-Farben fixen! 🔴
 
 ---
 
