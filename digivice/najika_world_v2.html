@@ -163,12 +163,25 @@
     </div>
 
     <div id="controls">
+        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">📍 Regionen:</h3>
+        <button onclick="teleportToRegion('Samtmoos-Tiefwald')">🌲 Wald</button>
+        <button onclick="teleportToRegion('Heiße Dünen')">🏜️ Wüste</button>
+        <button onclick="teleportToRegion('Salzwind-Küste')">🌊 Küste</button>
+        <button onclick="teleportToRegion('Blitzebene')">⚡ Hochebene</button>
+        <button onclick="teleportToRegion('Grünschlamm-Sumpf')">🌿 Sumpf</button>
+        <button onclick="teleportToRegion('Reich der Drei')">❄️ Eis</button>
+        <button onclick="teleportToRegion('Magmaströme')">🌋 Vulkan</button>
+        <button onclick="teleportToRegion('Tiefenhöhlen')">🕳️ Höhlen</button>
+        <button onclick="teleportToRegion('Götterfels')">⛰️ Berg</button>
+
+        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🏘️ Städte:</h3>
         <button onclick="teleportToCity('Handelsfestung')">🏜️ Handelsfestung</button>
         <button onclick="teleportToCity('Dampf-Hain')">🌲 Dampf-Hain</button>
         <button onclick="teleportToCity('Salzige Bucht')">🌊 Salzige Bucht</button>
         <button onclick="teleportToCity('Runenheim')">⚡ Runenheim</button>
         <button onclick="teleportToCity('Funken-Siedlung')">🌋 Funken-Siedlung</button>
-        <button onclick="teleportToRegion('Götterfels')">⛰️ Berg</button>
+
+        <h3 style="margin: 15px 0 5px 0; color: #4CAF50;">🛠️ Tools:</h3>
         <button onclick="worldManager && worldManager.logStats()">📊 Stats</button>
     </div>
 
