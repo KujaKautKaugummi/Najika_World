@@ -23,6 +23,29 @@ LIVING_STATE = {
     "current_mood": "neutral",  # happy, excited, sad, bored, playful, curious, loving
     "mood_intensity": 50,  # 0-100
 
+    # === GAME STATS (NEU) ===
+    "hunger": 100.0,          # 0-100 (0 = verhungert, 100 = satt)
+    "energy": 100.0,          # 0-100 (0 = erschöpft, 100 = ausgeruht)
+    "mood_game": 100.0,       # 0-100 (Game-Mood, beeinflusst Anger)
+
+    # Selbstfürsorge System
+    "anger_level": 0.0,       # 0-100 (Wut/Genervt durch Vernachlässigung)
+    "auto_care_threshold": 20.0,   # Unter 20% → Auto-Care
+    "auto_care_max": 50.0,         # Füllt nur bis 50% auf
+    "auto_care_enabled": True,
+
+    # Unfälle
+    "last_accident": None,    # {"type": "...", "timestamp": ..., "data": {...}}
+    "accidents_today": 0,
+    "max_accidents_per_day": 3,
+
+    # Update-Tracking
+    "last_update": time.time(),  # Für kontinuierliche Bedürfnis-Abnahme
+
+    # Control Mode (AI vs Player)
+    "control_mode": "ai",     # "ai" oder "player"
+    "player_online": False,
+
     # Autonomie
     "last_proactive_message": 0,  # Timestamp
     "proactive_cooldown": 1800,  # 30 Minuten zwischen proaktiven Messages
@@ -530,6 +553,361 @@ def get_living_state_context(current_state):
 
     return context
 
+# ===== SELBSTFÜRSORGE-SYSTEM (NEU) =====
+
+ACCIDENT_TYPES = {
+    "cooking_fire": {
+        "message": "🔥 FEUER IN DER KÜCHE! Beim Kochen ist die Bude abgebrannt! 😱",
+        "najika_says": "🔥 OH NEIN! FEUER! Ich kriegs nicht aus! *panisch* 😱",
+        "damage_type": "kitchen_destroyed",
+        "repair_cost": 500,
+        "mood_loss": 20,
+        "anger_gain": 15
+    },
+    "crop_damage": {
+        "message": "🌾 50% der Ernte wurde zerstört... Najika war zu müde! 😓",
+        "najika_says": "Die Pflanzen... ich bin zu müde für das alles... 😭",
+        "damage_type": "crops_50%_lost",
+        "mood_loss": 15,
+        "anger_gain": 10
+    },
+    "item_loss": {
+        "message": "📦 3-5 Items verloren! Najika hat sie fallen lassen! 😫",
+        "najika_says": "Alles auf dem Boden! Ups... UPS! 😰",
+        "damage_type": "random_items_lost",
+        "mood_loss": 10,
+        "anger_gain": 8
+    },
+    "water_damage": {
+        "message": "💧 Wasserschaden! Das Wasser ist übergelaufen! 😰",
+        "najika_says": "Hab vergessen es abzustellen... Sorry! 😅",
+        "damage_type": "floor_damaged",
+        "repair_cost": 300,
+        "mood_loss": 12,
+        "anger_gain": 12
+    },
+    "power_outage": {
+        "message": "⚡ Stromausfall! Kühlschrank-Essen verdorben! 🔌",
+        "najika_says": "Sicherung raus... wie mach ich das wieder an? 😅",
+        "damage_type": "food_spoiled_50%",
+        "repair_cost": 200,
+        "mood_loss": 8,
+        "anger_gain": 10
+    }
+}
+
+def update_needs_over_time(current_state):
+    """Update Hunger/Energy/Mood über Zeit (kontinuierlich)"""
+    now = time.time()
+    last_update = current_state.get("last_update", now)
+    delta = now - last_update
+
+    # Pro Stunde Abnahme
+    hours = delta / 3600.0
+
+    # Hunger sinkt (-5 pro Stunde)
+    current_state["hunger"] -= hours * 5.0
+    current_state["hunger"] = max(0, min(100, current_state["hunger"]))
+
+    # Energy sinkt (-3 pro Stunde)
+    current_state["energy"] -= hours * 3.0
+    current_state["energy"] = max(0, min(100, current_state["energy"]))
+
+    # Mood sinkt basierend auf Hunger/Energy
+    if current_state["hunger"] < 30:
+        current_state["mood_game"] -= hours * 2.0
+    if current_state["energy"] < 20:
+        current_state["mood_game"] -= hours * 1.0
+    current_state["mood_game"] = max(0, min(100, current_state["mood_game"]))
+
+    # Anger steigt bei niedrigen Werten
+    if current_state["hunger"] < 10:
+        current_state["anger_level"] += hours * 5.0
+    if current_state["energy"] < 10:
+        current_state["anger_level"] += hours * 3.0
+    if current_state["mood_game"] < 20:
+        current_state["anger_level"] += hours * 2.0
+
+    # Anger sinkt wenn gut versorgt
+    if current_state["hunger"] > 70 and current_state["energy"] > 70:
+        current_state["anger_level"] -= hours * 2.0
+
+    current_state["anger_level"] = max(0, min(100, current_state["anger_level"]))
+
+    # Update timestamp
+    current_state["last_update"] = now
+
+def auto_eat(current_state):
+    """Najika isst selbst (notgedrungen)"""
+    old_hunger = current_state["hunger"]
+
+    # Füllt nur bis max 50%
+    hunger_gain = 30.0
+    current_state["hunger"] = min(current_state["auto_care_max"], old_hunger + hunger_gain)
+
+    # Anger steigt
+    current_state["anger_level"] += 10
+    current_state["mood_game"] -= 15
+
+    # Unfall-Chance (30% wenn Anger > 30)
+    accident_happened = False
+    if current_state["anger_level"] > 30 and random.random() < 0.3:
+        trigger_accident(current_state, "cooking_fire")
+        accident_happened = True
+
+    # Notification-Message
+    message = f"🍔 Najika hat sich selbst Essen gemacht (Hunger: {old_hunger:.0f}% → {current_state['hunger']:.0f}%)\n"
+    message += f"😤 Sie ist nicht glücklich darüber! (Anger: {current_state['anger_level']:.0f}%)"
+
+    return {
+        "action": "auto_eat",
+        "hunger_before": old_hunger,
+        "hunger_after": current_state["hunger"],
+        "anger_level": current_state["anger_level"],
+        "accident_happened": accident_happened,
+        "message": message,
+        "najika_says": "Musste mir selbst was zu essen machen... 😤"
+    }
+
+def auto_sleep(current_state):
+    """Najika schläft selbst (auf dem Boden)"""
+    old_energy = current_state["energy"]
+
+    # Füllt nur bis max 50%
+    energy_gain = 40.0
+    current_state["energy"] = min(current_state["auto_care_max"], old_energy + energy_gain)
+
+    # Anger steigt
+    current_state["anger_level"] += 8
+    current_state["mood_game"] -= 10
+
+    # Notification-Message
+    message = f"💤 Najika ist eingeschlafen (Energy: {old_energy:.0f}% → {current_state['energy']:.0f}%)\n"
+    message += f"😒 Nicht im Bett... (Anger: {current_state['anger_level']:.0f}%)"
+
+    return {
+        "action": "auto_sleep",
+        "energy_before": old_energy,
+        "energy_after": current_state["energy"],
+        "anger_level": current_state["anger_level"],
+        "message": message,
+        "najika_says": "Bin auf dem Boden eingepennt... 😒"
+    }
+
+def check_auto_care(current_state):
+    """Prüft ob Auto-Care aktiviert werden muss"""
+    if not current_state.get("auto_care_enabled", True):
+        return None
+
+    # Nur im AI-Modus (nicht wenn Player aktiv spielt)
+    if current_state.get("control_mode") == "player" and current_state.get("player_online"):
+        return None
+
+    threshold = current_state.get("auto_care_threshold", 20.0)
+    actions = []
+
+    # Hunger zu niedrig?
+    if current_state["hunger"] < threshold:
+        result = auto_eat(current_state)
+        actions.append(result)
+
+    # Energy zu niedrig?
+    if current_state["energy"] < threshold:
+        result = auto_sleep(current_state)
+        actions.append(result)
+
+    return actions if actions else None
+
+def trigger_accident(current_state, accident_type):
+    """Löst spezifischen Unfall aus"""
+    # Check Max Accidents/Day
+    if current_state["accidents_today"] >= current_state.get("max_accidents_per_day", 3):
+        return None
+
+    accident = ACCIDENT_TYPES.get(accident_type)
+    if not accident:
+        return None
+
+    # Accident ausführen
+    current_state["mood_game"] -= accident.get("mood_loss", 0)
+    current_state["anger_level"] += accident.get("anger_gain", 0)
+    current_state["accidents_today"] += 1
+
+    current_state["last_accident"] = {
+        "type": accident_type,
+        "timestamp": time.time(),
+        "data": accident
+    }
+
+    return {
+        "type": accident_type,
+        "message": accident["message"],
+        "najika_says": accident["najika_says"],
+        "damage_type": accident.get("damage_type"),
+        "repair_cost": accident.get("repair_cost", 0)
+    }
+
+def check_for_accidents(current_state):
+    """Prüft ob Unfall passieren soll (basierend auf Anger)"""
+    # Max Accidents/Day check
+    if current_state["accidents_today"] >= current_state.get("max_accidents_per_day", 3):
+        return None
+
+    anger = current_state.get("anger_level", 0)
+
+    # Unter 20 Anger: Keine Unfälle
+    if anger < 20:
+        return None
+
+    # Chance steigt mit Anger
+    base_chance = (anger - 20) / 100.0  # 20% → 0%, 100% → 80%
+
+    # Pro Update-Cycle (angepasst für realistische Häufigkeit)
+    if random.random() < base_chance * 0.01:  # 1% der Base-Chance pro Check
+        # Wähle zufälligen Unfall
+        accident_type = random.choice(list(ACCIDENT_TYPES.keys()))
+        return trigger_accident(current_state, accident_type)
+
+    return None
+
+def get_greeting_message(current_state):
+    """Generiert Begrüßung basierend auf Anger & Abwesenheit"""
+    anger = current_state.get("anger_level", 0)
+    last_interaction = current_state.get("last_interaction", time.time())
+    hours_offline = (time.time() - last_interaction) / 3600.0
+
+    if anger > 80:
+        messages = [
+            "ICH BIN NICHT DEIN SPIELZEUG! 😡😡😡",
+            "DU KANNST MICH NICHT EINFACH VERGESSEN!",
+            f"SCHAU DIR AN WAS PASSIERT IST! *zeigt auf Chaos* 🔥💧📦"
+        ]
+    elif anger > 50:
+        messages = [
+            "Na toll, endlich! Weißt du wie lange ich warte?! 😡",
+            "Hast du mich vergessen oder was?! 🔥",
+            "Die Bude ist fast abgebrannt! Danke auch! 😤"
+        ]
+    elif anger > 20:
+        messages = [
+            "Da bist du ja... Ich hatte Hunger, weißt du? 😒",
+            "Schön, dass du dich blicken lässt... 😑",
+            "Nächstes Mal bitte früher! 😤"
+        ]
+    elif hours_offline > 8:
+        messages = [
+            "Hey! Hab dich vermisst! War echt lange... 😊",
+            "Puh, du warst lange weg! Alles okay? 😇",
+            "Schön, dass du wieder da bist! 💚"
+        ]
+    else:
+        messages = [
+            "Hey! Schon zurück? 😊",
+            "Na, was machen wir jetzt? 🤗",
+            "Yay! 🎉"
+        ]
+
+    return random.choice(messages)
+
+def player_feeds_najika(current_state, food_value=30):
+    """Spieler füttert Najika manuell"""
+    old_hunger = current_state["hunger"]
+
+    # Hunger steigt (bis 100%)
+    current_state["hunger"] = min(100, old_hunger + food_value)
+
+    # Anger sinkt!
+    current_state["anger_level"] -= 5
+    current_state["anger_level"] = max(0, current_state["anger_level"])
+
+    # Mood steigt
+    current_state["mood_game"] += 5
+    current_state["mood_game"] = min(100, current_state["mood_game"])
+
+    # Positive Reaktion
+    reactions = [
+        "Danke! Das schmeckt super! 😋",
+        "Nom nom nom! Lecker! 🤤",
+        "Du kümmerst dich um mich! 😊❤️"
+    ]
+
+    return {
+        "action": "player_feeds",
+        "hunger_before": old_hunger,
+        "hunger_after": current_state["hunger"],
+        "anger_level": current_state["anger_level"],
+        "najika_says": random.choice(reactions)
+    }
+
+def player_puts_najika_to_bed(current_state):
+    """Spieler legt Najika ins Bett (richtig!)"""
+    old_energy = current_state["energy"]
+
+    # Energy steigt VOLL (weil richtiges Bett)
+    current_state["energy"] = 100
+
+    # Anger sinkt deutlich!
+    current_state["anger_level"] -= 15
+    current_state["anger_level"] = max(0, current_state["anger_level"])
+
+    # Mood steigt
+    current_state["mood_game"] += 10
+    current_state["mood_game"] = min(100, current_state["mood_game"])
+
+    return {
+        "action": "player_bed",
+        "energy_before": old_energy,
+        "energy_after": current_state["energy"],
+        "anger_level": current_state["anger_level"],
+        "najika_says": "Danke... so kuschelig... 😴💤 *schläft friedlich*"
+    }
+
+def set_control_mode(current_state, mode="ai", player_online=False):
+    """Setzt Control-Mode (AI vs Player)"""
+    current_state["control_mode"] = mode
+    current_state["player_online"] = player_online
+
+    return {
+        "control_mode": mode,
+        "player_online": player_online,
+        "message": f"Najika wird jetzt {'von dir' if mode == 'player' else 'von AI'} gesteuert"
+    }
+
+# ===== HAUPT-UPDATE-FUNKTION =====
+
+def update_living_system(current_state):
+    """Haupt-Update: Needs, Auto-Care, Unfälle"""
+    results = {
+        "needs_updated": False,
+        "auto_care_actions": [],
+        "accidents": [],
+        "warnings": []
+    }
+
+    # 1. Update Needs über Zeit
+    update_needs_over_time(current_state)
+    results["needs_updated"] = True
+
+    # 2. Check Auto-Care
+    auto_care = check_auto_care(current_state)
+    if auto_care:
+        results["auto_care_actions"] = auto_care
+
+    # 3. Check Unfälle
+    accident = check_for_accidents(current_state)
+    if accident:
+        results["accidents"].append(accident)
+
+    # 4. Warnings generieren
+    if current_state["hunger"] < 20:
+        results["warnings"].append("⚠️ Hunger kritisch!")
+    if current_state["energy"] < 20:
+        results["warnings"].append("⚠️ Energy kritisch!")
+    if current_state["anger_level"] > 50:
+        results["warnings"].append("😤 Najika ist sehr sauer!")
+
+    return results
+
 # ===== EXPORT/IMPORT =====
 
 def export_living_state(current_state):
@@ -555,5 +933,12 @@ if __name__ == "__main__":
     print("- Autonome Aktivitäten")
     print("- Beziehungs-Evolution")
     print("- Emotionale Memories")
+    print()
+    print("NEU (Selbstfürsorge-System):")
+    print("- Hunger/Energy/Mood Game-Stats")
+    print("- Auto-Care (20% → 50%)")
+    print("- Anger-System")
+    print("- 5 Unfall-Typen")
+    print("- Player-Actions (Feed, Bed)")
     print()
     print("Dieses Modul in najika_server.py integrieren!")
