@@ -7,7 +7,7 @@ class TerrainGenerator {
   constructor(worldSize = 9600) {
     this.worldSize = worldSize;
     this.segments = 200;  // Mehr Detail für größere Welt
-    this.regionTerrains = new Map();
+    this.regionTerrains = new Map();  // Map<regionId, {geometry, region}>
   }
 
   /**
@@ -73,8 +73,11 @@ class TerrainGenerator {
     // Compute normals for proper lighting
     geometry.computeVertexNormals();
 
-    // Store terrain
-    this.regionTerrains.set(id, geometry);
+    // Store terrain with region data (needed for world→local coordinate conversion)
+    this.regionTerrains.set(id, {
+      geometry: geometry,
+      region: regionData
+    });
 
     return geometry;
   }
@@ -289,26 +292,39 @@ class TerrainGenerator {
 
   /**
    * Hole Terrain-Höhe an einer Position (für Vegetation/Objekte)
+   * @param {string} regionId - Region ID
+   * @param {number} x - World X coordinate
+   * @param {number} z - World Z coordinate
+   * @returns {number} Height at position
    */
   getHeightAt(regionId, x, z) {
-    const terrain = this.regionTerrains.get(regionId);
-    if (!terrain) return 0;
+    const terrainData = this.regionTerrains.get(regionId);
+    if (!terrainData) return 0;
+
+    const { geometry, region } = terrainData;
+    const vertices = geometry.attributes.position.array;
+
+    // Convert world coordinates to local coordinates
+    // (Terrain mesh is positioned at region.position)
+    const localX = x - region.position.x;
+    const localZ = z - region.position.z;
 
     // Find closest vertex (simplified)
-    // In production, use proper interpolation
-    const vertices = terrain.attributes.position.array;
-
+    // NOTE: PlaneGeometry vertices are in X-Y plane, rotated to X-Z
+    // Before rotation: vertices[i]=X, vertices[i+1]=Y(height), vertices[i+2]=Z
     let closestHeight = 0;
     let minDist = Infinity;
 
     for (let i = 0; i < vertices.length; i += 3) {
-      const vx = vertices[i];
-      const vz = vertices[i + 1];
-      const dist = Math.sqrt((vx - x) ** 2 + (vz - z) ** 2);
+      const vx = vertices[i];       // Local X
+      const vz = vertices[i + 1];   // Local Z (becomes Z after rotation)
+      const vy = vertices[i + 2];   // Height (becomes Y after rotation)
+
+      const dist = Math.sqrt((vx - localX) ** 2 + (vz - localZ) ** 2);
 
       if (dist < minDist) {
         minDist = dist;
-        closestHeight = vertices[i + 2];
+        closestHeight = vy;
       }
     }
 
