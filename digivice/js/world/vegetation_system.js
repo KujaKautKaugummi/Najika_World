@@ -37,6 +37,16 @@ class VegetationSystem {
     this.createPlantTemplate('beach_grass', { radius: 0.3, height: 1.5, color: 0x9acd32 });
     this.createPlantTemplate('swamp_grass', { radius: 0.4, height: 1.2, color: 0x556b2f });
     this.createPlantTemplate('tough_grass', { radius: 0.3, height: 1, color: 0x8b7355 });
+    this.createPlantTemplate('mountain_grass', { radius: 0.3, height: 0.8, color: 0x6b8e23 });
+    this.createPlantTemplate('alpine_flower', { radius: 0.2, height: 0.5, color: 0xff69b4 });
+    this.createPlantTemplate('highland_flower', { radius: 0.3, height: 0.6, color: 0xdda0dd });
+    this.createPlantTemplate('seaweed', { radius: 0.5, height: 2, color: 0x2e8b57 });
+    this.createPlantTemplate('poison_plant', { radius: 0.6, height: 1, color: 0x9370db });
+    this.createPlantTemplate('vines', { radius: 0.2, height: 3, color: 0x228b22 });
+    this.createPlantTemplate('snow_bush', { radius: 0.7, height: 1, color: 0xf0f8ff });
+    this.createPlantTemplate('fire_flower', { radius: 0.4, height: 0.8, color: 0xff4500 });
+    this.createPlantTemplate('lava_moss', { radius: 0.5, height: 0.3, color: 0x8b4513 });
+    this.createPlantTemplate('cave_moss', { radius: 0.4, height: 0.2, color: 0x2f4f4f });
 
     // SPECIAL
     this.createCrystalTemplate('crystal', { height: 4, radius: 0.8, color: 0x9370db });
