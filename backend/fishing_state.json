@@ -1,0 +1,38 @@
+{
+  "spots": {
+    "home_pond": {
+      "current_fish": 19,
+      "last_respawn": 1762696527.4815178
+    },
+    "ocean_shore": {
+      "current_fish": 50,
+      "last_respawn": 1762696527.4815178
+    },
+    "swamp_waters": {
+      "current_fish": 30,
+      "last_respawn": 1762696527.4815178
+    },
+    "lava_lake": {
+      "current_fish": 1,
+      "last_respawn": 1762696527.4815178
+    },
+    "frozen_lake": {
+      "current_fish": 15,
+      "last_respawn": 1762696527.4815178
+    }
+  },
+  "player_stats": {
+    "fishing_skill": 1,
+    "total_caught": 1,
+    "total_attempts": 2,
+    "biggest_catch": {
+      "type": "carp",
+      "name": "Karpfen",
+      "size": 50
+    },
+    "legendary_count": 0
+  },
+  "global_time_of_day": "day",
+  "global_weather": "clear",
+  "last_update": 1762696642.531051
+}

@@ -1,0 +1,429 @@
+{
+  "fields": [
+    {
+      "field_id": "farm_field_001",
+      "position": {
+        "x": -100,
+        "z": -100
+      },
+      "owner": "test_player",
+      "crop_type": "carrot",
+      "planted_at": 1762696416.8129733,
+      "current_stage": "planted",
+      "progress_percent": 6.251714429103379,
+      "water_level": 99.0595163454612,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696642.5300503,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 7,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_002",
+      "position": {
+        "x": -50,
+        "z": -100
+      },
+      "owner": "player",
+      "crop_type": "tomato",
+      "planted_at": 1762696658.6668391,
+      "current_stage": "planted",
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696658.6668391,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_003",
+      "position": {
+        "x": 0,
+        "z": -100
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_004",
+      "position": {
+        "x": 50,
+        "z": -100
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_005",
+      "position": {
+        "x": 100,
+        "z": -100
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_006",
+      "position": {
+        "x": -100,
+        "z": -50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_007",
+      "position": {
+        "x": -50,
+        "z": -50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_008",
+      "position": {
+        "x": 0,
+        "z": -50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_009",
+      "position": {
+        "x": 50,
+        "z": -50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_010",
+      "position": {
+        "x": 100,
+        "z": -50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_011",
+      "position": {
+        "x": -100,
+        "z": 0
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_012",
+      "position": {
+        "x": -50,
+        "z": 0
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_013",
+      "position": {
+        "x": 0,
+        "z": 0
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_014",
+      "position": {
+        "x": 50,
+        "z": 0
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_015",
+      "position": {
+        "x": 100,
+        "z": 0
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_016",
+      "position": {
+        "x": -100,
+        "z": 50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_017",
+      "position": {
+        "x": -50,
+        "z": 50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_018",
+      "position": {
+        "x": 0,
+        "z": 50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_019",
+      "position": {
+        "x": 50,
+        "z": 50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    },
+    {
+      "field_id": "farm_field_020",
+      "position": {
+        "x": 100,
+        "z": 50
+      },
+      "owner": "najika_ai",
+      "crop_type": null,
+      "planted_at": null,
+      "current_stage": null,
+      "progress_percent": 0,
+      "water_level": 100.0,
+      "soil_quality": 100.0,
+      "health": 100.0,
+      "last_watered": 1762696416.811973,
+      "weather_affected": false,
+      "fertilized": false,
+      "ready_to_harvest": false,
+      "estimated_yield": 0,
+      "actual_yield": null
+    }
+  ],
+  "global_season": "spring",
+  "global_weather": "clear",
+  "last_update": 1762696642.5300503,
+  "total_harvests": 0,
+  "total_crops_planted": 2
+}
