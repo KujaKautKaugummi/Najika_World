@@ -205,10 +205,11 @@
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
         // Lighting (Base scene lighting - biome system will override)
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // NOTE: Total light intensity should be ~1.0 to prevent color washing
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);  // Reduced from 0.6
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);  // Reduced from 0.9
         directionalLight.position.set(5000, 2000, 5000);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 4096;
