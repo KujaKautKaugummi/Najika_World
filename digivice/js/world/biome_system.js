@@ -91,7 +91,9 @@ class BiomeSystem {
       color: groundColor,
       roughness: this.getTerrainRoughness(biome),
       metalness: this.getTerrainMetalness(biome),
-      side: THREE.DoubleSide  // WICHTIG: Beide Seiten rendern!
+      side: THREE.DoubleSide,  // WICHTIG: Beide Seiten rendern!
+      flatShading: false,       // Smooth shading (nicht flat)
+      wireframe: false          // DEBUG: Set to true to see geometry
     });
 
     // Spezielle Eigenschaften pro Biome

@@ -257,7 +257,10 @@ class RegionStreaming {
     // Position terrain at region center
     // Y-Position MUSS über Character-Spawn sein!
     terrainMesh.position.set(region.position.x, 0, region.position.z);
-    terrainMesh.rotation.x = -Math.PI / 2;
+
+    // WICHTIG: +Math.PI / 2 (nicht -Math.PI / 2)!
+    // Sonst sind Normalen invertiert und Beleuchtung trifft Unterseite!
+    terrainMesh.rotation.x = +Math.PI / 2;
 
     return terrainMesh;
   }
