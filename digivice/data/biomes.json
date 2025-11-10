@@ -13,7 +13,7 @@
       },
       "terrain": {
         "type": "sandy_dunes",
-        "heightVariation": 5,
+        "heightVariation": 30,
         "noiseScale": 0.01
       },
       "enemies": ["scorpion", "bandit", "sand_elemental"],
@@ -33,7 +33,7 @@
       },
       "terrain": {
         "type": "hilly",
-        "heightVariation": 5,
+        "heightVariation": 25,
         "noiseScale": 0.02
       },
       "enemies": ["wolf", "druid", "forest_spirit"],
@@ -54,7 +54,7 @@
       },
       "terrain": {
         "type": "coastal",
-        "heightVariation": 3,
+        "heightVariation": 20,
         "noiseScale": 0.015,
         "beach": true
       },
@@ -76,7 +76,7 @@
       },
       "terrain": {
         "type": "rocky_plateau",
-        "heightVariation": 5,
+        "heightVariation": 25,
         "noiseScale": 0.025
       },
       "enemies": ["lightning_elemental", "wind_spirit", "raven"],
@@ -97,7 +97,7 @@
       },
       "terrain": {
         "type": "marshy",
-        "heightVariation": 3,
+        "heightVariation": 15,
         "noiseScale": 0.01,
         "muddy": true
       },
@@ -119,7 +119,7 @@
       },
       "terrain": {
         "type": "glacial",
-        "heightVariation": 5,
+        "heightVariation": 25,
         "noiseScale": 0.02,
         "icy": true
       },
@@ -142,7 +142,7 @@
       },
       "terrain": {
         "type": "volcanic",
-        "heightVariation": 5,
+        "heightVariation": 30,
         "noiseScale": 0.03,
         "rugged": true
       },
@@ -189,7 +189,7 @@
       },
       "terrain": {
         "type": "cavern",
-        "heightVariation": 5,
+        "heightVariation": 20,
         "noiseScale": 0.015,
         "stalactites": true
       },
