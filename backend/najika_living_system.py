@@ -694,8 +694,36 @@ def auto_sleep(current_state):
         "najika_says": "Bin auf dem Boden eingepennt... 😒"
     }
 
-def check_auto_care(current_state):
-    """Prüft ob Auto-Care aktiviert werden muss"""
+def auto_wash(current_state, hygiene_before):
+    """Najika geht selbst auf Toilette / wäscht sich"""
+    # Füllt nur bis max 50%
+    hygiene_gain = 35.0
+    hygiene_after = min(current_state["auto_care_max"], hygiene_before + hygiene_gain)
+
+    # Anger steigt (sie mag es nicht alleine zu sein)
+    current_state["anger_level"] += 6
+    current_state["mood_game"] -= 8
+
+    # Notification-Message
+    message = f"🚽 Najika ist auf die Toilette gegangen (Hygiene: {hygiene_before:.0f}% → {hygiene_after:.0f}%)\n"
+    message += f"😤 Musste selbst... (Anger: {current_state['anger_level']:.0f}%)"
+
+    return {
+        "action": "auto_wash",
+        "hygiene_before": hygiene_before,
+        "hygiene_after": hygiene_after,
+        "anger_level": current_state["anger_level"],
+        "message": message,
+        "najika_says": "Musste selbst auf Toilette... peinlich... 😳"
+    }
+
+def check_auto_care(current_state, najika_state=None):
+    """Prüft ob Auto-Care aktiviert werden muss
+
+    Args:
+        current_state: Living State
+        najika_state: Optional Tamagotchi State (für Hygiene-Check)
+    """
     if not current_state.get("auto_care_enabled", True):
         return None
 
@@ -714,6 +742,11 @@ def check_auto_care(current_state):
     # Energy zu niedrig?
     if current_state["energy"] < threshold:
         result = auto_sleep(current_state)
+        actions.append(result)
+
+    # Hygiene zu niedrig? (nur wenn najika_state übergeben wurde)
+    if najika_state and najika_state.get("hygiene", 100) < threshold:
+        result = auto_wash(current_state, najika_state["hygiene"])
         actions.append(result)
 
     return actions if actions else None
