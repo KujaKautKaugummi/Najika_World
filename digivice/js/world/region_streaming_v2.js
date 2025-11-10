@@ -258,8 +258,9 @@ class RegionStreaming {
     // Y-Position MUSS über Character-Spawn sein!
     terrainMesh.position.set(region.position.x, 0, region.position.z);
 
-    // KEINE Rotation/Scale nötig - Geometrie ist bereits in terrain_generator.js transformiert!
-    // (rotateX + scale wird VOR computeVertexNormals() angewendet)
+    // Simple rotation - Three.js handles normals automatically!
+    // (wie in der alten funktionierenden Version najika_world.html)
+    terrainMesh.rotation.x = -Math.PI / 2;
 
     return terrainMesh;
   }
