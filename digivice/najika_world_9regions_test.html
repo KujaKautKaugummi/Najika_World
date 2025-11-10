@@ -292,6 +292,11 @@
         character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
         scene.add(character);
 
+        // Camera folgt Character (Third-Person Mode)
+        cameraController.setCharacter(character, 3.5);
+        cameraController.setMode(cameraController.MODES.THIRD);
+        document.getElementById('camera-mode').textContent = 'THIRD';
+
         // WASD-Steuerung
         const keys = {
             w: false,
@@ -746,12 +751,25 @@
             const delta = 0.016;
             cameraController.update(delta);
 
-            // WASD Movement
+            // WASD Movement mit Character-Rotation
             const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
-            if (keys.w) character.position.z += moveSpeed;  // Vorwärts
-            if (keys.s) character.position.z -= moveSpeed;  // Rückwärts
-            if (keys.a) character.position.x += moveSpeed;  // Links
-            if (keys.d) character.position.x -= moveSpeed;  // Rechts
+            let dx = 0;
+            let dz = 0;
+
+            if (keys.w) dz += moveSpeed;  // Vorwärts
+            if (keys.s) dz -= moveSpeed;  // Rückwärts
+            if (keys.a) dx += moveSpeed;  // Links
+            if (keys.d) dx -= moveSpeed;  // Rechts
+
+            // Bewegung anwenden
+            if (dx !== 0 || dz !== 0) {
+                character.position.x += dx;
+                character.position.z += dz;
+
+                // Character dreht sich in Bewegungsrichtung
+                const targetRotation = Math.atan2(dx, dz);
+                character.rotation.y = targetRotation;
+            }
 
             // Keep character within map bounds (-100 to 100)
             character.position.x = Math.max(-100, Math.min(100, character.position.x));
