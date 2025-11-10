@@ -1977,6 +1977,40 @@ def living_system_loop():
             if update_needs():
                 save_state()
 
+            # 5. Check Auto-Care (Living System → Tamagotchi State Sync)
+            from najika_living_system import check_auto_care, update_needs_over_time
+
+            # Update Living State Needs
+            update_needs_over_time(living_state)
+
+            # Check if Auto-Care should trigger (pass najika_state for hygiene check!)
+            auto_care_actions = check_auto_care(living_state, STATE["najika"])
+            if auto_care_actions:
+                # Apply auto-care to TAMAGOTCHI STATE (sync!)
+                log("INFO", f"🔧 Auto-Care aktiviert! {len(auto_care_actions)} Aktionen", "LIVING")
+
+                for action in auto_care_actions:
+                    action_type = action.get("action")
+                    if action_type == "auto_eat":
+                        # Feed Najika (Tamagotchi State)
+                        STATE["najika"]["hunger"] = min(100, STATE["najika"]["hunger"] + 30)
+                        STATE["najika"]["last_fed"] = time.time()
+                        log("INFO", f"  🍖 Auto-Eat: Hunger → {STATE['najika']['hunger']}", "AUTO-CARE")
+                    elif action_type == "auto_sleep":
+                        # Rest Najika (Tamagotchi State)
+                        STATE["najika"]["energy"] = min(100, STATE["najika"]["energy"] + 40)
+                        STATE["najika"]["last_sleep"] = time.time()
+                        log("INFO", f"  😴 Auto-Sleep: Energy → {STATE['najika']['energy']}", "AUTO-CARE")
+                    elif action_type == "auto_wash":
+                        # Wash Najika (Tamagotchi State)
+                        hygiene_after = action.get("hygiene_after", 50)
+                        STATE["najika"]["hygiene"] = hygiene_after
+                        log("INFO", f"  🚽 Auto-Wash: Hygiene → {STATE['najika']['hygiene']}", "AUTO-CARE")
+                        log("INFO", f"     💬 Najika: {action.get('najika_says')}", "AUTO-CARE")
+
+                STATE["living"] = living_state
+                save_state()
+
         except Exception as e:
             log("ERROR", f"Fehler im Living System Loop: {e}", "LIVING")
             time.sleep(5)  # Bei Fehler kurz warten
