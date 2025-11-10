@@ -593,10 +593,10 @@
 
             // WASD Movement
             const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
-            if (keys.w) character.position.z -= moveSpeed;
-            if (keys.s) character.position.z += moveSpeed;
-            if (keys.a) character.position.x -= moveSpeed;
-            if (keys.d) character.position.x += moveSpeed;
+            if (keys.w) character.position.z += moveSpeed;  // Vorwärts
+            if (keys.s) character.position.z -= moveSpeed;  // Rückwärts
+            if (keys.a) character.position.x += moveSpeed;  // Links
+            if (keys.d) character.position.x -= moveSpeed;  // Rechts
 
             // Keep character within map bounds (-100 to 100)
             character.position.x = Math.max(-100, Math.min(100, character.position.x));
