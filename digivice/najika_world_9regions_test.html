@@ -133,6 +133,84 @@
             border-radius: 10px;
             z-index: 100;
         }
+
+        #najika-stats {
+            position: absolute;
+            bottom: 80px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 100;
+            border: 2px solid #667eea;
+        }
+
+        #najika-stats h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #667eea;
+            text-shadow: 0 0 10px #667eea;
+        }
+
+        .stat-bar {
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        .stat-bar-fill-container {
+            background: #222;
+            height: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 8px;
+        }
+
+        .stat-inline {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        #backend-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 100;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #333;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2ecc71;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #e74c3c;
+            animation: none;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -164,6 +242,46 @@
 
     <canvas id="minimap"></canvas>
 
+    <div id="najika-stats">
+        <h2>🌸 NAJIKA STATUS</h2>
+        <div class="stat-bar">
+            <span>🍖 Hunger: <span id="najika-hunger">--</span>%</span>
+            <div class="stat-bar-fill-container">
+                <div class="stat-bar-fill" id="hunger-fill" style="background: linear-gradient(90deg, #f39c12, #e67e22); width: 0%;"></div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <span>⚡ Energy: <span id="najika-energy">--</span>%</span>
+            <div class="stat-bar-fill-container">
+                <div class="stat-bar-fill" id="energy-fill" style="background: linear-gradient(90deg, #3498db, #2980b9); width: 0%;"></div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <span>😊 Happiness: <span id="najika-happiness">--</span>%</span>
+            <div class="stat-bar-fill-container">
+                <div class="stat-bar-fill" id="happiness-fill" style="background: linear-gradient(90deg, #e91e63, #c2185b); width: 0%;"></div>
+            </div>
+        </div>
+        <hr style="margin: 10px 0; border-color: #333;">
+        <div class="stat-inline">
+            <span>💪 STR: <span id="najika-str">--</span></span>
+            <span>🧠 INT: <span id="najika-int">--</span></span>
+        </div>
+        <div class="stat-inline">
+            <span>🎯 DEX: <span id="najika-dex">--</span></span>
+            <span>✨ CHA: <span id="najika-cha">--</span></span>
+        </div>
+        <div class="stat-inline">
+            <span>📊 Level: <span id="najika-level">--</span></span>
+            <span>⭐ XP: <span id="najika-xp">--</span></span>
+        </div>
+    </div>
+
+    <div id="backend-status">
+        <div class="status-dot offline" id="status-dot"></div>
+        <span id="status-text">Backend Offline</span>
+    </div>
+
     <div id="controls">
         <button onclick="switchCameraMode()">📷 Kamera</button>
         <button onclick="teleportTo('ice')">❄️ Ice</button>
@@ -176,6 +294,7 @@
         <button onclick="teleportTo('forest')">🌲 Forest</button>
         <button onclick="teleportTo('volcano')">🌋 Volcano</button>
         <button onclick="toggleGrid()">📐 Grid</button>
+        <button onclick="openTerminal()" style="background: #667eea;">💻 Terminal</button>
     </div>
 
     <!-- Three.js und eigene Skripte -->
@@ -801,6 +920,89 @@
 
         // Start in der Mitte (Mountain)
         teleportTo('mountain');
+
+        // ===== BACKEND INTEGRATION (Phase 3) =====
+
+        // Backend URL (localhost:8000)
+        const BACKEND_URL = 'http://localhost:8000';
+
+        // Fetch Najika Status from Backend
+        async function fetchNajikaStatus() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/najika/status`);
+                if (!response.ok) throw new Error('Backend nicht erreichbar');
+
+                const data = await response.json();
+                updateNajikaStats(data);
+                updateBackendStatus(true);
+            } catch (error) {
+                console.warn('Najika Status konnte nicht geladen werden:', error);
+                updateBackendStatus(false);
+            }
+        }
+
+        // Update Najika Stats UI
+        function updateNajikaStats(data) {
+            // Helper: Update bar value and fill
+            const updateBar = (textId, fillId, value) => {
+                const textEl = document.getElementById(textId);
+                const fillEl = document.getElementById(fillId);
+                if (textEl) textEl.textContent = Math.round(value);
+                if (fillEl) fillEl.style.width = Math.max(0, Math.min(100, value)) + '%';
+            };
+
+            // Needs
+            if (data.hunger !== undefined) updateBar('najika-hunger', 'hunger-fill', data.hunger);
+            if (data.energy !== undefined) updateBar('najika-energy', 'energy-fill', data.energy);
+            if (data.happiness !== undefined) updateBar('najika-happiness', 'happiness-fill', data.happiness);
+
+            // Stats
+            if (data.strength !== undefined) {
+                document.getElementById('najika-str').textContent = data.strength;
+            }
+            if (data.intelligence !== undefined) {
+                document.getElementById('najika-int').textContent = data.intelligence;
+            }
+            if (data.dexterity !== undefined) {
+                document.getElementById('najika-dex').textContent = data.dexterity;
+            }
+            if (data.charisma !== undefined) {
+                document.getElementById('najika-cha').textContent = data.charisma;
+            }
+
+            // Growth
+            if (data.level !== undefined) {
+                document.getElementById('najika-level').textContent = data.level;
+            }
+            if (data.xp !== undefined) {
+                document.getElementById('najika-xp').textContent = data.xp;
+            }
+        }
+
+        // Update Backend Connection Status
+        function updateBackendStatus(online) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+
+            if (online) {
+                dot.classList.remove('offline');
+                text.textContent = 'Backend Online';
+            } else {
+                dot.classList.add('offline');
+                text.textContent = 'Backend Offline';
+            }
+        }
+
+        // Open Terminal (Digivice)
+        window.openTerminal = () => {
+            window.open('/digivice/index.html', '_blank', 'width=1200,height=800');
+        };
+
+        // Auto-Update: Fetch Najika Status alle 5 Sekunden
+        fetchNajikaStatus(); // Initial fetch
+        setInterval(fetchNajikaStatus, 5000); // Update alle 5s
+
+        console.log('✅ Phase 3: Backend Integration aktiviert!');
     </script>
 </body>
 </html>
