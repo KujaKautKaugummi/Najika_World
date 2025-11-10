@@ -1,1002 +1,363 @@
 # 🗺️ NAJIKA WORLD - 9 REGIONS TEST MAP ROADMAP
 ## Für Claude Code Web-Modelle (Unlimited)
 
-**⚠️ WICHTIGER KONTEXT:**
-Diese Roadmap ist für die **9-REGIONEN TEST-MAP** (`najika_world_9regions_test.html`).
-Das ist ein **TEILPROJEKT** des größeren **Najika World** Spiels!
-
-**Siehe:** `NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md` für das vollständige Projekt.
+**LETZTE AKTUALISIERUNG:** 2025-11-10 (Basierend auf echtem Code-Stand)
 
 ---
 
-## 🎯 SCOPE: WAS IST DIE 9-REGIONS TEST-MAP?
+## 🎯 WAS IST DIE TEST-MAP?
 
-**⚠️ USER-KLARSTELLUNG:**
-> "es geht ja darum das alles auf der mini map getestet wird bevor es das handyspiel in groß wird"
+**User-Klarstellung:**
 > "es müssen wirklich alle funktionen bei digivice bei najika drin sein zum schluss"
-> "und wenn das alles fertig und getestet ist übertragen wir das auf das große handyspiel"
+> "wenn das alles fertig und getestet ist übertragen wir das auf das große handyspiel"
 
-**KLARSTELLUNG:**
-Die 9-Regions Test-Map ist **NICHT nur eine Basis**!
-Sie ist die **KOMPLETTE TEST-UMGEBUNG für ALLE Features!**
-
-**Was die Test-Map IST:**
-- ✅ **TEST-UMGEBUNG** für das gesamte Najika World Spiel
-- ✅ **ALLE Features müssen hier ZUERST getestet werden**
-- ✅ **Digivice KOMPLETT** implementiert (alle Module)
-- ✅ **Najika KI KOMPLETT** implementiert (4 Persönlichkeiten)
-- ✅ **Kampfsystem KOMPLETT** implementiert und getestet
-- ✅ **PvP-System** getestet (3 Modi)
-- ✅ **Slime-System** getestet (Evolution, Tamagotchi)
-- ✅ **Alle Gameplay-Mechaniken** getestet
+**Die Test-Map ist:**
+- ✅ **KOMPLETTE TEST-UMGEBUNG** für alle Features
+- ✅ **Alle** Digivice-Funktionen müssen hier getestet werden
+- ✅ **Alle** Najika KI Funktionen müssen hier getestet werden
+- ✅ **DANN** wird alles auf das große Handyspiel übertragen
 
 **Workflow:**
 ```
-1. Feature auf 9-Regions Test-Map implementieren
-2. Feature auf 9-Regions Test-Map testen
-3. Wenn alles funktioniert und getestet ist
-4. → Feature auf großes Handyspiel übertragen
+Feature auf Test-Map entwickeln → Testen → Wenn fertig → Auf Handyspiel übertragen
 ```
 
-**Die Test-Map ist die QUALITÄTS-SICHERUNG!**
-- Kleinere Map = Schnelleres Testen
-- Alle Features müssen hier funktionieren
-- Erst wenn alles rund läuft → Großes Spiel
+---
+
+## ✅ AKTUELLER STAND (najika_world_9regions_test.html)
+
+**URL:** http://localhost:8000/digivice/najika_world_9regions_test.html
+
+**WAS FUNKTIONIERT (100%):**
+
+### Basis-Systeme:
+- ✅ **9 Regionen (3x3 Grid)** - Alle Farben korrekt!
+  - Ice (weiß), Highland (braun), Desert (gelb)
+  - Swamp (grün), Mountain (grau, Y=5 höher), Coast (hellbraun)
+  - Caves (dunkelgrau), Forest (dunkelgrün), Volcano (braun)
+- ✅ **WASD Movement** - Richtungen korrekt (W=vor, S=zurück, A/D=links/rechts, Shift=Sprint)
+- ✅ **Najika Character (Bohne)** - Grüner Zylinder mit Kopf/Füßen
+- ✅ **Auto-Height Adjustment** - Character passt sich Berg-Höhe an
+- ✅ **Camera Controller** - Orbit-Modus funktioniert
+- ✅ **Map Bounds** - Character bleibt auf Map (-100 bis 100)
+
+### Asset-System:
+- ✅ **4 Regionen mit Assets:**
+  - 🏜️ Oasis (16 Assets): Palmen, Kakteen, Häuser, Töpfe
+  - 🏰 Dungeon (15 Assets): Truhen, Fackeln, Banner, Wände
+  - 🏛️ Medieval (9 Assets): Gebäude, Fässer, Eimer
+  - 🌲 Nature (12 Assets): Bäume, Felsen, Büsche
+- ✅ **GLTFLoader** - Lädt .gltf und .glb Dateien
+- ✅ **Loading Screen** - Mit Progressbar (zeigt X/52 Assets)
+- ✅ **Shadows** - Alle Models casten/empfangen Schatten
+
+### UI-Elemente:
+- ✅ **Status-UI** (oben links): Kamera-Modus, Position, Gebiet, Assets, FPS
+- ✅ **Teleport-Buttons** (unten): 5 Buttons (Oasis, Dungeon, Medieval, Nature, Center)
+- ✅ **Region-Marker** - 4 farbige Säulen mit Text-Labels
+- ✅ **Grid Helper** - 200x200 Grid mit 40 Divisions
+- ✅ **Minimap Canvas** - 200x200px (oben rechts, noch leer)
+
+### Technisches:
+- ✅ **Three.js r128** - Via CDN
+- ✅ **Scene** - Himmelblau, Fog, Lighting
+- ✅ **Shadows** - 4096x4096 Shadow Map
+- ✅ **Responsive** - Window Resize funktioniert
 
 ---
 
-## 📚 EXISTIERENDE SYSTEME (Bereits fertig in anderen Files)
+## ❌ WAS FEHLT (ToDo für Web-Modelle)
 
-**Backend (najika_server.py - 2153 Zeilen):**
-- ✅ PvP-System (3 Modi: Hardcore/Normal/Softy)
-- ✅ Slime-Begleiter-System (Evolution, Tamagotchi, Rettung)
-- ✅ Battle-System (MANUAL/ASSIST/AUTO Modi)
-- ✅ Magic-System (Explosion-Klasse!)
-- ✅ Skill-System (Learning by Doing)
-- ✅ AI Integration (Qwen2.5 7B + Coqui Voice)
+### PRIORITÄT 1 - Assets & Basis-Features:
 
-**Frontend (index.html - 80KB PWA):**
-- ✅ Schwarze Windmühle (12 Räume, E-Taste Interaktionen)
-- ✅ Dungeon System (3 Dungeons)
-- ✅ Battle System Integration
-- ✅ Fishing System
-- ✅ Garden System
-- ✅ Touch Controls & Virtual Joystick
-- ✅ Interior System
+1. **Assets für 5 fehlende Regionen:**
+   - ❌ Ice Region (keine Assets)
+   - ❌ Highland Region (keine Assets)
+   - ❌ Desert Region (nur Farbe, keine Assets)
+   - ❌ Swamp Region (keine Assets)
+   - ❌ Caves Region (keine Assets)
+   - ❌ Volcano Region (keine Assets)
+   - ❌ Coast Region (keine Assets)
 
-**Kampfsystem-Files (JavaScript):**
-- ✅ `dungeon_combat.js` - Dungeon Combat mit Enemy Spawning
-- ✅ `dungeon_enemies.js` - 10+ Enemy-Types (Skeletons, Corrupted Heroes)
-- ✅ `battle_core.js` - Core Battle Logic
-- ✅ `battle_api.js` - Backend Integration + Offline Fallback
-- ✅ `dungeon_generator.js` - Prozeduraler Dungeon Generator
-- ✅ `command_system.js` - Befehls-System
+2. **Minimap vervollständigen:**
+   - ❌ Canvas existiert, aber ist leer
+   - ❌ 9 Regionen auf Minimap zeichnen
+   - ❌ Najika-Position live anzeigen (grüner Punkt)
+   - ❌ Farb-Kodierung der Regionen
 
----
+3. **Alle 9 Regionen mit Teleport-Buttons:**
+   - ✅ 4 Buttons existieren (Oasis, Dungeon, Medieval, Nature)
+   - ❌ 5 Buttons fehlen (Ice, Highland, Desert, Swamp, Caves, Volcano, Coast, Mountain)
 
-## 🎯 WAS DIE WEB-MODELLE TUN SOLLEN
+4. **Region-Marker für alle 9:**
+   - ✅ 4 Marker existieren
+   - ❌ 5 Marker fehlen
 
-**KOMPLETT-IMPLEMENTIERUNG auf Test-Map:**
+### PRIORITÄT 2 - Kamera & Movement:
 
-Die Web-Modelle müssen **ALLE Features** auf der 9-Regions Test-Map implementieren und testen!
+5. **Third-Person Camera:**
+   - ✅ Camera Controller existiert
+   - ❌ Third-Person Modus aktivieren (Kamera folgt Najika)
+   - ❌ Smooth Follow implementieren
+   - ❌ Camera Modi wechseln funktioniert (Button existiert, aber nur Orbit aktiv)
 
-**Phase 1 - Basis-Features (PRIORITÄT 1):**
-1. ✅ Terrain-Farben SOFORT fixen (Browser-Cache Problem)
-2. ✅ Third-Person Camera implementieren
-3. ✅ Alle 9 Regionen mit Assets füllen
-4. ✅ Minimap vervollständigen (9 Regionen + Live Position)
-5. ✅ WASD Movement + Sprint perfektionieren
+6. **Character Improvements:**
+   - ❌ Besseres Character-Model (aktuell simple Bohne)
+   - ❌ Walk/Run Animation
+   - ❌ Rotation beim Movement
 
-**Phase 2 - Kern-Features (PRIORITÄT 2):**
-6. Integration existierender Systeme in Test-Map:
-   - Dungeon Combat System (`dungeon_combat.js`)
-   - Battle System (`battle_core.js`)
-   - Enemy System (`dungeon_enemies.js`)
-7. Digivice KOMPLETT:
-   - Terminal-Module (bereits in index.html)
-   - Map/Navigation
-   - Inventory
-   - Character Stats
-   - Quests
-   - Crafting
-   - Settings
-8. Stadt-System vollständig:
-   - 8 Städte mit Icons
-   - E-Taste Eintritt
-   - Stadt-Interiors (Basis-Version)
+### PRIORITÄT 3 - Digivice Integration:
 
-**Phase 3 - Gameplay-Features (PRIORITÄT 3):**
-9. Kampfsystem auf Test-Map:
-   - Enemy Spawns in Regionen
-   - Battle UI
-   - Loot System
-10. Najika KI Integration:
-    - 4 Persönlichkeiten (Megumin, Harley, Shiro, Melissa)
-    - Voice (Coqui TTS)
-    - Memory System (ChromaDB)
-11. Slime-System:
-    - Tier Evolution (Level 1-49)
-    - Slime Metamorphose (Level 50+)
-    - 8 Farben
-    - Tamagotchi-Pflege
-12. PvP-System (Test-Version):
-    - 3 Modi auf Test-Map
-    - Mercy-System testen
+7. **Digivice-Module einbinden:**
+   - ✅ Existiert in `digivice/index.html`
+   - ❌ Integration in Test-Map
+   - ❌ Terminal-Module (4 Stück bereits fertig)
+   - ❌ Najika Tamagotchi Stats anzeigen
+   - ❌ Battle-System UI
 
-**Phase 4 - Polish & Testing (PRIORITÄT 4):**
-13. Visuelle Verbesserungen
-14. Performance-Optimierung (FPS > 30)
-15. Mobile Touch-Controls
-16. Testing aller Features
-17. Bug-Fixes
+8. **Backend-Verbindung:**
+   - ✅ Backend läuft (najika_server.py Port 8000)
+   - ❌ WebSocket-Verbindung zur Test-Map
+   - ❌ Najika Status live updates
 
-**DANN:**
-→ Wenn ALLES auf Test-Map funktioniert und getestet ist
-→ Features auf großes Handyspiel übertragen
+### PRIORITÄT 4 - Kampfsystem:
+
+9. **Combat Integration:**
+   - ✅ Existiert in separaten Files (`dungeon_combat.js`, `battle_core.js`)
+   - ❌ Integration in Test-Map
+   - ❌ Enemy Spawns in Regionen
+   - ❌ Battle UI
+   - ❌ E-Taste für Dungeon-Eintritt
+
+10. **Enemy System:**
+    - ✅ 10+ Enemy-Types definiert
+    - ❌ Spawning-System aktiv
+    - ❌ Kollisions-Detection
+    - ❌ Loot-System
+
+### PRIORITÄT 5 - Stadt-System:
+
+11. **8 Städte platzieren:**
+    - ✅ `cities.json` existiert mit 8 Städten
+    - ❌ Stadt-Icons auf Map
+    - ❌ E-Taste für Stadt-Eintritt
+    - ❌ Stadt-Interiors (Basis)
+
+12. **Schwarze Windmühle:**
+    - ✅ Existiert in `index.html` (12 Räume)
+    - ❌ Auf Berg-Gipfel platzieren
+    - ❌ Als Home-Base zugänglich
 
 ---
 
-## 📚 WICHTIGE DATEIEN ZUM LESEN
+## 🚀 EMPFOHLENE ARBEITS-REIHENFOLGE
 
-**VOR Start LESEN:**
-1. `NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md` (2021 Zeilen - DAS GANZE PROJEKT!)
-2. `DOCS/KANONISCHE_BASIS.md` (Unveränderbare Basis-Regeln)
-3. `digivice/najika_world_9regions_test.html` (Aktueller Stand)
-4. `digivice/static/js/camera_controller.js` (Kamera-Referenz)
+### Phase 1: Basis vervollständigen (4-6h)
+1. Assets für 5 fehlende Regionen hinzufügen
+2. Alle 9 Teleport-Buttons implementieren
+3. Alle 9 Region-Marker platzieren
+4. Minimap vervollständigen
 
----
+**Ergebnis:** Alle 9 Regionen komplett navigierbar und sichtbar
 
-## 📑 INHALTSVERZEICHNIS
+### Phase 2: Kamera & Character (2-3h)
+5. Third-Person Camera aktivieren
+6. Character-Rotation beim Movement
+7. Camera Modi-Wechsel testen
 
-1. [✅ Aktueller Status](#-aktueller-status-stand-najika_world_9regions_testhtml)
-2. [🚀 Next Steps - Was jetzt zu tun ist](#-next-steps---was-jetzt-zu-tun-ist)
-3. [🎯 Phase A1-A20: Test-Map Features](#-phase-a1-kamera-system-komplett)
-4. [🤖 Phase B: Najika KI Integration](#-phase-b-najika-ki-integration)
-5. [📝 Zusammenfassung für Web-Modelle](#-zusammenfassung-für-web-modelle)
-6. [🔧 Entwicklungs-Richtlinien](#-entwicklungs-richtlinien)
+**Ergebnis:** Smooth gameplay mit Third-Person Kamera
 
----
+### Phase 3: Digivice Integration (3-4h)
+8. Backend WebSocket-Verbindung
+9. Najika Stats UI einbinden
+10. Terminal-Module zugänglich machen
 
-## ✅ AKTUELLER STATUS (Stand: najika_world_9regions_test.html)
+**Ergebnis:** Najika KI lebt auf der Map
 
-**WAS IST FERTIG:**
-- ✅ 9 Regionen (3x3 Grid, flat build mode) - Ice, Highland, Desert, Swamp, Mountain, Coast, Caves, Forest, Volcano
-- ✅ Najika Character (Bohne) mit WASD Movement
-- ✅ Auto-adjust character height (Berg ist höher als andere Regionen)
-- ✅ Kamera-Controller mit Orbit-Modus
-- ✅ UI mit Position, Region, FPS, Asset-Count
-- ✅ Minimap (Canvas, 200x200px oben rechts)
-- ✅ Region-Marker und Text-Labels für 4 Test-Regionen
-- ✅ Grid-Helper (200x200, 40 Divisions)
-- ✅ Asset-Loading für 4 Test-Regionen (Oasis, Dungeon, Medieval, Nature)
-- ✅ Teleportation zu verschiedenen Positionen
-- ✅ Lighting (Ambient + Directional mit Shadows)
-- ✅ Shadow-System funktioniert
+### Phase 4: Kampfsystem (4-5h)
+11. Combat-Files integrieren
+12. Enemy Spawns aktivieren
+13. Battle UI implementieren
+14. E-Taste für Dungeons
 
-**WAS FEHLT (für 9-Regions Test-Map):**
-- ❌ Third-Person Camera (folgt Najika automatisch)
-- ❌ Assets für alle 9 Regionen (aktuell nur 4 Regionen)
-- ❌ Dungeon-System Integration in Test-Map (E-Taste zum Betreten)
-- ❌ Schwarze Mühle (Najika's Home)
-- ❌ Stadt-System (8 Städte)
-- ❌ Digivice-Module vollständig
-- ❌ Najika KI Integration
+**Ergebnis:** Kampf-Mechanik funktioniert
 
-**WAS BEREITS IN ANDEREN FILES FERTIG IST:**
-- ✅ **Kampfsystem komplett!** (`dungeon_combat.js`, `dungeon_enemies.js`, `battle_core.js`, `battle_api.js`)
-  - Dungeon Combat mit Enemy Spawning
-  - 10+ Enemy-Types (Skeletons, Corrupted Heroes, etc.)
-  - HP/Damage/Speed/Attack Range System
-  - Loot & XP System
-  - Combat UI
-  - Backend Integration (Python Server)
-  - Offline-Fallback
-- ✅ Dungeon Generator (`dungeon_generator.js`)
-- ✅ Command System (`command_system.js`)
+### Phase 5: Stadt-System (3-4h)
+15. 8 Städte platzieren
+16. Stadt-Icons & E-Taste
+17. Schwarze Windmühle auf Berg
+
+**Ergebnis:** Komplette Open-World mit Städten
+
+### Phase 6: Polish & Testing (4-6h)
+18. Performance-Optimierung (FPS > 30)
+19. Mobile Touch-Controls
+20. Visuelle Verbesserungen
+21. Bug-Fixes
+22. Vollständiges Testing
+
+**Ergebnis:** Release-ready für Übertragung auf Handyspiel
 
 ---
 
-## 📋 STRATEGIE: 2-PHASEN-ANSATZ
+## 📁 WICHTIGE DATEIEN
 
-### Phase A: TEST-MAP FERTIG
-Alle Mechaniken auf Test-Map testen bis rund läuft.
-**OHNE Najika KI!**
-
-### Phase B: NAJIKA INTEGRATION
-Erst wenn Map stabil → dann KI Najika + Living System drauf.
-
----
-
-## 🚀 NEXT STEPS - WAS JETZT ZU TUN IST
-
-**⚠️ KONTEXT AUS SESSION_UEBERGABE_WEB_MODELL.md (2025-11-09):**
-Das vorherige Claude-Modell hat bereits an der 9-Regionen Test-Map gearbeitet!
-**Bekannte Probleme die SOFORT gefixt werden müssen:**
-
-**PRIORITÄT 1 (KRITISCH - SOFORT FIXEN!):**
-1. 🔴 **Terrain-Farben funktionieren NICHT richtig**
-   - Küste zeigt WEIß statt Hellbraun (#c2b280)
-   - Wüste zeigt WEIß statt Gelb (#e8d4a0)
-   - Sumpf zeigt GRAU statt Grün (#556b2f)
-   - **Fix:** Browser-Cache + Material-System debuggen
-   - **File:** `digivice/js/world/biome_system.js`, `region_streaming.js`
-
-2. 🟡 **Vulkan-Terrain ist wellig ("kirkel krackel") statt flach**
-   - heightVariation=60 wird gecached, sollte 5 sein
-   - **Fix:** Cache-Buster zu biomes.json oder Hard-Reload
-   - **File:** `digivice/data/biomes.json`
-
-3. 🟡 **Eis-Teleport Button funktioniert nicht**
-   - Region-Name Mismatch zwischen Button und regions.json
-   - **Fix:** Region-Namen synchronisieren
-   - **Files:** `najika_world_v2.html`, `regions.json`
-
-**PRIORITÄT 2 (DANACH):**
-4. **Third-Person Camera** implementieren (Kamera folgt Najika automatisch)
-5. **Assets für 5 fehlende Regionen** (Ice, Highland, Desert, Swamp, Coast, Caves, Forest, Volcano)
-6. **Minimap vollständig** mit allen 9 Regionen + Najika-Position live
-
-**PRIORITÄT 3 (DANACH):**
-7. **Vegetation 3D-Modelle** statt grüne Kugeln (KayKit Assets)
-8. **Städte Optik** verbessern (Häuser statt bunte Boxen)
-9. **Dungeon-System Integration** (E-Taste zum Betreten)
-10. **Digivice-UI** Basis-Module vorbereiten
-
-**PRIORITÄT 4 (VOLLSTÄNDIGE INTEGRATION):**
-11. **Kampfsystem vollständig** integrieren und testen
-12. **PvP-System** (3 Modi) auf Test-Map implementieren
-13. **Slime-System** (Evolution, Tamagotchi) integrieren
-14. **Najika KI** (4 Persönlichkeiten) vollständig integrieren
-15. **Oregon Trail Events** System testen
-16. **Schwarze Windmühle** auf Test-Map (oder Integration mit index.html)
-
----
-
-## 🎯 PHASE A1: KAMERA-SYSTEM KOMPLETT
-
-**STATUS:** ⚠️ TEILWEISE FERTIG (Orbit-Modus funktioniert, Third-Person fehlt noch)
-
-**Was noch zu tun ist:**
-Komplettes Third-Person Camera System aus `najika_world_v2.html` übernehmen.
-
-**Vorbereitung:**
-1. Lies `static/js/camera_controller.js` vollständig
-2. Check wie in v2 Kamera an Character gebunden ist
-3. Verstehe Third-Person Camera Logic
-
-**Implementierung (1 großer Commit):**
-- ✅ Orbit-Modus funktioniert bereits
-- ❌ Third-Person Modus: Kamera folgt Najika automatisch
-- ❌ Smooth movement beim Laufen
-- ❌ Kamera-Kollision (nicht durch Boden/Berg)
-- ✅ Mausrad-Zoom (bereits implementiert)
-- ❌ Touch-Controls (Pinch-Zoom, Drag für Mobile)
-- ❌ Umschalten zwischen Orbit und Third-Person
-
-**Commit:** "Feature: Third-Person Camera - follows Najika"
-
----
-
-## 🎯 PHASE A2: MINIMAP & REGION-LABELS
-
-**STATUS:** ⚠️ TEILWEISE FERTIG (Minimap existiert, aber noch nicht vollständig)
-
-**Was ist fertig:**
-- ✅ Minimap Canvas (200x200px, oben rechts)
-- ✅ Region-Namen als floating Labels (für 4 Test-Regionen)
-- ✅ Aktuelle Region im UI ("Gebiet: Mountain")
-- ✅ Grid-Lines zwischen Regionen (GridHelper)
-
-**Was fehlt noch:**
-- ❌ Minimap zeigt alle 9 Regionen (3x3 Grid)
-- ❌ Najika als Dot auf Minimap (live update)
-- ❌ Farb-Kodierung der Regionen auf Minimap
-- ❌ Minimap anklickbar für Teleportation (optional)
-
-**Implementierung (1 Commit):**
-- Minimap vollständig implementieren mit allen 9 Regionen
-- Najika-Position live auf Minimap
-- Farben entsprechend der Regionen
-
-**Commit:** "Feature: Complete Minimap with 9 Regions + Live Position"
-
----
-
-## 🎯 PHASE A3: DUNGEON-SYSTEM KOMPLETT
-
-**Was:**
-8 Dungeons auf Map (1 pro Region außer Berg).
-
-**Vorbereitung:**
-1. Finde Dungeon-Assets in najika_world.html
-2. Check Dungeon-Loading Logic
-3. Exit-Portal - wie funktioniert es?
-
-**Implementierung (1 großer Commit):**
-- 8 Dungeons platzieren
-- Dungeon-Eingänge (Glowing Portal)
-- E-Taste → Innenraum laden
-- Exit-Portal im Dungeon
-- Dungeon-Assets: Wände, Boden, Fackeln
-
-**Wichtig:** Robust - keine Bugs beim Betreten/Verlassen.
-
-**Commit:** "Feature: Dungeon System - 8 Dungeons"
-
----
-
-## 🎯 PHASE A4: SCHWARZE MÜHLE (GÖTTERFELS)
-
-**Was:**
-Najika's Home auf Berg-Gipfel.
-
-**Vorbereitung:**
-1. Check regions.json → Götterfels
-2. Mühlen-Design (Windmühle? Schwarz)
-3. Innenraum: Bed, Crafting, Storage
-
-**Implementierung (1 großer Commit):**
-- Mühlen-Modell auf Gipfel (X=0, Z=0, Y=15)
-- E-Taste → betreten
-- Innenraum (Safe Zone)
-- Möbel: Bed, Crafting Table, Chest
-- Fluss vom Berg (visuell - blaue Linie)
-- Exit zurück zur Map
-
-**Commit:** "Feature: Schwarze Mühle - Home"
-
----
-
-## 🏙️ PHASE A5: STADT-ICONS & POSITIONEN
-
-**Was:**
-Städte auf Map sichtbar (noch nicht betreten).
-
-**Vorbereitung:**
-1. Lies `entwicklung/data/cities.json`
-2. Welche Region = welche Stadt?
-3. Icon-Design (Tower? Flagge?)
-
-**Implementierung (1 großer Commit):**
-- Stadt-Positionen aus cities.json laden
-- 8 Stadt-Icons platzieren
-- Icon-Design: Glowing Beacon oder Häuser-Cluster
-- Stadt-Name als Label
-- Entfernung zur nächsten Stadt im UI
-
-**Städte:**
-1. Wüstenstadt (Wüste)
-2. Hafenstadt (Küste)
-3. Waldstadt (Wald)
-4. Vulkanstadt (Vulkan)
-5. Eisstadt (Eis)
-6. Hochebenenstadt (Hochebene)
-7. Sumpfstadt (Sumpf)
-8. Höhlenstadt (Höhlen)
-
-**Commit:** "Feature: City Icons - 8 cities"
-
----
-
-## 🏙️ PHASE A6: STADT-EINTRITT SYSTEM
-
-**Was:**
-Mit E-Taste Stadt betreten.
-
-**Vorbereitung:**
-1. Check wie Dungeon-Eintritt funktioniert
-2. Loading Screen Design
-3. Wie Stadt-Szene laden?
-
-**Implementierung (1 großer Commit):**
-- Nähe-Check: < 10m → Icon leuchtet
-- E-Taste zeigt "Drücke E zum Betreten"
-- Loading Screen "Betrete [Stadt]..."
-- Stadt-Innenbereich laden (eigene Szene)
-- Transition smooth
-
-**Commit:** "Feature: City Entry System"
-
----
-
-## 🏙️ PHASE A7: STADT-INNENBEREICH (TEMPLATE)
-
-**Was:**
-Standard-Stadt-Layout (für alle 8 Städte).
-
-**Vorbereitung:**
-1. Stadt-Größe? (z.B. 200x200)
-2. Straßen-Layout (Grid oder organisch?)
-3. Gebäude-Positionen festlegen
-
-**Implementierung (1 großer Commit):**
-- Stadt-Layout: Straßen + Plätze
-- 10-15 Gebäude pro Stadt (Primitives OK)
-- Gebäude OHNE E betreten (durchlaufen)
-- NPCs (statisch - einfach Kapseln)
-- Exit-Portal zurück zur Map
-- Template für alle 8 Städte kopierbar
-
-**Commit:** "Feature: City Interior Template"
-
----
-
-## 🏙️ PHASE A8: GEBÄUDE-TYPEN & FUNKTIONEN
-
-**Was:**
-Verschiedene Gebäude mit Funktionen.
-
-**Vorbereitung:**
-1. Gebäude-Typen definieren
-2. Innenräume - wie komplex?
-3. NPCs - Interaktion?
-
-**Implementierung (1-2 große Commits):**
-
-**Standard-Gebäude (alle Städte):**
-- Wohnhäuser (3-5 Stück) - nur visuell
-- Shop (Händler-NPC inside)
-- Taverne (Essen kaufen)
-- Werkstatt (Crafting)
-- Rathaus (Quest-Giver NPC)
-
-**Spezial-Gebäude pro Region:**
-- Wüste: Oase, Karawanserei
-- Küste: Hafen, Leuchtturm
-- Wald: Jäger-Hütte
-- Vulkan: Schmiede, Lava-Grube
-- Eis: Iglu-Cluster
-- Hochebene: Observatorium
-- Sumpf: Stelzen-Häuser
-- Höhlen: Kristall-Mine
-
-**Commit 1:** "Feature: Standard Buildings"
-**Commit 2:** "Feature: Special Buildings per Region"
-
----
-
-## 🖥️ PHASE A9: DIGIVICE - MAP MODUL
-
-**Was:**
-Vollbild-Karte in Digivice.
-
-**Vorbereitung:**
-1. Check Digivice UI-Struktur
-2. Wie Map rendern? (Canvas? Three.js?)
-3. Marker-System
-
-**Implementierung (1 großer Commit):**
-- Map-Button in Digivice → Fullscreen Map
-- 9 Regionen dargestellt (3x3 Grid)
-- Najika-Position live (Dot)
-- Stadt-Marker anklickbar (Teleport später)
-- Dungeon-Marker
-- Zoom In/Out
-- Wegpunkt setzen (Kompass in 3D-Welt)
-
-**Commit:** "Feature: Digivice Map Module"
-
----
-
-## 🖥️ PHASE A10: DIGIVICE - INVENTORY
-
-**Was:**
-Rucksack-System.
-
-**Vorbereitung:**
-1. Item-Datenstruktur definieren
-2. Wo Items speichern? (localStorage?)
-3. Item-Icons wo her?
-
-**Implementierung (1 großer Commit):**
-- Inventory-Button → öffnet Rucksack
-- 20 Item-Slots (Grid)
-- Items anzeigen (Icon + Name + Anzahl)
-- Item-Details bei Click
-- Item benutzen (z.B. Essen → Hunger +10)
-- Item wegwerfen
-- Item-Gewicht/Limit (optional)
-
-**Commit:** "Feature: Inventory System"
-
----
-
-## 🖥️ PHASE A11: DIGIVICE - CHARACTER STATS
-
-**Was:**
-Charakter-Status anzeigen.
-
-**Vorbereitung:**
-1. Stats-System definieren (HP, Stamina, etc.)
-2. Wo speichern?
-3. Level-Up Mechanik?
-
-**Implementierung (1 großer Commit):**
-- Stats-Button → Character Sheet
-- Level anzeigen
-- XP-Bar (bis nächstes Level)
-- Stats: HP, Stamina, Strength, Defense
-- Equipment Slots (Waffe, Rüstung, Accessoire)
-- Skills/Abilities Liste
-
-**Commit:** "Feature: Character Stats Module"
-
----
-
-## 🖥️ PHASE A12: DIGIVICE - QUESTS
-
-**Was:**
-Quest-Log System.
-
-**Vorbereitung:**
-1. Quest-Datenstruktur
-2. Quest-Fortschritt tracken wie?
-3. Quest-Giver NPCs
-
-**Implementierung (1 großer Commit):**
-- Quests-Button → Quest-Log
-- Aktive Quests (max 5)
-- Quest-Beschreibung
-- Quest-Ziele (z.B. "3/10 Items")
-- Quest abschließen → Belohnung
-- Quest-Giver NPCs in Städten
-
-**Commit:** "Feature: Quest System"
-
----
-
-## 🖥️ PHASE A13: DIGIVICE - CRAFTING
-
-**Was:**
-Crafting-System.
-
-**Vorbereitung:**
-1. Rezepte definieren (JSON?)
-2. Crafting-Stations wo?
-3. Item-Kombinationen
-
-**Implementierung (1 großer Commit):**
-- Crafting-Button → Rezept-Liste
-- Rezepte anzeigen (benötigte Items)
-- Craft-Button (wenn Items vorhanden)
-- Item wird erstellt → Inventory
-- Crafting-Station-Check (z.B. in Mühle)
-
-**Commit:** "Feature: Crafting System"
-
----
-
-## 🖥️ PHASE A14: DIGIVICE - SETTINGS
-
-**Was:**
-Einstellungen.
-
-**Implementierung (1 Commit):**
-- Settings-Button → Einstellungen
-- Graphics Quality (Low/Med/High)
-- Sound Volume (Master, Music, SFX)
-- Controls (WASD, Gamepad)
-- Language (DE/EN)
-- Save/Load Game
-
-**Commit:** "Feature: Settings Module"
-
----
-
-## 🎨 PHASE A15: VISUELLE POLISH
-
-**Was:**
-Map schöner machen.
-
-**Implementierung (1-2 Commits):**
-- Tag/Nacht-Zyklus (optional)
-- Schatten optimieren
-- Partikel: Rauch (Vulkan), Schnee (Eis), Nebel (Sumpf)
-- Wasser-Animation (Küste, Fluss)
-- Bessere 3D-Modelle (wo nötig)
-- Texturen statt Farben
-
-**Commit 1:** "Polish: Visual Effects"
-**Commit 2:** "Polish: Better Models & Textures"
-
----
-
-## 🧪 PHASE A16: TESTING & BUGFIXES
-
-**Was:**
-Alles testen und fixen.
-
-**Testing:**
-1. Performance: FPS > 30?
-2. Alle Features funktionieren?
-3. Mobile: Touch-Controls OK?
-4. Keine Console-Errors?
-
-**Bugfixes:**
-- Najika fällt nicht durch Boden
-- Kamera clippt nicht durch Wände
-- UI überlappen sich nicht
-- Stadt/Dungeon-Transitions smooth
-
-**Commits:** "Fix: [Bug beschreibung]"
-
----
-
-## 🤖 PHASE B: NAJIKA KI INTEGRATION
-
-**NUR wenn Phase A komplett fertig!**
-
-### B1: Living System Backend Check
-- Auto-Care läuft?
-- Mood-System funktioniert?
-- Anger-System aktiv?
-
-### B2: Digivice ↔ Backend Sync
-- Tamagotchi-Werte vom Backend holen
-- Änderungen an Backend senden
-- WebSocket für Real-Time (optional)
-
-### B3: KI-Antworten
-- Najika antwortet auf Fragen
-- Kontext-Awareness (weiß wo sie ist)
-- Emotionale Antworten (Mood/Anger)
-
-### B4: Training System
-- Training-Session starten
-- Trainings-Daten sammeln
-- Fortschritt anzeigen
-
-**Commits:** "Feature: Najika AI - [Teil]"
-
----
-
-## 📊 PRIORITÄTEN
-
-### JETZT (Phase A1-A5)
-Basis fertig - Map funktioniert, Kamera OK, Städte/Dungeons sichtbar.
-
-### DANACH (A6-A14)
-Stadt-Interiors, Digivice-Module.
-
-### POLISH (A15-A16)
-Visuell verbessern, Bugs fixen.
-
-### SPÄTER (Phase B)
-Najika KI drauf.
-
----
-
-## 🎯 ERFOLGS-KRITERIEN Phase A
-
-**Phase A ist fertig wenn:**
-- Najika läuft flüssig durch 9 Regionen
-- Alle 8 Städte betreten und erkunden
-- Dungeons funktionieren
-- Digivice zeigt alle Module (außer Handy)
-- FPS > 30
-- Keine kritischen Bugs
-- **BEREIT für Najika KI Integration**
-
----
-
-## 🔧 ENTWICKLUNGS-RICHTLINIEN
-
-### Commit-Messages Format
+### Haupt-Datei:
 ```
-Feature: [Großes Feature]
-Fix: [Bug]
-Polish: [Visuell]
-Test: [Was getestet]
+digivice/najika_world_9regions_test.html    (631 Zeilen - ALLES DRIN!)
 ```
 
-### Vor jedem großen Commit
-1. Alle betroffenen Files checken
-2. Code durchdenken
-3. Testen: WASD, Buttons, Console-Errors
-4. Dann erst committen
+### Referenz-Dateien:
+```
+digivice/index.html                         (Digivice UI + 12 Räume)
+digivice/static/js/camera_controller.js     (Kamera-System)
+```
 
-### Code-Qualität
-- Kommentare in Deutsch
-- Klare Funktions-Namen
-- Error-Handling immer
-- Keine console.log in Production
+### Kampfsystem:
+```
+digivice/js/dungeon_combat.js               (Combat-Logik)
+digivice/js/dungeon_enemies.js              (10+ Enemy-Types)
+digivice/js/battle_core.js                  (Battle-Engine)
+digivice/js/battle_api.js                   (Backend-Integration)
+```
 
----
+### Data-Files:
+```
+digivice/data/regions.json                  (9 Regionen)
+digivice/data/cities.json                   (8 Städte)
+digivice/data/biomes.json                   (Biome-Eigenschaften)
+```
 
-**Viel Erfolg, Claude Web-Modelle! 🚀**
+### Backend:
+```
+backend/najika_server.py                    (2153 Zeilen - Python Server)
+```
 
-**Start mit PHASE A1: Third-Person Camera!**
-
----
-
-## 📝 ZUSAMMENFASSUNG FÜR WEB-MODELLE
-
-### Was ist die Basis?
-- **Datei:** `digivice/najika_world_9regions_test.html`
-- **Stand:** 9 Regionen funktionieren, Najika läuft mit WASD, Orbit-Kamera, Assets für 4 Regionen
-- **Ziel:** Komplette Test-Map mit allen Features (OHNE Najika KI)
-
-### Wie arbeiten?
-1. **VOR jedem großen Feature:** Alle betroffenen Files lesen und verstehen
-2. **GROSSE COMMITS:** Nicht häppchenweise, sondern komplette Features auf einmal
-3. **TESTEN:** Nach jedem Feature: WASD testen, Console checken, FPS prüfen
-4. **COMMIT:** Erst wenn alles funktioniert → dann committen
-
-### Was ist wichtig?
-- **Code-Qualität:** Kommentare in Deutsch, klare Funktionsnamen, Error-Handling
-- **Performance:** FPS > 30 ist Pflicht
-- **Mobile:** Touch-Controls müssen funktionieren
-- **Keine Bugs:** Najika darf nicht durch Boden fallen, Kamera nicht clippen
-
-### Wo sind die wichtigen Files?
-- **Hauptdatei:** `digivice/najika_world_9regions_test.html`
-- **Kamera:** `digivice/static/js/camera_controller.js`
-- **Regionen:** `entwicklung/data/regions.json`
-- **Städte:** `entwicklung/data/cities.json`
-- **Biomes:** `entwicklung/data/biomes.json`
-- **Assets:** `digivice/static/assets/` (kaykit, jellysquish)
-
-### Welche Assets sind verfügbar?
-- **KayKit:** Dungeon, Medieval, Nature - bereits in Test-Map verwendet
-- **Jellysquish:** Oasis - bereits in Test-Map verwendet
-- **Weitere:** In `digivice/static/assets/KayKit Mini-Game Variety Pack 1.2/Models/gltf/`
-
-### Quick-Start für neues Web-Modell:
-1. Lies diese Roadmap komplett durch
-2. Öffne `najika_world_9regions_test.html` und verstehe den aktuellen Stand
-3. Wähle PHASE A1 oder A2 (beides Priorität 1)
-4. Lies alle relevanten Files durch
-5. Plane das Feature komplett durch
-6. Implementiere alles in 1-2 großen Commits
-7. Teste gründlich
-8. Commit mit Message: "Feature: [Feature-Name]"
+### Assets:
+```
+digivice/static/assets/kaykit/              (Dungeon, Medieval, Nature)
+digivice/static/assets/jellysquish/         (Oasis)
+```
 
 ---
 
+## 📝 ENTWICKLUNGS-RICHTLINIEN
 
+### 1. IMMER die Haupt-Datei lesen:
+```bash
+# Die Test-Map ist EINE HTML-Datei (631 Zeilen)
+# Kein komplexes Modul-System mehr!
+Read: digivice/najika_world_9regions_test.html
+```
 
-## ⚔️ PHASE A17: KAMPF-SYSTEM INTEGRATION (Optional)
+### 2. Assets hinzufügen:
+```javascript
+// Pattern (siehe Zeilen 387-458):
+regionAssets: {
+    ice: [
+        { path: 'static/assets/...', name: '...', position: [x, 0, z], scale: 1 }
+    ]
+}
+```
 
-**STATUS:** ✅ BEREITS IMPLEMENTIERT in separaten Files!
+### 3. Teleport-Button hinzufügen:
+```html
+<!-- Pattern (siehe Zeile 169-175): -->
+<button onclick="teleportTo('ice')">❄️ Eis</button>
+```
 
-**Was existiert bereits:**
-- ✅ Dungeon Combat System (`dungeon_combat.js`)
-- ✅ 10+ Enemy Types (`dungeon_enemies.js`)
-- ✅ Battle Core Logic (`battle_core.js`)
-- ✅ Backend Integration (`battle_api.js`)
-- ✅ Command System (`command_system.js`)
+### 4. Region-Position in `regionPositions` (Zeile 523):
+```javascript
+regionPositions: {
+    ice: { x: -66.66, z: 66.66 }  // Top-left region
+}
+```
 
-**Was die Test-Map tun könnte (OPTIONAL):**
-- Integration von `dungeon_combat.js` in Test-Map
-- Enemy Spawns in Regionen (Simple Version)
-- Test-Kämpfe zur Demonstration
-
-**WICHTIG:**
-Das vollständige Kampfsystem ist FERTIG und läuft bereits in `index.html`.
-Die Test-Map braucht NUR eine simple Integration für Testing-Zwecke!
-
----
-
-## 🎲 PHASE A18: EVENT-SYSTEM - NICHT FÜR TEST-MAP
-
-**STATUS:** ❌ NICHT TEIL DER TEST-MAP
-
-**Grund:**
-Oregon Trail Events sind Teil des **Full Najika World** Spiels.
-Die 9-Regions Test-Map ist NUR für technische Basis-Tests.
-
-**Für Full Game siehe:**
-- `NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md` (Zeile 944-1043)
-- Oregon Trail Events Design (2682 Zeilen Event-Dokument vorhanden)
-
----
-
-## 🎮 PHASE A19: GAMEPLAY-MECHANIKEN - NICHT FÜR TEST-MAP
-
-**STATUS:** ❌ NICHT TEIL DER TEST-MAP
-
-**Grund:**
-Resource-Management, Resting, Weather, Time, Party, Reputation sind Teil des **Full Najika World** Spiels.
-
-**Für Full Game siehe:**
-- `NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md`
-- Backend: `najika_server.py` (2153 Zeilen)
+### 5. Testing nach jeder Änderung:
+```bash
+1. Browser neu laden (Strg+F5)
+2. Console checken (F12)
+3. Alle Buttons testen
+4. WASD Movement testen
+5. FPS prüfen (sollte > 30 sein)
+```
 
 ---
 
-## 📱 PHASE A20: MOBILE OPTIMIERUNG
+## 🎯 ERFOLGS-KRITERIEN
 
-**STATUS:** ⚠️ TEILWEISE RELEVANT
+### MVP (Minimum Viable Product):
+- ✅ Alle 9 Regionen mit Assets
+- ✅ Alle 9 Teleport-Buttons funktionieren
+- ✅ Minimap zeigt alle Regionen + Najika-Position
+- ✅ Third-Person Camera folgt Najika
+- ✅ FPS > 30
 
-**Was:**
-Random Events beim Reisen (wie Oregon Trail + Konosuba).
-
-**Vorbereitung:**
-1. Event-Typen definieren (Encounter, Choice, Disaster)
-2. Event-Pool pro Region
-3. Event-Trigger (Zeit? Distanz?)
-
-**Implementierung (2 große Commits):**
-
-**Commit 1: Event Engine**
-- Event-Trigger System (z.B. alle 100m ein Event)
-- Event-Screen (Overlay mit Text + Choices)
-- Event-Datenstruktur (JSON)
-- Event-Konsequenzen (HP-, Item+, etc.)
-
-**Commit 2: Event-Content**
-- 50+ Events schreiben:
-  * Encounters: Banditen, Händler, NPCs
-  * Choices: Helfen oder Ignorieren? 
-  * Disasters: Sturm, Monster-Angriff
-  * Funny: Konosuba-Style (Explosion Magic, Kazuma's Luck)
-- Events pro Region unterschiedlich
-- Event-Belohnungen/Strafen
-
-**Commits:**
-- "Feature: Event System Engine"
-- "Content: 50+ Random Events"
-
----
-
-## 🎮 PHASE A19: GAMEPLAY-MECHANIKEN
-
-**Was:**
-Alle weiteren Mechaniken fürs Handy-Spiel testen.
-
-**Implementierung (jeweils 1 Commit pro Mechanik):**
-
-### A19.1: Resource-Management
-- Hunger/Thirst System (sinkt über Zeit)
-- Essen konsumieren (aus Inventory)
-- Game Over bei Hunger = 0
-
-**Commit:** "Feature: Resource Management - Hunger/Thirst"
-
-### A19.2: Resting System
-- Bed in Mühle oder Taverne
-- Schlafen → HP+, Time+
-- Can't sleep wenn Enemies nearby
-
-**Commit:** "Feature: Rest System"
-
-### A19.3: Weather System
-- Wetter pro Region (aus biomes.json)
-- Wetter-Effekte: Regen (Sicht↓), Sturm (Damage)
-- Wetter beeinflusst Events
-
-**Commit:** "Feature: Weather System"
-
-### A19.4: Time System
-- Ingame-Zeit (Tag/Nacht)
-- Zeitfortschritt beim Reisen
-- Nacht = mehr Enemies
-
-**Commit:** "Feature: Time System - Day/Night"
-
-### A19.5: Party System (optional)
-- Begleiter rekrutieren (NPCs)
-- Party-Members in Kampf
-- Party-Inventory geteilt
-
-**Commit:** "Feature: Party System"
-
-### A19.6: Reputation System
-- Reputation pro Stadt
-- Gute Taten → Rep+
-- Bessere Preise bei hoher Rep
-
-**Commit:** "Feature: Reputation per City"
-
----
-
-## 📱 PHASE A20: MOBILE OPTIMIERUNG
-
-**Was:**
-Alles für Mobile-Play vorbereiten.
-
-**Implementierung (1-2 Commits):**
-- Touch-Controls optimieren
-- UI-Elemente größer (für Finger)
-- Performance-Optimierung (FPS auf Mobile)
-- Portrait/Landscape Modes
-- Virtual Joystick (optional)
-
-**Commits:**
-- "Mobile: Touch Controls + UI"
-- "Mobile: Performance Optimization"
-
----
-
-## 🎯 ERFOLGS-KRITERIEN KOMPLETT
-
-**Test-Map ist 100% fertig wenn:**
-- ✅ Alle Phasen A1-A20 abgeschlossen
-- ✅ Map funktioniert flüssig (FPS > 30)
-- ✅ Kampf-System funktioniert (Turn-Based)
-- ✅ Events spawnen und funktionieren
-- ✅ Alle Gameplay-Mechaniken laufen
-- ✅ Mobile: Touch-Controls OK
+### KOMPLETT (Ready für Handyspiel):
+- ✅ MVP erfüllt
+- ✅ Digivice komplett integriert
+- ✅ Najika KI läuft und reagiert
+- ✅ Kampfsystem funktioniert (Enemies spawnen, Battle UI)
+- ✅ 8 Städte zugänglich
+- ✅ Schwarze Windmühle als Home
+- ✅ Mobile Touch-Controls
 - ✅ Keine kritischen Bugs
-- ✅ **BEREIT für Handy-Spiel-Integration**
-
-Dann erst → **PHASE B: Najika KI + Handy-Spiel Build**
+- ✅ Performance stabil
 
 ---
 
-**LOS GEHT'S! Start mit PHASE A1! 🚀**
+## 💡 QUICK START FÜR WEB-MODELLE
+
+### 1. Verstehe den Code:
+```bash
+Read: digivice/najika_world_9regions_test.html
+# Komplett durchlesen! Nur 631 Zeilen, ALLES an einem Ort!
+```
+
+### 2. Starte Server:
+```bash
+# Backend muss laufen auf Port 8000
+cd C:\Najika_World\backend
+python najika_server.py
+```
+
+### 3. Öffne Test-Map:
+```
+http://localhost:8000/digivice/najika_world_9regions_test.html
+```
+
+### 4. Verstehe die Struktur:
+- **Zeilen 1-136:** CSS & HTML-Struktur
+- **Zeilen 184-250:** Scene Setup & 9 Regionen
+- **Zeilen 252-290:** Najika Character (Bohne)
+- **Zeilen 292-343:** WASD-Steuerung & Height-System
+- **Zeilen 345-378:** Region-Marker
+- **Zeilen 380-520:** Asset-Loading System
+- **Zeilen 522-572:** Teleport & UI-Functions
+- **Zeilen 574-625:** Animation Loop
+
+### 5. Beginne mit Phase 1:
+Assets für Ice-Region hinzufügen (einfachster Start!)
 
 ---
 
-## 🎯 QUICK REFERENCE - DIE WICHTIGSTEN INFOS
+## 🔥 WICHTIG
 
-### Datei-Struktur:
-```
-digivice/
-├── najika_world_9regions_test.html  ← HAUPTDATEI (aktuell)
-├── najika_world_v2.html             ← Reference für Kamera-System
-├── index.html                       ← Digivice UI (Tamagotchi etc.)
-└── static/
-    ├── js/
-    │   ├── camera_controller.js     ← Kamera-Logik
-    │   └── ...
-    └── assets/
-        ├── kaykit/                   ← 3D-Assets (Dungeon, Medieval, Nature)
-        └── jellysquish/              ← 3D-Assets (Oasis)
+**Die Test-Map ist SIMPEL gehalten:**
+- Eine HTML-Datei (kein Webpack, kein Bundler)
+- Three.js via CDN
+- Inline JavaScript
+- Einfach zu verstehen und zu erweitern
 
-entwicklung/data/
-├── regions.json                     ← 9 Regionen-Definitionen
-├── cities.json                      ← 8 Städte-Definitionen
-└── biomes.json                      ← Biome-Eigenschaften
-```
+**NICHT verwechseln mit:**
+- `najika_world_v2.html` (alte Version mit Modulen)
+- `najika_world_FINAL.html` (andere Variante)
 
-### Die 9 Regionen (3x3 Grid):
-```
-[Ice]     [Highland] [Desert]
-[Swamp]   [Mountain] [Coast]
-[Caves]   [Forest]   [Volcano]
-```
-- **Größe:** je 66.66 x 66.66 Einheiten
-- **Berg (Mountain):** Y=5 (höher als andere)
-- **Alle anderen:** Y=0 (flat)
-
-### Najika Character:
-- **Modell:** Bohne (Zylinder + 2 Halbkugeln)
-- **Farbe:** Grün (#4CAF50)
-- **Steuerung:** WASD + Shift (Sprint)
-- **Position:** Startet in Mitte (Mountain-Region)
-- **Höhe:** 3.5 Einheiten (passt sich automatisch an Region an)
-
-### Assets Loading:
-- **Aktuell:** 4 Regionen haben Assets (Oasis, Dungeon, Medieval, Nature)
-- **Fehlt noch:** 5 Regionen brauchen Assets (Ice, Highland, Desert, Swamp, Coast, Caves, Forest, Volcano)
-- **Format:** GLTF/GLB
-- **Loader:** THREE.GLTFLoader
-
-### Performance-Ziele:
-- **FPS:** > 30 (Pflicht)
-- **Shadow Quality:** 4096x4096 (bereits implementiert)
-- **Fog:** Ja (100-300 Einheiten)
-- **Anti-Aliasing:** Ja
-
-### Testing-Checklist nach jedem Feature:
-- [ ] WASD Movement funktioniert
-- [ ] Kamera folgt Najika (wenn Third-Person)
-- [ ] Keine Console-Errors (F12)
-- [ ] FPS stabil > 30
-- [ ] Najika fällt nicht durch Boden
-- [ ] Assets laden korrekt
-- [ ] UI zeigt korrekte Werte
-
-### Commit-Message Format:
-```
-Feature: [Was wurde hinzugefügt]
-Fix: [Was wurde gefixt]
-Polish: [Visuell verbessert]
-Test: [Was getestet]
-```
+**DIE RICHTIGE DATEI:**
+- `najika_world_9regions_test.html` ← DIESE!
 
 ---
 
-**🎮 BEREIT FÜR ACTION? START MIT PHASE A1 ODER A2! 🚀**
+**🎮 BEREIT? START MIT PHASE 1! 🚀**
 
+**Ziel:** Alle 9 Regionen komplett → Dann Digivice → Dann Kampf → Dann Transfer auf Handyspiel!
