@@ -5,6 +5,42 @@
 
 ---
 
+## ⚠️ WICHTIG: ARBEITSWEISE FÜR WEB-MODELLE
+
+**GROßE BLÖCKE - GROßE COMMITS:**
+- ✅ **Vorbereiten:** Code komplett durchdenken, planen, alle Files lesen
+- ✅ **Große Einspielung:** Komplettes Feature auf einmal implementieren
+- ✅ **Ein Commit:** Pro Feature EIN großer Commit (nicht häppchenweise!)
+- ✅ **Testen:** Nach Einspielung komplett testen
+- ✅ **Dann nächstes Feature:** Erst wenn alles funktioniert
+
+**NICHT:**
+- ❌ Task-für-Task kleine Commits
+- ❌ Häppchenweise vorgehen
+- ❌ Halbfertige Features committen
+
+**BEISPIEL:**
+```
+RICHTIG:
+1. Lies: najika_world_9regions_test.html komplett
+2. Lies: cities.json komplett
+3. Plane: Alle 5 Städte + 3 Orte + E-Taste System
+4. Schreibe: ALLES auf einmal (Code + Assets + UI)
+5. Teste: Alle 8 Locations
+6. Commit: "Feature: Stadt-System komplett - 5 Städte + 3 Orte mit E-Taste"
+
+FALSCH:
+1. Commit: "Add city 1"
+2. Commit: "Add city 2"
+3. Commit: "Fix city 1"
+4. Commit: "Add E-Taste"
+5. Commit: "Fix E-Taste"
+```
+
+**Ergebnis: Weniger Commits, mehr Qualität, schnellerer Fortschritt!**
+
+---
+
 ## 🎯 WAS IST DIE TEST-MAP?
 
 **User-Klarstellung:**
