@@ -155,11 +155,10 @@
         <p><strong>FPS:</strong> <span id="fps">60</span></p>
         <hr style="margin: 15px 0; border-color: #333;">
         <p style="font-size: 12px; opacity: 0.8;">
-            <strong>Gebiete:</strong><br>
-            🏜️ Oasis (Südwest)<br>
-            🏰 Dungeon (Nordwest)<br>
-            🏛️ Medieval (Nordost)<br>
-            🌲 Nature (Südost)
+            <strong>9 Gebiete (3x3 Grid):</strong><br>
+            ❄️ Ice (NW) | ⛰️ Highland (N) | 🏜️ Desert (NO)<br>
+            🧪 Swamp (W) | 🗻 Mountain (C) | 🌊 Coast (O)<br>
+            🕳️ Caves (SW) | 🌲 Forest (S) | 🌋 Volcano (SO)
         </p>
     </div>
 
@@ -167,11 +166,15 @@
 
     <div id="controls">
         <button onclick="switchCameraMode()">📷 Kamera</button>
-        <button onclick="teleportTo('oasis')">🏜️ Oasis</button>
-        <button onclick="teleportTo('dungeon')">🏰 Dungeon</button>
-        <button onclick="teleportTo('medieval')">🏛️ Medieval</button>
-        <button onclick="teleportTo('nature')">🌲 Nature</button>
-        <button onclick="teleportTo('center')">🎯 Zentrum</button>
+        <button onclick="teleportTo('ice')">❄️ Ice</button>
+        <button onclick="teleportTo('highland')">⛰️ Highland</button>
+        <button onclick="teleportTo('desert')">🏜️ Desert</button>
+        <button onclick="teleportTo('swamp')">🧪 Swamp</button>
+        <button onclick="teleportTo('mountain')">🗻 Mountain</button>
+        <button onclick="teleportTo('coast')">🌊 Coast</button>
+        <button onclick="teleportTo('caves')">🕳️ Caves</button>
+        <button onclick="teleportTo('forest')">🌲 Forest</button>
+        <button onclick="teleportTo('volcano')">🌋 Volcano</button>
         <button onclick="toggleGrid()">📐 Grid</button>
     </div>
 
@@ -371,11 +374,19 @@
             scene.add(sprite);
         }
 
-        // Regionen markieren
-        createRegionMarker(-50, -50, '#FFA500', 'OASIS');      // Südwest
-        createRegionMarker(-50, 50, '#8B0000', 'DUNGEON');     // Nordwest
-        createRegionMarker(50, 50, '#4169E1', 'MEDIEVAL');     // Nordost
-        createRegionMarker(50, -50, '#228B22', 'NATURE');      // Südost
+        // Regionen markieren (alle 9)
+        // Row 1 (top): z=66
+        createRegionMarker(-66.66, 66.66, '#f0f8ff', 'ICE');       // Nordwest
+        createRegionMarker(0, 66.66, '#8b7355', 'HIGHLAND');       // Nord
+        createRegionMarker(66.66, 66.66, '#e8d4a0', 'DESERT');     // Nordost
+        // Row 2 (middle): z=0
+        createRegionMarker(-66.66, 0, '#556b2f', 'SWAMP');         // West
+        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');           // Zentrum
+        createRegionMarker(66.66, 0, '#c2b280', 'COAST');          // Ost
+        // Row 3 (bottom): z=-66
+        createRegionMarker(-66.66, -66.66, '#2f2f2f', 'CAVES');   // Südwest
+        createRegionMarker(0, -66.66, '#2d5016', 'FOREST');        // Süd
+        createRegionMarker(66.66, -66.66, '#8b4513', 'VOLCANO');   // Südost
 
         // Asset Loading
         const gltfLoader = new THREE.GLTFLoader();
@@ -456,6 +467,81 @@
                 { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', name: 'Rock 3', position: [60, 0, -90], scale: 1.1 },
                 { path: 'static/assets/kaykit/nature/Bush_3_A_Color1.gltf', name: 'Bush 4', position: [70, 0, -85], scale: 1 },
             ],
+
+            // ICE (Nordwest: x=-66.66, z=66.66)
+            ice: [
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', name: 'Ice Rock 1', position: [-70, 0, 70], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Ice Rock 2', position: [-60, 0, 60], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', name: 'Ice Rock 3', position: [-80, 0, 80], scale: 1.4 },
+                { path: 'static/assets/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Cube.gltf', name: 'Ice Crystal 1', position: [-50, 0, 70], scale: 1.5 },
+                { path: 'static/assets/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Cube.gltf', name: 'Ice Crystal 2', position: [-75, 0, 55], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Snow Bush 1', position: [-65, 0, 75], scale: 1 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', name: 'Snow Bush 2', position: [-85, 0, 65], scale: 1.1 },
+            ],
+
+            // HIGHLAND (Nordmitte: x=0, z=66.66)
+            highland: [
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', name: 'Highland Rock 1', position: [0, 0, 70], scale: 1.4 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Highland Rock 2', position: [-10, 0, 60], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', name: 'Highland Rock 3', position: [10, 0, 80], scale: 1.5 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Tough Grass 1', position: [-15, 0, 75], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', name: 'Tough Grass 2', position: [15, 0, 65], scale: 1.1 },
+                { path: 'static/assets/kaykit/nature/Bush_3_A_Color1.gltf', name: 'Highland Flower', position: [5, 0, 55], scale: 1 },
+            ],
+
+            // DESERT (Nordost: x=66.66, z=66.66)
+            desert: [
+                { path: 'static/assets/jellysquish/oasis/cactus_large.glb', name: 'Desert Cactus 1', position: [70, 0, 70], scale: 1.3 },
+                { path: 'static/assets/jellysquish/oasis/cactus_small.glb', name: 'Desert Cactus 2', position: [60, 0, 60], scale: 1.1 },
+                { path: 'static/assets/jellysquish/oasis/cactus_large.glb', name: 'Desert Cactus 3', position: [80, 0, 80], scale: 1.4 },
+                { path: 'static/assets/jellysquish/oasis/rocks_1.glb', name: 'Desert Rock 1', position: [75, 0, 65], scale: 1.2 },
+                { path: 'static/assets/jellysquish/oasis/rocks_2.glb', name: 'Desert Rock 2', position: [65, 0, 75], scale: 1.1 },
+                { path: 'static/assets/jellysquish/oasis/rocks_3.glb', name: 'Desert Rock 3', position: [55, 0, 55], scale: 1 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Dry Bush 1', position: [85, 0, 70], scale: 0.8 },
+                { path: 'static/assets/kaykit/nature/Bush_1_B_Color1.gltf', name: 'Dry Bush 2', position: [50, 0, 85], scale: 0.7 },
+            ],
+
+            // SWAMP (Mittewest: x=-66.66, z=0)
+            swamp: [
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/bone_A.gltf', name: 'Bone 1', position: [-70, 0, 0], scale: 1.2 },
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/bone_B.gltf', name: 'Bone 2', position: [-60, 0, -10], scale: 1.1 },
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone.gltf', name: 'Gravestone 1', position: [-80, 0, 10], scale: 1.3 },
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone_cross.gltf', name: 'Gravestone 2', position: [-50, 0, 5], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Tree_1_C_Color1.gltf', name: 'Dead Tree 1', position: [-75, 0, -5], scale: 1.4 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Swamp Grass 1', position: [-65, 0, 8], scale: 1 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', name: 'Poison Plant', position: [-85, 0, -8], scale: 1.1 },
+            ],
+
+            // VOLCANO (Südost: x=66.66, z=-66.66)
+            volcano: [
+                { path: 'static/assets/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/pillar.gltf', name: 'Lava Pillar 1', position: [70, 0, -70], scale: 1.5 },
+                { path: 'static/assets/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/pillar.gltf', name: 'Lava Pillar 2', position: [60, 0, -60], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', name: 'Volcanic Rock 1', position: [80, 0, -80], scale: 1.4 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Volcanic Rock 2', position: [75, 0, -65], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', name: 'Volcanic Rock 3', position: [65, 0, -75], scale: 1.2 },
+                { path: 'static/assets/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Cylinder.gltf', name: 'Lava Rock', position: [55, 0, -55], scale: 1.2 },
+            ],
+
+            // COAST (Mitteost: x=66.66, z=0)
+            coast: [
+                { path: 'static/assets/jellysquish/oasis/palm_l.glb', name: 'Coast Palm 1', position: [70, 0, 0], scale: 1.4 },
+                { path: 'static/assets/jellysquish/oasis/palm_m.glb', name: 'Coast Palm 2', position: [60, 0, -10], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', name: 'Coast Rock 1', position: [80, 0, 10], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Coast Rock 2', position: [75, 0, -8], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Beach Grass 1', position: [65, 0, 5], scale: 1.1 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', name: 'Beach Grass 2', position: [55, 0, -5], scale: 1 },
+            ],
+
+            // CAVES (Südwest: x=-66.66, z=-66.66)
+            caves: [
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/candle.gltf', name: 'Cave Candle 1', position: [-70, 0, -70], scale: 1.2 },
+                { path: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/candle_melted.gltf', name: 'Cave Candle 2', position: [-60, 0, -60], scale: 1.1 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', name: 'Cave Rock 1', position: [-80, 0, -80], scale: 1.4 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', name: 'Cave Rock 2', position: [-75, 0, -65], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', name: 'Cave Rock 3', position: [-65, 0, -75], scale: 1.2 },
+                { path: 'static/assets/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Cube.gltf', name: 'Crystal', position: [-55, 0, -55], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', name: 'Cave Moss', position: [-85, 0, -70], scale: 0.9 },
+            ],
         };
 
         // Alle Assets zählen
@@ -519,13 +605,20 @@
         // Start loading
         loadAllAssets();
 
-        // Teleport Funktionen
+        // Teleport Funktionen (alle 9 Regionen)
         const regionPositions = {
-            oasis: { x: -70, z: -70 },
-            dungeon: { x: -70, z: 70 },
-            medieval: { x: 70, z: 70 },
-            nature: { x: 70, z: -70 },
-            center: { x: 0, z: 0 }
+            // Row 1 (top): z=66
+            ice: { x: -66.66, z: 66.66 },
+            highland: { x: 0, z: 66.66 },
+            desert: { x: 66.66, z: 66.66 },
+            // Row 2 (middle): z=0
+            swamp: { x: -66.66, z: 0 },
+            mountain: { x: 0, z: 0 },
+            coast: { x: 66.66, z: 0 },
+            // Row 3 (bottom): z=-66
+            caves: { x: -66.66, z: -66.66 },
+            forest: { x: 0, z: -66.66 },
+            volcano: { x: 66.66, z: -66.66 }
         };
 
         window.teleportTo = (region) => {
@@ -537,16 +630,31 @@
             }
         };
 
-        // Aktuelles Gebiet ermitteln
+        // Aktuelles Gebiet ermitteln (3x3 Grid)
         function updateCurrentRegion() {
             const x = camera.position.x;
             const z = camera.position.z;
 
-            let region = 'Zentrum';
-            if (x < 0 && z < 0) region = '🏜️ Oasis';
-            else if (x < 0 && z >= 0) region = '🏰 Dungeon';
-            else if (x >= 0 && z >= 0) region = '🏛️ Medieval';
-            else if (x >= 0 && z < 0) region = '🌲 Nature';
+            let region = 'Unbekannt';
+
+            // Row 1 (top): z >= 33.33
+            if (z >= 33.33) {
+                if (x < -33.33) region = '❄️ Ice';
+                else if (x >= -33.33 && x < 33.33) region = '⛰️ Highland';
+                else region = '🏜️ Desert';
+            }
+            // Row 2 (middle): -33.33 <= z < 33.33
+            else if (z >= -33.33 && z < 33.33) {
+                if (x < -33.33) region = '🧪 Swamp';
+                else if (x >= -33.33 && x < 33.33) region = '🗻 Mountain';
+                else region = '🌊 Coast';
+            }
+            // Row 3 (bottom): z < -33.33
+            else {
+                if (x < -33.33) region = '🕳️ Caves';
+                else if (x >= -33.33 && x < 33.33) region = '🌲 Forest';
+                else region = '🌋 Volcano';
+            }
 
             document.getElementById('current-region').textContent = region;
         }
@@ -570,6 +678,53 @@
         window.toggleGrid = () => {
             gridHelper.visible = !gridHelper.visible;
         };
+
+        // Minimap Setup
+        const minimapCanvas = document.getElementById('minimap');
+        const minimapCtx = minimapCanvas.getContext('2d');
+        const minimapSize = 200;
+        const worldSize = 200; // -100 to 100 = 200 units
+        const minimapScale = minimapSize / worldSize;
+
+        function drawMinimap() {
+            // Clear
+            minimapCtx.clearRect(0, 0, minimapSize, minimapSize);
+
+            // Draw 9 regions (3x3 grid)
+            regions.forEach(region => {
+                // Convert world position to minimap position
+                // World: -100 to 100 -> Minimap: 0 to 200
+                const minimapX = (region.x + 100) * minimapScale - (regionSize * minimapScale / 2);
+                const minimapZ = (region.z + 100) * minimapScale - (regionSize * minimapScale / 2);
+                const minimapRegionSize = regionSize * minimapScale;
+
+                // Draw region rectangle
+                minimapCtx.fillStyle = '#' + region.color.toString(16).padStart(6, '0');
+                minimapCtx.fillRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
+
+                // Draw border
+                minimapCtx.strokeStyle = '#ffffff';
+                minimapCtx.lineWidth = 1;
+                minimapCtx.strokeRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
+            });
+
+            // Draw Najika (character position)
+            const najikaMinimapX = (character.position.x + 100) * minimapScale;
+            const najikaMinimapZ = (character.position.z + 100) * minimapScale;
+
+            // Draw character as green dot
+            minimapCtx.fillStyle = '#4CAF50';
+            minimapCtx.beginPath();
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.fill();
+
+            // Draw character outline
+            minimapCtx.strokeStyle = '#ffffff';
+            minimapCtx.lineWidth = 2;
+            minimapCtx.beginPath();
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.stroke();
+        }
 
         // Animation Loop
         let lastTime = performance.now();
@@ -611,6 +766,9 @@
             document.getElementById('position').textContent = `${x}, ${z}`;
             updateCurrentRegion();
 
+            // Draw minimap
+            drawMinimap();
+
             renderer.render(scene, camera);
         }
 
@@ -623,8 +781,8 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Start in der Mitte
-        teleportTo('center');
+        // Start in der Mitte (Mountain)
+        teleportTo('mountain');
     </script>
 </body>
 </html>
