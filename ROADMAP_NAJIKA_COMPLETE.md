@@ -135,18 +135,35 @@ Feature auf Test-Map entwickeln → Testen → Wenn fertig → Auf Handyspiel ü
     - ❌ Kollisions-Detection
     - ❌ Loot-System
 
-### PRIORITÄT 5 - Stadt-System:
+### PRIORITÄT 5 - Stadt-System & Besondere Orte:
 
-11. **8 Städte platzieren:**
-    - ✅ `cities.json` existiert mit 8 Städten
-    - ❌ Stadt-Icons auf Map
-    - ❌ E-Taste für Stadt-Eintritt
-    - ❌ Stadt-Interiors (Basis)
+11. **5 Städte + 3 Besondere Orte (E-Taste System):**
+    - ✅ `cities.json` existiert mit allen Definitionen
+    - ✅ E-Taste System existiert in `index.html` (Referenz: `3d_scene.js` Zeile 506-526)
+    - ❌ **5 Städte auf Map platzieren:**
+      1. Handelsfestung (Desert/Heiße Dünen) - PvP Arena, Player Shops
+      2. Dampf-Hain (Forest/Samtmoos) - Onsen, Restaurants
+      3. Salzige Bucht (Coast/Küste) - Hafen, Leuchtturm
+      4. Runenheim (Highland/Blitzebene) - Magie-Akademie
+      5. Funken-Siedlung (Volcano/Magmaströme) - Schmieden
+    - ❌ **3 Besondere Orte auf Map platzieren:**
+      1. Reich der Drei (Ice) - Untote & Nekromanten
+      2. Funkelnest (Swamp) - Versteckte Schatzhöhle, Hexen
+      3. Tiefenhöhlen (Caves) - Goblin-Siedlungen
+    - ❌ **E-Taste Proximity-System:**
+      - Spieler läuft mit WASD zu Stadt/Ort
+      - Bei Nähe: "E - [Name] betreten" Prompt
+      - E drücken → Lädt Interior
+      - Exit-Taste → Zurück zur Map
+    - ❌ **Stadt-Interiors erstellen:**
+      - Gebäude, NPCs, Shops (Basis-Version)
+      - Basierend auf `cities.json` Features
 
-12. **Schwarze Windmühle:**
-    - ✅ Existiert in `index.html` (12 Räume)
-    - ❌ Auf Berg-Gipfel platzieren
-    - ❌ Als Home-Base zugänglich
+12. **Schwarze Windmühle (Najika's Home):**
+    - ✅ Existiert komplett in `index.html` (12 Räume, 4 Stockwerke)
+    - ✅ E-Taste System funktioniert
+    - ❌ Auf Berg-Gipfel (Mountain Region) platzieren
+    - ❌ Zugang wie bei Städten (E-Taste)
 
 ---
 
@@ -182,12 +199,13 @@ Feature auf Test-Map entwickeln → Testen → Wenn fertig → Auf Handyspiel ü
 
 **Ergebnis:** Kampf-Mechanik funktioniert
 
-### Phase 5: Stadt-System (3-4h)
-15. 8 Städte platzieren
-16. Stadt-Icons & E-Taste
-17. Schwarze Windmühle auf Berg
+### Phase 5: Stadt-System & Besondere Orte (5-6h)
+15. 5 Städte + 3 Besondere Orte auf Map platzieren (Icons/3D-Modelle)
+16. E-Taste Proximity-System für alle 8 Locations
+17. Stadt-Interiors erstellen (Basis: Gebäude, NPCs)
+18. Schwarze Windmühle auf Berg-Gipfel
 
-**Ergebnis:** Komplette Open-World mit Städten
+**Ergebnis:** Komplette Open-World mit 5 Städten + 3 Besonderen Orten + Najika's Home
 
 ### Phase 6: Polish & Testing (4-6h)
 18. Performance-Optimierung (FPS > 30)
@@ -273,13 +291,61 @@ regionPositions: {
 }
 ```
 
-### 5. Testing nach jeder Änderung:
+### 5. E-Taste System implementieren (für Städte/Orte):
+```javascript
+// Referenz: digivice/js/3d_scene.js (Zeile 506-526)
+
+// 1. Proximity-Detection
+let nearBuilding = null;
+
+function checkBuildingProximity() {
+    const playerPos = character.position;
+    // Check distance zu Stadt/Ort
+    const distance = playerPos.distanceTo(building.position);
+    if (distance < 10) {  // 10 Einheiten Radius
+        nearBuilding = building;
+        showPrompt("E - " + building.userData.buildingName + " betreten");
+    } else {
+        nearBuilding = null;
+        hidePrompt();
+    }
+}
+
+// 2. E-Taste Event
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'e' || e.key === 'E') {
+        if (nearBuilding) {
+            enterBuilding(nearBuilding);
+        }
+    }
+});
+
+// 3. Interior laden
+function enterBuilding(building) {
+    const buildingName = building.userData.buildingName;
+    // Speichere Außen-Position
+    exteriorPosition = { x: character.position.x, z: character.position.z };
+    // Lade Interior (aus cities.json oder room_config_detailed.json)
+    loadBuildingInterior(buildingName);
+}
+
+// 4. Exit zurück zur Map
+function exitBuilding() {
+    character.position.set(exteriorPosition.x, 0, exteriorPosition.z);
+    // Zeige Außen-Scene wieder
+}
+```
+
+### 6. Testing nach jeder Änderung:
 ```bash
 1. Browser neu laden (Strg+F5)
 2. Console checken (F12)
 3. Alle Buttons testen
 4. WASD Movement testen
-5. FPS prüfen (sollte > 30 sein)
+5. E-Taste bei Stadt/Ort testen
+6. Interior-Loading testen
+7. Exit zurück zur Map testen
+8. FPS prüfen (sollte > 30 sein)
 ```
 
 ---
@@ -298,8 +364,9 @@ regionPositions: {
 - ✅ Digivice komplett integriert
 - ✅ Najika KI läuft und reagiert
 - ✅ Kampfsystem funktioniert (Enemies spawnen, Battle UI)
-- ✅ 8 Städte zugänglich
-- ✅ Schwarze Windmühle als Home
+- ✅ **5 Städte zugänglich** (E-Taste System)
+- ✅ **3 Besondere Orte zugänglich** (E-Taste System)
+- ✅ Schwarze Windmühle als Home (Berg-Gipfel)
 - ✅ Mobile Touch-Controls
 - ✅ Keine kritischen Bugs
 - ✅ Performance stabil
