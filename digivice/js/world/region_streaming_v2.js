@@ -258,10 +258,8 @@ class RegionStreaming {
     // Y-Position MUSS über Character-Spawn sein!
     terrainMesh.position.set(region.position.x, 0, region.position.z);
 
-    // WICHTIG: -Math.PI / 2 um XY-Ebene zu XZ-Ebene zu drehen
-    // ABER: Normalen zeigen dann nach unten, also scale(1, -1, 1) um Y zu flippen
-    terrainMesh.rotation.x = -Math.PI / 2;
-    terrainMesh.scale.set(1, -1, 1);  // Flip Y to invert normals
+    // KEINE Rotation/Scale nötig - Geometrie ist bereits in terrain_generator.js transformiert!
+    // (rotateX + scale wird VOR computeVertexNormals() angewendet)
 
     return terrainMesh;
   }

@@ -70,7 +70,14 @@ class TerrainGenerator {
         console.warn(`Unknown biome: ${biome}`);
     }
 
-    // Compute normals for proper lighting
+    // WICHTIG: Geometrie ERST rotieren/transformieren, DANN Normalen berechnen!
+    // Rotation: XY-Ebene → XZ-Ebene
+    geometry.rotateX(-Math.PI / 2);
+
+    // Flip Y-Achse um Normalen nach oben zeigen zu lassen
+    geometry.scale(1, -1, 1);
+
+    // JETZT Normalen berechnen (NACH Rotation/Scale!)
     geometry.computeVertexNormals();
 
     // Store terrain with region data (needed for world→local coordinate conversion)

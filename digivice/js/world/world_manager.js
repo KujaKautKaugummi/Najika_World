@@ -2,11 +2,11 @@
 // Koordiniert TerrainGenerator, BiomeSystem, VegetationSystem, CityBuilder, RegionStreaming, LODManager
 
 const THREE = window.THREE;
-import TerrainGenerator from './terrain_generator.js?v=5';
+import TerrainGenerator from './terrain_generator.js?v=7';
 import BiomeSystem from './biome_system.js?v=5';
 import VegetationSystem from './vegetation_system.js?v=5';
 import CityBuilder from './city_builder.js?v=5';
-import RegionStreaming from './region_streaming_v2.js';
+import RegionStreaming from './region_streaming_v2.js?v=7';
 import LODManager from './lod_manager.js?v=5';
 import AssetLoader from './asset_loader.js?v=5';
 import AssetDiscovery from './asset_discovery.js?v=5';
