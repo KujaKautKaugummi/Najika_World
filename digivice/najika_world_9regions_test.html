@@ -211,6 +211,39 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+        #e-prompt {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 100px);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 30px;
+            border-radius: 10px;
+            z-index: 150;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            border: 3px solid #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            display: none;
+            animation: prompt-pulse 1.5s infinite;
+        }
+
+        @keyframes prompt-pulse {
+            0%, 100% { transform: translate(-50%, 100px) scale(1); }
+            50% { transform: translate(-50%, 100px) scale(1.05); }
+        }
+
+        .e-key {
+            display: inline-block;
+            background: #4CAF50;
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +313,11 @@
     <div id="backend-status">
         <div class="status-dot offline" id="status-dot"></div>
         <span id="status-text">Backend Offline</span>
+    </div>
+
+    <div id="e-prompt">
+        <span class="e-key">E</span>
+        <span id="e-prompt-text">Schwarze Windmühle betreten</span>
     </div>
 
     <div id="controls">
@@ -444,6 +482,53 @@
                 case 'shift': keys.shift = false; break;
             }
         });
+
+        // E-Taste für Gebäude-Zugang
+        let nearBuilding = null;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'e' || e.key === 'E') {
+                if (nearBuilding) {
+                    enterBuilding(nearBuilding);
+                }
+            }
+        });
+
+        // Proximity Detection für Gebäude
+        function checkBuildingProximity() {
+            const ePrompt = document.getElementById('e-prompt');
+            const ePromptText = document.getElementById('e-prompt-text');
+
+            // Check Schwarze Windmühle
+            if (schwarzeMuehle) {
+                const distance = character.position.distanceTo(schwarzeMuehle.position);
+                const radius = schwarzeMuehle.userData.proximityRadius || 15;
+
+                if (distance < radius) {
+                    nearBuilding = schwarzeMuehle;
+                    ePromptText.textContent = schwarzeMuehle.userData.buildingName + ' betreten';
+                    ePrompt.style.display = 'block';
+                    return;
+                }
+            }
+
+            // Kein Gebäude in der Nähe
+            nearBuilding = null;
+            ePrompt.style.display = 'none';
+        }
+
+        // Gebäude betreten
+        function enterBuilding(building) {
+            const buildingType = building.userData.buildingType;
+            const buildingName = building.userData.buildingName;
+
+            console.log(`🏠 Betrete ${buildingName}...`);
+
+            if (buildingType === 'schwarze_muehle') {
+                // Öffne Schwarze Windmühle (vollständiges Digivice mit 12 Räumen)
+                window.open('/digivice/index.html', '_blank', 'width=1400,height=900');
+            }
+        }
 
         // Get ground height at position (based on region)
         function getGroundHeight(x, z) {
@@ -729,6 +814,68 @@
         // Start loading
         loadAllAssets();
 
+        // ===== SCHWARZE WINDMÜHLE (Najika's Home auf Berg-Gipfel) =====
+        let schwarzeMuehle = null;
+
+        async function loadSchwarzeMuehle() {
+            try {
+                const gltf = await new Promise((resolve, reject) => {
+                    gltfLoader.load('static/assets/kaykit/medieval/building_windmill_red.gltf', resolve, undefined, reject);
+                });
+
+                schwarzeMuehle = gltf.scene;
+                schwarzeMuehle.position.set(0, 5, 0); // Berg-Gipfel (Mountain Region)
+                schwarzeMuehle.scale.set(2.5, 2.5, 2.5); // Größer und imposanter
+
+                // Färbe Windmühle SCHWARZ
+                schwarzeMuehle.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                        // Setze Material auf schwarz mit leichtem Glanz
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0x1a1a1a,
+                            roughness: 0.6,
+                            metalness: 0.3,
+                            emissive: 0x0a0a0a,
+                            emissiveIntensity: 0.2
+                        });
+                    }
+                });
+
+                // UserData für E-Taste System
+                schwarzeMuehle.userData.buildingType = 'schwarze_muehle';
+                schwarzeMuehle.userData.buildingName = 'Schwarze Windmühle';
+                schwarzeMuehle.userData.proximityRadius = 15; // 15 Einheiten Radius
+
+                scene.add(schwarzeMuehle);
+
+                // Leuchtender Marker über der Windmühle
+                const markerGeometry = new THREE.SphereGeometry(1, 16, 16);
+                const markerMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x8b00ff,
+                    emissive: 0x8b00ff,
+                    emissiveIntensity: 1,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                marker.position.set(0, 18, 0); // Über der Windmühle
+                scene.add(marker);
+
+                // Pulsing Animation für Marker
+                setInterval(() => {
+                    marker.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.3);
+                }, 16);
+
+                console.log('✅ Schwarze Windmühle auf Berg-Gipfel platziert!');
+            } catch (error) {
+                console.error('❌ Schwarze Windmühle konnte nicht geladen werden:', error);
+            }
+        }
+
+        loadSchwarzeMuehle();
+
         // Teleport Funktionen (alle 9 Regionen)
         const regionPositions = {
             // Row 1 (top): z=66
@@ -896,6 +1043,9 @@
 
             // Update character height based on region
             updateCharacterHeight();
+
+            // Check building proximity (E-Taste System)
+            checkBuildingProximity();
 
             // Update UI
             const x = camera.position.x.toFixed(1);
