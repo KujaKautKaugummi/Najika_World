@@ -251,9 +251,11 @@ class RegionStreaming {
     // Create mesh
     const terrainMesh = new THREE.Mesh(terrainGeometry, groundMaterial);
     terrainMesh.receiveShadow = true;
+    terrainMesh.castShadow = false;  // Terrain wirft keine Schatten
     terrainMesh.name = `terrain_${region.id}`;
 
     // Position terrain at region center
+    // Y-Position MUSS über Character-Spawn sein!
     terrainMesh.position.set(region.position.x, 0, region.position.z);
     terrainMesh.rotation.x = -Math.PI / 2;
 
