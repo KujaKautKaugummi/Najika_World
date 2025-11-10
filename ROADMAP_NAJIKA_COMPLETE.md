@@ -260,37 +260,37 @@ Feature auf Test-Map entwickeln → Testen → Wenn fertig → Auf Handyspiel ü
 
 ### 1. Diese Roadmap (PRIORITÄT 1):
 ```
-ROADMAP_NAJIKA_COMPLETE.md (diese Datei!)
+C:\Najika_World\ROADMAP_NAJIKA_COMPLETE.md (diese Datei!)
 → Komplette Übersicht über Aufgaben, Arbeitsweise, Code-Struktur
 ```
 
 ### 2. Master-Dokumentation (PRIORITÄT 2):
 ```
-NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
+C:\Najika_World\NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
 → Vollständige Projekt-Vision, Kampfsystem, Najika KI, Gameplay
 → Verstehen was das große Ganze ist
 ```
 
 ### 3. Haupt-Code-Datei (PRIORITÄT 3):
 ```
-digivice/najika_world_9regions_test.html (631 Zeilen)
+C:\Najika_World\digivice\najika_world_9regions_test.html (631 Zeilen)
 → ALLES an einem Ort! Kompletten Code verstehen
 → Scene Setup, Regionen, Character, Movement, Assets
 ```
 
 ### 4. Data-Files (PRIORITÄT 4):
 ```
-digivice/data/cities.json           (5 Städte + 3 Besondere Orte)
-digivice/data/regions.json          (9 Regionen Definitionen)
-digivice/data/biomes.json           (Biome-Eigenschaften)
-entwicklung/data/room_config_detailed.json  (12 Räume für Interiors)
+C:\Najika_World\digivice\data\cities.json           (5 Städte + 3 Besondere Orte)
+C:\Najika_World\digivice\data\regions.json          (9 Regionen Definitionen)
+C:\Najika_World\digivice\data\biomes.json           (Biome-Eigenschaften)
+C:\Najika_World\entwicklung\data\room_config_detailed.json  (12 Räume für Interiors)
 ```
 
 ### 5. Referenz-Code (PRIORITÄT 5):
 ```
-digivice/index.html                         (Digivice UI + E-Taste System)
-digivice/js/3d_scene.js                     (Zeile 506-526: enterBuilding())
-digivice/static/js/camera_controller.js     (Kamera-Modi)
+C:\Najika_World\digivice\index.html                         (Digivice UI + E-Taste System)
+C:\Najika_World\digivice\js\3d_scene.js                     (Zeile 506-526: enterBuilding())
+C:\Najika_World\digivice\static\js\camera_controller.js     (Kamera-Modi)
 ```
 
 ---
@@ -443,11 +443,11 @@ function exitBuilding() {
 
 ### 1. Lies PFLICHTLEKTÜRE (siehe oben):
 ```bash
-Read: ROADMAP_NAJIKA_COMPLETE.md (diese Datei)
-Read: NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
-Read: digivice/najika_world_9regions_test.html (631 Zeilen)
-Read: digivice/data/cities.json
-Read: digivice/data/regions.json
+Read: C:\Najika_World\ROADMAP_NAJIKA_COMPLETE.md (diese Datei)
+Read: C:\Najika_World\NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
+Read: C:\Najika_World\digivice\najika_world_9regions_test.html (631 Zeilen)
+Read: C:\Najika_World\digivice\data\cities.json
+Read: C:\Najika_World\digivice\data\regions.json
 
 → NUR wenn ALLES gelesen, verstanden → dann weitermachen!
 ```
