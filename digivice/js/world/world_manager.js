@@ -2,14 +2,14 @@
 // Koordiniert TerrainGenerator, BiomeSystem, VegetationSystem, CityBuilder, RegionStreaming, LODManager
 
 const THREE = window.THREE;
-import TerrainGenerator from './terrain_generator.js?v=4';
-import BiomeSystem from './biome_system.js?v=4';
-import VegetationSystem from './vegetation_system.js?v=4';
-import CityBuilder from './city_builder.js?v=4';
-import RegionStreaming from './region_streaming.js?v=4';
-import LODManager from './lod_manager.js?v=4';
-import AssetLoader from './asset_loader.js?v=4';
-import AssetDiscovery from './asset_discovery.js?v=4';
+import TerrainGenerator from './terrain_generator.js?v=5';
+import BiomeSystem from './biome_system.js?v=5';
+import VegetationSystem from './vegetation_system.js?v=5';
+import CityBuilder from './city_builder.js?v=5';
+import RegionStreaming from './region_streaming.js?v=5';
+import LODManager from './lod_manager.js?v=5';
+import AssetLoader from './asset_loader.js?v=5';
+import AssetDiscovery from './asset_discovery.js?v=5';
 
 class WorldManager {
   constructor(scene, camera) {
