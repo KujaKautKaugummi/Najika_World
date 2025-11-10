@@ -289,6 +289,35 @@
         character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
         scene.add(character);
 
+        // WASD-Steuerung
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            shift: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = true; break;
+                case 'a': keys.a = true; break;
+                case 's': keys.s = true; break;
+                case 'd': keys.d = true; break;
+                case 'shift': keys.shift = true; break;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = false; break;
+                case 'a': keys.a = false; break;
+                case 's': keys.s = false; break;
+                case 'd': keys.d = false; break;
+                case 'shift': keys.shift = false; break;
+            }
+        });
+
         // Get ground height at position (based on region)
         function getGroundHeight(x, z) {
             // Check which region character is in
@@ -561,6 +590,17 @@
             // Update Kamera
             const delta = 0.016;
             cameraController.update(delta);
+
+            // WASD Movement
+            const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
+            if (keys.w) character.position.z -= moveSpeed;
+            if (keys.s) character.position.z += moveSpeed;
+            if (keys.a) character.position.x -= moveSpeed;
+            if (keys.d) character.position.x += moveSpeed;
+
+            // Keep character within map bounds (-100 to 100)
+            character.position.x = Math.max(-100, Math.min(100, character.position.x));
+            character.position.z = Math.max(-100, Math.min(100, character.position.z));
 
             // Update character height based on region
             updateCharacterHeight();
