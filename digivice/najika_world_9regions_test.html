@@ -254,6 +254,41 @@
         gridHelper.visible = true;
         scene.add(gridHelper);
 
+        // Najika Character (Bohne)
+        const character = new THREE.Group();
+        const characterMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4CAF50,
+            roughness: 0.7,
+            metalness: 0.3
+        });
+
+        // Körper (Zylinder)
+        const bodyGeometry = new THREE.CylinderGeometry(2, 2, 3, 16);
+        const body = new THREE.Mesh(bodyGeometry, characterMaterial);
+        body.castShadow = true;
+        body.receiveShadow = true;
+        character.add(body);
+
+        // Kopf (Halbkugel oben)
+        const headGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+        const head = new THREE.Mesh(headGeometry, characterMaterial);
+        head.position.y = 1.5;
+        head.castShadow = true;
+        head.receiveShadow = true;
+        character.add(head);
+
+        // Füße (Halbkugel unten)
+        const feetGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+        const feet = new THREE.Mesh(feetGeometry, characterMaterial);
+        feet.position.y = -1.5;
+        feet.castShadow = true;
+        feet.receiveShadow = true;
+        character.add(feet);
+
+        // Position: Mitte der Map (Berg-Region, leicht erhöht)
+        character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
+        scene.add(character);
+
         // Gebietsgrenzen visualisieren
         function createRegionMarker(x, z, color, label) {
             const markerGeometry = new THREE.BoxGeometry(2, 10, 2);
