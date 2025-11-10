@@ -6,7 +6,7 @@ import TerrainGenerator from './terrain_generator.js?v=5';
 import BiomeSystem from './biome_system.js?v=5';
 import VegetationSystem from './vegetation_system.js?v=5';
 import CityBuilder from './city_builder.js?v=5';
-import RegionStreaming from './region_streaming.js?v=5';
+import RegionStreaming from './region_streaming_v2.js';
 import LODManager from './lod_manager.js?v=5';
 import AssetLoader from './asset_loader.js?v=5';
 import AssetDiscovery from './asset_discovery.js?v=5';
