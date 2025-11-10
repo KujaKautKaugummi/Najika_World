@@ -254,18 +254,48 @@ Feature auf Test-Map entwickeln → Testen → Wenn fertig → Auf Handyspiel ü
 
 ---
 
-## 📁 WICHTIGE DATEIEN
+## 📚 PFLICHTLEKTÜRE VOR START
 
-### Haupt-Datei:
+**⚠️ Web-Modelle MÜSSEN diese Files ZUERST lesen:**
+
+### 1. Diese Roadmap (PRIORITÄT 1):
 ```
-digivice/najika_world_9regions_test.html    (631 Zeilen - ALLES DRIN!)
+ROADMAP_NAJIKA_COMPLETE.md (diese Datei!)
+→ Komplette Übersicht über Aufgaben, Arbeitsweise, Code-Struktur
 ```
 
-### Referenz-Dateien:
+### 2. Master-Dokumentation (PRIORITÄT 2):
 ```
-digivice/index.html                         (Digivice UI + 12 Räume)
-digivice/static/js/camera_controller.js     (Kamera-System)
+NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
+→ Vollständige Projekt-Vision, Kampfsystem, Najika KI, Gameplay
+→ Verstehen was das große Ganze ist
 ```
+
+### 3. Haupt-Code-Datei (PRIORITÄT 3):
+```
+digivice/najika_world_9regions_test.html (631 Zeilen)
+→ ALLES an einem Ort! Kompletten Code verstehen
+→ Scene Setup, Regionen, Character, Movement, Assets
+```
+
+### 4. Data-Files (PRIORITÄT 4):
+```
+digivice/data/cities.json           (5 Städte + 3 Besondere Orte)
+digivice/data/regions.json          (9 Regionen Definitionen)
+digivice/data/biomes.json           (Biome-Eigenschaften)
+entwicklung/data/room_config_detailed.json  (12 Räume für Interiors)
+```
+
+### 5. Referenz-Code (PRIORITÄT 5):
+```
+digivice/index.html                         (Digivice UI + E-Taste System)
+digivice/js/3d_scene.js                     (Zeile 506-526: enterBuilding())
+digivice/static/js/camera_controller.js     (Kamera-Modi)
+```
+
+---
+
+## 📁 WEITERE WICHTIGE DATEIEN (zum Nachschlagen)
 
 ### Kampfsystem:
 ```
@@ -411,10 +441,15 @@ function exitBuilding() {
 
 ## 💡 QUICK START FÜR WEB-MODELLE
 
-### 1. Verstehe den Code:
+### 1. Lies PFLICHTLEKTÜRE (siehe oben):
 ```bash
-Read: digivice/najika_world_9regions_test.html
-# Komplett durchlesen! Nur 631 Zeilen, ALLES an einem Ort!
+Read: ROADMAP_NAJIKA_COMPLETE.md (diese Datei)
+Read: NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md (2021 Zeilen)
+Read: digivice/najika_world_9regions_test.html (631 Zeilen)
+Read: digivice/data/cities.json
+Read: digivice/data/regions.json
+
+→ NUR wenn ALLES gelesen, verstanden → dann weitermachen!
 ```
 
 ### 2. Starte Server:
