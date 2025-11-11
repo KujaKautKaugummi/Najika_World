@@ -203,6 +203,12 @@ class RealtimeCombat {
     handleManualControls(e) {
         const key = e.key.toLowerCase();
 
+        // ELEMENT-WEAVE: Q+E gleichzeitig (beide keys müssen gedrückt sein)
+        if ((key === 'q' || key === 'e') && this.keys.q && this.keys.e) {
+            this.elementWeave();
+            return; // Verhindere normale Angriffe
+        }
+
         // LEFT HAND ATTACKS (Q)
         if (key === 'q' && !e.shiftKey) {
             this.leftHandLightAttack();
@@ -238,6 +244,56 @@ class RealtimeCombat {
         if (key === 'v') {
             this.parry();
         }
+    }
+
+    // ===== ELEMENT-WEAVES =====
+
+    elementWeave() {
+        // Cooldown check
+        if (this.bothHandsCooldown > 0) return;
+        if (this.playerMana < 30) return; // Mana Cost
+
+        const leftElement = this.leftHandWeapon ? this.leftHandWeapon.element : null;
+        const rightElement = this.rightHandWeapon ? this.rightHandWeapon.element : null;
+
+        // Beide Waffen müssen Elemente haben
+        if (!leftElement || !rightElement) {
+            console.log('⚠️ Beide Waffen brauchen Elemente für Weaves!');
+            return;
+        }
+
+        // Element-Combo bestimmen
+        const comboKey = [leftElement, rightElement].sort().join('+');
+        const weaves = {
+            'fire+ice': { name: 'Thermoschock', damage: 80, color: 0xff00ff },
+            'fire+water': { name: 'Dampfexplosion', damage: 70, color: 0xff8888 },
+            'fire+earth': { name: 'Lava-Schuss', damage: 75, color: 0xff4400 },
+            'fire+wind': { name: 'Flammensturm', damage: 85, color: 0xff6600 },
+            'ice+water': { name: 'Eissturm', damage: 75, color: 0x00ffff },
+            'lightning+water': { name: 'Elektroschock', damage: 90, color: 0xffff00 },
+            'light+darkness': { name: 'Schatten-Licht', damage: 100, color: 0x888888 }
+        };
+
+        const weave = weaves[comboKey];
+
+        if (!weave) {
+            console.log(`⚠️ Keine Weave-Combo für ${leftElement} + ${rightElement}`);
+            return;
+        }
+
+        // Execute Weave
+        const damage = this.calculateDamage('both', 'heavy') * 1.5; // +50% Bonus
+        this.executeAttack(damage, 'element_weave');
+
+        // Visual Feedback
+        console.log(`💫 ELEMENT-WEAVE: ${weave.name}! ${damage} Schaden!`);
+
+        // Costs & Cooldowns
+        this.playerMana -= 30;
+        this.bothHandsCooldown = 3000; // 3s cooldown
+
+        // Combo update
+        this.updateCombo();
     }
 
     handleAssistControls(e) {
@@ -598,8 +654,50 @@ class RealtimeCombat {
     // ===== VISUAL FEEDBACK =====
 
     showDamageNumber(damage, position) {
-        // TODO: Create 3D Text floating upwards
-        console.log(`-${damage} HP`);
+        // Create floating damage number (Sprite-based)
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 256;
+        canvas.height = 128;
+
+        // Draw damage text
+        context.font = 'Bold 60px Arial';
+        context.fillStyle = damage > 50 ? '#ff0000' : '#ffaa00';
+        context.textAlign = 'center';
+        context.fillText(`-${damage}`, 128, 80);
+
+        // Create sprite
+        const texture = new this.THREE.CanvasTexture(canvas);
+        const material = new this.THREE.SpriteMaterial({ map: texture, transparent: true });
+        const sprite = new this.THREE.Sprite(material);
+
+        sprite.position.copy(position);
+        sprite.position.y += 2;
+        sprite.scale.set(4, 2, 1);
+
+        this.scene.add(sprite);
+
+        // Animate upwards and fade out
+        const startY = sprite.position.y;
+        const startTime = Date.now();
+        const duration = 1500; // 1.5 seconds
+
+        const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = elapsed / duration;
+
+            if (progress < 1) {
+                sprite.position.y = startY + progress * 3; // Float up 3 units
+                sprite.material.opacity = 1 - progress; // Fade out
+                requestAnimationFrame(animate);
+            } else {
+                this.scene.remove(sprite);
+                sprite.material.dispose();
+                texture.dispose();
+            }
+        };
+
+        animate();
     }
 
     // ===== ENEMY SPAWNING =====
@@ -720,7 +818,7 @@ class RealtimeCombat {
 
     // ===== UPDATE LOOP =====
 
-    update(delta) {
+    update(delta, playerPosition) {
         // Update Cooldowns
         if (this.leftHandCooldown > 0) this.leftHandCooldown -= delta * 1000;
         if (this.rightHandCooldown > 0) this.rightHandCooldown -= delta * 1000;
@@ -731,17 +829,60 @@ class RealtimeCombat {
             this.playerStamina = Math.min(this.playerMaxStamina, this.playerStamina + delta * 10);
         }
 
-        // Combat-spezifische Updates
-        if (this.combatActive) {
-            this.updateEnemies(delta);
+        // Update ALL enemies (AI, Movement)
+        if (playerPosition) {
+            this.updateEnemies(delta, playerPosition);
         }
     }
 
-    updateEnemies(delta) {
-        if (!this.currentTarget || !this.currentTarget.alive) return;
+    updateEnemies(delta, playerPosition) {
+        // Update ALL living enemies
+        for (const enemy of this.enemies) {
+            if (!enemy.alive) continue;
 
-        // Simple Enemy AI: Rotate towards player
-        // TODO: Movement, Attack patterns
+            // Calculate distance to player
+            const distance = playerPosition.distanceTo(enemy.position);
+
+            // Aggro: Follow player if close
+            if (distance < 15) {
+                enemy.aggro = true;
+
+                // Move towards player
+                const direction = new this.THREE.Vector3();
+                direction.subVectors(playerPosition, enemy.position);
+                direction.y = 0; // Only move horizontally
+                direction.normalize();
+
+                const moveSpeed = enemy.speed * delta;
+                enemy.position.x += direction.x * moveSpeed;
+                enemy.position.z += direction.z * moveSpeed;
+
+                // Rotate towards player
+                const angle = Math.atan2(direction.x, direction.z);
+                enemy.mesh.rotation.y = angle;
+
+                // Visual: Glow if aggro
+                if (!enemy.mesh.material.emissive) {
+                    enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
+                }
+                enemy.mesh.material.emissiveIntensity = 0.3;
+
+                // Attack if very close (< 3 units) and in combat
+                if (distance < 3 && this.combatActive && enemy === this.currentTarget) {
+                    // Enemy attacks automatically every 2 seconds
+                    if (!enemy.lastAttackTime || Date.now() - enemy.lastAttackTime > 2000) {
+                        this.enemyCounterAttack(enemy);
+                        enemy.lastAttackTime = Date.now();
+                    }
+                }
+            } else {
+                // De-aggro if far away
+                enemy.aggro = false;
+                if (enemy.mesh.material.emissive) {
+                    enemy.mesh.material.emissiveIntensity = 0;
+                }
+            }
+        }
     }
 
     // ===== PROXIMITY DETECTION =====
