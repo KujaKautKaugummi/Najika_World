@@ -477,38 +477,7 @@
         const soundSystem = new SoundSystem();
         const tutorialSystem = new TutorialSystem();
 
-        // Save System (needs game state)
-        const gameState = {
-            character,
-            inventorySystem,
-            questManager,
-            skillSystem,
-            realtimeCombat,
-            specialLocations
-        };
-        const saveSystem = new SaveSystem(gameState);
-
-        // Try to load save
-        saveSystem.loadGame();
-
         console.log('🎨 Phase 10 Systems initialisiert!');
-
-        // Manual Save/Load (Phase 10)
-        window.addEventListener('keydown', (e) => {
-            // F5: Manual Save
-            if (e.key === 'F5') {
-                e.preventDefault();
-                saveSystem.saveGame();
-            }
-
-            // F9: Manual Load
-            if (e.key === 'F9') {
-                e.preventDefault();
-                if (confirm('💾 Spielstand laden? (Ungespeicherte Änderungen gehen verloren!)')) {
-                    saveSystem.loadGame();
-                }
-            }
-        });
 
 
 
@@ -628,6 +597,37 @@
         cameraController.setCharacter(character, 4.5); // Höher für Mage-Model
         cameraController.setMode(cameraController.MODES.THIRD);
         document.getElementById('camera-mode').textContent = 'THIRD';
+
+        // Save System (AFTER character is defined)
+        const gameState = {
+            character,
+            inventorySystem,
+            questManager,
+            skillSystem,
+            realtimeCombat,
+            specialLocations
+        };
+        const saveSystem = new SaveSystem(gameState);
+
+        // Try to load save
+        saveSystem.loadGame();
+
+        // Manual Save/Load (F5/F9)
+        window.addEventListener('keydown', (e) => {
+            // F5: Manual Save
+            if (e.key === 'F5') {
+                e.preventDefault();
+                saveSystem.saveGame();
+            }
+
+            // F9: Manual Load
+            if (e.key === 'F9') {
+                e.preventDefault();
+                if (confirm('💾 Spielstand laden? (Ungespeicherte Änderungen gehen verloren!)')) {
+                    saveSystem.loadGame();
+                }
+            }
+        });
 
         // WASD-Steuerung
         const keys = {
