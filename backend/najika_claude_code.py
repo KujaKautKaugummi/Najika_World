@@ -30,12 +30,16 @@ class NajikaClaudeCode:
         self.enabled = True
         self.fallback_to_ollama = True
         self.max_retries = 2
+        self.claude_cli_path = None
         self.stats = {
             "claude_code_calls": 0,
             "claude_code_success": 0,
             "claude_code_failures": 0,
             "fallback_to_ollama": 0
         }
+
+        # Finde Claude CLI
+        self.claude_cli_path = self._find_claude_cli()
 
         # Check ob Claude Code verfügbar ist
         self.available = self._check_claude_code_available()
@@ -50,17 +54,45 @@ class NajikaClaudeCode:
     def _check_claude_code_available(self):
         """Prüft ob Claude Code CLI verfügbar ist"""
         try:
+            if not self.claude_cli_path:
+                return False
+
             # Versuche claude --version zu rufen
             result = subprocess.run(
-                ["claude", "--version"],
+                [self.claude_cli_path, "--version"],
                 capture_output=True,
                 text=True,
-                timeout=5
+                timeout=5,
+                shell=True  # Wichtig für Windows .cmd Files!
             )
             return result.returncode == 0
         except Exception as e:
             print(f"[NAJIKA CLAUDE CODE] Claude CLI check failed: {e}")
             return False
+
+    def _find_claude_cli(self):
+        """Findet Claude CLI Executable"""
+        # Windows: Suche claude.cmd
+        if sys.platform == 'win32':
+            npm_path = Path.home() / 'AppData' / 'Roaming' / 'npm' / 'claude.cmd'
+            if npm_path.exists():
+                return str(npm_path)
+
+            # Fallback: Versuche 'claude.cmd' im PATH
+            try:
+                result = subprocess.run(
+                    ["where", "claude.cmd"],
+                    capture_output=True,
+                    text=True,
+                    timeout=3
+                )
+                if result.returncode == 0 and result.stdout:
+                    return result.stdout.strip().split('\n')[0]
+            except:
+                pass
+
+        # Unix-like: claude sollte im PATH sein
+        return "claude"
 
     def ask_claude_code(self, prompt, context=None):
         """
@@ -82,35 +114,23 @@ class NajikaClaudeCode:
             # Baue vollständigen Prompt
             full_prompt = self._build_prompt(prompt, context)
 
-            # Erstelle temporäre Datei für den Prompt
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, encoding='utf-8') as f:
-                temp_file = f.name
-                f.write(full_prompt)
+            # Rufe Claude Code CLI auf mit --print (non-interactive mode)
+            result = subprocess.run(
+                [self.claude_cli_path, "--print", full_prompt],
+                capture_output=True,
+                text=True,
+                timeout=60,  # 60 Sekunden Timeout
+                encoding='utf-8',
+                shell=True  # Wichtig für Windows .cmd Files!
+            )
 
-            try:
-                # Rufe Claude Code CLI auf
-                result = subprocess.run(
-                    ["claude", "--non-interactive", "--input", temp_file],
-                    capture_output=True,
-                    text=True,
-                    timeout=60,  # 60 Sekunden Timeout
-                    encoding='utf-8'
-                )
-
-                if result.returncode == 0 and result.stdout:
-                    self.stats["claude_code_success"] += 1
-                    return result.stdout.strip()
-                else:
-                    print(f"[NAJIKA CLAUDE CODE] [WARNING] Fehler: {result.stderr}")
-                    self.stats["claude_code_failures"] += 1
-                    return None
-
-            finally:
-                # Lösche temp file
-                try:
-                    os.unlink(temp_file)
-                except:
-                    pass
+            if result.returncode == 0 and result.stdout:
+                self.stats["claude_code_success"] += 1
+                return result.stdout.strip()
+            else:
+                print(f"[NAJIKA CLAUDE CODE] [WARNING] Fehler: {result.stderr}")
+                self.stats["claude_code_failures"] += 1
+                return None
 
         except subprocess.TimeoutExpired:
             print("[NAJIKA CLAUDE CODE] ⏱️  Timeout - Claude Code antwortet nicht")
