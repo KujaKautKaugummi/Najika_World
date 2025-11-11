@@ -820,19 +820,93 @@ class RealtimeCombat {
         mesh.add(fallback);
 
         // Try to load KayKit model (async, replace fallback if successful)
+        // Map enemy types to actual existing models with full paths
         const characterModels = {
-            'ice_elemental': 'character_skeleton.gltf',
-            'fire_drake': 'character_golem.gltf',
-            'sand_nomad': 'character_knight.gltf',
-            'swamp_witch': 'character_mage.gltf',
-            'forest_guardian': 'character_golem.gltf'
+            // Ice Region - Skeleton Models
+            'ice_undead': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_warrior.gltf',
+                scale: 2
+            },
+            'ice_elemental': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_mage.gltf',
+                scale: 2
+            },
+
+            // Desert Region - Knight & Barbarian
+            'desert_bandit': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_rogue.gltf',
+                scale: 2
+            },
+            'desert_sandworm': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 2.5
+            },
+
+            // Swamp Region - Witch & Mage
+            'swamp_witch': {
+                path: 'static/assets/KayKit Spooktober Seasonal Pack 1.1/Models/Characters/Witch/gltf/character_witch.gltf',
+                scale: 2
+            },
+            'swamp_monster': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_minion.gltf',
+                scale: 2.5
+            },
+
+            // Mountain Region - Big Barbarian
+            'mountain_giant': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 3
+            },
+
+            // Coast Region - Pirate & Knight
+            'coast_pirate': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_rogue.gltf',
+                scale: 2
+            },
+            'coast_seamonster': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_warrior.gltf',
+                scale: 2.5
+            },
+
+            // Caves Region - Minion
+            'caves_goblin': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_minion.gltf',
+                scale: 1.5
+            },
+
+            // Forest Region - Mage & Archer
+            'forest_druid': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_mage.gltf',
+                scale: 2
+            },
+            'forest_spirit': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_archer.gltf',
+                scale: 2
+            },
+
+            // Volcano Region - Barbarian & Warrior
+            'volcano_elemental': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 2.5
+            },
+            'volcano_lavamonster': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_knight.gltf',
+                scale: 2.5
+            },
+
+            // Highland Region - Knight
+            'highland_guardian': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_knight.gltf',
+                scale: 2
+            }
         };
 
-        const modelFile = characterModels[type] || 'character_skeleton.gltf';
-        const modelPath = `static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/${modelFile}`;
+        const modelConfig = characterModels[type];
+        const modelPath = modelConfig ? modelConfig.path : null;
+        const modelScale = modelConfig ? modelConfig.scale : 2;
 
         // Try async loading (don't block spawning!)
-        if (typeof THREE !== 'undefined' && THREE.GLTFLoader) {
+        if (modelPath && typeof THREE !== 'undefined' && THREE.GLTFLoader) {
             const loader = new THREE.GLTFLoader();
             loader.load(
                 modelPath,
@@ -842,13 +916,14 @@ class RealtimeCombat {
 
                     // Add KayKit model
                     const model = gltf.scene;
-                    model.scale.set(2, 2, 2);
+                    model.scale.set(modelScale, modelScale, modelScale);
 
                     model.traverse((child) => {
                         if (child.isMesh) {
                             child.castShadow = true;
                             child.receiveShadow = true;
 
+                            // Color tinting for enemy variation
                             if (data.color) {
                                 const colorObj = new this.THREE.Color(data.color);
                                 child.material = child.material.clone();
@@ -858,13 +933,15 @@ class RealtimeCombat {
                     });
 
                     mesh.add(model);
-                    console.log(`✅ Loaded KayKit model for ${type}`);
+                    console.log(`✅ Loaded KayKit model for ${type}: ${modelPath}`);
                 },
                 undefined,
                 (error) => {
-                    console.warn(`⚠️ KayKit model failed for ${type}, keeping fallback`);
+                    console.warn(`⚠️ KayKit model failed for ${type} (${modelPath}), keeping fallback:`, error);
                 }
             );
+        } else {
+            console.log(`ℹ️ No model configured for ${type}, using fallback geometry`);
         }
 
         // Enemy Object
