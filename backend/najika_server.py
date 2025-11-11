@@ -54,6 +54,15 @@ except ImportError:
 # Import Enhanced Battle System
 from najika_battle import BATTLE_SYSTEM, SKILL_DB, ITEM_DB
 
+# Import Voice Call System (Whisper STT + Coqui TTS)
+try:
+    from najika_voice_call import VOICE_CALL_SYSTEM
+    VOICE_CALL_ENABLED = True
+    print("✅ Voice Call System aktiviert (Whisper STT + Coqui TTS)")
+except ImportError as e:
+    VOICE_CALL_ENABLED = False
+    print(f"⚠️  Voice Call System nicht verfügbar: {e}")
+
 # Import Claude Code Integration (PRIORITÄT 1!)
 from najika_claude_code import call_ai_with_hierarchy, CLAUDE_CODE_INSTANCE
 
@@ -1507,6 +1516,108 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode()); return
 
+        # ===== VOICE CALL SYSTEM =====
+        if self.path=="/api/voice_call/start":
+            if not VOICE_CALL_ENABLED:
+                self.send_response(503); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": "Voice Call not available"}).encode()); return
+
+            try:
+                result = VOICE_CALL_SYSTEM.start_call()
+                self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
+                self.wfile.write(json.dumps(result, ensure_ascii=False).encode('utf-8')); return
+            except Exception as e:
+                print(f"Voice Call Start Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/voice_call/audio":
+            if not VOICE_CALL_ENABLED:
+                self.send_response(503); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": "Voice Call not available"}).encode()); return
+
+            try:
+                data = json.loads(body.decode("utf-8"))
+                audio_data_base64 = data.get("audio", "")
+
+                if not audio_data_base64:
+                    self.send_response(400); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": "No audio data provided"}).encode()); return
+
+                # Process audio (Whisper STT)
+                stt_result = VOICE_CALL_SYSTEM.process_audio_chunk(audio_data_base64)
+
+                if "error" in stt_result:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(stt_result).encode()); return
+
+                # Get user's transcribed text
+                user_text = stt_result.get("text", "")
+
+                if not user_text:
+                    self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
+                    self.wfile.write(json.dumps({"stt": stt_result, "text": "", "audio_base64": ""}, ensure_ascii=False).encode('utf-8')); return
+
+                # Generate Najika's response using existing chat system
+                add_message_with_importance("user", user_text)
+                prompt = build_prompt(STATE["history"], user_text)
+
+                # Call AI (same as regular chat)
+                try:
+                    najika_response = call_ai_with_hierarchy(prompt)
+                    add_message_with_importance("assistant", najika_response)
+                except Exception as ai_error:
+                    log("ERROR", f"AI Call failed during voice call: {ai_error}", "VOICE")
+                    najika_response = "Entschuldigung, ich konnte deine Nachricht nicht verarbeiten."
+
+                # Generate voice response (Coqui TTS)
+                tts_result = VOICE_CALL_SYSTEM.generate_voice_response(najika_response)
+
+                # Return STT result + Najika's text + TTS audio
+                response = {
+                    "stt": stt_result,
+                    "text": najika_response,
+                    "tts": tts_result
+                }
+
+                self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
+                self.wfile.write(json.dumps(response, ensure_ascii=False).encode('utf-8')); return
+
+            except Exception as e:
+                print(f"Voice Call Audio Error: {e}")
+                import traceback
+                traceback.print_exc()
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/voice_call/end":
+            if not VOICE_CALL_ENABLED:
+                self.send_response(503); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": "Voice Call not available"}).encode()); return
+
+            try:
+                result = VOICE_CALL_SYSTEM.end_call()
+                self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
+                self.wfile.write(json.dumps(result, ensure_ascii=False).encode('utf-8')); return
+            except Exception as e:
+                print(f"Voice Call End Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/voice_call/stats":
+            if not VOICE_CALL_ENABLED:
+                self.send_response(503); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": "Voice Call not available"}).encode()); return
+
+            try:
+                stats = VOICE_CALL_SYSTEM.get_stats()
+                self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8"); self.end_headers()
+                self.wfile.write(json.dumps(stats, ensure_ascii=False).encode('utf-8')); return
+            except Exception as e:
+                print(f"Voice Call Stats Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
         # ===== LORA TRAINING SYSTEM =====
         if self.path=="/api/training/start":
             if not LORA_TRAINING_ENABLED:
@@ -1928,6 +2039,32 @@ class Handler(SimpleHTTPRequestHandler):
             save_state()
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok": True, "message": message, "activity": living_state.get("current_activity")}).encode()); return
+        if self.path=="/api/claude_code/launch":
+            # Najika startet Claude Code eigenständig!
+            from najika_claude_code import launch_claude_code_session
+            try:
+                # Optional: Task-Beschreibung aus Body
+                try:
+                    body_str = body.decode("utf-8")
+                    data = json.loads(body_str)
+                    task = data.get("task") or data.get("message")
+                except:
+                    task = None
+
+                # Starte Claude Code in neuem Fenster
+                success = launch_claude_code_session(task)
+
+                log("INFO", f"Claude Code Launch: {'Success' if success else 'Failed'} (Task: {task})", "CLAUDE")
+
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({
+                    "ok": success,
+                    "message": "Claude Code gestartet!" if success else "Fehler beim Starten von Claude Code",
+                    "task": task
+                }).encode()); return
+            except Exception as e:
+                log("ERROR", f"Claude Code Launch Error: {e}", "CLAUDE")
+                self.send_error(500, str(e)); return
         self.send_error(404,"unknown")
 
 # ===== BACKGROUND THREAD FÜR LIVING SYSTEM =====
@@ -1977,35 +2114,45 @@ def living_system_loop():
             if update_needs():
                 save_state()
 
-            # 5. Check Auto-Care (Living System → Tamagotchi State Sync)
-            from najika_living_system import check_auto_care, update_needs_over_time
+            # 5. SYNC: Tamagotchi State → Living State (kontinuierlich)
+            # Damit beide States immer synchron sind!
+            living_state["hunger"] = STATE["najika"].get("hunger", 100)
+            living_state["energy"] = STATE["najika"].get("energy", 100)
+            # Hygiene bleibt nur in Tamagotchi State (wird in check_auto_care separat gecheckt)
 
-            # Update Living State Needs
+            # Update Living State Needs über Zeit (sinkt kontinuierlich)
+            from najika_living_system import check_auto_care, update_needs_over_time
             update_needs_over_time(living_state)
+
+            # SYNC ZURÜCK: Living State → Tamagotchi State (damit UI korrekt anzeigt)
+            STATE["najika"]["hunger"] = living_state["hunger"]
+            STATE["najika"]["energy"] = living_state["energy"]
 
             # Check if Auto-Care should trigger (pass najika_state for hygiene check!)
             auto_care_actions = check_auto_care(living_state, STATE["najika"])
             if auto_care_actions:
-                # Apply auto-care to TAMAGOTCHI STATE (sync!)
+                # Apply auto-care
                 log("INFO", f"🔧 Auto-Care aktiviert! {len(auto_care_actions)} Aktionen", "LIVING")
 
                 for action in auto_care_actions:
                     action_type = action.get("action")
                     if action_type == "auto_eat":
-                        # Feed Najika (Tamagotchi State)
-                        STATE["najika"]["hunger"] = min(100, STATE["najika"]["hunger"] + 30)
+                        # Auto-Eat updated bereits living_state["hunger"] → sync zurück
+                        STATE["najika"]["hunger"] = living_state["hunger"]
                         STATE["najika"]["last_fed"] = time.time()
-                        log("INFO", f"  🍖 Auto-Eat: Hunger → {STATE['najika']['hunger']}", "AUTO-CARE")
+                        log("INFO", f"  🍖 Auto-Eat: Hunger → {STATE['najika']['hunger']:.1f}%", "AUTO-CARE")
+                        log("INFO", f"     💬 Najika: {action.get('najika_says')}", "AUTO-CARE")
                     elif action_type == "auto_sleep":
-                        # Rest Najika (Tamagotchi State)
-                        STATE["najika"]["energy"] = min(100, STATE["najika"]["energy"] + 40)
+                        # Auto-Sleep updated bereits living_state["energy"] → sync zurück
+                        STATE["najika"]["energy"] = living_state["energy"]
                         STATE["najika"]["last_sleep"] = time.time()
-                        log("INFO", f"  😴 Auto-Sleep: Energy → {STATE['najika']['energy']}", "AUTO-CARE")
+                        log("INFO", f"  😴 Auto-Sleep: Energy → {STATE['najika']['energy']:.1f}%", "AUTO-CARE")
+                        log("INFO", f"     💬 Najika: {action.get('najika_says')}", "AUTO-CARE")
                     elif action_type == "auto_wash":
-                        # Wash Najika (Tamagotchi State)
+                        # Auto-Wash updated hygiene (nur in Tamagotchi State)
                         hygiene_after = action.get("hygiene_after", 50)
                         STATE["najika"]["hygiene"] = hygiene_after
-                        log("INFO", f"  🚽 Auto-Wash: Hygiene → {STATE['najika']['hygiene']}", "AUTO-CARE")
+                        log("INFO", f"  🚽 Auto-Wash: Hygiene → {STATE['najika']['hygiene']:.1f}%", "AUTO-CARE")
                         log("INFO", f"     💬 Najika: {action.get('najika_says')}", "AUTO-CARE")
 
                 STATE["living"] = living_state
