@@ -888,6 +888,23 @@ class RealtimeCombat {
 
     // ===== UPDATE LOOP =====
 
+    setEnemyEmissive(enemy, color, intensity) {
+        // Helper function: enemy.mesh is now a Group, need to traverse children
+        if (!enemy || !enemy.mesh) return;
+
+        enemy.mesh.traverse((child) => {
+            if (child.isMesh && child.material) {
+                if (!child.material.emissive) {
+                    child.material.emissive = new this.THREE.Color(0x000000);
+                }
+                if (color) {
+                    child.material.emissive.set(color);
+                }
+                child.material.emissiveIntensity = intensity;
+            }
+        });
+    }
+
     update(delta, playerPosition) {
         // Update Cooldowns
         if (this.leftHandCooldown > 0) this.leftHandCooldown -= delta * 1000;
@@ -955,10 +972,7 @@ class RealtimeCombat {
                 enemy.mesh.rotation.y = angle;
 
                 // Visual: Glow if aggro
-                if (!enemy.mesh.material.emissive) {
-                    enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
-                }
-                enemy.mesh.material.emissiveIntensity = 0.3;
+                this.setEnemyEmissive(enemy, 0xff0000, 0.3);
 
                 // Attack if very close (< 3 units) and in combat
                 if (distance < 3 && this.combatActive && enemy === this.currentTarget) {
@@ -971,9 +985,7 @@ class RealtimeCombat {
             } else {
                 // De-aggro if far away
                 enemy.aggro = false;
-                if (enemy.mesh.material.emissive) {
-                    enemy.mesh.material.emissiveIntensity = 0;
-                }
+                this.setEnemyEmissive(enemy, null, 0);
             }
         }
     }
@@ -1013,8 +1025,7 @@ class RealtimeCombat {
 
         // Visual: Enemy glüht rot
         enemy.aggro = true;
-        enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
-        enemy.mesh.material.emissiveIntensity = 0.5;
+        this.setEnemyEmissive(enemy, 0xff0000, 0.5);
     }
 
     endCombat() {
