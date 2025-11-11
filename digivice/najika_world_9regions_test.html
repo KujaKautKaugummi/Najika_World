@@ -244,6 +244,47 @@
             font-weight: bold;
             margin-right: 8px;
         }
+
+        /* Mobile Touch Controls (Phase 6) */
+        #mobile-joystick {
+            position: absolute;
+            bottom: 100px;
+            left: 30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            z-index: 100;
+            display: none;
+        }
+
+        #mobile-joystick-thumb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(76, 175, 80, 0.7);
+            border: 2px solid #4CAF50;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            #mobile-joystick {
+                display: block;
+            }
+            #controls {
+                flex-wrap: wrap;
+                max-width: 90%;
+            }
+            #controls button {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -320,6 +361,10 @@
         <span id="e-prompt-text">Schwarze Windmühle betreten</span>
     </div>
 
+    <div id="mobile-joystick">
+        <div id="mobile-joystick-thumb"></div>
+    </div>
+
     <div id="controls">
         <button onclick="switchCameraMode()">📷 Kamera</button>
         <button onclick="teleportTo('ice')">❄️ Ice</button>
@@ -343,18 +388,28 @@
     <script>
         const THREE = window.THREE;
 
-        // Scene Setup
+        // Scene Setup (Phase 6: Optimiert für Performance)
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87CEEB); // Himmelblau
-        scene.fog = new THREE.Fog(0x87CEEB, 100, 300);
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // Verbesserte Skybox mit Gradient (morgens/abends Feeling)
+        scene.background = new THREE.Color(0x87CEEB); // Himmelblau
+        scene.fog = new THREE.Fog(0x87CEEB, 80, 250); // Optimierte Fog Distance
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
         camera.position.set(0, 50, 100);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        // Renderer mit Performance-Optimierungen
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true
+        });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Max 2x für Performance
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.autoUpdate = false; // Nur bei Bedarf updaten
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
         // Kamera-Controller
@@ -362,20 +417,28 @@
         cameraController.setTarget(0, 5, 0);
         cameraController.orbitDistance = 50;
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // Verbesserte Lighting für bessere Atmosphäre
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(100, 100, 100);
+        const directionalLight = new THREE.DirectionalLight(0xfff8dc, 0.9); // Warmes Licht
+        directionalLight.position.set(100, 120, 80);
         directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 4096;
-        directionalLight.shadow.mapSize.height = 4096;
+        // Optimierte Shadow Map (2048 statt 4096 für Performance)
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
         directionalLight.shadow.camera.left = -150;
         directionalLight.shadow.camera.right = 150;
         directionalLight.shadow.camera.top = 150;
         directionalLight.shadow.camera.bottom = -150;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 500;
+        directionalLight.shadow.bias = -0.0001;
         scene.add(directionalLight);
+
+        // Hemispheric Light für natürlichere Beleuchtung
+        const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x8B7355, 0.3);
+        scene.add(hemiLight);
 
         // 9 REGIONS (3x3 Grid, each ~66x66)
         const regionSize = 66.66;
@@ -414,43 +477,49 @@
         gridHelper.visible = true;
         scene.add(gridHelper);
 
-        // Najika Character (Bohne)
-        const character = new THREE.Group();
-        const characterMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4CAF50,
-            roughness: 0.7,
-            metalness: 0.3
-        });
+        // Najika Character (KayKit Mage Model - Phase 6)
+        let character = new THREE.Group();
+        let najikaModel = null;
 
-        // Körper (Zylinder)
-        const bodyGeometry = new THREE.CylinderGeometry(2, 2, 3, 16);
-        const body = new THREE.Mesh(bodyGeometry, characterMaterial);
-        body.castShadow = true;
-        body.receiveShadow = true;
-        character.add(body);
+        async function loadNajikaCharacter() {
+            try {
+                const gltf = await new Promise((resolve, reject) => {
+                    gltfLoader.load('static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_mage.gltf', resolve, undefined, reject);
+                });
 
-        // Kopf (Halbkugel oben)
-        const headGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
-        const head = new THREE.Mesh(headGeometry, characterMaterial);
-        head.position.y = 1.5;
-        head.castShadow = true;
-        head.receiveShadow = true;
-        character.add(head);
+                najikaModel = gltf.scene;
+                najikaModel.scale.set(2.5, 2.5, 2.5); // Größer für bessere Sichtbarkeit
 
-        // Füße (Halbkugel unten)
-        const feetGeometry = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
-        const feet = new THREE.Mesh(feetGeometry, characterMaterial);
-        feet.position.y = -1.5;
-        feet.castShadow = true;
-        feet.receiveShadow = true;
-        character.add(feet);
+                najikaModel.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+
+                character.add(najikaModel);
+                console.log('✅ Najika Character (Mage) geladen!');
+            } catch (error) {
+                console.warn('⚠️  Najika Character konnte nicht geladen werden, verwende Fallback:', error);
+                // Fallback: Simple colored cube
+                const fallbackGeometry = new THREE.BoxGeometry(2, 4, 2);
+                const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
+                const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+                fallback.castShadow = true;
+                fallback.receiveShadow = true;
+                character.add(fallback);
+            }
+        }
 
         // Position: Mitte der Map (Berg-Region, leicht erhöht)
         character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
         scene.add(character);
 
+        // Lade Najika Character Model
+        loadNajikaCharacter();
+
         // Camera folgt Character (Third-Person Mode)
-        cameraController.setCharacter(character, 3.5);
+        cameraController.setCharacter(character, 4.5); // Höher für Mage-Model
         cameraController.setMode(cameraController.MODES.THIRD);
         document.getElementById('camera-mode').textContent = 'THIRD';
 
@@ -481,6 +550,52 @@
                 case 'd': keys.d = false; break;
                 case 'shift': keys.shift = false; break;
             }
+        });
+
+        // Mobile Touch Controls (Phase 6)
+        const joystick = document.getElementById('mobile-joystick');
+        const joystickThumb = document.getElementById('mobile-joystick-thumb');
+        let joystickActive = false;
+        let joystickVector = { x: 0, z: 0 };
+
+        joystick.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            joystickActive = true;
+        });
+
+        joystick.addEventListener('touchmove', (e) => {
+            if (!joystickActive) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = joystick.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            let dx = touch.clientX - centerX;
+            let dy = touch.clientY - centerY;
+
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDistance = rect.width / 2;
+
+            if (distance > maxDistance) {
+                dx = (dx / distance) * maxDistance;
+                dy = (dy / distance) * maxDistance;
+            }
+
+            joystickThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+            // Normalize für Movement
+            joystickVector.x = dx / maxDistance;
+            joystickVector.z = dy / maxDistance;
+        });
+
+        joystick.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            joystickActive = false;
+            joystickVector.x = 0;
+            joystickVector.z = 0;
+            joystickThumb.style.transform = 'translate(-50%, -50%)';
         });
 
         // E-Taste für Gebäude-Zugang
@@ -1191,15 +1306,22 @@
             const delta = 0.016;
             cameraController.update(delta);
 
-            // WASD Movement mit Character-Rotation
+            // Movement: WASD + Mobile Joystick (Phase 6)
             const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
             let dx = 0;
             let dz = 0;
 
+            // WASD Keyboard Input
             if (keys.w) dz += moveSpeed;  // Vorwärts
             if (keys.s) dz -= moveSpeed;  // Rückwärts
             if (keys.a) dx += moveSpeed;  // Links
             if (keys.d) dx -= moveSpeed;  // Rechts
+
+            // Mobile Joystick Input
+            if (joystickActive) {
+                dx += joystickVector.x * moveSpeed;
+                dz += joystickVector.z * moveSpeed;
+            }
 
             // Bewegung anwenden
             if (dx !== 0 || dz !== 0) {
