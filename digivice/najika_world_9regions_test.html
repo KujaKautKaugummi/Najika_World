@@ -1839,6 +1839,13 @@
             const delta = 0.016;
             cameraController.update(delta);
 
+            // First-Person: Character dreht sich mit der Kamera
+            const currentCameraMode = cameraController.getMode();
+            if (currentCameraMode === cameraController.MODES.FIRST) {
+                // In First-Person: Character-Rotation = Kamera-Rotation (orbitYaw)
+                character.rotation.y = cameraController.orbitYaw;
+            }
+
             // ===== FORTNITE-STYLE MOVEMENT SYSTEM =====
 
             // Sliding Update (Decay)
@@ -1924,15 +1931,21 @@
                 character.position.x += worldDx;
                 character.position.z += worldDz;
 
-                // Character Rotation (Fortnite-Style: dreht sich zur Bewegungsrichtung)
-                if (currentMode === cameraController.MODES.THIRD || currentMode === cameraController.MODES.FIRST) {
+                // Character Rotation (NUR in Third-Person!)
+                // In First-Person NICHT rotation setzen, weil das die Kamera beeinflusst!
+                if (currentMode === cameraController.MODES.THIRD) {
                     if (!isSliding) {
                         // Character dreht sich zur Bewegungsrichtung (relativ zur Kamera)
                         const moveAngle = Math.atan2(worldDx, worldDz);
-                        character.rotation.y = moveAngle;
+                        // Smooth rotation (Lerp für flüssigere Bewegung)
+                        const angleDiff = moveAngle - character.rotation.y;
+                        // Normalize angle difference to [-PI, PI]
+                        const normalizedDiff = Math.atan2(Math.sin(angleDiff), Math.cos(angleDiff));
+                        character.rotation.y += normalizedDiff * 0.15;  // 15% interpolation
                     }
                     // Während Slide: Rotation bleibt wie sie ist
                 }
+                // In First-Person: character.rotation.y NICHT ändern!
 
                 // Visual Feedback für States (Höhe anpassen)
                 if (isCrouching && !isSliding) {
