@@ -195,8 +195,10 @@ class CameraController {
             this.camera.lookAt(charTarget);
 
         } else if (this.currentMode === this.MODES.FIRST) {
-            // FIRST-PERSON: Ego-Perspektive
-            const eyeHeight = this.characterHeight * 0.85;
+            // FIRST-PERSON: Ego-Perspektive (Augenhöhe, nicht Kopfmitte)
+            // Character position.y ist bereits die Körpermitte
+            // Augenhöhe sollte leicht über der Mitte sein, nicht bei 0.85 * height
+            const eyeHeight = this.characterHeight * 0.20;  // ~20% über Mitte = Augenhöhe
 
             this.camera.position.set(
                 this.character.position.x,
