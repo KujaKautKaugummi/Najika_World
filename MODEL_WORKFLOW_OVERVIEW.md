@@ -1,10 +1,10 @@
 # NAJIKA PROJECT - MODEL WORKFLOW OVERVIEW
 **Date:** 2025-11-11
-**Purpose:** Kompletter Überblick über die Arbeitsteilung zwischen den 3 Models
+**Purpose:** Kompletter Überblick über die Arbeitsteilung zwischen den 2 Models
 
 ---
 
-## 🎯 PROJEKT-STRUKTUR (3 MODELS, 3 PROJEKTE)
+## 🎯 PROJEKT-STRUKTUR (2 MODELS, 3 PROJEKTE)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -12,22 +12,29 @@
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
-        ┌─────────────────────┬─────────────────────┬─────────────────────┐
-        │                     │                     │                     │
-        ▼                     ▼                     ▼                     ▼
-┌───────────────┐    ┌──────────────────┐   ┌──────────────────┐   ┌──────────┐
-│  MODEL 1      │    │    MODEL 2       │   │    MODEL 3       │   │ BACKEND  │
-│  DIGIVICE APK │◄───│ TEST ENVIRONMENT │──►│   HANDYSPIEL     │   │ (Python) │
-│               │    │  (DUAL PURPOSE)  │   │  (MOBILE GAME)   │   │          │
-│  P0 Priority  │    │   P1 Priority    │   │   P2 Priority    │   │  SHARED  │
-└───────────────┘    └──────────────────┘   └──────────────────┘   └──────────┘
-        │                     │                     │                     │
-        │                     │                     │                     │
-        └─────────────────────┴─────────────────────┴─────────────────────┘
-                              │
-                              ▼
-                  Alle nutzen GLEICHEN Python Backend:
-                  http://127.0.0.1:8000
+        ┌─────────────────────────────┬─────────────────────────────┐
+        │                             │                             │
+        ▼                             ▼                             ▼
+┌───────────────┐          ┌─────────────────────────┐       ┌──────────┐
+│  MODEL 1      │          │       MODEL 2           │       │ BACKEND  │
+│  DIGIVICE APK │◄─────────│  TEST ENVIRONMENT       │       │ (Python) │
+│               │          │      +                  │       │          │
+│  P0 Priority  │          │  HANDYSPIEL FULL GAME   │       │  SHARED  │
+│               │          │                         │       │          │
+│  10-12 Wochen │          │  P1 Priority            │       │ ✅ Ready │
+└───────────────┘          │  10-12 Wochen           │       └──────────┘
+                           └─────────────────────────┘
+                                      │
+                                      │
+        ┌─────────────────────────────┴─────────────────────────────┐
+        │                                                             │
+        ▼                                                             ▼
+┌──────────────────┐                                      ┌──────────────────┐
+│ C:\NajikaTest... │                                      │ C:\NajikaHandy...│
+│ (10x10m Testing) │                                      │ (500x500m Game)  │
+└──────────────────┘                                      └──────────────────┘
+
+Beide Models nutzen GLEICHEN Python Backend: http://127.0.0.1:8000
 ```
 
 ---
@@ -69,35 +76,52 @@ WORKFLOW:
 
 ---
 
-### **MODEL 2: TEST ENVIRONMENT (DUAL PURPOSE!)**
+### **MODEL 2: TEST ENVIRONMENT + HANDYSPIEL FULL GAME**
 ```
-PROJECT: C:\NajikaTestEnvironment_UE5
-TODO: C:\Najika_World\TEST_ENVIRONMENT_TODO.md
-PRIORITY: P1 (HIGH)
-TIMELINE: Parallel zu Model 1 (Week 2-10)
+PROJECTS:
+- C:\NajikaTestEnvironment_UE5 (Testing 10x10m)
+- C:\NajikaHandyspiel_UE5 (Full Game 500x500m)
 
-🔥 DOPPELTER ZWECK:
+TODOs:
+- C:\Najika_World\TEST_ENVIRONMENT_TODO.md
+- C:\Najika_World\HANDYSPIEL_MOBILE_GAME_TODO.md
+
+PRIORITY: P1 (HIGH)
+TIMELINE: Parallel zu Model 1 (10-12 Wochen)
+
+🔥 TRIPLE PURPOSE:
 1. Teste DIGIVICE Features VOR Integration in Model 1
-2. Prototype HANDYSPIEL Mechaniken VOR Full Game (Model 3)
+2. Prototype HANDYSPIEL Mechaniken (10x10m Test)
+3. Entwickle HANDYSPIEL FULL GAME (500x500m)
 
 ZUSTÄNDIG FÜR:
+
+📋 PART 1: TEST ENVIRONMENT (C:\NajikaTestEnvironment_UE5)
 ✅ Mini-Lebensraum (10x10m Test-Raum)
 ✅ Najika Character (basic)
-
-DIGIVICE FEATURE TESTING:
-✅ Backend Connection (HTTP Tests)
-✅ Voice Call System
-✅ Animations
-✅ UI Widgets
-✅ Physics
+✅ Backend Connection Tests (HTTP)
+✅ Voice Call System Tests
+✅ Animation Tests
+✅ UI Widget Tests
+✅ Physics Tests
 ✅ Performance Profiling
 
-HANDYSPIEL MECHANICS PROTOTYPING:
-✅ Combat System (Melee, Projectile, AOE)
-✅ Enemy AI (Behavior Tree)
-✅ Loot System (Pickup, Inventory, Rarity)
-✅ Movement Mechanics (Dash, Double Jump, Crouch)
-✅ Fortnite-Style Building (Optional)
+✅ HANDYSPIEL MECHANICS PROTOTYPING:
+  - Combat System (Melee, Projectile, AOE)
+  - Enemy AI (Behavior Tree)
+  - Loot System (Pickup, Inventory, Rarity)
+  - Movement Mechanics (Dash, Double Jump, Crouch)
+  - Fortnite-Style Building (Optional)
+
+📋 PART 2: HANDYSPIEL FULL GAME (C:\NajikaHandyspiel_UE5)
+✅ Third-Person Action Game (Fortnite-Style)
+✅ Combat Systems (erweitert aus Prototypen!)
+✅ Enemy AI (mehrere Typen + Boss AI)
+✅ Loot System (komplettes Item-System)
+✅ World Building (500m x 500m Map, 8-10 POIs)
+✅ Storm Zone (Fortnite Battle Royale Mechanic)
+✅ Multiplayer Architecture (ONLINE GAME!)
+✅ UEFN Port Preparation
 
 TESTING:
 ✅ Teste ALLES sofort nach Implementation!
@@ -106,55 +130,26 @@ TESTING:
 ✅ Bug Documentation
 
 WORKFLOW:
-1. Feature implementieren (z.B. Voice Calls)
-2. Sofort testen (PC + Mobile)
-3. Wenn OK → Export zu Model 1 (Digivice)
-4. Wenn Problem → Fix & Re-test
-5. Mechanik prototypen (z.B. Combat)
-6. Wenn validiert → Export zu Model 3 (Handyspiel)
+1. Baue Mini-Lebensraum (10x10m) für Tests
+2. Teste Digivice Features → Export zu Model 1
+3. Prototype Handyspiel Mechaniken im Test Environment
+4. Wenn validiert → Übertrage zu Full Game Project
+5. Entwickle Full Game (500x500m) parallel
+6. Add Multiplayer Layer (Client-Server)
+7. UEFN Compatibility (Blueprint → Verse)
 
 EXPORT FLOW:
 ┌────────────────────┐
 │  Test Environment  │
+│     (10x10m)       │
 └────────────────────┘
          │
-         ├──► Feature OK? ──► Model 1 (Digivice APK)
+         ├──► Digivice Feature OK? ──► Model 1 (Digivice APK)
          │
-         └──► Mechanik OK? ──► Model 3 (Handyspiel)
-```
-
----
-
-### **MODEL 3: HANDYSPIEL (Mobile Action Game)**
-```
-PROJECT: C:\NajikaHandyspiel_UE5
-TODO: C:\Najika_World\HANDYSPIEL_MOBILE_GAME_TODO.md
-PRIORITY: P2 (MEDIUM - can wait)
-TIMELINE: Parallel Development (10-12 Wochen)
-
-ZUSTÄNDIG FÜR:
-✅ Third-Person Action Game (Fortnite-Style)
-✅ Combat Systems (Import von Model 2 + Erweitern!)
-✅ Enemy AI (Import von Model 2 + Erweitern!)
-✅ Loot System (Import von Model 2 + Erweitern!)
-✅ World Building (500m x 500m Map, 8-10 POIs)
-✅ Storm Zone (Fortnite Battle Royale Mechanic)
-✅ Multiplayer Architecture (ONLINE GAME!)
-✅ UEFN Port Preparation
-
-WORKFLOW:
-1. Warte auf validierte Prototypen von Model 2
-2. Importiere Blueprints/C++ Code
-3. Teste in Mini-Lebensraum (10x10m)
-4. Erweitere für Full Game:
-   - Combat: Mehr Waffen, Skills, Combos
-   - AI: Mehr Enemy Types, Boss AI
-   - Loot: Komplettes Item-System
-   - World: 500x500m Map mit 8-10 POIs
-5. Add Multiplayer Layer (Client-Server)
-6. UEFN Compatibility (Blueprint → Verse)
+         └──► Game Mechanik OK? ──► Handyspiel Full Game (500x500m)
 
 ENDRESULTAT:
+✅ Test Environment funktional
 ✅ Standalone Mobile Game (Android APK)
 ✅ Online Multiplayer (wenn öffentlich)
 ✅ UEFN-Ready (für Fortnite Port)
