@@ -494,39 +494,69 @@
             }
         });
 
-        // Proximity Detection für Gebäude
+        // Proximity Detection für Gebäude (alle Locations)
         function checkBuildingProximity() {
             const ePrompt = document.getElementById('e-prompt');
             const ePromptText = document.getElementById('e-prompt-text');
+
+            let closestBuilding = null;
+            let closestDistance = Infinity;
 
             // Check Schwarze Windmühle
             if (schwarzeMuehle) {
                 const distance = character.position.distanceTo(schwarzeMuehle.position);
                 const radius = schwarzeMuehle.userData.proximityRadius || 15;
 
-                if (distance < radius) {
-                    nearBuilding = schwarzeMuehle;
-                    ePromptText.textContent = schwarzeMuehle.userData.buildingName + ' betreten';
-                    ePrompt.style.display = 'block';
-                    return;
+                if (distance < radius && distance < closestDistance) {
+                    closestBuilding = schwarzeMuehle;
+                    closestDistance = distance;
                 }
             }
 
-            // Kein Gebäude in der Nähe
-            nearBuilding = null;
-            ePrompt.style.display = 'none';
+            // Check alle Städte & Besondere Orte
+            for (const building of buildings) {
+                const distance = character.position.distanceTo(building.position);
+                const radius = building.userData.proximityRadius || 12;
+
+                if (distance < radius && distance < closestDistance) {
+                    closestBuilding = building;
+                    closestDistance = distance;
+                }
+            }
+
+            // Zeige nächstes Gebäude
+            if (closestBuilding) {
+                nearBuilding = closestBuilding;
+                const buildingName = closestBuilding.userData.buildingName || 'Gebäude';
+                ePromptText.textContent = buildingName + ' betreten';
+                ePrompt.style.display = 'block';
+            } else {
+                nearBuilding = null;
+                ePrompt.style.display = 'none';
+            }
         }
 
         // Gebäude betreten
         function enterBuilding(building) {
             const buildingType = building.userData.buildingType;
             const buildingName = building.userData.buildingName;
+            const buildingDescription = building.userData.buildingDescription;
 
             console.log(`🏠 Betrete ${buildingName}...`);
 
             if (buildingType === 'schwarze_muehle') {
                 // Öffne Schwarze Windmühle (vollständiges Digivice mit 12 Räumen)
                 window.open('/digivice/index.html', '_blank', 'width=1400,height=900');
+            }
+            else if (buildingType === 'city') {
+                // Stadt betreten - Öffne Stadt-Interior
+                alert(`🏙️ Willkommen in ${buildingName}!\n\n${buildingDescription}\n\n(Stadt-Interior wird noch implementiert)`);
+                console.log(`Stadt: ${buildingName} - ${buildingDescription}`);
+            }
+            else if (buildingType === 'special') {
+                // Besonderer Ort betreten
+                alert(`✨ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Interior wird noch implementiert)`);
+                console.log(`Besonderer Ort: ${buildingName} - ${buildingDescription}`);
             }
         }
 
@@ -875,6 +905,150 @@
         }
 
         loadSchwarzeMuehle();
+
+        // ===== STÄDTE & BESONDERE ORTE (Phase 5) =====
+        const buildings = [];
+        const cityLocations = [
+            // 5 STÄDTE
+            {
+                name: 'Handelsfestung',
+                type: 'city',
+                region: 'desert',
+                position: { x: 70, y: 0, z: 70 },
+                model: 'static/assets/kaykit/medieval/building_castle_yellow.gltf',
+                scale: 2.0,
+                color: 0xffd700, // Gold
+                description: 'PvP Arena & Player Shops'
+            },
+            {
+                name: 'Dampf-Hain',
+                type: 'city',
+                region: 'forest',
+                position: { x: 0, y: 0, z: -70 },
+                model: 'static/assets/jellysquish/oasis/house_large.glb',
+                scale: 1.8,
+                color: 0x2ecc71, // Grün
+                description: 'Onsen & Restaurants'
+            },
+            {
+                name: 'Salzige Bucht',
+                type: 'city',
+                region: 'coast',
+                position: { x: 70, y: 0, z: 0 },
+                model: 'static/assets/kaykit/medieval/building_tower_A_blue.gltf',
+                scale: 2.2,
+                color: 0x3498db, // Blau
+                description: 'Hafen & Leuchtturm'
+            },
+            {
+                name: 'Runenheim',
+                type: 'city',
+                region: 'highland',
+                position: { x: 0, y: 0, z: 70 },
+                model: 'static/assets/kaykit/medieval/building_tower_A_red.gltf',
+                scale: 2.0,
+                color: 0x9b59b6, // Lila
+                description: 'Magie-Akademie'
+            },
+            {
+                name: 'Funken-Siedlung',
+                type: 'city',
+                region: 'volcano',
+                position: { x: 70, y: 0, z: -70 },
+                model: 'static/assets/kaykit/medieval/building_blacksmith_red.gltf',
+                scale: 1.8,
+                color: 0xe74c3c, // Rot
+                description: 'Schmieden'
+            },
+            // 3 BESONDERE ORTE
+            {
+                name: 'Reich der Drei',
+                type: 'special',
+                region: 'ice',
+                position: { x: -70, y: 0, z: 70 },
+                model: 'static/assets/kaykit/dungeon/column.gltf',
+                scale: 2.5,
+                color: 0x00ffff, // Cyan
+                description: 'Untote & Nekromanten'
+            },
+            {
+                name: 'Funkelnest',
+                type: 'special',
+                region: 'swamp',
+                position: { x: -70, y: 0, z: 0 },
+                model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone_cross.gltf',
+                scale: 2.0,
+                color: 0xff1493, // Pink
+                description: 'Schatzhöhle & Hexen'
+            },
+            {
+                name: 'Tiefenhöhlen',
+                type: 'special',
+                region: 'caves',
+                position: { x: -70, y: 0, z: -70 },
+                model: 'static/assets/kaykit/dungeon/wall.gltf',
+                scale: 2.2,
+                color: 0x8b4513, // Braun
+                description: 'Goblin-Siedlungen'
+            }
+        ];
+
+        async function loadCitiesAndLocations() {
+            for (const location of cityLocations) {
+                try {
+                    const gltf = await new Promise((resolve, reject) => {
+                        gltfLoader.load(location.model, resolve, undefined, reject);
+                    });
+
+                    const building = gltf.scene;
+                    building.position.set(location.position.x, location.position.y, location.position.z);
+                    building.scale.set(location.scale, location.scale, location.scale);
+
+                    building.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+
+                    // UserData für E-Taste System
+                    building.userData.buildingType = location.type;
+                    building.userData.buildingName = location.name;
+                    building.userData.buildingDescription = location.description;
+                    building.userData.proximityRadius = 12;
+
+                    scene.add(building);
+                    buildings.push(building);
+
+                    // Leuchtender Marker über Gebäude
+                    const markerGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+                    const markerMaterial = new THREE.MeshStandardMaterial({
+                        color: location.color,
+                        emissive: location.color,
+                        emissiveIntensity: 1.5,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                    marker.position.set(location.position.x, location.position.y + 15, location.position.z);
+                    scene.add(marker);
+
+                    // Pulsing Animation
+                    marker.userData.offset = Math.random() * Math.PI * 2;
+                    marker.userData.animate = () => {
+                        marker.scale.setScalar(1 + Math.sin(Date.now() * 0.003 + marker.userData.offset) * 0.3);
+                    };
+                    setInterval(marker.userData.animate, 16);
+
+                    console.log(`✅ ${location.name} (${location.region}) platziert!`);
+                } catch (error) {
+                    console.warn(`⚠️  ${location.name} konnte nicht geladen werden:`, error);
+                }
+            }
+            console.log(`🏙️ ${buildings.length} Städte & Besondere Orte geladen!`);
+        }
+
+        loadCitiesAndLocations();
 
         // Teleport Funktionen (alle 9 Regionen)
         const regionPositions = {
