@@ -392,6 +392,7 @@
     <script src="static/js/special_features.js"></script>
     <script src="static/js/skill_system.js"></script>
     <script src="static/js/crafting_system.js"></script>
+    <script src="static/js/special_locations.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -462,6 +463,11 @@
         const craftingSystem = new CraftingSystem(inventorySystem);
 
         console.log('📚 Skill + Crafting Systeme geladen!');
+
+        // Special Locations (Phase 9: Reich der Drei, Funkelnest, Tiefenhöhlen)
+        const specialLocations = new SpecialLocations(scene, THREE, inventorySystem, questManager);
+        specialLocations.createEntranceMarkers();
+
 
 
         // Auto-accept World Explorer quest
@@ -2277,6 +2283,23 @@
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
 
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
+
             }
 
             return result;
@@ -2305,11 +2328,48 @@
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
 
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
+
                 console.log(`🗺️ Explored: ${regionName}`);
             }
         }
 
         console.log('🔗 Quest Hooks installed!');
+
+        // Enter Special Location (E key)
+        const originalEKeyHandler = window.addEventListener;
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && !isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    e.preventDefault();
+                    
+                    // Enter location
+                    alert(`🗺️ Betrete ${nearLocation.name}!\n\n${nearLocation.description}\n\n(Special Location Interiors werden vollständig in einer späteren Phase implementiert)\n\nLocation-Features:\n${nearLocation.interior.theme}\n${nearLocation.interior.enemies.length} Enemy-Typen\n${nearLocation.interior.loot ? nearLocation.interior.loot.length + ' Loot-Typen' : ''}`);
+                    
+                    console.log(`🗺️ Würde jetzt ${nearLocation.name} betreten...`);
+                    
+                    // TODO: Später vollständiges Interior laden
+                    // const interior = specialLocations.enterLocation(nearLocation.id);
+                }
+            }
+        });
+
 
         // Leuchtturm Climbing Controls (Phase 8)
         let isPressingClimb = false;
@@ -2777,6 +2837,29 @@
             z-index: 500;
         `;
         document.body.appendChild(buildingPrompt);
+
+        // Location Prompt UI (Phase 9)
+        const locationPrompt = document.createElement('div');
+        locationPrompt.id = 'location-prompt';
+        locationPrompt.style.cssText = `
+            position: fixed;
+            bottom: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 3px solid #FFD700;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            display: none;
+            z-index: 500;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        `;
+        document.body.appendChild(locationPrompt);
+
 
         // Check every frame
         setInterval(checkBuildingInteraction, 100);
@@ -3360,6 +3443,23 @@
                 // Update Special Features (Phase 8)
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
+
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
 
             }
         }, 1000);
