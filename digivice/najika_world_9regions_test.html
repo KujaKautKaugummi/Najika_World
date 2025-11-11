@@ -387,6 +387,7 @@
     <script src="static/js/interior_generator.js"></script>
     <script src="static/js/food_system.js"></script>
     <script src="static/js/inventory_system.js"></script>
+    <script src="static/js/npc_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -434,6 +435,10 @@
 
         // Inventory System (Phase 5: Inventar + Equipment)
         const inventorySystem = new InventorySystem(foodSystem, realtimeCombat);
+
+        // NPC System (Phase 6: NPCs + Dialogue)
+        const npcSystem = new NPCSystem(scene, THREE);
+
 
         // Default: MANUAL Mode (volle Kontrolle)
         realtimeCombat.setCombatMode('MANUAL');
@@ -743,6 +748,10 @@
                 const interior = interiorGenerator.generateCityInterior(cityData);
                 interiorGenerator.loadInterior(interior);
 
+                // 4.5. Spawn NPCs in interior (Phase 6)
+                const cityId = cityData.id || cityData.name.toLowerCase().replace(/\s+/g, '_');
+                interiorGenerator.spawnNPCsInInterior(npcSystem, cityId, cityData);
+
                 // 5. Positioniere Character im Interior (Zentrum, leicht nach vorne)
                 character.position.set(0, 3.5, 50);
 
@@ -776,6 +785,9 @@
             setTimeout(() => {
                 // 2. Entferne Interior
                 interiorGenerator.unloadInterior();
+
+                // 2.5. Clear NPCs (Phase 6)
+                npcSystem.clearNPCs();
 
                 // 3. Zeige Exterior-Objekte wieder
                 regions.forEach(region => {
@@ -1699,6 +1711,13 @@
                 // Update Combat System (mit Player Position für Enemy AI)
                 realtimeCombat.update(delta, character.position);
 
+            // Update NPC System (Phase 6)
+            if (isInInterior) {
+                npcSystem.update(delta);
+                updateNPCProximity();
+            }
+
+
                 // Proximity Detection - Auto-Start Combat
                 if (!realtimeCombat.combatActive) {
                     const nearEnemy = realtimeCombat.checkEnemyProximity(character.position);
@@ -2202,6 +2221,333 @@
         });
 
         console.log('🎒 Inventar-UI erstellt! Drücke I oder TAB zum Öffnen!');
+
+        // ===== NPC INTERACTION SYSTEM (Phase 6) =====
+
+        let nearestNPC = null;
+        let npcProximityUI = null;
+        let dialogueUI = null;
+        let dialogueOpen = false;
+
+        // Create NPC Proximity UI ("Press E to talk")
+        function createNPCProximityUI() {
+            const ui = document.createElement('div');
+            ui.id = 'npc-proximity-ui';
+            ui.style.cssText = `
+                position: fixed;
+                bottom: 150px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.85);
+                padding: 15px 30px;
+                border-radius: 10px;
+                border: 2px solid #4CAF50;
+                color: white;
+                font-family: 'Courier New', monospace;
+                font-size: 16px;
+                display: none;
+                z-index: 500;
+                text-align: center;
+            `;
+            document.body.appendChild(ui);
+            return ui;
+        }
+
+        npcProximityUI = createNPCProximityUI();
+
+        // Create Dialogue UI
+        function createDialogueUI() {
+            const ui = document.createElement('div');
+            ui.id = 'dialogue-ui';
+            ui.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 900px;
+                max-height: 300px;
+                background: rgba(0, 0, 0, 0.95);
+                border: 3px solid #4CAF50;
+                border-radius: 15px;
+                padding: 20px;
+                color: white;
+                font-family: 'Courier New', monospace;
+                display: none;
+                z-index: 1000;
+            `;
+
+            // Portrait (Left)
+            const portrait = document.createElement('div');
+            portrait.id = 'dialogue-portrait';
+            portrait.style.cssText = `
+                float: left;
+                width: 120px;
+                height: 120px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid #4CAF50;
+                border-radius: 10px;
+                margin-right: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 60px;
+            `;
+            ui.appendChild(portrait);
+
+            // Content (Right)
+            const content = document.createElement('div');
+            content.style.cssText = `
+                overflow: hidden;
+            `;
+
+            // NPC Name
+            const name = document.createElement('div');
+            name.id = 'dialogue-npc-name';
+            name.style.cssText = `
+                font-size: 20px;
+                font-weight: bold;
+                color: #4CAF50;
+                margin-bottom: 10px;
+            `;
+            content.appendChild(name);
+
+            // Dialogue Text
+            const text = document.createElement('div');
+            text.id = 'dialogue-text';
+            text.style.cssText = `
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 15px;
+                min-height: 60px;
+            `;
+            content.appendChild(text);
+
+            // Options Container
+            const options = document.createElement('div');
+            options.id = 'dialogue-options';
+            options.style.cssText = `
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            `;
+            content.appendChild(options);
+
+            ui.appendChild(content);
+
+            document.body.appendChild(ui);
+            return ui;
+        }
+
+        dialogueUI = createDialogueUI();
+
+        // Update NPC Proximity Check (every frame)
+        function updateNPCProximity() {
+            if (isInInterior && !dialogueOpen) {
+                nearestNPC = npcSystem.getNearestNPC(character.position, 3);
+
+                if (nearestNPC) {
+                    npcProximityUI.innerHTML = `Press <b>E</b> to talk: <span style="color: #4CAF50;">${nearestNPC.name}</span>`;
+                    npcProximityUI.style.display = 'block';
+                } else {
+                    npcProximityUI.style.display = 'none';
+                }
+            } else {
+                npcProximityUI.style.display = 'none';
+            }
+        }
+
+        // Start Dialogue with NPC
+        function startDialogue(npc) {
+            npcSystem.startInteraction(npc);
+            dialogueOpen = true;
+
+            // Show Dialogue UI
+            dialogueUI.style.display = 'block';
+            npcProximityUI.style.display = 'none';
+
+            // Get NPC icon
+            const typeIcons = {
+                vendor: '🛒',
+                quest_giver: '❗',
+                trainer: '⚔️',
+                citizen: '🧑'
+            };
+            const icon = typeIcons[npc.type] || '🧑';
+
+            // Update Portrait
+            document.getElementById('dialogue-portrait').textContent = icon;
+
+            // Update Name
+            document.getElementById('dialogue-npc-name').textContent = npc.name;
+
+            // Show first dialogue
+            showDialogue(npc.getNextDialogue());
+        }
+
+        // Show Dialogue Content
+        function showDialogue(dialogue) {
+            const textDiv = document.getElementById('dialogue-text');
+            const optionsDiv = document.getElementById('dialogue-options');
+
+            // Set text
+            textDiv.textContent = dialogue.text;
+
+            // Clear and create option buttons
+            optionsDiv.innerHTML = '';
+
+            dialogue.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option.text;
+                btn.style.cssText = `
+                    padding: 10px 20px;
+                    background: rgba(76, 175, 80, 0.3);
+                    border: 2px solid #4CAF50;
+                    border-radius: 5px;
+                    color: white;
+                    cursor: pointer;
+                    font-family: 'Courier New', monospace;
+                    font-size: 14px;
+                    transition: all 0.2s;
+                `;
+
+                btn.onmouseenter = () => {
+                    btn.style.background = 'rgba(76, 175, 80, 0.6)';
+                    btn.style.transform = 'scale(1.05)';
+                };
+
+                btn.onmouseleave = () => {
+                    btn.style.background = 'rgba(76, 175, 80, 0.3)';
+                    btn.style.transform = 'scale(1)';
+                };
+
+                btn.onclick = () => {
+                    handleDialogueAction(option.action);
+                };
+
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        // Handle Dialogue Actions
+        function handleDialogueAction(action) {
+            const npc = npcSystem.activeNPC;
+
+            switch(action) {
+                case 'close':
+                    endDialogue();
+                    break;
+
+                case 'next':
+                    // Show next dialogue
+                    showDialogue(npc.getNextDialogue());
+                    break;
+
+                case 'open_shop':
+                    // Open Shop UI (Vendor)
+                    openNPCShop(npc);
+                    break;
+
+                case 'accept_quest':
+                    // Accept Quest (Quest-Giver)
+                    console.log(`✅ Quest accepted: ${npc.quests[0]}`);
+                    alert(`Quest "${npc.quests[0]}" accepted!\n(Quest System coming in Phase 7)`);
+                    endDialogue();
+                    break;
+
+                case 'train_magic':
+                case 'train_smithing':
+                    // Training (Trainer)
+                    console.log(`⚔️ Training started: ${action}`);
+                    alert(`Training "${action}" started!\n(Skill System coming later)`);
+                    endDialogue();
+                    break;
+
+                case 'start_arena':
+                    // Arena Battle
+                    console.log('🏟️ Arena Battle starting...');
+                    alert('Arena Battle starting!\n(Arena System coming in Phase 8)');
+                    endDialogue();
+                    break;
+
+                default:
+                    console.warn(`⚠️ Unknown dialogue action: ${action}`);
+                    showDialogue(npc.getNextDialogue());
+            }
+        }
+
+        // Open NPC Shop
+        function openNPCShop(npc) {
+            console.log(`🛒 Opening shop: ${npc.name}`);
+
+            // Check if this is a food vendor
+            if (npc.shopType === 'food') {
+                // Show food items with prices
+                let shopHTML = `<h3>${npc.name}'s Shop</h3><ul>`;
+
+                npc.inventory.forEach(foodId => {
+                    const foodInfo = foodSystem.getFoodInfo(foodId);
+                    if (foodInfo) {
+                        const price = 50; // Default price
+                        shopHTML += `<li>${foodInfo.icon} ${foodInfo.name} - ${price}g
+                            <button onclick="buyFromNPC('${foodId}', ${price})">Buy</button>
+                        </li>`;
+                    }
+                });
+
+                shopHTML += '</ul>';
+                shopHTML += `<button onclick="endDialogue()">Close Shop</button>`;
+
+                document.getElementById('dialogue-text').innerHTML = shopHTML;
+                document.getElementById('dialogue-options').innerHTML = '';
+            } else {
+                // Generic item shop (weapons, armor, etc.)
+                alert(`Opening ${npc.shopType} shop...\n(Full shop UI coming soon)`);
+                endDialogue();
+            }
+        }
+
+        // Buy from NPC
+        window.buyFromNPC = function(itemId, price) {
+            if (inventorySystem.hasGold(price)) {
+                inventorySystem.removeGold(price);
+                inventorySystem.addItem(itemId, 1);
+                console.log(`✅ Bought ${itemId} for ${price}g`);
+                alert(`Bought ${itemId}!`);
+
+                // Refresh inventory UI if open
+                if (inventoryOpen) {
+                    updateInventoryUI();
+                }
+            } else {
+                alert(`Not enough gold! Need ${price}g, have ${inventorySystem.gold}g`);
+            }
+        };
+
+        // End Dialogue
+        function endDialogue() {
+            if (npcSystem.activeNPC) {
+                npcSystem.endInteraction();
+            }
+            dialogueOpen = false;
+            dialogueUI.style.display = 'none';
+        }
+
+        // NPC Interaction Keyboard Handler
+        window.addEventListener('keydown', (e) => {
+            // E key to talk to NPC
+            if ((e.key === 'e' || e.key === 'E') && nearestNPC && !dialogueOpen && isInInterior) {
+                e.preventDefault();
+                startDialogue(nearestNPC);
+            }
+
+            // ESC to close dialogue
+            if (e.key === 'Escape' && dialogueOpen) {
+                endDialogue();
+            }
+        });
+
+        console.log('💬 NPC Dialogue System ready! Press E to talk to NPCs!');
+
 
         // HOTKEYS für Essen (F1-F5)
         window.addEventListener('keydown', (e) => {
