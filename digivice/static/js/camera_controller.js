@@ -171,6 +171,11 @@ class CameraController {
 
         if (this.currentMode === this.MODES.ORBIT || !this.character) {
             // ORBIT Mode: Freie Kamera-Steuerung
+            // Auto-Track Character wenn vorhanden
+            if (this.character) {
+                this.target.copy(this.character.position);
+            }
+
             const offset = new THREE.Vector3(
                 sinYaw * cosPitch,
                 sinPitch,
@@ -195,15 +200,17 @@ class CameraController {
             this.camera.lookAt(charTarget);
 
         } else if (this.currentMode === this.MODES.FIRST) {
-            // FIRST-PERSON: Ego-Perspektive (Augenhöhe, nicht Kopfmitte)
+            // FIRST-PERSON: Ego-Perspektive (Kamera VOR dem Kopf, nicht IM Kopf)
             // Character position.y ist bereits die Körpermitte
-            // Augenhöhe sollte leicht über der Mitte sein, nicht bei 0.85 * height
-            const eyeHeight = this.characterHeight * 0.20;  // ~20% über Mitte = Augenhöhe
+            // Augenhöhe bei ~40% über Mitte = realistische Augenhöhe
+            const eyeHeight = this.characterHeight * 0.40;  // ~40% über Mitte = Augenhöhe
+            const forwardOffset = 1.5;  // Kamera 1.5 Einheiten VOR dem Kopf
 
+            // Kamera-Position: VOR dem Character, in Blickrichtung
             this.camera.position.set(
-                this.character.position.x,
+                this.character.position.x + sinYaw * cosPitch * forwardOffset,
                 this.character.position.y + eyeHeight,
-                this.character.position.z
+                this.character.position.z + cosYaw * cosPitch * forwardOffset
             );
 
             const lookDistance = 10;
