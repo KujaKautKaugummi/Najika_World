@@ -385,6 +385,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="static/js/camera_controller.js"></script>
     <script src="static/js/interior_generator.js"></script>
+    <script src="static/js/world_combat.js"></script>
 
     <script>
         const THREE = window.THREE;
@@ -422,6 +423,9 @@
         const interiorGenerator = new InteriorGenerator(scene, THREE);
         let currentInteriorState = null; // Stores exterior position & state
         let isInInterior = false;
+
+        // World Combat System (Phase 3: Combat System)
+        const worldCombat = new WorldCombat(scene, THREE);
 
         // Verbesserte Lighting für bessere Atmosphäre
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
@@ -605,6 +609,7 @@
         let nearBuilding = null;
 
         window.addEventListener('keydown', (e) => {
+            // E-Taste: Gebäude betreten/verlassen
             if (e.key === 'e' || e.key === 'E') {
                 if (nearBuilding) {
                     // Check if it's an Exit Portal
@@ -613,6 +618,17 @@
                     } else {
                         enterBuilding(nearBuilding);
                     }
+                }
+            }
+
+            // Space-Taste: Angriff im Kampf (Phase 3: Combat)
+            if (e.code === 'Space' && worldCombat.combatActive && !isInInterior) {
+                e.preventDefault(); // Verhindere Scrollen
+                const result = worldCombat.playerAttack();
+
+                // Update Combat UI nach Angriff
+                if (result) {
+                    updateCombatUI();
                 }
             }
         });
@@ -812,6 +828,107 @@
                 ePrompt.style.display = 'none';
                 nearBuilding = null;
             }
+        }
+
+        // Combat UI Update (Phase 3)
+        function updateCombatUI() {
+            const stats = worldCombat.getStats();
+
+            if (!stats.combatActive) {
+                // Remove Combat UI wenn nicht aktiv
+                const combatUI = document.getElementById('combat-ui');
+                if (combatUI) combatUI.remove();
+                return;
+            }
+
+            // Finde oder erstelle Combat UI
+            let combatUI = document.getElementById('combat-ui');
+            if (!combatUI) {
+                combatUI = document.createElement('div');
+                combatUI.id = 'combat-ui';
+                combatUI.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.95);
+                    padding: 30px;
+                    border-radius: 15px;
+                    z-index: 500;
+                    min-width: 400px;
+                    border: 3px solid #ff0000;
+                    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+                `;
+                document.body.appendChild(combatUI);
+            }
+
+            // HP Bars
+            const playerHPPercent = (stats.health / stats.maxHealth) * 100;
+            const enemyHPPercent = stats.currentEnemy ?
+                (worldCombat.currentEnemy.health / worldCombat.currentEnemy.maxHealth) * 100 : 0;
+
+            const playerHPColor = playerHPPercent > 60 ? '#00ff00' : playerHPPercent > 30 ? '#ffff00' : '#ff0000';
+            const enemyHPColor = enemyHPPercent > 60 ? '#00ff00' : enemyHPPercent > 30 ? '#ffff00' : '#ff0000';
+
+            combatUI.innerHTML = `
+                <h2 style="text-align: center; color: #ff0000; margin: 0 0 20px 0; font-size: 24px;">⚔️ COMBAT ⚔️</h2>
+
+                <!-- Player Stats -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; color: white; font-size: 14px; margin-bottom: 5px;">
+                        <span><strong>🧙 Najika</strong> (Lv ${stats.level})</span>
+                        <span>${stats.health} / ${stats.maxHealth} HP</span>
+                    </div>
+                    <div style="background: #222; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${playerHPColor}; height: 100%; width: ${playerHPPercent}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+
+                <!-- Enemy Stats -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; color: white; font-size: 14px; margin-bottom: 5px;">
+                        <span><strong>👾 ${stats.currentEnemy || 'Unknown'}</strong></span>
+                        <span>${worldCombat.currentEnemy ? worldCombat.currentEnemy.health : 0} / ${worldCombat.currentEnemy ? worldCombat.currentEnemy.maxHealth : 0} HP</span>
+                    </div>
+                    <div style="background: #222; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${enemyHPColor}; height: 100%; width: ${enemyHPPercent}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+
+                <!-- Combat Info -->
+                <div style="color: #aaa; text-align: center; margin-bottom: 20px; font-size: 13px;">
+                    <p style="margin: 5px 0;">💪 Dein Schaden: ${stats.damage}</p>
+                    <p style="margin: 5px 0;">⭐ XP: ${stats.xp} | 🏆 Level: ${stats.level}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button onclick="worldCombat.playerAttack(); updateCombatUI();" style="
+                        background: #ff4444;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: bold;
+                    ">⚔️ Angriff (SPACE)</button>
+                    <button onclick="worldCombat.exitCombat(); updateCombatUI();" style="
+                        background: #4444ff;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: bold;
+                    ">🏃 Fliehen</button>
+                </div>
+
+                <p style="text-align: center; color: #888; margin-top: 15px; font-size: 12px;">
+                    Drücke <strong>SPACE</strong> um anzugreifen!
+                </p>
+            `;
         }
 
         // Get ground height at position (based on region)
@@ -1096,6 +1213,10 @@
             // Loading Screen ausblenden
             document.getElementById('loading').style.display = 'none';
             console.log('🎉 Alle Assets geladen!');
+
+            // Spawn Enemies in all 9 regions (Phase 3: Combat)
+            worldCombat.spawnEnemiesInAllRegions(regions);
+            console.log('⚔️ Combat System aktiviert!');
         }
 
         // Start loading
@@ -1516,6 +1637,21 @@
                 checkExitPortalProximity();
             } else {
                 checkBuildingProximity();
+            }
+
+            // Combat System (Phase 3): Proximity Detection & Enemy Updates
+            if (!isInInterior) {
+                // Check if player is near an enemy (auto-start combat)
+                if (!worldCombat.combatActive) {
+                    const nearEnemy = worldCombat.checkCombatProximity(character.position);
+                    if (nearEnemy) {
+                        worldCombat.startCombat(nearEnemy);
+                        updateCombatUI(); // Öffne Combat UI
+                    }
+                }
+
+                // Update enemy AI (rotation, aggro glow, etc.)
+                worldCombat.updateEnemies(character.position);
             }
 
             // Update UI
