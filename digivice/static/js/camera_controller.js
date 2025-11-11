@@ -187,37 +187,55 @@ class CameraController {
 
         } else if (this.currentMode === this.MODES.THIRD) {
             // THIRD-PERSON: Fortnite-Style
-            const distance = 12;
-            const height = 4;
+            // Kamera ist frei drehbar (nur orbitYaw/Pitch), UNABHÄNGIG von Character-Rotation
+
+            const distance = 8;  // Näher für Fortnite-Feeling
+            const heightOffset = 2.5;  // Über Schulter
+            const shoulderOffset = 1.5;  // Seitlich (rechte Schulter)
+
+            // Verwende NUR orbitYaw/Pitch (NICHT character.rotation.y!)
+            const cos = Math.cos(this.orbitPitch);
+            const sin = Math.sin(this.orbitPitch);
+            const cosYaw = Math.cos(this.orbitYaw);
+            const sinYaw = Math.sin(this.orbitYaw);
+
+            // Kamera-Position: Hinter Character + Schulter-Offset + Höhe
             const offset = new THREE.Vector3(
-                sinYaw * cosPitch * distance,
-                height + sinPitch * distance * 0.5,
-                cosYaw * cosPitch * distance
+                sinYaw * cos * distance + shoulderOffset * Math.cos(this.orbitYaw + Math.PI/2),
+                heightOffset + sin * distance * 0.5,
+                cosYaw * cos * distance + shoulderOffset * Math.sin(this.orbitYaw + Math.PI/2)
             );
 
             const charTarget = this.character.position.clone();
+            charTarget.y += 1.5;  // Blick auf Oberkörper, nicht Füße
             this.camera.position.copy(charTarget).add(offset);
             this.camera.lookAt(charTarget);
 
         } else if (this.currentMode === this.MODES.FIRST) {
-            // FIRST-PERSON: Ego-Perspektive (Kamera VOR dem Kopf, nicht IM Kopf)
-            // Character position.y ist bereits die Körpermitte
-            // Augenhöhe bei ~40% über Mitte = realistische Augenhöhe
-            const eyeHeight = this.characterHeight * 0.40;  // ~40% über Mitte = Augenhöhe
-            const forwardOffset = 1.5;  // Kamera 1.5 Einheiten VOR dem Kopf
+            // FIRST-PERSON: Ego-Perspektive wie Fortnite
+            // Kamera schaut in Charakter-Blickrichtung (character.rotation.y)
 
-            // Kamera-Position: VOR dem Character, in Blickrichtung
+            const eyeHeight = this.characterHeight * 0.40;  // Augenhöhe
+
+            // WICHTIG: Verwende character.rotation.y als Basis-Blickrichtung (Fortnite-Style)
+            const characterYaw = this.character.rotation.y;
+
+            // Kamera-Position an den Augen des Charakters
             this.camera.position.set(
-                this.character.position.x + sinYaw * cosPitch * forwardOffset,
+                this.character.position.x,
                 this.character.position.y + eyeHeight,
-                this.character.position.z + cosYaw * cosPitch * forwardOffset
+                this.character.position.z
             );
 
+            // Blickrichtung: Charakter-Rotation + Maus-Pitch für hoch/runter schauen
             const lookDistance = 10;
+            const charCos = Math.cos(characterYaw);
+            const charSin = Math.sin(characterYaw);
+
             const lookTarget = new THREE.Vector3(
-                this.camera.position.x + sinYaw * cosPitch * lookDistance,
+                this.camera.position.x + charSin * cosPitch * lookDistance,
                 this.camera.position.y + sinPitch * lookDistance,
-                this.camera.position.z + cosYaw * cosPitch * lookDistance
+                this.camera.position.z + charCos * cosPitch * lookDistance
             );
 
             this.camera.lookAt(lookTarget);
@@ -252,6 +270,22 @@ class CameraController {
     setCharacter(character, height = 3) {
         this.character = character;
         this.characterHeight = height;
+    }
+
+    // Für Fortnite-Style kamera-relative Bewegung
+    getCameraYaw() {
+        // Gibt die horizontale Blickrichtung der Kamera zurück
+        if (this.currentMode === this.MODES.ORBIT) {
+            return this.orbitYaw;
+        } else if (this.currentMode === this.MODES.THIRD) {
+            // In Third-Person: NUR Kamera-Rotation (NICHT Character-Rotation!)
+            // Sonst gibt es einen Feedback-Loop!
+            return this.orbitYaw;
+        } else if (this.currentMode === this.MODES.FIRST) {
+            // In First-Person: Character-Rotation ist die Kamera-Richtung
+            return this.character ? this.character.rotation.y : 0;
+        }
+        return 0;
     }
 
     clamp(value, min, max) {

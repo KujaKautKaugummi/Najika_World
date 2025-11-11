@@ -305,6 +305,7 @@
         <p><strong>Gebiet:</strong> <span id="current-region" class="region-label">-</span></p>
         <p><strong>Geladene Assets:</strong> <span id="asset-count">0</span></p>
         <p><strong>FPS:</strong> <span id="fps">60</span></p>
+        <p><strong>Movement:</strong> <span id="movement-state" style="color: #4CAF50;">Normal</span></p>
         <hr style="margin: 15px 0; border-color: #333;">
         <p style="font-size: 12px; opacity: 0.8;">
             <strong>9 Gebiete (3x3 Grid):</strong><br>
@@ -356,6 +357,27 @@
         <span id="status-text">Backend Offline</span>
     </div>
 
+    <div id="controls-info" style="position: absolute; top: 450px; right: 20px; background: rgba(0, 0, 0, 0.8); color: white; padding: 15px; border-radius: 10px; font-size: 12px; max-width: 250px; border: 2px solid #4CAF50;">
+        <h3 style="margin: 0 0 10px 0; color: #4CAF50;">🎮 CONTROLS</h3>
+        <div style="color: #aaa; line-height: 1.6;">
+            <strong style="color: #FFC107;">Movement (Fortnite-Style):</strong><br>
+            WASD = Bewegung (kamera-relativ)<br>
+            <strong>Shift + W</strong> = Sprint 🏃<br>
+            <strong>Ctrl</strong> = Crouch 🐢<br>
+            <strong>Sprint + Ctrl</strong> = Slide 🏃💨<br>
+            <br>
+            <strong style="color: #2196F3;">Kamera:</strong><br>
+            Tab = Kamera wechseln<br>
+            Maus/Touch = Kamera drehen<br>
+            Scroll = Zoom<br>
+            <br>
+            <strong style="color: #FF6B9D;">Combat:</strong><br>
+            F6 = Combat Mode wechseln<br>
+            Q/E = Angriffe<br>
+            C = Dodge | X = Block | V = Parry
+        </div>
+    </div>
+
     <div id="e-prompt">
         <span class="e-key">E</span>
         <span id="e-prompt-text">Schwarze Windmühle betreten</span>
@@ -390,6 +412,13 @@
     <script src="static/js/npc_system.js"></script>
     <script src="static/js/quest_system.js"></script>
     <script src="static/js/special_features.js"></script>
+    <script src="static/js/skill_system.js"></script>
+    <script src="static/js/crafting_system.js"></script>
+    <script src="static/js/special_locations.js"></script>
+    <script src="static/js/performance_monitor.js"></script>
+    <script src="static/js/save_system.js"></script>
+    <script src="static/js/sound_system.js"></script>
+    <script src="static/js/tutorial_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -452,6 +481,30 @@
         specialFeatures.createLighthouseClimbUI();
         specialFeatures.createArenaUI();
 
+        // Skill System (Block 8.5)
+        const skillSystem = new SkillSystem(inventorySystem);
+        skillSystem.loadFromLocalStorage();
+
+        // Crafting System (Block 8.6)
+        const craftingSystem = new CraftingSystem(inventorySystem);
+
+        console.log('📚 Skill + Crafting Systeme geladen!');
+
+        // Special Locations (Phase 9: Reich der Drei, Funkelnest, Tiefenhöhlen)
+        const specialLocations = new SpecialLocations(scene, THREE, inventorySystem, questManager);
+        specialLocations.createEntranceMarkers();
+
+        // Phase 10: Polish Systems
+        const performanceMonitor = new PerformanceMonitor();
+        const soundSystem = new SoundSystem();
+        const tutorialSystem = new TutorialSystem();
+
+        console.log('🎨 Phase 10 Systems initialisiert!');
+
+
+
+
+
         // Auto-accept World Explorer quest
         questManager.acceptQuest('world_explorer');
 
@@ -463,6 +516,63 @@
         // Equip starting weapons (MIT ELEMENTEN für Weave-Testing!)
         realtimeCombat.equipWeapon('left', { type: 'fire_sword', element: 'fire', damage: 15 });
         realtimeCombat.equipWeapon('right', { type: 'ice_dagger', element: 'ice', damage: 12 });
+
+        // Combat Mode Toggle (F6 key)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'F6') {
+                e.preventDefault();
+                const currentMode = realtimeCombat.combatMode;
+                let nextMode = 'MANUAL';
+
+                if (currentMode === 'MANUAL') {
+                    nextMode = 'ASSIST';
+                } else if (currentMode === 'ASSIST') {
+                    nextMode = 'AUTO';
+                } else {
+                    nextMode = 'MANUAL';
+                }
+
+                realtimeCombat.setCombatMode(nextMode);
+                console.log(`🎮 Combat Mode: ${nextMode}`);
+
+                // Show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.95);
+                    color: white;
+                    padding: 30px 50px;
+                    border-radius: 15px;
+                    border: 3px solid #FFD700;
+                    font-size: 24px;
+                    font-weight: bold;
+                    z-index: 10000;
+                    text-align: center;
+                `;
+
+                const modeInfo = {
+                    'MANUAL': { icon: '⚔️', desc: 'Volle Kontrolle', keys: 'Q/E/SPACE/C/X/V' },
+                    'ASSIST': { icon: '📣', desc: 'Najika kämpft, du feuerst an!', keys: '1/2/3/4' },
+                    'AUTO': { icon: '🤖', desc: 'Najika kämpft alleine', keys: '1/2/3/4 (optional)' }
+                };
+
+                const info = modeInfo[nextMode];
+                notification.innerHTML = `
+                    ${info.icon} ${nextMode} MODE ${info.icon}<br>
+                    <div style="font-size: 14px; margin-top: 10px; color: #aaa;">${info.desc}</div>
+                    <div style="font-size: 12px; margin-top: 5px; color: #FFD700;">Tasten: ${info.keys}</div>
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }
+        });
 
         // Verbesserte Lighting für bessere Atmosphäre
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
@@ -567,14 +677,53 @@
         cameraController.setMode(cameraController.MODES.THIRD);
         document.getElementById('camera-mode').textContent = 'THIRD';
 
-        // WASD-Steuerung
+        // Save System (AFTER character is defined)
+        const gameState = {
+            character,
+            inventorySystem,
+            questManager,
+            skillSystem,
+            realtimeCombat,
+            specialLocations
+        };
+        const saveSystem = new SaveSystem(gameState);
+
+        // Try to load save
+        saveSystem.loadGame();
+
+        // Manual Save/Load (F5/F9)
+        window.addEventListener('keydown', (e) => {
+            // F5: Manual Save
+            if (e.key === 'F5') {
+                e.preventDefault();
+                saveSystem.saveGame();
+            }
+
+            // F9: Manual Load
+            if (e.key === 'F9') {
+                e.preventDefault();
+                if (confirm('💾 Spielstand laden? (Ungespeicherte Änderungen gehen verloren!)')) {
+                    saveSystem.loadGame();
+                }
+            }
+        });
+
+        // WASD-Steuerung (Fortnite-Style erweitert)
         const keys = {
             w: false,
             a: false,
             s: false,
             d: false,
-            shift: false
+            shift: false,
+            ctrl: false  // Crouch
         };
+
+        // Movement State (Fortnite-Features)
+        let isSprinting = false;
+        let isCrouching = false;
+        let isSliding = false;
+        let slideVelocity = 0;
+        let slideDirection = 0;
 
         window.addEventListener('keydown', (e) => {
             switch(e.key.toLowerCase()) {
@@ -582,7 +731,31 @@
                 case 'a': keys.a = true; break;
                 case 's': keys.s = true; break;
                 case 'd': keys.d = true; break;
-                case 'shift': keys.shift = true; break;
+                case 'shift':
+                    keys.shift = true;
+                    break;
+                case 'control':  // Ctrl für Crouch (C-Taste ist Combat Dodge!)
+                    keys.ctrl = true;
+                    // Sliding: Shift + Ctrl = Slide
+                    if (isSprinting && !isCrouching && !isSliding) {
+                        isSliding = true;
+                        slideVelocity = 1.5;  // Schneller als Sprint
+                        // Slide-Richtung: Aktuelle Bewegungsrichtung
+                        if (keys.w || keys.a || keys.s || keys.d) {
+                            const cameraYaw = cameraController.getCameraYaw();
+                            let angle = 0;
+                            if (keys.w && !keys.a && !keys.d) angle = cameraYaw;
+                            else if (keys.w && keys.d) angle = cameraYaw - Math.PI/4;
+                            else if (keys.d && !keys.w && !keys.s) angle = cameraYaw - Math.PI/2;
+                            else if (keys.s && keys.d) angle = cameraYaw - 3*Math.PI/4;
+                            else if (keys.s && !keys.a && !keys.d) angle = cameraYaw - Math.PI;
+                            else if (keys.s && keys.a) angle = cameraYaw + 3*Math.PI/4;
+                            else if (keys.a && !keys.w && !keys.s) angle = cameraYaw + Math.PI/2;
+                            else if (keys.w && keys.a) angle = cameraYaw + Math.PI/4;
+                            slideDirection = angle;
+                        }
+                    }
+                    break;
             }
         });
 
@@ -592,7 +765,16 @@
                 case 'a': keys.a = false; break;
                 case 's': keys.s = false; break;
                 case 'd': keys.d = false; break;
-                case 'shift': keys.shift = false; break;
+                case 'shift':
+                    keys.shift = false;
+                    isSprinting = false;
+                    break;
+                case 'control':
+                    keys.ctrl = false;
+                    if (!isSliding) {
+                        isCrouching = false;
+                    }
+                    break;
             }
         });
 
@@ -1657,47 +1839,138 @@
             const delta = 0.016;
             cameraController.update(delta);
 
-            // Movement: WASD + Mobile Joystick (Bug-Fix: First-Person Camera-relative)
-            const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
-            let dx = 0;
-            let dz = 0;
-
-            // WASD Keyboard Input
-            if (keys.w) dz += moveSpeed;  // Vorwärts
-            if (keys.s) dz -= moveSpeed;  // Rückwärts
-            if (keys.a) dx += moveSpeed;  // Links
-            if (keys.d) dx -= moveSpeed;  // Rechts
-
-            // Mobile Joystick Input
-            if (joystickActive) {
-                dx += joystickVector.x * moveSpeed;
-                dz += joystickVector.z * moveSpeed;
+            // First-Person: Character dreht sich mit der Kamera
+            const currentCameraMode = cameraController.getMode();
+            if (currentCameraMode === cameraController.MODES.FIRST) {
+                // In First-Person: Character-Rotation = Kamera-Rotation (orbitYaw)
+                character.rotation.y = cameraController.orbitYaw;
             }
 
-            // Bewegung anwenden
-            if (dx !== 0 || dz !== 0) {
-                // In First-Person: Bewegung relativ zur Kamera-Blickrichtung
-                const currentMode = cameraController.getMode();
-                if (currentMode === cameraController.MODES.FIRST) {
-                    // Berechne Bewegung relativ zur Kamera-Rotation
-                    const cameraYaw = cameraController.orbitYaw;
-                    const cos = Math.cos(cameraYaw);
-                    const sin = Math.sin(cameraYaw);
+            // ===== FORTNITE-STYLE MOVEMENT SYSTEM =====
 
-                    const worldDx = dx * cos - dz * sin;
-                    const worldDz = dx * sin + dz * cos;
-
-                    character.position.x += worldDx;
-                    character.position.z += worldDz;
-                } else {
-                    // Third-Person / Orbit: Normale Bewegung
-                    character.position.x += dx;
-                    character.position.z += dz;
-
-                    // Character dreht sich in Bewegungsrichtung (nur in Third-Person)
-                    const targetRotation = Math.atan2(dx, dz);
-                    character.rotation.y = targetRotation;
+            // Sliding Update (Decay)
+            if (isSliding) {
+                slideVelocity -= delta * 3;  // Schnell langsamer werden
+                if (slideVelocity <= 0 || !keys.ctrl) {
+                    isSliding = false;
+                    slideVelocity = 0;
+                    isCrouching = keys.ctrl;  // Wechsel zu Crouch wenn Ctrl noch gedrückt
                 }
+            }
+
+            // Sprint Update (nur bei Vorwärtsbewegung)
+            if (keys.shift && keys.w && !isCrouching && !isSliding) {
+                isSprinting = true;
+            } else if (!keys.shift || !keys.w) {
+                isSprinting = false;
+            }
+
+            // Crouch Update (ohne Slide)
+            if (keys.ctrl && !isSliding) {
+                isCrouching = true;
+            } else if (!keys.ctrl) {
+                isCrouching = false;
+            }
+
+            // Movement Speed basierend auf State
+            let moveSpeed = 0.5;  // Base
+            if (isSliding) {
+                moveSpeed = slideVelocity;  // Sliding (wird weniger)
+            } else if (isSprinting) {
+                moveSpeed = 1.0;  // Sprint (2x base)
+            } else if (isCrouching) {
+                moveSpeed = 0.25;  // Crouch (0.5x base)
+            }
+
+            let dx = 0;
+            let dz = 0;
+            let hasMovementInput = false;
+
+            // WASD Keyboard Input (relativ zur Kamera-Blickrichtung)
+            if (!isSliding) {
+                if (keys.w) { dz += 1; hasMovementInput = true; }
+                if (keys.s) { dz -= 1; hasMovementInput = true; }
+                if (keys.a) { dx += 1; hasMovementInput = true; }
+                if (keys.d) { dx -= 1; hasMovementInput = true; }
+
+                // Normalize diagonal movement
+                if (dx !== 0 && dz !== 0) {
+                    const length = Math.sqrt(dx * dx + dz * dz);
+                    dx /= length;
+                    dz /= length;
+                }
+
+                dx *= moveSpeed;
+                dz *= moveSpeed;
+            } else {
+                // Sliding: Bewegung in Slide-Richtung
+                dx = Math.sin(slideDirection) * moveSpeed;
+                dz = Math.cos(slideDirection) * moveSpeed;
+                hasMovementInput = true;
+            }
+
+            // Mobile Joystick Input
+            if (joystickActive && !isSliding) {
+                dx += joystickVector.x * moveSpeed;
+                dz += joystickVector.z * moveSpeed;
+                hasMovementInput = true;
+            }
+
+            // Bewegung anwenden (IMMER kamera-relativ in Third/First-Person!)
+            if (hasMovementInput && (dx !== 0 || dz !== 0)) {
+                const currentMode = cameraController.getMode();
+                const cameraYaw = cameraController.getCameraYaw();
+
+                // Kamera-relative Bewegung (für Third + First Person)
+                const cos = Math.cos(cameraYaw);
+                const sin = Math.sin(cameraYaw);
+
+                const worldDx = dx * cos - dz * sin;
+                const worldDz = dx * sin + dz * cos;
+
+                character.position.x += worldDx;
+                character.position.z += worldDz;
+
+                // Character Rotation (NUR in Third-Person!)
+                // In First-Person NICHT rotation setzen, weil das die Kamera beeinflusst!
+                if (currentMode === cameraController.MODES.THIRD) {
+                    if (!isSliding) {
+                        // Character dreht sich zur Bewegungsrichtung (relativ zur Kamera)
+                        const moveAngle = Math.atan2(worldDx, worldDz);
+                        // Smooth rotation (Lerp für flüssigere Bewegung)
+                        const angleDiff = moveAngle - character.rotation.y;
+                        // Normalize angle difference to [-PI, PI]
+                        const normalizedDiff = Math.atan2(Math.sin(angleDiff), Math.cos(angleDiff));
+                        character.rotation.y += normalizedDiff * 0.15;  // 15% interpolation
+                    }
+                    // Während Slide: Rotation bleibt wie sie ist
+                }
+                // In First-Person: character.rotation.y NICHT ändern!
+
+                // Visual Feedback für States (Höhe anpassen)
+                if (isCrouching && !isSliding) {
+                    character.scale.y = 0.7;  // Ducken
+                } else if (isSliding) {
+                    character.scale.y = 0.5;  // Slide (noch tiefer)
+                } else {
+                    character.scale.y = 1.0;  // Normal
+                }
+            }
+
+            // UI Update: Movement State
+            const movementStateEl = document.getElementById('movement-state');
+            if (isSliding) {
+                movementStateEl.textContent = '🏃💨 SLIDING';
+                movementStateEl.style.color = '#FF6B9D';
+            } else if (isSprinting) {
+                movementStateEl.textContent = '🏃 SPRINT';
+                movementStateEl.style.color = '#FFC107';
+            } else if (isCrouching) {
+                movementStateEl.textContent = '🐢 CROUCH';
+                movementStateEl.style.color = '#2196F3';
+            } else {
+                movementStateEl.textContent = 'Normal';
+                movementStateEl.style.color = '#4CAF50';
             }
 
             // Keep character within map bounds
@@ -2265,6 +2538,23 @@
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
 
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
+
             }
 
             return result;
@@ -2293,11 +2583,48 @@
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
 
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
+
                 console.log(`🗺️ Explored: ${regionName}`);
             }
         }
 
         console.log('🔗 Quest Hooks installed!');
+
+        // Enter Special Location (E key)
+        const originalEKeyHandler = window.addEventListener;
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && !isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    e.preventDefault();
+                    
+                    // Enter location
+                    alert(`🗺️ Betrete ${nearLocation.name}!\n\n${nearLocation.description}\n\n(Special Location Interiors werden vollständig in einer späteren Phase implementiert)\n\nLocation-Features:\n${nearLocation.interior.theme}\n${nearLocation.interior.enemies.length} Enemy-Typen\n${nearLocation.interior.loot ? nearLocation.interior.loot.length + ' Loot-Typen' : ''}`);
+                    
+                    console.log(`🗺️ Würde jetzt ${nearLocation.name} betreten...`);
+                    
+                    // TODO: Später vollständiges Interior laden
+                    // const interior = specialLocations.enterLocation(nearLocation.id);
+                }
+            }
+        });
+
 
         // Leuchtturm Climbing Controls (Phase 8)
         let isPressingClimb = false;
@@ -2586,6 +2913,40 @@
                     endDialogue();
                     break;
 
+
+                case 'train_magic':
+                case 'train_smithing':
+                    // Skill Training (NPC Trainer)
+                    const availableSkills = skillSystem.getSkillsFromTrainer(npc.id);
+                    if (availableSkills.length > 0) {
+                        let skillsHTML = '<h3 style="color: #FFD700;">📚 Skills lernen</h3><ul style="list-style: none; padding: 0;">';
+                        availableSkills.forEach(skill => {
+                            const canLearn = skillSystem.canLearnSkill(skill.id);
+                            skillsHTML += `
+                                <li style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${canLearn.canLearn ? '#4CAF50' : '#ff0000'};">
+                                    <div style="font-size: 18px; font-weight: bold; color: #FFD700;">${skill.icon} ${skill.name}</div>
+                                    <div style="font-size: 12px; color: #aaa; margin: 5px 0;">${skill.description}</div>
+                                    <div style="font-size: 14px; color: #fff; margin: 5px 0;">
+                                        Power: ${skill.power} | Mana: ${skill.manaCost} | Cooldown: ${skill.cooldown}s
+                                    </div>
+                                    <div style="font-size: 14px; color: #FFD700;">Kosten: ${skill.cost}g</div>
+                                    ${canLearn.canLearn ?
+                                        '<button onclick="learnSkillFromNPC(\'' + skill.id + '\')" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer;">✓ Lernen</button>' :
+                                        '<div style="color: #ff0000; margin-top: 10px;">' + canLearn.reason + '</div>'
+                                    }
+                                </li>
+                            `;
+                        });
+                        skillsHTML += '</ul><button onclick="endDialogue()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,0,0,0.3); border: 2px solid #ff0000; border-radius: 5px; color: white; cursor: pointer;">Schließen</button>';
+
+                        document.getElementById('dialogue-text').innerHTML = skillsHTML;
+                        document.getElementById('dialogue-options').innerHTML = '';
+                    } else {
+                        alert('Dieser Trainer hat keine Skills mehr für dich!');
+                        endDialogue();
+                    }
+                    break;
+
                 case 'start_arena':
                     // Arena Battle
                     console.log('🏟️ Arena Battle starting...');
@@ -2731,6 +3092,29 @@
             z-index: 500;
         `;
         document.body.appendChild(buildingPrompt);
+
+        // Location Prompt UI (Phase 9)
+        const locationPrompt = document.createElement('div');
+        locationPrompt.id = 'location-prompt';
+        locationPrompt.style.cssText = `
+            position: fixed;
+            bottom: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 3px solid #FFD700;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            display: none;
+            z-index: 500;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        `;
+        document.body.appendChild(locationPrompt);
+
 
         // Check every frame
         setInterval(checkBuildingInteraction, 100);
@@ -3189,7 +3573,117 @@
 
         console.log('📋 Quest UI ready! Press Q or J to open Quest Log!');
 
+        // Crafting bei Schmied (E-Taste bei funken_siedlung NPCs)
+        const originalHandleDialogueAction = handleDialogueAction;
+        handleDialogueAction = function(action) {
+            if (action === 'open_crafting') {
+                // Show Crafting UI
+                const recipes = craftingSystem.getAllRecipes();
+                let craftingHTML = '<h3 style="color: #FFD700;">🔨 CRAFTING</h3>';
+                craftingHTML += '<div style="max-height: 400px; overflow-y: auto;">';
+
+                recipes.forEach(recipe => {
+                    const check = recipe.canCraft(inventorySystem);
+                    const missing = recipe.getMissingMaterials(inventorySystem);
+
+                    craftingHTML += `
+                        <div style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${check.canCraft ? '#4CAF50' : '#ff0000'};">
+                            <div style="font-size: 18px; font-weight: bold; color: #FFD700;">${recipe.icon} ${recipe.name}</div>
+                            <div style="font-size: 12px; color: #aaa; margin: 5px 0;">${recipe.description}</div>
+                            <div style="font-size: 12px; color: #fff; margin-top: 10px;">Materialien:</div>
+                            <ul style="font-size: 12px; margin: 5px 0; padding-left: 20px;">
+                    `;
+
+                    recipe.materials.forEach(mat => {
+                        const have = inventorySystem.getItemCount(mat.item);
+                        const color = have >= mat.count ? '#00ff00' : '#ff0000';
+                        craftingHTML += `<li style="color: ${color};">${mat.item}: ${have}/${mat.count}</li>`;
+                    });
+
+                    craftingHTML += `</ul>`;
+
+                    if (recipe.requiredGold > 0) {
+                        const hasGold = inventorySystem.hasGold(recipe.requiredGold);
+                        craftingHTML += `<div style="font-size: 12px; color: ${hasGold ? '#FFD700' : '#ff0000'};">Gold: ${inventorySystem.gold}/${recipe.requiredGold}</div>`;
+                    }
+
+                    if (check.canCraft) {
+                        craftingHTML += '<button onclick="craftItemFromNPC(\'' + recipe.id + '\')" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer;">🔨 Craften</button>';
+                    } else {
+                        craftingHTML += '<div style="color: #ff0000; margin-top: 10px; font-size: 12px;">' + check.reason + '</div>';
+                    }
+
+                    craftingHTML += '</div>';
+                });
+
+                craftingHTML += '</div><button onclick="endDialogue()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,0,0,0.3); border: 2px solid #ff0000; border-radius: 5px; color: white; cursor: pointer;">Schließen</button>';
+
+                document.getElementById('dialogue-text').innerHTML = craftingHTML;
+                document.getElementById('dialogue-options').innerHTML = '';
+                return;
+            }
+
+            // Call original
+            originalHandleDialogueAction(action);
+        };
+
+        // Craft Item from NPC
+        window.craftItemFromNPC = function(recipeId) {
+            if (craftingSystem.craftItem(recipeId)) {
+                const recipe = craftingSystem.recipes[recipeId];
+                alert('🔨 Crafting erfolgreich!\n\n' + recipe.icon + ' ' + recipe.name + ' erstellt!');
+                endDialogue();
+                if (inventoryOpen) updateInventoryUI();
+            } else {
+                alert('❌ Crafting fehlgeschlagen!');
+            }
+        };
+
+
         // Arena Mode Selection (Phase 8)
+
+        // Learn Skill from NPC (Global Function)
+        window.learnSkillFromNPC = function(skillId) {
+            if (skillSystem.learnSkill(skillId)) {
+                alert('📚 Skill gelernt: ' + skillSystem.learnedSkills[skillId].name + '!\n\nÖffne das Skills-Menu (K) um deine Skills zu sehen!');
+                endDialogue();
+                skillSystem.saveToLocalStorage();
+            } else {
+                alert('❌ Konnte Skill nicht lernen!');
+            }
+        };
+
+        // Learn Skill from NPC Keyboard (K for Skills)
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'k' || e.key === 'K') && !dialogueOpen && !inventoryOpen && !questLogOpen && !isInInterior) {
+                e.preventDefault();
+                // Show Skills UI
+                const learnedSkills = skillSystem.getLearnedSkills();
+                if (learnedSkills.length === 0) {
+                    alert('📚 Noch keine Skills gelernt!\n\nSuche Skill-Trainer in den Städten!');
+                } else {
+                    let skillsHTML = '<h2 style="color: #FFD700;">📚 DEINE SKILLS</h2><ul style="list-style: none; padding: 0;">';
+                    learnedSkills.forEach(skill => {
+                        const equipped = skillSystem.equippedSkills.includes(skill.id);
+                        skillsHTML += `
+                            <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${equipped ? '#4CAF50' : '#666'};">
+                                <div style="font-size: 16px; font-weight: bold;">${skill.icon} ${skill.name} (Lv.${skill.level})</div>
+                                <div style="font-size: 12px; color: #aaa;">${skill.description}</div>
+                                <div style="font-size: 12px; margin-top: 5px;">
+                                    Power: ${skill.getPowerAtLevel()} | Mana: ${skill.getManaCostAtLevel()} | CD: ${skill.getCooldownAtLevel().toFixed(1)}s
+                                </div>
+                                <div style="font-size: 10px; color: #FFD700; margin-top: 5px;">
+                                    XP: ${skill.xp}/${skill.xpRequired} | Ausgerüstet: ${equipped ? '✓' : '✗'}
+                                </div>
+                            </li>
+                        `;
+                    });
+                    skillsHTML += '</ul>';
+                    alert(skillsHTML.replace(/<[^>]*>/g, '\n')); // Quick alert (proper UI später)
+                }
+            }
+        });
+
         window.selectArenaMode = function(mode) {
             specialFeatures.selectArenaMode(mode);
             const arenaUI = document.getElementById('arena-ui');
@@ -3198,12 +3692,39 @@
 
 
         // Update tracker every second
+        let lastUpdateTime = Date.now();
         setInterval(() => {
             if (!questLogOpen) {
                 updateQuestTracker();
+
+            // Update Performance Monitor (Phase 10)
+            performanceMonitor.update(renderer);
+
+                // Calculate delta time (in seconds)
+                const currentTime = Date.now();
+                const delta = (currentTime - lastUpdateTime) / 1000;
+                lastUpdateTime = currentTime;
+
                 // Update Special Features (Phase 8)
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
+
+            // Check Special Locations (Phase 9)
+            if (!isInInterior) {
+                const nearLocation = specialLocations.checkEntranceProximity(character.position);
+                if (nearLocation) {
+                    // Show prompt
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) {
+                        prompt.textContent = `${nearLocation.entrance.icon} Drücke E: ${nearLocation.name}`;
+                        prompt.style.display = 'block';
+                    }
+                } else {
+                    const prompt = document.getElementById('location-prompt');
+                    if (prompt) prompt.style.display = 'none';
+                }
+            }
+
 
             }
         }, 1000);

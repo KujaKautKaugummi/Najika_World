@@ -803,17 +803,146 @@ class RealtimeCombat {
     }
 
     spawnEnemy(type, x, y, z, data) {
-        // Create Enemy Mesh (simple colored box)
+        // Create mesh container (ALWAYS add simple fallback immediately)
+        const mesh = new this.THREE.Group();
+        mesh.position.set(x, y, z);
+
+        // Simple fallback geometry (ALWAYS present)
         const geometry = new this.THREE.BoxGeometry(2, 3, 2);
         const material = new this.THREE.MeshStandardMaterial({
             color: data.color,
             roughness: 0.7,
             metalness: 0.3
         });
-        const mesh = new this.THREE.Mesh(geometry, material);
-        mesh.position.set(x, y, z);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+        const fallback = new this.THREE.Mesh(geometry, material);
+        fallback.castShadow = true;
+        fallback.receiveShadow = true;
+        mesh.add(fallback);
+
+        // Try to load KayKit model (async, replace fallback if successful)
+        // Map enemy types to actual existing models with full paths
+        const characterModels = {
+            // Ice Region - Skeleton Models
+            'ice_undead': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_warrior.gltf',
+                scale: 2
+            },
+            'ice_elemental': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_mage.gltf',
+                scale: 2
+            },
+
+            // Desert Region - Knight & Barbarian
+            'desert_bandit': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_rogue.gltf',
+                scale: 2
+            },
+            'desert_sandworm': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 2.5
+            },
+
+            // Swamp Region - Witch & Mage
+            'swamp_witch': {
+                path: 'static/assets/KayKit Spooktober Seasonal Pack 1.1/Models/Characters/Witch/gltf/character_witch.gltf',
+                scale: 2
+            },
+            'swamp_monster': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_minion.gltf',
+                scale: 2.5
+            },
+
+            // Mountain Region - Big Barbarian
+            'mountain_giant': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 3
+            },
+
+            // Coast Region - Pirate & Knight
+            'coast_pirate': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_rogue.gltf',
+                scale: 2
+            },
+            'coast_seamonster': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_warrior.gltf',
+                scale: 2.5
+            },
+
+            // Caves Region - Minion
+            'caves_goblin': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_minion.gltf',
+                scale: 1.5
+            },
+
+            // Forest Region - Mage & Archer
+            'forest_druid': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_mage.gltf',
+                scale: 2
+            },
+            'forest_spirit': {
+                path: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_archer.gltf',
+                scale: 2
+            },
+
+            // Volcano Region - Barbarian & Warrior
+            'volcano_elemental': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+                scale: 2.5
+            },
+            'volcano_lavamonster': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_knight.gltf',
+                scale: 2.5
+            },
+
+            // Highland Region - Knight
+            'highland_guardian': {
+                path: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_knight.gltf',
+                scale: 2
+            }
+        };
+
+        const modelConfig = characterModels[type];
+        const modelPath = modelConfig ? modelConfig.path : null;
+        const modelScale = modelConfig ? modelConfig.scale : 2;
+
+        // Try async loading (don't block spawning!)
+        if (modelPath && typeof THREE !== 'undefined' && THREE.GLTFLoader) {
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                modelPath,
+                (gltf) => {
+                    // Remove fallback
+                    mesh.remove(fallback);
+
+                    // Add KayKit model
+                    const model = gltf.scene;
+                    model.scale.set(modelScale, modelScale, modelScale);
+
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+
+                            // Color tinting for enemy variation
+                            if (data.color) {
+                                const colorObj = new this.THREE.Color(data.color);
+                                child.material = child.material.clone();
+                                child.material.color.multiply(colorObj);
+                            }
+                        }
+                    });
+
+                    mesh.add(model);
+                    console.log(`✅ Loaded KayKit model for ${type}: ${modelPath}`);
+                },
+                undefined,
+                (error) => {
+                    console.warn(`⚠️ KayKit model failed for ${type} (${modelPath}), keeping fallback:`, error);
+                }
+            );
+        } else {
+            console.log(`ℹ️ No model configured for ${type}, using fallback geometry`);
+        }
 
         // Enemy Object
         const enemy = {
@@ -835,6 +964,23 @@ class RealtimeCombat {
     }
 
     // ===== UPDATE LOOP =====
+
+    setEnemyEmissive(enemy, color, intensity) {
+        // Helper function: enemy.mesh is now a Group, need to traverse children
+        if (!enemy || !enemy.mesh) return;
+
+        enemy.mesh.traverse((child) => {
+            if (child.isMesh && child.material) {
+                if (!child.material.emissive) {
+                    child.material.emissive = new this.THREE.Color(0x000000);
+                }
+                if (color) {
+                    child.material.emissive.set(color);
+                }
+                child.material.emissiveIntensity = intensity;
+            }
+        });
+    }
 
     update(delta, playerPosition) {
         // Update Cooldowns
@@ -870,9 +1016,60 @@ class RealtimeCombat {
             this.playerStamina = player.stamina;
         }
 
+        // Najika AI (ASSIST/AUTO Mode only!)
+        if ((this.combatMode === 'ASSIST' || this.combatMode === 'AUTO') && this.combatActive) {
+            this.updateNajikaAI(delta);
+        }
+
         // Update ALL enemies (AI, Movement)
         if (playerPosition) {
             this.updateEnemies(delta, playerPosition);
+        }
+    }
+
+    updateNajikaAI(delta) {
+        // Najika's AI: Auto-attack in ASSIST/AUTO mode
+        if (!this.najikaNextActionTime) {
+            this.najikaNextActionTime = Date.now() + 1500; // First action in 1.5s
+        }
+
+        const now = Date.now();
+        if (now >= this.najikaNextActionTime && this.currentTarget && this.currentTarget.alive) {
+            // Najika performs an action!
+            this.lastNajikaActionTime = now;
+
+            // Choose random action
+            const actions = ['attack_left', 'attack_right', 'attack_both', 'dodge'];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+
+            this.najikaState = randomAction === 'dodge' ? 'dodging' : 'attacking';
+
+            // Execute the action
+            if (randomAction === 'attack_left') {
+                this.leftHandLightAttack();
+                console.log('🤖 Najika: Linker Hand Angriff!');
+            } else if (randomAction === 'attack_right') {
+                this.rightHandLightAttack();
+                console.log('🤖 Najika: Rechter Hand Angriff!');
+            } else if (randomAction === 'attack_both') {
+                if (this.playerStamina >= 30) {
+                    this.bothHandsAttack();
+                    console.log('🤖 Najika: Beide Hände!');
+                } else {
+                    // Fallback to single hand
+                    this.leftHandLightAttack();
+                }
+            } else if (randomAction === 'dodge') {
+                console.log('🤖 Najika: Dodge!');
+            }
+
+            // Schedule next action (1.5-2.5s random)
+            this.najikaNextActionTime = now + 1500 + Math.random() * 1000;
+
+            // Back to idle after 0.5s
+            setTimeout(() => {
+                this.najikaState = 'idle';
+            }, 500);
         }
     }
 
@@ -903,10 +1100,7 @@ class RealtimeCombat {
                 enemy.mesh.rotation.y = angle;
 
                 // Visual: Glow if aggro
-                if (!enemy.mesh.material.emissive) {
-                    enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
-                }
-                enemy.mesh.material.emissiveIntensity = 0.3;
+                this.setEnemyEmissive(enemy, 0xff0000, 0.3);
 
                 // Attack if very close (< 3 units) and in combat
                 if (distance < 3 && this.combatActive && enemy === this.currentTarget) {
@@ -919,9 +1113,7 @@ class RealtimeCombat {
             } else {
                 // De-aggro if far away
                 enemy.aggro = false;
-                if (enemy.mesh.material.emissive) {
-                    enemy.mesh.material.emissiveIntensity = 0;
-                }
+                this.setEnemyEmissive(enemy, null, 0);
             }
         }
     }
@@ -961,8 +1153,7 @@ class RealtimeCombat {
 
         // Visual: Enemy glüht rot
         enemy.aggro = true;
-        enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
-        enemy.mesh.material.emissiveIntensity = 0.5;
+        this.setEnemyEmissive(enemy, 0xff0000, 0.5);
     }
 
     endCombat() {
@@ -1022,7 +1213,12 @@ class RealtimeCombat {
         } else if (hand === 'right') {
             this.rightHandWeapon = weapon;
         }
-        console.log(`⚔️ ${hand} Hand: ${weapon.type} equipped`);
+
+        if (weapon) {
+            console.log(`⚔️ ${hand} Hand: ${weapon.type} equipped`);
+        } else {
+            console.log(`🔓 ${hand} Hand: unequipped`);
+        }
     }
 }
 
