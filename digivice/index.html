@@ -423,6 +423,7 @@ input {
             <button id="cam-orbit" class="cloud-btn cam-btn active">Orbit</button>
             <button id="cam-third" class="cloud-btn cam-btn">Third</button>
             <button id="cam-first" class="cloud-btn cam-btn">First</button>
+            <button id="worldModeToggle" class="cloud-btn" style="background: linear-gradient(135deg, #667eea, #764ba2); font-weight: bold;">🗺️ Open World</button>
             <button id="faceNajikaBtn" class="cloud-btn">Najika ausrichten</button>
             <button id="webcamBtn" class="cloud-btn">Webcam</button>
             <button id="cloud" class="cloud-btn" style="display:none">Cloud aktivieren</button>
@@ -738,6 +739,17 @@ function applyCameraMode(mode) {
 if (cameraButtons[0]) cameraButtons[0].addEventListener('click', () => applyCameraMode('orbit'));
 if (cameraButtons[1]) cameraButtons[1].addEventListener('click', () => applyCameraMode('third'));
 if (cameraButtons[2]) cameraButtons[2].addEventListener('click', () => applyCameraMode('first'));
+
+// World Mode Toggle
+const worldModeToggle = document.getElementById('worldModeToggle');
+if (worldModeToggle) {
+    worldModeToggle.addEventListener('click', () => {
+        if (window.worldModeManager) {
+            const newMode = window.worldModeManager.currentMode === 'digivice' ? 'openworld' : 'digivice';
+            window.worldModeManager.switchMode(newMode);
+        }
+    });
+}
 
 if (faceBtn) {
     faceBtn.addEventListener('click', () => {
@@ -1990,6 +2002,9 @@ function closeLoRATraining() {
 <script src="/digivice/js/system_monitor.js"></script>
 <script src="/digivice/js/secure_messenger.js"></script>
 <script src="/digivice/js/terminal_modules.js"></script>
+<!-- Open World Systems -->
+<script src="/digivice/static/js/api_client.js"></script>
+<script src="/digivice/static/js/world_mode_manager.js"></script>
 <!-- INVENTAR PANEL (Toggle mit I-Taste) -->
 <div id="inventory-panel" style="
     position: fixed;
