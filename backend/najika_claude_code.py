@@ -216,3 +216,30 @@ def initialize():
 
 # Auto-Initialize beim Import
 initialize()
+
+
+# ===== LAUNCH CLAUDE CODE INTERACTIVE =====
+
+def launch_claude_code_session(task_description=None):
+    """
+    Öffnet ein neues Terminal-Fenster mit Claude Code (interaktiv)
+
+    Najika kann das aufrufen wenn:
+    - Die Aufgabe zu komplex ist
+    - User nach "Claude Code" fragt
+    - Interaktive Session gewünscht
+
+    Args:
+        task_description: Optionale Beschreibung der Aufgabe
+
+    Returns:
+        bool: True wenn erfolgreich gestartet
+    """
+    from najika_launch_claude_code import launch_claude_code_with_task, launch_claude_code_interactive
+
+    print("[NAJIKA] 🚀 Starte Claude Code für dich...")
+
+    if task_description:
+        return launch_claude_code_with_task(task_description)
+    else:
+        return launch_claude_code_interactive()
