@@ -939,9 +939,60 @@ class RealtimeCombat {
             this.playerStamina = player.stamina;
         }
 
+        // Najika AI (ASSIST/AUTO Mode only!)
+        if ((this.combatMode === 'ASSIST' || this.combatMode === 'AUTO') && this.combatActive) {
+            this.updateNajikaAI(delta);
+        }
+
         // Update ALL enemies (AI, Movement)
         if (playerPosition) {
             this.updateEnemies(delta, playerPosition);
+        }
+    }
+
+    updateNajikaAI(delta) {
+        // Najika's AI: Auto-attack in ASSIST/AUTO mode
+        if (!this.najikaNextActionTime) {
+            this.najikaNextActionTime = Date.now() + 1500; // First action in 1.5s
+        }
+
+        const now = Date.now();
+        if (now >= this.najikaNextActionTime && this.currentTarget && this.currentTarget.alive) {
+            // Najika performs an action!
+            this.lastNajikaActionTime = now;
+
+            // Choose random action
+            const actions = ['attack_left', 'attack_right', 'attack_both', 'dodge'];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+
+            this.najikaState = randomAction === 'dodge' ? 'dodging' : 'attacking';
+
+            // Execute the action
+            if (randomAction === 'attack_left') {
+                this.leftHandLightAttack();
+                console.log('🤖 Najika: Linker Hand Angriff!');
+            } else if (randomAction === 'attack_right') {
+                this.rightHandLightAttack();
+                console.log('🤖 Najika: Rechter Hand Angriff!');
+            } else if (randomAction === 'attack_both') {
+                if (this.playerStamina >= 30) {
+                    this.bothHandsAttack();
+                    console.log('🤖 Najika: Beide Hände!');
+                } else {
+                    // Fallback to single hand
+                    this.leftHandLightAttack();
+                }
+            } else if (randomAction === 'dodge') {
+                console.log('🤖 Najika: Dodge!');
+            }
+
+            // Schedule next action (1.5-2.5s random)
+            this.najikaNextActionTime = now + 1500 + Math.random() * 1000;
+
+            // Back to idle after 0.5s
+            setTimeout(() => {
+                this.najikaState = 'idle';
+            }, 500);
         }
     }
 
