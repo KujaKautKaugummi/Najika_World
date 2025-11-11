@@ -363,8 +363,8 @@
             <strong style="color: #FFC107;">Movement (Fortnite-Style):</strong><br>
             WASD = Bewegung (kamera-relativ)<br>
             <strong>Shift + W</strong> = Sprint 🏃<br>
-            <strong>Ctrl/C</strong> = Crouch 🐢<br>
-            <strong>Sprint + Ctrl/C</strong> = Slide 🏃💨<br>
+            <strong>Ctrl</strong> = Crouch 🐢<br>
+            <strong>Sprint + Ctrl</strong> = Slide 🏃💨<br>
             <br>
             <strong style="color: #2196F3;">Kamera:</strong><br>
             Tab = Kamera wechseln<br>
@@ -734,10 +734,9 @@
                 case 'shift':
                     keys.shift = true;
                     break;
-                case 'control':  // Ctrl für Crouch
-                case 'c':  // Alternative: C-Taste
+                case 'control':  // Ctrl für Crouch (C-Taste ist Combat Dodge!)
                     keys.ctrl = true;
-                    // Sliding: Shift + Ctrl/C = Slide
+                    // Sliding: Shift + Ctrl = Slide
                     if (isSprinting && !isCrouching && !isSliding) {
                         isSliding = true;
                         slideVelocity = 1.5;  // Schneller als Sprint
@@ -771,7 +770,6 @@
                     isSprinting = false;
                     break;
                 case 'control':
-                case 'c':
                     keys.ctrl = false;
                     if (!isSliding) {
                         isCrouching = false;
