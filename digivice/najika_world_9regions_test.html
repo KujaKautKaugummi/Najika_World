@@ -1184,8 +1184,12 @@
         window.teleportTo = (region) => {
             const pos = regionPositions[region];
             if (pos) {
-                camera.position.set(pos.x, 50, pos.z + 50);
-                cameraController.setTarget(pos.x, 5, pos.z);
+                // Teleportiere Character zur Region
+                const groundHeight = getGroundHeight(pos.x, pos.z);
+                character.position.set(pos.x, groundHeight + 3.5, pos.z);
+
+                // Setze Kamera-Target
+                cameraController.setTarget(pos.x, groundHeight, pos.z);
                 updateCurrentRegion();
             }
         };
