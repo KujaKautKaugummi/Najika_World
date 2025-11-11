@@ -470,29 +470,47 @@
                 lastTime = currentTime;
             }
 
-            // WASD-Bewegung
+            // WASD-Bewegung (relativ zur Kamera)
             let forward = 0;
             let right = 0;
 
-            if (keys.w) forward -= 1;  // W = vorwärts (Z-)
-            if (keys.s) forward += 1;  // S = rückwärts (Z+)
-            if (keys.a) right -= 1;    // A = links
-            if (keys.d) right += 1;    // D = rechts
+            if (keys.w) forward += 1;  // W = vorwärts in Kamera-Richtung
+            if (keys.s) forward -= 1;  // S = rückwärts in Kamera-Richtung
+            if (keys.a) right -= 1;    // A = links (von Kamera aus)
+            if (keys.d) right += 1;    // D = rechts (von Kamera aus)
 
             // Bewegung relativ zur Kamera
             if (forward !== 0 || right !== 0) {
                 const speed = keys.shift ? 120 : 60;
-                const angle = Math.atan2(right, forward);
-                const worldAngle = cameraController.orbitYaw + angle;
 
-                const moveX = Math.sin(worldAngle) * speed * deltaTime;
-                const moveZ = Math.cos(worldAngle) * speed * deltaTime;
+                // Normalisiere Bewegung für diagonale Bewegung
+                const length = Math.sqrt(forward * forward + right * right);
+                const normalizedForward = forward / length;
+                const normalizedRight = right / length;
+
+                // Berechne Bewegung basierend auf Kamera-Yaw
+                const cameraYaw = cameraController.orbitYaw;
+
+                // Forward/backward relativ zur Kamera
+                const forwardX = -Math.sin(cameraYaw) * normalizedForward;
+                const forwardZ = -Math.cos(cameraYaw) * normalizedForward;
+
+                // Left/right relativ zur Kamera
+                const rightX = Math.cos(cameraYaw) * normalizedRight;
+                const rightZ = -Math.sin(cameraYaw) * normalizedRight;
+
+                // Kombiniere Bewegungen
+                const moveX = (forwardX + rightX) * speed * deltaTime;
+                const moveZ = (forwardZ + rightZ) * speed * deltaTime;
 
                 character.position.x += moveX;
                 character.position.z += moveZ;
 
-                // Charakter-Rotation
-                character.rotation.y = worldAngle + Math.PI;
+                // Charakter-Rotation in Bewegungsrichtung
+                if (forward !== 0 || right !== 0) {
+                    const moveAngle = Math.atan2(moveX, moveZ);
+                    character.rotation.y = moveAngle;
+                }
 
                 // Kamera-Target nachführen
                 cameraController.setTarget(
