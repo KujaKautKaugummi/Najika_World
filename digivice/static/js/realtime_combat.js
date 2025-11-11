@@ -29,9 +29,10 @@
  */
 
 class RealtimeCombat {
-    constructor(scene, THREE) {
+    constructor(scene, THREE, foodSystem = null) {
         this.scene = scene;
         this.THREE = THREE;
+        this.foodSystem = foodSystem; // Food System Integration
 
         // Combat State
         this.combatActive = false;
@@ -421,8 +422,25 @@ class RealtimeCombat {
             baseDamage *= cheerBonus;
         }
 
+        // FOOD BUFFS (Phase 4!)
+        if (this.foodSystem) {
+            const buffSummary = this.foodSystem.getBuffSummary();
+            if (buffSummary.damage > 0) {
+                baseDamage *= (1 + buffSummary.damage / 100);
+            }
+        }
+
         // Random Variance
         baseDamage *= (0.9 + Math.random() * 0.2); // 90-110%
+
+        // Crit Chance (Food Buffs)
+        if (this.foodSystem) {
+            const buffed = this.foodSystem.calculateBuffedStats({ critChance: 0 });
+            if (buffed.critChance > 0 && Math.random() * 100 < buffed.critChance) {
+                baseDamage *= 2; // CRITICAL HIT!
+                console.log('💥 CRITICAL HIT! x2 Damage!');
+            }
+        }
 
         return Math.floor(baseDamage);
     }
@@ -824,9 +842,32 @@ class RealtimeCombat {
         if (this.rightHandCooldown > 0) this.rightHandCooldown -= delta * 1000;
         if (this.bothHandsCooldown > 0) this.bothHandsCooldown -= delta * 1000;
 
-        // Stamina Regen (auch außerhalb Combat)
+        // Stamina Regen (Base + Food Buffs)
+        let staminaRegen = 10; // Base
+        if (this.foodSystem) {
+            const buffSummary = this.foodSystem.getBuffSummary();
+            staminaRegen += buffSummary.stamina_regen;
+        }
+
         if (this.playerStamina < this.playerMaxStamina) {
-            this.playerStamina = Math.min(this.playerMaxStamina, this.playerStamina + delta * 10);
+            this.playerStamina = Math.min(this.playerMaxStamina, this.playerStamina + delta * staminaRegen);
+        }
+
+        // Food System Update (HP/Mana/Stamina Regens)
+        if (this.foodSystem) {
+            const player = this.foodSystem.updateRegens(delta, {
+                health: this.playerHealth,
+                maxHealth: this.playerMaxHealth,
+                mana: this.playerMana,
+                maxMana: this.playerMaxMana,
+                stamina: this.playerStamina,
+                maxStamina: this.playerMaxStamina
+            });
+
+            // Apply updated values
+            this.playerHealth = player.health;
+            this.playerMana = player.mana;
+            this.playerStamina = player.stamina;
         }
 
         // Update ALL enemies (AI, Movement)
