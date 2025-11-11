@@ -427,6 +427,7 @@ input {
             <button id="faceNajikaBtn" class="cloud-btn">Najika ausrichten</button>
             <button id="webcamBtn" class="cloud-btn">Webcam</button>
             <button id="cloud" class="cloud-btn" style="display:none">Cloud aktivieren</button>
+            <button id="voiceCallBtn" class="cloud-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); font-weight: bold;">📞 Voice Call</button>
         </div>
     </header>
 
@@ -2137,6 +2138,117 @@ function closeLoRATraining() {
     </div>
 </div>
 
+<!-- 📞 VOICE CALL PANEL -->
+<div id="voice-call-panel" style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    max-height: 600px;
+    background: rgba(20, 20, 35, 0.98);
+    border: 3px solid #ff6b6b;
+    border-radius: 15px;
+    padding: 20px;
+    display: none;
+    z-index: 4000;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #ff6b6b; padding-bottom: 10px;">
+        <h3 style="margin: 0; color: #ff6b6b;">📞 Voice Call mit Najika</h3>
+        <button onclick="endVoiceCall()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 0;">&times;</button>
+    </div>
+
+    <!-- Call Status -->
+    <div id="call-status" style="text-align: center; padding: 20px; color: #eaeaea; font-size: 16px; margin-bottom: 20px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+        <div id="call-status-text">Bereit zum Anrufen</div>
+        <div id="call-duration" style="font-size: 14px; color: #aaa; margin-top: 10px; display: none;">00:00</div>
+    </div>
+
+    <!-- Audio Visualizer -->
+    <div style="margin-bottom: 20px;">
+        <canvas id="audio-visualizer" width="410" height="80" style="
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        "></canvas>
+    </div>
+
+    <!-- Transcript -->
+    <div style="margin-bottom: 20px;">
+        <h4 style="color: #a3b3ff; margin-bottom: 10px; font-size: 14px;">📝 Transkript:</h4>
+        <div id="call-transcript" style="
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 150px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+            color: #eaeaea;
+        ">
+            <p style="color: #888; text-align: center;">Das Gespräch erscheint hier...</p>
+        </div>
+    </div>
+
+    <!-- Call Controls -->
+    <div style="display: flex; gap: 10px; justify-content: center;">
+        <button id="start-call-btn" onclick="startVoiceCall()" style="
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        ">
+            📞 Anruf starten
+        </button>
+        <button id="end-call-btn" onclick="endVoiceCall()" style="
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+        ">
+            📵 Anruf beenden
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div id="call-stats" style="
+        margin-top: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        font-size: 12px;
+        color: #aaa;
+        display: none;
+    ">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span>STT Latenz:</span>
+            <span id="stt-latency">-- ms</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>TTS Latenz:</span>
+            <span id="tts-latency">-- ms</span>
+        </div>
+    </div>
+</div>
+
 <script>
 // Toggle Panels mit Keyboard
 document.addEventListener('keydown', (e) => {
@@ -2252,6 +2364,7 @@ async function updateSkillsPanel() {
 <script src="/digivice/js/buildings_custom.js?v=25"></script>
 <script src="/digivice/js/character_animations.js?v=26"></script>
 <script src="/digivice/js/3d_scene.js?v=33"></script>
+<script src="/digivice/js/voice_call.js?v=1"></script>
 
 </body>
 </html>

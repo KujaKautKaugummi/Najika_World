@@ -102,13 +102,13 @@ class NightTrainingSession:
             if datetime.now() >= self.end_time:
                 break
 
-        # PHASE 3: Advanced Training (2h)
-        self.log("\n[PHASE 3/5] Advanced Training (2h)")
+        # PHASE 3: Advanced Training - NEW MODULES! (2h)
+        self.log("\n[PHASE 3/5] Advanced Training - NEW 2025 Research-Based! (2h)")
         advanced_scripts = [
-            ("najika_create_advanced_training.py", "Advanced Problem Solving", 30),
-            ("najika_create_coding_training.py", "Complex Coding Patterns", 30),
-            ("najika_human_like_trainer.py", "Human-like Response Training", 30),
-            ("najika_create_complete_training.py", "Complete Training Suite", 30)
+            ("najika_advisor_training.py", "Advisor Training (Lebensberatung)", 30),
+            ("najika_thought_organizer_training.py", "Thought Organization (Mind-Maps)", 30),
+            ("najika_fact_checker_training.py", "Fact Checker (Error Detection)", 30),
+            ("najika_emotional_intelligence_training.py", "Emotional Intelligence (RLHF)", 30)
         ]
 
         for script, desc, duration in advanced_scripts:
