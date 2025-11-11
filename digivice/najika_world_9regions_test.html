@@ -305,6 +305,7 @@
         <p><strong>Gebiet:</strong> <span id="current-region" class="region-label">-</span></p>
         <p><strong>Geladene Assets:</strong> <span id="asset-count">0</span></p>
         <p><strong>FPS:</strong> <span id="fps">60</span></p>
+        <p><strong>Movement:</strong> <span id="movement-state" style="color: #4CAF50;">Normal</span></p>
         <hr style="margin: 15px 0; border-color: #333;">
         <p style="font-size: 12px; opacity: 0.8;">
             <strong>9 Gebiete (3x3 Grid):</strong><br>
@@ -354,6 +355,27 @@
     <div id="backend-status">
         <div class="status-dot offline" id="status-dot"></div>
         <span id="status-text">Backend Offline</span>
+    </div>
+
+    <div id="controls-info" style="position: absolute; top: 450px; right: 20px; background: rgba(0, 0, 0, 0.8); color: white; padding: 15px; border-radius: 10px; font-size: 12px; max-width: 250px; border: 2px solid #4CAF50;">
+        <h3 style="margin: 0 0 10px 0; color: #4CAF50;">🎮 CONTROLS</h3>
+        <div style="color: #aaa; line-height: 1.6;">
+            <strong style="color: #FFC107;">Movement (Fortnite-Style):</strong><br>
+            WASD = Bewegung (kamera-relativ)<br>
+            <strong>Shift + W</strong> = Sprint 🏃<br>
+            <strong>Ctrl/C</strong> = Crouch 🐢<br>
+            <strong>Sprint + Ctrl/C</strong> = Slide 🏃💨<br>
+            <br>
+            <strong style="color: #2196F3;">Kamera:</strong><br>
+            Tab = Kamera wechseln<br>
+            Maus/Touch = Kamera drehen<br>
+            Scroll = Zoom<br>
+            <br>
+            <strong style="color: #FF6B9D;">Combat:</strong><br>
+            F6 = Combat Mode wechseln<br>
+            Q/E = Angriffe<br>
+            C = Dodge | X = Block | V = Parry
+        </div>
     </div>
 
     <div id="e-prompt">
@@ -686,14 +708,22 @@
             }
         });
 
-        // WASD-Steuerung
+        // WASD-Steuerung (Fortnite-Style erweitert)
         const keys = {
             w: false,
             a: false,
             s: false,
             d: false,
-            shift: false
+            shift: false,
+            ctrl: false  // Crouch
         };
+
+        // Movement State (Fortnite-Features)
+        let isSprinting = false;
+        let isCrouching = false;
+        let isSliding = false;
+        let slideVelocity = 0;
+        let slideDirection = 0;
 
         window.addEventListener('keydown', (e) => {
             switch(e.key.toLowerCase()) {
@@ -701,7 +731,32 @@
                 case 'a': keys.a = true; break;
                 case 's': keys.s = true; break;
                 case 'd': keys.d = true; break;
-                case 'shift': keys.shift = true; break;
+                case 'shift':
+                    keys.shift = true;
+                    break;
+                case 'control':  // Ctrl für Crouch
+                case 'c':  // Alternative: C-Taste
+                    keys.ctrl = true;
+                    // Sliding: Shift + Ctrl/C = Slide
+                    if (isSprinting && !isCrouching && !isSliding) {
+                        isSliding = true;
+                        slideVelocity = 1.5;  // Schneller als Sprint
+                        // Slide-Richtung: Aktuelle Bewegungsrichtung
+                        if (keys.w || keys.a || keys.s || keys.d) {
+                            const cameraYaw = cameraController.getCameraYaw();
+                            let angle = 0;
+                            if (keys.w && !keys.a && !keys.d) angle = cameraYaw;
+                            else if (keys.w && keys.d) angle = cameraYaw - Math.PI/4;
+                            else if (keys.d && !keys.w && !keys.s) angle = cameraYaw - Math.PI/2;
+                            else if (keys.s && keys.d) angle = cameraYaw - 3*Math.PI/4;
+                            else if (keys.s && !keys.a && !keys.d) angle = cameraYaw - Math.PI;
+                            else if (keys.s && keys.a) angle = cameraYaw + 3*Math.PI/4;
+                            else if (keys.a && !keys.w && !keys.s) angle = cameraYaw + Math.PI/2;
+                            else if (keys.w && keys.a) angle = cameraYaw + Math.PI/4;
+                            slideDirection = angle;
+                        }
+                    }
+                    break;
             }
         });
 
@@ -711,7 +766,17 @@
                 case 'a': keys.a = false; break;
                 case 's': keys.s = false; break;
                 case 'd': keys.d = false; break;
-                case 'shift': keys.shift = false; break;
+                case 'shift':
+                    keys.shift = false;
+                    isSprinting = false;
+                    break;
+                case 'control':
+                case 'c':
+                    keys.ctrl = false;
+                    if (!isSliding) {
+                        isCrouching = false;
+                    }
+                    break;
             }
         });
 
@@ -1776,47 +1841,125 @@
             const delta = 0.016;
             cameraController.update(delta);
 
-            // Movement: WASD + Mobile Joystick (Bug-Fix: First-Person Camera-relative)
-            const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
-            let dx = 0;
-            let dz = 0;
+            // ===== FORTNITE-STYLE MOVEMENT SYSTEM =====
 
-            // WASD Keyboard Input
-            if (keys.w) dz += moveSpeed;  // Vorwärts
-            if (keys.s) dz -= moveSpeed;  // Rückwärts
-            if (keys.a) dx += moveSpeed;  // Links
-            if (keys.d) dx -= moveSpeed;  // Rechts
-
-            // Mobile Joystick Input
-            if (joystickActive) {
-                dx += joystickVector.x * moveSpeed;
-                dz += joystickVector.z * moveSpeed;
+            // Sliding Update (Decay)
+            if (isSliding) {
+                slideVelocity -= delta * 3;  // Schnell langsamer werden
+                if (slideVelocity <= 0 || !keys.ctrl) {
+                    isSliding = false;
+                    slideVelocity = 0;
+                    isCrouching = keys.ctrl;  // Wechsel zu Crouch wenn Ctrl noch gedrückt
+                }
             }
 
-            // Bewegung anwenden
-            if (dx !== 0 || dz !== 0) {
-                // In First-Person: Bewegung relativ zur Kamera-Blickrichtung
-                const currentMode = cameraController.getMode();
-                if (currentMode === cameraController.MODES.FIRST) {
-                    // Berechne Bewegung relativ zur Kamera-Rotation
-                    const cameraYaw = cameraController.orbitYaw;
-                    const cos = Math.cos(cameraYaw);
-                    const sin = Math.sin(cameraYaw);
+            // Sprint Update (nur bei Vorwärtsbewegung)
+            if (keys.shift && keys.w && !isCrouching && !isSliding) {
+                isSprinting = true;
+            } else if (!keys.shift || !keys.w) {
+                isSprinting = false;
+            }
 
-                    const worldDx = dx * cos - dz * sin;
-                    const worldDz = dx * sin + dz * cos;
+            // Crouch Update (ohne Slide)
+            if (keys.ctrl && !isSliding) {
+                isCrouching = true;
+            } else if (!keys.ctrl) {
+                isCrouching = false;
+            }
 
-                    character.position.x += worldDx;
-                    character.position.z += worldDz;
-                } else {
-                    // Third-Person / Orbit: Normale Bewegung
-                    character.position.x += dx;
-                    character.position.z += dz;
+            // Movement Speed basierend auf State
+            let moveSpeed = 0.5;  // Base
+            if (isSliding) {
+                moveSpeed = slideVelocity;  // Sliding (wird weniger)
+            } else if (isSprinting) {
+                moveSpeed = 1.0;  // Sprint (2x base)
+            } else if (isCrouching) {
+                moveSpeed = 0.25;  // Crouch (0.5x base)
+            }
 
-                    // Character dreht sich in Bewegungsrichtung (nur in Third-Person)
-                    const targetRotation = Math.atan2(dx, dz);
-                    character.rotation.y = targetRotation;
+            let dx = 0;
+            let dz = 0;
+            let hasMovementInput = false;
+
+            // WASD Keyboard Input (relativ zur Kamera-Blickrichtung)
+            if (!isSliding) {
+                if (keys.w) { dz += 1; hasMovementInput = true; }
+                if (keys.s) { dz -= 1; hasMovementInput = true; }
+                if (keys.a) { dx += 1; hasMovementInput = true; }
+                if (keys.d) { dx -= 1; hasMovementInput = true; }
+
+                // Normalize diagonal movement
+                if (dx !== 0 && dz !== 0) {
+                    const length = Math.sqrt(dx * dx + dz * dz);
+                    dx /= length;
+                    dz /= length;
                 }
+
+                dx *= moveSpeed;
+                dz *= moveSpeed;
+            } else {
+                // Sliding: Bewegung in Slide-Richtung
+                dx = Math.sin(slideDirection) * moveSpeed;
+                dz = Math.cos(slideDirection) * moveSpeed;
+                hasMovementInput = true;
+            }
+
+            // Mobile Joystick Input
+            if (joystickActive && !isSliding) {
+                dx += joystickVector.x * moveSpeed;
+                dz += joystickVector.z * moveSpeed;
+                hasMovementInput = true;
+            }
+
+            // Bewegung anwenden (IMMER kamera-relativ in Third/First-Person!)
+            if (hasMovementInput && (dx !== 0 || dz !== 0)) {
+                const currentMode = cameraController.getMode();
+                const cameraYaw = cameraController.getCameraYaw();
+
+                // Kamera-relative Bewegung (für Third + First Person)
+                const cos = Math.cos(cameraYaw);
+                const sin = Math.sin(cameraYaw);
+
+                const worldDx = dx * cos - dz * sin;
+                const worldDz = dx * sin + dz * cos;
+
+                character.position.x += worldDx;
+                character.position.z += worldDz;
+
+                // Character Rotation (Fortnite-Style: dreht sich zur Bewegungsrichtung)
+                if (currentMode === cameraController.MODES.THIRD || currentMode === cameraController.MODES.FIRST) {
+                    if (!isSliding) {
+                        // Character dreht sich zur Bewegungsrichtung (relativ zur Kamera)
+                        const moveAngle = Math.atan2(worldDx, worldDz);
+                        character.rotation.y = moveAngle;
+                    }
+                    // Während Slide: Rotation bleibt wie sie ist
+                }
+
+                // Visual Feedback für States (Höhe anpassen)
+                if (isCrouching && !isSliding) {
+                    character.scale.y = 0.7;  // Ducken
+                } else if (isSliding) {
+                    character.scale.y = 0.5;  // Slide (noch tiefer)
+                } else {
+                    character.scale.y = 1.0;  // Normal
+                }
+            }
+
+            // UI Update: Movement State
+            const movementStateEl = document.getElementById('movement-state');
+            if (isSliding) {
+                movementStateEl.textContent = '🏃💨 SLIDING';
+                movementStateEl.style.color = '#FF6B9D';
+            } else if (isSprinting) {
+                movementStateEl.textContent = '🏃 SPRINT';
+                movementStateEl.style.color = '#FFC107';
+            } else if (isCrouching) {
+                movementStateEl.textContent = '🐢 CROUCH';
+                movementStateEl.style.color = '#2196F3';
+            } else {
+                movementStateEl.textContent = 'Normal';
+                movementStateEl.style.color = '#4CAF50';
             }
 
             // Keep character within map bounds
