@@ -803,17 +803,78 @@ class RealtimeCombat {
     }
 
     spawnEnemy(type, x, y, z, data) {
-        // Create Enemy Mesh (simple colored box)
-        const geometry = new this.THREE.BoxGeometry(2, 3, 2);
-        const material = new this.THREE.MeshStandardMaterial({
-            color: data.color,
-            roughness: 0.7,
-            metalness: 0.3
-        });
-        const mesh = new this.THREE.Mesh(geometry, material);
+        // KayKit Character Models Mapping
+        const characterModels = {
+            'ice_elemental': 'character_skeleton.gltf',
+            'fire_drake': 'character_golem.gltf',
+            'sand_nomad': 'character_knight.gltf',
+            'swamp_witch': 'character_mage.gltf',
+            'forest_guardian': 'character_golem.gltf'
+        };
+
+        const modelFile = characterModels[type] || 'character_skeleton.gltf';
+        const modelPath = `static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/${modelFile}`;
+
+        // Create mesh container
+        const mesh = new this.THREE.Group();
         mesh.position.set(x, y, z);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+
+        // Try to load KayKit model
+        if (window.GLTFLoader) {
+            const loader = new this.THREE.GLTFLoader();
+            loader.load(
+                modelPath,
+                (gltf) => {
+                    const model = gltf.scene;
+                    model.scale.set(2, 2, 2); // Scale up
+
+                    // Apply color tint
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+
+                            // Tint with enemy color
+                            if (data.color) {
+                                const colorObj = new this.THREE.Color(data.color);
+                                child.material = child.material.clone();
+                                child.material.color.multiply(colorObj);
+                            }
+                        }
+                    });
+
+                    mesh.add(model);
+                    console.log(`✅ Loaded KayKit model for ${type}: ${modelFile}`);
+                },
+                undefined,
+                (error) => {
+                    console.warn(`⚠️ Could not load KayKit model for ${type}, using fallback`);
+                    // Fallback: simple colored box
+                    const geometry = new this.THREE.BoxGeometry(2, 3, 2);
+                    const material = new this.THREE.MeshStandardMaterial({
+                        color: data.color,
+                        roughness: 0.7,
+                        metalness: 0.3
+                    });
+                    const fallback = new this.THREE.Mesh(geometry, material);
+                    fallback.castShadow = true;
+                    fallback.receiveShadow = true;
+                    mesh.add(fallback);
+                }
+            );
+        } else {
+            // No GLTF Loader, use simple fallback
+            const geometry = new this.THREE.BoxGeometry(2, 3, 2);
+            const material = new this.THREE.MeshStandardMaterial({
+                color: data.color,
+                roughness: 0.7,
+                metalness: 0.3
+            });
+            const fallback = new this.THREE.Mesh(geometry, material);
+            fallback.castShadow = true;
+            fallback.receiveShadow = true;
+            mesh.add(fallback);
+        }
 
         // Enemy Object
         const enemy = {

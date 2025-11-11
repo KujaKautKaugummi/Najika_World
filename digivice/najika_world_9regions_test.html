@@ -495,6 +495,63 @@
         realtimeCombat.equipWeapon('left', { type: 'fire_sword', element: 'fire', damage: 15 });
         realtimeCombat.equipWeapon('right', { type: 'ice_dagger', element: 'ice', damage: 12 });
 
+        // Combat Mode Toggle (F6 key)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'F6') {
+                e.preventDefault();
+                const currentMode = realtimeCombat.combatMode;
+                let nextMode = 'MANUAL';
+
+                if (currentMode === 'MANUAL') {
+                    nextMode = 'ASSIST';
+                } else if (currentMode === 'ASSIST') {
+                    nextMode = 'AUTO';
+                } else {
+                    nextMode = 'MANUAL';
+                }
+
+                realtimeCombat.setCombatMode(nextMode);
+                console.log(`🎮 Combat Mode: ${nextMode}`);
+
+                // Show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.95);
+                    color: white;
+                    padding: 30px 50px;
+                    border-radius: 15px;
+                    border: 3px solid #FFD700;
+                    font-size: 24px;
+                    font-weight: bold;
+                    z-index: 10000;
+                    text-align: center;
+                `;
+
+                const modeInfo = {
+                    'MANUAL': { icon: '⚔️', desc: 'Volle Kontrolle', keys: 'Q/E/SPACE/C/X/V' },
+                    'ASSIST': { icon: '📣', desc: 'Najika kämpft, du feuerst an!', keys: '1/2/3/4' },
+                    'AUTO': { icon: '🤖', desc: 'Najika kämpft alleine', keys: '1/2/3/4 (optional)' }
+                };
+
+                const info = modeInfo[nextMode];
+                notification.innerHTML = `
+                    ${info.icon} ${nextMode} MODE ${info.icon}<br>
+                    <div style="font-size: 14px; margin-top: 10px; color: #aaa;">${info.desc}</div>
+                    <div style="font-size: 12px; margin-top: 5px; color: #FFD700;">Tasten: ${info.keys}</div>
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }
+        });
+
         // Verbesserte Lighting für bessere Atmosphäre
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
         scene.add(ambientLight);
@@ -3481,12 +3538,18 @@
 
 
         // Update tracker every second
+        let lastUpdateTime = Date.now();
         setInterval(() => {
             if (!questLogOpen) {
                 updateQuestTracker();
 
             // Update Performance Monitor (Phase 10)
             performanceMonitor.update(renderer);
+
+                // Calculate delta time (in seconds)
+                const currentTime = Date.now();
+                const delta = (currentTime - lastUpdateTime) / 1000;
+                lastUpdateTime = currentTime;
 
                 // Update Special Features (Phase 8)
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
