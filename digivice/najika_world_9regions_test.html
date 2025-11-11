@@ -389,6 +389,7 @@
     <script src="static/js/inventory_system.js"></script>
     <script src="static/js/npc_system.js"></script>
     <script src="static/js/quest_system.js"></script>
+    <script src="static/js/special_features.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -441,6 +442,15 @@
         const npcSystem = new NPCSystem(scene, THREE);
         // Quest System (Phase 7: Quests + Tracking)
         const questManager = new QuestManager();
+
+
+        // Special Features System (Phase 8: Arena, Onsen, Leuchtturm, Player Shops)
+        const specialFeatures = new SpecialFeatures(scene, THREE, inventorySystem, foodSystem);
+
+        // Create UI elements
+        specialFeatures.createOnsenUI();
+        specialFeatures.createLighthouseClimbUI();
+        specialFeatures.createArenaUI();
 
         // Auto-accept World Explorer quest
         questManager.acceptQuest('world_explorer');
@@ -2251,6 +2261,10 @@
             if (result) {
                 questManager.updateQuestsByTrigger('collect', itemId, quantity);
                 updateQuestTracker();
+                // Update Special Features (Phase 8)
+                const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+                specialFeatures.update(delta, character.position, currentBuildings);
+
             }
 
             return result;
@@ -2275,11 +2289,54 @@
                 exploredRegions.add(regionName);
                 questManager.updateQuestsByTrigger('explore', regionName, 1);
                 updateQuestTracker();
+                // Update Special Features (Phase 8)
+                const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+                specialFeatures.update(delta, character.position, currentBuildings);
+
                 console.log(`🗺️ Explored: ${regionName}`);
             }
         }
 
         console.log('🔗 Quest Hooks installed!');
+
+        // Leuchtturm Climbing Controls (Phase 8)
+        let isPressingClimb = false;
+        let nearLighthouse = null;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                if (isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                    isPressingClimb = true;
+
+                    // Check if near lighthouse
+                    const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+                    nearLighthouse = specialFeatures.checkLighthouseProximity(character.position, currentBuildings);
+
+                    if (nearLighthouse && !specialFeatures.isClimbing) {
+                        e.preventDefault();
+                        specialFeatures.startClimbing(nearLighthouse);
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                isPressingClimb = false;
+            }
+        });
+
+        // Update climbing in game loop
+        setInterval(() => {
+            if (specialFeatures.isClimbing && isInInterior) {
+                const climbHeight = specialFeatures.updateClimbing(0.016, isPressingClimb);
+                // Adjust character height
+                if (nearLighthouse) {
+                    character.position.y = 3.5 + climbHeight;
+                }
+            }
+        }, 16); // 60 FPS
+
 
 
         // ===== NPC INTERACTION SYSTEM (Phase 6) =====
@@ -2614,6 +2671,110 @@
         });
 
         console.log('💬 NPC Dialogue System ready! Press E to talk to NPCs!');
+
+        // Building Interaction (Phase 8)
+        function checkBuildingInteraction() {
+            if (!isInInterior || dialogueOpen || inventoryOpen || questLogOpen) return;
+
+            const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+
+            // Check Arena
+            for (const building of currentBuildings) {
+                if (building.userData.buildingType === 'arena') {
+                    const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
+                    if (distance < 15) {
+                        // Show Arena prompt
+                        const prompt = document.getElementById('building-prompt');
+                        if (prompt) {
+                            prompt.textContent = '🏟️ Drücke E um die Arena zu betreten';
+                            prompt.style.display = 'block';
+                        }
+                        return; // Only one prompt at a time
+                    }
+                }
+
+                // Check Player Shop
+                if (building.userData.buildingType === 'player_shop') {
+                    const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
+                    if (distance < 5) {
+                        const prompt = document.getElementById('building-prompt');
+                        if (prompt) {
+                            prompt.textContent = `🛒 Drücke E für ${building.userData.buildingName}`;
+                            prompt.style.display = 'block';
+                        }
+                        return;
+                    }
+                }
+            }
+
+            // Hide prompt if not near anything
+            const prompt = document.getElementById('building-prompt');
+            if (prompt) prompt.style.display = 'none';
+        }
+
+        // Create building prompt UI
+        const buildingPrompt = document.createElement('div');
+        buildingPrompt.id = 'building-prompt';
+        buildingPrompt.style.cssText = `
+            position: fixed;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            display: none;
+            z-index: 500;
+        `;
+        document.body.appendChild(buildingPrompt);
+
+        // Check every frame
+        setInterval(checkBuildingInteraction, 100);
+
+        // E key handler for buildings
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+
+                // Check Arena
+                for (const building of currentBuildings) {
+                    if (building.userData.buildingType === 'arena') {
+                        const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
+                        if (distance < 15) {
+                            // Show Arena UI
+                            const arenaUI = document.getElementById('arena-ui');
+                            if (arenaUI) {
+                                arenaUI.innerHTML = specialFeatures.showArenaModeSelection();
+                                arenaUI.style.display = 'block';
+                            }
+                            return;
+                        }
+                    }
+
+                    // Check Player Shop
+                    if (building.userData.buildingType === 'player_shop') {
+                        const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
+                        if (distance < 5) {
+                            alert(building.userData.buildingName + '\n\nComing Soon: Multiplayer Player Shops! 🛒');
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // ESC to close Arena UI
+            if (e.key === 'Escape') {
+                const arenaUI = document.getElementById('arena-ui');
+                if (arenaUI && arenaUI.style.display === 'block') {
+                    arenaUI.style.display = 'none';
+                }
+            }
+        });
+
         // ===== QUEST SYSTEM UI (Phase 7) =====
 
         let questLogOpen = false;
@@ -3028,10 +3189,22 @@
 
         console.log('📋 Quest UI ready! Press Q or J to open Quest Log!');
 
+        // Arena Mode Selection (Phase 8)
+        window.selectArenaMode = function(mode) {
+            specialFeatures.selectArenaMode(mode);
+            const arenaUI = document.getElementById('arena-ui');
+            if (arenaUI) arenaUI.style.display = 'none';
+        };
+
+
         // Update tracker every second
         setInterval(() => {
             if (!questLogOpen) {
                 updateQuestTracker();
+                // Update Special Features (Phase 8)
+                const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
+                specialFeatures.update(delta, character.position, currentBuildings);
+
             }
         }, 1000);
 
