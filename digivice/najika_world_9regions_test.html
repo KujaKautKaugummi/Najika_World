@@ -515,9 +515,6 @@
         character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
         scene.add(character);
 
-        // Lade Najika Character Model
-        loadNajikaCharacter();
-
         // Camera folgt Character (Third-Person Mode)
         cameraController.setCharacter(character, 4.5); // Höher für Mage-Model
         cameraController.setMode(cameraController.MODES.THIRD);
@@ -747,6 +744,9 @@
         const loadedAssets = [];
         let totalAssets = 0;
         let loadedCount = 0;
+
+        // Lade Najika Character Model (nach gltfLoader Definition!)
+        loadNajikaCharacter();
 
         // Assets für jedes Gebiet
         const regionAssets = {
@@ -1091,7 +1091,7 @@
                 type: 'special',
                 region: 'swamp',
                 position: { x: -70, y: 0, z: 0 },
-                model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone_cross.gltf',
+                model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone.gltf',
                 scale: 2.0,
                 color: 0xff1493, // Pink
                 description: 'Schatzhöhle & Hexen'
@@ -1306,7 +1306,7 @@
             const delta = 0.016;
             cameraController.update(delta);
 
-            // Movement: WASD + Mobile Joystick (Phase 6)
+            // Movement: WASD + Mobile Joystick (Bug-Fix: First-Person Camera-relative)
             const moveSpeed = keys.shift ? 1.0 : 0.5;  // Shift = schneller
             let dx = 0;
             let dz = 0;
@@ -1325,12 +1325,28 @@
 
             // Bewegung anwenden
             if (dx !== 0 || dz !== 0) {
-                character.position.x += dx;
-                character.position.z += dz;
+                // In First-Person: Bewegung relativ zur Kamera-Blickrichtung
+                const currentMode = cameraController.getMode();
+                if (currentMode === cameraController.MODES.FIRST) {
+                    // Berechne Bewegung relativ zur Kamera-Rotation
+                    const cameraYaw = cameraController.orbitYaw;
+                    const cos = Math.cos(cameraYaw);
+                    const sin = Math.sin(cameraYaw);
 
-                // Character dreht sich in Bewegungsrichtung
-                const targetRotation = Math.atan2(dx, dz);
-                character.rotation.y = targetRotation;
+                    const worldDx = dx * cos - dz * sin;
+                    const worldDz = dx * sin + dz * cos;
+
+                    character.position.x += worldDx;
+                    character.position.z += worldDz;
+                } else {
+                    // Third-Person / Orbit: Normale Bewegung
+                    character.position.x += dx;
+                    character.position.z += dz;
+
+                    // Character dreht sich in Bewegungsrichtung (nur in Third-Person)
+                    const targetRotation = Math.atan2(dx, dz);
+                    character.rotation.y = targetRotation;
+                }
             }
 
             // Keep character within map bounds (-100 to 100)
