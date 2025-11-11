@@ -384,6 +384,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="static/js/camera_controller.js"></script>
+    <script src="static/js/interior_generator.js"></script>
 
     <script>
         const THREE = window.THREE;
@@ -416,6 +417,11 @@
         const cameraController = new CameraController(camera, scene, renderer);
         cameraController.setTarget(0, 5, 0);
         cameraController.orbitDistance = 50;
+
+        // Interior Generator (Phase 2: Stadt-Interiors)
+        const interiorGenerator = new InteriorGenerator(scene, THREE);
+        let currentInteriorState = null; // Stores exterior position & state
+        let isInInterior = false;
 
         // Verbesserte Lighting für bessere Atmosphäre
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
@@ -601,7 +607,12 @@
         window.addEventListener('keydown', (e) => {
             if (e.key === 'e' || e.key === 'E') {
                 if (nearBuilding) {
-                    enterBuilding(nearBuilding);
+                    // Check if it's an Exit Portal
+                    if (nearBuilding.userData && nearBuilding.userData.isExitPortal) {
+                        unloadBuildingInterior();
+                    } else {
+                        enterBuilding(nearBuilding);
+                    }
                 }
             }
         });
@@ -661,14 +672,145 @@
                 window.open('/digivice/index.html', '_blank', 'width=1400,height=900');
             }
             else if (buildingType === 'city') {
-                // Stadt betreten - Öffne Stadt-Interior
-                alert(`🏙️ Willkommen in ${buildingName}!\n\n${buildingDescription}\n\n(Stadt-Interior wird noch implementiert)`);
-                console.log(`Stadt: ${buildingName} - ${buildingDescription}`);
+                // Stadt betreten - Lade Stadt-Interior
+                const cityData = {
+                    name: buildingName,
+                    type: buildingType,
+                    description: buildingDescription
+                };
+                loadBuildingInterior(cityData);
             }
             else if (buildingType === 'special') {
                 // Besonderer Ort betreten
                 alert(`✨ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Interior wird noch implementiert)`);
                 console.log(`Besonderer Ort: ${buildingName} - ${buildingDescription}`);
+            }
+        }
+
+        // Stadt-Interior laden (Phase 2)
+        function loadBuildingInterior(cityData) {
+            console.log(`🏗️ Lade Interior für ${cityData.name}...`);
+
+            // 1. Speichere Exterior-Position
+            currentInteriorState = {
+                position: character.position.clone(),
+                cameraMode: cameraController.getMode(),
+                worldObjects: [] // Objekte die ausgeblendet werden
+            };
+
+            // 2. Fade-Out (simuliert mit schneller Transition)
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(() => {
+                // 3. Verstecke Exterior-Objekte
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = false;
+                });
+                loadedAssets.forEach(asset => {
+                    if (asset.model) asset.model.visible = false;
+                });
+                buildings.forEach(building => {
+                    building.visible = false;
+                });
+                if (schwarzeMuehle) schwarzeMuehle.visible = false;
+                gridHelper.visible = false;
+
+                // 4. Generiere und lade Interior
+                const interior = interiorGenerator.generateCityInterior(cityData);
+                interiorGenerator.loadInterior(interior);
+
+                // 5. Positioniere Character im Interior (Zentrum, leicht nach vorne)
+                character.position.set(0, 3.5, 50);
+
+                // 6. Setze Kamera
+                cameraController.setTarget(0, 0, 50);
+                cameraController.setMode(cameraController.MODES.THIRD);
+
+                // 7. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 8. Markiere als "in Interior"
+                isInInterior = true;
+
+                console.log(`✅ Interior für ${cityData.name} geladen! (${interior.objects.length} Objekte)`);
+            }, 300);
+        }
+
+        // Stadt-Interior verlassen (Phase 2)
+        function unloadBuildingInterior() {
+            if (!isInInterior || !currentInteriorState) {
+                console.warn('⚠️  Nicht in Interior, kann nicht verlassen');
+                return;
+            }
+
+            console.log('🚪 Verlasse Interior...');
+
+            // 1. Fade-Out
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(() => {
+                // 2. Entferne Interior
+                interiorGenerator.unloadInterior();
+
+                // 3. Zeige Exterior-Objekte wieder
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = true;
+                });
+                loadedAssets.forEach(asset => {
+                    if (asset.model) asset.model.visible = true;
+                });
+                buildings.forEach(building => {
+                    building.visible = true;
+                });
+                if (schwarzeMuehle) schwarzeMuehle.visible = true;
+                gridHelper.visible = true;
+
+                // 4. Stelle Character-Position wieder her
+                character.position.copy(currentInteriorState.position);
+
+                // 5. Stelle Kamera wieder her
+                cameraController.setMode(currentInteriorState.cameraMode);
+                cameraController.setTarget(
+                    currentInteriorState.position.x,
+                    getGroundHeight(currentInteriorState.position.x, currentInteriorState.position.z),
+                    currentInteriorState.position.z
+                );
+
+                // 6. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 7. Markiere als "nicht in Interior"
+                isInInterior = false;
+                currentInteriorState = null;
+
+                console.log('✅ Zurück in Exterior!');
+            }, 300);
+        }
+
+        // Exit-Portal Proximity Detection (Phase 2)
+        function checkExitPortalProximity() {
+            const interior = interiorGenerator.getCurrentInterior();
+            if (!interior || !interior.exitPortal) return;
+
+            const ePrompt = document.getElementById('e-prompt');
+            const ePromptText = document.getElementById('e-prompt-text');
+
+            // Distance zum Exit-Portal
+            const distance = character.position.distanceTo(interior.exitPortal.position);
+            const radius = 10; // Proximity Radius
+
+            if (distance < radius) {
+                // Zeige E-Prompt
+                ePromptText.textContent = `${interior.name} verlassen`;
+                ePrompt.style.display = 'block';
+                nearBuilding = interior.exitPortal; // Für E-Taste Event
+            } else {
+                ePrompt.style.display = 'none';
+                nearBuilding = null;
             }
         }
 
@@ -1353,15 +1495,28 @@
                 }
             }
 
-            // Keep character within map bounds (-200 to 200) - 4x größere Welt
-            character.position.x = Math.max(-200, Math.min(200, character.position.x));
-            character.position.z = Math.max(-200, Math.min(200, character.position.z));
+            // Keep character within map bounds
+            if (isInInterior) {
+                // Interior Bounds: ±66 (133.32 / 2)
+                character.position.x = Math.max(-66, Math.min(66, character.position.x));
+                character.position.z = Math.max(-66, Math.min(66, character.position.z));
+            } else {
+                // Exterior Bounds: ±200 (400 / 2) - 4x größere Welt
+                character.position.x = Math.max(-200, Math.min(200, character.position.x));
+                character.position.z = Math.max(-200, Math.min(200, character.position.z));
+            }
 
             // Update character height based on region
-            updateCharacterHeight();
+            if (!isInInterior) {
+                updateCharacterHeight();
+            }
 
             // Check building proximity (E-Taste System)
-            checkBuildingProximity();
+            if (isInInterior) {
+                checkExitPortalProximity();
+            } else {
+                checkBuildingProximity();
+            }
 
             // Update UI
             const x = camera.position.x.toFixed(1);
