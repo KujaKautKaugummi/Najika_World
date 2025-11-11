@@ -203,9 +203,12 @@ class RegionStreaming {
     if (region.city && region.city.name) {
       const cityData = this.getCityData(region.city.name);
       if (cityData) {
+        console.log(`  🏘️ Building city: ${cityData.name} at (${cityData.position.x}, ${cityData.position.z})`);
         this.cityBuilder.buildCity(cityData);
         this.stats.loadedCities++;
       }
+    } else if (region.city === null) {
+      console.log(`  ℹ️  No city in this region (${region.name}) - this is intentional`);
     }
 
     // 4. Add special features
@@ -271,8 +274,8 @@ class RegionStreaming {
   loadRegionFeatures(region, regionGroup) {
     // Special locations (Funkelnest, Leuchtturm, etc.)
     if (region.specialLocation) {
-      console.log(`  🎯 Adding special location: ${region.specialLocation.name || region.specialLocation}`);
-      // TODO: Add special location markers/buildings
+      console.log(`  🎯 Special location in region: ${region.specialLocation.name || region.specialLocation}`);
+      // Note: Special locations currently don't load physical assets to avoid placeholder boxes
     }
 
     // Götterfels special handling
@@ -282,8 +285,8 @@ class RegionStreaming {
 
     // Tiefenhöhlen entrance
     if (region.id === 'tiefenhoehlen') {
-      console.log(`  🕳️ Adding cave entrance at (${region.entrance.x}, ${region.entrance.z})`);
-      // TODO: Add cave entrance mesh
+      console.log(`  🕳️ Cave entrance marked at (${region.entrance.x}, ${region.entrance.z})`);
+      // Note: Cave entrance currently doesn't load to avoid placeholder boxes
     }
   }
 
@@ -291,22 +294,22 @@ class RegionStreaming {
    * Load Götterfels special features
    */
   loadGoetterfelsFeatures(region, regionGroup) {
-    console.log('  ⛰️ Loading Götterfels features...');
+    console.log('  ⛰️ Götterfels features noted (assets disabled to prevent placeholder boxes):');
 
     // Schwarze Mühle (on peak)
     if (region.specialLocations && region.specialLocations.peak) {
       const peak = region.specialLocations.peak;
-      console.log(`    🏠 ${peak.name} - ${peak.rooms} rooms (Safe Zone)`);
-      // TODO: Load Schwarze Mühle model
+      console.log(`    🏠 ${peak.name} - ${peak.rooms} rooms (Safe Zone) - Asset loading disabled`);
     }
 
     // Fluss (river)
-    console.log('    🌊 River flowing down the mountain');
-    // TODO: Add river mesh
+    console.log('    🌊 River flowing down the mountain - Asset loading disabled');
 
     // Kleines Dorf (small village)
-    console.log('    🏘️ Small village');
-    // TODO: Add village buildings
+    console.log('    🏘️ Small village - Asset loading disabled');
+
+    // NOTE: Physical assets for these features are disabled to prevent magenta placeholder boxes
+    // Re-enable when proper GLB models are available
   }
 
   /**
