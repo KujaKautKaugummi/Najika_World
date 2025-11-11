@@ -390,6 +390,8 @@
     <script src="static/js/npc_system.js"></script>
     <script src="static/js/quest_system.js"></script>
     <script src="static/js/special_features.js"></script>
+    <script src="static/js/skill_system.js"></script>
+    <script src="static/js/crafting_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -451,6 +453,16 @@
         specialFeatures.createOnsenUI();
         specialFeatures.createLighthouseClimbUI();
         specialFeatures.createArenaUI();
+
+        // Skill System (Block 8.5)
+        const skillSystem = new SkillSystem(inventorySystem);
+        skillSystem.loadFromLocalStorage();
+
+        // Crafting System (Block 8.6)
+        const craftingSystem = new CraftingSystem(inventorySystem);
+
+        console.log('📚 Skill + Crafting Systeme geladen!');
+
 
         // Auto-accept World Explorer quest
         questManager.acceptQuest('world_explorer');
@@ -2586,6 +2598,40 @@
                     endDialogue();
                     break;
 
+
+                case 'train_magic':
+                case 'train_smithing':
+                    // Skill Training (NPC Trainer)
+                    const availableSkills = skillSystem.getSkillsFromTrainer(npc.id);
+                    if (availableSkills.length > 0) {
+                        let skillsHTML = '<h3 style="color: #FFD700;">📚 Skills lernen</h3><ul style="list-style: none; padding: 0;">';
+                        availableSkills.forEach(skill => {
+                            const canLearn = skillSystem.canLearnSkill(skill.id);
+                            skillsHTML += `
+                                <li style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${canLearn.canLearn ? '#4CAF50' : '#ff0000'};">
+                                    <div style="font-size: 18px; font-weight: bold; color: #FFD700;">${skill.icon} ${skill.name}</div>
+                                    <div style="font-size: 12px; color: #aaa; margin: 5px 0;">${skill.description}</div>
+                                    <div style="font-size: 14px; color: #fff; margin: 5px 0;">
+                                        Power: ${skill.power} | Mana: ${skill.manaCost} | Cooldown: ${skill.cooldown}s
+                                    </div>
+                                    <div style="font-size: 14px; color: #FFD700;">Kosten: ${skill.cost}g</div>
+                                    ${canLearn.canLearn ?
+                                        '<button onclick="learnSkillFromNPC(\'' + skill.id + '\')" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer;">✓ Lernen</button>' :
+                                        '<div style="color: #ff0000; margin-top: 10px;">' + canLearn.reason + '</div>'
+                                    }
+                                </li>
+                            `;
+                        });
+                        skillsHTML += '</ul><button onclick="endDialogue()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,0,0,0.3); border: 2px solid #ff0000; border-radius: 5px; color: white; cursor: pointer;">Schließen</button>';
+
+                        document.getElementById('dialogue-text').innerHTML = skillsHTML;
+                        document.getElementById('dialogue-options').innerHTML = '';
+                    } else {
+                        alert('Dieser Trainer hat keine Skills mehr für dich!');
+                        endDialogue();
+                    }
+                    break;
+
                 case 'start_arena':
                     // Arena Battle
                     console.log('🏟️ Arena Battle starting...');
@@ -3189,7 +3235,117 @@
 
         console.log('📋 Quest UI ready! Press Q or J to open Quest Log!');
 
+        // Crafting bei Schmied (E-Taste bei funken_siedlung NPCs)
+        const originalHandleDialogueAction = handleDialogueAction;
+        handleDialogueAction = function(action) {
+            if (action === 'open_crafting') {
+                // Show Crafting UI
+                const recipes = craftingSystem.getAllRecipes();
+                let craftingHTML = '<h3 style="color: #FFD700;">🔨 CRAFTING</h3>';
+                craftingHTML += '<div style="max-height: 400px; overflow-y: auto;">';
+
+                recipes.forEach(recipe => {
+                    const check = recipe.canCraft(inventorySystem);
+                    const missing = recipe.getMissingMaterials(inventorySystem);
+
+                    craftingHTML += `
+                        <div style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${check.canCraft ? '#4CAF50' : '#ff0000'};">
+                            <div style="font-size: 18px; font-weight: bold; color: #FFD700;">${recipe.icon} ${recipe.name}</div>
+                            <div style="font-size: 12px; color: #aaa; margin: 5px 0;">${recipe.description}</div>
+                            <div style="font-size: 12px; color: #fff; margin-top: 10px;">Materialien:</div>
+                            <ul style="font-size: 12px; margin: 5px 0; padding-left: 20px;">
+                    `;
+
+                    recipe.materials.forEach(mat => {
+                        const have = inventorySystem.getItemCount(mat.item);
+                        const color = have >= mat.count ? '#00ff00' : '#ff0000';
+                        craftingHTML += `<li style="color: ${color};">${mat.item}: ${have}/${mat.count}</li>`;
+                    });
+
+                    craftingHTML += `</ul>`;
+
+                    if (recipe.requiredGold > 0) {
+                        const hasGold = inventorySystem.hasGold(recipe.requiredGold);
+                        craftingHTML += `<div style="font-size: 12px; color: ${hasGold ? '#FFD700' : '#ff0000'};">Gold: ${inventorySystem.gold}/${recipe.requiredGold}</div>`;
+                    }
+
+                    if (check.canCraft) {
+                        craftingHTML += '<button onclick="craftItemFromNPC(\'' + recipe.id + '\')" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; border: none; border-radius: 5px; color: white; cursor: pointer;">🔨 Craften</button>';
+                    } else {
+                        craftingHTML += '<div style="color: #ff0000; margin-top: 10px; font-size: 12px;">' + check.reason + '</div>';
+                    }
+
+                    craftingHTML += '</div>';
+                });
+
+                craftingHTML += '</div><button onclick="endDialogue()" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,0,0,0.3); border: 2px solid #ff0000; border-radius: 5px; color: white; cursor: pointer;">Schließen</button>';
+
+                document.getElementById('dialogue-text').innerHTML = craftingHTML;
+                document.getElementById('dialogue-options').innerHTML = '';
+                return;
+            }
+
+            // Call original
+            originalHandleDialogueAction(action);
+        };
+
+        // Craft Item from NPC
+        window.craftItemFromNPC = function(recipeId) {
+            if (craftingSystem.craftItem(recipeId)) {
+                const recipe = craftingSystem.recipes[recipeId];
+                alert('🔨 Crafting erfolgreich!\n\n' + recipe.icon + ' ' + recipe.name + ' erstellt!');
+                endDialogue();
+                if (inventoryOpen) updateInventoryUI();
+            } else {
+                alert('❌ Crafting fehlgeschlagen!');
+            }
+        };
+
+
         // Arena Mode Selection (Phase 8)
+
+        // Learn Skill from NPC (Global Function)
+        window.learnSkillFromNPC = function(skillId) {
+            if (skillSystem.learnSkill(skillId)) {
+                alert('📚 Skill gelernt: ' + skillSystem.learnedSkills[skillId].name + '!\n\nÖffne das Skills-Menu (K) um deine Skills zu sehen!');
+                endDialogue();
+                skillSystem.saveToLocalStorage();
+            } else {
+                alert('❌ Konnte Skill nicht lernen!');
+            }
+        };
+
+        // Learn Skill from NPC Keyboard (K for Skills)
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'k' || e.key === 'K') && !dialogueOpen && !inventoryOpen && !questLogOpen && !isInInterior) {
+                e.preventDefault();
+                // Show Skills UI
+                const learnedSkills = skillSystem.getLearnedSkills();
+                if (learnedSkills.length === 0) {
+                    alert('📚 Noch keine Skills gelernt!\n\nSuche Skill-Trainer in den Städten!');
+                } else {
+                    let skillsHTML = '<h2 style="color: #FFD700;">📚 DEINE SKILLS</h2><ul style="list-style: none; padding: 0;">';
+                    learnedSkills.forEach(skill => {
+                        const equipped = skillSystem.equippedSkills.includes(skill.id);
+                        skillsHTML += `
+                            <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; border: 2px solid ${equipped ? '#4CAF50' : '#666'};">
+                                <div style="font-size: 16px; font-weight: bold;">${skill.icon} ${skill.name} (Lv.${skill.level})</div>
+                                <div style="font-size: 12px; color: #aaa;">${skill.description}</div>
+                                <div style="font-size: 12px; margin-top: 5px;">
+                                    Power: ${skill.getPowerAtLevel()} | Mana: ${skill.getManaCostAtLevel()} | CD: ${skill.getCooldownAtLevel().toFixed(1)}s
+                                </div>
+                                <div style="font-size: 10px; color: #FFD700; margin-top: 5px;">
+                                    XP: ${skill.xp}/${skill.xpRequired} | Ausgerüstet: ${equipped ? '✓' : '✗'}
+                                </div>
+                            </li>
+                        `;
+                    });
+                    skillsHTML += '</ul>';
+                    alert(skillsHTML.replace(/<[^>]*>/g, '\n')); // Quick alert (proper UI später)
+                }
+            }
+        });
+
         window.selectArenaMode = function(mode) {
             specialFeatures.selectArenaMode(mode);
             const arenaUI = document.getElementById('arena-ui');
