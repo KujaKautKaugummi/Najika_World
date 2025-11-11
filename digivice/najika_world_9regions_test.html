@@ -828,6 +828,156 @@
             }
         }
 
+        // ===== COMBAT UI =====
+
+        function updateCombatUI() {
+            const stats = realtimeCombat.getStats();
+
+            if (!stats.combatActive) {
+                // Remove Combat UI
+                const combatUI = document.getElementById('combat-ui');
+                if (combatUI) combatUI.remove();
+                return;
+            }
+
+            // Finde oder erstelle Combat UI
+            let combatUI = document.getElementById('combat-ui');
+            if (!combatUI) {
+                combatUI = document.createElement('div');
+                combatUI.id = 'combat-ui';
+                combatUI.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.95);
+                    padding: 30px;
+                    border-radius: 15px;
+                    z-index: 500;
+                    min-width: 500px;
+                    border: 3px solid #ff0000;
+                    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+                    font-family: 'Courier New', monospace;
+                `;
+                document.body.appendChild(combatUI);
+            }
+
+            // Calculate Percentages
+            const hpPercent = (stats.health / stats.maxHealth) * 100;
+            const manaPercent = (stats.mana / stats.maxMana) * 100;
+            const staminaPercent = (stats.stamina / stats.maxStamina) * 100;
+            const cheerPercent = stats.cheerMeter;
+
+            const hpColor = hpPercent > 60 ? '#00ff00' : hpPercent > 30 ? '#ffff00' : '#ff0000';
+            const staminaColor = staminaPercent > 50 ? '#00aaff' : staminaPercent > 20 ? '#ffaa00' : '#ff0000';
+
+            // Enemy Stats
+            const enemy = realtimeCombat.currentTarget;
+            const enemyHPPercent = enemy ? (enemy.health / enemy.maxHealth) * 100 : 0;
+            const enemyHPColor = enemyHPPercent > 60 ? '#00ff00' : enemyHPPercent > 30 ? '#ffff00' : '#ff0000';
+
+            // Combat Mode Badge
+            let modeBadge = '';
+            if (stats.combatMode === 'MANUAL') {
+                modeBadge = '<span style="background: #4CAF50; padding: 3px 8px; border-radius: 5px; font-size: 11px;">⚔️ MANUAL</span>';
+            } else if (stats.combatMode === 'ASSIST') {
+                modeBadge = '<span style="background: #2196F3; padding: 3px 8px; border-radius: 5px; font-size: 11px;">📣 ASSIST</span>';
+            } else {
+                modeBadge = '<span style="background: #9C27B0; padding: 3px 8px; border-radius: 5px; font-size: 11px;">🤖 AUTO</span>';
+            }
+
+            combatUI.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="color: #ff0000; margin: 0 0 5px 0; font-size: 24px;">⚔️ REALTIME COMBAT ⚔️</h2>
+                    ${modeBadge}
+                    ${stats.comboCount > 1 ? `<div style="color: #FFD700; font-size: 16px; margin-top: 5px;">🔥 COMBO x${stats.comboCount} 🔥</div>` : ''}
+                </div>
+
+                <!-- Player Stats -->
+                <div style="margin-bottom: 20px;">
+                    <div style="color: #4CAF50; font-weight: bold; margin-bottom: 10px;">🧙 NAJIKA</div>
+
+                    <!-- HP Bar -->
+                    <div style="margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                            <span>❤️ HP</span>
+                            <span>${stats.health} / ${stats.maxHealth}</span>
+                        </div>
+                        <div style="background: #222; height: 18px; border-radius: 9px; overflow: hidden;">
+                            <div style="background: ${hpColor}; height: 100%; width: ${hpPercent}%; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stamina Bar -->
+                    <div style="margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                            <span>⚡ Stamina</span>
+                            <span>${Math.floor(stats.stamina)} / ${stats.maxStamina}</span>
+                        </div>
+                        <div style="background: #222; height: 14px; border-radius: 7px; overflow: hidden;">
+                            <div style="background: ${staminaColor}; height: 100%; width: ${staminaPercent}%; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+
+                    ${stats.combatMode !== 'MANUAL' ? `
+                    <!-- Cheer Meter (ASSIST/AUTO only) -->
+                    <div style="margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                            <span>📣 Cheer Meter</span>
+                            <span>${cheerPercent} / 100</span>
+                        </div>
+                        <div style="background: #222; height: 14px; border-radius: 7px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #ff00ff, #00ffff); height: 100%; width: ${cheerPercent}%; transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+
+                <!-- Enemy Stats -->
+                ${enemy ? `
+                <div style="margin-bottom: 20px;">
+                    <div style="color: #ff4444; font-weight: bold; margin-bottom: 10px;">👾 ${enemy.name}</div>
+
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                        <span>❤️ HP</span>
+                        <span>${enemy.health} / ${enemy.maxHealth}</span>
+                    </div>
+                    <div style="background: #222; height: 18px; border-radius: 9px; overflow: hidden;">
+                        <div style="background: ${enemyHPColor}; height: 100%; width: ${enemyHPPercent}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Controls -->
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    ${stats.combatMode === 'MANUAL' ? `
+                    <div style="font-size: 12px; line-height: 1.6;">
+                        <strong style="color: #FFD700;">⚔️ MANUAL CONTROLS:</strong><br>
+                        <span style="color: #aaa;">
+                        Q/E = Leichte Angriffe (Hände)<br>
+                        Shift+Q/E = Schwere Angriffe<br>
+                        SPACE = Beide Hände<br>
+                        C = Dodge/Roll | X = Block | V = Parry
+                        </span>
+                    </div>
+                    ` : `
+                    <div style="font-size: 12px; line-height: 1.6;">
+                        <strong style="color: #FFD700;">📣 CHEER CONTROLS:</strong><br>
+                        <span style="color: #aaa;">
+                        1 = "Los!" (+DMG)<br>
+                        2 = "Defend!" (+DEF)<br>
+                        3 = "Combo!" (Special)<br>
+                        4 = "Finisher!" (Ultimate @ 100 Cheer)
+                        </span>
+                    </div>
+                    `}
+                </div>
+
+                ${stats.isBlocking ? '<div style="text-align: center; color: #00aaff; margin-top: 10px; font-weight: bold;">🛡️ BLOCKING</div>' : ''}
+                ${stats.isDodging ? '<div style="text-align: center; color: #ffaa00; margin-top: 10px; font-weight: bold;">🌀 DODGING</div>' : ''}
+            `;
+        }
+
         // Get ground height at position (based on region)
         function getGroundHeight(x, z) {
             // Check which region character is in
@@ -1111,7 +1261,8 @@
             document.getElementById('loading').style.display = 'none';
             console.log('🎉 Alle Assets geladen!');
 
-            // TODO: Spawn Enemies für Realtime Combat System
+            // Spawn Enemies in allen 9 Regionen (Phase 3: Combat)
+            realtimeCombat.spawnEnemiesInAllRegions(regions);
             console.log('⚔️ Realtime Combat System bereit!');
         }
 
@@ -1538,6 +1689,18 @@
             // Realtime Combat System Update (Phase 3: ECHTZEIT!)
             if (!isInInterior) {
                 realtimeCombat.update(delta);
+
+                // Proximity Detection - Auto-Start Combat
+                if (!realtimeCombat.combatActive) {
+                    const nearEnemy = realtimeCombat.checkEnemyProximity(character.position);
+                    if (nearEnemy) {
+                        realtimeCombat.startCombat(nearEnemy);
+                        updateCombatUI();
+                    }
+                } else {
+                    // Update Combat UI während Combat
+                    updateCombatUI();
+                }
             }
 
             // Update UI

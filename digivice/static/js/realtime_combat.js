@@ -602,40 +602,185 @@ class RealtimeCombat {
         console.log(`-${damage} HP`);
     }
 
+    // ===== ENEMY SPAWNING =====
+
+    spawnEnemiesInAllRegions(regions) {
+        console.log('🐉 Spawne Enemies in allen 9 Regionen...');
+
+        // Enemy Types pro Region (basierend auf Master-Doku)
+        const regionEnemyTypes = {
+            ice: ['ice_undead', 'ice_elemental'],
+            highland: ['highland_guardian'],
+            desert: ['desert_bandit', 'desert_sandworm'],
+            swamp: ['swamp_witch', 'swamp_monster'],
+            mountain: ['mountain_giant'],
+            coast: ['coast_pirate', 'coast_seamonster'],
+            caves: ['caves_goblin'],
+            forest: ['forest_druid', 'forest_spirit'],
+            volcano: ['volcano_elemental', 'volcano_lavamonster']
+        };
+
+        const enemyDatabase = {
+            // ICE
+            ice_undead: { name: 'Eis-Untoter', hp: 40, damage: 8, speed: 1.0, color: 0x00ffff },
+            ice_elemental: { name: 'Eis-Elemental', hp: 50, damage: 10, speed: 0.8, color: 0xaaffff },
+
+            // HIGHLAND
+            highland_guardian: { name: 'Hochland-Wächter', hp: 60, damage: 12, speed: 0.9, color: 0x8b7355 },
+
+            // DESERT
+            desert_bandit: { name: 'Wüsten-Bandit', hp: 45, damage: 10, speed: 1.2, color: 0xe8d4a0 },
+            desert_sandworm: { name: 'Sandwurm', hp: 80, damage: 15, speed: 0.5, color: 0xc4a000 },
+
+            // SWAMP
+            swamp_witch: { name: 'Sumpf-Hexe', hp: 55, damage: 14, speed: 0.7, color: 0x556b2f },
+            swamp_monster: { name: 'Giftmonster', hp: 70, damage: 12, speed: 0.6, color: 0x3d5c1f },
+
+            // MOUNTAIN
+            mountain_giant: { name: 'Bergriese', hp: 100, damage: 20, speed: 0.4, color: 0x808080 },
+
+            // COAST
+            coast_pirate: { name: 'Pirat', hp: 50, damage: 11, speed: 1.1, color: 0xc2b280 },
+            coast_seamonster: { name: 'Seemonster', hp: 90, damage: 18, speed: 0.8, color: 0x0066cc },
+
+            // CAVES
+            caves_goblin: { name: 'Höhlen-Goblin', hp: 35, damage: 7, speed: 1.3, color: 0x2f2f2f },
+
+            // FOREST
+            forest_druid: { name: 'Feindlicher Druide', hp: 65, damage: 13, speed: 0.8, color: 0x2d5016 },
+            forest_spirit: { name: 'Waldgeist', hp: 45, damage: 9, speed: 1.0, color: 0x4CAF50 },
+
+            // VOLCANO
+            volcano_elemental: { name: 'Feuer-Elemental', hp: 85, damage: 22, speed: 0.7, color: 0xff4500 },
+            volcano_lavamonster: { name: 'Lava-Kreatur', hp: 95, damage: 25, speed: 0.5, color: 0x8b0000 }
+        };
+
+        regions.forEach(region => {
+            const enemyTypes = regionEnemyTypes[region.name];
+            if (!enemyTypes) return;
+
+            // Spawn 3-5 Enemies pro Region
+            const enemyCount = 3 + Math.floor(Math.random() * 3);
+
+            for (let i = 0; i < enemyCount; i++) {
+                // Random Enemy Type für diese Region
+                const randomType = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+                const enemyData = enemyDatabase[randomType];
+
+                if (!enemyData) continue;
+
+                // Random Position innerhalb der Region
+                const offsetX = (Math.random() - 0.5) * 100;
+                const offsetZ = (Math.random() - 0.5) * 100;
+
+                this.spawnEnemy(
+                    randomType,
+                    region.x + offsetX,
+                    region.y + 2,
+                    region.z + offsetZ,
+                    enemyData
+                );
+            }
+        });
+
+        console.log(`✅ ${this.enemies.length} Enemies gespawnt!`);
+    }
+
+    spawnEnemy(type, x, y, z, data) {
+        // Create Enemy Mesh (simple colored box)
+        const geometry = new this.THREE.BoxGeometry(2, 3, 2);
+        const material = new this.THREE.MeshStandardMaterial({
+            color: data.color,
+            roughness: 0.7,
+            metalness: 0.3
+        });
+        const mesh = new this.THREE.Mesh(geometry, material);
+        mesh.position.set(x, y, z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        // Enemy Object
+        const enemy = {
+            id: `${type}_${Date.now()}_${Math.random()}`,
+            type: type,
+            name: data.name,
+            health: data.hp,
+            maxHealth: data.hp,
+            damage: data.damage,
+            speed: data.speed,
+            position: mesh.position,
+            mesh: mesh,
+            alive: true,
+            aggro: false
+        };
+
+        this.enemies.push(enemy);
+        this.scene.add(mesh);
+    }
+
     // ===== UPDATE LOOP =====
 
     update(delta) {
-        if (!this.combatActive) return;
-
         // Update Cooldowns
         if (this.leftHandCooldown > 0) this.leftHandCooldown -= delta * 1000;
         if (this.rightHandCooldown > 0) this.rightHandCooldown -= delta * 1000;
         if (this.bothHandsCooldown > 0) this.bothHandsCooldown -= delta * 1000;
 
-        // Stamina Regen
+        // Stamina Regen (auch außerhalb Combat)
         if (this.playerStamina < this.playerMaxStamina) {
             this.playerStamina = Math.min(this.playerMaxStamina, this.playerStamina + delta * 10);
         }
 
-        // Update Enemies (AI)
-        this.updateEnemies(delta);
+        // Combat-spezifische Updates
+        if (this.combatActive) {
+            this.updateEnemies(delta);
+        }
     }
 
     updateEnemies(delta) {
-        // TODO: Enemy AI behavior
+        if (!this.currentTarget || !this.currentTarget.alive) return;
+
+        // Simple Enemy AI: Rotate towards player
+        // TODO: Movement, Attack patterns
+    }
+
+    // ===== PROXIMITY DETECTION =====
+
+    checkEnemyProximity(playerPosition) {
+        if (this.combatActive) return null;
+
+        let closestEnemy = null;
+        let closestDistance = Infinity;
+
+        for (const enemy of this.enemies) {
+            if (!enemy.alive) continue;
+
+            const distance = playerPosition.distanceTo(enemy.position);
+
+            if (distance < 5 && distance < closestDistance) {
+                closestEnemy = enemy;
+                closestDistance = distance;
+            }
+        }
+
+        return closestEnemy;
     }
 
     // ===== COMBAT LIFECYCLE =====
 
-    async startCombat(enemies) {
-        this.enemies = enemies;
-        this.currentTarget = enemies[0];
+    async startCombat(enemy) {
+        this.currentTarget = enemy;
+        this.combatActive = true;
 
         // Start battle with backend
-        const enemyTypes = enemies.map(e => e.type);
-        await this.startBattleWithBackend(enemyTypes);
+        await this.startBattleWithBackend([enemy.type]);
 
-        console.log('⚔️ Combat gestartet!');
+        console.log(`⚔️ Combat gestartet gegen: ${enemy.name}!`);
+
+        // Visual: Enemy glüht rot
+        enemy.aggro = true;
+        enemy.mesh.material.emissive = new this.THREE.Color(0xff0000);
+        enemy.mesh.material.emissiveIntensity = 0.5;
     }
 
     endCombat() {
