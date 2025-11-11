@@ -57,13 +57,16 @@ Timeline: 10-12 Wochen
 Priority: P0 (Highest)
 ```
 
-### **MODEL 2: TEST ENVIRONMENT** (DUAL PURPOSE!)
+### **MODEL 2: TEST ENVIRONMENT + HANDYSPIEL FULL GAME**
 ```
-🔥 WICHTIG: Doppelter Zweck!
+🔥 WICHTIG: Triple Purpose!
 1. Digivice Features testen VOR Integration in Haupt-APK
-2. Handyspiel Mechaniken prototypen VOR Full-Game Development
+2. Handyspiel Mechaniken prototypen (Test Environment 10x10m)
+3. Handyspiel FULL GAME entwickeln (500x500m Online Multiplayer!)
 
 Zuständig für:
+
+📋 PART 1: TEST ENVIRONMENT (C:\NajikaTestEnvironment_UE5)
 - Mini Test-Lebensraum erstellen (10x10m)
 - Feature-Testing Stations (Backend, Voice, UI, etc.)
 - Handyspiel Mechanics Prototyping (Combat, AI, Loot)
@@ -71,44 +74,34 @@ Zuständig für:
 - Bug Documentation
 - Performance Profiling
 - Export validierter Features zu Model 1 (Digivice)
-- Export validierter Mechaniken zu Model 3 (Handyspiel)
 
-TODO Location:
-C:\Najika_World\TEST_ENVIRONMENT_TODO.md
-
-Project Location:
-C:\NajikaTestEnvironment_UE5 (erstellen!)
-
-Timeline: Parallel zu Model 1 (Week 2-10)
-Priority: P1 (High)
-
-Workflow:
-Test Environment → Feature OK? → Export zu Digivice APK (Model 1)
-Test Environment → Mechanik OK? → Export zu Handyspiel (Model 3)
-```
-
-### **MODEL 3: HANDYSPIEL (MOBILE GAME)**
-```
-Zuständig für:
+📋 PART 2: HANDYSPIEL FULL GAME (C:\NajikaHandyspiel_UE5)
 - Action Game Development (Fortnite-Style)
-- Combat Systems (Import validierter Prototypen von Model 2!)
-- Enemy AI (Import validierter Prototypen von Model 2!)
-- Loot System (Import validierter Prototypen von Model 2!)
+- Combat Systems (erweitert aus Prototypen!)
+- Enemy AI (mehrere Typen + Boss AI)
+- Loot System (komplettes Item-System)
 - World Building (500m x 500m map, 8-10 POIs)
+- Storm Zone (Battle Royale Mechanic)
 - Multiplayer Architecture (Online Game!)
 - UEFN Port Preparation
 
-TODO Location:
-C:\Najika_World\HANDYSPIEL_MOBILE_GAME_TODO.md
+TODO Locations:
+- C:\Najika_World\TEST_ENVIRONMENT_TODO.md (Testing)
+- C:\Najika_World\HANDYSPIEL_MOBILE_GAME_TODO.md (Full Game)
 
-Project Location:
-C:\NajikaHandyspiel_UE5 (erstellen!)
+Project Locations:
+- C:\NajikaTestEnvironment_UE5 (10x10m Testing)
+- C:\NajikaHandyspiel_UE5 (500x500m Game)
 
-Timeline: Parallel Development (10-12 Wochen)
-Priority: P2 (Medium - can wait)
+Timeline: Parallel zu Model 1 (10-12 Wochen)
+Priority: P1 (High)
 
-NOTE: Nutze validierte Mechaniken von Model 2 (Test Environment)!
-Model 2 prototypt Combat/AI/Loot → Model 3 skaliert zum Full Game.
+Workflow:
+1. Baue Test Environment (10x10m)
+2. Teste Digivice Features → Export zu Model 1
+3. Prototype Handyspiel Mechaniken im Test Environment
+4. Wenn validiert → Übertrage zu Full Game Project
+5. Entwickle Full Game (500x500m) parallel
 ```
 
 ---
@@ -170,7 +163,7 @@ C:\Najika_World\
 ### **ALL MODELS MUST READ:**
 ```
 1. MODEL_WORKFLOW_OVERVIEW.md (READ FIRST! 🔥)
-   → Understand wie alle 3 Models zusammenarbeiten
+   → Understand wie die 2 Models zusammenarbeiten
    → Workflow visualization
    → Timeline & Priorities
    → Success Criteria
@@ -216,20 +209,14 @@ C:\Najika_World\
    Battery: 4+ hours
 
 7. HANDYSPIEL_MOBILE_GAME_TODO.md
-   → Understand which mechanics to prototype
-   → Combat, AI, Loot systems
-```
+   → COMPLETE TODO für Full Game Development!
+   → Combat, AI, Loot, World Building, Multiplayer
 
-### **MODEL 3 (Handyspiel) MUST ALSO READ:**
-```
-5. JETSON_MIGRATION_PLAN.md
+8. JETSON_MIGRATION_PLAN.md
    → UEFN compatibility requirements
+   → Fortnite port preparation
 
-6. TEST_ENVIRONMENT_TODO.md (Section 2.7)
-   → Which mechanics Model 2 prototypes for you
-   → Import workflow
-
-7. Research Fortnite mechanics:
+9. Research Fortnite mechanics:
    → Movement, Combat, Building
    → Study UEFN Verse language
 ```
