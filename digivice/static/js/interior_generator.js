@@ -530,6 +530,30 @@ class InteriorGenerator {
     }
 
     /**
+     * Spawnt NPCs im aktuellen Interior
+     * @param {NPCSystem} npcSystem - NPC System Instance
+     * @param {string} cityId - City ID (handelsfestung, dampf_hain, etc.)
+     * @param {Object} cityData - City Data
+     */
+    spawnNPCsInInterior(npcSystem, cityId, cityData) {
+        if (!this.currentInterior) {
+            console.warn('⚠️ Kein aktives Interior, NPCs können nicht gespawned werden');
+            return [];
+        }
+
+        const interiorBounds = {
+            width: this.interiorSize,
+            depth: this.interiorSize
+        };
+
+        const npcs = npcSystem.spawnNPCsForCity(cityId, cityData, interiorBounds);
+        this.currentInterior.npcs = npcs;
+
+        console.log(`🧑 ${npcs.length} NPCs gespawned in ${cityData.name}`);
+        return npcs;
+    }
+
+    /**
      * Gibt aktuelles Interior zurück
      */
     getCurrentInterior() {
