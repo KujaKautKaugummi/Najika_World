@@ -385,6 +385,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="static/js/camera_controller.js"></script>
     <script src="static/js/interior_generator.js"></script>
+    <script src="static/js/food_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -419,13 +420,16 @@
         cameraController.setTarget(0, 5, 0);
         cameraController.orbitDistance = 50;
 
+        // Food System (Phase 4: Essen + Buffs)
+        const foodSystem = new FoodSystem();
+
         // Interior Generator (Phase 2: Stadt-Interiors)
         const interiorGenerator = new InteriorGenerator(scene, THREE);
         let currentInteriorState = null; // Stores exterior position & state
         let isInInterior = false;
 
         // Realtime Combat System (Phase 3: ECHTZEITRICHTIG!)
-        const realtimeCombat = new RealtimeCombat(scene, THREE);
+        const realtimeCombat = new RealtimeCombat(scene, THREE, foodSystem);
 
         // Default: MANUAL Mode (volle Kontrolle)
         realtimeCombat.setCombatMode('MANUAL');
@@ -1810,6 +1814,115 @@
         setInterval(fetchNajikaStatus, 5000); // Update alle 5s
 
         console.log('✅ Phase 3: Backend Integration aktiviert!');
-    </script>
+    
+        // ===== FOOD SYSTEM: STARTER ITEMS (Phase 4) =====
+
+        // Gebe Starter-Food Items
+        foodSystem.addFood('champion_keule', 1); // Die legendäre Champion-Keule!
+        foodSystem.addFood('baozi', 5); // Gedämpfte Brötchen
+        foodSystem.addFood('arena_happen', 3); // Burger
+        foodSystem.addFood('salted_fish', 3); // Salzfisch
+
+        console.log('🍖 Starter Food Items hinzugefügt!');
+        console.log('📦 Inventar:', foodSystem.getInventory());
+
+        // HOTKEYS für Essen (F1-F5)
+        window.addEventListener('keydown', (e) => {
+            if (isInInterior) return; // Kein Essen in Interiors
+
+            let foodID = null;
+
+            // F-Keys für Food Quickslots
+            if (e.key === 'F1' || e.key === '6') foodID = 'baozi';
+            else if (e.key === 'F2' || e.key === '7') foodID = 'arena_happen';
+            else if (e.key === 'F3' || e.key === '8') foodID = 'salted_fish';
+            else if (e.key === 'F4' || e.key === '9') foodID = 'champion_keule';
+
+            if (foodID && foodSystem.hasFood(foodID)) {
+                // Consume Food
+                const success = foodSystem.eatFood(foodID, {
+                    health: realtimeCombat.playerHealth,
+                    maxHealth: realtimeCombat.playerMaxHealth,
+                    mana: realtimeCombat.playerMana,
+                    maxMana: realtimeCombat.playerMaxMana,
+                    stamina: realtimeCombat.playerStamina,
+                    maxStamina: realtimeCombat.playerMaxStamina
+                });
+
+                if (success) {
+                    foodSystem.removeFood(foodID, 1);
+
+                    // Apply instant heal
+                    const food = foodSystem.getFoodInfo(foodID);
+                    if (food.effects.hp_instant) {
+                        realtimeCombat.playerHealth = Math.min(
+                            realtimeCombat.playerMaxHealth,
+                            realtimeCombat.playerHealth + food.effects.hp_instant
+                        );
+                    }
+
+                    // Update UI
+                    updateBuffUI();
+                }
+            }
+        });
+
+        // Buff UI Update Function
+        function updateBuffUI() {
+            const buffsContainer = document.getElementById('buffs-container');
+            if (!buffsContainer) {
+                // Create Buffs Container
+                const container = document.createElement('div');
+                container.id = 'buffs-container';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 20px;
+                    z-index: 400;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                `;
+                document.body.appendChild(container);
+            }
+
+            // Update Buffs
+            const activeBuffs = foodSystem.getActiveBuffs();
+            const container = document.getElementById('buffs-container');
+
+            container.innerHTML = activeBuffs.map(buff => {
+                const minutes = Math.floor(buff.remaining / 60);
+                const seconds = Math.floor(buff.remaining % 60);
+                const paddedSeconds = seconds < 10 ? '0' + seconds : seconds;
+                const timeStr = minutes + ':' + paddedSeconds;
+
+                let rarityColor = '#888';
+                if (buff.rarity === 'legendary') rarityColor = '#ff8800';
+                else if (buff.rarity === 'rare') rarityColor = '#0088ff';
+                else if (buff.rarity === 'uncommon') rarityColor = '#00ff00';
+
+                return `
+                    <div style="
+                        background: rgba(0,0,0,0.8);
+                        padding: 8px 12px;
+                        border-radius: 8px;
+                        border: 2px solid ${rarityColor};
+                        color: white;
+                        font-size: 12px;
+                        min-width: 180px;
+                    ">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>${buff.icon} ${buff.name}</span>
+                            <span style="color: #aaa; font-size: 10px;">${timeStr}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update Buff UI every second
+        setInterval(updateBuffUI, 1000);
+
+</script>
 </body>
 </html>
