@@ -386,6 +386,7 @@
     <script src="static/js/camera_controller.js"></script>
     <script src="static/js/interior_generator.js"></script>
     <script src="static/js/food_system.js"></script>
+    <script src="static/js/inventory_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -430,6 +431,9 @@
 
         // Realtime Combat System (Phase 3: ECHTZEITRICHTIG!)
         const realtimeCombat = new RealtimeCombat(scene, THREE, foodSystem);
+
+        // Inventory System (Phase 5: Inventar + Equipment)
+        const inventorySystem = new InventorySystem(foodSystem, realtimeCombat);
 
         // Default: MANUAL Mode (volle Kontrolle)
         realtimeCombat.setCombatMode('MANUAL');
@@ -1825,6 +1829,379 @@
 
         console.log('🍖 Starter Food Items hinzugefügt!');
         console.log('📦 Inventar:', foodSystem.getInventory());
+
+        // ===== INVENTORY SYSTEM: STARTER ITEMS (Phase 5) =====
+
+        // Add food items to inventory
+        inventorySystem.addItem('baozi', 5);
+        inventorySystem.addItem('arena_happen', 3);
+        inventorySystem.addItem('salted_fish', 3);
+        inventorySystem.addItem('champion_keule', 1);
+
+        // Add starter weapons
+        inventorySystem.addItem('fire_sword', 1);
+        inventorySystem.addItem('ice_dagger', 1);
+
+        // Add starter armor
+        inventorySystem.addItem('leather_armor', 1);
+        inventorySystem.addItem('iron_helmet', 1);
+
+        // Add starter accessories
+        inventorySystem.addItem('vitality_amulet', 1);
+
+        // Add starter gold
+        inventorySystem.addGold(200);
+
+        console.log('🎒 Inventar-System initialisiert!');
+        console.log('📦 Items:', inventorySystem.getInventoryDisplay());
+        console.log('💰 Gold:', inventorySystem.gold);
+
+        // Auto-equip starting weapons
+        inventorySystem.equipItem('fire_sword');  // Left hand
+        inventorySystem.equipItem('ice_dagger');  // Right hand
+
+        // ===== INVENTORY UI =====
+
+        let inventoryOpen = false;
+
+        // Create Inventory UI Container
+        const inventoryUI = document.createElement('div');
+        inventoryUI.id = 'inventory-ui';
+        inventoryUI.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 700px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            color: white;
+            font-family: 'Courier New', monospace;
+        `;
+
+        // Title
+        const invTitle = document.createElement('div');
+        invTitle.innerHTML = '<h2 style="margin: 0 0 15px 0; color: #4CAF50; text-shadow: 0 0 10px #4CAF50;">🎒 INVENTAR</h2>';
+        inventoryUI.appendChild(invTitle);
+
+        // Top Stats Bar
+        const statsBar = document.createElement('div');
+        statsBar.id = 'inventory-stats';
+        statsBar.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        `;
+        inventoryUI.appendChild(statsBar);
+
+        // Main Container (Equipment + Inventory Grid)
+        const mainContainer = document.createElement('div');
+        mainContainer.style.cssText = `
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+        `;
+
+        // Equipment Panel (Left)
+        const equipmentPanel = document.createElement('div');
+        equipmentPanel.id = 'equipment-panel';
+        equipmentPanel.style.cssText = `
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        `;
+        equipmentPanel.innerHTML = '<h3 style="margin: 0 0 10px 0; color: #FFA500;">⚔️ Ausrüstung</h3>';
+        mainContainer.appendChild(equipmentPanel);
+
+        // Inventory Grid (Right)
+        const inventoryGrid = document.createElement('div');
+        inventoryGrid.id = 'inventory-grid';
+        inventoryGrid.style.cssText = `
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-auto-rows: 70px;
+            gap: 8px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        `;
+        mainContainer.appendChild(inventoryGrid);
+
+        inventoryUI.appendChild(mainContainer);
+
+        // Item Details Panel (Bottom)
+        const detailsPanel = document.createElement('div');
+        detailsPanel.id = 'item-details';
+        detailsPanel.style.cssText = `
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            min-height: 100px;
+            font-size: 13px;
+        `;
+        detailsPanel.innerHTML = '<p style="color: #aaa;">Wähle ein Item aus...</p>';
+        inventoryUI.appendChild(detailsPanel);
+
+        // Close Button
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '✕ Schließen (I oder ESC)';
+        closeBtn.style.cssText = `
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 15px;
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        `;
+        closeBtn.onclick = () => { toggleInventory(); };
+        inventoryUI.appendChild(closeBtn);
+
+        document.body.appendChild(inventoryUI);
+
+        // ===== INVENTORY FUNCTIONS =====
+
+        function toggleInventory() {
+            inventoryOpen = !inventoryOpen;
+            inventoryUI.style.display = inventoryOpen ? 'flex' : 'none';
+
+            if (inventoryOpen) {
+                updateInventoryUI();
+            }
+        }
+
+        function updateInventoryUI() {
+            // Update Stats Bar
+            const stats = inventorySystem.getTotalStats();
+            statsBar.innerHTML = `
+                <span>💰 Gold: <b style="color: #FFD700;">${inventorySystem.gold}</b></span>
+                <span>⚔️ Damage: <b style="color: #ff6666;">+${Math.floor(stats.damage)}</b></span>
+                <span>🛡️ Defense: <b style="color: #6666ff;">+${Math.floor(stats.defense)}</b></span>
+                <span>💪 Strength: <b style="color: #ff9900;">+${stats.strength}%</b></span>
+                <span>⚡ Speed: <b style="color: #ffff66;">×${stats.speed_modifier.toFixed(2)}</b></span>
+            `;
+
+            // Update Equipment Panel
+            const equipment = inventorySystem.getAllEquipment();
+            const equipSlots = [
+                { key: 'weapon_left', name: '⚔️ Left Hand', icon: '🗡️' },
+                { key: 'weapon_right', name: '⚔️ Right Hand', icon: '🗡️' },
+                { key: 'armor_head', name: '⛑️ Kopf', icon: '⛑️' },
+                { key: 'armor_chest', name: '🛡️ Brust', icon: '🛡️' },
+                { key: 'armor_legs', name: '👖 Beine', icon: '👖' },
+                { key: 'accessory_1', name: '💍 Accessory 1', icon: '💍' },
+                { key: 'accessory_2', name: '💍 Accessory 2', icon: '💍' }
+            ];
+
+            // Clear and rebuild equipment slots
+            equipmentPanel.innerHTML = '<h3 style="margin: 0 0 10px 0; color: #FFA500;">⚔️ Ausrüstung</h3>';
+
+            equipSlots.forEach(slot => {
+                const item = equipment[slot.key];
+                const slotDiv = document.createElement('div');
+                slotDiv.style.cssText = `
+                    padding: 8px;
+                    background: ${item ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255, 255, 255, 0.05)'};
+                    border: 2px solid ${item ? '#4CAF50' : '#555'};
+                    border-radius: 8px;
+                    cursor: ${item ? 'pointer' : 'default'};
+                    font-size: 12px;
+                `;
+
+                if (item) {
+                    const rarityColors = {
+                        common: '#888',
+                        uncommon: '#00ff00',
+                        rare: '#0088ff',
+                        legendary: '#ff8800'
+                    };
+                    const color = rarityColors[item.rarity] || '#888';
+
+                    slotDiv.innerHTML = `
+                        <div style="font-weight: bold; color: ${color};">${item.icon} ${item.name}</div>
+                        <div style="font-size: 10px; color: #aaa; margin-top: 3px;">${slot.name}</div>
+                    `;
+
+                    slotDiv.onclick = () => {
+                        if (confirm(`${item.name} ablegen?`)) {
+                            inventorySystem.unequipItem(slot.key);
+                            updateInventoryUI();
+                        }
+                    };
+                } else {
+                    slotDiv.innerHTML = `
+                        <div style="color: #666;">${slot.icon} Leer</div>
+                        <div style="font-size: 10px; color: #555;">${slot.name}</div>
+                    `;
+                }
+
+                equipmentPanel.appendChild(slotDiv);
+            });
+
+            // Update Inventory Grid
+            const items = inventorySystem.getInventoryDisplay();
+            inventoryGrid.innerHTML = '';
+
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                const rarityColors = {
+                    common: '#888',
+                    uncommon: '#00ff00',
+                    rare: '#0088ff',
+                    legendary: '#ff8800',
+                    quest: '#ff00ff'
+                };
+                const borderColor = rarityColors[item.rarity] || '#555';
+
+                itemDiv.style.cssText = `
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 2px solid ${borderColor};
+                    border-radius: 8px;
+                    padding: 5px;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    transition: all 0.2s;
+                `;
+
+                itemDiv.innerHTML = `
+                    <div style="font-size: 24px;">${item.icon}</div>
+                    <div style="font-size: 10px; margin-top: 3px; text-align: center; color: ${borderColor};">${item.name}</div>
+                    ${item.quantity > 1 ? `<div style="position: absolute; top: 3px; right: 5px; background: rgba(0,0,0,0.8); padding: 2px 5px; border-radius: 3px; font-size: 10px; font-weight: bold;">×${item.quantity}</div>` : ''}
+                `;
+
+                // Hover effect
+                itemDiv.onmouseenter = () => {
+                    itemDiv.style.transform = 'scale(1.05)';
+                    itemDiv.style.boxShadow = `0 0 15px ${borderColor}`;
+                };
+                itemDiv.onmouseleave = () => {
+                    itemDiv.style.transform = 'scale(1)';
+                    itemDiv.style.boxShadow = 'none';
+                };
+
+                // Click to show details
+                itemDiv.onclick = () => {
+                    showItemDetails(item);
+                };
+
+                // Right-click to use
+                itemDiv.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    inventorySystem.useItem(item.id);
+                    updateInventoryUI();
+                };
+
+                inventoryGrid.appendChild(itemDiv);
+            });
+
+            // Fill empty slots
+            const emptySlots = 50 - items.length;
+            for (let i = 0; i < emptySlots; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.cssText = `
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 2px solid #333;
+                    border-radius: 8px;
+                `;
+                inventoryGrid.appendChild(emptyDiv);
+            }
+        }
+
+        function showItemDetails(item) {
+            const detailsPanel = document.getElementById('item-details');
+            const itemData = inventorySystem.itemDatabase[item.id];
+
+            if (!itemData) {
+                detailsPanel.innerHTML = '<p style="color: red;">❌ Item-Daten nicht gefunden!</p>';
+                return;
+            }
+
+            const rarityColors = {
+                common: '#888',
+                uncommon: '#00ff00',
+                rare: '#0088ff',
+                legendary: '#ff8800',
+                quest: '#ff00ff'
+            };
+            const color = rarityColors[item.rarity] || '#888';
+
+            let statsHTML = '';
+            if (itemData.stats) {
+                statsHTML = '<div style="margin-top: 10px;"><b>Stats:</b><br>';
+                for (const [key, value] of Object.entries(itemData.stats)) {
+                    statsHTML += `<span style="color: #4CAF50;">• ${key}: ${value > 0 ? '+' : ''}${value}</span><br>`;
+                }
+                statsHTML += '</div>';
+            }
+
+            const useButton = itemData.type !== 'quest' && itemData.type !== 'material' ?
+                `<button onclick="inventorySystem.useItem('${item.id}'); updateInventoryUI();" style="padding: 8px 15px; background: rgba(76, 175, 80, 0.3); border: 2px solid #4CAF50; border-radius: 5px; color: white; cursor: pointer; margin-right: 10px;">✓ Benutzen</button>` : '';
+
+            const sellButton = itemData.value > 0 ?
+                `<button onclick="if(confirm('${item.name} für ${Math.floor(itemData.value * 0.5)} Gold verkaufen?')) { inventorySystem.sellItem('${item.id}', 1); updateInventoryUI(); }" style="padding: 8px 15px; background: rgba(255, 215, 0, 0.3); border: 2px solid #FFD700; border-radius: 5px; color: white; cursor: pointer;">💰 Verkaufen (${Math.floor(itemData.value * 0.5)}g)</button>` : '';
+
+            detailsPanel.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <div style="font-size: 18px; color: ${color}; font-weight: bold;">${item.icon} ${item.name} ${item.quantity > 1 ? `×${item.quantity}` : ''}</div>
+                        <div style="color: #aaa; margin-top: 5px; font-style: italic;">${item.description}</div>
+                        ${statsHTML}
+                        <div style="margin-top: 10px; color: ${color};">
+                            <b>Typ:</b> ${itemData.type} | <b>Seltenheit:</b> ${item.rarity} | <b>Wert:</b> ${itemData.value}g
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    ${useButton}
+                    ${sellButton}
+                </div>
+            `;
+        }
+
+        // ===== KEYBOARD CONTROLS =====
+
+        window.addEventListener('keydown', (e) => {
+            // I or TAB to open inventory
+            if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
+                if (!isInInterior) { // Don't open inventory in interiors
+                    e.preventDefault();
+                    toggleInventory();
+                }
+            }
+
+            // ESC to close inventory
+            if (e.key === 'Escape' && inventoryOpen) {
+                toggleInventory();
+            }
+        });
+
+        console.log('🎒 Inventar-UI erstellt! Drücke I oder TAB zum Öffnen!');
 
         // HOTKEYS für Essen (F1-F5)
         window.addEventListener('keydown', (e) => {
