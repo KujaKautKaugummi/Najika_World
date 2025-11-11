@@ -388,6 +388,7 @@
     <script src="static/js/food_system.js"></script>
     <script src="static/js/inventory_system.js"></script>
     <script src="static/js/npc_system.js"></script>
+    <script src="static/js/quest_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -438,6 +439,12 @@
 
         // NPC System (Phase 6: NPCs + Dialogue)
         const npcSystem = new NPCSystem(scene, THREE);
+        // Quest System (Phase 7: Quests + Tracking)
+        const questManager = new QuestManager();
+
+        // Auto-accept World Explorer quest
+        questManager.acceptQuest('world_explorer');
+
 
 
         // Default: MANUAL Mode (volle Kontrolle)
@@ -2221,6 +2228,59 @@
         });
 
         console.log('🎒 Inventar-UI erstellt! Drücke I oder TAB zum Öffnen!');
+        // ===== QUEST HOOKS (Phase 7) =====
+
+        // Hook: Enemy Killed
+        const originalEnemyKillHandler = realtimeCombat.removeEnemy;
+        realtimeCombat.removeEnemy = function(enemy) {
+            // Call original
+            originalEnemyKillHandler.call(this, enemy);
+
+            // Update kill quests
+            questManager.updateQuestsByTrigger('kill', enemy.type || 'any', 1);
+            updateQuestTracker();
+        };
+
+        // Hook: Item Collected (when added to inventory)
+        const originalAddItem = inventorySystem.addItem;
+        inventorySystem.addItem = function(itemId, quantity) {
+            // Call original
+            const result = originalAddItem.call(this, itemId, quantity);
+
+            // Update collect quests
+            if (result) {
+                questManager.updateQuestsByTrigger('collect', itemId, quantity);
+                updateQuestTracker();
+            }
+
+            return result;
+        };
+
+        // Hook: NPC Talked To (in dialogue system)
+        const originalStartDialogue = startDialogue;
+        startDialogue = function(npc) {
+            // Call original
+            originalStartDialogue(npc);
+
+            // Update talk quests
+            questManager.updateQuestsByTrigger('talk', npc.id, 1);
+            updateQuestTracker();
+        };
+
+        // Hook: Region Explored (when entering region)
+        // We'll need to add this to the region checking code
+        let exploredRegions = new Set();
+        function checkRegionExploration(regionName) {
+            if (!exploredRegions.has(regionName)) {
+                exploredRegions.add(regionName);
+                questManager.updateQuestsByTrigger('explore', regionName, 1);
+                updateQuestTracker();
+                console.log(`🗺️ Explored: ${regionName}`);
+            }
+        }
+
+        console.log('🔗 Quest Hooks installed!');
+
 
         // ===== NPC INTERACTION SYSTEM (Phase 6) =====
 
@@ -2449,8 +2509,15 @@
 
                 case 'accept_quest':
                     // Accept Quest (Quest-Giver)
-                    console.log(`✅ Quest accepted: ${npc.quests[0]}`);
-                    alert(`Quest "${npc.quests[0]}" accepted!\n(Quest System coming in Phase 7)`);
+                    const availableQuests = questManager.getQuestsFromNPC(npc.id);
+                    if (availableQuests.length > 0) {
+                        const quest = availableQuests[0];
+                        questManager.acceptQuest(quest.id);
+                        console.log(`✅ Quest accepted: ${quest.name}`);
+                        alert(`Quest Accepted: ${quest.name}!\n\n${quest.description}\n\nCheck your Quest Log (Q or J)`);
+                    } else {
+                        alert('No quests available from this NPC.');
+                    }
                     endDialogue();
                     break;
 
@@ -2547,6 +2614,427 @@
         });
 
         console.log('💬 NPC Dialogue System ready! Press E to talk to NPCs!');
+        // ===== QUEST SYSTEM UI (Phase 7) =====
+
+        let questLogOpen = false;
+        let questTrackerUI = null;
+        let questLogUI = null;
+
+        // Create Quest Tracker (Top-Right Widget)
+        function createQuestTrackerUI() {
+            const tracker = document.createElement('div');
+            tracker.id = 'quest-tracker';
+            tracker.style.cssText = `
+                position: fixed;
+                top: 200px;
+                right: 20px;
+                width: 300px;
+                background: rgba(0, 0, 0, 0.85);
+                border: 2px solid #FFD700;
+                border-radius: 10px;
+                padding: 15px;
+                color: white;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                z-index: 400;
+                display: none;
+            `;
+            document.body.appendChild(tracker);
+            return tracker;
+        }
+
+        questTrackerUI = createQuestTrackerUI();
+
+        // Update Quest Tracker
+        function updateQuestTracker() {
+            const tracked = questManager.getTrackedQuest();
+
+            if (!tracked) {
+                questTrackerUI.style.display = 'none';
+                return;
+            }
+
+            questTrackerUI.style.display = 'block';
+
+            const objectives = tracked.getFormattedObjectives();
+            const percent = tracked.getCompletionPercent();
+
+            let html = `
+                <div style="font-weight: bold; color: #FFD700; margin-bottom: 10px;">
+                    📋 ${tracked.name}
+                </div>
+                <div style="margin-bottom: 8px; font-size: 11px; color: #aaa;">
+                    ${tracked.description.substring(0, 60)}...
+                </div>
+                <div style="background: rgba(255, 255, 255, 0.1); border-radius: 5px; height: 8px; margin-bottom: 10px;">
+                    <div style="background: #FFD700; height: 100%; width: ${percent}%; border-radius: 5px;"></div>
+                </div>
+            `;
+
+            objectives.forEach(obj => {
+                html += `
+                    <div style="margin: 5px 0; display: flex; justify-content: space-between;">
+                        <span>${obj.icon} ${obj.text}</span>
+                        <span style="color: ${obj.complete ? '#00ff00' : '#ffaa00'};">${obj.progress}</span>
+                    </div>
+                `;
+            });
+
+            questTrackerUI.innerHTML = html;
+        }
+
+        // Create Quest Log UI (Full Screen Overlay)
+        function createQuestLogUI() {
+            const ui = document.createElement('div');
+            ui.id = 'quest-log-ui';
+            ui.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 1000px;
+                height: 700px;
+                background: rgba(0, 0, 0, 0.95);
+                border: 3px solid #FFD700;
+                border-radius: 15px;
+                padding: 20px;
+                color: white;
+                font-family: 'Courier New', monospace;
+                z-index: 1000;
+                display: none;
+            `;
+
+            // Title
+            const title = document.createElement('div');
+            title.innerHTML = '<h2 style="margin: 0 0 20px 0; color: #FFD700; text-shadow: 0 0 10px #FFD700;">📋 QUEST LOG</h2>';
+            ui.appendChild(title);
+
+            // Close Button
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕ Close (Q or ESC)';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                padding: 8px 15px;
+                background: rgba(255, 0, 0, 0.3);
+                border: 2px solid #ff0000;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+            `;
+            closeBtn.onclick = () => { toggleQuestLog(); };
+            ui.appendChild(closeBtn);
+
+            // Main Container
+            const mainContainer = document.createElement('div');
+            mainContainer.style.cssText = `
+                display: flex;
+                gap: 20px;
+                height: calc(100% - 60px);
+            `;
+
+            // Left Panel (Quest List)
+            const leftPanel = document.createElement('div');
+            leftPanel.style.cssText = `
+                width: 350px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 10px;
+                padding: 15px;
+                overflow-y: auto;
+            `;
+
+            // Tabs (Active / Completed)
+            const tabs = document.createElement('div');
+            tabs.style.cssText = 'display: flex; gap: 10px; margin-bottom: 15px;';
+
+            const activeTab = document.createElement('button');
+            activeTab.id = 'quest-tab-active';
+            activeTab.textContent = '📝 Active';
+            activeTab.style.cssText = `
+                flex: 1;
+                padding: 10px;
+                background: rgba(255, 215, 0, 0.3);
+                border: 2px solid #FFD700;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                font-family: 'Courier New', monospace;
+            `;
+            activeTab.onclick = () => { showQuestTab('active'); };
+
+            const completedTab = document.createElement('button');
+            completedTab.id = 'quest-tab-completed';
+            completedTab.textContent = '✅ Completed';
+            completedTab.style.cssText = `
+                flex: 1;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid #666;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                font-family: 'Courier New', monospace;
+            `;
+            completedTab.onclick = () => { showQuestTab('completed'); };
+
+            tabs.appendChild(activeTab);
+            tabs.appendChild(completedTab);
+            leftPanel.appendChild(tabs);
+
+            // Quest List Container
+            const questList = document.createElement('div');
+            questList.id = 'quest-list';
+            leftPanel.appendChild(questList);
+
+            mainContainer.appendChild(leftPanel);
+
+            // Right Panel (Quest Details)
+            const rightPanel = document.createElement('div');
+            rightPanel.id = 'quest-details-panel';
+            rightPanel.style.cssText = `
+                flex: 1;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 10px;
+                padding: 20px;
+                overflow-y: auto;
+            `;
+            rightPanel.innerHTML = '<p style="color: #aaa;">Select a quest to view details...</p>';
+
+            mainContainer.appendChild(rightPanel);
+
+            ui.appendChild(mainContainer);
+
+            document.body.appendChild(ui);
+            return ui;
+        }
+
+        questLogUI = createQuestLogUI();
+
+        let currentQuestTab = 'active';
+
+        function toggleQuestLog() {
+            questLogOpen = !questLogOpen;
+            questLogUI.style.display = questLogOpen ? 'block' : 'none';
+
+            if (questLogOpen) {
+                updateQuestLog();
+            }
+        }
+
+        function showQuestTab(tab) {
+            currentQuestTab = tab;
+
+            // Update tab styles
+            const activeBtn = document.getElementById('quest-tab-active');
+            const completedBtn = document.getElementById('quest-tab-completed');
+
+            if (tab === 'active') {
+                activeBtn.style.background = 'rgba(255, 215, 0, 0.3)';
+                activeBtn.style.borderColor = '#FFD700';
+                completedBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+                completedBtn.style.borderColor = '#666';
+            } else {
+                activeBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+                activeBtn.style.borderColor = '#666';
+                completedBtn.style.background = 'rgba(0, 255, 0, 0.2)';
+                completedBtn.style.borderColor = '#00ff00';
+            }
+
+            updateQuestLog();
+        }
+
+        function updateQuestLog() {
+            const listDiv = document.getElementById('quest-list');
+            const quests = currentQuestTab === 'active'
+                ? questManager.getActiveQuests()
+                : questManager.getCompletedQuests();
+
+            listDiv.innerHTML = '';
+
+            if (quests.length === 0) {
+                listDiv.innerHTML = `<p style="color: #aaa; text-align: center; margin-top: 50px;">
+                    ${currentQuestTab === 'active' ? 'No active quests' : 'No completed quests'}
+                </p>`;
+                return;
+            }
+
+            quests.forEach(quest => {
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    padding: 12px;
+                    margin-bottom: 10px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 2px solid ${questManager.trackedQuest === quest.id ? '#FFD700' : '#666'};
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                `;
+
+                const percent = quest.getCompletionPercent();
+
+                item.innerHTML = `
+                    <div style="font-weight: bold; color: #FFD700; margin-bottom: 5px;">
+                        ${quest.name}
+                    </div>
+                    <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">
+                        Type: ${quest.type.toUpperCase()}
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 3px; height: 6px;">
+                        <div style="background: ${percent === 100 ? '#00ff00' : '#FFD700'}; height: 100%; width: ${percent}%; border-radius: 3px;"></div>
+                    </div>
+                    <div style="font-size: 10px; color: #aaa; margin-top: 5px; text-align: right;">
+                        ${percent}%
+                    </div>
+                `;
+
+                item.onmouseenter = () => {
+                    item.style.background = 'rgba(255, 255, 255, 0.2)';
+                    item.style.transform = 'scale(1.02)';
+                };
+
+                item.onmouseleave = () => {
+                    item.style.background = 'rgba(255, 255, 255, 0.1)';
+                    item.style.transform = 'scale(1)';
+                };
+
+                item.onclick = () => { showQuestDetails(quest); };
+
+                listDiv.appendChild(item);
+            });
+        }
+
+        function showQuestDetails(quest) {
+            const detailsPanel = document.getElementById('quest-details-panel');
+
+            const objectives = quest.getFormattedObjectives();
+            const percent = quest.getCompletionPercent();
+
+            let objectivesHTML = '';
+            objectives.forEach(obj => {
+                objectivesHTML += `
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 5px; margin-bottom: 8px;">
+                        <span>${obj.icon} ${obj.text}</span>
+                        <span style="color: ${obj.complete ? '#00ff00' : '#ffaa00'};">${obj.progress}</span>
+                    </div>
+                `;
+            });
+
+            let rewardsHTML = '';
+            if (quest.rewards.gold > 0) {
+                rewardsHTML += `<span style="color: #FFD700;">💰 ${quest.rewards.gold} Gold</span><br>`;
+            }
+            if (quest.rewards.xp > 0) {
+                rewardsHTML += `<span style="color: #00aaff;">⭐ ${quest.rewards.xp} XP</span><br>`;
+            }
+            if (quest.rewards.items.length > 0) {
+                rewardsHTML += `<span style="color: #00ff00;">🎁 ${quest.rewards.items.join(', ')}</span>`;
+            }
+
+            const trackBtn = quest.status === 'active' ? `
+                <button onclick="questManager.trackQuest('${quest.id}'); updateQuestLog(); updateQuestTracker();"
+                    style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); border: 2px solid #FFD700; border-radius: 5px; color: white; cursor: pointer; font-family: 'Courier New', monospace; margin-top: 15px;">
+                    📍 Track Quest
+                </button>
+            ` : '';
+
+            const completeBtn = quest.status === 'active' && quest.isComplete() ? `
+                <button onclick="completeQuestFromLog('${quest.id}');"
+                    style="padding: 10px 20px; background: rgba(0, 255, 0, 0.3); border: 2px solid #00ff00; border-radius: 5px; color: white; cursor: pointer; font-family: 'Courier New', monospace; margin-top: 15px; margin-left: 10px;">
+                    ✅ Complete Quest
+                </button>
+            ` : '';
+
+            detailsPanel.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #FFD700; margin: 0 0 10px 0;">${quest.name}</h3>
+                    <p style="color: #aaa; margin: 0 0 15px 0; font-style: italic;">${quest.description}</p>
+                    <div style="display: inline-block; padding: 5px 10px; background: rgba(255, 215, 0, 0.2); border-radius: 5px; font-size: 12px;">
+                        Type: <b>${quest.type.toUpperCase()}</b>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #FFD700; margin: 0 0 10px 0;">Progress (${percent}%)</h4>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 5px; height: 10px; margin-bottom: 15px;">
+                        <div style="background: ${percent === 100 ? '#00ff00' : '#FFD700'}; height: 100%; width: ${percent}%; border-radius: 5px;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #FFD700; margin: 0 0 10px 0;">Objectives</h4>
+                    ${objectivesHTML}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #FFD700; margin: 0 0 10px 0;">Rewards</h4>
+                    <div style="padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                        ${rewardsHTML}
+                    </div>
+                </div>
+
+                ${trackBtn}
+                ${completeBtn}
+            `;
+        }
+
+        window.completeQuestFromLog = function(questId) {
+            const quest = questManager.quests[questId];
+            if (!quest) return;
+
+            // Give rewards
+            if (quest.rewards.gold > 0) {
+                inventorySystem.addGold(quest.rewards.gold);
+            }
+            quest.rewards.items.forEach(itemId => {
+                inventorySystem.addItem(itemId, 1);
+            });
+
+            // Complete quest
+            questManager.completeQuest(questId);
+
+            // Update UI
+            updateQuestLog();
+            updateQuestTracker();
+
+            // Show notification
+            alert(`🎉 Quest Complete: ${quest.name}!\n\nRewards:\n💰 ${quest.rewards.gold} Gold\n⭐ ${quest.rewards.xp} XP\n🎁 ${quest.rewards.items.join(', ')}`);
+        };
+
+        // Quest Complete Notification Event Listener
+        window.addEventListener('quest-complete', (e) => {
+            const { questId, quest } = e.detail;
+            updateQuestTracker();
+
+            // Show notification
+            console.log(`🎉 Quest Complete: ${quest.name}`);
+        });
+
+        // Quest Log Keyboard Handler
+        window.addEventListener('keydown', (e) => {
+            // Q or J to open quest log
+            if ((e.key === 'q' || e.key === 'Q' || e.key === 'j' || e.key === 'J') && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                e.preventDefault();
+                toggleQuestLog();
+            }
+
+            // ESC to close quest log
+            if (e.key === 'Escape' && questLogOpen) {
+                toggleQuestLog();
+            }
+        });
+
+        console.log('📋 Quest UI ready! Press Q or J to open Quest Log!');
+
+        // Update tracker every second
+        setInterval(() => {
+            if (!questLogOpen) {
+                updateQuestTracker();
+            }
+        }, 1000);
+
 
 
         // HOTKEYS für Essen (F1-F5)
