@@ -187,30 +187,23 @@ class CameraController {
 
         } else if (this.currentMode === this.MODES.THIRD) {
             // THIRD-PERSON: Fortnite-Style
-            // Kamera folgt Character-Rotation + freie Kamera-Rotation (orbitYaw/Pitch)
+            // Kamera ist frei drehbar (nur orbitYaw/Pitch), UNABHÄNGIG von Character-Rotation
 
-            // Character-Rotation als Basis
-            const characterYaw = this.character.rotation.y;
-
-            // Kamera-Offset relativ zur Character-Rotation
-            const distance = 8;  // Näher als vorher für Fortnite-Feeling
+            const distance = 8;  // Näher für Fortnite-Feeling
             const heightOffset = 2.5;  // Über Schulter
             const shoulderOffset = 1.5;  // Seitlich (rechte Schulter)
 
-            // Kombiniere Character-Rotation mit freier Kamera-Rotation
-            const totalYaw = characterYaw + this.orbitYaw;
-            const totalPitch = this.orbitPitch;
-
-            const cos = Math.cos(totalPitch);
-            const sin = Math.sin(totalPitch);
-            const cosYaw = Math.cos(totalYaw);
-            const sinYaw = Math.sin(totalYaw);
+            // Verwende NUR orbitYaw/Pitch (NICHT character.rotation.y!)
+            const cos = Math.cos(this.orbitPitch);
+            const sin = Math.sin(this.orbitPitch);
+            const cosYaw = Math.cos(this.orbitYaw);
+            const sinYaw = Math.sin(this.orbitYaw);
 
             // Kamera-Position: Hinter Character + Schulter-Offset + Höhe
             const offset = new THREE.Vector3(
-                sinYaw * cos * distance + shoulderOffset * Math.cos(characterYaw + Math.PI/2),
+                sinYaw * cos * distance + shoulderOffset * Math.cos(this.orbitYaw + Math.PI/2),
                 heightOffset + sin * distance * 0.5,
-                cosYaw * cos * distance + shoulderOffset * Math.sin(characterYaw + Math.PI/2)
+                cosYaw * cos * distance + shoulderOffset * Math.sin(this.orbitYaw + Math.PI/2)
             );
 
             const charTarget = this.character.position.clone();
@@ -285,8 +278,9 @@ class CameraController {
         if (this.currentMode === this.MODES.ORBIT) {
             return this.orbitYaw;
         } else if (this.currentMode === this.MODES.THIRD) {
-            // In Third-Person: Character-Rotation + freie Kamera-Rotation
-            return this.character ? this.character.rotation.y + this.orbitYaw : this.orbitYaw;
+            // In Third-Person: NUR Kamera-Rotation (NICHT Character-Rotation!)
+            // Sonst gibt es einen Feedback-Loop!
+            return this.orbitYaw;
         } else if (this.currentMode === this.MODES.FIRST) {
             // In First-Person: Character-Rotation ist die Kamera-Richtung
             return this.character ? this.character.rotation.y : 0;
