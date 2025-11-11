@@ -393,6 +393,10 @@
     <script src="static/js/skill_system.js"></script>
     <script src="static/js/crafting_system.js"></script>
     <script src="static/js/special_locations.js"></script>
+    <script src="static/js/performance_monitor.js"></script>
+    <script src="static/js/save_system.js"></script>
+    <script src="static/js/sound_system.js"></script>
+    <script src="static/js/tutorial_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
 
     <script>
@@ -467,6 +471,46 @@
         // Special Locations (Phase 9: Reich der Drei, Funkelnest, Tiefenhöhlen)
         const specialLocations = new SpecialLocations(scene, THREE, inventorySystem, questManager);
         specialLocations.createEntranceMarkers();
+
+        // Phase 10: Polish Systems
+        const performanceMonitor = new PerformanceMonitor();
+        const soundSystem = new SoundSystem();
+        const tutorialSystem = new TutorialSystem();
+
+        // Save System (needs game state)
+        const gameState = {
+            character,
+            inventorySystem,
+            questManager,
+            skillSystem,
+            realtimeCombat,
+            specialLocations
+        };
+        const saveSystem = new SaveSystem(gameState);
+
+        // Try to load save
+        saveSystem.loadGame();
+
+        console.log('🎨 Phase 10 Systems initialisiert!');
+
+        // Manual Save/Load (Phase 10)
+        window.addEventListener('keydown', (e) => {
+            // F5: Manual Save
+            if (e.key === 'F5') {
+                e.preventDefault();
+                saveSystem.saveGame();
+            }
+
+            // F9: Manual Load
+            if (e.key === 'F9') {
+                e.preventDefault();
+                if (confirm('💾 Spielstand laden? (Ungespeicherte Änderungen gehen verloren!)')) {
+                    saveSystem.loadGame();
+                }
+            }
+        });
+
+
 
 
 
@@ -3440,6 +3484,10 @@
         setInterval(() => {
             if (!questLogOpen) {
                 updateQuestTracker();
+
+            // Update Performance Monitor (Phase 10)
+            performanceMonitor.update(renderer);
+
                 // Update Special Features (Phase 8)
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
                 specialFeatures.update(delta, character.position, currentBuildings);
