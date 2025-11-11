@@ -1213,7 +1213,12 @@ class RealtimeCombat {
         } else if (hand === 'right') {
             this.rightHandWeapon = weapon;
         }
-        console.log(`⚔️ ${hand} Hand: ${weapon.type} equipped`);
+
+        if (weapon) {
+            console.log(`⚔️ ${hand} Hand: ${weapon.type} equipped`);
+        } else {
+            console.log(`🔓 ${hand} Hand: unequipped`);
+        }
     }
 }
 

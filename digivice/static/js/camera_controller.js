@@ -200,24 +200,30 @@ class CameraController {
             this.camera.lookAt(charTarget);
 
         } else if (this.currentMode === this.MODES.FIRST) {
-            // FIRST-PERSON: Ego-Perspektive (Kamera VOR dem Kopf, nicht IM Kopf)
-            // Character position.y ist bereits die Körpermitte
-            // Augenhöhe bei ~40% über Mitte = realistische Augenhöhe
-            const eyeHeight = this.characterHeight * 0.40;  // ~40% über Mitte = Augenhöhe
-            const forwardOffset = 1.5;  // Kamera 1.5 Einheiten VOR dem Kopf
+            // FIRST-PERSON: Ego-Perspektive wie Fortnite
+            // Kamera schaut in Charakter-Blickrichtung (character.rotation.y)
 
-            // Kamera-Position: VOR dem Character, in Blickrichtung
+            const eyeHeight = this.characterHeight * 0.40;  // Augenhöhe
+
+            // WICHTIG: Verwende character.rotation.y als Basis-Blickrichtung (Fortnite-Style)
+            const characterYaw = this.character.rotation.y;
+
+            // Kamera-Position an den Augen des Charakters
             this.camera.position.set(
-                this.character.position.x + sinYaw * cosPitch * forwardOffset,
+                this.character.position.x,
                 this.character.position.y + eyeHeight,
-                this.character.position.z + cosYaw * cosPitch * forwardOffset
+                this.character.position.z
             );
 
+            // Blickrichtung: Charakter-Rotation + Maus-Pitch für hoch/runter schauen
             const lookDistance = 10;
+            const charCos = Math.cos(characterYaw);
+            const charSin = Math.sin(characterYaw);
+
             const lookTarget = new THREE.Vector3(
-                this.camera.position.x + sinYaw * cosPitch * lookDistance,
+                this.camera.position.x + charSin * cosPitch * lookDistance,
                 this.camera.position.y + sinPitch * lookDistance,
-                this.camera.position.z + cosYaw * cosPitch * lookDistance
+                this.camera.position.z + charCos * cosPitch * lookDistance
             );
 
             this.camera.lookAt(lookTarget);
