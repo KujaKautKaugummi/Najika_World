@@ -430,9 +430,9 @@
         // Default: MANUAL Mode (volle Kontrolle)
         realtimeCombat.setCombatMode('MANUAL');
 
-        // Equip starting weapons
-        realtimeCombat.equipWeapon('left', { type: 'sword', element: null, damage: 15 });
-        realtimeCombat.equipWeapon('right', { type: 'dagger', element: null, damage: 12 });
+        // Equip starting weapons (MIT ELEMENTEN für Weave-Testing!)
+        realtimeCombat.equipWeapon('left', { type: 'fire_sword', element: 'fire', damage: 15 });
+        realtimeCombat.equipWeapon('right', { type: 'ice_dagger', element: 'ice', damage: 12 });
 
         // Verbesserte Lighting für bessere Atmosphäre
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Heller
@@ -1688,7 +1688,8 @@
 
             // Realtime Combat System Update (Phase 3: ECHTZEIT!)
             if (!isInInterior) {
-                realtimeCombat.update(delta);
+                // Update Combat System (mit Player Position für Enemy AI)
+                realtimeCombat.update(delta, character.position);
 
                 // Proximity Detection - Auto-Start Combat
                 if (!realtimeCombat.combatActive) {
