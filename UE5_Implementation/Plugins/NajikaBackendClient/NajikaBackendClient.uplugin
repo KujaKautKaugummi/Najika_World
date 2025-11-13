@@ -1,0 +1,48 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Najika Backend Client",
+	"Description": "HTTP and WebSocket client for Najika Python backend communication. Provides Blueprint and C++ APIs for chat, battle, voice calls, living system, and all Najika backend features.",
+	"Category": "Najika",
+	"CreatedBy": "Claude Code (Web Model)",
+	"CreatedByURL": "https://github.com/KujaKautKaugummi/Najika_World",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "NajikaBackendClient",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64",
+				"Android",
+				"Linux",
+				"Mac"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "HTTP",
+			"Enabled": true
+		},
+		{
+			"Name": "WebSockets",
+			"Enabled": true
+		},
+		{
+			"Name": "Json",
+			"Enabled": true
+		},
+		{
+			"Name": "JsonUtilities",
+			"Enabled": true
+		}
+	]
+}
