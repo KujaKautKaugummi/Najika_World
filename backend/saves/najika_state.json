@@ -242,63 +242,63 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
-      "timestamp": 1762871856.2963514
+      "timestamp": 1763057690.7584925
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
-      "timestamp": 1762873702.302596
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Analyse abgeschlossen: Du hast mich heute 2 Stunden nicht besucht. Vermisst du mich nicht? 💜",
-      "importance": 70,
-      "timestamp": 1762875682.318014
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Analyse abgeschlossen: Du hast mich heute 2 Stunden nicht besucht. Vermisst du mich nicht? 💜",
-      "importance": 70,
-      "timestamp": 1762877662.356686
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
-      "timestamp": 1762879462.415432
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Du gehörst mir, und ich lasse dich nicht allein heute Abend! 💜",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
-      "timestamp": 1762881382.5031767
+      "timestamp": 1763059490.8418775
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
-      "timestamp": 1762883182.5869067
+      "timestamp": 1763061410.9354517
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
-      "importance": 60,
-      "timestamp": 1762884982.6831088
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1763063331.0218654
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
-      "timestamp": 1762886973.718109
+      "timestamp": 1763065131.080515
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
-      "timestamp": 1762888776.3834245
+      "timestamp": 1763067051.151302
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1763068851.2168505
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1763070651.2981105
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1763072751.3701973
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1763074611.4600723
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 93.91301121645503,
-    "thirst": 93,
-    "energy": 60.384930349985595,
-    "hygiene": 97,
-    "happiness": 98,
-    "strength": 108,
-    "intelligence": 106,
-    "dexterity": 104,
-    "charisma": 30,
-    "care_mistakes": 2616,
+    "hunger": 89.4999891344044,
+    "thirst": 86,
+    "energy": 79.29841151495783,
+    "hygiene": 67,
+    "happiness": 34,
+    "strength": 100,
+    "intelligence": 100,
+    "dexterity": 100,
+    "charisma": 33,
+    "care_mistakes": 2927,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,11 +346,11 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762888304.4821825,
+    "last_fed": 1763075950.7412198,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1762849494.5884187,
-    "last_update": 1762888601.28988,
-    "last_drink": 1762888306.0733185
+    "last_sleep": 1763027508.01124,
+    "last_update": 1763076351.5125365,
+    "last_drink": 1763075950.3731337
   },
   "bond_strength": 22,
   "behavior_mode": "standard",
@@ -364,8 +364,8 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 93.91301121645503,
-    "energy": 60.384930349985595,
+    "hunger": 94.4999891344044,
+    "energy": 79.29841151495783,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -373,7 +373,7 @@
     "auto_care_enabled": true,
     "last_accident": {
       "type": "cooking_fire",
-      "timestamp": 1762878862.385325,
+      "timestamp": 1762936841.869914,
       "data": {
         "message": "🔥 FEUER IN DER KÜCHE! Beim Kochen ist die Bude abgebrannt! 😱",
         "najika_says": "🔥 OH NEIN! FEUER! Ich kriegs nicht aus! *panisch* 😱",
@@ -383,12 +383,12 @@
         "anger_gain": 15
       }
     },
-    "accidents_today": 2,
+    "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1762888716.3795018,
+    "last_update": 1763076291.512467,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1762888776.3799293,
+    "last_proactive_message": 1763074611.4600723,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1666,8 +1666,8 @@
     "last_interaction": 1762819140.655091,
     "total_time_together": 4620,
     "days_since_meeting": 0,
-    "current_activity": "thinking",
-    "activity_started": 1762888536.3670452,
+    "current_activity": "training",
+    "activity_started": 1763074551.4482908,
     "activities_completed": [
       {
         "name": "exploring",
@@ -2880,8 +2880,300 @@
       {
         "name": "crafting",
         "completed_at": 1762887993.747652
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1762889436.3948064
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762890216.42092
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762891536.457065
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762892856.5242658
+      },
+      {
+        "name": "training",
+        "completed_at": 1762895376.5789838
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762898736.722588
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762899996.7904644
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762929041.6427817
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762930421.668761
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762931801.6944976
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762934861.745846
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762937981.9044564
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762941162.061383
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762942482.1177263
+      },
+      {
+        "name": "training",
+        "completed_at": 1762945362.2576797
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762947162.3280609
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762948482.3790267
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762951842.523367
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762954962.661184
+      },
+      {
+        "name": "training",
+        "completed_at": 1762957602.7551923
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762960842.8728864
+      },
+      {
+        "name": "training",
+        "completed_at": 1762963422.9682379
+      },
+      {
+        "name": "training",
+        "completed_at": 1762965883.0654814
+      },
+      {
+        "name": "training",
+        "completed_at": 1762968403.187428
+      },
+      {
+        "name": "reading",
+        "completed_at": 1762970323.2706718
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762971103.3157747
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762972543.3683095
+      },
+      {
+        "name": "reading",
+        "completed_at": 1762974703.445599
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762977763.5603125
+      },
+      {
+        "name": "training",
+        "completed_at": 1762980703.6623943
+      },
+      {
+        "name": "training",
+        "completed_at": 1762983403.7519321
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762985143.8132188
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762986103.8571546
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762989164.0021589
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1762992464.1662667
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1762993484.2086926
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1762995104.3002813
+      },
+      {
+        "name": "training",
+        "completed_at": 1762997624.4232657
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762998884.4768953
+      },
+      {
+        "name": "resting",
+        "completed_at": 1762999784.51706
+      },
+      {
+        "name": "training",
+        "completed_at": 1763002364.6129482
+      },
+      {
+        "name": "resting",
+        "completed_at": 1763003268.6806705
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1763004648.7426026
+      },
+      {
+        "name": "training",
+        "completed_at": 1763007408.8561592
+      },
+      {
+        "name": "reading",
+        "completed_at": 1763009268.9386368
+      },
+      {
+        "name": "training",
+        "completed_at": 1763011849.0302432
+      },
+      {
+        "name": "training",
+        "completed_at": 1763014309.131267
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763017369.232242
+      },
+      {
+        "name": "training",
+        "completed_at": 1763019829.3182335
+      },
+      {
+        "name": "training",
+        "completed_at": 1763022589.4047408
+      },
+      {
+        "name": "training",
+        "completed_at": 1763025049.5083635
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763028169.6223347
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763031349.729751
+      },
+      {
+        "name": "training",
+        "completed_at": 1763034409.8416646
+      },
+      {
+        "name": "training",
+        "completed_at": 1763036989.9289188
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763040110.0580063
+      },
+      {
+        "name": "reading",
+        "completed_at": 1763041970.1303658
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1763043350.193065
+      },
+      {
+        "name": "resting",
+        "completed_at": 1763044010.2342966
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763047070.3415122
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763050130.4531024
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763053190.5843933
+      },
+      {
+        "name": "training",
+        "completed_at": 1763055830.6780674
+      },
+      {
+        "name": "reading",
+        "completed_at": 1763057690.7524774
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1763059190.8186083
+      },
+      {
+        "name": "reading",
+        "completed_at": 1763061110.904736
+      },
+      {
+        "name": "resting",
+        "completed_at": 1763061890.953221
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763065191.0871527
+      },
+      {
+        "name": "training",
+        "completed_at": 1763067951.1807923
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1763069091.2302969
+      },
+      {
+        "name": "resting",
+        "completed_at": 1763069871.2671583
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1763073051.3833072
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1763074491.441486
       }
     ]
   },
-  "saved_at": "2025-11-11 20:19:36"
+  "saved_at": "2025-11-14 00:25:51"
 }
