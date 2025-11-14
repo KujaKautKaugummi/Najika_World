@@ -242,12 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
-      "importance": 60,
-      "timestamp": 1763091233.7063591
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
       "timestamp": 1763093033.7695224
@@ -299,6 +293,12 @@
       "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
       "importance": 60,
       "timestamp": 1763107854.4732134
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1763109654.552472
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 39.079125123222674,
+    "hunger": 47.32905901405547,
     "thirst": 0,
-    "energy": 42.045893108248706,
-    "hygiene": 35.0,
+    "energy": 40.99585344274839,
+    "hygiene": 23.0,
     "happiness": 0,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 34,
-    "care_mistakes": 3041,
+    "care_mistakes": 3045,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1763108454.5100734,
+    "last_fed": 1763110254.5821536,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1763027508.01124,
-    "last_update": 1763109054.535114,
+    "last_update": 1763110254.5761492,
     "last_drink": 1763075950.3731337
   },
   "bond_strength": 22,
@@ -364,10 +364,10 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 44.079125123222674,
-    "energy": 42.045893108248706,
-    "mood_game": 0,
-    "anger_level": 100,
+    "hunger": 47.32905901405547,
+    "energy": 40.99585344274839,
+    "mood_game": -15,
+    "anger_level": 110,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
@@ -385,10 +385,10 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1763108994.534555,
+    "last_update": 1763110254.5821536,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1763107854.47269,
+    "last_proactive_message": 1763109654.5519695,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -3243,5 +3243,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-14 09:30:54"
+  "saved_at": "2025-11-14 09:50:54"
 }
