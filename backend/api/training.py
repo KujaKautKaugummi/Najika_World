@@ -178,14 +178,24 @@ def start_training_job(
             detail=f"Cannot start job with status: {job.status}"
         )
 
-    job.status = "running"
-    job.started_at = datetime.utcnow()
-    db.commit()
+    # Import training launcher
+    from backend.services.training_launcher import training_launcher
 
-    # TODO: Start actual training
-    # background_tasks.add_task(run_training, job_id, db)
+    # Launch training in background
+    success = training_launcher.launch_training(
+        job_id=job_id,
+        training_type=job.training_type,
+        config=job.config,
+        db=db
+    )
 
-    return {"success": True, "message": "Training started"}
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to launch training job"
+        )
+
+    return {"success": True, "message": "Training started in background"}
 
 
 @router.post("/jobs/{job_id}/cancel")
