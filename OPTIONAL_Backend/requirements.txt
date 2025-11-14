@@ -1,0 +1,47 @@
+# ============================================================================
+# OPTIONAL Backend - Python Dependencies
+# ============================================================================
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# Oder mit venv:
+#   python -m venv venv
+#   source venv/bin/activate  (Linux/Mac)
+#   venv\Scripts\activate  (Windows)
+#   pip install -r requirements.txt
+#
+# ============================================================================
+
+# FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+bcrypt==4.1.1
+
+# JWT
+PyJWT==2.8.0
+
+# WebSocket Support
+websockets==12.0
+
+# Database (Optional - für SQLite/PostgreSQL)
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Whisper AI (Uncomment wenn genutzt)
+# openai-whisper==20231117
+# torch==2.1.0
+# torchaudio==2.1.0
+
+# Utilities
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# CORS
+python-cors==1.0.0
