@@ -221,27 +221,25 @@ class TranscribeRequest(BaseModel):
 @router.post("/transcribe")
 async def transcribe_audio(request: TranscribeRequest):
     """
-    Transcribe audio using Whisper AI (placeholder)
-    TODO: Implement actual Whisper AI integration
+    Transcribe audio using Whisper AI
     """
 
-    # Decode base64 audio
-    try:
-        audio_data = base64.b64decode(request.audio_base64)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid base64 audio: {e}"
-        )
+    # Import voice service
+    from backend.services.voice_service import voice_service
 
-    # TODO: Call Whisper AI for transcription
-    # For now, return placeholder
-    transcription = "[Whisper AI Placeholder - Audio received successfully]"
+    # Transcribe audio
+    result = voice_service.transcribe_base64(request.audio_base64, language="de")
+
+    if not result["success"]:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Transcription failed: {result.get('error', 'Unknown error')}"
+        )
 
     return {
         "success": True,
-        "transcription": transcription,
-        "language": "de",  # Detected language
+        "transcription": result["text"],
+        "language": result.get("language", "de"),
     }
 
 
@@ -253,20 +251,28 @@ class TTSRequest(BaseModel):
 @router.post("/tts")
 async def text_to_speech(request: TTSRequest):
     """
-    Convert text to speech (placeholder)
-    TODO: Implement TTS engine (Edge TTS or Coqui)
+    Convert text to speech using Edge TTS
     """
 
-    # TODO: Generate audio from text using TTS engine
+    # Import voice service
+    from backend.services.voice_service import voice_service
 
-    # Placeholder response
-    audio_b64 = "placeholder_audio_base64_here"
+    try:
+        # Generate audio (returns base64)
+        audio_b64 = await voice_service.speak_base64_async(request.text)
 
-    return {
-        "success": True,
-        "audio_base64": audio_b64,
-        "format": "mp3",
-    }
+        return {
+            "success": True,
+            "audio_base64": audio_b64,
+            "format": "mp3",
+            "personality": voice_service.tts.personality
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"TTS failed: {e}"
+        )
 
 
 # ============================================================================
