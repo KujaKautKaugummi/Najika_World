@@ -13,7 +13,7 @@ from backend.config import settings
 from backend.database import init_db
 
 # Import API routers
-from backend.api import auth, game, training, voice, admin
+from backend.api import auth, game, training, voice, admin, arena
 
 
 # ============================================================================
@@ -59,6 +59,7 @@ app = FastAPI(
 
     - 🔐 **Authentication** - JWT-based user authentication
     - 🎮 **Game Systems** - Combat, inventory, farming, fishing, quests
+    - 🏟️ **Nemesis Arena** - Shadow of Mordor hierarchy + Mortal Kombat finishers
     - 🤖 **AI Training** - LoRA training, session training, code training
     - 🎤 **Voice Chat** - WebSocket voice with Whisper AI transcription
     - ⚙️ **Admin** - User management, system monitoring
@@ -98,6 +99,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(game.router, prefix=settings.API_PREFIX)
+app.include_router(arena.router, prefix=settings.API_PREFIX)
 app.include_router(training.router, prefix=settings.API_PREFIX)
 app.include_router(voice.router, prefix=settings.API_PREFIX)
 app.include_router(admin.router, prefix=settings.API_PREFIX)
@@ -139,6 +141,7 @@ def api_info():
         "endpoints": {
             "auth": f"{settings.API_PREFIX}/auth",
             "game": f"{settings.API_PREFIX}/game",
+            "arena": f"{settings.API_PREFIX}/game/arena",
             "training": f"{settings.API_PREFIX}/training",
             "voice": f"{settings.API_PREFIX}/voice",
             "admin": f"{settings.API_PREFIX}/admin",
