@@ -169,12 +169,35 @@ async def handle_voice_message(message: dict, user_id: str, username: str):
         )
 
     elif msg_type == "transcription_request":
-        # Request transcription of audio
-        # TODO: Integrate Whisper AI
-        await manager.send_personal_message(
-            {"type": "transcription", "text": "[Whisper AI Placeholder]"},
-            user_id
-        )
+        # Request transcription of audio using Whisper AI
+        from backend.services.whisper_service import get_whisper_service
+
+        whisper = get_whisper_service()
+        if whisper.is_available() and "audio_base64" in message:
+            result = whisper.transcribe_base64(
+                audio_base64=message["audio_base64"],
+                language=message.get("language")
+            )
+
+            if result["success"]:
+                await manager.send_personal_message(
+                    {
+                        "type": "transcription",
+                        "text": result["text"],
+                        "language": result.get("language", "unknown")
+                    },
+                    user_id
+                )
+            else:
+                await manager.send_personal_message(
+                    {"type": "error", "message": f"Transcription failed: {result['error']}"},
+                    user_id
+                )
+        else:
+            await manager.send_personal_message(
+                {"type": "error", "message": "Whisper AI not available or audio missing"},
+                user_id
+            )
 
     else:
         # Unknown message type
@@ -222,13 +245,32 @@ class TranscribeRequest(BaseModel):
 async def transcribe_audio(request: TranscribeRequest):
     """
     Transcribe audio using Whisper AI
+
+    Request:
+        - audio_base64: Base64 encoded audio file
+
+    Response:
+        - success: bool
+        - transcription: str
+        - language: str
     """
 
-    # Import voice service
-    from backend.services.voice_service import voice_service
+    from backend.services.whisper_service import get_whisper_service
+
+    whisper = get_whisper_service()
+
+    if not whisper.is_available():
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Whisper AI service not available"
+        )
 
     # Transcribe audio
-    result = voice_service.transcribe_base64(request.audio_base64, language="de")
+    result = whisper.transcribe_base64(
+        audio_base64=request.audio_base64,
+        audio_format="wav",
+        language=None  # Auto-detect
+    )
 
     if not result["success"]:
         raise HTTPException(
@@ -239,13 +281,95 @@ async def transcribe_audio(request: TranscribeRequest):
     return {
         "success": True,
         "transcription": result["text"],
-        "language": result.get("language", "de"),
+        "language": result.get("language", "unknown"),
     }
 
 
 class TTSRequest(BaseModel):
     text: str
-    language: str = "de"
+    language: str = "en"
+    voice: Optional[str] = None
+
+
+@router.post("/tts")
+async def text_to_speech(request: TTSRequest):
+    """
+    Convert text to speech using TTS engine
+
+    Request:
+        - text: Text to convert
+        - language: Language code (default: "en")
+        - voice: Optional voice name
+
+    Response:
+        - success: bool
+        - audio_base64: Base64 encoded audio
+        - engine: TTS engine used
+    """
+
+    from backend.services.tts_service import get_tts_service
+
+    tts = get_tts_service()
+
+    # Generate speech
+    result = await tts.generate_speech(
+        text=request.text,
+        language=request.language,
+        voice=request.voice
+    )
+
+    if not result["success"]:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"TTS generation failed: {result.get('error', 'Unknown error')}"
+        )
+
+    return {
+        "success": True,
+        "audio_base64": result["audio_base64"],
+        "engine": result["engine"],
+        "cached": result.get("cached", False)
+    }
+
+
+@router.get("/voices")
+async def get_available_voices():
+    """
+    Get list of available TTS voices
+
+    Response:
+        - voices: List of voice dictionaries
+    """
+
+    from backend.services.tts_service import get_tts_service
+
+    tts = get_tts_service()
+    voices = await tts.get_available_voices()
+
+    return {
+        "voices": voices,
+        "engine": tts.engine,
+        "total": len(voices)
+    }
+
+
+@router.get("/languages")
+def get_supported_languages():
+    """
+    Get list of supported languages for speech recognition
+
+    Response:
+        - languages: List of language codes
+    """
+
+    from backend.services.whisper_service import get_whisper_service
+
+    whisper = get_whisper_service()
+
+    return {
+        "languages": whisper.get_supported_languages(),
+        "total": len(whisper.get_supported_languages())
+    }
 
 
 @router.post("/tts")
