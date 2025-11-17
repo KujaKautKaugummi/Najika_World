@@ -35,7 +35,8 @@ class BattleActionRequest(BaseModel):
 
 class CreateFinisherRequest(BaseModel):
     """Request to create Mortal Kombat style finisher"""
-    ingredients: List[str]
+    category: str  # "Ehrenvoller Tod", "Lustiger Tod", "Grausamer Tod", "Tod Tod Blut Blut", "Epischer Tod"
+    ingredients: List[str]  # Player keywords/stichwörter
     defeated_monster_id: int
 
 
@@ -282,18 +283,51 @@ async def create_finisher(
     Create a custom Mortal Kombat-style finisher
 
     This is triggered AFTER defeating an arena monster.
-    Player provides ingredients to create a brutal finisher animation.
+    Player CHOOSES brutality category, then provides keywords/ingredients.
+
+    ## Brutality Categories:
+    1. **Ehrenvoller Tod** - Clean, respectful finish
+    2. **Lustiger Tod** - Comical, absurd finish
+    3. **Grausamer Tod** - Dark, sadistic finish
+    4. **Tod Tod Blut Blut** - EXTREME brutality
+    5. **Epischer Tod** - Cinematic, over-the-top
 
     Different from FinisherQTE (button mashing during combat).
     This is the "FINISH HIM!" moment.
     """
+    # Parse category
+    from backend.services.finisher_system import BrutalityCategory
+
+    try:
+        # Map string to enum
+        category_map = {
+            "Ehrenvoller Tod": BrutalityCategory.HONORABLE_DEATH,
+            "Lustiger Tod": BrutalityCategory.FUNNY_DEATH,
+            "Grausamer Tod": BrutalityCategory.CRUEL_DEATH,
+            "Tod Tod Blut Blut": BrutalityCategory.BLOOD_BATH,
+            "Epischer Tod": BrutalityCategory.EPIC_DEATH
+        }
+
+        category = category_map.get(request.category)
+        if not category:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid category. Choose from: {list(category_map.keys())}"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid category: {e}"
+        )
+
     # Get character level for power calculation
     from backend.models.character import Character
     character = db.query(Character).filter(Character.user_id == current_user.id).first()
     level = character.level if character else 1
 
-    # Create finisher
+    # Create finisher with category
     finisher = finisher_generator.create_custom_finisher(
+        category=category,
         ingredients=request.ingredients,
         character_level=level,
         user_id=current_user.id
@@ -307,7 +341,69 @@ async def create_finisher(
         "success": True,
         "finisher": finisher.to_dict(),
         "message": f"🔥 FINISH HIM! {finisher.name} gegen {monster_name}!",
-        "animation_ready": True
+        "animation_ready": True,
+        "category_selected": category.value
+    }
+
+
+@router.get("/finisher/categories")
+async def get_brutality_categories(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get available brutality categories for finisher creation
+
+    Player must choose a category FIRST, then provide keywords
+    """
+    from backend.services.finisher_system import BrutalityCategory
+
+    categories = [
+        {
+            "id": "HONORABLE_DEATH",
+            "name": "Ehrenvoller Tod",
+            "description": "Sauberer, respektvoller Finish",
+            "brutality": 3,
+            "humor": 2,
+            "icon": "⚔️"
+        },
+        {
+            "id": "FUNNY_DEATH",
+            "name": "Lustiger Tod",
+            "description": "Komisch, absurd, witzig",
+            "brutality": 5,
+            "humor": 10,
+            "icon": "🎭"
+        },
+        {
+            "id": "CRUEL_DEATH",
+            "name": "Grausamer Tod",
+            "description": "Dunkel, sadistisch, brutal",
+            "brutality": 8,
+            "humor": 1,
+            "icon": "☠️"
+        },
+        {
+            "id": "BLOOD_BATH",
+            "name": "Tod Tod Blut Blut",
+            "description": "EXTREME BRUTALITÄT! BLUT ÜBERALL!",
+            "brutality": 10,
+            "humor": 0,
+            "icon": "💀💀💀"
+        },
+        {
+            "id": "EPIC_DEATH",
+            "name": "Epischer Tod",
+            "description": "Cinematisch, spektakulär, legendär",
+            "brutality": 7,
+            "humor": 5,
+            "icon": "⚡"
+        }
+    ]
+
+    return {
+        "success": True,
+        "categories": categories,
+        "instruction": "Wähle zuerst eine Kategorie, dann gib Stichwörter ein!"
     }
 
 
