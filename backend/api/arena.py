@@ -35,7 +35,7 @@ class BattleActionRequest(BaseModel):
 
 class CreateFinisherRequest(BaseModel):
     """Request to create Mortal Kombat style finisher"""
-    category: str  # "Ehrenvoller Tod", "Lustiger Tod", "Grausamer Tod", "Tod Tod Blut Blut", "Epischer Tod"
+    category: str  # "Ehrenvoller Tod", "Lustiger Tod", "Grausamer Tod", "Tod Tod Blut Blut", "Sinnloser Tod"
     ingredients: List[str]  # Player keywords/stichwörter
     defeated_monster_id: int
 
@@ -290,7 +290,7 @@ async def create_finisher(
     2. **Lustiger Tod** - Comical, absurd finish
     3. **Grausamer Tod** - Dark, sadistic finish
     4. **Tod Tod Blut Blut** - EXTREME brutality
-    5. **Epischer Tod** - Cinematic, over-the-top
+    5. **Sinnloser Tod** - Anti-climactic, meaningless
 
     Different from FinisherQTE (button mashing during combat).
     This is the "FINISH HIM!" moment.
@@ -305,7 +305,7 @@ async def create_finisher(
             "Lustiger Tod": BrutalityCategory.FUNNY_DEATH,
             "Grausamer Tod": BrutalityCategory.CRUEL_DEATH,
             "Tod Tod Blut Blut": BrutalityCategory.BLOOD_BATH,
-            "Epischer Tod": BrutalityCategory.EPIC_DEATH
+            "Sinnloser Tod": BrutalityCategory.POINTLESS_DEATH
         }
 
         category = category_map.get(request.category)
@@ -391,12 +391,12 @@ async def get_brutality_categories(
             "icon": "💀💀💀"
         },
         {
-            "id": "EPIC_DEATH",
-            "name": "Epischer Tod",
-            "description": "Cinematisch, spektakulär, legendär",
-            "brutality": 7,
-            "humor": 5,
-            "icon": "⚡"
+            "id": "POINTLESS_DEATH",
+            "name": "Sinnloser Tod",
+            "description": "Anti-klimatisch, bedeutungslos, absurd",
+            "brutality": 4,
+            "humor": 7,
+            "icon": "🤷"
         }
     ]
 

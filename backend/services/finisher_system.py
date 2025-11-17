@@ -18,7 +18,7 @@ class BrutalityCategory(Enum):
     FUNNY_DEATH = "Lustiger Tod"             # Comical, absurd finish
     CRUEL_DEATH = "Grausamer Tod"            # Dark, sadistic finish
     BLOOD_BATH = "Tod Tod Blut Blut"         # EXTREME brutality
-    EPIC_DEATH = "Epischer Tod"              # Cinematic, over-the-top
+    POINTLESS_DEATH = "Sinnloser Tod"        # Anti-climactic, meaningless
 
 
 class FinisherStyle(Enum):
@@ -176,8 +176,8 @@ class NajikaFinisherGenerator:
         duration = 3.0 + (len(animation_steps) * 0.5)
         if category == BrutalityCategory.BLOOD_BATH:
             duration += 1.0  # Longer for extreme brutality
-        elif category == BrutalityCategory.EPIC_DEATH:
-            duration += 1.5  # Cinematic = longer
+        elif category == BrutalityCategory.POINTLESS_DEATH:
+            duration -= 0.5  # Shorter, anti-climactic
 
         finisher = FinisherAnimation(
             name=name,
@@ -238,7 +238,7 @@ class NajikaFinisherGenerator:
                 BrutalityCategory.FUNNY_DEATH: FinisherStyle.CUTE_BRUTAL,
                 BrutalityCategory.CRUEL_DEATH: FinisherStyle.DOMINANT,
                 BrutalityCategory.BLOOD_BATH: FinisherStyle.CHAOS,
-                BrutalityCategory.EPIC_DEATH: FinisherStyle.EXPLOSION
+                BrutalityCategory.POINTLESS_DEATH: FinisherStyle.CHAOS  # Random, senseless
             }
             style = category_style_map.get(category, FinisherStyle.CUTE_BRUTAL)
 
@@ -256,7 +256,7 @@ class NajikaFinisherGenerator:
             BrutalityCategory.FUNNY_DEATH: 5,       # Moderate, comical
             BrutalityCategory.CRUEL_DEATH: 8,       # Dark, sadistic
             BrutalityCategory.BLOOD_BATH: 10,       # EXTREME
-            BrutalityCategory.EPIC_DEATH: 7         # Spectacular
+            BrutalityCategory.POINTLESS_DEATH: 4    # Low-moderate, anti-climactic
         }
 
         brutality = base_brutality.get(category, 5)
@@ -270,7 +270,7 @@ class NajikaFinisherGenerator:
             BrutalityCategory.FUNNY_DEATH: 10,      # Maximum comedy
             BrutalityCategory.CRUEL_DEATH: 1,       # Dark, no humor
             BrutalityCategory.BLOOD_BATH: 0,        # Pure brutality
-            BrutalityCategory.EPIC_DEATH: 5         # Some flair
+            BrutalityCategory.POINTLESS_DEATH: 7    # Absurd, confusing humor
         }
 
         humor = base_humor.get(category, 5)
@@ -290,7 +290,7 @@ class NajikaFinisherGenerator:
             BrutalityCategory.FUNNY_DEATH: "der Absurdität ☺",
             BrutalityCategory.CRUEL_DEATH: "der Grausamkeit ☠",
             BrutalityCategory.BLOOD_BATH: "DES BLUTBADES 💀💀💀",
-            BrutalityCategory.EPIC_DEATH: "der Legende ⚡"
+            BrutalityCategory.POINTLESS_DEATH: "aus irgendeinem Grund 🤷"
         }
 
         suffix = category_suffixes.get(category, "")
@@ -335,9 +335,9 @@ class NajikaFinisherGenerator:
                 "setup": f"BLUT! BLUT! {ingredients[0] if ingredients else 'ZERSTÖRUNG'} WIRD ENTFESSELT!",
                 "aftermath": "💀💀💀 BLUTBAD! Überall nur ROT! EXTREME BRUTALITY!"
             },
-            BrutalityCategory.EPIC_DEATH: {
-                "setup": f"⚡ Epische Musik! {ingredients[0] if ingredients else 'Ultimativer Angriff'} lädt auf!",
-                "aftermath": "🎬 LEGENDARY KILL! Cinematische Slow-Motion Victory!"
+            BrutalityCategory.POINTLESS_DEATH: {
+                "setup": f"*Stolpert über nichts* Ähm... {ingredients[0] if ingredients else 'Warum'}?",
+                "aftermath": "🤷 Ist tot. Warum? Wer weiß. Einfach so. XP +50 (warum auch immer)"
             }
         }
 
