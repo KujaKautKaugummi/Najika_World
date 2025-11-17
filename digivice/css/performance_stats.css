@@ -1,0 +1,110 @@
+/**
+ * Performance Stats UI Styles
+ */
+
+.performance-stats {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    border: 2px solid #00ff00;
+    border-radius: 5px;
+    z-index: 99999;
+    box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+}
+
+.perf-stats-header {
+    padding: 10px;
+    background: #00ff00;
+    color: #000;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.perf-close-btn {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 20px;
+}
+
+.perf-close-btn:hover {
+    color: #f00;
+}
+
+.perf-stats-body {
+    padding: 10px;
+}
+
+.perf-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.perf-stat:last-child {
+    border-bottom: none;
+}
+
+.perf-stat-label {
+    color: #0f0;
+}
+
+.perf-stat-value {
+    color: #fff;
+    font-weight: bold;
+}
+
+.perf-warnings {
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.perf-warning {
+    padding: 5px;
+    background: rgba(255, 0, 0, 0.2);
+    border-left: 3px solid #ff0;
+    margin-bottom: 5px;
+    font-size: 11px;
+}
+
+.perf-warning-time {
+    color: #888;
+    margin-right: 5px;
+}
+
+.perf-warning-msg {
+    color: #ff0;
+}
+
+/* Scrollbar */
+
+.perf-warnings::-webkit-scrollbar {
+    width: 6px;
+}
+
+.perf-warnings::-webkit-scrollbar-track {
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.perf-warnings::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 3px;
+}
+
+.perf-warnings::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
+}
