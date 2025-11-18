@@ -51,12 +51,23 @@ class User(Base):
     # Boss Spawns
     boss_spawn_defeats = relationship("BossSpawnDefeat", back_populates="player", cascade="all, delete-orphan")
 
+    # Territory Control (Region Boss)
+    controlled_regions = relationship("RegionBoss", back_populates="boss_player", cascade="all, delete-orphan")
+
     # World State
     world_state = relationship("PlayerWorldState", back_populates="player", uselist=False, cascade="all, delete-orphan")
 
     # Voice System
     voice_calls = relationship("VoiceCall", back_populates="player", cascade="all, delete-orphan")
     voice_settings = relationship("VoiceSettings", back_populates="player", uselist=False, cascade="all, delete-orphan")
+
+    # Card Game System
+    card_collection = relationship("PlayerCardCollection", back_populates="player", cascade="all, delete-orphan")
+    card_decks = relationship("PlayerDeck", back_populates="player", cascade="all, delete-orphan")
+    card_game_ranking = relationship("CardGameRanking", back_populates="player", uselist=False, cascade="all, delete-orphan")
+
+    # Dice Monsters System
+    dice_collection = relationship("PlayerDiceCollection", back_populates="player", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
