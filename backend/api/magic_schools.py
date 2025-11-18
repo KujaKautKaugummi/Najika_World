@@ -17,22 +17,45 @@ Author: Claude Code (CLI)
 Date: 2025-11-18
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from pydantic import BaseModel
 from typing import Optional
+from sqlalchemy.orm import Session
+from datetime import datetime
 
-from backend.services.magic_schools_system import (
-    MagicSchoolSystem, MagicSchool
-)
+from backend.database import get_db
+from backend.models.magic_progress import MagicSchoolProgress
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/magic", tags=["magic"])
 
-# Global System Instance
-magic_system = MagicSchoolSystem()
 
-# Initialize default spells
-magic_system.create_default_spells()
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def get_or_create_school_progress(db: Session, player_id: int, school: str) -> MagicSchoolProgress:
+    """Get or create progress for a magic school"""
+    progress = db.query(MagicSchoolProgress).filter(
+        MagicSchoolProgress.player_id == player_id,
+        MagicSchoolProgress.school == school
+    ).first()
+
+    if not progress:
+        progress = MagicSchoolProgress(
+            player_id=player_id,
+            school=school,
+            level=1,
+            xp=0.0,
+            xp_required=100.0,
+            unlocked_spells=[],
+            can_weave=False
+        )
+        db.add(progress)
+        db.commit()
+        db.refresh(progress)
+
+    return progress
 
 
 # ============================================================================
@@ -40,6 +63,8 @@ magic_system.create_default_spells()
 # ============================================================================
 
 class CastSpellRequest(BaseModel):
+    player_id: int
+    school: str
     spell_id: str
     damage_dealt: float = 0.0
 
@@ -49,56 +74,88 @@ class CastSpellRequest(BaseModel):
 # ============================================================================
 
 @router.post("/cast")
-async def cast_spell(request: CastSpellRequest):
+async def cast_spell(request: CastSpellRequest, db: Session = Depends(get_db)):
     """
     Cast Spell (Skyrim Learning by Doing!)
 
     Body:
     {
+        "player_id": 1,
+        "school": "feuer",
         "spell_id": "fire_novice_1",
         "damage_dealt": 25.0
     }
     """
     try:
-        result = magic_system.cast_spell(
-            request.spell_id,
-            request.damage_dealt
-        )
+        # Validate school
+        valid_schools = ["feuer", "eis", "blitz", "wasser", "erde", "wind", "licht", "dunkelheit", "explosion"]
+        if request.school not in valid_schools:
+            raise HTTPException(status_code=400, detail={"error": f"Ungültige Schule: {request.school}", "valid_schools": valid_schools})
 
-        if "error" in result:
-            raise HTTPException(status_code=400, detail=result["error"])
+        # Get or create progress
+        progress = get_or_create_school_progress(db, request.player_id, request.school)
 
-        return result
+        # Add XP based on damage
+        xp_gained = request.damage_dealt
+        progress.xp += xp_gained
+        progress.total_casts += 1
+        progress.total_damage += request.damage_dealt
+        progress.last_cast = datetime.utcnow()
+
+        # Perfect cast bonus
+        if request.damage_dealt >= 50:
+            progress.perfect_casts += 1
+
+        # Level up logic
+        leveled_up = False
+        while progress.xp >= progress.xp_required:
+            progress.xp -= progress.xp_required
+            progress.level += 1
+            leveled_up = True
+            progress.xp_required = 100 * (1.2 ** progress.level)
+            if progress.level >= 20:
+                progress.can_weave = True
+
+        # Unlock spell
+        unlocked = progress.unlocked_spells or []
+        if request.spell_id not in unlocked:
+            unlocked.append(request.spell_id)
+            progress.unlocked_spells = unlocked
+
+        db.commit()
+        db.refresh(progress)
+
+        return {
+            "success": True,
+            "school": request.school,
+            "xp_gained": xp_gained,
+            "level": progress.level,
+            "xp": progress.xp,
+            "leveled_up": leveled_up,
+            "can_weave": progress.can_weave
+        }
 
     except HTTPException:
         raise
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/school/{school}")
-async def get_school_info(school: str):
+async def get_school_info(school: str, player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Get School Info
 
-    Path: /api/magic/school/feuer
+    Path: /api/magic/school/feuer?player_id=1
     """
     try:
-        # Parse school
-        try:
-            magic_school = MagicSchool(school)
-        except ValueError:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": f"Ungültige Schule: {school}",
-                    "valid_schools": [s.value for s in MagicSchool]
-                }
-            )
+        valid_schools = ["feuer", "eis", "blitz", "wasser", "erde", "wind", "licht", "dunkelheit", "explosion"]
+        if school not in valid_schools:
+            raise HTTPException(status_code=400, detail={"error": f"Ungültige Schule: {school}", "valid_schools": valid_schools})
 
-        info = magic_system.get_school_info(magic_school)
-
-        return info
+        progress = get_or_create_school_progress(db, player_id, school)
+        return progress.to_dict()
 
     except HTTPException:
         raise
@@ -107,15 +164,19 @@ async def get_school_info(school: str):
 
 
 @router.get("/overview")
-async def get_overview():
+async def get_overview(player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Get All Schools Overview
 
-    Returns summary for all 9 schools
+    Query: /api/magic/overview?player_id=1
     """
     try:
-        overview = magic_system.get_all_schools_overview()
-        return overview
+        all_schools = ["feuer", "eis", "blitz", "wasser", "erde", "wind", "licht", "dunkelheit", "explosion"]
+        overview = []
+        for school in all_schools:
+            progress = get_or_create_school_progress(db, player_id, school)
+            overview.append({"school": school, "level": progress.level, "xp": progress.xp, "can_weave": progress.can_weave})
+        return {"player_id": player_id, "schools": overview}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -123,42 +184,32 @@ async def get_overview():
 
 @router.get("/can-weave")
 async def check_can_weave(
-    school1: str = Query(..., description="First magic school"),
-    school2: str = Query(..., description="Second magic school")
+    player_id: int = Query(...),
+    school1: str = Query(...),
+    school2: str = Query(...),
+    db: Session = Depends(get_db)
 ):
     """
     Check if can weave (combine) 2 schools
 
-    Query Params:
-        school1: str
-        school2: str
-
-    Example: /api/magic/can-weave?school1=feuer&school2=eis
+    Example: /api/magic/can-weave?player_id=1&school1=feuer&school2=eis
 
     WICHTIG: Explosion NIEMALS kombinierbar! (Gebot #3)
     """
     try:
-        # Parse schools
-        try:
-            school1_enum = MagicSchool(school1)
-            school2_enum = MagicSchool(school2)
-        except ValueError as e:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": f"Ungültige Schule: {e}",
-                    "valid_schools": [s.value for s in MagicSchool]
-                }
-            )
+        if school1 == "explosion" or school2 == "explosion":
+            return {"can_weave": False, "reason": "Explosion kann NIEMALS kombiniert werden!"}
 
-        can_weave, reason = magic_system.can_weave(school1_enum, school2_enum)
+        if school1 == school2:
+            return {"can_weave": False, "reason": "Gleiche Schulen können nicht kombiniert werden"}
 
-        return {
-            "can_weave": can_weave,
-            "reason": reason,
-            "school1": school1_enum.value,
-            "school2": school2_enum.value
-        }
+        progress1 = get_or_create_school_progress(db, player_id, school1)
+        progress2 = get_or_create_school_progress(db, player_id, school2)
+
+        if progress1.can_weave and progress2.can_weave:
+            return {"can_weave": True, "reason": "Beide Schulen Level 20+!", "school1": school1, "school2": school2}
+        else:
+            return {"can_weave": False, "reason": f"Level 20+ required. {school1}: {progress1.level}, {school2}: {progress2.level}"}
 
     except HTTPException:
         raise
@@ -215,15 +266,16 @@ async def get_all_spells(
 
 
 @router.get("/state/export")
-async def export_state():
+async def export_state(player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Export State
 
-    Returns complete state for all schools
+    Returns complete state for all schools for a player
     """
     try:
-        state = magic_system.export_state()
-        return state
+        all_progress = db.query(MagicSchoolProgress).filter(MagicSchoolProgress.player_id == player_id).all()
+        schools_data = {p.school: p.to_dict() for p in all_progress}
+        return {"player_id": player_id, "schools": schools_data}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
