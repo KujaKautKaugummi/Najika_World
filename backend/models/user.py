@@ -69,6 +69,10 @@ class User(Base):
     # Dice Monsters System
     dice_collection = relationship("PlayerDiceCollection", back_populates="player", cascade="all, delete-orphan")
 
+    # Housing & Farming System
+    player_house = relationship("PlayerHouse", back_populates="owner", uselist=False, cascade="all, delete-orphan")
+    farm_plots = relationship("FarmPlot", back_populates="owner", cascade="all, delete-orphan")
+
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
 
