@@ -16,7 +16,8 @@ from backend.database import init_db
 from backend.api import (
     auth, game, training, voice, admin, arena,
     slime, pvp, oregon_events, region_boss, magic_schools,
-    instrument, world, multiplayer, card_game, dice_monsters
+    instrument, world, multiplayer, card_game, dice_monsters,
+    housing, farming
 )
 
 
@@ -130,6 +131,10 @@ app.include_router(card_game.rankings_router)  # Already has /api/rankings prefi
 # Dice Monsters System
 app.include_router(dice_monsters.router)  # Already has /api/dice prefix
 app.include_router(dice_monsters.duel_router)  # Already has /api/dice-duel prefix
+
+# Housing & Farming System
+app.include_router(housing.router)  # Already has /api/housing prefix
+app.include_router(farming.router)  # Already has /api/farming prefix
 
 
 # ============================================================================

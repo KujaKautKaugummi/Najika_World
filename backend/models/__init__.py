@@ -21,6 +21,7 @@ from backend.models.multiplayer_session import MultiplayerSession, SessionPartic
 from backend.models.voice_settings import VoiceSettings
 from backend.models.card_game import Card, PlayerCardCollection, PlayerDeck, CardGameMatch, CardGameRanking
 from backend.models.dice_monsters import DiceMonster, PlayerDiceCollection, DiceDuelMatch
+from backend.models.housing import PlayerHouse, FarmPlot, FishingSpot
 
 __all__ = [
     "User",
@@ -62,4 +63,8 @@ __all__ = [
     "DiceMonster",
     "PlayerDiceCollection",
     "DiceDuelMatch",
+    # Housing & Farming System
+    "PlayerHouse",
+    "FarmPlot",
+    "FishingSpot",
 ]
