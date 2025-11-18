@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 38.166330010692214,
-    "thirst": 0,
-    "energy": 95.89979800641538,
-    "hygiene": 50.0,
-    "happiness": 0,
+    "hunger": 29.916446813278654,
+    "thirst": 9,
+    "energy": 96.94986808796723,
+    "hygiene": 29.0,
+    "happiness": 52,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 48,
-    "care_mistakes": 3974,
+    "care_mistakes": 3969,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1763452877.8079734,
+    "last_fed": 1763448598.194871,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1763448601.9937677,
-    "last_update": 1763453477.8491728,
+    "last_update": 1763452277.7820005,
     "last_drink": 1763448600.101319
   },
   "bond_strength": 23,
@@ -364,10 +364,10 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 38.166330010692214,
-    "energy": 95.89979800641538,
-    "mood_game": -8,
-    "anger_level": 106,
+    "hunger": 34.916446813278654,
+    "energy": 96.94986808796723,
+    "mood_game": 0,
+    "anger_level": 100,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
@@ -385,7 +385,7 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1763453477.85718,
+    "last_update": 1763452217.7730823,
     "control_mode": "ai",
     "player_online": false,
     "last_proactive_message": 1763452277.77349,
@@ -1748,8 +1748,8 @@
     "last_interaction": 1763320699.266384,
     "total_time_together": 4980,
     "days_since_meeting": 0,
-    "current_activity": "training",
-    "activity_started": 1763453117.8254483,
+    "current_activity": "crafting",
+    "activity_started": 1763451857.7554004,
     "activities_completed": [
       {
         "name": "exploring",
@@ -3982,12 +3982,8 @@
       {
         "name": "exploring",
         "completed_at": 1763451377.7259858
-      },
-      {
-        "name": "crafting",
-        "completed_at": 1763453057.8168025
       }
     ]
   },
-  "saved_at": "2025-11-18 09:11:17"
+  "saved_at": "2025-11-18 08:51:17"
 }
