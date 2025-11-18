@@ -20,7 +20,7 @@ from backend.models import (
     slime_companion, pvp_battle, arena_monster, magic_progress,
     instrument_progress, oregon_trail, region_boss, world_state,
     voice_call, multiplayer_session, voice_settings,
-    card_game, dice_monsters, housing
+    card_game, dice_monsters, housing, world_map
 )
 from backend.config import settings
 

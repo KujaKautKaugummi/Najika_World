@@ -22,6 +22,7 @@ from backend.models.voice_settings import VoiceSettings
 from backend.models.card_game import Card, PlayerCardCollection, PlayerDeck, CardGameMatch, CardGameRanking
 from backend.models.dice_monsters import DiceMonster, PlayerDiceCollection, DiceDuelMatch
 from backend.models.housing import PlayerHouse, FarmPlot, FishingSpot
+from backend.models.world_map import Region, FastTravelPoint, PlayerPosition, RegionBoundary, WorldWeather, DayNightCycle
 
 __all__ = [
     "User",
@@ -67,4 +68,11 @@ __all__ = [
     "PlayerHouse",
     "FarmPlot",
     "FishingSpot",
+    # World Map System
+    "Region",
+    "FastTravelPoint",
+    "PlayerPosition",
+    "RegionBoundary",
+    "WorldWeather",
+    "DayNightCycle",
 ]
