@@ -17,7 +17,7 @@ from backend.api import (
     auth, game, training, voice, admin, arena,
     slime, pvp, oregon_events, region_boss, magic_schools,
     instrument, world, multiplayer, card_game, dice_monsters,
-    housing, farming
+    housing, farming, world_map
 )
 
 
@@ -135,6 +135,9 @@ app.include_router(dice_monsters.duel_router)  # Already has /api/dice-duel pref
 # Housing & Farming System
 app.include_router(housing.router)  # Already has /api/housing prefix
 app.include_router(farming.router)  # Already has /api/farming prefix
+
+# World Map System (9600x9600 Grid)
+app.include_router(world_map.router)  # Already has /api/world-map prefix
 
 
 # ============================================================================
