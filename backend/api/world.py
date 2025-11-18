@@ -2,7 +2,7 @@
 World API - Najika World
 =========================
 
-REST API für World System (Biomes, Weather, Day/Night, Cities, Wilderness)
+REST API für World System (Biomes, Weather, Day/Night, Cities, Wilderness) (FastAPI)
 
 Endpoints:
 - GET /api/world/info - Get map info
@@ -21,22 +21,45 @@ Endpoints:
 
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, Field
 
 from backend.services.world_system import WorldSystem, Biome
 
-# Create Blueprint
-world_bp = Blueprint('world', __name__, url_prefix='/api/world')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/world", tags=["world"])
 
 # Global System Instance
 world_system = WorldSystem()
 
 
-@world_bp.route('/info', methods=['GET'])
-def get_map_info():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class SetTimeRequest(BaseModel):
+    hour: int = Field(..., ge=0, lt=24)
+    minute: int = Field(0, ge=0, lt=60)
+
+
+class UpdateTimeRequest(BaseModel):
+    delta_seconds: float = Field(..., gt=0)
+
+
+class CheckCityEntryRequest(BaseModel):
+    city_id: str
+    player_reputation: int = 0
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.get("/info")
+async def get_map_info():
     """
     Get Map Info
 
@@ -51,21 +74,21 @@ def get_map_info():
         }
     """
     try:
-        return jsonify({
+        return {
             "size_meters": world_system.MAP_SIZE,
             "size_km2": world_system.total_area_km2,
             "goetterfels_height": world_system.GOETTERFELS_HEIGHT,
             "wilderness_percentage": world_system.wilderness_percentage,
             "total_biomes": len(world_system.biomes),
             "total_cities": len(world_system.cities)
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/biomes', methods=['GET'])
-def get_all_biomes():
+@router.get("/biomes")
+async def get_all_biomes():
     """
     Get All Biomes
 
@@ -105,14 +128,14 @@ def get_all_biomes():
                 "enemy_types": config.enemy_types
             }
 
-        return jsonify({"biomes": biomes_data, "count": len(biomes_data)})
+        return {"biomes": biomes_data, "count": len(biomes_data)}
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/biome/<biome_id>', methods=['GET'])
-def get_biome(biome_id: str):
+@router.get("/biome/{biome_id}")
+async def get_biome(biome_id: str):
     """
     Get Specific Biome
 
@@ -123,14 +146,17 @@ def get_biome(biome_id: str):
         try:
             biome = Biome(biome_id)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Biome: {biome_id}",
-                "valid_biomes": [b.value for b in Biome]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Biome: {biome_id}",
+                    "valid_biomes": [b.value for b in Biome]
+                }
+            )
 
         config = world_system.biomes[biome]
 
-        return jsonify({
+        return {
             "id": biome.value,
             "name": config.name,
             "description": config.description,
@@ -150,14 +176,16 @@ def get_biome(biome_id: str):
                 "ambient": config.ambient_color,
                 "fog": config.fog_color
             }
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/weather/<biome_id>', methods=['GET'])
-def get_weather(biome_id: str):
+@router.get("/weather/{biome_id}")
+async def get_weather(biome_id: str):
     """
     Get Weather for Biome
 
@@ -168,14 +196,17 @@ def get_weather(biome_id: str):
         try:
             biome = Biome(biome_id)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Biome: {biome_id}",
-                "valid_biomes": [b.value for b in Biome]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Biome: {biome_id}",
+                    "valid_biomes": [b.value for b in Biome]
+                }
+            )
 
         weather = world_system.get_weather(biome)
 
-        return jsonify({
+        return {
             "biome": biome.value,
             "weather": {
                 "type": weather.type.value,
@@ -191,14 +222,16 @@ def get_weather(biome_id: str):
                 "started_at": weather.started_at.isoformat(),
                 "duration_minutes": weather.duration_minutes
             }
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/weather/<biome_id>/update', methods=['POST'])
-def update_weather(biome_id: str):
+@router.post("/weather/{biome_id}/update")
+async def update_weather(biome_id: str):
     """
     Force Weather Update for Biome
 
@@ -209,16 +242,19 @@ def update_weather(biome_id: str):
         try:
             biome = Biome(biome_id)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Biome: {biome_id}",
-                "valid_biomes": [b.value for b in Biome]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Biome: {biome_id}",
+                    "valid_biomes": [b.value for b in Biome]
+                }
+            )
 
         changed = world_system.update_weather(biome)
 
         new_weather = world_system.get_weather(biome)
 
-        return jsonify({
+        return {
             "biome": biome.value,
             "changed": changed,
             "new_weather": {
@@ -226,14 +262,16 @@ def update_weather(biome_id: str):
                 "intensity": new_weather.intensity,
                 "temperature": new_weather.temperature
             }
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/time', methods=['GET'])
-def get_time():
+@router.get("/time")
+async def get_time():
     """
     Get Current Game Time
 
@@ -251,14 +289,14 @@ def get_time():
     """
     try:
         time_info = world_system.get_time_info()
-        return jsonify(time_info)
+        return time_info
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/time/set', methods=['POST'])
-def set_time():
+@router.post("/time/set")
+async def set_time(request: SetTimeRequest):
     """
     Set Game Time
 
@@ -269,33 +307,19 @@ def set_time():
     }
     """
     try:
-        data = request.get_json()
+        world_system.set_time(request.hour, request.minute)
 
-        hour = data.get('hour')
-        minute = data.get('minute', 0)
-
-        if hour is None:
-            return jsonify({"error": "hour erforderlich"}), 400
-
-        if not (0 <= hour < 24):
-            return jsonify({"error": "hour muss zwischen 0 und 23 liegen"}), 400
-
-        if not (0 <= minute < 60):
-            return jsonify({"error": "minute muss zwischen 0 und 59 liegen"}), 400
-
-        world_system.set_time(hour, minute)
-
-        return jsonify({
+        return {
             "success": True,
             "time": world_system.get_time_info()
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/time/update', methods=['POST'])
-def update_time():
+@router.post("/time/update")
+async def update_time(request: UpdateTimeRequest):
     """
     Update Game Time (Delta)
 
@@ -307,26 +331,19 @@ def update_time():
     Used by game loop to advance time
     """
     try:
-        data = request.get_json()
+        world_system.update_time(request.delta_seconds)
 
-        delta_seconds = data.get('delta_seconds', 0.0)
-
-        if delta_seconds <= 0:
-            return jsonify({"error": "delta_seconds muss > 0 sein"}), 400
-
-        world_system.update_time(delta_seconds)
-
-        return jsonify({
+        return {
             "success": True,
             "time": world_system.get_time_info()
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/cities', methods=['GET'])
-def get_all_cities():
+@router.get("/cities")
+async def get_all_cities():
     """
     Get All Cities
 
@@ -350,14 +367,14 @@ def get_all_cities():
     """
     try:
         cities = world_system.get_all_cities()
-        return jsonify({"cities": cities, "count": len(cities)})
+        return {"cities": cities, "count": len(cities)}
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/city/<city_id>', methods=['GET'])
-def get_city(city_id: str):
+@router.get("/city/{city_id}")
+async def get_city(city_id: str):
     """
     Get Specific City
 
@@ -367,12 +384,15 @@ def get_city(city_id: str):
         city = world_system.get_city(city_id)
 
         if not city:
-            return jsonify({
-                "error": f"Stadt nicht gefunden: {city_id}",
-                "available_cities": list(world_system.cities.keys())
-            }), 404
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "error": f"Stadt nicht gefunden: {city_id}",
+                    "available_cities": list(world_system.cities.keys())
+                }
+            )
 
-        return jsonify({
+        return {
             "id": city.id,
             "name": city.name,
             "type": city.type.value,
@@ -392,14 +412,16 @@ def get_city(city_id: str):
             "pvp_enabled": city.pvp_enabled,
             "npc_count": city.npc_count,
             "min_reputation": city.min_reputation
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/city/enter', methods=['POST'])
-def check_city_entry():
+@router.post("/city/enter")
+async def check_city_entry(request: CheckCityEntryRequest):
     """
     Check if Player Can Enter City
 
@@ -410,29 +432,27 @@ def check_city_entry():
     }
     """
     try:
-        data = request.get_json()
+        can_enter, message = world_system.can_enter_city(
+            request.city_id,
+            request.player_reputation
+        )
 
-        city_id = data.get('city_id')
-        player_reputation = data.get('player_reputation', 0)
-
-        if not city_id:
-            return jsonify({"error": "city_id erforderlich"}), 400
-
-        can_enter, message = world_system.can_enter_city(city_id, player_reputation)
-
-        return jsonify({
-            "city_id": city_id,
+        return {
+            "city_id": request.city_id,
             "can_enter": can_enter,
             "message": message,
-            "player_reputation": player_reputation
-        })
+            "player_reputation": request.player_reputation
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/wilderness/<biome_id>', methods=['GET'])
-def get_wilderness(biome_id: str):
+@router.get("/wilderness/{biome_id}")
+async def get_wilderness(
+    biome_id: str,
+    player_id: int = Query(..., description="Player ID")
+):
     """
     Generate/Get Wilderness Area
 
@@ -446,18 +466,17 @@ def get_wilderness(biome_id: str):
         try:
             biome = Biome(biome_id)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Biome: {biome_id}",
-                "valid_biomes": [b.value for b in Biome]
-            }), 400
-
-        player_id = request.args.get('player_id', type=int)
-        if not player_id:
-            return jsonify({"error": "player_id erforderlich"}), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Biome: {biome_id}",
+                    "valid_biomes": [b.value for b in Biome]
+                }
+            )
 
         wilderness = world_system.get_wilderness(biome, player_id)
 
-        return jsonify({
+        return {
             "biome": wilderness.biome.value,
             "seed": wilderness.seed,
             "layout_variant": wilderness.layout_variant,
@@ -469,14 +488,16 @@ def get_wilderness(biome_id: str):
             "resource_density": wilderness.resource_density,
             "created_at": wilderness.created_at.isoformat(),
             "expires_at": wilderness.expires_at.isoformat() if wilderness.expires_at else None
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@world_bp.route('/state/export', methods=['GET'])
-def export_state():
+@router.get("/state/export")
+async def export_state():
     """
     Export Complete World State
 
@@ -485,45 +506,7 @@ def export_state():
     """
     try:
         state = world_system.export_state()
-        return jsonify(state)
+        return state
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(world_bp)
-
-    print("=" * 60)
-    print("World API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  GET    /api/world/info")
-    print("  GET    /api/world/biomes")
-    print("  GET    /api/world/biome/<biome>")
-    print("  GET    /api/world/weather/<biome>")
-    print("  POST   /api/world/weather/<biome>/update")
-    print("  GET    /api/world/time")
-    print("  POST   /api/world/time/set")
-    print("  POST   /api/world/time/update")
-    print("  GET    /api/world/cities")
-    print("  GET    /api/world/city/<city_id>")
-    print("  POST   /api/world/city/enter")
-    print("  GET    /api/world/wilderness/<biome>")
-    print("  GET    /api/world/state/export")
-    print()
-    print("Server läuft auf: http://localhost:5007")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5007, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))

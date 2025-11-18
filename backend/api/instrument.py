@@ -2,7 +2,7 @@
 Instrument Playing API - Najika World
 ======================================
 
-REST API für Spielbares Instrument System
+REST API für Spielbares Instrument System (FastAPI)
 
 Endpoints:
 - POST /api/instrument/play-note - Play single note
@@ -16,26 +16,56 @@ Endpoints:
 
 Educational purpose: Learn real instruments while playing!
 
+NO STAMINA COSTS - Completely unlimited like Zelda Ocarina of Time!
+
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, Field
+from typing import Optional, List
 
 from backend.services.instrument_system import (
     InstrumentPlayingSystem, InstrumentType, Note, NoteQuality
 )
 
-# Create Blueprint
-instrument_bp = Blueprint('instrument', __name__, url_prefix='/api/instrument')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/instrument", tags=["instrument"])
 
 # Global System Instance
 instrument_system = InstrumentPlayingSystem()
 
 
-@instrument_bp.route('/play-note', methods=['POST'])
-def play_note():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class PlayNoteRequest(BaseModel):
+    instrument: Optional[str] = None
+    note: str
+    octave: int = Field(4, ge=1, le=8)
+    duration: float = Field(0.5, gt=0)
+    velocity: float = Field(0.8, ge=0.0, le=1.0)
+    quality: str = "good"
+
+
+class PlaySongRequest(BaseModel):
+    song_id: str
+    note_accuracies: List[float] = []
+
+
+class SwitchInstrumentRequest(BaseModel):
+    instrument: str
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.post("/play-note")
+async def play_note(request: PlayNoteRequest):
     """
     Play Single Note
 
@@ -60,77 +90,66 @@ def play_note():
         }
     """
     try:
-        data = request.get_json()
-
         # Parse instrument (optional)
         instrument = None
-        if data.get('instrument'):
+        if request.instrument:
             try:
-                instrument = InstrumentType(data['instrument'])
+                instrument = InstrumentType(request.instrument)
             except ValueError:
-                return jsonify({
-                    "error": f"Ungültiges Instrument: {data['instrument']}",
-                    "valid_instruments": [i.value for i in InstrumentType]
-                }), 400
+                raise HTTPException(
+                    status_code=400,
+                    detail={
+                        "error": f"Ungültiges Instrument: {request.instrument}",
+                        "valid_instruments": [i.value for i in InstrumentType]
+                    }
+                )
         else:
             instrument = instrument_system.current_instrument
 
         # Parse note
-        note_str = data.get('note')
-        if not note_str:
-            return jsonify({"error": "note erforderlich"}), 400
-
         try:
-            note = Note(note_str.upper())
+            note = Note(request.note.upper())
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Note: {note_str}",
-                "valid_notes": [n.value for n in Note]
-            }), 400
-
-        # Parse octave
-        octave = data.get('octave', 4)
-        if not (1 <= octave <= 8):
-            return jsonify({
-                "error": "octave muss zwischen 1 und 8 liegen"
-            }), 400
-
-        # Parse duration
-        duration = data.get('duration', 0.5)
-        if duration <= 0:
-            return jsonify({"error": "duration muss > 0 sein"}), 400
-
-        # Parse velocity
-        velocity = data.get('velocity', 0.8)
-        if not (0.0 <= velocity <= 1.0):
-            return jsonify({
-                "error": "velocity muss zwischen 0.0 und 1.0 liegen"
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültige Note: {request.note}",
+                    "valid_notes": [n.value for n in Note]
+                }
+            )
 
         # Parse quality
-        quality = NoteQuality.GOOD
-        if data.get('quality'):
-            try:
-                quality = NoteQuality(data['quality'])
-            except ValueError:
-                return jsonify({
-                    "error": f"Ungültige Quality: {data['quality']}",
+        try:
+            quality = NoteQuality(request.quality)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültige Quality: {request.quality}",
                     "valid_qualities": [q.value for q in NoteQuality]
-                }), 400
+                }
+            )
 
         # Play note!
         result = instrument_system.play_note(
-            instrument, note, octave, duration, velocity, quality
+            instrument,
+            note,
+            request.octave,
+            request.duration,
+            request.velocity,
+            quality
         )
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/play-song', methods=['POST'])
-def play_song():
+@router.post("/play-song")
+async def play_song(request: PlaySongRequest):
     """
     Play Complete Song
 
@@ -154,32 +173,25 @@ def play_song():
         }
     """
     try:
-        data = request.get_json()
-
-        song_id = data.get('song_id')
-        if not song_id:
-            return jsonify({"error": "song_id erforderlich"}), 400
-
-        note_accuracies = data.get('note_accuracies', [])
-        if not isinstance(note_accuracies, list):
-            return jsonify({
-                "error": "note_accuracies muss eine Liste sein"
-            }), 400
-
         # Play song!
-        result = instrument_system.play_song(song_id, note_accuracies)
+        result = instrument_system.play_song(
+            request.song_id,
+            request.note_accuracies
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/switch', methods=['POST'])
-def switch_instrument():
+@router.post("/switch")
+async def switch_instrument(request: SwitchInstrumentRequest):
     """
     Switch Instrument
 
@@ -197,30 +209,29 @@ def switch_instrument():
         }
     """
     try:
-        data = request.get_json()
-
-        instrument_str = data.get('instrument')
-        if not instrument_str:
-            return jsonify({"error": "instrument erforderlich"}), 400
-
         try:
-            instrument = InstrumentType(instrument_str)
+            instrument = InstrumentType(request.instrument)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Instrument: {instrument_str}",
-                "valid_instruments": [i.value for i in InstrumentType]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Instrument: {request.instrument}",
+                    "valid_instruments": [i.value for i in InstrumentType]
+                }
+            )
 
         result = instrument_system.switch_instrument(instrument)
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/<instrument_type>', methods=['GET'])
-def get_instrument_info(instrument_type: str):
+@router.get("/{instrument_type}")
+async def get_instrument_info(instrument_type: str):
     """
     Get Instrument Info
 
@@ -240,21 +251,29 @@ def get_instrument_info(instrument_type: str):
         try:
             instrument = InstrumentType(instrument_type)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiges Instrument: {instrument_type}",
-                "valid_instruments": [i.value for i in InstrumentType]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Instrument: {instrument_type}",
+                    "valid_instruments": [i.value for i in InstrumentType]
+                }
+            )
 
         info = instrument_system.get_instrument_info(instrument)
 
-        return jsonify(info)
+        return info
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/songs', methods=['GET'])
-def get_all_songs():
+@router.get("/songs")
+async def get_all_songs(
+    category: Optional[str] = Query(None, description="Filter by category"),
+    difficulty: Optional[str] = Query(None, description="Filter by difficulty")
+):
     """
     Get All Songs
 
@@ -278,22 +297,19 @@ def get_all_songs():
         }
     """
     try:
-        category = request.args.get('category')
-        difficulty = request.args.get('difficulty')
-
         songs = instrument_system.get_all_songs(category, difficulty)
 
-        return jsonify({
+        return {
             "songs": songs,
             "count": len(songs)
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/songs/<song_id>', methods=['GET'])
-def get_song(song_id: str):
+@router.get("/songs/{song_id}")
+async def get_song(song_id: str):
     """
     Get Specific Song
 
@@ -320,18 +336,21 @@ def get_song(song_id: str):
         song = instrument_system.get_song(song_id)
 
         if not song:
-            return jsonify({
-                "error": f"Song nicht gefunden: {song_id}"
-            }), 404
+            raise HTTPException(
+                status_code=404,
+                detail=f"Song nicht gefunden: {song_id}"
+            )
 
-        return jsonify(song)
+        return song
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/progress', methods=['GET'])
-def get_progress():
+@router.get("/progress")
+async def get_progress():
     """
     Get Player Progress
 
@@ -350,14 +369,14 @@ def get_progress():
     try:
         progress = instrument_system.get_progress()
 
-        return jsonify(progress)
+        return progress
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@instrument_bp.route('/state/export', methods=['GET'])
-def export_state():
+@router.get("/state/export")
+async def export_state():
     """
     Export State
 
@@ -366,40 +385,7 @@ def export_state():
     """
     try:
         state = instrument_system.export_state()
-        return jsonify(state)
+        return state
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(instrument_bp)
-
-    print("=" * 60)
-    print("Instrument Playing API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  POST   /api/instrument/play-note")
-    print("  POST   /api/instrument/play-song")
-    print("  POST   /api/instrument/switch")
-    print("  GET    /api/instrument/<type>")
-    print("  GET    /api/instrument/songs")
-    print("  GET    /api/instrument/songs/<song_id>")
-    print("  GET    /api/instrument/progress")
-    print("  GET    /api/instrument/state/export")
-    print()
-    print("Server läuft auf: http://localhost:5006")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5006, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))

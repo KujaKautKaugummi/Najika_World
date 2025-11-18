@@ -2,7 +2,7 @@
 Oregon Trail Events API - Najika World
 =======================================
 
-REST API für Oregon Trail Events System
+REST API für Oregon Trail Events System (FastAPI)
 
 Endpoints:
 - GET /api/oregon/trigger - Trigger random event
@@ -13,22 +13,45 @@ Endpoints:
 
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
+from typing import Dict, Any, Optional
 
 from backend.services.oregon_trail_events import OregonTrailEventsSystem
 
-# Create Blueprint
-oregon_bp = Blueprint('oregon', __name__, url_prefix='/api/oregon')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/oregon", tags=["oregon"])
 
 # Global System Instance
 oregon_system = OregonTrailEventsSystem()
 
 
-@oregon_bp.route('/trigger', methods=['GET'])
-def trigger_event():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class ExecuteChoiceRequest(BaseModel):
+    choice_index: int
+    player_state: Dict[str, Any] = {}
+
+
+class ReduceChaosRequest(BaseModel):
+    method: str
+    amount: Optional[int] = None
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.get("/trigger")
+async def trigger_event(
+    location: str = Query("any", description="Event location"),
+    player_class: Optional[str] = Query(None, description="Player class")
+):
     """
     Trigger Random Event
 
@@ -39,28 +62,25 @@ def trigger_event():
     Example: /api/oregon/trigger?location=wilderness&player_class=mage
     """
     try:
-        location = request.args.get('location', 'any')
-        player_class = request.args.get('player_class')
-
         event_data = oregon_system.trigger_random_event(location, player_class)
 
         if not event_data:
-            return jsonify({
+            return {
                 "triggered": False,
                 "message": "Kein Event getriggert"
-            })
+            }
 
-        return jsonify({
+        return {
             "triggered": True,
             "event": event_data
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@oregon_bp.route('/choice', methods=['POST'])
-def execute_choice():
+@router.post("/choice")
+async def execute_choice(request: ExecuteChoiceRequest):
     """
     Execute Player Choice
 
@@ -75,29 +95,24 @@ def execute_choice():
     }
     """
     try:
-        data = request.get_json()
-
-        choice_index = data.get('choice_index')
-        player_state = data.get('player_state', {})
-
-        if choice_index is None:
-            return jsonify({
-                "error": "choice_index erforderlich"
-            }), 400
-
-        result = oregon_system.execute_choice(choice_index, player_state)
+        result = oregon_system.execute_choice(
+            request.choice_index,
+            request.player_state
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@oregon_bp.route('/chaos', methods=['GET'])
-def get_chaos_status():
+@router.get("/chaos")
+async def get_chaos_status():
     """
     Get Chaos Status
 
@@ -105,14 +120,14 @@ def get_chaos_status():
     """
     try:
         status = oregon_system.get_chaos_status()
-        return jsonify(status)
+        return status
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@oregon_bp.route('/chaos/reduce', methods=['POST'])
-def reduce_chaos():
+@router.post("/chaos/reduce")
+async def reduce_chaos(request: ReduceChaosRequest):
     """
     Reduce Chaos
 
@@ -123,26 +138,19 @@ def reduce_chaos():
     }
     """
     try:
-        data = request.get_json()
+        result = oregon_system.chaos_calc.reduce_chaos(
+            request.method,
+            request.amount
+        )
 
-        method = data.get('method')
-        amount = data.get('amount')
-
-        if not method:
-            return jsonify({
-                "error": "method erforderlich"
-            }), 400
-
-        result = oregon_system.chaos_calc.reduce_chaos(method, amount)
-
-        return jsonify(result)
+        return result
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@oregon_bp.route('/current', methods=['GET'])
-def get_current_event():
+@router.get("/current")
+async def get_current_event():
     """
     Get Current Active Event
 
@@ -150,47 +158,17 @@ def get_current_event():
     """
     try:
         if not oregon_system.event_active or not oregon_system.current_event:
-            return jsonify({
+            return {
                 "active": False,
                 "message": "Kein aktives Event"
-            })
+            }
 
         event = oregon_system._format_event_for_client(oregon_system.current_event)
 
-        return jsonify({
+        return {
             "active": True,
             "event": event
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(oregon_bp)
-
-    print("=" * 60)
-    print("Oregon Trail Events API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  GET    /api/oregon/trigger")
-    print("  POST   /api/oregon/choice")
-    print("  GET    /api/oregon/chaos")
-    print("  POST   /api/oregon/chaos/reduce")
-    print("  GET    /api/oregon/current")
-    print()
-    print("Server läuft auf: http://localhost:5005")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5005, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))
