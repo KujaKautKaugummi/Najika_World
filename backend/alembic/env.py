@@ -15,7 +15,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 # Import Base and all models
 from backend.database import Base
-from backend.models import user, character, inventory, training
+from backend.models import (
+    user, character, inventory, training,
+    slime_companion, pvp_battle, arena_monster, magic_progress
+)
 from backend.config import settings
 
 # this is the Alembic Config object, which provides

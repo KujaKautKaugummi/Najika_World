@@ -9,8 +9,8 @@ import json
 import uuid
 
 from backend.services.multiplayer_server import get_multiplayer_server
-from backend.api.auth import get_current_user_from_token
-from backend.models.user import User
+# from backend.api.auth import get_current_user_from_token  # Not implemented yet
+# from backend.models.user import User
 
 
 router = APIRouter(prefix="/multiplayer", tags=["multiplayer"])
@@ -110,11 +110,11 @@ async def multiplayer_websocket(
                 await server.handle_message(player_id, message)
 
             except json.JSONDecodeError:
-                print(f"  Invalid JSON from player {player_id}")
+                print(f"Invalid JSON from player {player_id}")
                 continue
 
             except Exception as e:
-                print(f"L Error handling message from player {player_id}: {e}")
+                print(f"Error handling message from player {player_id}: {e}")
                 continue
 
     except WebSocketDisconnect:
@@ -122,7 +122,7 @@ async def multiplayer_websocket(
         await server.disconnect(player_id)
 
     except Exception as e:
-        print(f"L WebSocket error for player {player_id}: {e}")
+        print(f"WebSocket error for player {player_id}: {e}")
         await server.disconnect(player_id)
 
 
