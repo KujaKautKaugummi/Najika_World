@@ -45,8 +45,11 @@ def init_db() -> None:
     Initialize database by creating all tables
     Call this on application startup
     """
-    # Import all models here to ensure they are registered with Base
-    from backend.models import user, character, inventory, training
+    # Import ALL models so they are registered with Base
+    from backend.models import (
+        user, character, inventory, training,
+        slime_companion, pvp_battle, arena_monster, magic_progress
+    )
 
     Base.metadata.create_all(bind=engine)
     print("✅ Database initialized successfully")

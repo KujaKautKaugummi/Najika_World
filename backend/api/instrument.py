@@ -28,14 +28,14 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 
 from backend.services.instrument_system import (
-    InstrumentPlayingSystem, InstrumentType, Note, NoteQuality
+    InstrumentSystem, InstrumentType, Note, NoteQuality
 )
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/instrument", tags=["instrument"])
 
 # Global System Instance
-instrument_system = InstrumentPlayingSystem()
+instrument_system = InstrumentSystem()
 
 
 # ============================================================================
