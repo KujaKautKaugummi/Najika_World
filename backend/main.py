@@ -78,8 +78,11 @@ app = FastAPI(
     ---
 
     **Version:** {version}
-    **Environment:** {"Debug" if settings.DEBUG else "Production"}
-    """.format(version=settings.APP_VERSION),
+    **Environment:** {environment}
+    """.format(
+        version=settings.APP_VERSION,
+        environment="Debug" if settings.DEBUG else "Production"
+    ),
     lifespan=lifespan,
 )
 
