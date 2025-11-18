@@ -19,6 +19,8 @@ from backend.models.world_state import WorldState, PlayerWorldState
 from backend.models.voice_call import VoiceCall, VoiceMessage
 from backend.models.multiplayer_session import MultiplayerSession, SessionParticipant
 from backend.models.voice_settings import VoiceSettings
+from backend.models.card_game import Card, PlayerCardCollection, PlayerDeck, CardGameMatch, CardGameRanking
+from backend.models.dice_monsters import DiceMonster, PlayerDiceCollection, DiceDuelMatch
 
 __all__ = [
     "User",
@@ -50,4 +52,14 @@ __all__ = [
     "MultiplayerSession",
     "SessionParticipant",
     "VoiceSettings",
+    # Card Game System
+    "Card",
+    "PlayerCardCollection",
+    "PlayerDeck",
+    "CardGameMatch",
+    "CardGameRanking",
+    # Dice Monsters System
+    "DiceMonster",
+    "PlayerDiceCollection",
+    "DiceDuelMatch",
 ]

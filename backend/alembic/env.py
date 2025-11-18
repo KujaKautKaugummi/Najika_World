@@ -19,7 +19,8 @@ from backend.models import (
     user, character, inventory, training,
     slime_companion, pvp_battle, arena_monster, magic_progress,
     instrument_progress, oregon_trail, region_boss, world_state,
-    voice_call, multiplayer_session, voice_settings
+    voice_call, multiplayer_session, voice_settings,
+    card_game, dice_monsters
 )
 from backend.config import settings
 
