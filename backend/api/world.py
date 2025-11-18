@@ -10,30 +10,76 @@ Endpoints:
 - GET /api/world/biome/<biome> - Get specific biome
 - GET /api/world/weather/<biome> - Get weather for biome
 - POST /api/world/weather/<biome>/update - Force weather update
-- GET /api/world/time - Get current time
-- POST /api/world/time/set - Set game time
-- POST /api/world/time/update - Update time (delta)
+- GET /api/world/time - Get current time (DATABASE)
+- POST /api/world/time/set - Set game time (DATABASE)
+- POST /api/world/time/update - Update time (delta) (DATABASE)
 - GET /api/world/cities - Get all cities
 - GET /api/world/city/<city_id> - Get specific city
 - POST /api/world/city/enter - Check if can enter city
 - GET /api/world/wilderness/<biome> - Generate/get wilderness
-- GET /api/world/state/export - Export complete state
+- GET /api/world/state/export - Export complete state (DATABASE)
 
 Copyright: Najika World
 Author: Claude Code (CLI)
 Date: 2025-11-18
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+from datetime import datetime
 
+from backend.database import get_db
+from backend.models.world_state import WorldState, PlayerWorldState
 from backend.services.world_system import WorldSystem, Biome
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/world", tags=["world"])
 
-# Global System Instance
+# Global System Instance (for static config: biomes, cities, weather)
 world_system = WorldSystem()
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def get_or_create_world_state(db: Session) -> WorldState:
+    """Get or create singleton WorldState"""
+    world_state = db.query(WorldState).first()
+    if not world_state:
+        world_state = WorldState(
+            id=1,
+            world_time=0,
+            world_day=1,
+            world_season="spring",
+            current_weather="clear"
+        )
+        db.add(world_state)
+        db.commit()
+        db.refresh(world_state)
+    return world_state
+
+
+def get_or_create_player_world_state(db: Session, player_id: int) -> PlayerWorldState:
+    """Get or create PlayerWorldState for player"""
+    player_state = db.query(PlayerWorldState).filter(
+        PlayerWorldState.player_id == player_id
+    ).first()
+
+    if not player_state:
+        player_state = PlayerWorldState(
+            player_id=player_id,
+            current_region="samtmoos_tiefwald",
+            position_x=0.0,
+            position_y=0.0,
+            position_z=0.0
+        )
+        db.add(player_state)
+        db.commit()
+        db.refresh(player_state)
+
+    return player_state
 
 
 # ============================================================================
@@ -271,34 +317,57 @@ async def update_weather(biome_id: str):
 
 
 @router.get("/time")
-async def get_time():
+async def get_time(db: Session = Depends(get_db)):
     """
-    Get Current Game Time
+    Get Current Game Time (DATABASE)
 
     Returns:
         {
+            world_time: int,
+            world_day: int,
+            world_season: str,
             current_time: str,
             time_of_day: str,
-            is_night: bool,
-            light_level: float,
-            sun_altitude: float,
-            sun_azimuth: float,
-            moon_phase: float,
-            time_scale: float
+            is_night: bool
         }
     """
     try:
-        time_info = world_system.get_time_info()
-        return time_info
+        world_state = get_or_create_world_state(db)
+
+        # Calculate time from world_time (seconds since start)
+        hours = (world_state.world_time // 3600) % 24
+        minutes = (world_state.world_time // 60) % 60
+
+        # Determine time of day
+        if 6 <= hours < 12:
+            time_of_day = "morning"
+        elif 12 <= hours < 18:
+            time_of_day = "afternoon"
+        elif 18 <= hours < 22:
+            time_of_day = "evening"
+        else:
+            time_of_day = "night"
+
+        is_night = hours < 6 or hours >= 22
+
+        return {
+            "world_time": world_state.world_time,
+            "world_day": world_state.world_day,
+            "world_season": world_state.world_season,
+            "current_time": f"{hours:02d}:{minutes:02d}",
+            "time_of_day": time_of_day,
+            "is_night": is_night
+        }
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/time/set")
-async def set_time(request: SetTimeRequest):
+async def set_time(request: SetTimeRequest, db: Session = Depends(get_db)):
     """
-    Set Game Time
+    Set Game Time (DATABASE)
 
     Body:
     {
@@ -307,21 +376,36 @@ async def set_time(request: SetTimeRequest):
     }
     """
     try:
-        world_system.set_time(request.hour, request.minute)
+        world_state = get_or_create_world_state(db)
+
+        # Set time as seconds since start of day
+        new_time = (request.hour * 3600) + (request.minute * 60)
+        world_state.world_time = new_time
+
+        db.commit()
+        db.refresh(world_state)
+
+        hours = request.hour
+        minutes = request.minute
 
         return {
             "success": True,
-            "time": world_system.get_time_info()
+            "time": {
+                "world_time": world_state.world_time,
+                "world_day": world_state.world_day,
+                "current_time": f"{hours:02d}:{minutes:02d}"
+            }
         }
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/time/update")
-async def update_time(request: UpdateTimeRequest):
+async def update_time(request: UpdateTimeRequest, db: Session = Depends(get_db)):
     """
-    Update Game Time (Delta)
+    Update Game Time (Delta) (DATABASE)
 
     Body:
     {
@@ -331,14 +415,36 @@ async def update_time(request: UpdateTimeRequest):
     Used by game loop to advance time
     """
     try:
-        world_system.update_time(request.delta_seconds)
+        world_state = get_or_create_world_state(db)
+
+        # Update time
+        world_state.world_time += int(request.delta_seconds)
+
+        # Check if day changed (86400 seconds = 1 day)
+        if world_state.world_time >= 86400:
+            days_passed = world_state.world_time // 86400
+            world_state.world_day += days_passed
+            world_state.world_time = world_state.world_time % 86400
+
+        world_state.last_update = datetime.utcnow()
+
+        db.commit()
+        db.refresh(world_state)
+
+        hours = (world_state.world_time // 3600) % 24
+        minutes = (world_state.world_time // 60) % 60
 
         return {
             "success": True,
-            "time": world_system.get_time_info()
+            "time": {
+                "world_time": world_state.world_time,
+                "world_day": world_state.world_day,
+                "current_time": f"{hours:02d}:{minutes:02d}"
+            }
         }
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -497,16 +603,39 @@ async def get_wilderness(
 
 
 @router.get("/state/export")
-async def export_state():
+async def export_state(db: Session = Depends(get_db)):
     """
-    Export Complete World State
+    Export Complete World State (DATABASE)
 
     Returns:
-        JSON with map info, biomes, weather, time, cities
+        JSON with map info, biomes, weather, time, cities, world state
     """
     try:
-        state = world_system.export_state()
+        # Get world state from database
+        world_state = get_or_create_world_state(db)
+
+        # Get all player world states
+        player_states = db.query(PlayerWorldState).all()
+
+        # Get static world system state
+        system_state = world_system.export_state()
+
+        # Combine with database state
+        state = {
+            **system_state,
+            "database_state": {
+                "world_time": world_state.world_time,
+                "world_day": world_state.world_day,
+                "world_season": world_state.world_season,
+                "current_weather": world_state.current_weather,
+                "active_events": world_state.active_events or [],
+                "maintenance_mode": world_state.maintenance_mode,
+                "player_count": len(player_states)
+            }
+        }
+
         return state
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
