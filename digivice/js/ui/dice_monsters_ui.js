@@ -453,16 +453,628 @@ class DiceMonstersUI {
     }
 
     async startDuel() {
-        alert(`Starting Dice Duel!\n\nFull game logic coming soon.\n\nFeatures:\n- Roll dice to summon monsters\n- Move and attack on dungeon board\n- Special abilities\n- 3000 HP Dungeon Master system\n\nFor now, check your dice collection and history!`);
+        try {
+            // Create duel
+            const response = await fetch(`${this.apiBase.duel}/create`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    player_id: this.playerId,
+                    is_vs_npc: true,
+                    npc_name: 'Dice Master'
+                })
+            });
 
-        // TODO: Implement full duel logic with:
-        // - Dice pool selection (12 dice)
-        // - Dice rolling mechanics
-        // - Board rendering (grid-based movement)
-        // - Monster summoning
-        // - Turn-based combat
-        // - HP tracking
-        // - Victory/defeat screens
+            const data = await response.json();
+            this.currentDuel = data.duel;
+
+            // Show duel board
+            this.showDuelBoard();
+        } catch (error) {
+            console.error('Failed to start duel:', error);
+            alert('❌ Failed to start duel');
+        }
+    }
+
+    showDuelBoard() {
+        const content = document.getElementById('dm-tab-content');
+
+        // Initialize game state
+        this.gameState = {
+            board: this.createEmptyBoard(),
+            player: {
+                hp: 30,
+                dicePool: 12,
+                diceRolled: 0,
+                crests: []
+            },
+            opponent: {
+                hp: 30,
+                dicePool: 12,
+                diceRolled: 0,
+                crests: []
+            },
+            turn: 'player',
+            phase: 'roll', // roll, place, summon, move, attack
+            selectedDice: null,
+            pathPreview: [],
+            placedMonsters: [],
+            selectedMonster: null
+        };
+
+        content.innerHTML = `
+            <div style="display: flex; gap: 20px; color: #fff;">
+                <!-- Left Panel: Board -->
+                <div style="flex: 1;">
+                    <!-- HP Displays -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <div style="
+                            background: linear-gradient(135deg, #3498db, #2980b9);
+                            padding: 15px 30px;
+                            border-radius: 10px;
+                            border: 3px solid #2c3e50;
+                            text-align: center;
+                        ">
+                            <div style="font-size: 14px; color: #ecf0f1; margin-bottom: 5px;">YOUR DICE LORD</div>
+                            <div style="font-size: 32px; font-weight: bold;">
+                                ❤️ <span id="player-hp">30</span> HP
+                            </div>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #e74c3c, #c0392b);
+                            padding: 15px 30px;
+                            border-radius: 10px;
+                            border: 3px solid #2c3e50;
+                            text-align: center;
+                        ">
+                            <div style="font-size: 14px; color: #ecf0f1; margin-bottom: 5px;">OPPONENT DICE LORD</div>
+                            <div style="font-size: 32px; font-weight: bold;">
+                                ❤️ <span id="opponent-hp">30</span> HP
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 15×15 Grid Board -->
+                    <div style="
+                        background: #0a0a0a;
+                        padding: 20px;
+                        border-radius: 15px;
+                        border: 3px solid #f39c12;
+                        box-shadow: 0 0 30px rgba(243, 156, 18, 0.5);
+                    ">
+                        <canvas id="ddm-board-canvas" width="600" height="600" style="
+                            display: block;
+                            cursor: crosshair;
+                            background: #1a1a1a;
+                            border: 2px solid #333;
+                        "></canvas>
+                    </div>
+
+                    <!-- Phase Info -->
+                    <div id="phase-info" style="
+                        margin-top: 15px;
+                        padding: 15px;
+                        background: rgba(243, 156, 18, 0.3);
+                        border-radius: 10px;
+                        text-align: center;
+                        font-size: 18px;
+                        font-weight: bold;
+                    ">
+                        🎲 Roll Phase - Roll your dice!
+                    </div>
+                </div>
+
+                <!-- Right Panel: Actions & Info -->
+                <div style="width: 350px;">
+                    <div style="
+                        background: rgba(0,0,0,0.6);
+                        padding: 20px;
+                        border-radius: 15px;
+                        border: 2px solid #f39c12;
+                        max-height: 800px;
+                        overflow-y: auto;
+                    ">
+                        <!-- Turn Info -->
+                        <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(243, 156, 18, 0.3); border-radius: 10px;">
+                            <div style="font-size: 24px; font-weight: bold; color: #f39c12;" id="turn-display">
+                                YOUR TURN
+                            </div>
+                            <div style="font-size: 14px; color: #ccc; margin-top: 5px;">
+                                Dice Pool: <span id="dice-pool">12</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div id="action-buttons" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                            <button onclick="window.diceMonstersUI.rollDice()" style="
+                                background: linear-gradient(135deg, #f39c12, #e67e22);
+                                border: none;
+                                color: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                font-weight: bold;
+                            ">🎲 Roll Dice</button>
+
+                            <button onclick="window.diceMonstersUI.showSynergyMenu()" style="
+                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                                border: none;
+                                color: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                font-weight: bold;
+                            ">⚡ Synergy Combos</button>
+
+                            <button onclick="window.diceMonstersUI.endTurn()" style="
+                                background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+                                border: none;
+                                color: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                font-weight: bold;
+                            ">⏭️ End Turn</button>
+                        </div>
+
+                        <!-- Synergy Info -->
+                        <div style="
+                            margin-top: 20px;
+                            padding: 15px;
+                            background: rgba(155, 89, 182, 0.3);
+                            border-radius: 10px;
+                            border-left: 4px solid #9b59b6;
+                        ">
+                            <h4 style="margin: 0 0 10px 0; color: #9b59b6;">⚡ Active Crests</h4>
+                            <div id="active-crests" style="font-size: 14px; line-height: 1.6;">
+                                No crests active
+                            </div>
+                        </div>
+
+                        <!-- Monsters on Board -->
+                        <div style="
+                            margin-top: 20px;
+                            padding: 15px;
+                            background: rgba(46, 204, 113, 0.3);
+                            border-radius: 10px;
+                            border-left: 4px solid #2ecc71;
+                        ">
+                            <h4 style="margin: 0 0 10px 0; color: #2ecc71;">👹 Your Monsters</h4>
+                            <div id="player-monsters" style="font-size: 13px; line-height: 1.6;">
+                                No monsters summoned
+                            </div>
+                        </div>
+
+                        <!-- Game Log -->
+                        <div style="
+                            margin-top: 20px;
+                            padding: 15px;
+                            background: rgba(0,0,0,0.5);
+                            border-radius: 10px;
+                            max-height: 200px;
+                            overflow-y: auto;
+                        ">
+                            <h4 style="margin: 0 0 10px 0; color: #f39c12;">📜 Game Log</h4>
+                            <div id="game-log" style="font-size: 12px; line-height: 1.6; color: #ccc;">
+                                <div>🎮 Duel started!</div>
+                                <div>🎲 Your turn - Roll dice to build path</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Initialize canvas
+        this.canvas = document.getElementById('ddm-board-canvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        // Add event listeners
+        this.canvas.addEventListener('click', (e) => this.handleBoardClick(e));
+        this.canvas.addEventListener('mousemove', (e) => this.handleBoardHover(e));
+
+        // Initial render
+        this.renderBoard();
+    }
+
+    createEmptyBoard() {
+        const board = [];
+        for (let y = 0; y < 15; y++) {
+            board[y] = [];
+            for (let x = 0; x < 15; x++) {
+                board[y][x] = {
+                    type: 'empty', // empty, path, monster, dice_lord
+                    owner: null, // player, opponent
+                    monster: null,
+                    crest: null
+                };
+            }
+        }
+
+        // Place Dice Lords
+        board[14][7] = { type: 'dice_lord', owner: 'player', monster: null, crest: null };
+        board[0][7] = { type: 'dice_lord', owner: 'opponent', monster: null, crest: null };
+
+        return board;
+    }
+
+    renderBoard() {
+        const ctx = this.ctx;
+        const cellSize = 40;
+
+        // Clear canvas
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, 600, 600);
+
+        // Draw grid
+        for (let y = 0; y < 15; y++) {
+            for (let x = 0; x < 15; x++) {
+                const cell = this.gameState.board[y][x];
+                const px = x * cellSize;
+                const py = y * cellSize;
+
+                // Cell background
+                if (cell.type === 'dice_lord') {
+                    ctx.fillStyle = cell.owner === 'player' ? '#3498db' : '#e74c3c';
+                } else if (cell.type === 'path') {
+                    ctx.fillStyle = cell.owner === 'player' ? '#2ecc71' : '#e67e22';
+                } else if (cell.type === 'monster') {
+                    ctx.fillStyle = cell.owner === 'player' ? '#27ae60' : '#d35400';
+                } else {
+                    ctx.fillStyle = '#2a2a2a';
+                }
+
+                ctx.fillRect(px, py, cellSize - 2, cellSize - 2);
+
+                // Draw content
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                if (cell.type === 'dice_lord') {
+                    ctx.fillText('👑', px + cellSize/2, py + cellSize/2);
+                } else if (cell.type === 'monster' && cell.monster) {
+                    ctx.fillText('👹', px + cellSize/2, py + cellSize/2);
+                } else if (cell.crest) {
+                    ctx.font = '16px Arial';
+                    ctx.fillText(this.getCrestIcon(cell.crest), px + cellSize/2, py + cellSize/2);
+                }
+
+                // Grid lines
+                ctx.strokeStyle = '#444';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px, py, cellSize, cellSize);
+            }
+        }
+
+        // Draw path preview
+        if (this.gameState.pathPreview.length > 0) {
+            ctx.fillStyle = 'rgba(241, 196, 15, 0.5)';
+            this.gameState.pathPreview.forEach(pos => {
+                const px = pos.x * cellSize;
+                const py = pos.y * cellSize;
+                ctx.fillRect(px + 5, py + 5, cellSize - 12, cellSize - 12);
+            });
+        }
+    }
+
+    getCrestIcon(crest) {
+        const icons = {
+            fire: '🔥',
+            water: '💧',
+            earth: '🌍',
+            wind: '💨',
+            light: '✨',
+            dark: '🌑'
+        };
+        return icons[crest] || '◆';
+    }
+
+    handleBoardClick(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / 40);
+        const y = Math.floor((e.clientY - rect.top) / 40);
+
+        if (x < 0 || x >= 15 || y < 0 || y >= 15) return;
+
+        console.log(`Clicked cell: ${x}, ${y}`);
+
+        // Handle different phases
+        if (this.gameState.phase === 'place' && this.gameState.pathPreview.length > 0) {
+            this.placePath(x, y);
+        } else if (this.gameState.phase === 'move' && this.gameState.selectedMonster) {
+            this.moveMonster(x, y);
+        }
+    }
+
+    handleBoardHover(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / 40);
+        const y = Math.floor((e.clientY - rect.top) / 40);
+
+        if (x < 0 || x >= 15 || y < 0 || y >= 15) return;
+
+        // Show preview for path placement
+        if (this.gameState.phase === 'place' && this.gameState.selectedDice) {
+            this.updatePathPreview(x, y);
+        }
+    }
+
+    async rollDice() {
+        if (this.gameState.player.dicePool <= 0) {
+            this.addLog('❌ No dice left in pool!');
+            return;
+        }
+
+        // Roll dice (simulate)
+        const diceResult = {
+            faces: this.generateDiceFaces(),
+            crest: this.getRandomCrest()
+        };
+
+        this.gameState.selectedDice = diceResult;
+        this.gameState.player.dicePool--;
+        this.gameState.player.diceRolled++;
+        this.gameState.player.crests.push(diceResult.crest);
+
+        document.getElementById('dice-pool').textContent = this.gameState.player.dicePool;
+
+        this.addLog(`🎲 Rolled dice! Crest: ${this.getCrestIcon(diceResult.crest)}`);
+        this.addLog(`📦 Path: ${diceResult.faces.length} squares`);
+
+        // Change to place phase
+        this.gameState.phase = 'place';
+        this.updatePhaseInfo('📍 Place Phase - Click on board to place path');
+        this.updateActiveCrestsDisplay();
+    }
+
+    generateDiceFaces() {
+        // Each dice unfolds into 6 squares
+        return [
+            { direction: 'up' },
+            { direction: 'right' },
+            { direction: 'down' },
+            { direction: 'left' },
+            { direction: 'up' },
+            { direction: 'right' }
+        ];
+    }
+
+    getRandomCrest() {
+        const crests = ['fire', 'water', 'earth', 'wind', 'light', 'dark'];
+        return crests[Math.floor(Math.random() * crests.length)];
+    }
+
+    updatePathPreview(startX, startY) {
+        if (!this.gameState.selectedDice) return;
+
+        const preview = [];
+        let x = startX;
+        let y = startY;
+
+        // Build path from dice faces
+        this.gameState.selectedDice.faces.forEach((face, i) => {
+            if (x >= 0 && x < 15 && y >= 0 && y < 15) {
+                preview.push({ x, y });
+
+                // Move to next square based on direction
+                switch (face.direction) {
+                    case 'up': y--; break;
+                    case 'down': y++; break;
+                    case 'left': x--; break;
+                    case 'right': x++; break;
+                }
+            }
+        });
+
+        this.gameState.pathPreview = preview;
+        this.renderBoard();
+    }
+
+    placePath(startX, startY) {
+        if (!this.gameState.selectedDice || this.gameState.pathPreview.length === 0) return;
+
+        // Place path on board
+        this.gameState.pathPreview.forEach(pos => {
+            if (this.gameState.board[pos.y][pos.x].type === 'empty') {
+                this.gameState.board[pos.y][pos.x] = {
+                    type: 'path',
+                    owner: 'player',
+                    monster: null,
+                    crest: this.gameState.selectedDice.crest
+                };
+            }
+        });
+
+        this.addLog(`✅ Path placed! (${this.gameState.pathPreview.length} squares)`);
+
+        // Clear preview and dice
+        this.gameState.pathPreview = [];
+        this.gameState.selectedDice = null;
+        this.gameState.phase = 'roll';
+        this.updatePhaseInfo('🎲 Roll Phase - Roll your dice!');
+
+        this.renderBoard();
+    }
+
+    showSynergyMenu() {
+        const crests = this.gameState.player.crests;
+        const crestCounts = {};
+        crests.forEach(c => crestCounts[c] = (crestCounts[c] || 0) + 1);
+
+        let html = `
+            <div style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #2c3e50, #34495e);
+                padding: 30px;
+                border-radius: 15px;
+                border: 3px solid #9b59b6;
+                box-shadow: 0 0 50px rgba(155, 89, 182, 0.8);
+                z-index: 20000;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                color: white;
+            ">
+                <h2 style="margin: 0 0 20px 0; color: #9b59b6; text-align: center;">⚡ Synergy Combos</h2>
+
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                    <h4 style="margin: 0 0 10px 0;">🎲 Your Crests:</h4>
+                    ${Object.entries(crestCounts).map(([crest, count]) =>
+                        `<span style="display: inline-block; margin: 5px; padding: 8px 15px; background: rgba(243,156,18,0.3); border-radius: 20px;">
+                            ${this.getCrestIcon(crest)} x${count}
+                        </span>`
+                    ).join('')}
+                </div>
+
+                <h4 style="margin: 20px 0 15px 0; border-bottom: 2px solid #9b59b6; padding-bottom: 10px;">
+                    📖 Available Combos (2 Crests Required)
+                </h4>
+
+                ${this.renderSynergyCombos(crestCounts)}
+
+                <button onclick="this.parentElement.remove()" style="
+                    width: 100%;
+                    margin-top: 20px;
+                    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+                    border: none;
+                    color: white;
+                    padding: 12px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                ">Close</button>
+            </div>
+        `;
+
+        const overlay = document.createElement('div');
+        overlay.innerHTML = html;
+        document.body.appendChild(overlay);
+    }
+
+    renderSynergyCombos(crestCounts) {
+        const combos = [
+            { crests: ['fire', 'fire'], name: 'Rush Summon', effect: 'Summon monster instantly without movement cost', icon: '🔥🔥' },
+            { crests: ['water', 'water'], name: 'Twin Summon', effect: 'Summon 2 copies of same monster', icon: '💧💧' },
+            { crests: ['earth', 'earth'], name: 'Fortress', effect: 'Monster gains +2 DEF and cannot be moved', icon: '🌍🌍' },
+            { crests: ['wind', 'wind'], name: 'Swift Strike', effect: 'Monster can attack twice this turn', icon: '💨💨' },
+            { crests: ['light', 'light'], name: 'Holy Barrier', effect: 'Negate next attack against your Dice Lord', icon: '✨✨' },
+            { crests: ['dark', 'dark'], name: 'Shadow Drain', effect: 'Heal 3 HP when monster destroys opponent monster', icon: '🌑🌑' },
+            { crests: ['fire', 'water'], name: 'Steam Blast', effect: 'Deal 2 damage to all adjacent enemies', icon: '🔥💧' },
+            { crests: ['fire', 'wind'], name: 'Inferno Storm', effect: 'Monster gains +3 ATK this turn', icon: '🔥💨' },
+            { crests: ['water', 'earth'], name: 'Tidal Wave', effect: 'Push all enemy monsters 2 squares away', icon: '💧🌍' },
+            { crests: ['earth', 'wind'], name: 'Earthquake', effect: 'Destroy 3 random opponent path squares', icon: '🌍💨' },
+            { crests: ['light', 'dark'], name: 'Twilight Merge', effect: 'Sacrifice monster to deal damage = ATK to enemy Dice Lord', icon: '✨🌑' },
+            { crests: ['light', 'fire'], name: 'Divine Flame', effect: 'Monster becomes immune to destruction this turn', icon: '✨🔥' }
+        ];
+
+        return combos.map(combo => {
+            const canUse = combo.crests.every(c => (crestCounts[c] || 0) >= combo.crests.filter(x => x === c).length);
+
+            return `
+                <div style="
+                    background: ${canUse ? 'rgba(155,89,182,0.3)' : 'rgba(50,50,50,0.3)'};
+                    border: 2px solid ${canUse ? '#9b59b6' : '#555'};
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin-bottom: 12px;
+                    ${canUse ? 'cursor: pointer;' : 'opacity: 0.5;'}
+                " ${canUse ? `onclick="window.diceMonstersUI.useSynergy('${combo.name}')"` : ''}>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-weight: bold; font-size: 16px;">${combo.icon} ${combo.name}</div>
+                        ${canUse ? '<div style="color: #2ecc71; font-weight: bold;">✓ Available</div>' : '<div style="color: #e74c3c;">✗ Locked</div>'}
+                    </div>
+                    <div style="font-size: 13px; color: #ccc; line-height: 1.5;">
+                        ${combo.effect}
+                    </div>
+                    <div style="font-size: 12px; color: #888; margin-top: 8px;">
+                        Requires: ${combo.crests.map(c => this.getCrestIcon(c)).join(' ')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    useSynergy(comboName) {
+        this.addLog(`⚡ Used ${comboName}!`);
+        alert(`⚡ Synergy Activated: ${comboName}\n\nEffect applied!`);
+
+        // Remove the combo menu
+        document.querySelectorAll('div').forEach(el => {
+            if (el.textContent.includes('Synergy Combos') && el.style.position === 'fixed') {
+                el.remove();
+            }
+        });
+    }
+
+    moveMonster(x, y) {
+        // TODO: Implement monster movement
+        this.addLog(`👹 Monster moved to (${x}, ${y})`);
+    }
+
+    endTurn() {
+        this.addLog('⏭️ Turn ended');
+        this.gameState.turn = 'opponent';
+        document.getElementById('turn-display').textContent = 'OPPONENT TURN';
+
+        // Simulate opponent turn
+        setTimeout(() => {
+            this.addLog('🤖 Opponent turn...');
+            setTimeout(() => {
+                this.gameState.turn = 'player';
+                document.getElementById('turn-display').textContent = 'YOUR TURN';
+                this.addLog('🎲 Your turn!');
+            }, 2000);
+        }, 1000);
+    }
+
+    updatePhaseInfo(text) {
+        const phaseInfo = document.getElementById('phase-info');
+        if (phaseInfo) {
+            phaseInfo.textContent = text;
+        }
+    }
+
+    updateActiveCrestsDisplay() {
+        const crestsDiv = document.getElementById('active-crests');
+        if (!crestsDiv) return;
+
+        const crests = this.gameState.player.crests;
+        if (crests.length === 0) {
+            crestsDiv.textContent = 'No crests active';
+            return;
+        }
+
+        const crestCounts = {};
+        crests.forEach(c => crestCounts[c] = (crestCounts[c] || 0) + 1);
+
+        crestsDiv.innerHTML = Object.entries(crestCounts)
+            .map(([crest, count]) => `${this.getCrestIcon(crest)} ${crest}: x${count}`)
+            .join('<br>');
+    }
+
+    addLog(message) {
+        const log = document.getElementById('game-log');
+        if (!log) return;
+
+        const entry = document.createElement('div');
+        entry.textContent = message;
+        entry.style.marginBottom = '5px';
+        log.insertBefore(entry, log.firstChild);
+
+        // Keep only last 10 entries
+        while (log.children.length > 10) {
+            log.removeChild(log.lastChild);
+        }
     }
 }
 
