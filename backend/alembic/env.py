@@ -17,7 +17,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from backend.database import Base
 from backend.models import (
     user, character, inventory, training,
-    slime_companion, pvp_battle, arena_monster, magic_progress
+    slime_companion, pvp_battle, arena_monster, magic_progress,
+    instrument_progress, oregon_trail, region_boss, world_state,
+    voice_call, multiplayer_session, voice_settings
 )
 from backend.config import settings
 

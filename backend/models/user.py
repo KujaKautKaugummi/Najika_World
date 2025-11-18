@@ -41,7 +41,22 @@ class User(Base):
     slime_companions = relationship("SlimeCompanion", back_populates="owner", cascade="all, delete-orphan")
     pvp_stats = relationship("PvPStats", back_populates="player", uselist=False, cascade="all, delete-orphan")
     magic_progress = relationship("MagicSchoolProgress", back_populates="player", cascade="all, delete-orphan")
-    controlled_regions = relationship("RegionBoss", back_populates="boss_player", cascade="all, delete-orphan")
+
+    # Instrument System
+    instrument_progress = relationship("InstrumentProgress", back_populates="player", uselist=False, cascade="all, delete-orphan")
+
+    # Oregon Trail
+    oregon_journeys = relationship("OregonTrailJourney", back_populates="player", cascade="all, delete-orphan")
+
+    # Boss Spawns
+    boss_spawn_defeats = relationship("BossSpawnDefeat", back_populates="player", cascade="all, delete-orphan")
+
+    # World State
+    world_state = relationship("PlayerWorldState", back_populates="player", uselist=False, cascade="all, delete-orphan")
+
+    # Voice System
+    voice_calls = relationship("VoiceCall", back_populates="player", cascade="all, delete-orphan")
+    voice_settings = relationship("VoiceSettings", back_populates="player", uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
