@@ -2,17 +2,17 @@
 Instrument Playing API - Najika World
 ======================================
 
-REST API für Spielbares Instrument System (FastAPI)
+REST API für Spielbares Instrument System (FastAPI) (DATABASE)
 
 Endpoints:
-- POST /api/instrument/play-note - Play single note
-- POST /api/instrument/play-song - Play complete song
-- POST /api/instrument/switch - Switch instrument
-- GET /api/instrument/<type> - Get instrument info
-- GET /api/instrument/songs - Get all songs
-- GET /api/instrument/songs/<song_id> - Get specific song
-- GET /api/instrument/progress - Get player progress
-- GET /api/instrument/state/export - Export state
+- POST /api/instrument/play-note - Play single note (DATABASE)
+- POST /api/instrument/play-song - Play complete song (DATABASE)
+- POST /api/instrument/switch - Switch instrument (DATABASE)
+- GET /api/instrument/<type> - Get instrument info (static)
+- GET /api/instrument/songs - Get all songs (static)
+- GET /api/instrument/songs/<song_id> - Get specific song (static)
+- GET /api/instrument/progress - Get player progress (DATABASE)
+- GET /api/instrument/state/export - Export state (DATABASE)
 
 Educational purpose: Learn real instruments while playing!
 
@@ -23,10 +23,14 @@ Author: Claude Code (CLI)
 Date: 2025-11-18
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
 from typing import Optional, List
+from datetime import datetime
 
+from backend.database import get_db
+from backend.models.instrument_progress import InstrumentProgress, PlayedNote, LearnedSong
 from backend.services.instrument_system import (
     InstrumentSystem, InstrumentType, Note, NoteQuality
 )
@@ -34,8 +38,61 @@ from backend.services.instrument_system import (
 # Create FastAPI Router
 router = APIRouter(prefix="/api/instrument", tags=["instrument"])
 
-# Global System Instance
+# Global System Instance (for static config: songs, instrument data)
 instrument_system = InstrumentSystem()
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def get_or_create_progress(db: Session, player_id: int) -> InstrumentProgress:
+    """Get or create instrument progress for player"""
+    progress = db.query(InstrumentProgress).filter(
+        InstrumentProgress.player_id == player_id
+    ).first()
+
+    if not progress:
+        progress = InstrumentProgress(
+            player_id=player_id,
+            current_instrument="mundharmonika",
+            instrument_skills={},
+            instrument_experience={},
+            learned_songs=[],
+            total_notes_played=0,
+            perfect_notes=0,
+            great_notes=0,
+            good_notes=0
+        )
+        db.add(progress)
+        db.commit()
+        db.refresh(progress)
+
+    return progress
+
+
+def calculate_xp_for_note(quality: str) -> int:
+    """Calculate XP based on note quality"""
+    xp_map = {
+        "perfect": 10,
+        "great": 7,
+        "good": 5,
+        "ok": 3,
+        "poor": 1,
+        "miss": 0
+    }
+    return xp_map.get(quality.lower(), 5)
+
+
+def calculate_level_from_xp(xp: int) -> int:
+    """Calculate level from XP (exponential)"""
+    # Level 1 = 0 XP, Level 2 = 100 XP, Level 3 = 220 XP, etc.
+    level = 1
+    xp_required = 0
+    while xp >= xp_required:
+        level += 1
+        xp_required += int(100 * (1.2 ** (level - 2)))
+    return max(1, level - 1)
 
 
 # ============================================================================
@@ -43,6 +100,7 @@ instrument_system = InstrumentSystem()
 # ============================================================================
 
 class PlayNoteRequest(BaseModel):
+    player_id: int
     instrument: Optional[str] = None
     note: str
     octave: int = Field(4, ge=1, le=8)
@@ -52,11 +110,13 @@ class PlayNoteRequest(BaseModel):
 
 
 class PlaySongRequest(BaseModel):
+    player_id: int
     song_id: str
     note_accuracies: List[float] = []
 
 
 class SwitchInstrumentRequest(BaseModel):
+    player_id: int
     instrument: str
 
 
@@ -65,12 +125,13 @@ class SwitchInstrumentRequest(BaseModel):
 # ============================================================================
 
 @router.post("/play-note")
-async def play_note(request: PlayNoteRequest):
+async def play_note(request: PlayNoteRequest, db: Session = Depends(get_db)):
     """
-    Play Single Note
+    Play Single Note (DATABASE)
 
     Body:
     {
+        "player_id": 1,
         "instrument": "mundharmonika",  // optional, uses current
         "note": "C",
         "octave": 4,
@@ -83,132 +144,241 @@ async def play_note(request: PlayNoteRequest):
         note_data: {
             note: str,
             frequency: float,
-            xp_gained: float,
+            xp_gained: int,
             level: int,
             level_up: bool,
             quality: str
         }
     """
     try:
-        # Parse instrument (optional)
-        instrument = None
-        if request.instrument:
-            try:
-                instrument = InstrumentType(request.instrument)
-            except ValueError:
-                raise HTTPException(
-                    status_code=400,
-                    detail={
-                        "error": f"Ungültiges Instrument: {request.instrument}",
-                        "valid_instruments": [i.value for i in InstrumentType]
-                    }
-                )
-        else:
-            instrument = instrument_system.current_instrument
+        progress = get_or_create_progress(db, request.player_id)
 
-        # Parse note
+        # Parse instrument
+        instrument_name = request.instrument or progress.current_instrument
+
         try:
-            note = Note(request.note.upper())
+            instrument = InstrumentType(instrument_name)
         except ValueError:
             raise HTTPException(
                 status_code=400,
                 detail={
-                    "error": f"Ungültige Note: {request.note}",
-                    "valid_notes": [n.value for n in Note]
+                    "error": f"Ungültiges Instrument: {instrument_name}",
+                    "valid_instruments": [i.value for i in InstrumentType]
                 }
             )
 
-        # Parse quality
-        try:
-            quality = NoteQuality(request.quality)
-        except ValueError:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": f"Ungültige Quality: {request.quality}",
-                    "valid_qualities": [q.value for q in NoteQuality]
-                }
-            )
+        # Calculate XP
+        xp_gained = calculate_xp_for_note(request.quality)
 
-        # Play note!
-        result = instrument_system.play_note(
-            instrument,
-            note,
-            request.octave,
-            request.duration,
-            request.velocity,
-            quality
+        # Get current stats
+        skills = progress.instrument_skills or {}
+        experience = progress.instrument_experience or {}
+
+        current_xp = experience.get(instrument_name, 0)
+        old_level = calculate_level_from_xp(current_xp)
+
+        # Add XP
+        new_xp = current_xp + xp_gained
+        experience[instrument_name] = new_xp
+        new_level = calculate_level_from_xp(new_xp)
+
+        # Update skill level
+        skills[instrument_name] = new_level
+
+        # Update progress
+        progress.instrument_skills = skills
+        progress.instrument_experience = experience
+        progress.total_notes_played += 1
+
+        # Update quality counters
+        if request.quality.lower() == "perfect":
+            progress.perfect_notes += 1
+        elif request.quality.lower() == "great":
+            progress.great_notes += 1
+        elif request.quality.lower() == "good":
+            progress.good_notes += 1
+
+        progress.last_played = datetime.utcnow()
+
+        # Log played note
+        played_note = PlayedNote(
+            progress_id=progress.id,
+            instrument=instrument_name,
+            note=request.note,
+            octave=request.octave,
+            duration=request.duration,
+            velocity=request.velocity,
+            quality=request.quality,
+            accuracy=sum(request.note_accuracies) / len(request.note_accuracies) if hasattr(request, 'note_accuracies') and request.note_accuracies else 0.8,
+            played_at=datetime.utcnow()
         )
 
-        return result
+        db.add(played_note)
+        db.commit()
+        db.refresh(progress)
+
+        # Calculate frequency (for audio playback)
+        note_frequencies = {
+            "C": 261.63, "C#": 277.18, "D": 293.66, "D#": 311.13,
+            "E": 329.63, "F": 349.23, "F#": 369.99, "G": 392.00,
+            "G#": 415.30, "A": 440.00, "A#": 466.16, "B": 493.88
+        }
+        base_freq = note_frequencies.get(request.note.upper(), 440.0)
+        octave_multiplier = 2 ** (request.octave - 4)
+        frequency = base_freq * octave_multiplier
+
+        return {
+            "success": True,
+            "note": request.note,
+            "octave": request.octave,
+            "frequency": frequency,
+            "xp_gained": xp_gained,
+            "level": new_level,
+            "level_up": new_level > old_level,
+            "quality": request.quality,
+            "total_notes_played": progress.total_notes_played
+        }
 
     except HTTPException:
         raise
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/play-song")
-async def play_song(request: PlaySongRequest):
+async def play_song(request: PlaySongRequest, db: Session = Depends(get_db)):
     """
-    Play Complete Song
+    Play Complete Song (DATABASE)
 
     Body:
     {
-        "song_id": "happy_birthday",
-        "note_accuracies": [85.5, 92.0, 78.3, ...]  // accuracy % für jede Note
+        "player_id": 1,
+        "song_id": "zelda_song_of_time",
+        "note_accuracies": [0.95, 0.88, 0.92, ...]
     }
 
     Returns:
-        song_result: {
-            song_name: str,
-            notes_count: int,
-            perfect_notes: int,
-            total_score: float,
-            accuracy: float,
-            rank: str,  // S, A, B, C, D
-            xp_gained: float,
-            level: int,
-            level_up: bool
+        song_data: {
+            song_id: str,
+            score: float,
+            xp_gained: int,
+            completed: bool,
+            learned: bool
         }
     """
     try:
-        # Play song!
-        result = instrument_system.play_song(
-            request.song_id,
-            request.note_accuracies
-        )
+        progress = get_or_create_progress(db, request.player_id)
 
-        if "error" in result:
-            raise HTTPException(status_code=400, detail=result["error"])
+        # Check if song exists (using static system)
+        song_data = instrument_system.get_song(request.song_id)
+        if not song_data:
+            raise HTTPException(status_code=404, detail=f"Song nicht gefunden: {request.song_id}")
 
-        return result
+        # Calculate score
+        if request.note_accuracies:
+            avg_accuracy = sum(request.note_accuracies) / len(request.note_accuracies)
+        else:
+            avg_accuracy = 0.7
+
+        score = avg_accuracy * 100  # 0-100
+
+        # Calculate XP based on song difficulty and score
+        difficulty = song_data.get("difficulty", 1)
+        xp_gained = int(difficulty * 50 * avg_accuracy)
+
+        # Update instrument XP
+        instrument_name = progress.current_instrument
+        experience = progress.instrument_experience or {}
+        current_xp = experience.get(instrument_name, 0)
+        old_level = calculate_level_from_xp(current_xp)
+
+        new_xp = current_xp + xp_gained
+        experience[instrument_name] = new_xp
+        new_level = calculate_level_from_xp(new_xp)
+
+        # Update skills
+        skills = progress.instrument_skills or {}
+        skills[instrument_name] = new_level
+
+        progress.instrument_skills = skills
+        progress.instrument_experience = experience
+        progress.last_played = datetime.utcnow()
+
+        # Check if song completed (score >= 70%)
+        completed = score >= 70.0
+
+        # Check if already learned
+        learned_songs_list = progress.learned_songs or []
+        already_learned = request.song_id in learned_songs_list
+        newly_learned = completed and not already_learned
+
+        if newly_learned:
+            learned_songs_list.append(request.song_id)
+            progress.learned_songs = learned_songs_list
+
+            # Create LearnedSong entry
+            learned_song = LearnedSong(
+                player_id=request.player_id,
+                song_id=request.song_id,
+                song_name=song_data.get("name", request.song_id),
+                difficulty=difficulty,
+                times_played=1,
+                best_score=score,
+                completed=True,
+                learned_at=datetime.utcnow(),
+                last_played=datetime.utcnow()
+            )
+            db.add(learned_song)
+        else:
+            # Update existing learned song
+            learned_song = db.query(LearnedSong).filter(
+                LearnedSong.player_id == request.player_id,
+                LearnedSong.song_id == request.song_id
+            ).first()
+
+            if learned_song:
+                learned_song.times_played += 1
+                learned_song.best_score = max(learned_song.best_score, score)
+                learned_song.completed = learned_song.completed or completed
+                learned_song.last_played = datetime.utcnow()
+
+        db.commit()
+        db.refresh(progress)
+
+        return {
+            "success": True,
+            "song_id": request.song_id,
+            "score": round(score, 2),
+            "xp_gained": xp_gained,
+            "level": new_level,
+            "level_up": new_level > old_level,
+            "completed": completed,
+            "learned": newly_learned or already_learned
+        }
 
     except HTTPException:
         raise
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/switch")
-async def switch_instrument(request: SwitchInstrumentRequest):
+async def switch_instrument(request: SwitchInstrumentRequest, db: Session = Depends(get_db)):
     """
-    Switch Instrument
+    Switch Instrument (DATABASE)
 
     Body:
     {
+        "player_id": 1,
         "instrument": "gitarre"
     }
-
-    Returns:
-        {
-            success: bool,
-            previous: str,
-            current: str,
-            message: str
-        }
     """
     try:
+        progress = get_or_create_progress(db, request.player_id)
+
+        # Validate instrument
         try:
             instrument = InstrumentType(request.instrument)
         except ValueError:
@@ -220,34 +390,35 @@ async def switch_instrument(request: SwitchInstrumentRequest):
                 }
             )
 
-        result = instrument_system.switch_instrument(instrument)
+        old_instrument = progress.current_instrument
+        progress.current_instrument = request.instrument
 
-        return result
+        db.commit()
+        db.refresh(progress)
+
+        return {
+            "success": True,
+            "old_instrument": old_instrument,
+            "new_instrument": request.instrument,
+            "message": f"Gewechselt von {old_instrument} zu {request.instrument}"
+        }
 
     except HTTPException:
         raise
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/{instrument_type}")
 async def get_instrument_info(instrument_type: str):
     """
-    Get Instrument Info
+    Get Instrument Info (static)
 
     Path: /api/instrument/mundharmonika
-
-    Returns:
-        {
-            type: str,
-            name: str,
-            difficulty: str,
-            range_low: str,
-            range_high: str,
-            description: str
-        }
     """
     try:
+        # Parse instrument
         try:
             instrument = InstrumentType(instrument_type)
         except ValueError:
@@ -259,6 +430,7 @@ async def get_instrument_info(instrument_type: str):
                 }
             )
 
+        # Get instrument info from system
         info = instrument_system.get_instrument_info(instrument)
 
         return info
@@ -269,40 +441,16 @@ async def get_instrument_info(instrument_type: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/songs")
-async def get_all_songs(
-    category: Optional[str] = Query(None, description="Filter by category"),
-    difficulty: Optional[str] = Query(None, description="Filter by difficulty")
-):
+@router.get("/songs/all")
+async def get_all_songs():
     """
-    Get All Songs
+    Get All Songs (static)
 
-    Query Params:
-        category: str (optional) - tutorial, zelda, popular, etc.
-        difficulty: str (optional) - easy, medium, hard
-
-    Returns:
-        {
-            songs: [
-                {
-                    id: str,
-                    name: str,
-                    category: str,
-                    difficulty: str,
-                    notes_count: int,
-                    duration: float
-                }
-            ],
-            count: int
-        }
+    Path: /api/instrument/songs/all
     """
     try:
-        songs = instrument_system.get_all_songs(category, difficulty)
-
-        return {
-            "songs": songs,
-            "count": len(songs)
-        }
+        songs = instrument_system.get_all_songs()
+        return {"songs": songs, "count": len(songs)}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -311,35 +459,15 @@ async def get_all_songs(
 @router.get("/songs/{song_id}")
 async def get_song(song_id: str):
     """
-    Get Specific Song
+    Get Specific Song (static)
 
-    Path: /api/instrument/songs/happy_birthday
-
-    Returns:
-        {
-            id: str,
-            name: str,
-            category: str,
-            difficulty: str,
-            notes: [
-                {
-                    note: str,
-                    octave: int,
-                    duration: float,
-                    velocity: float
-                }
-            ],
-            tutorial_text: str
-        }
+    Path: /api/instrument/songs/zelda_song_of_time
     """
     try:
         song = instrument_system.get_song(song_id)
 
         if not song:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Song nicht gefunden: {song_id}"
-            )
+            raise HTTPException(status_code=404, detail=f"Song nicht gefunden: {song_id}")
 
         return song
 
@@ -349,43 +477,69 @@ async def get_song(song_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/progress")
-async def get_progress():
+@router.get("/progress/{player_id}")
+async def get_progress(player_id: int, db: Session = Depends(get_db)):
     """
-    Get Player Progress
+    Get Player Progress (DATABASE)
 
-    Returns:
-        {
-            current_instrument: str,
-            level: int,
-            total_xp: float,
-            perfect_notes: int,
-            total_notes: int,
-            accuracy: float,
-            play_time: float,
-            songs_completed: int
-        }
+    Path: /api/instrument/progress/1
     """
     try:
-        progress = instrument_system.get_progress()
+        progress = get_or_create_progress(db, player_id)
 
-        return progress
+        # Get learned songs
+        learned_songs = db.query(LearnedSong).filter(
+            LearnedSong.player_id == player_id
+        ).all()
+
+        return {
+            "player_id": player_id,
+            "progress": progress.to_dict(),
+            "learned_songs": [song.to_dict() for song in learned_songs],
+            "learned_songs_count": len(learned_songs)
+        }
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/state/export")
-async def export_state():
+@router.get("/state/export/{player_id}")
+async def export_state(player_id: int, db: Session = Depends(get_db)):
     """
-    Export State
+    Export Complete State (DATABASE)
 
-    Returns:
-        JSON with complete instrument state
+    Path: /api/instrument/state/export/1
     """
     try:
-        state = instrument_system.export_state()
-        return state
+        progress = get_or_create_progress(db, player_id)
+
+        # Get played notes (last 100)
+        played_notes = db.query(PlayedNote).filter(
+            PlayedNote.progress_id == progress.id
+        ).order_by(
+            PlayedNote.played_at.desc()
+        ).limit(100).all()
+
+        # Get learned songs
+        learned_songs = db.query(LearnedSong).filter(
+            LearnedSong.player_id == player_id
+        ).all()
+
+        return {
+            "player_id": player_id,
+            "progress": progress.to_dict(),
+            "played_notes": [note.to_dict() for note in played_notes],
+            "learned_songs": [song.to_dict() for song in learned_songs],
+            "stats": {
+                "total_notes": progress.total_notes_played,
+                "perfect_notes": progress.perfect_notes,
+                "great_notes": progress.great_notes,
+                "good_notes": progress.good_notes,
+                "learned_songs_count": len(learned_songs)
+            }
+        }
 
     except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
