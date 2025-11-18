@@ -2,7 +2,7 @@
 Region Boss API - Najika World
 ===============================
 
-REST API für Gebietsherrscher System
+REST API für Gebietsherrscher System (FastAPI)
 
 Endpoints:
 - POST /api/region-boss/challenge/create - Create challenge
@@ -18,24 +18,71 @@ Endpoints:
 
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
+from typing import Dict, Any, Optional
 
 from backend.services.region_boss_system import (
     RegionBossSystem, Region, ConquestPath
 )
 
-# Create Blueprint
-region_boss_bp = Blueprint('region_boss', __name__, url_prefix='/api/region-boss')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/region-boss", tags=["region_boss"])
 
 # Global System Instance
 boss_system = RegionBossSystem()
 
 
-@region_boss_bp.route('/challenge/create', methods=['POST'])
-def create_challenge():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class CreateChallengeRequest(BaseModel):
+    challenger_id: int
+    region: str
+    challenge_type: str = "krieg"
+    stakes: Optional[Dict[str, Any]] = None
+    conditions: Optional[Dict[str, Any]] = None
+
+
+class AcceptChallengeRequest(BaseModel):
+    challenge_id: int
+    boss_player_id: int
+
+
+class CompleteChallengeRequest(BaseModel):
+    challenge_id: int
+    winner_id: int
+
+
+class AddConquestProgressRequest(BaseModel):
+    player_id: int
+    region: str
+    path: str
+    progress: float = 0.0
+
+
+class SetTaxRateRequest(BaseModel):
+    boss_player_id: int
+    region: str
+    tax_rate: float
+
+
+class BroadcastMessageRequest(BaseModel):
+    boss_player_id: int
+    region: str
+    message: str
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.post("/challenge/create")
+async def create_challenge(request: CreateChallengeRequest):
     """
     Create Challenge
 
@@ -49,61 +96,63 @@ def create_challenge():
     }
     """
     try:
-        data = request.get_json()
-
-        challenger_id = data.get('challenger_id')
-        region_str = data.get('region')
-        challenge_type_str = data.get('challenge_type', 'krieg')
-
-        if not challenger_id or not region_str:
-            return jsonify({
-                "error": "challenger_id und region erforderlich"
-            }), 400
-
         # Parse region
         try:
-            region = Region(region_str)
+            region = Region(request.region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region_str}",
-                "valid_regions": [r.value for r in Region]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültige Region: {request.region}",
+                    "valid_regions": [r.value for r in Region]
+                }
+            )
 
         # Parse challenge type
         try:
-            challenge_type = ConquestPath(challenge_type_str)
+            challenge_type = ConquestPath(request.challenge_type)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiger Challenge-Typ: {challenge_type_str}",
-                "valid_types": [c.value for c in ConquestPath]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiger Challenge-Typ: {request.challenge_type}",
+                    "valid_types": [c.value for c in ConquestPath]
+                }
+            )
 
         success, challenge_id, message = boss_system.create_challenge(
-            challenger_id, region, challenge_type,
-            stakes=data.get('stakes'),
-            conditions=data.get('conditions')
+            request.challenger_id,
+            region,
+            challenge_type,
+            stakes=request.stakes,
+            conditions=request.conditions
         )
 
         if not success:
-            return jsonify({
-                "success": False,
-                "message": message
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "message": message
+                }
+            )
 
-        return jsonify({
+        return {
             "success": True,
             "challenge_id": challenge_id,
             "message": message,
             "region": region.value,
             "type": challenge_type.value
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/challenge/accept', methods=['POST'])
-def accept_challenge():
+@router.post("/challenge/accept")
+async def accept_challenge(request: AcceptChallengeRequest):
     """
     Accept Challenge
 
@@ -114,36 +163,34 @@ def accept_challenge():
     }
     """
     try:
-        data = request.get_json()
-
-        challenge_id = data.get('challenge_id')
-        boss_player_id = data.get('boss_player_id')
-
-        if not challenge_id or not boss_player_id:
-            return jsonify({
-                "error": "challenge_id und boss_player_id erforderlich"
-            }), 400
-
-        success, message = boss_system.accept_challenge(challenge_id, boss_player_id)
+        success, message = boss_system.accept_challenge(
+            request.challenge_id,
+            request.boss_player_id
+        )
 
         if not success:
-            return jsonify({
-                "success": False,
-                "message": message
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "message": message
+                }
+            )
 
-        return jsonify({
+        return {
             "success": True,
             "message": message,
-            "challenge_id": challenge_id
-        })
+            "challenge_id": request.challenge_id
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/challenge/complete', methods=['POST'])
-def complete_challenge():
+@router.post("/challenge/complete")
+async def complete_challenge(request: CompleteChallengeRequest):
     """
     Complete Challenge
 
@@ -154,29 +201,24 @@ def complete_challenge():
     }
     """
     try:
-        data = request.get_json()
-
-        challenge_id = data.get('challenge_id')
-        winner_id = data.get('winner_id')
-
-        if not challenge_id or not winner_id:
-            return jsonify({
-                "error": "challenge_id und winner_id erforderlich"
-            }), 400
-
-        result = boss_system.complete_challenge(challenge_id, winner_id)
+        result = boss_system.complete_challenge(
+            request.challenge_id,
+            request.winner_id
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/conquest/progress', methods=['POST'])
-def add_conquest_progress():
+@router.post("/conquest/progress")
+async def add_conquest_progress(request: AddConquestProgressRequest):
     """
     Add Conquest Progress (Handel/Diplomatie/Quest)
 
@@ -189,46 +231,47 @@ def add_conquest_progress():
     }
     """
     try:
-        data = request.get_json()
-
-        player_id = data.get('player_id')
-        region_str = data.get('region')
-        path_str = data.get('path')
-        progress = data.get('progress', 0.0)
-
-        if not all([player_id, region_str, path_str]):
-            return jsonify({
-                "error": "player_id, region, path erforderlich"
-            }), 400
-
         # Parse region
         try:
-            region = Region(region_str)
+            region = Region(request.region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region_str}",
-                "valid_regions": [r.value for r in Region]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültige Region: {request.region}",
+                    "valid_regions": [r.value for r in Region]
+                }
+            )
 
         # Parse path
         try:
-            path = ConquestPath(path_str)
+            path = ConquestPath(request.path)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiger Pfad: {path_str}",
-                "valid_paths": [c.value for c in ConquestPath]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiger Pfad: {request.path}",
+                    "valid_paths": [c.value for c in ConquestPath]
+                }
+            )
 
-        result = boss_system.add_conquest_progress(player_id, region, path, progress)
+        result = boss_system.add_conquest_progress(
+            request.player_id,
+            region,
+            path,
+            request.progress
+        )
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/tax/set', methods=['POST'])
-def set_tax_rate():
+@router.post("/tax/set")
+async def set_tax_rate(request: SetTaxRateRequest):
     """
     Set Tax Rate (Boss only, 5-10%)
 
@@ -240,46 +283,45 @@ def set_tax_rate():
     }
     """
     try:
-        data = request.get_json()
-
-        boss_player_id = data.get('boss_player_id')
-        region_str = data.get('region')
-        tax_rate = data.get('tax_rate')
-
-        if not all([boss_player_id, region_str, tax_rate is not None]):
-            return jsonify({
-                "error": "boss_player_id, region, tax_rate erforderlich"
-            }), 400
-
         # Parse region
         try:
-            region = Region(region_str)
+            region = Region(request.region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region_str}"
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={"error": f"Ungültige Region: {request.region}"}
+            )
 
-        success, message = boss_system.set_tax_rate(boss_player_id, region, tax_rate)
+        success, message = boss_system.set_tax_rate(
+            request.boss_player_id,
+            region,
+            request.tax_rate
+        )
 
         if not success:
-            return jsonify({
-                "success": False,
-                "message": message
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "message": message
+                }
+            )
 
-        return jsonify({
+        return {
             "success": True,
             "message": message,
             "region": region.value,
-            "tax_rate": tax_rate
-        })
+            "tax_rate": request.tax_rate
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/broadcast', methods=['POST'])
-def broadcast_message():
+@router.post("/broadcast")
+async def broadcast_message(request: BroadcastMessageRequest):
     """
     Broadcast Message (Boss only)
 
@@ -291,47 +333,44 @@ def broadcast_message():
     }
     """
     try:
-        data = request.get_json()
-
-        boss_player_id = data.get('boss_player_id')
-        region_str = data.get('region')
-        message = data.get('message')
-
-        if not all([boss_player_id, region_str, message]):
-            return jsonify({
-                "error": "boss_player_id, region, message erforderlich"
-            }), 400
-
         # Parse region
         try:
-            region = Region(region_str)
+            region = Region(request.region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region_str}"
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={"error": f"Ungültige Region: {request.region}"}
+            )
 
         success, broadcast = boss_system.broadcast_message(
-            boss_player_id, region, message
+            request.boss_player_id,
+            region,
+            request.message
         )
 
         if not success:
-            return jsonify({
-                "success": False,
-                "message": broadcast
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "message": broadcast
+                }
+            )
 
-        return jsonify({
+        return {
             "success": True,
             "broadcast": broadcast,
             "region": region.value
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/region/<region>', methods=['GET'])
-def get_region_info(region: str):
+@router.get("/region/{region}")
+async def get_region_info(region: str):
     """
     Get Region Info
 
@@ -342,21 +381,26 @@ def get_region_info(region: str):
         try:
             region_enum = Region(region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region}",
-                "valid_regions": [r.value for r in Region]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültige Region: {region}",
+                    "valid_regions": [r.value for r in Region]
+                }
+            )
 
         info = boss_system.get_region_info(region_enum)
 
-        return jsonify(info)
+        return info
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/ultimate', methods=['GET'])
-def get_ultimate_ruler():
+@router.get("/ultimate")
+async def get_ultimate_ruler():
     """
     Get Ultimate Ruler Info
 
@@ -364,14 +408,17 @@ def get_ultimate_ruler():
     """
     try:
         info = boss_system.get_ultimate_ruler_info()
-        return jsonify(info)
+        return info
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/can-challenge', methods=['GET'])
-def check_can_challenge():
+@router.get("/can-challenge")
+async def check_can_challenge(
+    challenger_id: int = Query(..., description="Challenger player ID"),
+    region: str = Query(..., description="Region to challenge")
+):
     """
     Check if can challenge
 
@@ -382,37 +429,32 @@ def check_can_challenge():
     Example: /api/region-boss/can-challenge?challenger_id=1&region=samtmoos_tiefwald
     """
     try:
-        challenger_id = request.args.get('challenger_id', type=int)
-        region_str = request.args.get('region')
-
-        if not challenger_id or not region_str:
-            return jsonify({
-                "error": "challenger_id und region erforderlich"
-            }), 400
-
         # Parse region
         try:
-            region = Region(region_str)
+            region_enum = Region(region)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültige Region: {region_str}"
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={"error": f"Ungültige Region: {region}"}
+            )
 
-        can_challenge, reason = boss_system.can_challenge_boss(challenger_id, region)
+        can_challenge, reason = boss_system.can_challenge_boss(challenger_id, region_enum)
 
-        return jsonify({
+        return {
             "can_challenge": can_challenge,
             "reason": reason,
             "challenger_id": challenger_id,
-            "region": region.value
-        })
+            "region": region_enum.value
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@region_boss_bp.route('/state/export', methods=['GET'])
-def export_state():
+@router.get("/state/export")
+async def export_state():
     """
     Export State
 
@@ -421,42 +463,7 @@ def export_state():
     """
     try:
         state = boss_system.export_state()
-        return jsonify(state)
+        return state
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(region_boss_bp)
-
-    print("=" * 60)
-    print("Region Boss API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  POST   /api/region-boss/challenge/create")
-    print("  POST   /api/region-boss/challenge/accept")
-    print("  POST   /api/region-boss/challenge/complete")
-    print("  POST   /api/region-boss/conquest/progress")
-    print("  POST   /api/region-boss/tax/set")
-    print("  POST   /api/region-boss/broadcast")
-    print("  GET    /api/region-boss/region/<region>")
-    print("  GET    /api/region-boss/ultimate")
-    print("  GET    /api/region-boss/can-challenge")
-    print("  GET    /api/region-boss/state/export")
-    print()
-    print("Server läuft auf: http://localhost:5004")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5004, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))

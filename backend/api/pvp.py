@@ -2,7 +2,7 @@
 PvP API - Najika World
 ======================
 
-REST API für PvP System
+REST API für PvP System (FastAPI)
 
 Endpoints:
 - POST /api/pvp/battle/start - Start PvP Battle
@@ -17,24 +17,61 @@ Endpoints:
 
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
-from typing import Dict, Any
-import json
+from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel
+from typing import Dict, Any, List, Optional
 
 from backend.services.pvp_system import PvPSystem, PvPMode
 
-# Create Blueprint
-pvp_bp = Blueprint('pvp', __name__, url_prefix='/api/pvp')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/pvp", tags=["pvp"])
 
 # Global PvP System Instance
 pvp_system = PvPSystem()
 
 
-@pvp_bp.route('/battle/start', methods=['POST'])
-def start_battle():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class StartBattleRequest(BaseModel):
+    attacker_id: int
+    defender_id: int
+    mode: str = "normal"
+
+
+class EndBattleRequest(BaseModel):
+    battle_id: int
+    winner_id: int
+    battle_duration: float = 0.0
+
+
+class ItemData(BaseModel):
+    name: str
+    rarity: str
+
+
+class MercyDecisionRequest(BaseModel):
+    battle_id: int
+    player_id: int
+    accept_mercy: bool
+    player_inventory: List[ItemData] = []
+
+
+class NormalItemLossRequest(BaseModel):
+    battle_id: int
+    player_inventory: List[ItemData] = []
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.post("/battle/start")
+async def start_battle(request: StartBattleRequest):
     """
     Start PvP Battle
 
@@ -46,50 +83,47 @@ def start_battle():
     }
     """
     try:
-        data = request.get_json()
-
-        attacker_id = data.get('attacker_id')
-        defender_id = data.get('defender_id')
-        mode_str = data.get('mode', 'normal')
-
-        if not attacker_id or not defender_id:
-            return jsonify({
-                "error": "attacker_id und defender_id erforderlich"
-            }), 400
-
         # Parse mode
         try:
-            mode = PvPMode(mode_str)
+            mode = PvPMode(request.mode)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiger Modus: {mode_str}",
-                "valid_modes": ["hardcore", "normal", "softy"]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiger Modus: {request.mode}",
+                    "valid_modes": ["hardcore", "normal", "softy"]
+                }
+            )
 
         # Start battle
         success, battle_id, message = pvp_system.start_pvp_battle(
-            attacker_id, defender_id, mode
+            request.attacker_id, request.defender_id, mode
         )
 
         if not success:
-            return jsonify({
-                "success": False,
-                "message": message
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "message": message
+                }
+            )
 
-        return jsonify({
+        return {
             "success": True,
             "battle_id": battle_id,
             "message": message,
             "mode": mode.value
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/battle/end', methods=['POST'])
-def end_battle():
+@router.post("/battle/end")
+async def end_battle(request: EndBattleRequest):
     """
     End PvP Battle
 
@@ -101,30 +135,25 @@ def end_battle():
     }
     """
     try:
-        data = request.get_json()
-
-        battle_id = data.get('battle_id')
-        winner_id = data.get('winner_id')
-        battle_duration = data.get('battle_duration', 0.0)
-
-        if not battle_id or not winner_id:
-            return jsonify({
-                "error": "battle_id und winner_id erforderlich"
-            }), 400
-
-        result = pvp_system.end_pvp_battle(battle_id, winner_id, battle_duration)
+        result = pvp_system.end_pvp_battle(
+            request.battle_id,
+            request.winner_id,
+            request.battle_duration
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/mercy/decide', methods=['POST'])
-def mercy_decision():
+@router.post("/mercy/decide")
+async def mercy_decision(request: MercyDecisionRequest):
     """
     Process Mercy Decision (Hardcore PvP only)
 
@@ -140,33 +169,29 @@ def mercy_decision():
     }
     """
     try:
-        data = request.get_json()
-
-        battle_id = data.get('battle_id')
-        player_id = data.get('player_id')
-        accept_mercy = data.get('accept_mercy')
-        player_inventory = data.get('player_inventory', [])
-
-        if battle_id is None or player_id is None or accept_mercy is None:
-            return jsonify({
-                "error": "battle_id, player_id, accept_mercy erforderlich"
-            }), 400
+        # Convert Pydantic models to dicts for service layer
+        inventory_dicts = [item.dict() for item in request.player_inventory]
 
         result = pvp_system.process_mercy_decision(
-            battle_id, player_id, accept_mercy, player_inventory
+            request.battle_id,
+            request.player_id,
+            request.accept_mercy,
+            inventory_dicts
         )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/normal/item-loss', methods=['POST'])
-def normal_item_loss():
+@router.post("/normal/item-loss")
+async def normal_item_loss(request: NormalItemLossRequest):
     """
     Select Random Item Loss (Normal PvP only)
 
@@ -179,29 +204,27 @@ def normal_item_loss():
     }
     """
     try:
-        data = request.get_json()
+        # Convert Pydantic models to dicts for service layer
+        inventory_dicts = [item.dict() for item in request.player_inventory]
 
-        battle_id = data.get('battle_id')
-        player_inventory = data.get('player_inventory', [])
-
-        if not battle_id:
-            return jsonify({
-                "error": "battle_id erforderlich"
-            }), 400
-
-        result = pvp_system.select_random_item_loss(battle_id, player_inventory)
+        result = pvp_system.select_random_item_loss(
+            request.battle_id,
+            inventory_dicts
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/rankings/<mode>', methods=['GET'])
-def get_rankings(mode: str):
+@router.get("/rankings/{mode}")
+async def get_rankings(mode: str):
     """
     Get Rankings for PvP Mode
 
@@ -214,25 +237,30 @@ def get_rankings(mode: str):
         try:
             pvp_mode = PvPMode(mode)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiger Modus: {mode}",
-                "valid_modes": ["hardcore", "normal", "softy"]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiger Modus: {mode}",
+                    "valid_modes": ["hardcore", "normal", "softy"]
+                }
+            )
 
         rankings = pvp_system.get_pvp_rankings(pvp_mode)
 
-        return jsonify({
+        return {
             "mode": mode,
             "rankings": rankings,
             "total_players": len(rankings)
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/stats/<int:player_id>', methods=['GET'])
-def get_player_stats(player_id: int):
+@router.get("/stats/{player_id}")
+async def get_player_stats(player_id: int):
     """
     Get Player PvP Stats
 
@@ -240,14 +268,18 @@ def get_player_stats(player_id: int):
     """
     try:
         stats = pvp_system.get_player_pvp_stats(player_id)
-        return jsonify(stats)
+        return stats
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/can-pvp', methods=['GET'])
-def check_can_pvp():
+@router.get("/can-pvp")
+async def check_can_pvp(
+    attacker_id: int = Query(..., description="ID des Angreifers"),
+    defender_id: int = Query(..., description="ID des Verteidigers"),
+    mode: str = Query("normal", description="PvP Modus (hardcore/normal/softy)")
+):
     """
     Check if PvP can be initiated
 
@@ -259,40 +291,36 @@ def check_can_pvp():
     Example: /api/pvp/can-pvp?attacker_id=1&defender_id=2&mode=hardcore
     """
     try:
-        attacker_id = request.args.get('attacker_id', type=int)
-        defender_id = request.args.get('defender_id', type=int)
-        mode_str = request.args.get('mode', 'normal')
-
-        if not attacker_id or not defender_id:
-            return jsonify({
-                "error": "attacker_id und defender_id erforderlich"
-            }), 400
-
         # Parse mode
         try:
-            mode = PvPMode(mode_str)
+            pvp_mode = PvPMode(mode)
         except ValueError:
-            return jsonify({
-                "error": f"Ungültiger Modus: {mode_str}",
-                "valid_modes": ["hardcore", "normal", "softy"]
-            }), 400
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiger Modus: {mode}",
+                    "valid_modes": ["hardcore", "normal", "softy"]
+                }
+            )
 
-        can_start, reason = pvp_system.can_initiate_pvp(attacker_id, defender_id, mode)
+        can_start, reason = pvp_system.can_initiate_pvp(attacker_id, defender_id, pvp_mode)
 
-        return jsonify({
+        return {
             "can_start": can_start,
             "reason": reason,
             "attacker_id": attacker_id,
             "defender_id": defender_id,
-            "mode": mode.value
-        })
+            "mode": pvp_mode.value
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/state/export', methods=['GET'])
-def export_state():
+@router.get("/state/export")
+async def export_state():
     """
     Export complete PvP state
 
@@ -301,69 +329,33 @@ def export_state():
     """
     try:
         state = pvp_system.export_state()
-        return jsonify(state)
+        return state
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@pvp_bp.route('/state/import', methods=['POST'])
-def import_state():
+@router.post("/state/import")
+async def import_state(state: Dict[str, Any]):
     """
     Import PvP state
 
     Body: Complete state object (from export)
     """
     try:
-        state = request.get_json()
-
         if not state:
-            return jsonify({
-                "error": "State-Daten erforderlich"
-            }), 400
+            raise HTTPException(status_code=400, detail="State-Daten erforderlich")
 
         pvp_system.import_state(state)
 
-        return jsonify({
+        return {
             "success": True,
             "message": "PvP State importiert",
             "battles": len(pvp_system.battles),
             "players": len(pvp_system.player_stats)
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(pvp_bp)
-
-    print("=" * 60)
-    print("PvP API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  POST   /api/pvp/battle/start")
-    print("  POST   /api/pvp/battle/end")
-    print("  POST   /api/pvp/mercy/decide")
-    print("  POST   /api/pvp/normal/item-loss")
-    print("  GET    /api/pvp/rankings/<mode>")
-    print("  GET    /api/pvp/stats/<player_id>")
-    print("  GET    /api/pvp/can-pvp")
-    print("  GET    /api/pvp/state/export")
-    print("  POST   /api/pvp/state/import")
-    print()
-    print("Server läuft auf: http://localhost:5002")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5002, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))

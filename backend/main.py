@@ -13,7 +13,11 @@ from backend.config import settings
 from backend.database import init_db
 
 # Import API routers
-from backend.api import auth, game, training, voice, admin, arena
+from backend.api import (
+    auth, game, training, voice, admin, arena,
+    slime, pvp, oregon_events, region_boss, magic_schools,
+    instrument, world, multiplayer
+)
 
 
 # ============================================================================
@@ -103,6 +107,16 @@ app.include_router(arena.router, prefix=settings.API_PREFIX)
 app.include_router(training.router, prefix=settings.API_PREFIX)
 app.include_router(voice.router, prefix=settings.API_PREFIX)
 app.include_router(admin.router, prefix=settings.API_PREFIX)
+
+# Game Systems (FastAPI converted from Flask)
+app.include_router(slime.router)  # Already has /api/slime prefix
+app.include_router(pvp.router)  # Already has /api/pvp prefix
+app.include_router(oregon_events.router)  # Already has /api/oregon prefix
+app.include_router(region_boss.router)  # Already has /api/region-boss prefix
+app.include_router(magic_schools.router)  # Already has /api/magic prefix
+app.include_router(instrument.router)  # Already has /api/instrument prefix
+app.include_router(world.router)  # Already has /api/world prefix
+app.include_router(multiplayer.router)  # Already has /multiplayer prefix
 
 
 # ============================================================================

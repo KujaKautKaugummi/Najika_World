@@ -38,6 +38,10 @@ class User(Base):
     # Relationships
     characters = relationship("Character", back_populates="user", cascade="all, delete-orphan")
     training_jobs = relationship("TrainingJob", back_populates="user", cascade="all, delete-orphan")
+    slime_companions = relationship("SlimeCompanion", back_populates="owner", cascade="all, delete-orphan")
+    pvp_stats = relationship("PvPStats", back_populates="player", uselist=False, cascade="all, delete-orphan")
+    magic_progress = relationship("MagicSchoolProgress", back_populates="player", cascade="all, delete-orphan")
+    controlled_regions = relationship("RegionBoss", back_populates="boss_player", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"

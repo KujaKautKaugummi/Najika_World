@@ -2,7 +2,7 @@
 Slime API - Najika World
 ========================
 
-REST API für Slime Companion System
+REST API für Slime Companion System (FastAPI)
 
 Endpoints:
 - POST /api/slime/create - Create companion
@@ -15,29 +15,90 @@ Endpoints:
 - POST /api/slime/feed - Feed companion
 - POST /api/slime/water - Give water
 - POST /api/slime/sleep - Let sleep
-- GET /api/slime/<companion_id> - Get companion info
+- GET /api/slime/{companion_id} - Get companion info
 - GET /api/slime/state/export - Export state
 - POST /api/slime/state/import - Import state
 
 Copyright: Najika World
 Author: Claude Code (CLI)
-Date: 2025-11-17
+Date: 2025-11-18
 """
 
-from flask import Blueprint, request, jsonify
-from typing import Dict, Any
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import Dict, Any, Optional
 
 from backend.services.slime_system import SlimeSystem
 
-# Create Blueprint
-slime_bp = Blueprint('slime', __name__, url_prefix='/api/slime')
+# Create FastAPI Router
+router = APIRouter(prefix="/api/slime", tags=["slime"])
 
 # Global Slime System Instance
 slime_system = SlimeSystem()
 
 
-@slime_bp.route('/create', methods=['POST'])
-def create_companion():
+# ============================================================================
+# REQUEST MODELS (Pydantic)
+# ============================================================================
+
+class CreateCompanionRequest(BaseModel):
+    owner_player_id: int
+    name: str
+    starting_region: str
+
+
+class AddExperienceRequest(BaseModel):
+    companion_id: int
+    exp_amount: int = 0
+
+
+class MetamorphosisRequest(BaseModel):
+    companion_id: int
+    current_region: str
+
+
+class CollectColorRequest(BaseModel):
+    companion_id: int
+    region: str
+
+
+class LearnMoveRequest(BaseModel):
+    companion_id: int
+    move_name: str
+    move_type: str  # "enemy" or "player"
+    source_name: str
+
+
+class RescueRequest(BaseModel):
+    companion_id: int
+
+
+class UpdateTamagotchiRequest(BaseModel):
+    companion_id: int
+    delta_hours: Optional[float] = None
+
+
+class FeedCompanionRequest(BaseModel):
+    companion_id: int
+    amount: float = 30.0
+
+
+class GiveWaterRequest(BaseModel):
+    companion_id: int
+    amount: float = 40.0
+
+
+class LetSleepRequest(BaseModel):
+    companion_id: int
+    hours: float = 8.0
+
+
+# ============================================================================
+# ENDPOINTS
+# ============================================================================
+
+@router.post("/create")
+async def create_companion(request: CreateCompanionRequest):
     """
     Create Companion
 
@@ -49,34 +110,27 @@ def create_companion():
     }
     """
     try:
-        data = request.get_json()
+        companion = slime_system.create_companion(
+            request.owner_player_id,
+            request.name,
+            request.starting_region
+        )
 
-        owner_id = data.get('owner_player_id')
-        name = data.get('name')
-        region = data.get('starting_region')
-
-        if not owner_id or not name or not region:
-            return jsonify({
-                "error": "owner_player_id, name, starting_region erforderlich"
-            }), 400
-
-        companion = slime_system.create_companion(owner_id, name, region)
-
-        return jsonify({
+        return {
             "success": True,
             "companion_id": companion.companion_id,
             "name": companion.name,
             "level": companion.level,
             "fantasy_tier": companion.fantasy_tier.value if companion.fantasy_tier else None,
             "message": f"{companion.name} wurde erstellt!"
-        })
+        }
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/experience', methods=['POST'])
-def add_experience():
+@router.post("/experience")
+async def add_experience(request: AddExperienceRequest):
     """
     Add Experience
 
@@ -87,29 +141,24 @@ def add_experience():
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        exp_amount = data.get('exp_amount', 0)
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        leveled_up, result = slime_system.add_experience(companion_id, exp_amount)
+        leveled_up, result = slime_system.add_experience(
+            request.companion_id,
+            request.exp_amount
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/metamorphosis', methods=['POST'])
-def perform_metamorphosis():
+@router.post("/metamorphosis")
+async def perform_metamorphosis(request: MetamorphosisRequest):
     """
     Perform Metamorphosis (Level 50)
 
@@ -120,29 +169,24 @@ def perform_metamorphosis():
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        region = data.get('current_region')
-
-        if not companion_id or not region:
-            return jsonify({
-                "error": "companion_id, current_region erforderlich"
-            }), 400
-
-        result = slime_system.perform_metamorphosis(companion_id, region)
+        result = slime_system.perform_metamorphosis(
+            request.companion_id,
+            request.current_region
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/color/collect', methods=['POST'])
-def collect_color():
+@router.post("/color/collect")
+async def collect_color(request: CollectColorRequest):
     """
     Collect Slime Color (Rainbow Quest)
 
@@ -153,29 +197,24 @@ def collect_color():
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        region = data.get('region')
-
-        if not companion_id or not region:
-            return jsonify({
-                "error": "companion_id, region erforderlich"
-            }), 400
-
-        result = slime_system.collect_color(companion_id, region)
+        result = slime_system.collect_color(
+            request.companion_id,
+            request.region
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/learn', methods=['POST'])
-def try_learn_move():
+@router.post("/learn")
+async def try_learn_move(request: LearnMoveRequest):
     """
     Try Learn Move
 
@@ -183,35 +222,26 @@ def try_learn_move():
     {
         "companion_id": 1,
         "move_name": "Thunder Strike",
-        "move_type": "enemy",  // "enemy" or "player"
+        "move_type": "enemy",
         "source_name": "Goblin King"
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        move_name = data.get('move_name')
-        move_type = data.get('move_type')
-        source_name = data.get('source_name')
-
-        if not all([companion_id, move_name, move_type, source_name]):
-            return jsonify({
-                "error": "companion_id, move_name, move_type, source_name erforderlich"
-            }), 400
-
         learned, result = slime_system.try_learn_move(
-            companion_id, move_name, move_type, source_name
+            request.companion_id,
+            request.move_name,
+            request.move_type,
+            request.source_name
         )
 
-        return jsonify(result)
+        return result
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/rescue', methods=['POST'])
-def use_rescue():
+@router.post("/rescue")
+async def use_rescue(request: RescueRequest):
     """
     Use Rescue Mechanic (Hardcore)
 
@@ -221,157 +251,127 @@ def use_rescue():
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        rescued, result = slime_system.use_rescue(companion_id)
-
-        return jsonify(result)
+        rescued, result = slime_system.use_rescue(request.companion_id)
+        return result
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/tamagotchi/update', methods=['POST'])
-def update_tamagotchi():
+@router.post("/tamagotchi/update")
+async def update_tamagotchi(request: UpdateTamagotchiRequest):
     """
     Update Tamagotchi Stats (Decay)
 
     Body:
     {
         "companion_id": 1,
-        "delta_hours": 1.0  // optional
+        "delta_hours": 1.0
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        delta_hours = data.get('delta_hours')
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        result = slime_system.update_tamagotchi(companion_id, delta_hours)
+        result = slime_system.update_tamagotchi(
+            request.companion_id,
+            request.delta_hours
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/feed', methods=['POST'])
-def feed_companion():
+@router.post("/feed")
+async def feed_companion(request: FeedCompanionRequest):
     """
     Feed Companion
 
     Body:
     {
         "companion_id": 1,
-        "amount": 30.0  // optional, default 30.0
+        "amount": 30.0
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        amount = data.get('amount', 30.0)
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        result = slime_system.feed_companion(companion_id, amount)
+        result = slime_system.feed_companion(
+            request.companion_id,
+            request.amount
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/water', methods=['POST'])
-def give_water():
+@router.post("/water")
+async def give_water(request: GiveWaterRequest):
     """
     Give Water
 
     Body:
     {
         "companion_id": 1,
-        "amount": 40.0  // optional, default 40.0
+        "amount": 40.0
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        amount = data.get('amount', 40.0)
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        result = slime_system.give_water(companion_id, amount)
+        result = slime_system.give_water(
+            request.companion_id,
+            request.amount
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/sleep', methods=['POST'])
-def let_sleep():
+@router.post("/sleep")
+async def let_sleep(request: LetSleepRequest):
     """
     Let Sleep
 
     Body:
     {
         "companion_id": 1,
-        "hours": 8.0  // optional, default 8.0
+        "hours": 8.0
     }
     """
     try:
-        data = request.get_json()
-
-        companion_id = data.get('companion_id')
-        hours = data.get('hours', 8.0)
-
-        if not companion_id:
-            return jsonify({
-                "error": "companion_id erforderlich"
-            }), 400
-
-        result = slime_system.let_sleep(companion_id, hours)
+        result = slime_system.let_sleep(
+            request.companion_id,
+            request.hours
+        )
 
         if "error" in result:
-            return jsonify(result), 400
+            raise HTTPException(status_code=400, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/<int:companion_id>', methods=['GET'])
-def get_companion_info(companion_id: int):
+@router.get("/{companion_id}")
+async def get_companion_info(companion_id: int):
     """
     Get Companion Info
 
@@ -381,16 +381,18 @@ def get_companion_info(companion_id: int):
         result = slime_system.get_companion_info(companion_id)
 
         if "error" in result:
-            return jsonify(result), 404
+            raise HTTPException(status_code=404, detail=result["error"])
 
-        return jsonify(result)
+        return result
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/state/export', methods=['GET'])
-def export_state():
+@router.get("/state/export")
+async def export_state():
     """
     Export Slime State
 
@@ -399,73 +401,33 @@ def export_state():
     """
     try:
         state = slime_system.export_state()
-        return jsonify(state)
+        return state
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@slime_bp.route('/state/import', methods=['POST'])
-def import_state():
+@router.post("/state/import")
+async def import_state(state: Dict[str, Any]):
     """
     Import Slime State
 
     Body: Complete state object (from export)
     """
     try:
-        state = request.get_json()
-
         if not state:
-            return jsonify({
-                "error": "State-Daten erforderlich"
-            }), 400
+            raise HTTPException(status_code=400, detail="State-Daten erforderlich")
 
         # TODO: Implement import_state in SlimeSystem
         # slime_system.import_state(state)
 
-        return jsonify({
+        return {
             "success": True,
             "message": "Slime State importiert",
             "companions": len(state.get("companions", {}))
-        })
+        }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ============================================================================
-# STANDALONE SERVER (für Testing)
-# ============================================================================
-
-if __name__ == '__main__':
-    from flask import Flask
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    CORS(app)
-
-    app.register_blueprint(slime_bp)
-
-    print("=" * 60)
-    print("Slime API Server")
-    print("=" * 60)
-    print()
-    print("Endpoints:")
-    print("  POST   /api/slime/create")
-    print("  POST   /api/slime/experience")
-    print("  POST   /api/slime/metamorphosis")
-    print("  POST   /api/slime/color/collect")
-    print("  POST   /api/slime/learn")
-    print("  POST   /api/slime/rescue")
-    print("  POST   /api/slime/tamagotchi/update")
-    print("  POST   /api/slime/feed")
-    print("  POST   /api/slime/water")
-    print("  POST   /api/slime/sleep")
-    print("  GET    /api/slime/<companion_id>")
-    print("  GET    /api/slime/state/export")
-    print("  POST   /api/slime/state/import")
-    print()
-    print("Server läuft auf: http://localhost:5003")
-    print("=" * 60)
-
-    app.run(host='127.0.0.1', port=5003, debug=True)
+        raise HTTPException(status_code=500, detail=str(e))
