@@ -31,16 +31,16 @@ async def lifespan(app: FastAPI):
     """Handle startup and shutdown events"""
     # Startup
     print("=" * 70)
-    print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    print(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     print("=" * 70)
 
     # Initialize database
-    print("📊 Initializing database...")
+    print("Initializing database...")
     init_db()
 
-    print("✅ Backend is ready!")
-    print(f"📖 API Docs: http://{settings.HOST}:{settings.PORT}/docs")
-    print(f"📖 ReDoc: http://{settings.HOST}:{settings.PORT}/redoc")
+    print("Backend is ready!")
+    print(f"API Docs: http://{settings.HOST}:{settings.PORT}/docs")
+    print(f"ReDoc: http://{settings.HOST}:{settings.PORT}/redoc")
     print("=" * 70)
 
     yield

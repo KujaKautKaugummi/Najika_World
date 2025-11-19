@@ -55,7 +55,7 @@ def init_db() -> None:
     )
 
     Base.metadata.create_all(bind=engine)
-    print("✅ Database initialized successfully")
+    print("Database initialized successfully")
 
 
 def drop_all_tables() -> None:
@@ -67,7 +67,7 @@ def drop_all_tables() -> None:
         raise Exception("Cannot drop tables in production mode!")
 
     Base.metadata.drop_all(bind=engine)
-    print("⚠️ All tables dropped")
+    print("WARNING: All tables dropped")
 
 
 def reset_database() -> None:
