@@ -6,6 +6,7 @@ FastAPI application entry point with all API routers
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import uvicorn
 
@@ -138,6 +139,14 @@ app.include_router(farming.router)  # Already has /api/farming prefix
 
 # World Map System (9600x9600 Grid)
 app.include_router(world_map.router)  # Already has /api/world-map prefix
+
+
+# ============================================================================
+# STATIC FILES - DIGIVICE FRONTEND
+# ============================================================================
+
+# Mount digivice static files
+app.mount("/digivice", StaticFiles(directory="digivice", html=True), name="digivice")
 
 
 # ============================================================================
