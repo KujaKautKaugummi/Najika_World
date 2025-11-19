@@ -18,7 +18,7 @@ class DayNightCycle {
     this.sunLight = null;
     this.moonLight = null;
     this.ambientLight = null;
-    this.hemisphere Light = null;
+    this.hemisphereLight = null;
 
     // Sun/Moon objects
     this.sun = null;

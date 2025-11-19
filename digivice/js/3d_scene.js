@@ -1574,8 +1574,8 @@
                 worldManager.update(delta, characterGroup.position);
             }
 
-            // 🚪 Check Building Proximity
-            if (!useWorldManager && !currentInterior) {
+            // 🚪 Check Building Proximity (works in both modes)
+            if (!currentInterior) {
                 checkNearBuilding();
             }
             // ✨ Check Interactive Objects
@@ -2379,10 +2379,26 @@
                     }
                 });
                 adjustToGround(characterGroup);
+
+                // Set starting position based on world mode
+                if (useWorldManager) {
+                    // Open World: Start at Götterfels (Schwarze Mühle)
+                    characterGroup.position.set(4800, 0, 4800);
+                    console.log('🌍 Character spawned in Open World at Götterfels (4800, 4800)');
+                } else {
+                    // Old system: Default position
+                    characterGroup.position.set(0, 0, 0);
+                }
+
                 scene.add(characterGroup);
                 attachStaffToCharacter();
                 characterReady = true;
                 console.log('✅ Skeleton_Mage geladen');
+
+                // Update WorldManager if active
+                if (useWorldManager && worldManager) {
+                    worldManager.setPlayerPosition(characterGroup.position);
+                }
             },
             undefined,
             error => {
