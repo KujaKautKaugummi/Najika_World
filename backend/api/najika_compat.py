@@ -67,3 +67,22 @@ async def health():
         "backend": "fastapi",
         "version": "2.0.0"
     }
+
+
+@router.get("/chat/history")
+async def chat_history(user_id: int = 1):
+    """Legacy chat history endpoint"""
+    return {
+        "history": [],
+        "count": 0
+    }
+
+
+@router.get("/cloud/status")
+async def cloud_status():
+    """Legacy cloud provider status"""
+    return {
+        "cloud_enabled": False,
+        "provider": "local",
+        "status": "offline"
+    }

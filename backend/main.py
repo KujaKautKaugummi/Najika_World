@@ -148,7 +148,10 @@ app.include_router(najika_compat.router)
 # STATIC FILES - DIGIVICE FRONTEND
 # ============================================================================
 
-# Mount digivice static files
+# Mount assets folder
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+
+# Mount digivice static files (must be last to allow HTML fallback)
 app.mount("/digivice", StaticFiles(directory="digivice", html=True), name="digivice")
 
 
