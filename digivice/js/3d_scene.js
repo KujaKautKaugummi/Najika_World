@@ -63,6 +63,10 @@
     let characterHeading = 0;
     const activeKeys = new Set();
 
+    // 🌍 World Manager for 9600×9600 Open World
+    let worldManager = null;
+    let useWorldManager = true;  // Toggle for testing
+
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls)
     const COMBAT_SYSTEM = {
         leftHand: null,     // Zauber, Schild, Zweithwaffe
@@ -276,17 +280,66 @@
         clock = new THREE.Clock();
 
         setupLights();
-        setupFallbackRoom();
         installEventHandlers();
         ensureKayKitLoader();
         loadCharacter();
-        scheduleRoomBuild();
         createCombatStatsUI();
         createBuildingPromptUI();
+
+        // 🌍 Initialize World Manager (9600×9600 Grid World)
+        if (useWorldManager && window.WorldManager) {
+            initWorldManager();
+        } else {
+            // Fallback to old 2400×2400 map
+            setupFallbackRoom();
+            scheduleRoomBuild();
+        }
+
         startAnimationLoop();
 
         document.dispatchEvent(new CustomEvent('scene3d:ready'));
         console.log('Scene3D initialised.');
+    }
+
+    async function initWorldManager() {
+        console.log('🌍 Initializing WorldManager for 9600×9600 Open World...');
+
+        try {
+            // Create WorldManager instance
+            worldManager = new window.WorldManager(scene, camera);
+
+            // Initialize with backend data
+            await worldManager.initialize({
+                dataPath: '/digivice/data/',
+                enableLOD: true,
+                enableStreaming: true
+            });
+
+            // Set player starting position (Götterfels - Schwarze Mühle)
+            if (characterGroup) {
+                characterGroup.position.set(4800, 0, 4800);
+            }
+
+            // Update world based on player position
+            worldManager.setPlayerPosition(characterGroup ? characterGroup.position : new THREE.Vector3(4800, 0, 4800));
+
+            // Disable old room system
+            usingFallbackRoom = false;
+            currentRoomSpan = 9600;  // Full world size
+
+            console.log('✅ WorldManager initialized successfully!');
+            console.log(`   World Size: 9600×9600`);
+            console.log(`   Starting Position: Götterfels (4800, 4800)`);
+
+        } catch (error) {
+            console.error('❌ Failed to initialize WorldManager:', error);
+            console.log('⚠️ Falling back to old 2400×2400 map...');
+
+            // Fallback to old system
+            useWorldManager = false;
+            setupFallbackRoom();
+            scheduleRoomBuild();
+        }
     }
 
     function createCombatStatsUI() {
@@ -1516,11 +1569,18 @@
                     }
                 }
             }
+            // 🌍 Update World Manager (Streaming, LOD, Weather, Day/Night)
+            if (worldManager && characterGroup) {
+                worldManager.update(delta, characterGroup.position);
+            }
+
             // 🚪 Check Building Proximity
-            checkNearBuilding();
+            if (!useWorldManager) {
+                checkNearBuilding();
+            }
             // ✨ Check Interactive Objects
             checkInteractables();
-            if (pendingRoomBuild) {
+            if (pendingRoomBuild && !useWorldManager) {
                 buildRoom();
             }
             // Update Dungeon Combat (enemies & combat logic)
