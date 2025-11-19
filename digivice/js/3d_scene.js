@@ -1575,12 +1575,13 @@
             }
 
             // 🚪 Check Building Proximity
-            if (!useWorldManager) {
+            if (!useWorldManager && !currentInterior) {
                 checkNearBuilding();
             }
             // ✨ Check Interactive Objects
             checkInteractables();
-            if (pendingRoomBuild && !useWorldManager) {
+            // Only rebuild room if not in an interior
+            if (pendingRoomBuild && !useWorldManager && !currentInterior) {
                 buildRoom();
             }
             // Update Dungeon Combat (enemies & combat logic)
