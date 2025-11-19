@@ -433,10 +433,10 @@ input {
             <button onclick="window.cardGameUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #667eea, #764ba2); font-weight: bold;">🃏 Card Game</button>
             <button onclick="window.diceMonstersUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #f39c12, #d68910); font-weight: bold;">🎲 Dice Monsters</button>
             <button onclick="window.regionBossUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #e74c3c, #c0392b); font-weight: bold;">🏰 Region Boss</button>
-            <button onclick="window.oregonUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #f39c12, #e67e22); font-weight: bold;">🛤️ Oregon Trail</button>
-            <button onclick="window.magicUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); font-weight: bold;">✨ Magic</button>
+            <button onclick="window.oregonEventsUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #f39c12, #e67e22); font-weight: bold;">🛤️ Oregon Trail</button>
+            <button onclick="window.magicSchoolsUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); font-weight: bold;">✨ Magic</button>
             <button onclick="window.instrumentUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #3498db, #2980b9); font-weight: bold;">🎵 Instruments</button>
-            <button onclick="window.worldUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #16a085, #1abc9c); font-weight: bold;">🌍 World Info</button>
+            <button onclick="window.worldInfoUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #16a085, #1abc9c); font-weight: bold;">🌍 World Info</button>
             <button onclick="window.worldMapUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #2c3e50, #34495e); font-weight: bold;">🗺️ World Map</button>
             <button onclick="window.housingUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #27ae60, #229954); font-weight: bold;">🏠 Housing & Farm</button>
         </div>
@@ -2401,10 +2401,10 @@ async function updateSkillsPanel() {
 // Initialize Game System UIs
 window.addEventListener('load', () => {
     window.regionBossUI = new RegionBossUI();
-    window.oregonUI = new OregonEventsUI();
-    window.magicUI = new MagicSchoolsUI();
+    window.oregonEventsUI = new OregonEventsUI();
+    window.magicSchoolsUI = new MagicSchoolsUI();
     window.instrumentUI = new InstrumentUI();
-    window.worldUI = new WorldInfoUI();
+    window.worldInfoUI = new WorldInfoUI();
     window.cardGameUI = new CardGameUI();
     window.diceMonstersUI = new DiceMonstersUI();
 
