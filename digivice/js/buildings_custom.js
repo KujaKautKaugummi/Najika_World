@@ -2,6 +2,8 @@
 // Baut ECHTE Gebäude aus THREE.js Primitives
 
 window.CustomBuildings = {
+    _builtBuildings: new Set(), // Track built buildings to prevent spam
+
     buildWindmill: function(position, scale, parentGroup) {
         const mill = new THREE.Group();
 
@@ -83,7 +85,14 @@ window.CustomBuildings = {
         mill.userData.bladeGroup = bladeGroup; // Für spätere Animation
 
         parentGroup.add(mill);
-        console.log('🏰 Schwarze Mühle gebaut!');
+
+        // Only log once to prevent spam
+        const buildKey = 'windmill_' + position.join('_');
+        if (!this._builtBuildings.has(buildKey)) {
+            console.log('🏰 Schwarze Mühle gebaut!');
+            this._builtBuildings.add(buildKey);
+        }
+
         return mill;
     },
 
@@ -150,7 +159,14 @@ window.CustomBuildings = {
         house.userData.buildingRadius = radius;
 
         parentGroup.add(house);
-        console.log(`🏠 ${name} gebaut!`);
+
+        // Only log once to prevent spam
+        const buildKey = 'house_' + name + '_' + position.join('_');
+        if (!this._builtBuildings.has(buildKey)) {
+            console.log(`🏠 ${name} gebaut!`);
+            this._builtBuildings.add(buildKey);
+        }
+
         return house;
     },
 
@@ -214,7 +230,14 @@ window.CustomBuildings = {
         arena.userData.buildingRadius = 50;
 
         parentGroup.add(arena);
-        console.log('⚔️ Kampfarena gebaut!');
+
+        // Only log once to prevent spam
+        const buildKey = 'arena_' + position.join('_');
+        if (!this._builtBuildings.has(buildKey)) {
+            console.log('⚔️ Kampfarena gebaut!');
+            this._builtBuildings.add(buildKey);
+        }
+
         return arena;
     }
 };

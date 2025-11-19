@@ -2405,6 +2405,11 @@
             return; // No clamping - allow free movement between rooms
         }
 
+        // Disable clamping in Open World (allow free movement across entire world)
+        if (!currentInterior && currentRoomSpan >= 2000) {
+            return; // No clamping in large open world
+        }
+
         const limit = Math.max(8, currentRoomSpan / 2 - CLAMP_PADDING);
         position.x = clamp(position.x, -limit, limit);
         position.z = clamp(position.z, -limit, limit);
