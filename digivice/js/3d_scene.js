@@ -76,9 +76,9 @@
         health: 100,
         maxHealth: 100,
 
-        // 🎯 Target System
+        // 🎯 Target System (Skyrim/Fortnite Style)
         currentTarget: null,
-        targetLockOn: false,
+        targetLockOn: false,  // Tab zum Togglen
         targetDistance: 0,
 
         // 🥊 Attack States
@@ -90,9 +90,28 @@
 
         // 🎲 Hit Chance (abhängig von Distanz & Typ)
         hitChance: {
-            light: 0.85,     // 85% Light Attack Hit Chance
-            heavy: 0.65,     // 65% Heavy Attack Hit Chance (langsamer)
-            both: 0.50       // 50% Beide gleichzeitig (riskant!)
+            light: 0.85,      // 85% Light Attack Hit Chance (kein Stagger bei miss!)
+            heavy: 0.65,      // 65% Heavy Attack Hit Chance (kein Stagger bei miss!)
+            both: 0.50        // 50% Beide gleichzeitig (STAGGER bei miss!)
+        },
+
+        // 🎯 Lock-On Toggle (Tab-Taste)
+        toggleLockOn() {
+            this.targetLockOn = !this.targetLockOn;
+
+            if (this.targetLockOn) {
+                console.log('🎯 Lock-On AKTIVIERT - Auto-Targeting an');
+                if (typeof notify === 'function') {
+                    notify('🎯 Lock-On aktiviert', 'info');
+                }
+            } else {
+                console.log('🎯 Lock-On DEAKTIVIERT - Freies Zielen');
+                this.currentTarget = null;
+                if (typeof notify === 'function') {
+                    notify('🎯 Freies Zielen', 'info');
+                }
+            }
+            return this.targetLockOn;
         },
 
         // Parry-System (Dark Souls Style)
@@ -282,15 +301,25 @@
                 return { hit: true, damage, comboHits: this.combo.hits };
 
             } else {
-                // MISS! Spieler taumelt (stagger)
-                console.log(`❌ MISS! Taumeln für 500ms...`);
-                this.triggerStagger(500); // 500ms Stagger
+                // MISS! NUR bei simultanen Angriffen (both) wird getaumelt!
+                if (hand === 'both') {
+                    // BEIDE HÄNDE VERFEHLT = TAUMELN!
+                    console.log(`❌ MIX-ANGRIFF VERFEHLT! Taumeln für 500ms...`);
+                    this.triggerStagger(500); // 500ms Stagger
 
-                if (typeof notify === 'function') {
-                    notify('❌ VERFEHLT! Verletzlich!', 'error');
+                    if (typeof notify === 'function') {
+                        notify('❌ MIX VERFEHLT! TAUMELN!', 'error');
+                    }
+
+                    return { hit: false, reason: 'miss', staggered: true };
+                } else {
+                    // Einzelangriff verfehlt = NUR miss, KEIN Taumeln (wie Skyrim)
+                    console.log(`❌ Verfehlt (${hand})`);
+                    if (typeof notify === 'function') {
+                        notify(`❌ Verfehlt`, 'warning');
+                    }
+                    return { hit: false, reason: 'miss', staggered: false };
                 }
-
-                return { hit: false, reason: 'miss', staggered: true };
             }
         },
 
@@ -1777,8 +1806,8 @@
             COMBAT_SYSTEM.update(delta);
             updateCombatStatsUI();
 
-            // 🎯 Auto-Targeting: Finde nächsten Gegner wenn keiner ausgewählt
-            if (!COMBAT_SYSTEM.currentTarget && characterGroup && window.DungeonEnemies) {
+            // 🎯 Auto-Targeting: Finde nächsten Gegner wenn keiner ausgewählt (nur wenn Lock-On aktiv!)
+            if (COMBAT_SYSTEM.targetLockOn && !COMBAT_SYSTEM.currentTarget && characterGroup && window.DungeonEnemies) {
                 const nearestEnemy = findNearestEnemy();
                 if (nearestEnemy && nearestEnemy.distance < 15) {
                     COMBAT_SYSTEM.currentTarget = nearestEnemy.enemy;
@@ -1859,6 +1888,14 @@
 
     function onKeyDown(event) {
         activeKeys.add(event.code);
+
+        // 🎯 Tab: Lock-On Toggle (Skyrim/Fortnite Style)
+        if (event.code === 'Tab') {
+            event.preventDefault(); // Verhindere Browser-Tab-Switch
+            COMBAT_SYSTEM.toggleLockOn();
+            return;
+        }
+
         // F-Taste: Najika dreht sich zum Spieler
         if (event.code === 'KeyF') {
             faceCharacter();
@@ -1879,32 +1916,36 @@
         }
 
         // ⚔️ KAMPF-TASTEN (Light/Heavy System)
-        // J: Linke Hand Light/Heavy
+        // J: Linke Hand Light/Heavy (kein Stagger bei miss!)
         if (event.code === 'KeyJ') {
             if (event.shiftKey) {
                 // Shift+J = Heavy Attack Links
                 const result = COMBAT_SYSTEM.attackLeftHeavy();
-                if (result) {
-                    console.log('💥 Linke Hand HEAVY! Langsam aber stark!');
+                if (result && result.hit) {
+                    console.log('💥 Linke Hand HEAVY! ' + Math.round(result.damage) + ' Schaden');
+                } else if (result && !result.hit) {
+                    console.log('❌ Linke Hand Heavy verfehlt');
                 }
             } else {
                 // J = Light Attack Links
                 const result = COMBAT_SYSTEM.attackLeftLight();
                 if (result && result.hit) {
-                    console.log(`🔮 Linke Hand LIGHT! ${result.damage} Schaden`);
+                    console.log(`🔮 Linke Hand LIGHT! ${Math.round(result.damage)} Schaden`);
                 } else if (result && !result.hit) {
-                    console.log('❌ Verfehlt! TAUMELN!');
+                    console.log('❌ Linke Hand Light verfehlt');
                 }
             }
         }
 
-        // K: Rechte Hand Light/Heavy
+        // K: Rechte Hand Light/Heavy (kein Stagger bei miss!)
         if (event.code === 'KeyK') {
             if (event.shiftKey) {
                 // Shift+K = Heavy Attack Rechts
                 const result = COMBAT_SYSTEM.attackRightHeavy();
-                if (result) {
-                    console.log('💥 Rechte Hand HEAVY! Vernichtung!');
+                if (result && result.hit) {
+                    console.log('💥 Rechte Hand HEAVY! ' + Math.round(result.damage) + ' Schaden');
+                } else if (result && !result.hit) {
+                    console.log('❌ Rechte Hand Heavy verfehlt');
                 }
             } else {
                 // K = Light Attack Rechts
