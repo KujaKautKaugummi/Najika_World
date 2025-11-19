@@ -1,6 +1,6 @@
 """
 Card Game Models - Najika World
-Hybrid Triple Triad + Hearthstone System
+Triple Triad Card Game with Hearthstone-style Stone Visuals
 Fantasy-Western Setting
 """
 
@@ -173,7 +173,7 @@ class CardGameMatch(Base):
     player2_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Null if vs NPC
 
     # Match Settings
-    game_mode = Column(String(20), nullable=False)  # triad, hearthstone, hybrid
+    game_mode = Column(String(20), nullable=False)  # Only 'triad' supported
     is_ranked = Column(Boolean, default=False)
     is_vs_npc = Column(Boolean, default=False)
     npc_name = Column(String(100), nullable=True)

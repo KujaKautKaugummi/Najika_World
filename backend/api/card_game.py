@@ -2,8 +2,8 @@
 Card Game API - Najika World
 =============================
 
-REST API für Hybrid Card Game System (FastAPI) (DATABASE)
-Triple Triad + Hearthstone Mechanics
+REST API für Triple Triad Card Game System (FastAPI) (DATABASE)
+Triple Triad gameplay with Hearthstone-style stone visuals
 Fantasy-Western Setting
 
 Endpoints:
@@ -77,7 +77,7 @@ class UpdateDeckRequest(BaseModel):
 class StartMatchRequest(BaseModel):
     player1_id: int
     player2_id: Optional[int] = None
-    game_mode: str = "hybrid"  # triad, hearthstone, hybrid
+    game_mode: str = "triad"  # Only Triple Triad supported
     is_ranked: bool = False
     is_vs_npc: bool = False
     npc_name: Optional[str] = None
@@ -463,7 +463,7 @@ async def start_match(request: StartMatchRequest, db: Session = Depends(get_db))
     {
         "player1_id": 1,
         "player2_id": 2,
-        "game_mode": "hybrid",
+        "game_mode": "triad",
         "is_ranked": true,
         "is_vs_npc": false,
         "player1_deck_id": 5,
