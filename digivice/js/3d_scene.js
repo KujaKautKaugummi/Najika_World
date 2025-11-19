@@ -2471,6 +2471,11 @@
             return; // No clamping in large open world
         }
 
+        // Disable clamping if using WorldManager (even if currentRoomSpan not yet set)
+        if (useWorldManager && !currentInterior) {
+            return; // WorldManager handles bounds
+        }
+
         const limit = Math.max(8, currentRoomSpan / 2 - CLAMP_PADDING);
         position.x = clamp(position.x, -limit, limit);
         position.z = clamp(position.z, -limit, limit);
