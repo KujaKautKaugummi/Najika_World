@@ -18,7 +18,7 @@ from backend.api import (
     auth, game, training, voice, admin, arena,
     slime, pvp, oregon_events, region_boss, magic_schools,
     instrument, world, multiplayer, card_game, dice_monsters,
-    housing, farming, world_map
+    housing, farming, world_map, najika_compat
 )
 
 
@@ -139,6 +139,9 @@ app.include_router(farming.router)  # Already has /api/farming prefix
 
 # World Map System (9600x9600 Grid)
 app.include_router(world_map.router)  # Already has /api/world-map prefix
+
+# Najika Compatibility Layer (for old digivice frontend)
+app.include_router(najika_compat.router)
 
 
 # ============================================================================
