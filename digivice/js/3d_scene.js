@@ -75,6 +75,13 @@
         maxStamina: 100,
         health: 100,
         maxHealth: 100,
+        mana: 100,
+        maxMana: 100,
+        manaRegen: 5,  // Mana/sec
+
+        // 🪄 Skills System
+        skillSystem: null,  // Wird in init() initialisiert
+        skillCooldowns: {},  // skill_id => endTime
 
         // 🎯 Target System (Skyrim/Fortnite Style)
         currentTarget: null,
@@ -425,9 +432,327 @@
             return damage;
         },
 
+        // 🪄 Cast Skill (Zauber/Abilities)
+        castSkill(slotIndex) {
+            if (!this.skillSystem) {
+                console.warn('⚠️ Skill System nicht initialisiert!');
+                return false;
+            }
+
+            const equippedSkills = this.skillSystem.getEquippedSkills();
+            if (slotIndex >= equippedSkills.length) {
+                console.warn(`⚠️ Kein Skill in Slot ${slotIndex + 1}`);
+                return false;
+            }
+
+            const skillId = equippedSkills[slotIndex];
+            const skill = this.skillSystem.learnedSkills[skillId];
+
+            if (!skill) {
+                console.warn(`⚠️ Skill nicht gefunden: ${skillId}`);
+                return false;
+            }
+
+            // Check cooldown
+            const now = Date.now();
+            if (this.skillCooldowns[skillId] && now < this.skillCooldowns[skillId]) {
+                const remaining = ((this.skillCooldowns[skillId] - now) / 1000).toFixed(1);
+                console.log(`⏰ Skill auf Cooldown: ${remaining}s`);
+                if (typeof notify === 'function') {
+                    notify(`⏰ ${skill.name}: ${remaining}s`, 'warning');
+                }
+                return false;
+            }
+
+            // Check mana
+            const manaCost = skill.getManaCostAtLevel();
+            if (this.mana < manaCost) {
+                console.log(`⚠️ Nicht genug Mana! (${manaCost} benötigt, ${Math.floor(this.mana)} verfügbar)`);
+                if (typeof notify === 'function') {
+                    notify(`⚠️ Nicht genug Mana für ${skill.name}`, 'error');
+                }
+                return false;
+            }
+
+            // Cast spell!
+            this.mana -= manaCost;
+            const cooldownMs = skill.getCooldownAtLevel() * 1000;
+            this.skillCooldowns[skillId] = now + cooldownMs;
+
+            console.log(`✨ ${skill.icon} ${skill.name} gewirkt! (Power: ${skill.getPowerAtLevel()}, Mana: -${manaCost})`);
+            if (typeof notify === 'function') {
+                notify(`✨ ${skill.icon} ${skill.name}`, 'success');
+            }
+
+            // Add XP
+            skill.addXP(10);
+
+            // Save progress
+            this.skillSystem.save();
+
+            // Trigger visual effect
+            this.triggerSkillEffect(skill);
+
+            return true;
+        },
+
+        // 🎨 Trigger Skill Visual Effect
+        triggerSkillEffect(skill) {
+            if (!scene || !characterGroup) return;
+
+            const damage = skill.getPowerAtLevel();
+
+            switch(skill.id) {
+                case 'rune_fireball':
+                    this.createFireballProjectile(damage);
+                    break;
+                case 'lightning_bolt':
+                    this.createLightningBolt(damage);
+                    break;
+                case 'nature_heal':
+                    this.createHealEffect();
+                    break;
+                case 'rune_ice_lance':
+                    this.createIceLanceProjectile(damage);
+                    break;
+                case 'chain_lightning':
+                    this.createChainLightning(damage);
+                    break;
+                case 'nature_roots':
+                    this.createRootsEffect(damage);
+                    break;
+                case 'rune_lightning':
+                    this.createLightningStrike(damage);
+                    break;
+                default:
+                    console.log(`🎨 No visual effect for ${skill.name}`);
+            }
+        },
+
+        // 🔥 Fireball Projectile
+        createFireballProjectile(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const startPos = characterGroup.position.clone();
+            startPos.y += 1.5;
+            const targetPos = this.currentTarget.position.clone();
+            targetPos.y += 1;
+
+            const fireball = new THREE.Mesh(
+                new THREE.SphereGeometry(0.3, 16, 16),
+                new THREE.MeshBasicMaterial({ color: 0xff6600, emissive: 0xff3300 })
+            );
+            fireball.position.copy(startPos);
+            scene.add(fireball);
+
+            const direction = targetPos.clone().sub(startPos).normalize();
+            const distance = startPos.distanceTo(targetPos);
+            const duration = distance / 20; // 20 units/sec
+            const startTime = Date.now();
+
+            const animateFireball = () => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                if (elapsed >= duration) {
+                    // Impact!
+                    scene.remove(fireball);
+                    if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                        window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                        console.log(`🔥 Fireball hit for ${damage} damage!`);
+                    }
+                    return;
+                }
+
+                fireball.position.addScaledVector(direction, 20 * 0.016);
+                requestAnimationFrame(animateFireball);
+            };
+            animateFireball();
+        },
+
+        // ⚡ Lightning Bolt
+        createLightningBolt(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const targetPos = this.currentTarget.position.clone();
+            const points = [
+                new THREE.Vector3(targetPos.x, targetPos.y + 10, targetPos.z),
+                new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z)
+            ];
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0x00aaff, linewidth: 5 });
+            const lightning = new THREE.Line(geometry, material);
+            scene.add(lightning);
+
+            // Damage enemy
+            if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                console.log(`⚡ Lightning hit for ${damage} damage!`);
+            }
+
+            setTimeout(() => scene.remove(lightning), 150);
+        },
+
+        // 🌿 Heal Effect
+        createHealEffect() {
+            const healAmount = Math.min(20, this.maxHealth - this.health);
+            this.health = Math.min(this.maxHealth, this.health + healAmount);
+
+            const ring = new THREE.Mesh(
+                new THREE.RingGeometry(0.5, 1, 32),
+                new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, transparent: true, opacity: 0.6 })
+            );
+            ring.position.copy(characterGroup.position);
+            ring.rotation.x = -Math.PI / 2;
+            scene.add(ring);
+
+            console.log(`🌿 Healed ${healAmount} HP!`);
+            if (typeof notify === 'function') notify(`🌿 +${healAmount} HP`, 'success');
+
+            let scale = 1;
+            const animateHeal = () => {
+                scale += 0.1;
+                ring.scale.set(scale, scale, 1);
+                ring.material.opacity -= 0.02;
+                if (ring.material.opacity <= 0) {
+                    scene.remove(ring);
+                    return;
+                }
+                requestAnimationFrame(animateHeal);
+            };
+            animateHeal();
+        },
+
+        // ❄️ Ice Lance Projectile
+        createIceLanceProjectile(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const startPos = characterGroup.position.clone();
+            startPos.y += 1.5;
+            const targetPos = this.currentTarget.position.clone();
+
+            const iceLance = new THREE.Mesh(
+                new THREE.ConeGeometry(0.15, 1, 8),
+                new THREE.MeshBasicMaterial({ color: 0x00ccff, emissive: 0x0066cc })
+            );
+            iceLance.position.copy(startPos);
+
+            const direction = targetPos.clone().sub(startPos).normalize();
+            iceLance.lookAt(targetPos);
+            iceLance.rotateX(Math.PI / 2);
+
+            scene.add(iceLance);
+
+            const distance = startPos.distanceTo(targetPos);
+            const duration = distance / 25;
+            const startTime = Date.now();
+
+            const animateIce = () => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                if (elapsed >= duration) {
+                    scene.remove(iceLance);
+                    if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                        window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                        console.log(`❄️ Ice Lance hit for ${damage} damage!`);
+                    }
+                    return;
+                }
+                iceLance.position.addScaledVector(direction, 25 * 0.016);
+                requestAnimationFrame(animateIce);
+            };
+            animateIce();
+        },
+
+        // ⚡⚡ Chain Lightning
+        createChainLightning(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const playerPos = characterGroup.position.clone();
+            playerPos.y += 1.5;
+            const targetPos = this.currentTarget.position.clone();
+            targetPos.y += 1;
+
+            const points = [playerPos, targetPos];
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 3 });
+            const chain = new THREE.Line(geometry, material);
+            scene.add(chain);
+
+            if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                console.log(`⚡⚡ Chain Lightning hit for ${damage} damage!`);
+            }
+
+            setTimeout(() => scene.remove(chain), 200);
+        },
+
+        // 🌳 Roots Effect
+        createRootsEffect(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const targetPos = this.currentTarget.position.clone();
+            const roots = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.8, 0.8, 0.2, 8),
+                new THREE.MeshBasicMaterial({ color: 0x8b4513, transparent: true, opacity: 0.7 })
+            );
+            roots.position.copy(targetPos);
+            roots.position.y += 0.1;
+            scene.add(roots);
+
+            if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                console.log(`🌳 Roots snared for ${damage} damage!`);
+            }
+
+            setTimeout(() => scene.remove(roots), 3000);
+        },
+
+        // ⚡ Lightning Strike (from sky)
+        createLightningStrike(damage) {
+            if (!this.currentTarget) {
+                if (typeof notify === 'function') notify('⚠️ Kein Ziel!', 'warning');
+                return;
+            }
+
+            const targetPos = this.currentTarget.position.clone();
+            const points = [
+                new THREE.Vector3(targetPos.x, targetPos.y + 15, targetPos.z),
+                new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z)
+            ];
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 8 });
+            const strike = new THREE.Line(geometry, material);
+            scene.add(strike);
+
+            if (window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, damage);
+                console.log(`⚡ Lightning Strike hit for ${damage} damage!`);
+            }
+
+            setTimeout(() => scene.remove(strike), 100);
+        },
+
         update(delta) {
             // Stamina regeneriert sich
             this.stamina = Math.min(this.maxStamina, this.stamina + 10 * delta);
+
+            // Mana regeneriert sich
+            this.mana = Math.min(this.maxMana, this.mana + this.manaRegen * delta);
 
             // Combo-Buffer timeout
             if (Date.now() - this.lastComboTime > 800) {
@@ -523,6 +848,24 @@
         loadCharacter();
         createCombatStatsUI();
         createBuildingPromptUI();
+        createSkillHotbarUI();
+
+        // 🪄 Initialize Skill System
+        if (typeof SkillSystem !== 'undefined') {
+            COMBAT_SYSTEM.skillSystem = new SkillSystem();
+
+            // DEV: Lerne ein paar Skills zum Testen
+            COMBAT_SYSTEM.skillSystem.learnSkill('rune_fireball');
+            COMBAT_SYSTEM.skillSystem.learnSkill('lightning_bolt');
+            COMBAT_SYSTEM.skillSystem.learnSkill('nature_heal');
+
+            // Equip skills to hotbar
+            COMBAT_SYSTEM.skillSystem.equipSkill('rune_fireball');    // Slot 1
+            COMBAT_SYSTEM.skillSystem.equipSkill('lightning_bolt');   // Slot 2
+            COMBAT_SYSTEM.skillSystem.equipSkill('nature_heal');      // Slot 3
+
+            console.log('🪄 Skill System initialisiert mit 3 Skills');
+        }
 
         // 🌍 Initialize World Manager (9600×9600 Grid World)
         if (useWorldManager && window.WorldManager) {
@@ -622,6 +965,15 @@
                         <div id="combat-stamina-bar" style="background: linear-gradient(90deg, #4a90e2, #50c878); height: 100%; width: 100%; transition: width 0.3s;"></div>
                     </div>
                 </div>
+                <div style="margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                        <span>🪄 Mana:</span>
+                        <span id="combat-mana-text">100/100</span>
+                    </div>
+                    <div style="background: #333; height: 16px; border-radius: 5px; overflow: hidden;">
+                        <div id="combat-mana-bar" style="background: linear-gradient(90deg, #9c27b0, #e91e63); height: 100%; width: 100%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
                 <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #444; font-size: 11px;">
                     <div><strong>⚔️ Equipment:</strong></div>
                     <div id="combat-equipment" style="margin-top: 5px; line-height: 1.4;">
@@ -631,7 +983,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #444; font-size: 10px; color: #aaa;">
-                    J/K: Attack | Q: Parry | Space: Dodge
+                    J/K: Attack | Tab: Lock-On | 1-9: Skills
                 </div>
             </div>
         `;
@@ -679,6 +1031,15 @@
             const staminaPercent = (COMBAT_SYSTEM.stamina / COMBAT_SYSTEM.maxStamina) * 100;
             staminaBar.style.width = `${staminaPercent}%`;
             staminaText.textContent = `${Math.round(COMBAT_SYSTEM.stamina)}/${COMBAT_SYSTEM.maxStamina}`;
+        }
+
+        // Mana
+        const manaBar = combatStatsUI.querySelector('#combat-mana-bar');
+        const manaText = combatStatsUI.querySelector('#combat-mana-text');
+        if (manaBar && manaText) {
+            const manaPercent = (COMBAT_SYSTEM.mana / COMBAT_SYSTEM.maxMana) * 100;
+            manaBar.style.width = `${manaPercent}%`;
+            manaText.textContent = `${Math.round(COMBAT_SYSTEM.mana)}/${COMBAT_SYSTEM.maxMana}`;
         }
 
         // Equipment
@@ -762,6 +1123,99 @@
     function hideBuildingPrompt() {
         if (!buildingPromptUI) return;
         buildingPromptUI.style.display = 'none';
+    }
+
+    // 🪄 SKILL HOTBAR UI
+    let skillHotbarUI = null;
+
+    function createSkillHotbarUI() {
+        skillHotbarUI = document.createElement('div');
+        skillHotbarUI.id = 'skill-hotbar-ui';
+        skillHotbarUI.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        `;
+        document.body.appendChild(skillHotbarUI);
+        updateSkillHotbarUI();
+    }
+
+    function updateSkillHotbarUI() {
+        if (!skillHotbarUI || !COMBAT_SYSTEM.skillSystem) return;
+
+        const equippedSkills = COMBAT_SYSTEM.skillSystem.getEquippedSkills();
+        const maxSlots = 9;
+
+        let html = '';
+        for (let i = 0; i < maxSlots; i++) {
+            const skillId = equippedSkills[i];
+            const skill = skillId ? COMBAT_SYSTEM.skillSystem.learnedSkills[skillId] : null;
+
+            // Check cooldown
+            const now = Date.now();
+            const cooldownEnd = COMBAT_SYSTEM.skillCooldowns[skillId] || 0;
+            const onCooldown = now < cooldownEnd;
+            const cooldownPercent = onCooldown ? ((cooldownEnd - now) / (skill.getCooldownAtLevel() * 1000)) * 100 : 0;
+            const cooldownSec = onCooldown ? ((cooldownEnd - now) / 1000).toFixed(1) : '';
+
+            // Check mana
+            const manaCost = skill ? skill.getManaCostAtLevel() : 0;
+            const canAfford = skill ? COMBAT_SYSTEM.mana >= manaCost : false;
+
+            html += `
+                <div style="
+                    width: 60px;
+                    height: 60px;
+                    background: ${skill ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'};
+                    border: 2px solid ${skill ? (onCooldown ? '#666' : (canAfford ? '#9c27b0' : '#ff4444')) : '#333'};
+                    border-radius: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-family: monospace;
+                    position: relative;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+                    ${onCooldown ? 'opacity: 0.5;' : ''}
+                ">
+                    ${skill ? `
+                        <div style="font-size: 24px;">${skill.icon}</div>
+                        <div style="font-size: 9px; margin-top: 2px;">${i + 1}</div>
+                        <div style="font-size: 8px; color: #e91e63;">${manaCost}M</div>
+                        ${onCooldown ? `
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                height: ${cooldownPercent}%;
+                                background: rgba(255,0,0,0.6);
+                                border-radius: 0 0 6px 6px;
+                            "></div>
+                            <div style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                font-size: 14px;
+                                font-weight: bold;
+                                text-shadow: 0 0 4px black;
+                            ">${cooldownSec}</div>
+                        ` : ''}
+                    ` : `
+                        <div style="font-size: 18px; color: #666;">-</div>
+                        <div style="font-size: 9px; color: #666;">${i + 1}</div>
+                    `}
+                </div>
+            `;
+        }
+
+        skillHotbarUI.innerHTML = html;
     }
 
     function checkNearBuilding() {
@@ -1805,6 +2259,7 @@
             // ⚔️ Update Combat System (Stamina regeneration, combos)
             COMBAT_SYSTEM.update(delta);
             updateCombatStatsUI();
+            updateSkillHotbarUI();
 
             // 🎯 Auto-Targeting: Finde nächsten Gegner wenn keiner ausgewählt (nur wenn Lock-On aktiv!)
             if (COMBAT_SYSTEM.targetLockOn && !COMBAT_SYSTEM.currentTarget && characterGroup && window.DungeonEnemies) {
@@ -1895,6 +2350,17 @@
             COMBAT_SYSTEM.toggleLockOn();
             return;
         }
+
+        // 🪄 SKILL HOTBAR (1-9 für Skills/Zauber)
+        if (event.code === 'Digit1') { COMBAT_SYSTEM.castSkill(0); return; }
+        if (event.code === 'Digit2') { COMBAT_SYSTEM.castSkill(1); return; }
+        if (event.code === 'Digit3') { COMBAT_SYSTEM.castSkill(2); return; }
+        if (event.code === 'Digit4') { COMBAT_SYSTEM.castSkill(3); return; }
+        if (event.code === 'Digit5') { COMBAT_SYSTEM.castSkill(4); return; }
+        if (event.code === 'Digit6') { COMBAT_SYSTEM.castSkill(5); return; }
+        if (event.code === 'Digit7') { COMBAT_SYSTEM.castSkill(6); return; }
+        if (event.code === 'Digit8') { COMBAT_SYSTEM.castSkill(7); return; }
+        if (event.code === 'Digit9') { COMBAT_SYSTEM.castSkill(8); return; }
 
         // F-Taste: Najika dreht sich zum Spieler
         if (event.code === 'KeyF') {
