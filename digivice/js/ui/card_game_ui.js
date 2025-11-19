@@ -47,7 +47,7 @@ class CardGameUI {
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2 style="color: #fff; font-size: 32px; margin: 0;">
                         🃏 Card Game
-                        <span style="font-size: 14px; color: #888; margin-left: 10px;">Triple Triad + Hearthstone</span>
+                        <span style="font-size: 14px; color: #888; margin-left: 10px;">Triple Triad with Hearthstone Stones</span>
                     </h2>
                     <button onclick="window.cardGameUI.hide()" style="
                         background: rgba(231, 76, 60, 0.3);
@@ -258,58 +258,8 @@ class CardGameUI {
     }
 
     async showPlay() {
-        const content = document.getElementById('card-tab-content');
-        content.innerHTML = `
-            <div style="text-align: center; color: #fff; padding: 40px;">
-                <h3 style="margin-bottom: 30px;">⚔️ Select Game Mode</h3>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto;">
-                    <button onclick="window.cardGameUI.startMatch('triad')" style="
-                        background: linear-gradient(135deg, #667eea, #764ba2);
-                        border: none;
-                        color: #fff;
-                        padding: 40px 20px;
-                        border-radius: 10px;
-                        cursor: pointer;
-                        font-size: 18px;
-                        font-weight: bold;
-                    ">
-                        <div style="font-size: 48px; margin-bottom: 10px;">🎴</div>
-                        Triple Triad<br/>
-                        <span style="font-size: 12px; font-weight: normal;">Board Control</span>
-                    </button>
-
-                    <button onclick="window.cardGameUI.startMatch('hearthstone')" style="
-                        background: linear-gradient(135deg, #f39c12, #e67e22);
-                        border: none;
-                        color: #fff;
-                        padding: 40px 20px;
-                        border-radius: 10px;
-                        cursor: pointer;
-                        font-size: 18px;
-                        font-weight: bold;
-                    ">
-                        <div style="font-size: 48px; margin-bottom: 10px;">⚔️</div>
-                        Hearthstone<br/>
-                        <span style="font-size: 12px; font-weight: normal;">Hero Combat</span>
-                    </button>
-
-                    <button onclick="window.cardGameUI.startMatch('hybrid')" style="
-                        background: linear-gradient(135deg, #e74c3c, #c0392b);
-                        border: none;
-                        color: #fff;
-                        padding: 40px 20px;
-                        border-radius: 10px;
-                        cursor: pointer;
-                        font-size: 18px;
-                        font-weight: bold;
-                    ">
-                        <div style="font-size: 48px; margin-bottom: 10px;">🔥</div>
-                        Hybrid Mode<br/>
-                        <span style="font-size: 12px; font-weight: normal;">Ultimate Challenge</span>
-                    </button>
-                </div>
-            </div>
-        `;
+        // Directly start Triple Triad match (no mode selection)
+        await this.startMatch('triad');
     }
 
     async showRankings() {
