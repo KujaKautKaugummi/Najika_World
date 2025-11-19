@@ -42,20 +42,29 @@ async def najika_status():
 async def status_stream():
     """Legacy status stream endpoint (SSE)"""
     async def event_generator():
-        while True:
-            data = {
-                "status": "online",
-                "personality": "megumin",
-                "mood": "happy",
-                "energy": 85,
-                "timestamp": datetime.now().isoformat()
-            }
-            yield f"data: {json.dumps(data)}\n\n"
-            await asyncio.sleep(2)
+        try:
+            while True:
+                data = {
+                    "status": "online",
+                    "personality": "megumin",
+                    "mood": "happy",
+                    "energy": 85,
+                    "private_mode": False,  # Add private_mode field expected by frontend
+                    "timestamp": datetime.now().isoformat()
+                }
+                yield f"data: {json.dumps(data)}\n\n"
+                await asyncio.sleep(2)
+        except asyncio.CancelledError:
+            # Client disconnected - this is normal, don't log error
+            pass
 
     return StreamingResponse(
         event_generator(),
-        media_type="text/event-stream"
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"  # Disable nginx buffering
+        }
     )
 
 
