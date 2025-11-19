@@ -86,3 +86,18 @@ async def cloud_status():
         "provider": "local",
         "status": "offline"
     }
+
+
+@router.post("/najika/equipment")
+async def najika_equipment():
+    """Legacy equipment endpoint"""
+    return {
+        "weapon": "staff",
+        "armor": "mage_robe",
+        "accessory": "explosion_ring",
+        "stats": {
+            "attack": 50,
+            "defense": 30,
+            "magic": 100
+        }
+    }
