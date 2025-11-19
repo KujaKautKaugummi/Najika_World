@@ -2370,11 +2370,26 @@ async function updateSkillsPanel() {
 }
 </script>
 
+<!-- 🌍 World System (ES6 Modules) - Load BEFORE 3d_scene.js -->
+<script type="module">
+    // Import World Manager and expose globally
+    import WorldManager from '/digivice/js/world/world_manager.js?v=1';
+    import DayNightCycle from '/digivice/js/world/day_night_cycle.js?v=1';
+    import WeatherSystem from '/digivice/js/world/weather_system.js?v=1';
+
+    // Expose to global scope for 3d_scene.js
+    window.WorldManager = WorldManager;
+    window.DayNightCycle = DayNightCycle;
+    window.WeatherSystem = WeatherSystem;
+
+    console.log('🌍 World System modules loaded and exposed globally');
+</script>
+
 <script src="/digivice/js/fishing.js"></script>
 <script src="/digivice/js/garden.js?v=23"></script>
 <script src="/digivice/js/buildings_custom.js?v=25"></script>
 <script src="/digivice/js/character_animations.js?v=26"></script>
-<script src="/digivice/js/3d_scene.js?v=33"></script>
+<script src="/digivice/js/3d_scene.js?v=34"></script>
 <script src="/digivice/js/ui/game_systems_ui.js"></script>
 <script src="/digivice/js/ui/card_game_ui.js"></script>
 <script src="/digivice/js/ui/dice_monsters_ui.js"></script>
