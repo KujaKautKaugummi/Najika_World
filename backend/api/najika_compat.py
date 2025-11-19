@@ -12,6 +12,20 @@ from datetime import datetime
 router = APIRouter(prefix="/api", tags=["Najika Compatibility"])
 
 
+@router.get("/status")
+async def status():
+    """Legacy status endpoint"""
+    return {
+        "status": "online",
+        "personality": "megumin",
+        "mood": "happy",
+        "energy": 85,
+        "timestamp": datetime.now().isoformat(),
+        "backend": "fastapi",
+        "version": "2.0.0"
+    }
+
+
 @router.get("/najika/status")
 async def najika_status():
     """Legacy Najika status endpoint"""
