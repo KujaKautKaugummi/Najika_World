@@ -2400,6 +2400,11 @@
     }
 
     function clampCharacterToRoom(position) {
+        // Disable clamping in Schwarze Mühle (multi-room building with rooms at different positions)
+        if (currentInterior === 'Schwarze Mühle') {
+            return; // No clamping - allow free movement between rooms
+        }
+
         const limit = Math.max(8, currentRoomSpan / 2 - CLAMP_PADDING);
         position.x = clamp(position.x, -limit, limit);
         position.z = clamp(position.z, -limit, limit);
