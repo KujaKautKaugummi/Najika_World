@@ -67,7 +67,7 @@
     let worldManager = null;
     let useWorldManager = true;  // Toggle for testing
 
-    // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls)
+    // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
         leftHand: null,     // Zauber, Schild, Zweithwaffe
         rightHand: null,    // Hauptwaffe (Schwert, Axt, etc.)
@@ -75,6 +75,25 @@
         maxStamina: 100,
         health: 100,
         maxHealth: 100,
+
+        // 🎯 Target System
+        currentTarget: null,
+        targetLockOn: false,
+        targetDistance: 0,
+
+        // 🥊 Attack States
+        isAttacking: false,
+        attackStartTime: 0,
+        attackDuration: 0,
+        isStaggered: false,
+        staggerEndTime: 0,
+
+        // 🎲 Hit Chance (abhängig von Distanz & Typ)
+        hitChance: {
+            light: 0.85,     // 85% Light Attack Hit Chance
+            heavy: 0.65,     // 65% Heavy Attack Hit Chance (langsamer)
+            both: 0.50       // 50% Beide gleichzeitig (riskant!)
+        },
 
         // Parry-System (Dark Souls Style)
         parryWindow: { start: 80, end: 200 },  // ms
@@ -98,38 +117,204 @@
             multiplier: 1.0
         },
 
-        // Dual-Wield Combos
+        // Dual-Wield Combos (erweitert)
         dualWieldCombos: {
-            'LR': { damage: 30, stamina: 15, name: 'Schneller Doppelschlag' },
-            'RRL': { damage: 50, stamina: 25, name: 'Wirbel-Angriff' },
-            'LLL': { damage: 40, stamina: 20, name: 'Zauber-Salve' },
-            'RLRL': { damage: 70, stamina: 35, name: 'Todestanz' }
+            'LL': { damage: 25, stamina: 12, name: 'Doppel-Leicht', speed: 'fast' },
+            'LH': { damage: 45, stamina: 18, name: 'Leicht→Schwer Mix', speed: 'medium' },
+            'HL': { damage: 45, stamina: 18, name: 'Schwer→Leicht Mix', speed: 'medium' },
+            'HH': { damage: 80, stamina: 35, name: 'Doppel-Schwer Crush', speed: 'slow' },
+            'LLL': { damage: 40, stamina: 20, name: 'Zauber-Salve', speed: 'fast' },
+            'HHH': { damage: 120, stamina: 50, name: 'Vernichtung', speed: 'very_slow' },
+            'LHLH': { damage: 90, stamina: 40, name: 'Todestanz', speed: 'medium' }
         },
         comboBuffer: '',
         lastComboTime: 0,
 
         // Equipment Slots
         equipment: {
-            leftHand: { type: 'wand', name: 'Najika Staff', damage: 25 },
-            rightHand: { type: 'sword', name: 'Eisenschwert', damage: 35 },
+            leftHand: { type: 'wand', name: 'Najika Staff', damage: 25, speed: 1.2 },
+            rightHand: { type: 'sword', name: 'Eisenschwert', damage: 35, speed: 1.0 },
             armor: { defense: 10 }
         },
 
-        // Combat Functions
-        attackLeft() {
-            if (this.stamina < 10) return false;
-            this.stamina -= 10;
+        // ⚔️ ATTACK FUNCTIONS (erweitert)
+
+        // Linke Hand - Light Attack
+        attackLeftLight() {
+            if (this.stamina < 8 || this.isStaggered || this.isAttacking) return false;
+
+            this.stamina -= 8;
+            this.isAttacking = true;
+            this.attackDuration = 300; // 300ms schnell
+            this.attackStartTime = Date.now();
+
+            const damage = this.equipment.leftHand.damage * 0.7; // 70% für Light
+            const hit = this.performAttack('left', 'light', damage);
+
             this.comboBuffer += 'L';
             this.checkCombo();
-            return true;
+
+            setTimeout(() => { this.isAttacking = false; }, this.attackDuration);
+            return hit;
         },
 
-        attackRight() {
-            if (this.stamina < 15) return false;
-            this.stamina -= 15;
-            this.comboBuffer += 'R';
+        // Linke Hand - Heavy Attack
+        attackLeftHeavy() {
+            if (this.stamina < 20 || this.isStaggered || this.isAttacking) return false;
+
+            this.stamina -= 20;
+            this.isAttacking = true;
+            this.attackDuration = 800; // 800ms langsam, nicht abbrechbar!
+            this.attackStartTime = Date.now();
+
+            const damage = this.equipment.leftHand.damage * 1.5; // 150% für Heavy
+            const hit = this.performAttack('left', 'heavy', damage);
+
+            this.comboBuffer += 'H';
             this.checkCombo();
-            return true;
+
+            setTimeout(() => { this.isAttacking = false; }, this.attackDuration);
+            return hit;
+        },
+
+        // Rechte Hand - Light Attack
+        attackRightLight() {
+            if (this.stamina < 10 || this.isStaggered || this.isAttacking) return false;
+
+            this.stamina -= 10;
+            this.isAttacking = true;
+            this.attackDuration = 350;
+            this.attackStartTime = Date.now();
+
+            const damage = this.equipment.rightHand.damage * 0.7;
+            const hit = this.performAttack('right', 'light', damage);
+
+            this.comboBuffer += 'L';
+            this.checkCombo();
+
+            setTimeout(() => { this.isAttacking = false; }, this.attackDuration);
+            return hit;
+        },
+
+        // Rechte Hand - Heavy Attack
+        attackRightHeavy() {
+            if (this.stamina < 25 || this.isStaggered || this.isAttacking) return false;
+
+            this.stamina -= 25;
+            this.isAttacking = true;
+            this.attackDuration = 900; // Sehr langsam, hoher Schaden
+            this.attackStartTime = Date.now();
+
+            const damage = this.equipment.rightHand.damage * 1.5;
+            const hit = this.performAttack('right', 'heavy', damage);
+
+            this.comboBuffer += 'H';
+            this.checkCombo();
+
+            setTimeout(() => { this.isAttacking = false; }, this.attackDuration);
+            return hit;
+        },
+
+        // Beide Hände GLEICHZEITIG (riskant!)
+        attackBoth(leftType = 'light', rightType = 'heavy') {
+            const leftCost = leftType === 'light' ? 8 : 20;
+            const rightCost = rightType === 'light' ? 10 : 25;
+            const totalCost = leftCost + rightCost;
+
+            if (this.stamina < totalCost || this.isStaggered || this.isAttacking) return false;
+
+            this.stamina -= totalCost;
+            this.isAttacking = true;
+            this.attackDuration = 600; // Mittlere Dauer
+            this.attackStartTime = Date.now();
+
+            const leftDamage = this.equipment.leftHand.damage * (leftType === 'light' ? 0.7 : 1.5);
+            const rightDamage = this.equipment.rightHand.damage * (rightType === 'light' ? 0.7 : 1.5);
+            const totalDamage = leftDamage + rightDamage;
+
+            // Beide gleichzeitig = niedrigere Hit Chance!
+            const hit = this.performAttack('both', 'mixed', totalDamage, this.hitChance.both);
+
+            this.comboBuffer += 'B'; // 'B' für Both
+
+            setTimeout(() => { this.isAttacking = false; }, this.attackDuration);
+            return hit;
+        },
+
+        // 🎯 Angriff ausführen mit Hit Detection
+        performAttack(hand, type, damage, customHitChance = null) {
+            if (!this.currentTarget) {
+                console.log('⚠️ Kein Ziel!');
+                return { hit: false, reason: 'no_target' };
+            }
+
+            // Hit Chance berechnen
+            let hitChance = customHitChance || this.hitChance[type] || 0.75;
+
+            // Distanz zum Ziel beeinflusst Hit Chance
+            if (this.targetDistance > 5) {
+                hitChance *= 0.7; // 30% Penalty bei großer Distanz
+            }
+
+            // Roll für Hit/Miss
+            const roll = Math.random();
+            const isHit = roll < hitChance;
+
+            if (isHit) {
+                // HIT! Schaden anwenden
+                console.log(`💥 HIT! ${hand} ${type} - ${Math.round(damage)} Schaden`);
+
+                // Damage an Gegner (DungeonEnemies System)
+                if (window.DungeonEnemies && this.currentTarget.userData && this.currentTarget.userData.enemyId) {
+                    const enemyId = this.currentTarget.userData.enemyId;
+                    window.DungeonEnemies.damageEnemy(enemyId, damage);
+                }
+
+                // Combo-Counter erhöhen
+                this.combo.hits++;
+                this.combo.lastHitTime = Date.now();
+                this.combo.multiplier = Math.min(2.0, 1.0 + (this.combo.hits * 0.1));
+
+                if (typeof notify === 'function') {
+                    notify(`💥 ${Math.round(damage)} DMG (${this.combo.hits}x Combo!)`, 'success');
+                }
+
+                return { hit: true, damage, comboHits: this.combo.hits };
+
+            } else {
+                // MISS! Spieler taumelt (stagger)
+                console.log(`❌ MISS! Taumeln für 500ms...`);
+                this.triggerStagger(500); // 500ms Stagger
+
+                if (typeof notify === 'function') {
+                    notify('❌ VERFEHLT! Verletzlich!', 'error');
+                }
+
+                return { hit: false, reason: 'miss', staggered: true };
+            }
+        },
+
+        // 😵 Taumeln (Stagger) - Spieler ist verletzlich!
+        triggerStagger(duration = 500) {
+            this.isStaggered = true;
+            this.staggerEndTime = Date.now() + duration;
+            this.combo.hits = 0; // Combo unterbrochen!
+
+            // Gegner können CRIT machen während Stagger
+            // Das wird in DungeonEnemies.updateCombat() geprüft
+            if (window.DungeonEnemies) {
+                window.DungeonEnemies.playerIsStaggered = true;
+                setTimeout(() => {
+                    if (window.DungeonEnemies) {
+                        window.DungeonEnemies.playerIsStaggered = false;
+                    }
+                }, duration);
+            }
+
+            setTimeout(() => {
+                this.isStaggered = false;
+                console.log('✅ Taumeln beendet');
+            }, duration);
         },
 
         parry() {
@@ -175,14 +360,27 @@
         },
 
         executeCombo(combo) {
-            // Combo-Effekt (später mit Animation & Partikel)
+            // Combo-Schaden anwenden
+            if (this.currentTarget && window.DungeonEnemies && this.currentTarget.userData.enemyId) {
+                window.DungeonEnemies.damageEnemy(this.currentTarget.userData.enemyId, combo.damage);
+            }
+
             if (typeof notify === 'function') {
-                notify(`💥 ${combo.name}!`, 'success');
+                notify(`🌟 ${combo.name}! ${combo.damage} DMG`, 'success');
             }
         },
 
-        takeDamage(amount) {
+        takeDamage(amount, isCrit = false) {
             if (this.dodgeRoll.active) return 0;  // i-frames
+
+            // STAGGER = 2x Schaden von Crits!
+            if (this.isStaggered && isCrit) {
+                amount *= 2.0;
+                if (typeof notify === 'function') {
+                    notify(`💀 CRITICAL HIT! ${Math.round(amount)} DMG`, 'error');
+                }
+            }
+
             if (this.isParrying) {
                 // Parry successful - kein Schaden + Stamina zurück
                 this.stamina = Math.min(this.maxStamina, this.stamina + 20);
@@ -205,6 +403,17 @@
             // Combo-Buffer timeout
             if (Date.now() - this.lastComboTime > 800) {
                 this.comboBuffer = '';
+            }
+
+            // Combo timeout (kein Hit = Reset)
+            if (Date.now() - this.combo.lastHitTime > this.combo.timeout) {
+                this.combo.hits = 0;
+                this.combo.multiplier = 1.0;
+            }
+
+            // Update Target Distance
+            if (this.currentTarget && characterGroup) {
+                this.targetDistance = characterGroup.position.distanceTo(this.currentTarget.position);
             }
         }
     };
@@ -450,6 +659,29 @@
         if (equipLeft) equipLeft.textContent = COMBAT_SYSTEM.equipment.leftHand.name;
         if (equipRight) equipRight.textContent = COMBAT_SYSTEM.equipment.rightHand.name;
         if (equipArmor) equipArmor.textContent = `${COMBAT_SYSTEM.equipment.armor.defense} DEF`;
+    }
+
+    // 🎯 Find Nearest Enemy für Auto-Targeting
+    function findNearestEnemy() {
+        if (!window.DungeonEnemies || !characterGroup) return null;
+
+        const enemies = window.DungeonEnemies.getActiveEnemies();
+        if (!enemies || enemies.length === 0) return null;
+
+        let nearest = null;
+        let minDistance = Infinity;
+
+        enemies.forEach(enemy => {
+            if (!enemy.mesh || enemy.isDead) return;
+
+            const distance = characterGroup.position.distanceTo(enemy.mesh.position);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearest = { enemy: enemy.mesh, distance };
+            }
+        });
+
+        return nearest;
     }
 
     function createBuildingPromptUI() {
@@ -1544,6 +1776,28 @@
             // ⚔️ Update Combat System (Stamina regeneration, combos)
             COMBAT_SYSTEM.update(delta);
             updateCombatStatsUI();
+
+            // 🎯 Auto-Targeting: Finde nächsten Gegner wenn keiner ausgewählt
+            if (!COMBAT_SYSTEM.currentTarget && characterGroup && window.DungeonEnemies) {
+                const nearestEnemy = findNearestEnemy();
+                if (nearestEnemy && nearestEnemy.distance < 15) {
+                    COMBAT_SYSTEM.currentTarget = nearestEnemy.enemy;
+                    console.log(`🎯 Auto-Target: ${nearestEnemy.enemy.userData.enemyId} (${Math.round(nearestEnemy.distance)}m)`);
+                }
+            }
+
+            // 🎯 Target verloren wenn zu weit weg oder tot
+            if (COMBAT_SYSTEM.currentTarget) {
+                if (COMBAT_SYSTEM.targetDistance > 20) {
+                    console.log('🎯 Target zu weit weg - verloren');
+                    COMBAT_SYSTEM.currentTarget = null;
+                }
+                // Prüfe ob Target noch existiert
+                if (COMBAT_SYSTEM.currentTarget.userData && COMBAT_SYSTEM.currentTarget.userData.isDead) {
+                    console.log('🎯 Target eliminated - suche neues');
+                    COMBAT_SYSTEM.currentTarget = null;
+                }
+            }
             // 🎣 Update Fishing System
             if (typeof window.FishingSystem !== 'undefined') {
                 FishingSystem.updateFishing(delta);
@@ -1624,17 +1878,54 @@
             }
         }
 
-        // ⚔️ KAMPF-TASTEN
-        // Linke Maustaste / J: Linke Hand (Zauber)
+        // ⚔️ KAMPF-TASTEN (Light/Heavy System)
+        // J: Linke Hand Light/Heavy
         if (event.code === 'KeyJ') {
-            if (COMBAT_SYSTEM.attackLeft()) {
-                console.log('🔮 Linke Hand: Zauber!');
+            if (event.shiftKey) {
+                // Shift+J = Heavy Attack Links
+                const result = COMBAT_SYSTEM.attackLeftHeavy();
+                if (result) {
+                    console.log('💥 Linke Hand HEAVY! Langsam aber stark!');
+                }
+            } else {
+                // J = Light Attack Links
+                const result = COMBAT_SYSTEM.attackLeftLight();
+                if (result && result.hit) {
+                    console.log(`🔮 Linke Hand LIGHT! ${result.damage} Schaden`);
+                } else if (result && !result.hit) {
+                    console.log('❌ Verfehlt! TAUMELN!');
+                }
             }
         }
-        // Rechte Maustaste / K: Rechte Hand (Schwert)
+
+        // K: Rechte Hand Light/Heavy
         if (event.code === 'KeyK') {
-            if (COMBAT_SYSTEM.attackRight()) {
-                console.log('⚔️ Rechte Hand: Schwert!');
+            if (event.shiftKey) {
+                // Shift+K = Heavy Attack Rechts
+                const result = COMBAT_SYSTEM.attackRightHeavy();
+                if (result) {
+                    console.log('💥 Rechte Hand HEAVY! Vernichtung!');
+                }
+            } else {
+                // K = Light Attack Rechts
+                const result = COMBAT_SYSTEM.attackRightLight();
+                if (result && result.hit) {
+                    console.log(`⚔️ Rechte Hand LIGHT! ${result.damage} Schaden`);
+                } else if (result && !result.hit) {
+                    console.log('❌ Verfehlt! TAUMELN!');
+                }
+            }
+        }
+
+        // B: Beide Hände gleichzeitig (riskanter Mix-Angriff!)
+        if (event.code === 'KeyB') {
+            const leftType = event.shiftKey ? 'heavy' : 'light';
+            const rightType = event.shiftKey ? 'heavy' : 'light';
+            const result = COMBAT_SYSTEM.attackBoth(leftType, rightType);
+            if (result && result.hit) {
+                console.log(`💫 BEIDE HÄNDE! ${result.damage} Schaden!`);
+            } else if (result && !result.hit) {
+                console.log('❌ Mix-Angriff VERFEHLT! Schweres Taumeln!');
             }
         }
         // Q: Exit Building ODER Parry
@@ -2670,7 +2961,9 @@
         get scene() { return scene; },
         get characterGroup() { return characterGroup; },
         // ⚔️ Export Combat System
-        get combat() { return COMBAT_SYSTEM; }
+        get combat() { return COMBAT_SYSTEM; },
+        get COMBAT_SYSTEM() { return COMBAT_SYSTEM; },
+        get camera() { return camera; }
     };
 
     bootWhenReady();
