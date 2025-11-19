@@ -7,8 +7,11 @@ import os
 import base64
 import asyncio
 import tempfile
+import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
+
+logger = logging.getLogger(__name__)
 
 # Try to import Whisper
 try:
@@ -45,16 +48,16 @@ class WhisperService:
         if WHISPER_AVAILABLE:
             self._load_model()
         else:
-            print("❌ Whisper AI not available")
+            logger.warning("Whisper AI not available")
 
     def _load_model(self):
         """Load Whisper model"""
         try:
-            print(f"🎤 Loading Whisper model: {self.model_size}...")
+            logger.info(f"Loading Whisper model: {self.model_size}...")
             self.model = whisper.load_model(self.model_size)
-            print(f"✅ Whisper model loaded: {self.model_size}")
+            logger.info(f"Whisper model loaded: {self.model_size}")
         except Exception as e:
-            print(f"❌ Failed to load Whisper model: {e}")
+            logger.error(f"Failed to load Whisper model: {e}")
             self.model = None
 
     def transcribe(self, audio_path: str, language: str = "de") -> Dict[str, Any]:
@@ -182,7 +185,7 @@ class EdgeTTSService:
         self.config = self.voice_config.get(personality, self.voice_config['megumin'])
 
         if not EDGE_TTS_AVAILABLE:
-            print("❌ Edge TTS not available")
+            logger.warning("Edge TTS not available")
 
     async def speak_async(self, text: str, output_path: Optional[str] = None) -> str:
         """
@@ -276,9 +279,9 @@ class EdgeTTSService:
         if personality in self.voice_config:
             self.personality = personality
             self.config = self.voice_config[personality]
-            print(f"🎤 Voice personality changed to: {personality}")
+            logger.info(f"Voice personality changed to: {personality}")
         else:
-            print(f"⚠️ Unknown personality: {personality}")
+            logger.warning(f"Unknown personality: {personality}")
 
 
 class VoiceService:
@@ -299,9 +302,7 @@ class VoiceService:
         self.whisper = WhisperService(model_size=whisper_model)
         self.tts = EdgeTTSService(personality=tts_personality)
 
-        print("🎤 Voice Service initialized")
-        print(f"  Whisper: {whisper_model}")
-        print(f"  TTS: {tts_personality}")
+        logger.info(f"Voice Service initialized - Whisper: {whisper_model}, TTS: {tts_personality}")
 
     def transcribe(self, audio_path: str, language: str = "de") -> Dict[str, Any]:
         """Transcribe audio file"""
