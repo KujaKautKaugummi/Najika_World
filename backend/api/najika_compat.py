@@ -101,3 +101,23 @@ async def najika_equipment():
             "magic": 100
         }
     }
+
+
+@router.post("/room/actions")
+async def room_actions(room: str = "Wohnzimmer"):
+    """Legacy room actions endpoint"""
+    # Return default actions for rooms
+    actions_map = {
+        "Wohnzimmer": ["Chat", "Minigame", "Stats"],
+        "Schlafzimmer": ["Sleep", "Save", "Stats"],
+        "Küche": ["Cook", "Eat", "Stats"],
+        "Garten": ["Garden", "Plant", "Stats"],
+        "Musikraum": ["Play", "Listen", "Stats"],
+        "Trainingszimmer": ["Train", "Battle", "Stats"],
+        "Kampfarena": ["Fight", "Tournament", "Stats"],
+    }
+
+    return {
+        "room": room,
+        "actions": actions_map.get(room, ["Chat", "Stats"])
+    }
