@@ -19,6 +19,12 @@ class RegionStreaming {
     this.loadRadius = 2;  // Load regions within this distance (in region units)
     this.playerPosition = new THREE.Vector3(4800, 0, 4800);  // Start at Götterfels
 
+    // GLTFLoader for special locations
+    this.gltfLoader = new THREE.GLTFLoader();
+
+    // Special location meshes
+    this.specialMeshes = new Map();
+
     // Performance stats
     this.stats = {
       loadedRegions: 0,
@@ -297,16 +303,147 @@ class RegionStreaming {
     if (region.specialLocations && region.specialLocations.peak) {
       const peak = region.specialLocations.peak;
       console.log(`    🏠 ${peak.name} - ${peak.rooms} rooms (Safe Zone)`);
-      // TODO: Load Schwarze Mühle model
+      this.loadSchwarzeMuehle(peak, regionGroup);
     }
 
     // Fluss (river)
     console.log('    🌊 River flowing down the mountain');
-    // TODO: Add river mesh
+    this.loadRiver(region, regionGroup);
 
     // Kleines Dorf (small village)
     console.log('    🏘️ Small village');
-    // TODO: Add village buildings
+    this.loadVillage(region, regionGroup);
+  }
+
+  /**
+   * Load Schwarze Mühle (Najika's Home)
+   */
+  async loadSchwarzeMuehle(peakData, regionGroup) {
+    try {
+      const gltf = await new Promise((resolve, reject) => {
+        this.gltfLoader.load('static/assets/kaykit/medieval/building_windmill_red.gltf', resolve, undefined, reject);
+      });
+
+      const schwarzeMuehle = gltf.scene;
+      schwarzeMuehle.position.set(peakData.position.x, 5, peakData.position.z);
+      schwarzeMuehle.scale.set(2.5, 2.5, 2.5);
+
+      // Make it BLACK (Schwarze Mühle)
+      schwarzeMuehle.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            roughness: 0.6,
+            metalness: 0.3,
+            emissive: 0x0a0a0a,
+            emissiveIntensity: 0.2
+          });
+        }
+      });
+
+      // UserData for interaction system
+      schwarzeMuehle.userData.buildingType = 'schwarze_muehle';
+      schwarzeMuehle.userData.buildingName = 'Schwarze Windmühle';
+      schwarzeMuehle.userData.proximityRadius = 15;
+      schwarzeMuehle.userData.safeZone = peakData.safeZone;
+      schwarzeMuehle.userData.rooms = peakData.rooms;
+
+      regionGroup.add(schwarzeMuehle);
+      this.specialMeshes.set('schwarze_muehle', schwarzeMuehle);
+
+      // Add glowing marker above
+      const markerGeometry = new THREE.SphereGeometry(1, 16, 16);
+      const markerMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8b00ff,
+        emissive: 0x8b00ff,
+        emissiveIntensity: 1,
+        transparent: true,
+        opacity: 0.8
+      });
+      const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+      marker.position.set(peakData.position.x, 18, peakData.position.z);
+      regionGroup.add(marker);
+
+      // Pulsing animation
+      marker.userData.animateMarker = (time) => {
+        marker.scale.setScalar(1 + Math.sin(time * 0.003) * 0.3);
+      };
+
+      this.specialMeshes.set('schwarze_muehle_marker', marker);
+
+      console.log('    ✅ Schwarze Mühle loaded successfully!');
+    } catch (error) {
+      console.error('    ❌ Failed to load Schwarze Mühle:', error);
+    }
+  }
+
+  /**
+   * Load River mesh flowing down the mountain
+   */
+  loadRiver(region, regionGroup) {
+    // Create simple river using planes
+    const riverGeometry = new THREE.PlaneGeometry(20, 300);
+    const riverMaterial = new THREE.MeshStandardMaterial({
+      color: 0x2a5f9e,
+      transparent: true,
+      opacity: 0.7,
+      roughness: 0.1,
+      metalness: 0.3,
+      emissive: 0x1a3f6e,
+      emissiveIntensity: 0.2
+    });
+
+    const river = new THREE.Mesh(riverGeometry, riverMaterial);
+    river.rotation.x = -Math.PI / 2;
+    river.position.set(4800, 0.1, 4650);
+    river.userData.type = 'river';
+
+    regionGroup.add(river);
+    this.specialMeshes.set('goetterfels_river', river);
+
+    console.log('    ✅ River mesh added');
+  }
+
+  /**
+   * Load Village buildings
+   */
+  async loadVillage(region, regionGroup) {
+    const villagePositions = [
+      { x: 4750, z: 4750 },
+      { x: 4770, z: 4760 },
+      { x: 4730, z: 4770 }
+    ];
+
+    for (let i = 0; i < villagePositions.length; i++) {
+      try {
+        const gltf = await new Promise((resolve, reject) => {
+          this.gltfLoader.load('static/assets/kaykit/medieval/building_home_A_red.gltf', resolve, undefined, reject);
+        });
+
+        const house = gltf.scene.clone();
+        house.position.set(villagePositions[i].x, 0, villagePositions[i].z);
+        house.scale.set(1.5, 1.5, 1.5);
+
+        house.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+
+        house.userData.buildingType = 'village_house';
+        house.userData.buildingName = `Village House ${i + 1}`;
+
+        regionGroup.add(house);
+        this.specialMeshes.set(`village_house_${i}`, house);
+      } catch (error) {
+        console.error(`    ❌ Failed to load village house ${i}:`, error);
+      }
+    }
+
+    console.log('    ✅ Village buildings loaded');
   }
 
   /**

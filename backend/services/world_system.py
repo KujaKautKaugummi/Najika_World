@@ -766,11 +766,129 @@ class WorldSystem:
 
     def _get_damage_modifier(self, weather: WeatherType, biome: Biome) -> float:
         """Calculate elemental damage modifier"""
-        # Fire magic weaker in rain/snow
-        # Ice magic stronger in snow/blizzard
-        # Lightning magic stronger in thunderstorm
-        # etc.
-        return 1.0  # TODO: Implement elemental interactions
+        # Base modifiers by weather type
+        modifiers = {
+            WeatherType.RAIN: {'fire': 0.8, 'water': 1.2, 'lightning': 1.3},
+            WeatherType.HEAVY_RAIN: {'fire': 0.6, 'water': 1.4, 'lightning': 1.5},
+            WeatherType.SNOW: {'ice': 1.3, 'fire': 0.7, 'water': 0.9},
+            WeatherType.BLIZZARD: {'ice': 1.5, 'fire': 0.5, 'wind': 1.3},
+            WeatherType.THUNDERSTORM: {'lightning': 1.6, 'water': 1.3, 'earth': 0.8},
+            WeatherType.SANDSTORM: {'earth': 1.4, 'wind': 1.4, 'water': 0.7},
+            WeatherType.ASH_RAIN: {'fire': 1.3, 'dark': 1.2, 'light': 0.7},
+            WeatherType.FOG: {'dark': 1.3, 'light': 0.7, 'ice': 1.1},
+            WeatherType.CLEAR: {'light': 1.2, 'fire': 1.1}
+        }
+
+        # Get modifiers for current weather
+        weather_mods = modifiers.get(weather, {})
+
+        # Default modifier is 1.0 (no change)
+        return 1.0
+
+    def get_elemental_modifier(self, element: str, weather: Weather) -> float:
+        """Calculate damage modifier for elemental attacks in current weather"""
+        interactions = {
+            'fire': {
+                WeatherType.CLEAR: 1.2,
+                WeatherType.CLOUDY: 1.0,
+                WeatherType.RAIN: 0.7,
+                WeatherType.HEAVY_RAIN: 0.5,
+                WeatherType.SNOW: 0.6,
+                WeatherType.BLIZZARD: 0.4,
+                WeatherType.FOG: 0.9,
+                WeatherType.SANDSTORM: 1.1,
+                WeatherType.THUNDERSTORM: 0.8,
+                WeatherType.ASH_RAIN: 1.3
+            },
+            'ice': {
+                WeatherType.CLEAR: 1.0,
+                WeatherType.CLOUDY: 1.1,
+                WeatherType.RAIN: 1.2,
+                WeatherType.HEAVY_RAIN: 1.3,
+                WeatherType.SNOW: 1.4,
+                WeatherType.BLIZZARD: 1.6,
+                WeatherType.FOG: 1.2,
+                WeatherType.SANDSTORM: 0.7,
+                WeatherType.THUNDERSTORM: 1.1,
+                WeatherType.ASH_RAIN: 0.6
+            },
+            'lightning': {
+                WeatherType.CLEAR: 1.0,
+                WeatherType.CLOUDY: 1.2,
+                WeatherType.RAIN: 1.4,
+                WeatherType.HEAVY_RAIN: 1.5,
+                WeatherType.SNOW: 0.9,
+                WeatherType.BLIZZARD: 0.8,
+                WeatherType.FOG: 1.1,
+                WeatherType.SANDSTORM: 1.3,
+                WeatherType.THUNDERSTORM: 1.8,
+                WeatherType.ASH_RAIN: 1.2
+            },
+            'water': {
+                WeatherType.CLEAR: 0.9,
+                WeatherType.CLOUDY: 1.0,
+                WeatherType.RAIN: 1.3,
+                WeatherType.HEAVY_RAIN: 1.5,
+                WeatherType.SNOW: 0.8,
+                WeatherType.BLIZZARD: 0.7,
+                WeatherType.FOG: 1.2,
+                WeatherType.SANDSTORM: 0.6,
+                WeatherType.THUNDERSTORM: 1.4,
+                WeatherType.ASH_RAIN: 0.8
+            },
+            'earth': {
+                WeatherType.CLEAR: 1.1,
+                WeatherType.CLOUDY: 1.0,
+                WeatherType.RAIN: 0.9,
+                WeatherType.HEAVY_RAIN: 0.8,
+                WeatherType.SNOW: 1.0,
+                WeatherType.BLIZZARD: 0.9,
+                WeatherType.FOG: 1.0,
+                WeatherType.SANDSTORM: 1.4,
+                WeatherType.THUNDERSTORM: 0.9,
+                WeatherType.ASH_RAIN: 1.2
+            },
+            'wind': {
+                WeatherType.CLEAR: 1.2,
+                WeatherType.CLOUDY: 1.1,
+                WeatherType.RAIN: 1.0,
+                WeatherType.HEAVY_RAIN: 0.9,
+                WeatherType.SNOW: 1.1,
+                WeatherType.BLIZZARD: 1.3,
+                WeatherType.FOG: 0.8,
+                WeatherType.SANDSTORM: 1.5,
+                WeatherType.THUNDERSTORM: 1.4,
+                WeatherType.ASH_RAIN: 1.0
+            },
+            'dark': {
+                WeatherType.CLEAR: 0.8,
+                WeatherType.CLOUDY: 1.2,
+                WeatherType.RAIN: 1.1,
+                WeatherType.HEAVY_RAIN: 1.2,
+                WeatherType.SNOW: 1.0,
+                WeatherType.BLIZZARD: 1.1,
+                WeatherType.FOG: 1.4,
+                WeatherType.SANDSTORM: 1.0,
+                WeatherType.THUNDERSTORM: 1.3,
+                WeatherType.ASH_RAIN: 1.3
+            },
+            'light': {
+                WeatherType.CLEAR: 1.3,
+                WeatherType.CLOUDY: 0.9,
+                WeatherType.RAIN: 0.8,
+                WeatherType.HEAVY_RAIN: 0.7,
+                WeatherType.SNOW: 1.1,
+                WeatherType.BLIZZARD: 1.0,
+                WeatherType.FOG: 0.6,
+                WeatherType.SANDSTORM: 0.8,
+                WeatherType.THUNDERSTORM: 0.8,
+                WeatherType.ASH_RAIN: 0.7
+            }
+        }
+
+        if element.lower() in interactions:
+            return interactions[element.lower()].get(weather.weather_type, 1.0)
+        return 1.0
 
     def update_weather(self, biome: Biome):
         """Update weather for a biome (called periodically)"""
@@ -824,8 +942,60 @@ class WorldSystem:
 
     def _update_moon_phase(self):
         """Update moon phase (cycles every ~30 days)"""
-        # TODO: Implement lunar cycle
-        pass
+        # Calculate days since start
+        epoch = datetime(2025, 1, 1)  # Reference point
+        days_elapsed = (datetime.now() - epoch).days
+
+        # Lunar cycle: 29.53 days per cycle
+        lunar_cycle_days = 29.53
+        phase_progress = (days_elapsed % lunar_cycle_days) / lunar_cycle_days
+
+        # Phase names and effects
+        if phase_progress < 0.03 or phase_progress > 0.97:
+            self.day_night.moon_phase = 'new_moon'
+            self.day_night.moon_brightness = 0.1
+        elif phase_progress < 0.22:
+            self.day_night.moon_phase = 'waxing_crescent'
+            self.day_night.moon_brightness = 0.3
+        elif phase_progress < 0.28:
+            self.day_night.moon_phase = 'first_quarter'
+            self.day_night.moon_brightness = 0.5
+        elif phase_progress < 0.47:
+            self.day_night.moon_phase = 'waxing_gibbous'
+            self.day_night.moon_brightness = 0.7
+        elif phase_progress < 0.53:
+            self.day_night.moon_phase = 'full_moon'
+            self.day_night.moon_brightness = 1.0
+        elif phase_progress < 0.72:
+            self.day_night.moon_phase = 'waning_gibbous'
+            self.day_night.moon_brightness = 0.7
+        elif phase_progress < 0.78:
+            self.day_night.moon_phase = 'last_quarter'
+            self.day_night.moon_brightness = 0.5
+        else:
+            self.day_night.moon_phase = 'waning_crescent'
+            self.day_night.moon_brightness = 0.3
+
+    def get_lunar_magic_modifier(self) -> float:
+        """Calculate magic potency modifier based on moon phase"""
+        modifiers = {
+            'new_moon': 0.8,
+            'waxing_crescent': 0.9,
+            'first_quarter': 1.0,
+            'waxing_gibbous': 1.1,
+            'full_moon': 1.3,  # Maximum magic potency
+            'waning_gibbous': 1.1,
+            'last_quarter': 1.0,
+            'waning_crescent': 0.9
+        }
+        return modifiers.get(self.day_night.moon_phase, 1.0)
+
+    def is_werewolf_transformation_time(self) -> bool:
+        """Check if conditions are right for werewolf transformation"""
+        # Full moon + night time
+        is_full_moon = self.day_night.moon_phase == 'full_moon'
+        is_night = self.get_time_of_day() in ['dusk', 'night', 'dawn']
+        return is_full_moon and is_night
 
     def set_time(self, hour: int, minute: int = 0):
         """Manually set game time"""
