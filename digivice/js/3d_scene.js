@@ -921,6 +921,24 @@
             }, 2000);
         }
 
+        // 📜 Initialize Quest System
+        if (typeof QuestManager !== 'undefined') {
+            window.questManager = new QuestManager(COMBAT_SYSTEM.inventorySystem);
+            console.log('📜 Quest System initialized');
+        }
+
+        // 🎭 Initialize NPC System
+        if (typeof NPCSystem !== 'undefined' && scene) {
+            window.npcSystem = new NPCSystem(scene, THREE);
+            console.log('🎭 NPC System initialized');
+        }
+
+        // 🔨 Initialize Crafting System
+        if (typeof CraftingSystem !== 'undefined') {
+            window.craftingSystem = new CraftingSystem(COMBAT_SYSTEM.inventorySystem);
+            console.log('🔨 Crafting System initialized');
+        }
+
         // 🌍 Initialize World Manager (9600×9600 Grid World)
         if (useWorldManager && window.WorldManager) {
             initWorldManager();
