@@ -181,6 +181,27 @@
             return totalStats.defense || 0;
         },
 
+        // 🗡️ Equipment Management
+        equipWeapon(hand, weaponData) {
+            if (hand === 'left') {
+                this.leftHand = weaponData;
+                console.log(`⚔️ Linke Hand: ${weaponData.type} (${weaponData.damage} DMG) ausgerüstet`);
+            } else if (hand === 'right') {
+                this.rightHand = weaponData;
+                console.log(`⚔️ Rechte Hand: ${weaponData.type} (${weaponData.damage} DMG) ausgerüstet`);
+            }
+        },
+
+        unequipWeapon(hand) {
+            if (hand === 'left') {
+                this.leftHand = null;
+                console.log('🔓 Linke Hand: Waffe abgelegt');
+            } else if (hand === 'right') {
+                this.rightHand = null;
+                console.log('🔓 Rechte Hand: Waffe abgelegt');
+            }
+        },
+
         // ⚔️ ATTACK FUNCTIONS (erweitert)
 
         // Linke Hand - Light Attack

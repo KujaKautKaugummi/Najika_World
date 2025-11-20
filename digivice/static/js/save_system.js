@@ -52,6 +52,17 @@ class SaveSystem {
     }
 
     savePlayerData() {
+        // Check if gameState and character exist
+        if (!this.gameState || !this.gameState.character) {
+            console.warn('⚠️ Character not initialized yet, using defaults');
+            return {
+                position: { x: 4800, y: 0, z: 4800 }, // Default Götterfels
+                health: 100,
+                mana: 50,
+                stamina: 100
+            };
+        }
+
         const { character } = this.gameState;
         return {
             position: {
@@ -66,6 +77,11 @@ class SaveSystem {
     }
 
     saveInventoryData() {
+        if (!this.gameState || !this.gameState.inventorySystem) {
+            console.warn('⚠️ Inventory not initialized yet, using defaults');
+            return { items: {}, equipment: {}, gold: 0 };
+        }
+
         const { inventorySystem } = this.gameState;
         return {
             items: inventorySystem.items,
@@ -75,6 +91,11 @@ class SaveSystem {
     }
 
     saveQuestData() {
+        if (!this.gameState || !this.gameState.questManager) {
+            console.warn('⚠️ Quest Manager not initialized yet, using defaults');
+            return { activeQuests: [], completedQuests: [], trackedQuest: null };
+        }
+
         const { questManager } = this.gameState;
         return {
             activeQuests: questManager.activeQuests,
@@ -84,6 +105,11 @@ class SaveSystem {
     }
 
     saveSkillData() {
+        if (!this.gameState || !this.gameState.skillSystem) {
+            console.warn('⚠️ Skill System not initialized yet, using defaults');
+            return { learnedSkills: {}, equippedSkills: [] };
+        }
+
         const { skillSystem } = this.gameState;
         const learnedSkills = {};
 
@@ -103,6 +129,11 @@ class SaveSystem {
     }
 
     saveWorldData() {
+        if (!this.gameState || !this.gameState.specialLocations) {
+            console.warn('⚠️ Special Locations not initialized yet, using defaults');
+            return { openedChests: [], exploredRegions: [] };
+        }
+
         const { specialLocations } = this.gameState;
         return {
             openedChests: Array.from(specialLocations.openedChests || []),

@@ -736,12 +736,29 @@ class WorldInfoUI {
 // AUTO-INITIALIZE ALL SYSTEMS
 // ============================================================================
 
-window.addEventListener('DOMContentLoaded', () => {
-  window.regionBossUI = new RegionBossUI();
-  window.oregonEventsUI = new OregonEventsUI();
-  window.magicSchoolsUI = new MagicSchoolsUI();
-  window.instrumentUI = new InstrumentUI();
-  window.worldInfoUI = new WorldInfoUI();
+function initializeGameSystemsUI() {
+  // Prevent double-initialization
+  if (window.gameSystemsUIInitialized) {
+    console.log('⚠️ Game Systems UI already initialized');
+    return;
+  }
 
-  console.log('✅ All Game Systems UI initialized!');
-});
+  try {
+    window.regionBossUI = new RegionBossUI();
+    window.oregonEventsUI = new OregonEventsUI();
+    window.magicSchoolsUI = new MagicSchoolsUI();
+    window.instrumentUI = new InstrumentUI();
+    window.worldInfoUI = new WorldInfoUI();
+
+    window.gameSystemsUIInitialized = true;
+    console.log('✅ All Game Systems UI initialized!');
+  } catch (error) {
+    console.error('❌ Error initializing Game Systems UI:', error);
+  }
+}
+
+// Initialize on DOMContentLoaded
+window.addEventListener('DOMContentLoaded', initializeGameSystemsUI);
+
+// Also expose function for manual initialization if needed
+window.initializeGameSystemsUI = initializeGameSystemsUI;
