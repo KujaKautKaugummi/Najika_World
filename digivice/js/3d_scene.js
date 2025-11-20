@@ -83,6 +83,9 @@
         skillSystem: null,  // Wird in init() initialisiert
         skillCooldowns: {},  // skill_id => endTime
 
+        // 🎒 Inventory System
+        inventorySystem: null,  // Wird in init() initialisiert
+
         // 🎯 Target System (Skyrim/Fortnite Style)
         currentTarget: null,
         targetLockOn: false,  // Tab zum Togglen
@@ -156,11 +159,26 @@
         comboBuffer: '',
         lastComboTime: 0,
 
-        // Equipment Slots
-        equipment: {
-            leftHand: { type: 'wand', name: 'Najika Staff', damage: 25, speed: 1.2 },
-            rightHand: { type: 'sword', name: 'Eisenschwert', damage: 35, speed: 1.0 },
-            armor: { defense: 10 }
+        // 🎒 Equipment Helper Methods (uses InventorySystem)
+        getWeaponDamage(hand) {
+            if (!this.inventorySystem) return hand === 'left' ? 15 : 20; // Fallback
+
+            const slot = hand === 'left' ? 'weapon_left' : 'weapon_right';
+            const weapon = this.inventorySystem.equipment[slot];
+
+            if (weapon && weapon.data && weapon.data.stats) {
+                return weapon.data.stats.damage || 10;
+            }
+
+            // Fallback unarmed damage
+            return hand === 'left' ? 10 : 15;
+        },
+
+        getArmorDefense() {
+            if (!this.inventorySystem) return 10; // Fallback
+
+            const totalStats = this.inventorySystem.getTotalStats();
+            return totalStats.defense || 0;
         },
 
         // ⚔️ ATTACK FUNCTIONS (erweitert)
@@ -174,7 +192,7 @@
             this.attackDuration = 300; // 300ms schnell
             this.attackStartTime = Date.now();
 
-            const damage = this.equipment.leftHand.damage * 0.7; // 70% für Light
+            const damage = this.getWeaponDamage('left') * 0.7; // 70% für Light
             const hit = this.performAttack('left', 'light', damage);
 
             this.comboBuffer += 'L';
@@ -193,7 +211,7 @@
             this.attackDuration = 800; // 800ms langsam, nicht abbrechbar!
             this.attackStartTime = Date.now();
 
-            const damage = this.equipment.leftHand.damage * 1.5; // 150% für Heavy
+            const damage = this.getWeaponDamage('left') * 1.5; // 150% für Heavy
             const hit = this.performAttack('left', 'heavy', damage);
 
             this.comboBuffer += 'H';
@@ -212,7 +230,7 @@
             this.attackDuration = 350;
             this.attackStartTime = Date.now();
 
-            const damage = this.equipment.rightHand.damage * 0.7;
+            const damage = this.getWeaponDamage('right') * 0.7;
             const hit = this.performAttack('right', 'light', damage);
 
             this.comboBuffer += 'L';
@@ -231,7 +249,7 @@
             this.attackDuration = 900; // Sehr langsam, hoher Schaden
             this.attackStartTime = Date.now();
 
-            const damage = this.equipment.rightHand.damage * 1.5;
+            const damage = this.getWeaponDamage('right') * 1.5;
             const hit = this.performAttack('right', 'heavy', damage);
 
             this.comboBuffer += 'H';
@@ -254,8 +272,8 @@
             this.attackDuration = 600; // Mittlere Dauer
             this.attackStartTime = Date.now();
 
-            const leftDamage = this.equipment.leftHand.damage * (leftType === 'light' ? 0.7 : 1.5);
-            const rightDamage = this.equipment.rightHand.damage * (rightType === 'light' ? 0.7 : 1.5);
+            const leftDamage = this.getWeaponDamage('left') * (leftType === 'light' ? 0.7 : 1.5);
+            const rightDamage = this.getWeaponDamage('right') * (rightType === 'light' ? 0.7 : 1.5);
             const totalDamage = leftDamage + rightDamage;
 
             // Beide gleichzeitig = niedrigere Hit Chance!
@@ -426,7 +444,7 @@
                 return 0;
             }
 
-            const defense = this.equipment.armor.defense;
+            const defense = this.getArmorDefense();
             const damage = Math.max(1, amount - defense);
             this.health = Math.max(0, this.health - damage);
             return damage;
@@ -849,6 +867,7 @@
         createCombatStatsUI();
         createBuildingPromptUI();
         createSkillHotbarUI();
+        createInventoryUI();
 
         // 🪄 Initialize Skill System
         if (typeof SkillSystem !== 'undefined') {
@@ -865,6 +884,25 @@
             COMBAT_SYSTEM.skillSystem.equipSkill('nature_heal');      // Slot 3
 
             console.log('🪄 Skill System initialisiert mit 3 Skills');
+        }
+
+        // 🎒 Initialize Inventory System
+        if (typeof InventorySystem !== 'undefined') {
+            COMBAT_SYSTEM.inventorySystem = new InventorySystem(null, COMBAT_SYSTEM);
+
+            // DEV: Add starter equipment
+            COMBAT_SYSTEM.inventorySystem.addItem('fire_sword', 1);
+            COMBAT_SYSTEM.inventorySystem.addItem('ice_dagger', 1);
+            COMBAT_SYSTEM.inventorySystem.addItem('leather_armor', 1);
+            COMBAT_SYSTEM.inventorySystem.addItem('iron_helmet', 1);
+
+            // Auto-equip starter items
+            COMBAT_SYSTEM.inventorySystem.equipItem('fire_sword');
+            COMBAT_SYSTEM.inventorySystem.equipItem('ice_dagger');
+            COMBAT_SYSTEM.inventorySystem.equipItem('leather_armor');
+            COMBAT_SYSTEM.inventorySystem.equipItem('iron_helmet');
+
+            console.log('🎒 Inventory System initialisiert mit Starter-Equipment');
         }
 
         // 🌍 Initialize World Manager (9600×9600 Grid World)
@@ -1046,9 +1084,25 @@
         const equipLeft = combatStatsUI.querySelector('#equip-left');
         const equipRight = combatStatsUI.querySelector('#equip-right');
         const equipArmor = combatStatsUI.querySelector('#equip-armor');
-        if (equipLeft) equipLeft.textContent = COMBAT_SYSTEM.equipment.leftHand.name;
-        if (equipRight) equipRight.textContent = COMBAT_SYSTEM.equipment.rightHand.name;
-        if (equipArmor) equipArmor.textContent = `${COMBAT_SYSTEM.equipment.armor.defense} DEF`;
+
+        if (COMBAT_SYSTEM.inventorySystem) {
+            const leftWeapon = COMBAT_SYSTEM.inventorySystem.equipment.weapon_left;
+            const rightWeapon = COMBAT_SYSTEM.inventorySystem.equipment.weapon_right;
+            const armorChest = COMBAT_SYSTEM.inventorySystem.equipment.armor_chest;
+            const armorHead = COMBAT_SYSTEM.inventorySystem.equipment.armor_head;
+
+            if (equipLeft) {
+                equipLeft.textContent = leftWeapon ? `${leftWeapon.data.icon} ${leftWeapon.data.name}` : 'Unarmed';
+            }
+            if (equipRight) {
+                equipRight.textContent = rightWeapon ? `${rightWeapon.data.icon} ${rightWeapon.data.name}` : 'Unarmed';
+            }
+            if (equipArmor) {
+                const totalDef = COMBAT_SYSTEM.getArmorDefense();
+                const armorName = armorChest ? armorChest.data.name : (armorHead ? armorHead.data.name : 'None');
+                equipArmor.textContent = `${armorName} (${totalDef} DEF)`;
+            }
+        }
     }
 
     // 🎯 Find Nearest Enemy für Auto-Targeting
@@ -1216,6 +1270,308 @@
         }
 
         skillHotbarUI.innerHTML = html;
+    }
+
+    // 🎒 INVENTORY UI MODAL
+    let inventoryUI = null;
+    let draggedItem = null;
+
+    function createInventoryUI() {
+        inventoryUI = document.createElement('div');
+        inventoryUI.id = 'inventory-ui';
+        inventoryUI.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            max-width: 95vw;
+            height: 700px;
+            max-height: 90vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            display: none;
+            z-index: 2000;
+            color: white;
+            font-family: monospace;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        `;
+
+        inventoryUI.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; font-size: 24px;">🎒 INVENTORY</h2>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <span style="font-size: 18px; color: #ffd700;">💰 <span id="inv-gold">100</span>g</span>
+                    <button id="inv-close" style="
+                        background: #ff4444;
+                        border: none;
+                        color: white;
+                        padding: 8px 16px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    ">✕ Close</button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                <!-- Left: Inventory Grid -->
+                <div>
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #aaa;">Items (50 slots)</h3>
+                    <div id="inv-grid" style="
+                        display: grid;
+                        grid-template-columns: repeat(10, 1fr);
+                        gap: 5px;
+                        background: rgba(0,0,0,0.3);
+                        padding: 10px;
+                        border-radius: 8px;
+                        min-height: 400px;
+                    "></div>
+                </div>
+
+                <!-- Right: Equipment Paperdoll -->
+                <div>
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; color: #aaa;">Equipment</h3>
+                    <div id="inv-equipment" style="
+                        background: rgba(0,0,0,0.3);
+                        padding: 15px;
+                        border-radius: 8px;
+                    ">
+                        <div style="display: flex; flex-direction: column; gap: 10px;"></div>
+                    </div>
+
+                    <h3 style="margin: 20px 0 10px 0; font-size: 16px; color: #aaa;">Stats</h3>
+                    <div id="inv-stats" style="
+                        background: rgba(0,0,0,0.3);
+                        padding: 15px;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        line-height: 1.6;
+                    "></div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(inventoryUI);
+
+        // Close button
+        inventoryUI.querySelector('#inv-close').addEventListener('click', () => toggleInventoryUI());
+
+        updateInventoryUI();
+    }
+
+    function toggleInventoryUI() {
+        if (!inventoryUI) createInventoryUI();
+
+        if (inventoryUI.style.display === 'none') {
+            inventoryUI.style.display = 'block';
+            updateInventoryUI();
+        } else {
+            inventoryUI.style.display = 'none';
+        }
+    }
+
+    function updateInventoryUI() {
+        if (!inventoryUI || !COMBAT_SYSTEM.inventorySystem) return;
+
+        const inv = COMBAT_SYSTEM.inventorySystem;
+
+        // Update gold
+        const goldEl = inventoryUI.querySelector('#inv-gold');
+        if (goldEl) goldEl.textContent = inv.gold;
+
+        // Update inventory grid
+        const gridEl = inventoryUI.querySelector('#inv-grid');
+        if (gridEl) {
+            gridEl.innerHTML = '';
+
+            // Create 50 slots
+            for (let i = 0; i < inv.maxSlots; i++) {
+                const item = inv.items[i];
+                const slot = createInventorySlot(item, i, 'inventory');
+                gridEl.appendChild(slot);
+            }
+        }
+
+        // Update equipment slots
+        const equipEl = inventoryUI.querySelector('#inv-equipment > div');
+        if (equipEl) {
+            equipEl.innerHTML = '';
+
+            const equipSlots = [
+                { key: 'weapon_left', label: '🗡️ Left Hand' },
+                { key: 'weapon_right', label: '⚔️ Right Hand' },
+                { key: 'armor_head', label: '⛑️ Head' },
+                { key: 'armor_chest', label: '🛡️ Chest' },
+                { key: 'armor_legs', label: '👖 Legs' },
+                { key: 'accessory_1', label: '💍 Accessory 1' },
+                { key: 'accessory_2', label: '💍 Accessory 2' }
+            ];
+
+            equipSlots.forEach(({ key, label }) => {
+                const item = inv.equipment[key];
+                const slotContainer = document.createElement('div');
+                slotContainer.style.cssText = 'display: flex; align-items: center; gap: 10px; margin-bottom: 8px;';
+
+                const labelEl = document.createElement('span');
+                labelEl.textContent = label;
+                labelEl.style.cssText = 'min-width: 120px; font-size: 11px;';
+
+                const slot = createInventorySlot(item, key, 'equipment');
+                slot.style.width = '50px';
+                slot.style.height = '50px';
+
+                slotContainer.appendChild(labelEl);
+                slotContainer.appendChild(slot);
+                equipEl.appendChild(slotContainer);
+            });
+        }
+
+        // Update stats
+        const statsEl = inventoryUI.querySelector('#inv-stats');
+        if (statsEl) {
+            const stats = inv.getTotalStats();
+            statsEl.innerHTML = `
+                <div>⚔️ Damage: <strong>${stats.damage}</strong></div>
+                <div>🛡️ Defense: <strong>${stats.defense}</strong></div>
+                <div>💪 Strength: <strong>${stats.strength}%</strong></div>
+                <div>❤️ Max HP: <strong>+${stats.max_hp}</strong></div>
+                <div>💚 HP Regen: <strong>+${stats.hp_regen}/s</strong></div>
+                <div>⚡ Speed: <strong>×${stats.speed_modifier.toFixed(2)}</strong></div>
+                <div>⚖️ Weight: <strong>${stats.weight}</strong></div>
+            `;
+        }
+    }
+
+    function createInventorySlot(item, index, slotType) {
+        const slot = document.createElement('div');
+        slot.className = 'inv-slot';
+        slot.dataset.index = index;
+        slot.dataset.slotType = slotType;
+
+        const rarityColors = {
+            common: '#aaa',
+            uncommon: '#1eff00',
+            rare: '#0070dd',
+            legendary: '#a335ee',
+            quest: '#ffd700'
+        };
+
+        if (item) {
+            const rarity = item.data.rarity || 'common';
+            const borderColor = rarityColors[rarity];
+
+            slot.style.cssText = `
+                width: 60px;
+                height: 60px;
+                background: rgba(0,0,0,0.6);
+                border: 2px solid ${borderColor};
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: grab;
+                position: relative;
+                transition: transform 0.1s, box-shadow 0.1s;
+            `;
+
+            slot.innerHTML = `
+                <div style="font-size: 28px;">${item.data.icon || '📦'}</div>
+                ${item.quantity > 1 ? `<div style="position: absolute; bottom: 2px; right: 4px; font-size: 10px; font-weight: bold; text-shadow: 0 0 2px black;">${item.quantity}</div>` : ''}
+            `;
+
+            // Tooltip
+            slot.title = `${item.data.name}\n${item.data.description || ''}\nRarity: ${rarity}`;
+
+            // Drag events
+            slot.draggable = true;
+            slot.addEventListener('dragstart', onDragStart);
+            slot.addEventListener('dragover', onDragOver);
+            slot.addEventListener('drop', onDrop);
+            slot.addEventListener('dragend', onDragEnd);
+
+            // Right-click to use/equip
+            slot.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if (slotType === 'inventory') {
+                    if (item.data.type === 'weapon' || item.data.type === 'armor' || item.data.type === 'accessory') {
+                        COMBAT_SYSTEM.inventorySystem.equipItem(item.id);
+                        updateInventoryUI();
+                    } else if (item.data.type === 'food') {
+                        COMBAT_SYSTEM.inventorySystem.useItem(item.id);
+                        updateInventoryUI();
+                    }
+                } else if (slotType === 'equipment') {
+                    COMBAT_SYSTEM.inventorySystem.unequipItem(index);
+                    updateInventoryUI();
+                }
+            });
+
+            // Hover effect
+            slot.addEventListener('mouseenter', () => {
+                slot.style.transform = 'scale(1.1)';
+                slot.style.boxShadow = `0 0 15px ${borderColor}`;
+            });
+            slot.addEventListener('mouseleave', () => {
+                slot.style.transform = 'scale(1)';
+                slot.style.boxShadow = 'none';
+            });
+        } else {
+            // Empty slot
+            slot.style.cssText = `
+                width: 60px;
+                height: 60px;
+                background: rgba(0,0,0,0.3);
+                border: 2px solid #333;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+
+            // Can still drop items here
+            slot.addEventListener('dragover', onDragOver);
+            slot.addEventListener('drop', onDrop);
+        }
+
+        return slot;
+    }
+
+    function onDragStart(e) {
+        draggedItem = {
+            slotType: e.target.dataset.slotType,
+            index: e.target.dataset.index
+        };
+        e.target.style.opacity = '0.5';
+    }
+
+    function onDragOver(e) {
+        e.preventDefault(); // Allow drop
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    function onDrop(e) {
+        e.preventDefault();
+        if (!draggedItem) return;
+
+        const targetSlotType = e.currentTarget.dataset.slotType;
+        const targetIndex = e.currentTarget.dataset.index;
+
+        // TODO: Implement drag & drop logic
+        // This would move items between inventory slots
+        // Or equip/unequip items by dragging to equipment slots
+        console.log(`Drop: ${draggedItem.slotType}[${draggedItem.index}] → ${targetSlotType}[${targetIndex}]`);
+
+        updateInventoryUI();
+    }
+
+    function onDragEnd(e) {
+        e.target.style.opacity = '1';
+        draggedItem = null;
     }
 
     function checkNearBuilding() {
@@ -2361,6 +2717,12 @@
         if (event.code === 'Digit7') { COMBAT_SYSTEM.castSkill(6); return; }
         if (event.code === 'Digit8') { COMBAT_SYSTEM.castSkill(7); return; }
         if (event.code === 'Digit9') { COMBAT_SYSTEM.castSkill(8); return; }
+
+        // 🎒 I-Taste: Inventory Toggle
+        if (event.code === 'KeyI') {
+            toggleInventoryUI();
+            return;
+        }
 
         // F-Taste: Najika dreht sich zum Spieler
         if (event.code === 'KeyF') {
