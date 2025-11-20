@@ -1021,6 +1021,15 @@
 
         } catch (error) {
             console.error('❌ Failed to initialize WorldManager:', error);
+            console.error('Error details:', error.message);
+            console.error('Stack trace:', error.stack);
+
+            // Show user-friendly error
+            alert('⚠️ WorldManager konnte nicht geladen werden!\n\n' +
+                  'Fehler: ' + error.message + '\n\n' +
+                  'Fallback: Lade altes 2400×2400 System...\n\n' +
+                  'Für Open World, nutze: najika_world_9regions_test.html');
+
             console.log('⚠️ Falling back to old 2400×2400 map...');
 
             // Fallback to old system
