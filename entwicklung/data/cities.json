@@ -242,6 +242,30 @@
     {
       "region": "tiefenhoehlen",
       "reason": "Mehrere Goblin-Siedlungen, keine Hauptstadt"
+    },
+    {
+      "id": "goetterfels",
+      "name": "Götterfels (Schwarze Mühle)",
+      "region": "goetterfels_zentral",
+      "position": { "x": 4800, "z": 4800 },
+      "isCapital": false,
+      "size": "small",
+      "population": 0,
+      "buildings": {
+        "count": 1,
+        "types": [
+          {"type": "windmill", "count": 1}
+        ]
+      },
+      "features": {
+        "windmill": {
+          "name": "Schwarze Mühle",
+          "position": { "x": 4800, "z": 4800 },
+          "entrance": true,
+          "specialFunction": "Player Hub & Dungeon Entrance"
+        }
+      },
+      "description": "Die mystische Schwarze Mühle - Zentrum der Welt und Najika's Kraftquelle"
     }
   ]
 }
