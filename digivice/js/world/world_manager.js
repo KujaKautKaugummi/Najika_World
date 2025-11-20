@@ -109,7 +109,7 @@ class WorldManager {
       // Apply vegetation batching
       if (this.enableVegetationBatching) {
         console.log('🌿 Batching vegetation (instanced meshes)...');
-        // TODO: Batch vegetation after generation
+        this.vegetationSystem.batchVegetation();
       }
 
       this.initialized = true;
