@@ -201,6 +201,7 @@ class NajikaSecurity:
 
         Nutzt externe Services:
         - https://api.ipify.org (public IP)
+        - https://ipapi.co (geolocation)
         - Vergleicht mit bekannter VPN-Region
         """
         try:
@@ -212,18 +213,87 @@ class NajikaSecurity:
 
             print(f"[SECURITY] >> Public IP: {public_ip}")
 
-            # TODO: Prüfe ob IP zu VPN-Region gehört
-            # Für jetzt: Basic Check
+            # Hole IP-Geolocation Info
+            geo_info = self._get_ip_geolocation(public_ip)
+
+            # Prüfe ob IP zu VPN-Region gehört
+            is_vpn = self._check_if_vpn_ip(geo_info)
 
             return {
                 "ok": True,
                 "public_ip": public_ip,
-                "msg": f"Public IP: {public_ip}"
+                "location": {
+                    "country": geo_info.get("country_name", "Unknown"),
+                    "region": geo_info.get("region", "Unknown"),
+                    "city": geo_info.get("city", "Unknown"),
+                    "isp": geo_info.get("org", "Unknown")
+                },
+                "is_vpn_detected": is_vpn,
+                "msg": f"Public IP: {public_ip} ({geo_info.get('country_name', 'Unknown')})" +
+                       (" - VPN detected" if is_vpn else "")
             }
 
         except Exception as e:
             print(f"[SECURITY] WARNING IP Check Fehler: {e}")
             return {"ok": False, "error": str(e)}
+
+    def _get_ip_geolocation(self, ip: str) -> dict:
+        """
+        Holt Geolocation-Info für IP-Adresse
+
+        Nutzt ipapi.co (kostenlos, 1000 requests/Tag)
+        """
+        try:
+            import requests
+
+            response = requests.get(f"https://ipapi.co/{ip}/json/", timeout=10)
+
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"[SECURITY] WARNING Geolocation API Fehler: {response.status_code}")
+                return {}
+
+        except Exception as e:
+            print(f"[SECURITY] WARNING Geolocation Fehler: {e}")
+            return {}
+
+    def _check_if_vpn_ip(self, geo_info: dict) -> bool:
+        """
+        Prüft ob IP zu VPN/Proxy gehört
+
+        Heuristics:
+        - ISP/Organization enthält VPN-Keywords
+        - Bekannte VPN-Provider
+        - Datacenter-IPs
+        """
+        # VPN-Keywords in ISP/Org
+        vpn_keywords = [
+            "vpn", "proxy", "expressvpn", "nordvpn", "protonvpn",
+            "mullvad", "private internet access", "pia",
+            "datacenter", "hosting", "cloud", "server",
+            "linode", "digitalocean", "aws", "azure", "google cloud"
+        ]
+
+        org = geo_info.get("org", "").lower()
+
+        for keyword in vpn_keywords:
+            if keyword in org:
+                return True
+
+        # Check für bekannte VPN-ASNs (Autonomous System Numbers)
+        asn = geo_info.get("asn", "")
+        known_vpn_asns = [
+            "AS396982",  # Google Fiber
+            "AS14061",   # DigitalOcean
+            "AS16509",   # Amazon AWS
+            "AS8075",    # Microsoft Azure
+        ]
+
+        if asn in known_vpn_asns:
+            return True
+
+        return False
 
     # ===== ANTI-TRACKING & LOCATION OBFUSCATION =====
 
