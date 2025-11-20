@@ -213,8 +213,59 @@ async def handle_voice_audio(audio_data: bytes, user_id: str, username: str):
     # Broadcast audio to other users
     await manager.broadcast_audio(audio_data, user_id)
 
-    # TODO: Optional - Save audio for Whisper AI transcription
-    # TODO: Optional - Voice activity detection (VAD)
+    # Optional: Save audio for Whisper AI transcription
+    # This can be enabled if you want to auto-transcribe voice chat
+    if settings.ENABLE_VOICE_CHAT and hasattr(settings, 'AUTO_TRANSCRIBE_VOICE') and settings.AUTO_TRANSCRIBE_VOICE:
+        try:
+            import tempfile
+            from pathlib import Path
+
+            # Save audio to temporary file
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+                temp_file.write(audio_data)
+                temp_path = temp_file.name
+
+            # Transcribe using Whisper AI in background
+            try:
+                transcription = transcribe_with_whisper(temp_path)
+
+                if transcription:
+                    # Send transcription back to user
+                    await manager.send_personal_message({
+                        "type": "auto_transcription",
+                        "text": transcription,
+                        "timestamp": datetime.utcnow().isoformat()
+                    }, user_id)
+
+                    print(f"🎤 Auto-transcribed audio from {username}: {transcription[:50]}...")
+
+            finally:
+                # Clean up temp file
+                try:
+                    Path(temp_path).unlink()
+                except:
+                    pass
+
+        except Exception as e:
+            print(f"❌ Auto-transcription failed: {e}")
+
+    # Optional: Voice Activity Detection (VAD)
+    # This can be used to detect if audio contains speech
+    # Uncomment and implement if needed:
+    # try:
+    #     import webrtcvad
+    #     vad = webrtcvad.Vad()
+    #     vad.set_mode(3)  # Aggressiveness mode (0-3)
+    #
+    #     # Check if audio contains speech
+    #     is_speech = vad.is_speech(audio_data, sample_rate=16000)
+    #
+    #     if not is_speech:
+    #         print(f"⚠️ No speech detected in audio from {username}")
+    #         # Optionally don't broadcast non-speech audio
+    #
+    # except ImportError:
+    #     pass  # webrtcvad not installed (pip install webrtcvad)
 
 
 # ============================================================================
@@ -406,20 +457,168 @@ async def text_to_speech(request: TTSRequest):
 def transcribe_with_whisper(audio_path: str) -> str:
     """
     Transcribe audio file using Whisper AI
-    TODO: Implement actual Whisper AI integration
+
+    Integrates with:
+    - backend/services/whisper_service.py (primary)
+    - backend/services/voice_service.py (fallback)
+
+    Args:
+        audio_path: Path to audio file
+
+    Returns:
+        Transcribed text or empty string if failed
     """
-    # This should integrate with existing voice scripts:
-    # - najika_voice_call.py
-    # - NAJIKA_VIDEO_TO_VOICE_TRAINING.py
-    pass
+    try:
+        # Try using the dedicated Whisper service (preferred)
+        from backend.services.whisper_service import get_whisper_service
+
+        whisper = get_whisper_service()
+
+        if whisper.is_available():
+            result = whisper.transcribe_file(
+                audio_path=audio_path,
+                language=None,  # Auto-detect language
+                task="transcribe"
+            )
+
+            if result["success"]:
+                print(f"✅ Whisper transcription successful: {result['text'][:100]}...")
+                return result["text"]
+            else:
+                print(f"❌ Whisper transcription failed: {result.get('error', 'Unknown error')}")
+                return ""
+
+        else:
+            # Fallback to unified voice service
+            print("⚠️ Whisper service not available, trying voice_service fallback...")
+
+            from backend.services.voice_service import voice_service
+
+            result = voice_service.transcribe(audio_path, language="de")
+
+            if result["success"]:
+                print(f"✅ Voice service transcription successful: {result['text'][:100]}...")
+                return result["text"]
+            else:
+                print(f"❌ Voice service transcription failed: {result.get('error', 'Unknown error')}")
+                return ""
+
+    except ImportError as e:
+        print(f"❌ Whisper AI not installed: {e}")
+        print("   Install with: pip install openai-whisper")
+        return ""
+
+    except Exception as e:
+        print(f"❌ Transcription error: {e}")
+        import traceback
+        traceback.print_exc()
+        return ""
 
 
 def generate_tts_audio(text: str, language: str = "de") -> bytes:
     """
     Generate audio from text using TTS engine
-    TODO: Implement TTS engine (Edge TTS or Coqui)
+
+    Integrates with:
+    - backend/services/tts_service.py (primary - Edge TTS, gTTS, pyttsx3)
+    - backend/services/voice_service.py (fallback - Edge TTS)
+    - backend/najika_tts_edge.py (fallback - Megumin personality)
+
+    Args:
+        text: Text to convert to speech
+        language: Language code (de, en, etc.)
+
+    Returns:
+        Audio data as bytes, or empty bytes if failed
     """
-    # This should integrate with existing TTS scripts:
-    # - najika_tts_edge.py
-    # - najika_tts_coqui.py
-    pass
+    try:
+        # Try using the dedicated TTS service (preferred)
+        from backend.services.tts_service import get_tts_service
+        import asyncio
+
+        tts = get_tts_service()
+
+        # Check if engine is available
+        engine_name = settings.TTS_ENGINE.lower()
+
+        if engine_name in tts.engines_available and tts.engines_available[engine_name]:
+            print(f"🔊 Using TTS engine: {engine_name}")
+
+            # Generate speech (async)
+            result = asyncio.run(tts.generate_speech(
+                text=text,
+                language=language
+            ))
+
+            if result["success"]:
+                audio_data = result.get("audio_data")
+                if audio_data:
+                    print(f"✅ TTS generation successful ({len(audio_data)} bytes)")
+                    return audio_data
+                else:
+                    print("❌ TTS generation returned no audio data")
+                    # Try fallback
+            else:
+                print(f"❌ TTS generation failed: {result.get('error', 'Unknown error')}")
+                # Try fallback
+
+        # Fallback 1: Try Edge TTS via unified voice service
+        print("⚠️ Primary TTS engine not available, trying Edge TTS fallback...")
+
+        try:
+            from backend.services.voice_service import voice_service
+
+            audio_path = voice_service.speak(text)
+
+            if audio_path:
+                # Read audio file
+                from pathlib import Path
+                audio_file = Path(audio_path)
+
+                if audio_file.exists():
+                    with open(audio_file, 'rb') as f:
+                        audio_data = f.read()
+
+                    print(f"✅ Edge TTS (voice_service) successful ({len(audio_data)} bytes)")
+                    return audio_data
+
+        except Exception as e:
+            print(f"⚠️ Edge TTS (voice_service) fallback failed: {e}")
+
+        # Fallback 2: Try najika_tts_edge directly
+        print("⚠️ Trying najika_tts_edge fallback...")
+
+        try:
+            from backend.najika_tts_edge import text_to_speech
+
+            # Generate audio with Megumin personality
+            audio_path = text_to_speech(text, personality='megumin')
+
+            if audio_path:
+                from pathlib import Path
+                audio_file = Path(audio_path)
+
+                if audio_file.exists():
+                    with open(audio_file, 'rb') as f:
+                        audio_data = f.read()
+
+                    print(f"✅ najika_tts_edge successful ({len(audio_data)} bytes)")
+                    return audio_data
+
+        except Exception as e:
+            print(f"⚠️ najika_tts_edge fallback failed: {e}")
+
+        # All fallbacks failed
+        print("❌ All TTS engines failed")
+        return b""
+
+    except ImportError as e:
+        print(f"❌ TTS engine not installed: {e}")
+        print("   Install with: pip install edge-tts")
+        return b""
+
+    except Exception as e:
+        print(f"❌ TTS generation error: {e}")
+        import traceback
+        traceback.print_exc()
+        return b""

@@ -11,7 +11,8 @@ from datetime import datetime
 from backend.database import get_db
 from backend.models.world_map import (
     Region, FastTravelPoint, PlayerPosition,
-    RegionBoundary, WorldWeather, DayNightCycle
+    RegionBoundary, WorldWeather, DayNightCycle,
+    PlayerTravelPointUnlock
 )
 from backend.models.user import User
 
@@ -202,7 +203,13 @@ async def get_all_travel_points(player_id: int, db: Session = Depends(get_db)):
     """
     travel_points = db.query(FastTravelPoint).all()
 
-    # TODO: Check unlock status per player
+    # Get player's unlocked travel points
+    player_unlocks = db.query(PlayerTravelPointUnlock).filter(
+        PlayerTravelPointUnlock.user_id == player_id
+    ).all()
+
+    # Create set of unlocked travel point IDs for quick lookup
+    unlocked_ids = {unlock.travel_point_id for unlock in player_unlocks}
 
     return {
         "travel_points": [
@@ -216,7 +223,8 @@ async def get_all_travel_points(player_id: int, db: Session = Depends(get_db)):
                     "y": point.position_y,
                     "z": point.position_z
                 },
-                "is_locked": point.is_locked,
+                "is_locked": point.is_locked and point.id not in unlocked_ids,
+                "is_unlocked_by_player": point.id in unlocked_ids,
                 "unlock_requirement": point.unlock_requirement,
                 "icon": point.icon,
                 "description": point.description
@@ -241,8 +249,14 @@ async def fast_travel(request: FastTravelRequest, db: Session = Depends(get_db))
     if not travel_point:
         raise HTTPException(status_code=404, detail="Travel point not found")
 
-    # Check if locked
-    if travel_point.is_locked:
+    # Check if player has unlocked this travel point
+    player_unlock = db.query(PlayerTravelPointUnlock).filter(
+        PlayerTravelPointUnlock.user_id == request.player_id,
+        PlayerTravelPointUnlock.travel_point_id == request.travel_point_id
+    ).first()
+
+    # Check if locked (both globally and per-player)
+    if travel_point.is_locked and not player_unlock:
         raise HTTPException(
             status_code=403,
             detail=f"Travel point locked: {travel_point.unlock_requirement}"
@@ -344,6 +358,63 @@ async def get_player_position(player_id: int, db: Session = Depends(get_db)):
         is_in_house=player_pos.is_in_house,
         is_in_dungeon=player_pos.is_in_dungeon
     )
+
+
+@router.post("/travel-points/{travel_point_id}/unlock")
+async def unlock_travel_point(
+    travel_point_id: int,
+    player_id: int,
+    unlock_method: str = "discovery",
+    db: Session = Depends(get_db)
+):
+    """
+    Unlock a travel point for a player
+
+    Methods: "discovery", "quest", "purchase", "boss_defeat"
+    """
+    # Check if travel point exists
+    travel_point = db.query(FastTravelPoint).filter(
+        FastTravelPoint.id == travel_point_id
+    ).first()
+
+    if not travel_point:
+        raise HTTPException(status_code=404, detail="Travel point not found")
+
+    # Check if already unlocked
+    existing_unlock = db.query(PlayerTravelPointUnlock).filter(
+        PlayerTravelPointUnlock.user_id == player_id,
+        PlayerTravelPointUnlock.travel_point_id == travel_point_id
+    ).first()
+
+    if existing_unlock:
+        return {
+            "success": False,
+            "message": "Travel point already unlocked",
+            "unlocked_at": existing_unlock.unlocked_at.isoformat()
+        }
+
+    # Create unlock
+    unlock = PlayerTravelPointUnlock(
+        user_id=player_id,
+        travel_point_id=travel_point_id,
+        unlock_method=unlock_method
+    )
+
+    db.add(unlock)
+    db.commit()
+    db.refresh(unlock)
+
+    return {
+        "success": True,
+        "message": f"Travel point '{travel_point.name}' unlocked!",
+        "travel_point": {
+            "id": travel_point.id,
+            "name": travel_point.name,
+            "type": travel_point.point_type
+        },
+        "unlocked_at": unlock.unlocked_at.isoformat(),
+        "unlock_method": unlock_method
+    }
 
 
 @router.post("/position/update")

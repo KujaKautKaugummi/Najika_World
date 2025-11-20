@@ -40,7 +40,16 @@ class WebSocketManager:
             'battle': set(),
             'arena': set(),
             'evolution': set(),
-            'admin': set()
+            'admin': set(),
+            # Region channels for Boss broadcasts
+            'region:samtmoos_tiefwald': set(),
+            'region:reich_der_drei': set(),
+            'region:salzwind_kueste': set(),
+            'region:blitzebene': set(),
+            'region:gruenschlamm_sumpf': set(),
+            'region:magmastroeme': set(),
+            'region:heisse_duenen': set(),
+            'region:tiefenhoehlen': set()
         }
 
         # User presence tracking
@@ -230,6 +239,23 @@ class WebSocketManager:
 
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def broadcast_to_region(
+        self,
+        region_code: str,
+        message: Dict[str, Any],
+        exclude_users: Optional[Set[int]] = None
+    ):
+        """
+        Broadcast message to all users in a specific region
+
+        Args:
+            region_code: Region code (e.g., "samtmoos_tiefwald")
+            message: Message to broadcast
+            exclude_users: Optional set of user IDs to exclude
+        """
+        channel = f"region:{region_code}"
+        await self.broadcast_to_channel(channel, message, exclude_users)
 
     async def notify_battle_start(self, battle_id: str, participants: List[Dict[str, Any]]):
         """

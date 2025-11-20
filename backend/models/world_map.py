@@ -191,3 +191,32 @@ class DayNightCycle(Base):
 
     # Last Updated
     updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class PlayerTravelPointUnlock(Base):
+    """
+    Tracks which travel points each player has unlocked
+    """
+    __tablename__ = "player_travel_point_unlocks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    travel_point_id = Column(Integer, ForeignKey('fast_travel_points.id'), nullable=False)
+
+    # Unlock Info
+    unlocked_at = Column(DateTime, default=datetime.utcnow)
+    unlock_method = Column(String(100))  # "quest", "discovery", "purchase", "boss_defeat"
+
+    # Composite unique constraint: one unlock per player per travel point
+    __table_args__ = (
+        {'sqlite_autoincrement': True},
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'travel_point_id': self.travel_point_id,
+            'unlocked_at': self.unlocked_at.isoformat(),
+            'unlock_method': self.unlock_method
+        }

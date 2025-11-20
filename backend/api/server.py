@@ -448,15 +448,121 @@ async def learn_skill(skill_data: Dict[str, Any]):
 @app.post("/crafting/craft")
 async def craft_item(craft: CraftingAction):
     """Craft an item"""
-    # TODO: Implement material checking and crafting logic
+    # Define crafting recipes
+    recipes = {
+        "wooden_sword": {
+            "name": "Wooden Sword",
+            "type": "weapon",
+            "materials": [
+                {"id": "wood", "count": 5},
+                {"id": "rope", "count": 2}
+            ],
+            "result": {
+                "id": "wooden_sword",
+                "name": "Wooden Sword",
+                "type": "weapon",
+                "stats": {"attack": 10, "durability": 50}
+            }
+        },
+        "health_potion": {
+            "name": "Health Potion",
+            "type": "consumable",
+            "materials": [
+                {"id": "herb", "count": 3},
+                {"id": "water", "count": 1}
+            ],
+            "result": {
+                "id": "health_potion",
+                "name": "Health Potion",
+                "type": "food",
+                "stats": {"health_restore": 50}
+            }
+        },
+        "leather_armor": {
+            "name": "Leather Armor",
+            "type": "armor",
+            "materials": [
+                {"id": "leather", "count": 8},
+                {"id": "thread", "count": 4}
+            ],
+            "result": {
+                "id": "leather_armor",
+                "name": "Leather Armor",
+                "type": "armor",
+                "stats": {"defense": 15, "durability": 100}
+            }
+        }
+    }
+
+    # Check if recipe exists
+    if craft.recipe_id not in recipes:
+        return {
+            "success": False,
+            "message": f"Rezept {craft.recipe_id} nicht gefunden",
+            "error": "unknown_recipe"
+        }
+
+    recipe = recipes[craft.recipe_id]
+
+    # Check if player has required materials
+    inventory_items = game_state["inventory"]["items"]
+
+    # Count available materials
+    material_counts = {}
+    for item in inventory_items:
+        item_id = item.get("id")
+        item_count = item.get("count", 1)
+        material_counts[item_id] = material_counts.get(item_id, 0) + item_count
+
+    # Check if all materials are available
+    missing_materials = []
+    for material in recipe["materials"]:
+        mat_id = material["id"]
+        mat_count = material["count"]
+        available = material_counts.get(mat_id, 0)
+
+        if available < mat_count:
+            missing_materials.append({
+                "id": mat_id,
+                "required": mat_count,
+                "available": available,
+                "missing": mat_count - available
+            })
+
+    if missing_materials:
+        return {
+            "success": False,
+            "message": "Nicht genug Materialien!",
+            "missing_materials": missing_materials,
+            "error": "insufficient_materials"
+        }
+
+    # Remove materials from inventory
+    for material in recipe["materials"]:
+        mat_id = material["id"]
+        mat_count = material["count"]
+        remaining = mat_count
+
+        # Remove from inventory
+        game_state["inventory"]["items"] = [
+            item for item in game_state["inventory"]["items"]
+            if not (item.get("id") == mat_id and (remaining := remaining - item.get("count", 1)) >= 0)
+        ]
+
+    # Add crafted item to inventory
+    crafted_item = {
+        **recipe["result"],
+        "count": 1,
+        "crafted_at": datetime.now().isoformat()
+    }
+    game_state["inventory"]["items"].append(crafted_item)
+
     return {
         "success": True,
-        "message": f"Item {craft.recipe_id} gecraftet!",
-        "result": {
-            "id": craft.recipe_id,
-            "name": "Crafted Item",
-            "timestamp": datetime.now().isoformat()
-        }
+        "message": f"{recipe['name']} erfolgreich gecraftet!",
+        "result": crafted_item,
+        "materials_used": recipe["materials"],
+        "timestamp": datetime.now().isoformat()
     }
 
 # ═══════════════════════════════════════════════════════════════

@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Tuple
 from datetime import datetime, timedelta
 import json
+import asyncio
 
 
 class Region(Enum):
@@ -529,7 +530,7 @@ class RegionBossSystem:
         return True, f"Steuerrate auf {tax_rate}% gesetzt"
 
 
-    def broadcast_message(
+    async def broadcast_message(
         self,
         boss_player_id: int,
         region: Region,
@@ -551,7 +552,24 @@ class RegionBossSystem:
 
         broadcast = f"[BOSS von {region.value}]: {message}"
 
-        # TODO: Sende an alle Spieler in der Region
+        # Broadcast to all players in the region via WebSocket
+        try:
+            from backend.services.websocket_manager import websocket_manager
+
+            await websocket_manager.broadcast_to_region(
+                region_code=region.value,
+                message={
+                    'type': 'boss_broadcast',
+                    'region': region.value,
+                    'boss_player_id': boss_player_id,
+                    'message': message,
+                    'formatted_message': broadcast,
+                    'timestamp': datetime.now().isoformat()
+                }
+            )
+        except Exception as e:
+            # Log error but don't fail the broadcast
+            print(f"[REGION BOSS] Warning: WebSocket broadcast failed: {e}")
 
         return True, broadcast
 

@@ -311,18 +311,105 @@ def get_database_tables(
 @router.get("/logs/recent")
 def get_recent_logs(
     admin_user: User = Depends(get_current_admin_user),
-    lines: int = 100
+    lines: int = 100,
+    level: Optional[str] = None  # Filter by log level: INFO, WARNING, ERROR, DEBUG
 ):
-    """Get recent log entries (placeholder)"""
+    """
+    Get recent log entries from server log file
 
-    # TODO: Implement log reading from file
-    return {
-        "logs": [
-            "[INFO] Example log entry 1",
-            "[INFO] Example log entry 2",
-            "[WARNING] Example warning",
-        ][-lines:]
-    }
+    Args:
+        lines: Number of recent lines to return (default: 100, max: 1000)
+        level: Optional log level filter (INFO, WARNING, ERROR, DEBUG)
+    """
+    import os
+
+    # Limit lines to prevent excessive memory usage
+    lines = min(lines, 1000)
+
+    # Define log file paths (in priority order)
+    log_file_paths = [
+        "backend/logs/server.log",
+        "backend/logs/najika.log",
+        "logs/server.log",
+        "logs/najika.log",
+        "/var/log/najika/server.log",
+    ]
+
+    # Find first existing log file
+    log_file = None
+    for path in log_file_paths:
+        if os.path.exists(path):
+            log_file = path
+            break
+
+    if not log_file:
+        # Try to create logs directory and file
+        os.makedirs("backend/logs", exist_ok=True)
+        log_file = "backend/logs/server.log"
+
+        # Create empty log file if it doesn't exist
+        if not os.path.exists(log_file):
+            with open(log_file, 'w') as f:
+                f.write(f"[INFO] {datetime.utcnow().isoformat()} - Log file created\n")
+
+    # Read log file
+    try:
+        log_entries = []
+
+        with open(log_file, 'r', encoding='utf-8') as f:
+            # Read all lines
+            all_lines = f.readlines()
+
+            # Get last N lines
+            recent_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
+
+            # Parse and filter log entries
+            for line in recent_lines:
+                line = line.strip()
+
+                if not line:
+                    continue
+
+                # Filter by log level if specified
+                if level:
+                    level_upper = level.upper()
+                    if f"[{level_upper}]" not in line:
+                        continue
+
+                log_entries.append(line)
+
+        return {
+            "success": True,
+            "log_file": log_file,
+            "total_lines": len(log_entries),
+            "requested_lines": lines,
+            "filter_level": level,
+            "logs": log_entries
+        }
+
+    except FileNotFoundError:
+        return {
+            "success": False,
+            "error": "Log file not found",
+            "searched_paths": log_file_paths,
+            "logs": []
+        }
+
+    except PermissionError:
+        return {
+            "success": False,
+            "error": "Permission denied to read log file",
+            "log_file": log_file,
+            "logs": []
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": f"Failed to read log file: {str(e)}",
+            "log_file": log_file,
+            "logs": []
+        }
 
 
 @router.get("/config")
