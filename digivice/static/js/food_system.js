@@ -255,10 +255,38 @@ class FoodSystem {
         // Special: Champion-Keule Animation
         if (food.special === 'anime_classic') {
             console.log('🍖 NAJIKA BEISST REIN WIE IN JEDEM GUTEN ANIME! 😂');
-            // TODO: Trigger special eating animation
+            // Trigger special eating animation
+            this.triggerSpecialEatingAnimation(food.eatAnimation);
         }
 
         return true;
+    }
+
+    triggerSpecialEatingAnimation(animationType) {
+        // Create special animation for Champion-Keule
+        if (animationType === 'both_hands') {
+            // Both hands eating animation
+            const anim = document.createElement('div');
+            anim.innerHTML = '🍖😋🍖';
+            anim.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; z-index: 9999; animation: bounce 0.6s ease-in-out;';
+            document.body.appendChild(anim);
+
+            // Add bounce animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes bounce {
+                    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+                    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+                    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Remove after animation
+            setTimeout(() => {
+                anim.remove();
+            }, 600);
+        }
     }
 
     applyBuffs(food, player) {

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika World - 3D Map Demo</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            overflow: hidden;
+        }
+
+        #demo-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #demo-header {
+            background: linear-gradient(90deg, #0f3460 0%, #16213e 100%);
+            padding: 20px 30px;
+            border-bottom: 3px solid #e94560;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        #demo-header h1 {
+            color: #e94560;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+        }
+
+        #demo-header p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        #demo-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+
+        #controls-panel {
+            width: 300px;
+            background: rgba(22, 33, 62, 0.95);
+            border-right: 2px solid #0f3460;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #map-display {
+            flex: 1;
+            background: #0a0a15;
+            position: relative;
+        }
+
+        .control-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            color: #e94560;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            border: 2px solid #e94560;
+            color: white;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            border-color: #ff5570;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(15, 52, 96, 0.5);
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #e94560;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.active {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .status-indicator.inactive {
+            background: #ff6b6b;
+        }
+
+        #demo-footer {
+            background: linear-gradient(90deg, #0f3460 0%, #16213e 100%);
+            padding: 15px 30px;
+            border-top: 2px solid #e94560;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .hotkey {
+            background: rgba(233, 69, 96, 0.3);
+            border: 1px solid #e94560;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(233, 69, 96, 0.3);
+            border-top: 4px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading-text {
+            margin-top: 20px;
+            color: #e94560;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div id="loading-text">Loading World Map System...</div>
+    </div>
+
+    <!-- Main Demo Container -->
+    <div id="demo-container">
+        <!-- Header -->
+        <div id="demo-header">
+            <h1>🗺️ Najika World - 3D Map Visualization Demo</h1>
+            <p>9600×9600 Open World • 8 Biomes • Cities • Fast Travel • Exploration</p>
+        </div>
+
+        <!-- Content -->
+        <div id="demo-content">
+            <!-- Controls Panel -->
+            <div id="controls-panel">
+                <!-- Map Controls -->
+                <div class="control-section">
+                    <h3>🗺️ Map Controls</h3>
+                    <button class="control-btn" onclick="openFullMap()">
+                        <span>🌍</span>
+                        <span>Open Full Map</span>
+                    </button>
+                    <button class="control-btn" onclick="toggleMinimap()">
+                        <span>📍</span>
+                        <span>Toggle Minimap</span>
+                    </button>
+                    <button class="control-btn" onclick="focusOnPlayer()">
+                        <span>🎯</span>
+                        <span>Focus on Player</span>
+                    </button>
+                </div>
+
+                <!-- Quick Travel -->
+                <div class="control-section">
+                    <h3>🚀 Quick Travel</h3>
+                    <button class="control-btn" onclick="travelToRegion('goetterfels')">
+                        <span>🗻</span>
+                        <span>Götterfels (Center)</span>
+                    </button>
+                    <button class="control-btn" onclick="travelToRegion('heisse_duenen')">
+                        <span>🏜️</span>
+                        <span>Heiße Dünen (Desert)</span>
+                    </button>
+                    <button class="control-btn" onclick="travelToRegion('samtmoos_tiefwald')">
+                        <span>🌲</span>
+                        <span>Samtmoos-Tiefwald</span>
+                    </button>
+                    <button class="control-btn" onclick="travelToRegion('reich_der_drei')">
+                        <span>❄️</span>
+                        <span>Reich der Drei (Ice)</span>
+                    </button>
+                    <button class="control-btn" onclick="travelToRegion('magmastroeme')">
+                        <span>🌋</span>
+                        <span>Magmaströme (Volcano)</span>
+                    </button>
+                </div>
+
+                <!-- System Status -->
+                <div class="control-section">
+                    <h3>⚙️ System Status</h3>
+                    <div class="info-box">
+                        <div>
+                            <span class="status-indicator active"></span>
+                            <strong>Map API:</strong> Connected
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <span class="status-indicator active"></span>
+                            <strong>3D Renderer:</strong> Ready
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <span class="status-indicator active"></span>
+                            <strong>Minimap:</strong> Active
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="control-section">
+                    <h3>ℹ️ Information</h3>
+                    <div class="info-box">
+                        <p><strong>World Size:</strong> 9600×9600</p>
+                        <p><strong>Regions:</strong> 9</p>
+                        <p><strong>Biomes:</strong> 8</p>
+                        <p><strong>Cities:</strong> 5</p>
+                        <p><strong>Travel Points:</strong> Available</p>
+                    </div>
+                </div>
+
+                <!-- Hotkeys -->
+                <div class="control-section">
+                    <h3>⌨️ Keyboard Shortcuts</h3>
+                    <div class="info-box">
+                        <p><span class="hotkey">M</span> - Toggle Full Map</p>
+                        <p><span class="hotkey">N</span> - Toggle Minimap</p>
+                        <p><span class="hotkey">P</span> - Focus Player</p>
+                        <p><span class="hotkey">ESC</span> - Close Map</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Display -->
+            <div id="map-display">
+                <!-- 3D Map will be rendered here by WorldMap3DRenderer -->
+                <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    text-align: center;
+                    color: #666;
+                ">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">🗺️</h2>
+                    <p>Press <strong>M</strong> to open the full map</p>
+                    <p style="margin-top: 10px; font-size: 14px;">
+                        Or use the controls on the left panel
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div id="demo-footer">
+            <div>
+                <strong>Najika World Map System</strong> • 3D Visualization Demo
+            </div>
+            <div>
+                Current Region: <strong id="current-region">Götterfels</strong>
+            </div>
+            <div>
+                Position: <strong id="player-position">X: 4800, Z: 4800</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- THREE.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- World Map System Scripts -->
+    <script src="js/world_map_api.js"></script>
+    <script src="js/world_map_3d_renderer.js"></script>
+    <script src="js/ui/minimap.js"></script>
+    <script src="js/ui/world_map_full_ui.js"></script>
+    <script src="js/world_map_integration.js"></script>
+
+    <!-- Demo Scripts -->
+    <script>
+        // Wait for everything to load
+        window.addEventListener('load', async () => {
+            console.log('🚀 Demo page loaded, initializing...');
+
+            // Give systems time to initialize
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Hide loading overlay
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.5s';
+                setTimeout(() => overlay.remove(), 500);
+            }
+
+            console.log('✅ Demo ready!');
+
+            // Setup demo-specific features
+            setupDemo();
+        });
+
+        function setupDemo() {
+            // Update current region display
+            if (window.worldMapIntegration) {
+                window.addEventListener('regionChanged', (e) => {
+                    const regionEl = document.getElementById('current-region');
+                    if (regionEl && e.detail) {
+                        regionEl.textContent = e.detail.name;
+                    }
+                });
+            }
+
+            // Update position display
+            if (window.worldMapAPI) {
+                window.worldMapAPI.onPositionUpdate((pos) => {
+                    const posEl = document.getElementById('player-position');
+                    if (posEl) {
+                        posEl.textContent = `X: ${Math.round(pos.x)}, Z: ${Math.round(pos.z)}`;
+                    }
+                });
+            }
+        }
+
+        // Demo control functions
+        function openFullMap() {
+            if (window.worldMapIntegration) {
+                window.worldMapIntegration.openFullMap();
+            } else if (window.worldMapFullUI) {
+                window.worldMapFullUI.open();
+            }
+        }
+
+        function toggleMinimap() {
+            if (window.worldMapIntegration) {
+                window.worldMapIntegration.toggleMinimap();
+            }
+        }
+
+        function focusOnPlayer() {
+            if (window.worldMapIntegration) {
+                window.worldMapIntegration.focusOnPlayer();
+            }
+        }
+
+        function travelToRegion(regionId) {
+            console.log('🚀 Traveling to region:', regionId);
+
+            // Get region data
+            if (!window.worldMapAPI) return;
+
+            const regions = window.worldMapAPI.getRegions();
+            if (!regions || !regions.regions[regionId]) {
+                console.error('Region not found:', regionId);
+                return;
+            }
+
+            const region = regions.regions[regionId];
+
+            // Calculate center of region
+            const bounds = region.bounds;
+            const centerX = bounds.minX + (bounds.maxX - bounds.minX) / 2;
+            const centerZ = bounds.minZ + (bounds.maxZ - bounds.minZ) / 2;
+
+            // Update player position
+            if (window.worldMapAPI) {
+                window.worldMapAPI.savePlayerPosition(centerX, centerZ, 0, 0);
+            }
+
+            // Focus on region
+            if (window.worldMapIntegration) {
+                window.worldMapIntegration.focusOnRegion(regionId);
+            }
+
+            // Show notification
+            showNotification(`Traveling to ${region.name}...`);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(233, 69, 96, 0.95);
+                border: 2px solid #ffd700;
+                border-radius: 10px;
+                padding: 15px 25px;
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 99998;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

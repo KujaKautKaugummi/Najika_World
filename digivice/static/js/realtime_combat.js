@@ -430,6 +430,11 @@ class RealtimeCombat {
             }
         }
 
+        // Cheer Buff - Damage Multiplier
+        if (this.damageMultiplier) {
+            baseDamage *= this.damageMultiplier;
+        }
+
         // Random Variance
         baseDamage *= (0.9 + Math.random() * 0.2); // 90-110%
 
@@ -560,19 +565,36 @@ class RealtimeCombat {
     applyCheerBuff(command, bonus) {
         // Buffs für 3 Sekunden
         const duration = 3000;
+        const buffID = `cheer_${Date.now()}`;
 
         if (command === 'Los!') {
             // +10-20% Damage
             console.log(`⚔️ Damage Buff: +${(bonus * 100)}% für 3s`);
-            // TODO: Apply damage multiplier
+            // Apply damage multiplier via temporary multiplier
+            const originalMultiplier = this.damageMultiplier || 1;
+            this.damageMultiplier = 1 + bonus;
+            setTimeout(() => {
+                this.damageMultiplier = originalMultiplier;
+            }, duration);
         } else if (command === 'Defend!') {
             // +20-40% Defense
             console.log(`🛡️ Defense Buff: +${(bonus * 100)}% für 3s`);
-            // TODO: Apply defense multiplier
+            // Apply defense multiplier via temporary multiplier
+            const originalMultiplier = this.defenseMultiplier || 1;
+            this.defenseMultiplier = 1 + bonus;
+            setTimeout(() => {
+                this.defenseMultiplier = originalMultiplier;
+            }, duration);
         } else if (command === 'Combo!') {
             // Trigger Special Move
             console.log('💫 Special Move aktiviert!');
-            // TODO: Execute special combo
+            // Execute special combo attack
+            if (this.currentTarget && this.currentTarget.alive) {
+                const comboBonus = 1.5; // 50% bonus damage for special combo
+                const damage = Math.floor(this.calculateDamage('both', 'heavy') * comboBonus);
+                this.executeAttack(damage, 'special_combo');
+                console.log(`💫 SPECIAL COMBO: ${damage} Schaden!`);
+            }
         }
 
         // Remove buff after duration
@@ -646,7 +668,13 @@ class RealtimeCombat {
         }
 
         // Take damage
-        const damage = Math.floor(enemy.damage * (0.8 + Math.random() * 0.4));
+        let damage = Math.floor(enemy.damage * (0.8 + Math.random() * 0.4));
+
+        // Apply Defense Multiplier (from Defend! buff)
+        if (this.defenseMultiplier) {
+            damage = Math.floor(damage / this.defenseMultiplier);
+        }
+
         this.playerHealth -= damage;
 
         console.log(`💔 Took ${damage} damage!`);

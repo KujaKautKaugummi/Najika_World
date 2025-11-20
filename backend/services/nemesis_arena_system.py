@@ -364,6 +364,9 @@ class NemesisArenaSystem:
         """Handle monster death and possible resurrection"""
         monster.deaths += 1
 
+        # Calculate monster damage dealt (based on monster stats)
+        monster_damage_dealt = max(1, monster.attack - 2)  # Simple calculation
+
         # Create battle memory
         memory = BattleMemory(
             timestamp=datetime.now(),
@@ -372,7 +375,7 @@ class NemesisArenaSystem:
             result="lost",
             how_it_happened=f"Wurde besiegt durch {', '.join(events[:2]) if events else 'starken Angriff'}",
             damage_taken=damage,
-            damage_dealt=0,  # TODO: Track monster damage
+            damage_dealt=monster_damage_dealt,
             special_events=events
         )
         monster.battles.append(memory)
