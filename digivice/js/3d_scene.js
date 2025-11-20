@@ -939,6 +939,20 @@
             console.log('🔨 Crafting System initialized');
         }
 
+        // 🏠 Initialize Housing System
+        if (typeof HousingSystem !== 'undefined' && scene) {
+            HousingSystem.init(scene, 1); // Player ID 1 for now
+            HousingSystem.setScene(scene);
+            console.log('🏠 Housing System 3D initialized');
+        }
+
+        // 🌾 Initialize Farming System
+        if (typeof FarmingSystem !== 'undefined' && scene) {
+            FarmingSystem.init(scene, 1); // Player ID 1 for now
+            FarmingSystem.setScene(scene);
+            console.log('🌾 Farming System 3D initialized');
+        }
+
         // 🌍 Initialize World Manager (9600×9600 Grid World)
         if (useWorldManager && window.WorldManager) {
             initWorldManager();
@@ -2936,6 +2950,21 @@
                     }
                 }
             }
+
+            // 🏠 Update Housing System
+            if (typeof window.HousingSystem !== 'undefined' && characterGroup) {
+                HousingSystem.updateHousing(delta, characterGroup.position);
+                // Check if player near house
+                const nearHouse = HousingSystem.checkNearHouse(characterGroup.position);
+                // Show UI prompt when near house (later)
+            }
+
+            // 🌾 Update Farming System
+            if (typeof window.FarmingSystem !== 'undefined' && characterGroup) {
+                FarmingSystem.updateFarming(delta, characterGroup.position);
+                // Proximity check and UI updates handled inside updateFarming
+            }
+
             // 🌍 Update World Manager (Streaming, LOD, Weather, Day/Night)
             if (worldManager && characterGroup) {
                 worldManager.update(delta, characterGroup.position);
