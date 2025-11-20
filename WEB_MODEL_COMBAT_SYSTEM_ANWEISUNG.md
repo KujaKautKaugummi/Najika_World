@@ -759,11 +759,41 @@ playSound('parry');
 
 ## 📚 Referenzen
 
+### **Implementierte Code-Dateien:**
 - **COMBAT_SYSTEM Code:** `digivice/js/3d_scene.js` Zeile 70-210
-- **Spezifikation:** `alles wissen/.../NAJIKA_PROJEKT_KOMPLETT_V3_MIT_UNSERER_KI.md` Zeile 1710-1790
-- **Beispiel:** `digivice/najika_world_9regions_test.html` Zeile 1176-1180
 - **Enemy System:** `digivice/js/dungeon_enemies.js`
 - **Dungeon Combat:** `digivice/js/dungeon_combat.js`
+- **Dungeon Generator:** `digivice/js/dungeon_generator.js`
+- **Beispiel (Test):** `digivice/najika_world_9regions_test.html` Zeile 1176-1180
+
+### **Design-Spezifikationen:**
+- **⭐ HAUPTDOKUMENT:** `alles wissen/Najika finale/05_COMBAT_SYSTEM.md`
+  - Zeile 1-100: Orbit Cam + Anfeuern-System (Digimon World Style)
+  - Zeile 202-250: Third/First Person Combat (Soulframe + Skyrim Hybrid)
+  - Zeile 229-242: Vollständige Tastenbelegung
+  - Zeile 254-299: Modus-Wechsel System (Phase 2)
+
+- **Ergänzungen:** `alles wissen/.../NAJIKA_PROJEKT_KOMPLETT_V3_MIT_UNSERER_KI.md`
+  - Zeile 1710-1790: Controller/Keyboard Layout
+  - Zeile 1717-1718: Light/Heavy Attack Definition
+  - Zeile 1747-1760: AttackSystem Python-Beispiel
+  - Zeile 1762-1784: Block/Parry/Dodge Mechaniken
+
+- **Installer Code:** `alles wissen/.../najika_installer_part3_frontend.ps1`
+  - Zeile 157-162: lightAttack() / heavyAttack() Functions
+  - Zeile 223-224: LMB = Light, RMB = Heavy
+  - Zeile 300: Light/Heavy Attacks Feature-Liste
+
+### **Wichtige Hinweise aus Dokumentation:**
+
+**⚠️ NICHT Dark Souls-like!**
+- ✅ **Soulframe** = Fluid, schnell, akrobatisch, großzügige i-Frames
+- ❌ **Dark Souls** = Brutal, langsam, wenig Stamina, schwer
+
+**3 Kamera-Modi geplant (Phase 1 = nur Third-Person Action):**
+1. **Orbit Cam** - Najika kämpft, du feuerst an (Digimon World Style)
+2. **Third-Person** - Du kämpfst (Soulframe + Skyrim)
+3. **First-Person** - Du kämpfst (Optional)
 
 ---
 
