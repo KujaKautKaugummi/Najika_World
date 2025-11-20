@@ -81,25 +81,36 @@ class RegionBossUI {
       const state = await response.json();
 
       const regionsDiv = document.getElementById('boss-regions');
-      regionsDiv.innerHTML = '';
+      if (regionsDiv) {
+        regionsDiv.innerHTML = '';
 
-      for (const [region, boss] of Object.entries(state.region_bosses)) {
-        const card = document.createElement('div');
-        card.className = 'boss-region-card';
-        card.innerHTML = `
-          <h4>${region}</h4>
-          <p class="boss-name">${boss ? `Boss: ${boss.player_id}` : 'Kein Boss'}</p>
-          ${boss ? `
-            <p>Tax: ${boss.tax_rate}%</p>
-            <p>Seit: ${boss.crowned_at}</p>
-          ` : `
-            <button class="challenge-btn" data-region="${region}">Herausfordern</button>
-          `}
-        `;
-        regionsDiv.appendChild(card);
+        if (state && state.region_bosses && typeof state.region_bosses === 'object') {
+          for (const [region, boss] of Object.entries(state.region_bosses)) {
+            const card = document.createElement('div');
+            card.className = 'boss-region-card';
+            card.innerHTML = `
+              <h4>${region}</h4>
+              <p class="boss-name">${boss ? `Boss: ${boss.player_id}` : 'Kein Boss'}</p>
+              ${boss ? `
+                <p>Tax: ${boss.tax_rate}%</p>
+                <p>Seit: ${boss.crowned_at}</p>
+              ` : `
+                <button class="challenge-btn" data-region="${region}">Herausfordern</button>
+              `}
+            `;
+            regionsDiv.appendChild(card);
+          }
+        } else {
+          // Fallback if backend offline or no data
+          regionsDiv.innerHTML = '<p>⚠️ Keine Regionen verfügbar (Backend offline)</p>';
+        }
       }
     } catch (error) {
       console.error('Fehler beim Laden der Regionen:', error);
+      const regionsDiv = document.getElementById('boss-regions');
+      if (regionsDiv) {
+        regionsDiv.innerHTML = '<p>⚠️ Fehler beim Laden der Regionen</p>';
+      }
     }
   }
 
@@ -193,6 +204,36 @@ class OregonEventsUI {
     document.getElementById('continue-btn')?.addEventListener('click', () => {
       this.hide();
     });
+  }
+
+  async show() {
+    // Show the UI container
+    const container = document.getElementById('oregon-ui-container');
+    if (container) {
+      container.classList.remove('hidden');
+    }
+
+    // Start a random event
+    try {
+      const response = await fetch(`${this.apiBase}/random`);
+      if (response.ok) {
+        const event = await response.json();
+        await this.showEvent(event);
+      } else {
+        // Fallback: Show dummy event if backend offline
+        this.showEvent({
+          title: "Händler-Karawane",
+          text: "Eine Karawane bietet dir ihre Waren an.",
+          options: [
+            { text: "Kaufen", effect: { gold: -10, items: 1 } },
+            { text: "Ablehnen", effect: {} }
+          ],
+          najika_reaction: "*kicher* Die haben glänzende Sachen, Puddin'!"
+        });
+      }
+    } catch (error) {
+      console.error('Error loading Oregon event:', error);
+    }
   }
 
   async showEvent(event) {
@@ -353,25 +394,36 @@ class MagicSchoolsUI {
       const schools = await response.json();
 
       const schoolsDiv = document.getElementById('magic-schools');
-      schoolsDiv.innerHTML = schools.schools.map(school => `
-        <div class="magic-school-card" data-school="${school.id}">
-          <h3>${school.name}</h3>
-          <p>Level: ${school.level || 1}</p>
-          <p>XP: ${school.xp || 0}</p>
-          <button class="select-school-btn">Wählen</button>
-        </div>
-      `).join('');
+      if (schoolsDiv) {
+        if (schools && schools.schools && Array.isArray(schools.schools)) {
+          schoolsDiv.innerHTML = schools.schools.map(school => `
+            <div class="magic-school-card" data-school="${school.id}">
+              <h3>${school.name}</h3>
+              <p>Level: ${school.level || 1}</p>
+              <p>XP: ${school.xp || 0}</p>
+              <button class="select-school-btn">Wählen</button>
+            </div>
+          `).join('');
 
-      // School selection listeners
-      document.querySelectorAll('.select-school-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const school = e.target.closest('.magic-school-card').dataset.school;
-          this.selectSchool(school);
-        });
-      });
+          // School selection listeners
+          document.querySelectorAll('.select-school-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const school = e.target.closest('.magic-school-card').dataset.school;
+              this.selectSchool(school);
+            });
+          });
+        } else {
+          // Fallback if backend offline
+          schoolsDiv.innerHTML = '<p>⚠️ Keine Magieschulen verfügbar (Backend offline)</p>';
+        }
+      }
 
     } catch (error) {
       console.error('Fehler beim Laden der Schulen:', error);
+      const schoolsDiv = document.getElementById('magic-schools');
+      if (schoolsDiv) {
+        schoolsDiv.innerHTML = '<p>⚠️ Fehler beim Laden der Magieschulen</p>';
+      }
     }
   }
 
@@ -594,10 +646,17 @@ class InstrumentUI {
       const data = await response.json();
 
       const songSelect = document.getElementById('song-select');
-      songSelect.innerHTML = '<option value="">-- Song wählen --</option>' +
-        data.songs.map(song => `
-          <option value="${song.id}">${song.name} (${song.difficulty})</option>
-        `).join('');
+      if (songSelect) {
+        if (data && data.songs && Array.isArray(data.songs)) {
+          songSelect.innerHTML = '<option value="">-- Song wählen --</option>' +
+            data.songs.map(song => `
+              <option value="${song.id}">${song.name} (${song.difficulty})</option>
+            `).join('');
+        } else {
+          // Fallback if backend offline or no songs
+          songSelect.innerHTML = '<option value="">-- Keine Songs verfügbar --</option>';
+        }
+      }
 
     } catch (error) {
       console.error('Fehler beim Laden der Songs:', error);
@@ -631,12 +690,23 @@ class InstrumentUI {
       const response = await fetch(`${this.apiBase}/progress`);
       const progress = await response.json();
 
-      document.getElementById('instrument-level').textContent = progress.level;
-      document.getElementById('instrument-xp').textContent = progress.total_xp.toFixed(0);
-      document.getElementById('perfect-notes').textContent = progress.perfect_notes;
+      if (progress && typeof progress.level !== 'undefined') {
+        document.getElementById('instrument-level').textContent = progress.level || 1;
+        document.getElementById('instrument-xp').textContent = (progress.total_xp || 0).toFixed(0);
+        document.getElementById('perfect-notes').textContent = progress.perfect_notes || 0;
+      } else {
+        // Fallback if backend offline
+        document.getElementById('instrument-level').textContent = '1';
+        document.getElementById('instrument-xp').textContent = '0';
+        document.getElementById('perfect-notes').textContent = '0';
+      }
 
     } catch (error) {
       console.error('Fehler beim Laden des Progress:', error);
+      // Set defaults on error
+      document.getElementById('instrument-level').textContent = '1';
+      document.getElementById('instrument-xp').textContent = '0';
+      document.getElementById('perfect-notes').textContent = '0';
     }
   }
 
@@ -719,6 +789,21 @@ class WorldInfoUI {
       'ash_rain': '🌋'
     };
     return icons[weatherType] || '☀️';
+  }
+
+  show() {
+    const container = document.getElementById('world-info-container');
+    if (container) {
+      container.classList.remove('hidden');
+      this.updateWorldInfo();
+    }
+  }
+
+  hide() {
+    const container = document.getElementById('world-info-container');
+    if (container) {
+      container.classList.add('hidden');
+    }
   }
 
   startAutoUpdate() {
