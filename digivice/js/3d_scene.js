@@ -820,6 +820,10 @@
 
     let cameraMode = CAMERA_MODES.ORBIT;
 
+    // 💎 GROUND LOOT SYSTEM
+    let groundLoot = []; // Active loot items on the ground
+    let nearestLoot = null;
+
     function getContainer() {
         return document.getElementById('scene');
     }
@@ -903,6 +907,18 @@
             COMBAT_SYSTEM.inventorySystem.equipItem('iron_helmet');
 
             console.log('🎒 Inventory System initialisiert mit Starter-Equipment');
+
+            // 💎 DEV: Spawn test loot items
+            setTimeout(() => {
+                if (characterGroup) {
+                    const playerPos = characterGroup.position;
+                    spawnLootItem('lightning_staff', new THREE.Vector3(playerPos.x + 3, 0, playerPos.z + 2));
+                    spawnLootItem('crystal_shard', new THREE.Vector3(playerPos.x - 3, 0, playerPos.z + 2));
+                    spawnLootItem('vitality_amulet', new THREE.Vector3(playerPos.x, 0, playerPos.z + 5));
+                    spawnLootItem('', new THREE.Vector3(playerPos.x + 5, 0, playerPos.z), 100); // 100g
+                    console.log('💎 DEV Test Loot spawned');
+                }
+            }, 2000);
         }
 
         // 🌍 Initialize World Manager (9600×9600 Grid World)
@@ -1573,6 +1589,242 @@
         e.target.style.opacity = '1';
         draggedItem = null;
     }
+
+    // 💎 GROUND LOOT SYSTEM
+
+    function spawnLootItem(itemId, position, gold = 0) {
+        if (!scene || !COMBAT_SYSTEM.inventorySystem) return null;
+
+        const itemData = COMBAT_SYSTEM.inventorySystem.itemDatabase[itemId];
+        if (!itemData && gold === 0) {
+            console.warn(`⚠️ Unknown item: ${itemId}`);
+            return null;
+        }
+
+        // Create loot object (golden sphere for now, can be replaced with models)
+        const geometry = new THREE.SphereGeometry(0.3, 16, 16);
+        const rarityColors = {
+            common: 0xaaaaaa,
+            uncommon: 0x1eff00,
+            rare: 0x0070dd,
+            legendary: 0xa335ee,
+            quest: 0xffd700
+        };
+
+        const rarity = itemData ? itemData.rarity : 'common';
+        const color = gold > 0 ? 0xffd700 : (rarityColors[rarity] || 0xaaaaaa);
+
+        const material = new THREE.MeshStandardMaterial({
+            color: color,
+            emissive: color,
+            emissiveIntensity: 0.5,
+            metalness: 0.8,
+            roughness: 0.2
+        });
+
+        const lootMesh = new THREE.Mesh(geometry, material);
+        lootMesh.position.copy(position);
+        lootMesh.position.y += 0.5; // Slightly above ground
+
+        // Add floating animation
+        lootMesh.userData.startY = lootMesh.position.y;
+        lootMesh.userData.floatTime = 0;
+
+        // Store loot data
+        lootMesh.userData.itemId = itemId;
+        lootMesh.userData.gold = gold;
+        lootMesh.userData.rarity = rarity;
+        lootMesh.userData.isLoot = true;
+
+        scene.add(lootMesh);
+
+        // Create loot beam effect
+        const beamHeight = gold > 0 ? 15 : (rarity === 'legendary' ? 20 : (rarity === 'rare' ? 12 : 8));
+        createLootBeam(lootMesh.position, color, beamHeight, rarity);
+
+        const lootObj = {
+            mesh: lootMesh,
+            itemId: itemId,
+            gold: gold,
+            position: position.clone()
+        };
+
+        groundLoot.push(lootObj);
+
+        console.log(`💎 Loot spawned: ${itemData ? itemData.name : `${gold}g`} at`, position);
+        return lootObj;
+    }
+
+    function createLootBeam(position, color, height = 10, rarity = 'common') {
+        // Create vertical beam of light
+        const beamGeometry = new THREE.CylinderGeometry(0.05, 0.2, height, 8);
+        const beamMaterial = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: rarity === 'legendary' ? 0.8 : (rarity === 'rare' ? 0.6 : 0.4)
+        });
+
+        const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+        beam.position.copy(position);
+        beam.position.y += height / 2;
+
+        scene.add(beam);
+
+        // Animate and remove after 5 seconds
+        let elapsed = 0;
+        const animateBeam = () => {
+            elapsed += 0.016;
+            if (elapsed > 5) {
+                scene.remove(beam);
+                return;
+            }
+
+            beam.material.opacity = (1 - elapsed / 5) * (rarity === 'legendary' ? 0.8 : 0.5);
+            beam.rotation.y += 0.02;
+            requestAnimationFrame(animateBeam);
+        };
+        animateBeam();
+    }
+
+    function updateGroundLoot(delta) {
+        if (!characterGroup) return;
+
+        groundLoot.forEach(loot => {
+            // Floating animation
+            loot.mesh.userData.floatTime += delta * 2;
+            loot.mesh.position.y = loot.mesh.userData.startY + Math.sin(loot.mesh.userData.floatTime) * 0.1;
+
+            // Rotation
+            loot.mesh.rotation.y += delta * 1.5;
+        });
+
+        // Check nearest loot
+        nearestLoot = null;
+        let minDist = Infinity;
+
+        groundLoot.forEach(loot => {
+            const dist = characterGroup.position.distanceTo(loot.mesh.position);
+            if (dist < 3 && dist < minDist) { // Within 3 units
+                minDist = dist;
+                nearestLoot = loot;
+            }
+        });
+
+        // Show pickup prompt
+        if (nearestLoot) {
+            showLootPickupPrompt(nearestLoot);
+        } else {
+            hideLootPickupPrompt();
+        }
+    }
+
+    let lootPickupPromptUI = null;
+
+    function showLootPickupPrompt(loot) {
+        if (!lootPickupPromptUI) {
+            lootPickupPromptUI = document.createElement('div');
+            lootPickupPromptUI.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0,0,0,0.9);
+                border: 2px solid #ffd700;
+                border-radius: 10px;
+                padding: 10px 20px;
+                color: white;
+                font-family: monospace;
+                font-size: 14px;
+                font-weight: bold;
+                z-index: 1000;
+                display: none;
+            `;
+            document.body.appendChild(lootPickupPromptUI);
+        }
+
+        const itemData = COMBAT_SYSTEM.inventorySystem.itemDatabase[loot.itemId];
+        const text = loot.gold > 0 ? `💰 ${loot.gold}g` : `${itemData.icon} ${itemData.name}`;
+
+        lootPickupPromptUI.innerHTML = `E - Pick up ${text}`;
+        lootPickupPromptUI.style.display = 'block';
+    }
+
+    function hideLootPickupPrompt() {
+        if (lootPickupPromptUI) {
+            lootPickupPromptUI.style.display = 'none';
+        }
+    }
+
+    function pickupLoot() {
+        if (!nearestLoot || !COMBAT_SYSTEM.inventorySystem) return false;
+
+        const loot = nearestLoot;
+
+        // Add to inventory
+        if (loot.gold > 0) {
+            COMBAT_SYSTEM.inventorySystem.gold += loot.gold;
+            if (typeof notify === 'function') {
+                notify(`💰 +${loot.gold}g`, 'success');
+            }
+            console.log(`💰 Picked up ${loot.gold}g`);
+        } else {
+            const success = COMBAT_SYSTEM.inventorySystem.addItem(loot.itemId, 1);
+            if (success) {
+                const itemData = COMBAT_SYSTEM.inventorySystem.itemDatabase[loot.itemId];
+                if (typeof notify === 'function') {
+                    notify(`${itemData.icon} ${itemData.name}`, 'success');
+                }
+                console.log(`💎 Picked up ${itemData.name}`);
+            } else {
+                if (typeof notify === 'function') {
+                    notify('⚠️ Inventory full!', 'error');
+                }
+                return false;
+            }
+        }
+
+        // Remove from scene
+        scene.remove(loot.mesh);
+
+        // Remove from array
+        const index = groundLoot.indexOf(loot);
+        if (index > -1) {
+            groundLoot.splice(index, 1);
+        }
+
+        nearestLoot = null;
+        hideLootPickupPrompt();
+
+        return true;
+    }
+
+    // Hook into dungeon_enemies onEnemyKilled
+    window.onEnemyKilled = function(xp, loot, position) {
+        console.log(`💀 Enemy defeated! +${xp} XP, Loot:`, loot);
+
+        if (typeof notify === 'function') {
+            notify(`+${xp} XP | ${loot.length} items`, 'success');
+        }
+
+        // Spawn loot items on ground
+        if (loot && loot.length > 0 && position) {
+            const pos = new THREE.Vector3(position.x, position.y, position.z);
+
+            loot.forEach((itemId, index) => {
+                // Spread items in circle
+                const angle = (index / loot.length) * Math.PI * 2;
+                const offset = new THREE.Vector3(
+                    Math.cos(angle) * 1.5,
+                    0,
+                    Math.sin(angle) * 1.5
+                );
+
+                spawnLootItem(itemId, pos.clone().add(offset));
+            });
+        }
+
+        // TODO: Add XP to player level system
+    };
 
     function checkNearBuilding() {
         if (!characterGroup || !roomGroup) {
@@ -2617,6 +2869,9 @@
             updateCombatStatsUI();
             updateSkillHotbarUI();
 
+            // 💎 Update Ground Loot System
+            updateGroundLoot(delta);
+
             // 🎯 Auto-Targeting: Finde nächsten Gegner wenn keiner ausgewählt (nur wenn Lock-On aktiv!)
             if (COMBAT_SYSTEM.targetLockOn && !COMBAT_SYSTEM.currentTarget && characterGroup && window.DungeonEnemies) {
                 const nearestEnemy = findNearestEnemy();
@@ -2729,14 +2984,19 @@
             faceCharacter();
         }
 
-        // 🚪 E-Taste: Interaktion mit Objekten ODER Gebäude betreten
+        // 🚪 E-Taste: Loot Pickup, Interaktion, oder Gebäude betreten
         if (event.code === 'KeyE') {
-            // Wenn wir drinnen sind und ein interaktives Objekt in der Nähe ist
+            // Priorität 1: Loot Pickup
+            if (nearestLoot) {
+                pickupLoot();
+                return;
+            }
+            // Priorität 2: Interaktion mit Objekten (wenn drinnen)
             if (currentInterior && currentInteractable) {
                 handleInteraction();
                 return;
             }
-            // Wenn wir draußen sind und ein Gebäude in der Nähe ist
+            // Priorität 3: Gebäude betreten
             if (nearBuilding && !currentInterior) {
                 enterBuilding();
                 return;
