@@ -138,14 +138,44 @@
     /**
      * Enemy killed (called from enemy system)
      */
-    window.onEnemyKilled = function(xp, loot, position) {
+    window.onEnemyKilled = async function(xp, loot, position) {
         console.log(`💀 Enemy defeated! +${xp} XP, Loot:`, loot);
 
         if (typeof notify === 'function') {
             notify(`+${xp} XP | Loot: ${loot.join(', ')}`, 'success');
         }
 
-        // Add XP to player (TODO: Connect to backend)
+        // Add XP to player - Connect to backend
+        try {
+            const response = await fetch(`${API_URL}/api/game/add-xp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ xp: xp })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ XP added to backend:', data);
+
+                // Check for level up
+                if (data.leveledUp) {
+                    if (typeof notify === 'function') {
+                        notify(`🎉 LEVEL UP! Now Level ${data.newLevel}!`, 'success');
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('⚠️ Failed to sync XP to backend:', error);
+        }
+
+        // Spawn loot items in 3D scene
+        if (loot && loot.length > 0 && position) {
+            window.spawnLootItems(loot, position);
+        }
+
         // Update UI
         updateCombatUI();
 
@@ -183,7 +213,7 @@
             notify(`🎉 VICTORY! Level ${currentDungeon.level} cleared!`, 'success');
         }
 
-        // Show victory UI (TODO)
+        // Show victory UI
         showVictoryScreen();
     }
 
@@ -209,12 +239,8 @@
         // Clear enemies
         DungeonEnemies.clearAllEnemies();
 
-        // Show game over UI (TODO)
-        setTimeout(() => {
-            if (confirm('💀 Defeated! Try again?')) {
-                startDungeonCombat(currentDungeon?.level || 1, window.Scene3D?.scene);
-            }
-        }, 1000);
+        // Show game over UI
+        showGameOverScreen();
     }
 
     /**
@@ -521,6 +547,176 @@
             updateCombatUI();
         }
     };
+
+    /**
+     * Show Victory Screen UI
+     */
+    function showVictoryScreen() {
+        const overlay = document.createElement('div');
+        overlay.id = 'victory-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s;
+        `;
+
+        overlay.innerHTML = `
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+                <h1 style="color: #ffd700; font-size: 3rem; margin: 0 0 20px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎉 VICTORY! 🎉</h1>
+                <p style="color: white; font-size: 1.5rem; margin: 10px 0;">Dungeon Level ${currentDungeon?.level || 1} Cleared!</p>
+                <p style="color: #ffeb3b; font-size: 1.2rem; margin: 20px 0;">Enemies Defeated: ${currentDungeon?.enemyCount || 0}</p>
+                <div style="margin: 30px 0;">
+                    <button id="continue-btn" style="background: #4caf50; color: white; border: none; padding: 15px 40px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; margin-right: 10px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                        ✨ Continue
+                    </button>
+                    <button id="retry-btn" style="background: #ff9800; color: white; border: none; padding: 15px 40px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                        🔄 Next Level
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('continue-btn').onclick = () => {
+            overlay.remove();
+            exitDungeon();
+        };
+
+        document.getElementById('retry-btn').onclick = () => {
+            overlay.remove();
+            const nextLevel = (currentDungeon?.level || 1) + 1;
+            startDungeonCombat(nextLevel, window.Scene3D?.scene);
+        };
+    }
+
+    /**
+     * Show Game Over Screen UI
+     */
+    function showGameOverScreen() {
+        const overlay = document.createElement('div');
+        overlay.id = 'gameover-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s;
+        `;
+
+        overlay.innerHTML = `
+            <div style="background: linear-gradient(135deg, #c31432 0%, #240b36 100%); padding: 40px; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.7);">
+                <h1 style="color: #ff4444; font-size: 3rem; margin: 0 0 20px 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.8);">💀 DEFEATED 💀</h1>
+                <p style="color: white; font-size: 1.5rem; margin: 10px 0;">Dungeon Level ${currentDungeon?.level || 1}</p>
+                <p style="color: #ffcccc; font-size: 1.1rem; margin: 20px 0;">You have fallen in battle...</p>
+                <div style="margin: 30px 0;">
+                    <button id="retry-gameover-btn" style="background: #f44336; color: white; border: none; padding: 15px 40px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; margin-right: 10px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                        🔄 Try Again
+                    </button>
+                    <button id="exit-gameover-btn" style="background: #666; color: white; border: none; padding: 15px 40px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                        🚪 Exit
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('retry-gameover-btn').onclick = () => {
+            overlay.remove();
+            startDungeonCombat(currentDungeon?.level || 1, window.Scene3D?.scene);
+        };
+
+        document.getElementById('exit-gameover-btn').onclick = () => {
+            overlay.remove();
+            exitDungeon();
+        };
+    }
+
+    /**
+     * Spawn loot items in 3D scene
+     */
+    window.spawnLootItems = function(loot, position) {
+        if (!window.Scene3D || !window.Scene3D.scene) {
+            console.warn('⚠️ Scene3D not available for loot spawning');
+            return;
+        }
+
+        const scene = window.Scene3D.scene;
+
+        loot.forEach((item, index) => {
+            // Create glowing cube for loot
+            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            const material = new THREE.MeshStandardMaterial({
+                color: getLootColor(item),
+                emissive: getLootColor(item),
+                emissiveIntensity: 0.5,
+                metalness: 0.8,
+                roughness: 0.2
+            });
+
+            const lootMesh = new THREE.Mesh(geometry, material);
+
+            // Offset each item slightly
+            const offset = index * 0.7;
+            lootMesh.position.set(
+                position.x + Math.cos(index * 1.5) * offset,
+                position.y + 0.5,
+                position.z + Math.sin(index * 1.5) * offset
+            );
+
+            lootMesh.userData.lootItem = item;
+            lootMesh.userData.type = 'loot';
+
+            // Add floating animation
+            lootMesh.userData.floatOffset = index * Math.PI / 3;
+            lootMesh.userData.animate = (time) => {
+                lootMesh.position.y = position.y + 0.5 + Math.sin(time * 0.002 + lootMesh.userData.floatOffset) * 0.2;
+                lootMesh.rotation.y += 0.02;
+            };
+
+            scene.add(lootMesh);
+
+            // Add glowing beam effect
+            const beamGeometry = new THREE.CylinderGeometry(0.1, 0.3, 5, 8);
+            const beamMaterial = new THREE.MeshBasicMaterial({
+                color: getLootColor(item),
+                transparent: true,
+                opacity: 0.3
+            });
+            const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+            beam.position.copy(lootMesh.position);
+            beam.position.y += 2.5;
+            scene.add(beam);
+
+            console.log(`✨ Spawned loot: ${item} at`, position);
+        });
+    };
+
+    /**
+     * Get color for loot rarity
+     */
+    function getLootColor(itemName) {
+        const lower = itemName.toLowerCase();
+        if (lower.includes('legendary') || lower.includes('epic')) return 0xffd700;
+        if (lower.includes('rare')) return 0x9b59b6;
+        if (lower.includes('uncommon')) return 0x3498db;
+        return 0x95a5a6; // Common
+    }
 
     console.log('⚔️ Dungeon Combat System initialized');
     console.log('Controls: SPACE = Attack');
