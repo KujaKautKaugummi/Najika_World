@@ -65,7 +65,7 @@
 
     // 🌍 World Manager for 9600×9600 Open World
     let worldManager = null;
-    let useWorldManager = true;  // Open World (9600×9600) mit Schwarze Mühle als Gebäude
+    let useWorldManager = false;  // Start in Mühle Interior, nicht Open World
 
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
@@ -981,6 +981,12 @@
             // Fallback to old 2400×2400 map
             setupFallbackRoom();
             scheduleRoomBuild();
+            
+            // 🏠 AUTO-START: Lade Schwarze Mühle Interior
+            setTimeout(() => {
+                console.log("🏠 Auto-loading Schwarze Mühle interior...");
+                loadBuildingInterior("Schwarze Mühle");
+            }, 1500);
         }
 
         startAnimationLoop();
