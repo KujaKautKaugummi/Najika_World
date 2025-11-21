@@ -20,7 +20,7 @@ class WorldManager {
     this.config = {
       worldSize: 9600,
       center: { x: 4800, z: 4800 },
-      dataPath: '/entwicklung/data/'
+      dataPath: '/digivice/data/'  // FIX: Changed from /entwicklung/data/
     };
 
     // Initialize subsystems
