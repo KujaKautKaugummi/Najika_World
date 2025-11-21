@@ -873,7 +873,7 @@
             0.1,
             2000
         );
-        camera.position.set(0, 12, 28);
+        camera.position.set(0, 150, 300); // FIX: Open World needs higher camera!
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio || 1);

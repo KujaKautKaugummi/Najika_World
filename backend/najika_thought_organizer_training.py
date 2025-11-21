@@ -13,8 +13,13 @@ FEATURES:
 
 import json
 import requests
+import sys
 from pathlib import Path
 from datetime import datetime
+
+# Fix Windows CP1252 encoding issue
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 BACKEND_DIR = Path(__file__).parent
 TRAINING_LOG = BACKEND_DIR / "thought_organizer_training_log.json"
