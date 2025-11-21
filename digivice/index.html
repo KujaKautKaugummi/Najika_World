@@ -755,11 +755,9 @@ if (cameraButtons[2]) cameraButtons[2].addEventListener('click', () => applyCame
 // World Mode Toggle
 const worldModeToggle = document.getElementById('worldModeToggle');
 if (worldModeToggle) {
-    worldModeToggle.addEventListener('click', () => {
-        if (window.worldModeManager) {
-            const newMode = window.worldModeManager.currentMode === 'digivice' ? 'openworld' : 'digivice';
-            window.worldModeManager.switchMode(newMode);
-        }
+    worldModeToggle.addEventListener("click", () => {
+        // Open the CORRECT 9-region world with World Manager and Götterfels
+        window.open("/najika_world_v2.html", "_blank", "width=1400,height=900");
     });
 }
 
