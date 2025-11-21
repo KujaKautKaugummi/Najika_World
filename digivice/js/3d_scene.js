@@ -998,7 +998,7 @@
 
             // Initialize with backend data
             await worldManager.initialize({
-                dataPath: '/digivice/data/'  // FIX: Changed from /entwicklung/data/,
+                dataPath: '/digivice/data/',  // FIX: Changed from /entwicklung/data/
                 enableLOD: true,
                 enableStreaming: true
             });
