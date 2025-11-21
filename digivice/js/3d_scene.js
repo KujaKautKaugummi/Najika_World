@@ -2188,8 +2188,21 @@
         window.currentInterior = null; // Sync to window
         currentFloor = 0;
 
-        // Lade Open World zurück
-        buildRoom();
+        // Lade ECHTE Open World (9600×9600 mit WorldManager)
+        if (!worldManager && window.WorldManager) {
+            console.log('🌍 Loading WorldManager Open World (9600×9600)...');
+            initWorldManager().then(() => {
+                console.log('✅ WorldManager loaded after building exit');
+            }).catch(err => {
+                console.error('❌ Failed to load WorldManager:', err);
+                buildRoom(); // Fallback zur 2400×2400 Welt
+            });
+        } else if (worldManager) {
+            console.log('🌍 WorldManager already active');
+        } else {
+            console.log('⚠️ WorldManager not available, using 2400×2400 fallback');
+            buildRoom();
+        }
 
         // Restore Position draußen
         if (exteriorPosition) {
