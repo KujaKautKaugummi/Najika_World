@@ -65,7 +65,7 @@
 
     // 🌍 World Manager for 9600×9600 Open World
     let worldManager = null;
-    let useWorldManager = false;  // Digivice/Mühle uses room system, not WorldManager
+    let useWorldManager = true;  // Open World (9600×9600) mit Schwarze Mühle als Gebäude
 
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
@@ -981,11 +981,6 @@
             // Fallback to old 2400×2400 map
             setupFallbackRoom();
             scheduleRoomBuild();
-            // ⚙️ AUTO-START in Schwarze Mühle interior for Digivice
-            setTimeout(() => {
-                console.log('🏠 Auto-entering Schwarze Mühle interior...');
-                loadBuildingInterior('Schwarze Mühle');
-            }, 1000);
         }
 
         startAnimationLoop();
