@@ -65,7 +65,7 @@
 
     // 🌍 World Manager for 9600×9600 Open World
     let worldManager = null;
-    let useWorldManager = true;  // Toggle for testing
+    let useWorldManager = false;  // Digivice/Mühle uses room system, not WorldManager
 
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
@@ -981,6 +981,11 @@
             // Fallback to old 2400×2400 map
             setupFallbackRoom();
             scheduleRoomBuild();
+            // ⚙️ AUTO-START in Schwarze Mühle interior for Digivice
+            setTimeout(() => {
+                console.log('🏠 Auto-entering Schwarze Mühle interior...');
+                loadBuildingInterior('Schwarze Mühle');
+            }, 1000);
         }
 
         startAnimationLoop();
@@ -998,7 +1003,7 @@
 
             // Initialize with backend data
             await worldManager.initialize({
-                dataPath: '/entwicklung/data/',
+                dataPath: '/digivice/data/'  // FIX: Changed from /entwicklung/data/,
                 enableLOD: true,
                 enableStreaming: true
             });
