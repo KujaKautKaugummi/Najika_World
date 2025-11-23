@@ -13,7 +13,7 @@
 
 class WorldMapAPI {
     constructor() {
-        this.apiBase = '/api/world-map';
+        this.apiBase = 'http://localhost:8000/api/world-map';
         this.playerId = null;
 
         // Cache
@@ -58,7 +58,7 @@ class WorldMapAPI {
             if (storedId) return parseInt(storedId);
 
             // Otherwise fetch from API
-            const response = await fetch('/api/player/session');
+            const response = await fetch('http://localhost:8000/api/player/session');
             const data = await response.json();
             if (data.player_id) {
                 localStorage.setItem('najika_player_id', data.player_id);

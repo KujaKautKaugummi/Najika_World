@@ -60,7 +60,7 @@ async function startVoiceCall() {
         callStatusText.textContent = 'Verbinde mit Najika...';
 
         // Call server to start session
-        const response = await fetch('/api/voice_call/start', {
+        const response = await fetch('http://localhost:8000/api/voice_call/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -164,7 +164,7 @@ async function sendAudioToServer(audioBase64) {
     try {
         console.log('[VOICE CALL] Sending audio to server...');
 
-        const response = await fetch('/api/voice_call/audio', {
+        const response = await fetch('http://localhost:8000/api/voice_call/audio', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ audio: audioBase64 })
@@ -302,7 +302,7 @@ async function endVoiceCall() {
         }
 
         // Call server to end session
-        const response = await fetch('/api/voice_call/end', {
+        const response = await fetch('http://localhost:8000/api/voice_call/end', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         });
