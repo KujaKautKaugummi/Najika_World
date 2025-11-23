@@ -1,0 +1,18 @@
+{
+  "region": "gruenschlamm_sumpf",
+  "city": "none",
+  "special_location": "funkelnest_treasure_cave",
+  "note": "Keine Stadt, nur NPCs bei Funkelnest-Höhle und Wanderer",
+  "npcs": [
+    {"id": "sumpfhexe_morgana", "name": "Sumpfhexe Morgana", "race": "Human", "age": 89, "occupation": "Hexe", "location": "Sumpfhütte", "personality": {"trait": "Gruselig, weise, einsam"}, "shop": {"type": "dark_magic_vendor", "items": [{"id": "gift_trank", "price": 100}, {"id": "nekromantie_buch", "price": 800}]}, "najika_reaction": {"harley": "Swamp witch! Spooky and cool!"}},
+    {"id": "schaetzejaeger_drake", "name": "Schatzjäger Drake", "race": "Human", "age": 34, "occupation": "Schatzjäger", "location": "Funkelnest Eingang", "personality": {"trait": "Gierig, abenteuerlustig"}, "quests": ["das_funkelnest_geheimnis"], "najika_reaction": {"megumin": "Ein SCHATZJÄGER! Wie Indiana Jones!"}},
+    {"id": "alligator_beschwörer_zeke", "name": "Alligator-Beschwörer Zeke", "race": "Human", "age": 52, "occupation": "Tier-Beschwörer", "personality": {"trait": "Wild, spricht mit Alligatoren"}, "services": {"alligator_companion": {"price": 600}}, "najika_reaction": {"harley": "He talks to ALLIGATORS?! I love this guy!"}},
+    {"id": "untote_braut", "name": "Die Untote Braut", "race": "Undead", "age": 147, "occupation": "Geist", "location": "Versunkene Kirche", "personality": {"trait": "Tragisch, sehnt sich nach Frieden"}, "quests": ["die_verlorene_liebe"], "najika_reaction": {"melissa": "Eine Seele gefangen zwischen Leben und Tod..."}},
+    {"id": "giftmischer_vex", "name": "Giftmischer Vex", "race": "Goblin", "age": 41, "occupation": "Gift-Händler", "shop": {"type": "poison_vendor", "items": [{"id": "tödliches_gift", "price": 200}, {"id": "paralyse_gift", "price": 150}]}, "najika_reaction": {"shiro": "Goblin. Gift-Spezialist. Vorsicht empfohlen."}},
+    {"id": "sumpfgeist_nebel", "name": "Sumpfgeist Nebel", "race": "Spirit", "age": 312, "occupation": "Wächter", "personality": {"trait": "Mysteriös, testet Reisende"}, "quests": ["nebelprüfung"], "najika_reaction": {"melissa": "Geister des Sumpfes... Alt und mächtig."}},
+    {"id": "totengräber_mort", "name": "Totengräber Mort", "race": "Human", "age": 67, "occupation": "Totengräber", "location": "Sumpffriedhof", "personality": {"trait": "Morbid, aber freundlich"}, "najika_reaction": {"harley": "Creepy gravedigger! I bet he's seen some STUFF!"}},
+    {"id": "riesenkröte_könig", "name": "König der Riesenkröten", "race": "Beast (intelligent)", "age": 89, "occupation": "Sumpf-Herrscher", "personality": {"trait": "Weise, spricht in Quaken"}, "quests": ["der_froschkönig"], "najika_reaction": {"megumin": "Ein sprechender FROSCH-KÖNIG?! Das ist genial!"}},
+    {"id": "verzweifelte_händlerin", "name": "Verzweifelte Händlerin Maya", "race": "Human", "age": 28, "occupation": "Händlerin (verlaufen)", "location": "Random encounter", "personality": {"trait": "Ängstlich, verzweifelt, verlaufen"}, "quests": ["rettet_maya"], "najika_reaction": {"harley": "Poor thing is LOST! We gotta help her!"}},
+    {"id": "unterwasser_geist", "name": "Ertrunkener Seemann", "race": "Ghost", "age": 203, "occupation": "Geist", "location": "Versunkenes Schiff", "personality": {"trait": "Warnt vor Gefahren"}, "najika_reaction": {"melissa": "Noch mehr Verlorene Seelen..."}}
+  ]
+}

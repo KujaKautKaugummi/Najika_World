@@ -1,0 +1,60 @@
+{
+  "region": "goetterfels",
+  "note": "Zentrale Hub-Region. Händler verkaufen Items aus ALLEN Regionen mit 10% Aufschlag. Hier sind nur einzigartige Götterfels-Items aufgelistet.",
+  "items": [
+    {
+      "category": "legendary_weapons",
+      "items": [
+        {"id": "goetter_klinge", "name": "Götter-Klinge", "rarity": "legendary", "damage": 200, "price": 10000, "special": {"divine_power": "+50% gegen Dämonen", "holy_light": "Heilige Licht-Attacke"}, "vendor": "schmied_vulcan"},
+        {"id": "zeit_sense", "name": "Zeit-Sense", "rarity": "legendary", "magic_atk": 190, "price": 12000, "special": {"time_stop": "Stoppt Zeit für 3 Sek (Cooldown 60 Sek)", "age_damage": "Lässt Gegner altern"}, "vendor": "zeitwaechterin_chrona"},
+        {"id": "atlas_hammer", "name": "Atlas' Hammer", "rarity": "legendary", "damage": 220, "price": 11000, "special": {"earthquake": "Erschüttert die Erde", "titan_strength": "+100 STR"}, "vendor": "bergfuehrer_atlas"}
+      ]
+    },
+    {
+      "category": "divine_armor",
+      "items": [
+        {"id": "goetter_ruestung", "name": "Götter-Rüstung", "rarity": "legendary", "defense": 180, "magic_def": 160, "price": 15000, "special": {"divine_protection": "Immune to instant death", "holy_aura": "Heilt 1% HP/Sek"}, "vendor": "schmied_vulcan"},
+        {"id": "zeit_mantel", "name": "Zeit-Mantel", "rarity": "legendary", "defense": 100, "magic_def": 200, "price": 13000, "special": {"time_shield": "Negiert 1 Angriff pro Minute", "ageless": "Immun gegen Altern"}, "vendor": "zeitwaechterin_chrona"}
+      ]
+    },
+    {
+      "category": "special_items",
+      "items": [
+        {"id": "weltkarte_komplett", "name": "Vollständige Weltkarte", "rarity": "rare", "price": 500, "effect": "Zeigt alle 9 Regionen und alle Städte", "vendor": "bibliothekarin_sophia"},
+        {"id": "reise_proviant", "name": "Reise-Proviant", "rarity": "common", "price": 50, "effects": {"restore_hp": 200, "restore_mp": 100}, "stackable": 99, "vendor": "muehlen_wirt_otto"},
+        {"id": "goettlicher_segen", "name": "Göttlicher Segen", "rarity": "legendary", "price": 5000, "single_use": true, "effects": {"resurrection": "Einmalige Auferstehung bei Tod", "full_restore": true}, "vendor": "goetterbote_hermes"},
+        {"id": "zeitkristall", "name": "Zeitkristall", "rarity": "epic", "price": 3000, "stackable": 10, "used_in": ["time_magic", "legendary_crafting"], "special": "Enthält gefrorene Zeit", "vendor": "zeitwaechterin_chrona"}
+      ]
+    },
+    {
+      "category": "teleport_items",
+      "items": [
+        {"id": "teleport_stein_handelsfestung", "name": "Teleport-Stein: Handelsfestung", "rarity": "uncommon", "price": 200, "single_use": true, "effect": "Teleportiert zur Handelsfestung"},
+        {"id": "teleport_stein_dampfhain", "name": "Teleport-Stein: Dampf-Hain", "rarity": "uncommon", "price": 200, "single_use": true, "effect": "Teleportiert zu Dampf-Hain"},
+        {"id": "teleport_stein_salzigebucht", "name": "Teleport-Stein: Salzige Bucht", "rarity": "uncommon", "price": 200, "single_use": true, "effect": "Teleportiert zur Salzigen Bucht"},
+        {"id": "teleport_stein_runenheim", "name": "Teleport-Stein: Runenheim", "rarity": "uncommon", "price": 200, "single_use": true, "effect": "Teleportiert zu Runenheim"},
+        {"id": "teleport_stein_funkensiedlung", "name": "Teleport-Stein: Funken-Siedlung", "rarity": "uncommon", "price": 200, "single_use": true, "effect": "Teleportiert zur Funken-Siedlung"},
+        {"id": "meister_teleport_stein", "name": "Meister-Teleport-Stein", "rarity": "rare", "price": 1500, "consumable": false, "effect": "Teleportiert zu allen Städten (wiederverwertbar)", "vendor": "goetterbote_hermes"}
+      ]
+    },
+    {
+      "category": "consumables",
+      "items": [
+        {"id": "goettlicher_heiltrank", "name": "Göttlicher Heiltrank", "rarity": "epic", "price": 500, "effects": {"restore_hp": "100%", "restore_mp": "100%", "remove_all_debuffs": true}},
+        {"id": "berg_luft_trank", "name": "Bergluft-Trank", "rarity": "common", "price": 40, "effects": {"buffs": {"stamina": {"value": 15, "duration": 3600}, "climbing": {"value": 30, "duration": 3600}}}}
+      ]
+    },
+    {
+      "category": "crafting_materials",
+      "items": [
+        {"id": "goetter_erz", "name": "Götter-Erz", "rarity": "legendary", "price": 2000, "stackable": 50, "used_in": ["divine_weapon_crafting"], "description": "Erz aus dem Götterfels selbst"},
+        {"id": "berg_kristall", "name": "Berg-Kristall", "rarity": "rare", "price": 400, "stackable": 200, "used_in": ["jewelry", "magic_items"]}
+      ]
+    }
+  ],
+  "central_market": {
+    "description": "Zentral-Händler Maximus verkauft ALLE Items aus allen 9 Regionen",
+    "price_modifier": 1.1,
+    "available_items": "All items from: Handelsfestung, Dampf-Hain, Salzige Bucht, Runenheim, Grünschlamm, Funken-Siedlung, Reich der Drei, Tiefenhöhlen"
+  }
+}

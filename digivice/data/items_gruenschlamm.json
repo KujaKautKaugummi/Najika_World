@@ -1,0 +1,28 @@
+{
+  "region": "gruenschlamm_sumpf",
+  "items": [
+    {"category": "weapons", "items": [
+      {"id": "sumpf_dolch", "name": "Sumpfdolch", "rarity": "uncommon", "damage": 55, "price": 220, "special": {"poison_damage": 15}},
+      {"id": "nekromanten_stab", "name": "Nekromanten-Stab", "rarity": "rare", "magic_atk": 95, "price": 800, "special": {"summon_undead": true}},
+      {"id": "giftklinge", "name": "Giftklinge", "rarity": "epic", "damage": 100, "price": 1100, "special": {"deadly_poison": "30 DPS für 10 Sek"}}
+    ]},
+    {"category": "armor", "items": [
+      {"id": "sumpfleder_ruestung", "name": "Sumpfleder-Rüstung", "rarity": "common", "defense": 35, "price": 200, "special": {"poison_resistance": 50}},
+      {"id": "knochen_panzer", "name": "Knochenpanzer", "rarity": "rare", "defense": 80, "price": 700, "special": {"undead_resistance": 60}}
+    ]},
+    {"category": "consumables", "items": [
+      {"id": "gift_trank", "name": "Gift-Trank", "rarity": "uncommon", "price": 100, "effects": {"weapon_coating": {"poison": 25, "duration": 300}}},
+      {"id": "gegengift", "name": "Gegengift", "rarity": "common", "price": 40, "effects": {"remove_debuffs": ["poison"]}},
+      {"id": "nekromantie_scroll", "name": "Nekromantie-Schriftrolle", "rarity": "rare", "price": 500, "single_use": true, "effect": "Beschwört 3 Skelette"}
+    ]},
+    {"category": "materials", "items": [
+      {"id": "sumpfgras", "name": "Sumpfgras", "rarity": "common", "price": 5, "stackable": 999},
+      {"id": "gift_pilz", "name": "Giftpilz", "rarity": "uncommon", "price": 30, "stackable": 500, "used_in": ["poison_crafting"]},
+      {"id": "knochen", "name": "Knochen", "rarity": "common", "price": 10, "stackable": 999},
+      {"id": "nekrotische_essenz", "name": "Nekrotische Essenz", "rarity": "rare", "price": 200, "used_in": ["necromancy", "dark_magic"]}
+    ]},
+    {"category": "treasure", "items": [
+      {"id": "funkelnest_schatz", "name": "Funkelnest-Schatz", "rarity": "legendary", "price": 5000, "description": "Legendärer Schatz aus der Funkelnest-Höhle", "contains": "random legendary loot"}
+    ]}
+  ]
+}

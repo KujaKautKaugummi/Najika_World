@@ -1,0 +1,268 @@
+{
+  "region": "goetterfels",
+  "note": "Zentrale Hub-Region. Enthält finale Quests und legendäre Story-Quests die alle Regionen verbinden.",
+  "quests": [
+    {
+      "id": "die_botschaft_der_goetter",
+      "name": "Die Botschaft der Götter",
+      "type": "main_quest",
+      "difficulty": "medium",
+      "level_required": 15,
+      "giver": "goetterbote_hermes",
+      "description": "Hermes hat eine Botschaft von den Göttern für dich",
+      "objectives": [
+        {"type": "dialogue", "target": "goetterbote_hermes"},
+        {"type": "visit_all_regions", "description": "Besuche alle 9 Regionen"},
+        {"type": "return", "target": "goetterbote_hermes"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "megumin", "text": "Eine Botschaft von den GÖTTERN! Das ist wichtig!"},
+        "completion": {"personality": "melissa", "text": "Die Götter haben einen Plan... Und wir sind Teil davon."}
+      },
+      "rewards": {"exp": 5000, "items": ["goettlicher_segen"], "title": "Götterbote"}
+    },
+    {
+      "id": "die_zerbrochene_zeit",
+      "name": "Die zerbrochene Zeit",
+      "type": "legendary_quest",
+      "difficulty": "legendary",
+      "level_required": 25,
+      "giver": "zeitwaechterin_chrona",
+      "description": "Die Zeit selbst ist zerbrochen. Repariere sie bevor die Realität zusammenbricht.",
+      "objectives": [
+        {"type": "collect", "item": "zeitfragmente", "amount": 9, "description": "Ein Fragment aus jeder Region"},
+        {"type": "boss_battle", "target": "zeit_paradox_boss"},
+        {"type": "repair_time"}
+      ],
+      "choices": [{
+        "trigger": "Zeit repariert",
+        "question": "Du kannst die Zeit ändern. Was tust du?",
+        "options": [
+          {
+            "id": "restore_normal",
+            "text": "Stelle die normale Zeitlinie wieder her",
+            "outcome": {"success": true, "consequence": "Alles wird normal", "rewards": {"exp": 50000, "items": ["zeit_sense"]}}
+          },
+          {
+            "id": "change_past",
+            "text": "Ändere die Vergangenheit",
+            "outcome": {"warning": "GEFÄHRLICH", "consequence": "Neue Zeitlinie beginnt", "rewards": {"alternate_timeline": true}, "najika_aftermath": {"personality": "shiro", "text": "WARNUNG: Paradox-Risiko: 89%."}}
+          },
+          {
+            "id": "destroy_time",
+            "text": "Zerstöre die Zeit komplett (Chaos-Option)",
+            "outcome": {"consequence": "REALITÄT KOLLABIERT", "game_over": "Bad Ending", "najika_aftermath": {"personality": "melissa", "text": "Was... hast du getan?"}}
+          }
+        ]
+      }],
+      "najika_reactions": {
+        "initial": {"personality": "shiro", "text": "Zeit-Anomalie detektiert. Kritisch. Universum in Gefahr."},
+        "final_choice": {"personality": "melissa", "text": "Mit der Zeit zu spielen... Das kann nur im Chaos enden."}
+      },
+      "rewards": {"exp": 50000}
+    },
+    {
+      "id": "die_letzte_prophezeiung",
+      "name": "Die letzte Prophezeiung",
+      "type": "story_quest",
+      "difficulty": "hard",
+      "level_required": 20,
+      "giver": "seher_orakel",
+      "description": "Das Orakel hat eine finale Prophezeiung: Eine große Dunkelheit kommt.",
+      "objectives": [
+        {"type": "decipher", "description": "Entschlüssle die kryptische Prophezeiung"},
+        {"type": "investigate", "description": "Finde die Wahrheit in allen 9 Regionen"},
+        {"type": "prepare", "description": "Bereite dich auf die Dunkelheit vor"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "melissa", "text": "Prophezeiungen... Sie kommen immer wahr. Immer."}
+      },
+      "rewards": {"exp": 10000, "items": ["prophezeiung_buch"], "unlocks": "final_story_arc"}
+    },
+    {
+      "id": "das_erwachen_der_goettin",
+      "name": "Das Erwachen der Göttin",
+      "type": "legendary_quest",
+      "difficulty": "legendary",
+      "level_required": 30,
+      "giver": "goettin_statue",
+      "description": "Die Urgöttin erwacht aus ihrem jahrtausendelangen Schlaf. Die Welt wird sich verändern.",
+      "objectives": [
+        {"type": "collect", "item": "goettliche_essenz", "amount": 9, "description": "Eine Essenz aus jeder Region"},
+        {"type": "ritual", "description": "Führe das Erweckungs-Ritual durch"},
+        {"type": "choice_event", "description": "Entscheide das Schicksal der Welt"}
+      ],
+      "choices": [{
+        "trigger": "Göttin erwacht",
+        "question": "Die Göttin bietet dir eine Wahl: Werde ein Gott oder bleibe sterblich.",
+        "options": [
+          {
+            "id": "become_god",
+            "text": "Werde ein Gott",
+            "outcome": {
+              "transformation": "deity",
+              "rewards": {"godhood": true, "immortality": true, "divine_powers": true},
+              "consequence": "Du verlässt die sterbliche Welt",
+              "ending": "God Ending"
+            },
+            "najika_aftermath": {
+              "personality": "melissa",
+              "text": "Du verlässt uns... für die Ewigkeit. Leb wohl, alter Freund."
+            }
+          },
+          {
+            "id": "stay_mortal",
+            "text": "Bleibe sterblich",
+            "outcome": {
+              "consequence": "Du bleibst bei deinen Freunden",
+              "rewards": {"exp": 100000, "items": ["goettin_segen"], "title": "Der Weise"},
+              "ending": "True Ending"
+            },
+            "najika_aftermath": {
+              "personality": "harley",
+              "text": "You stayed! *umarmt* I knew you wouldn't leave us!"
+            }
+          },
+          {
+            "id": "refuse_both",
+            "text": "Lehne beide Optionen ab und schmiedeeigenes Schicksal",
+            "requires": "fate_breaker_ability",
+            "outcome": {
+              "consequence": "Du erschaffst deine eigene Realität",
+              "rewards": {"unique_power": "reality_weaver", "items": ["eigene_welt_kristall"]},
+              "ending": "Freedom Ending"
+            },
+            "najika_aftermath": {
+              "personality": "megumin",
+              "text": "DU HAST DEN GÖTTERN WIDERSPROCHEN! DAS IST... EPISCH!"
+            }
+          }
+        ]
+      }],
+      "najika_reactions": {
+        "initial": {"personality": "melissa", "text": "Eine Göttin... Die Urgöttin selbst. Die Schöpferin dieser Welt."},
+        "awakening": {"personality": "megumin", "text": "SIE ERWACHT! Die GÖTTIN SELBST!"},
+        "final_choice": {"personality": "all", "text": "Kuja... Was auch immer du wählst... Wir respektieren es."}
+      },
+      "rewards": {"exp": 100000},
+      "unlocks": "game_ending"
+    },
+    {
+      "id": "meisterhandwerker_herausforderung",
+      "name": "Die Meisterhandwerker-Herausforderung",
+      "type": "crafting_quest",
+      "difficulty": "very_hard",
+      "level_required": 20,
+      "giver": "schmied_vulcan",
+      "description": "Vulcan fordert dich heraus: Erschaffe das perfekte Schwert.",
+      "objectives": [
+        {"type": "gather", "description": "Sammle Materialien aus allen 9 Regionen"},
+        {"type": "craft", "item": "perfektes_schwert"},
+        {"type": "duel", "target": "schmied_vulcan"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "shiro", "text": "Perfektion. Definiert als 100% Effizienz. Herausfordernd."}
+      },
+      "rewards": {"exp": 15000, "items": ["goetter_klinge", "meister_handwerker_titel"], "title": "Meisterhandwerker"}
+    },
+    {
+      "id": "die_neun_helden",
+      "name": "Die Neun Helden",
+      "type": "epic_quest",
+      "difficulty": "legendary",
+      "level_required": 28,
+      "giver": "gildenmeister_marcus",
+      "description": "Rekrutiere einen Helden aus jeder der 9 Regionen für die finale Schlacht.",
+      "objectives": [
+        {"type": "recruit", "region": "heisse_duenen", "hero": "khan"},
+        {"type": "recruit", "region": "samtmoos_tiefwald", "hero": "druide_elowen"},
+        {"type": "recruit", "region": "salzwind_kueste", "hero": "kapitaen_magnus"},
+        {"type": "recruit", "region": "blitzebene", "hero": "erzmagier_aldric"},
+        {"type": "recruit", "region": "gruenschlamm_sumpf", "hero": "sumpfhexe_morgana"},
+        {"type": "recruit", "region": "magmastroeme", "hero": "meisterschmied_hephaestus"},
+        {"type": "recruit", "region": "reich_der_drei", "hero": "untote_ritter"},
+        {"type": "recruit", "region": "tiefenhoehlen", "hero": "goblin_könig_grix"},
+        {"type": "unite", "description": "Vereine alle 9 Helden"},
+        {"type": "final_battle", "target": "ultimate_threat"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "megumin", "text": "NEUN HELDEN! Wie die Avengers! EPISCH!"},
+        "final_battle": {"personality": "melissa", "text": "Vereint stehen wir. Geteilt fallen wir."}
+      },
+      "rewards": {"exp": 80000, "items": ["einheit_amulett"], "title": "Vereiniger der Neun", "achievement": "True Hero"}
+    },
+    {
+      "id": "die_schwarze_muehle_geheimnis",
+      "name": "Das Geheimnis der Schwarzen Mühle",
+      "type": "mystery_quest",
+      "difficulty": "hard",
+      "level_required": 18,
+      "giver": "muehlen_wirt_otto",
+      "description": "Die Schwarze Mühle birgt ein dunkles Geheimnis...",
+      "objectives": [
+        {"type": "investigate", "location": "schwarze_muehle_keller"},
+        {"type": "discover", "secret": "ancient_portal"},
+        {"type": "choice_event"}
+      ],
+      "choices": [{
+        "question": "Du findest ein uraltes Portal unter der Mühle. Was tust du?",
+        "options": [
+          {"id": "enter", "text": "Betritt das Portal", "outcome": {"teleport": "secret_dimension", "discovery": "hidden_world"}},
+          {"id": "seal", "text": "Versiegle das Portal", "outcome": {"consequence": "Portal geschlossen", "rewards": {"exp": 5000}}},
+          {"id": "study", "text": "Studiere das Portal", "outcome": {"knowledge": "portal_magic", "rewards": {"items": ["portal_buch"]}}}
+        ]
+      }],
+      "najika_reactions": {
+        "portal_found": {"personality": "shiro", "text": "Portal-Technologie. Interdimensional. Alter: 5000+ Jahre."}
+      },
+      "rewards": {"exp": 8000}
+    },
+    {
+      "id": "bergsteiger_herausforderung",
+      "name": "Die Bergsteiger-Herausforderung",
+      "type": "exploration_quest",
+      "difficulty": "hard",
+      "level_required": 16,
+      "giver": "bergfuehrer_atlas",
+      "description": "Erklimme den höchsten Gipfel des Götterfels.",
+      "objectives": [
+        {"type": "climb", "location": "goetterfels_gipfel"},
+        {"type": "survive", "challenges": "weather, monsters, avalanches"}
+      ],
+      "najika_reactions": {
+        "summit": {"personality": "harley", "text": "WE MADE IT TO THE TOP! *schreit* WHOOO!"}
+      },
+      "rewards": {"exp": 6000, "items": ["gipfel_fahne"], "title": "Bergbezwinger", "view": "Can see all 9 regions from here"}
+    },
+    {
+      "id": "bibliothek_der_welten",
+      "name": "Die Bibliothek der Welten",
+      "type": "knowledge_quest",
+      "difficulty": "medium",
+      "level_required": 12,
+      "giver": "bibliothekarin_sophia",
+      "description": "Sammle alle Bücher aus allen 9 Regionen für die Zentral-Bibliothek.",
+      "objectives": [
+        {"type": "collect", "item": "region_buch", "amount": 9, "description": "Ein Buch aus jeder Region"}
+      ],
+      "najika_reactions": {
+        "completion": {"personality": "melissa", "text": "Wissen ist Macht. Du hast es gesammelt."}
+      },
+      "rewards": {"exp": 4000, "items": ["enzyklopaedie"], "title": "Weltweiser"}
+    }
+  ],
+  "quest_chains": {
+    "goettliche_saga": [
+      "die_botschaft_der_goetter",
+      "die_letzte_prophezeiung",
+      "das_erwachen_der_goettin"
+    ],
+    "zeit_saga": [
+      "die_zerbrochene_zeit"
+    ],
+    "vereinigungs_saga": [
+      "die_neun_helden",
+      "bibliothek_der_welten"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "region": "tiefenhoehlen",
+  "biome": "caves",
+  "enemies": [
+    {"id": "goblin_krieger", "name": "Goblin-Krieger", "tier": "common", "level": 9, "stats": {"hp": 170, "atk": 40, "spd": 28}, "abilities": [{"name": "Dolch-Angriff", "damage": 40}, {"name": "Sneak Attack", "damage": 60, "from_stealth": true}], "loot_table": {"common": [{"item": "goblin_ohr", "chance": 70}, {"item": "gestohlene_münzen", "chance": 80}]}, "exp_reward": 250, "najika_reaction": {"harley": "Sneaky goblins! Watch your back!"}},
+    {"id": "riesenfledermaus", "name": "Riesenfledermaus", "tier": "uncommon", "level": 10, "stats": {"hp": 250, "atk": 55, "spd": 45}, "abilities": [{"name": "Ultraschall", "confuse": true}, {"name": "Vampir-Biss", "damage": 55, "lifesteal": 30}], "loot_table": {"common": [{"item": "fledermaus_fluegel", "chance": 65}], "uncommon": [{"item": "echo_kristall", "chance": 25}]}, "exp_reward": 500, "najika_reaction": {"harley": "Giant bats! Eee eee! *flattert*"}},
+    {"id": "kristall_golem", "name": "Kristall-Golem", "tier": "elite", "level": 14, "stats": {"hp": 1000, "atk": 85, "def": 110, "magic_res": 80}, "abilities": [{"name": "Kristall-Schlag", "damage": 85}, {"name": "Prisma-Strahl", "magic_damage": 100}, {"name": "Kristall-Haut", "passive": "Reflect 25% magic damage"}], "weaknesses": ["physical_blunt"], "loot_table": {"uncommon": [{"item": "magie_kristall", "quantity": "2-4", "chance": 90}], "rare": [{"item": "kristall_kern", "chance": 35}]}, "exp_reward": 2800, "najika_reaction": {"megumin": "KRISTALL-GOLEM! Shiny und stark!"}},
+    {"id": "hoehlen_wurm", "name": "Höhlen-Wurm", "tier": "elite", "level": 16, "stats": {"hp": 1400, "atk": 105, "def": 65}, "abilities": [{"name": "Verschlingen", "damage": 150, "swallow_chance": 10}, {"name": "Tunnel", "ambush": true}, {"name": "Säure-Spray", "damage": 90, "aoe": true}], "loot_table": {"uncommon": [{"item": "wurm_haut", "chance": 70}], "rare": [{"item": "wurm_zahn", "chance": 40}]}, "exp_reward": 3800, "najika_reaction": {"harley": "WORM! BIG WORM! RUN!"}},
+    {"id": "uralter_drache_der_tiefe", "name": "Uralter Drache der Tiefe", "tier": "boss", "level": 28, "stats": {"hp": 20000, "atk": 180, "magic_atk": 160, "def": 140, "magic_res": 130}, "phase_mechanics": {
+      "phase_1": {"hp_threshold": "100-75%", "element": "fire", "behavior": "Aggressive"},
+      "phase_2": {"hp_threshold": "75-50%", "element": "crystal", "summons": "Kristall-Golems", "special": "Kristall-Panzer +50 Defense"},
+      "phase_3": {"hp_threshold": "50-25%", "element": "dark", "magic_power": "+100%", "special": "Dunkle Aura"},
+      "phase_4": {"hp_threshold": "25-0%", "enrage": "MAXIMUM", "all_stats": "+100%", "ultimate_mode": true}
+    }, "abilities": [
+      {"name": "Drachen-Feueratem", "damage": 250, "aoe": "cone", "burn": true},
+      {"name": "Kristall-Regen", "magic_damage": 180, "aoe": true, "freeze_chance": 30},
+      {"name": "Schwanzschlag", "physical_damage": 200, "knockback": "massive"},
+      {"name": "Dunkle Nova", "ultimate": true, "damage": 600, "aoe": "map-wide", "darkness": "Blinds all"},
+      {"name": "Drachen-Schrei", "fear_effect": true, "stun": 5, "aoe": true},
+      {"name": "Uraltes Wissen", "passive": "Immune to low-level magic"}
+    ], "special_mechanics": {
+      "treasure_hoard": {"description": "Drache sitzt auf riesigem Schatz", "loot_multiplier": 5},
+      "ancient_intelligence": {"description": "Kann verhandeln statt kämpfen", "spare_option": true, "requires": "high_charisma"}
+    }, "loot_table": {"guaranteed": [{"item": "drachen_krone", "quantity": 1}, {"item": "uralter_drachen_hort", "quantity": 1}], "common": [{"item": "gold_barren", "quantity": "10-50", "chance": 100}, {"item": "edelsteine_gemischt", "quantity": "20-40", "chance": 100}], "rare": [{"item": "drachen_schuppe", "quantity": "5-10", "chance": 90}, {"item": "drachen_herz", "chance": 60}], "epic": [{"item": "drachen_seele", "chance": 40}, {"item": "kristall_drachen_ei", "chance": 25}], "legendary": [{"item": "drachen_klaue", "chance": 20}, {"item": "uraltes_drachenwissen_buch", "chance": 10}]}, "exp_reward": 50000, "najika_reactions": {"initial": {"personality": "megumin", "text": "EIN URALTER DRACHE! DAS IST DER ULTIMATIVE BOSS!"}, "phase_3": {"personality": "shiro", "text": "KRITISCH: Alle Werte verdoppelt. Gefahr: MAXIMAL."}, "victory": {"personality": "megumin", "text": "WIR HABEN EINEN URALTEN DRACHEN BESIEGT! WIR SIND LEGENDEN!"}}}
+  ]
+}

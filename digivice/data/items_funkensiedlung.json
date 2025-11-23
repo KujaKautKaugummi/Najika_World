@@ -1,0 +1,26 @@
+{
+  "region": "magmastroeme",
+  "items": [
+    {"category": "weapons", "items": [
+      {"id": "lava_schwert", "name": "Lavaschwert", "rarity": "rare", "damage": 105, "price": 1200, "special": {"fire_damage": 50, "burns_enemies": true}},
+      {"id": "obsidian_klinge", "name": "Obsidianklinge", "rarity": "epic", "damage": 130, "price": 1800, "special": {"razor_sharp": "Ignoriert 30% Defense"}},
+      {"id": "flammenhammer", "name": "Flammenhammer", "rarity": "rare", "damage": 120, "price": 1400, "special": {"aoe_burn": "Verbrennt Gegner im Umkreis"}},
+      {"id": "phoenix_klinge", "name": "Phoenix-Klinge", "rarity": "legendary", "damage": 150, "price": 3000, "special": {"resurrection": "Heilt 50% HP bei Tod (1x pro Tag)"}}
+    ]},
+    {"category": "armor", "items": [
+      {"id": "feuerfeste_ruestung", "name": "Feuerfeste Rüstung", "rarity": "uncommon", "defense": 70, "price": 600, "special": {"fire_immunity": 100}},
+      {"id": "obsidian_ruestung", "name": "Obsidian-Rüstung", "rarity": "epic", "defense": 110, "price": 1500, "special": {"fire_immunity": 100, "reflects_damage": "15%"}},
+      {"id": "lava_panzer", "name": "Lava-Panzer", "rarity": "legendary", "defense": 140, "price": 2500, "special": {"fire_immunity": 100, "burn_attackers": "Angreifer erleiden 30 Feuerschaden"}}
+    ]},
+    {"category": "consumables", "items": [
+      {"id": "feuer_resistenz_trank", "name": "Feuerresistenz-Trank", "rarity": "common", "price": 60, "effects": {"buffs": {"fire_resistance": {"value": 80, "duration": 1800}}}},
+      {"id": "lava_heilung", "name": "Lava-Heilung", "rarity": "rare", "price": 150, "effects": {"restore_hp": 300, "fire_buff": {"value": 30, "duration": 3600}}}
+    ]},
+    {"category": "materials", "items": [
+      {"id": "obsidian", "name": "Obsidian", "rarity": "uncommon", "price": 80, "stackable": 500, "used_in": ["weapon_crafting", "armor_crafting"]},
+      {"id": "lava_kristall", "name": "Lava-Kristall", "rarity": "rare", "price": 300, "stackable": 99, "used_in": ["fire_magic", "legendary_crafting"]},
+      {"id": "vulkan_asche", "name": "Vulkanasche", "rarity": "common", "price": 20, "stackable": 999, "used_in": ["alchemy", "crafting"]},
+      {"id": "phoenix_feder", "name": "Phoenix-Feder", "rarity": "legendary", "price": 2000, "stackable": 10, "used_in": ["resurrection_items", "legendary_crafting"]}
+    ]}
+  ]
+}

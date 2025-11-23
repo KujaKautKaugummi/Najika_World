@@ -1,0 +1,17 @@
+{
+  "region": "magmastroeme",
+  "quests": [
+    {"id": "der_feuertanz", "name": "Der Feuertanz", "type": "ritual_quest", "difficulty": "medium", "level_required": 12, "giver": "lava_tänzerin_ignis", "description": "Lerne den heiligen Feuertanz", "najika_reactions": {"harley": "Fire dancing! That's HOT!"}, "rewards": {"exp": 2000, "skill": "fire_dance", "items": ["feuer_amulett"]}},
+    {"id": "vulkan_expedition", "name": "Vulkan-Expedition", "type": "exploration_quest", "difficulty": "hard", "level_required": 15, "giver": "vulkan_forscher_vulcan", "description": "Begleite Dr. Vulcan in den aktiven Vulkan", "najika_reactions": {"shiro": "Gefahr: EXTREM. Temperatur: 1300°C. Schutzausrüstung erforderlich."}, "rewards": {"exp": 4000, "items": ["lava_kristall x5", "vulkan_daten"]}},
+    {"id": "arena_der_flammen", "name": "Arena der Flammen", "type": "combat_arena", "difficulty": "very_hard", "level_required": 18, "giver": "feuer_barbar_ragnar", "description": "Kämpfe in der Feuer-Arena", "najika_reactions": {"megumin": "ARENA! KAMPF! FEUER! ALLES WAS ICH LIEBE!"}, "rewards": {"exp": 6000, "items": ["flammen_champion_krone"], "title": "Flammen-Champion"}},
+    {"id": "besänftige_den_vulkan", "name": "Besänftige den Vulkan", "type": "main_quest", "difficulty": "legendary", "level_required": 20, "giver": "lava_druide_magmus", "description": "Der Vulkan wird aktiv. Besänftige ihn bevor er ausbricht.", "choices": [{
+      "question": "Der Vulkan ist wütend. Was tust du?",
+      "options": [
+        {"id": "ritual", "text": "Führe das Besänftigungs-Ritual durch", "requires": "lava_druide_trust", "outcome": {"success": true, "rewards": {"exp": 15000, "items": ["vulkan_herz"], "reputation": +200}}},
+        {"id": "seal", "text": "Versiegle den Vulkan mit Magie", "requires": "high_magic", "outcome": {"success": true, "consequence": "Vulkan versiegelt für 100 Jahre", "rewards": {"exp": 12000}}},
+        {"id": "evacuate", "text": "Evakuiere die Siedlung", "outcome": {"consequence": "Siedlung wird zerstört", "refugees_saved": true, "rewards": {"exp": 8000, "reputation": +100}}}
+      ]
+    }], "najika_reactions": {"melissa": "Ein Vulkan... Die Macht der Natur selbst."}, "rewards": {"exp": 15000}},
+    {"id": "das_ewige_feuer", "name": "Das ewige Feuer", "type": "legendary_quest", "difficulty": "legendary", "level_required": 22, "giver": "feuer_phoenix", "description": "Hüte das ewige Feuer mit dem Phoenix", "najika_reactions": {"megumin": "PHOENIX-QUEST! Das ist legendär!"}, "rewards": {"exp": 20000, "items": ["phoenix_ei", "ewige_flamme"], "title": "Hüter des ewigen Feuers"}}
+  ]
+}

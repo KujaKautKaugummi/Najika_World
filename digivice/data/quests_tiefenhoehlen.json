@@ -1,0 +1,23 @@
+{
+  "region": "tiefenhoehlen",
+  "quests": [
+    {"id": "die_singenden_kristalle", "name": "Die singenden Kristalle", "type": "mystery_quest", "difficulty": "medium", "level_required": 12, "giver": "hoehlen_druide_moss", "description": "Finde die singenden Kristalle in der Tiefe", "najika_reactions": {"shiro": "Kristalle produzieren akustische Resonanz. Faszinierend."}, "rewards": {"exp": 2500, "items": ["sing_kristall"]}},
+    {"id": "goblin_rebellion", "name": "Die Goblin-Rebellion", "type": "faction_quest", "difficulty": "hard", "level_required": 15, "giver": "goblin_könig_grix", "description": "Hilf dem Goblin-König oder stürze ihn", "choices": [{
+      "question": "Die Goblins rebellieren. Welche Seite wählst du?",
+      "options": [
+        {"id": "help_king", "text": "Hilf dem König", "outcome": {"combat": "rebels", "rewards": {"exp": 4000, "items": ["goblin_krone"]}, "reputation": {"goblin_king": 100}}},
+        {"id": "join_rebels", "text": "Schließ dich den Rebellen an", "outcome": {"combat": "king", "rewards": {"exp": 4000, "items": ["freiheits_banner"]}, "reputation": {"goblin_rebels": 100}}}
+      ]
+    }], "najika_reactions": {"harley": "REBELLION! Revolution! Chaos! I LOVE IT!"}, "rewards": {"exp": 4000}},
+    {"id": "der_schlafende_drache", "name": "Der schlafende Drache", "type": "legendary_quest", "difficulty": "legendary", "level_required": 24, "giver": "uralter_drache_tiefe", "description": "Wecke den uralten Drachen NICHT. Oder doch?", "choices": [{
+      "question": "Der Drache schläft. Was tust du?",
+      "options": [
+        {"id": "wake_dragon", "text": "Wecke den Drachen (BOSS FIGHT)", "outcome": {"combat_triggered": "uralter_drache_boss", "rewards": {"exp": 40000, "items": ["drachen_schatz"]}}},
+        {"id": "steal_quietly", "text": "Stiehl leise vom Schatz", "requires": "stealth_100", "outcome": {"success_chance": 30, "success": {"rewards": {"items": ["drachen_goldbarren x10"]}}, "fail": {"combat_triggered": "uralter_drache_enraged"}}},
+        {"id": "leave", "text": "Lass den Drachen schlafen", "outcome": {"consequence": "Drache bleibt schlafen. Kein Kampf.", "rewards": {"title": "Der Weise"}}}
+      ]
+    }], "najika_reactions": {"megumin": "DRACHEN WECKEN! KAMPF!"}, "rewards": {"exp": 40000}},
+    {"id": "echos_raetsel", "name": "Echos Rätsel", "type": "puzzle_quest", "difficulty": "medium", "level_required": 10, "giver": "höhlengeist_echo", "description": "Löse die Rätsel des Echos", "najika_reactions": {"harley": "Echo puzzles! This is FUN!"}, "rewards": {"exp": 1800, "items": ["echo_stein"]}},
+    {"id": "die_kristall_mine", "name": "Die Kristall-Mine", "type": "dungeon_quest", "difficulty": "hard", "level_required": 16, "giver": "zwerg_miner_thorin", "description": "Erkunde die tiefste Kristall-Mine", "najika_reactions": {"shiro": "Kristall-Mine. Potenzielle Edelstein-Ausbeute: Hoch."}, "rewards": {"exp": 5000, "items": ["diamant x3", "rubin x5"]}}
+  ]
+}

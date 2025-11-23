@@ -1,0 +1,17 @@
+{
+  "region": "tiefenhoehlen",
+  "city": "none",
+  "note": "Unterirdische Höhlen mit Goblin-Siedlungen",
+  "npcs": [
+    {"id": "goblin_könig_grix", "name": "Goblin-König Grix", "race": "Goblin", "age": 52, "occupation": "Goblin King", "personality": {"trait": "Clever, gierig, Anführer"}, "shop": {"type": "goblin_market", "items": [{"id": "gestohlene_waren", "price": "variable"}, {"id": "kristall_waffen", "price": 800}]}, "najika_reaction": {"harley": "Goblin king! Sneaky little dude!"}},
+    {"id": "zwerg_miner_thorin", "name": "Zwerg-Miner Thorin", "race": "Dwarf", "age": 178, "occupation": "Miner", "personality": {"trait": "Stur, hart arbeitend, liebt Edelsteine"}, "shop": {"type": "gems_vendor", "items": [{"id": "rubin", "price": 400}, {"id": "saphir", "price": 450}, {"id": "diamant", "price": 1000}]}, "najika_reaction": {"shiro": "Zwerg. Minen-Expertise: 98%. Edelstein-Qualität: Premium."}},
+    {"id": "hoehlen_druide_moss", "name": "Höhlen-Druide Moss", "race": "Human", "age": 89, "occupation": "Cave Druid", "personality": {"trait": "Lebt im Dunkeln, spricht mit Kristallen"}, "quests": ["die_singenden_kristalle"], "najika_reaction": {"melissa": "Ein Druide der Dunkelheit... Selten."}},
+    {"id": "fledermaus_königin", "name": "Fledermaus-Königin Nocturna", "race": "Were-Bat", "age": 234, "occupation": "Bat Queen", "personality": {"trait": "Nachtaktiv, klug, beschützend"}, "najika_reaction": {"harley": "Bat queen! *makes bat noises* Eee eee!"}},
+    {"id": "kristall_händler_gem", "name": "Kristall-Händler Gem", "race": "Gnome", "age": 156, "occupation": "Crystal Merchant", "shop": {"type": "crystal_vendor", "items": [{"id": "magie_kristall", "price": 300}, {"id": "leucht_kristall", "price": 150}]}, "najika_reaction": {"megumin": "SHINY CRYSTALS! Ich will alle!"}},
+    {"id": "riesenwurm_beschwörer", "name": "Wurm-Beschwörer Tremor", "race": "Human", "age": 67, "occupation": "Worm Tamer", "personality": {"trait": "Verrückt, spricht mit Würmern"}, "najika_reaction": {"harley": "He talks to WORMS?! That's... weird."}},
+    {"id": "schattenschmuggler_shade", "name": "Schattenschmuggler Shade", "race": "Human", "age": 34, "occupation": "Smuggler", "personality": {"trait": "Geheimnisvoll, verkauft verbotene Waren"}, "shop": {"type": "black_market", "items": [{"id": "verbotene_artefakte", "price": "high"}]}, "najika_reaction": {"melissa": "Schwarzmarkt... Vorsicht."}},
+    {"id": "höhlengeist_echo", "name": "Höhlengeist Echo", "race": "Ghost", "age": 412, "occupation": "Cave Spirit", "personality": {"trait": "Wiederholt alles, testet Besucher"}, "quests": ["echos_raetsel"], "najika_reaction": {"harley": "Echo... echo... echo... *kichert*"}},
+    {"id": "pilz_sammler_fungi", "name": "Pilzsammler Fungi", "race": "Halfling", "age": 41, "occupation": "Mushroom Collector", "shop": {"type": "mushroom_vendor", "items": [{"id": "leucht_pilze", "price": 30}, {"id": "gift_pilze", "price": 80}]}, "najika_reaction": {"shiro": "Pilze. Biolumineszenz-Analyse: Positiv."}},
+    {"id": "uralter_drache_tiefe", "name": "Uralter Drache der Tiefe", "race": "Ancient Dragon", "age": 1247, "occupation": "Dungeon Guardian", "personality": {"trait": "Uralt, weise, schläft meist"}, "quests": ["der_schlafende_drache"], "najika_reaction": {"megumin": "EIN URALTER DRACHE! IM DUNGEON! Das ist EPISCH!"}}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "region": "gruenschlamm_sumpf",
+  "quests": [
+    {"id": "das_funkelnest_geheimnis", "name": "Das Funkelnest-Geheimnis", "type": "dungeon_quest", "difficulty": "hard", "level_required": 15, "giver": "schaetzejaeger_drake", "description": "Erforsche die Funkelnest-Höhle und finde den Schatz", "najika_reactions": {"harley": "TREASURE CAVE! Let's go LOOTING!"}, "rewards": {"exp": 5000, "items": ["funkelnest_schatz"], "gold": 2000}},
+    {"id": "die_verlorene_liebe", "name": "Die verlorene Liebe", "type": "tragedy_quest", "difficulty": "medium", "level_required": 10, "giver": "untote_braut", "description": "Hilf der untoten Braut, Frieden zu finden", "choices": [
+      {"question": "Die untote Braut will ihren verlorenen Geliebten finden. Was tust du?", "options": [
+        {"id": "find_lover", "text": "Finde ihren Geliebten (auch tot)", "outcome": {"success": true, "consequence": "Sie finden Frieden zusammen", "rewards": {"exp": 2000, "items": ["braut_ring"]}}},
+        {"id": "exorcise", "text": "Vertreibe ihren Geist", "outcome": {"success": false, "consequence": "Sie wehrt sich!", "combat_triggered": "untote_braut_boss"}}
+      ]}],
+      "najika_reactions": {"melissa": "Liebe überdauert selbst den Tod..."}, "rewards": {"exp": 1500}},
+    {"id": "nebelprüfung", "name": "Die Nebelprüfung", "type": "trial_quest", "difficulty": "hard", "level_required": 12, "giver": "sumpfgeist_nebel", "description": "Bestehe die Prüfung des Sumpfgeistes", "najika_reactions": {"shiro": "Prüfung. Analysiere Muster..."}, "rewards": {"exp": 3000, "items": ["nebel_essenz"]}},
+    {"id": "der_froschkönig", "name": "Der Froschkönig", "type": "comedy_quest", "difficulty": "easy", "level_required": 8, "giver": "riesenkröte_könig", "description": "Der Froschkönig braucht Hilfe mit seinem Volk", "najika_reactions": {"megumin": "Froschkönig-Quest! Wie im Märchen!"}, "rewards": {"exp": 800, "companion": "riesen_kröte"}},
+    {"id": "rettet_maya", "name": "Rettet Maya", "type": "rescue_quest", "difficulty": "medium", "level_required": 10, "giver": "verzweifelte_händlerin", "description": "Führe Maya sicher aus dem Sumpf", "najika_reactions": {"harley": "Rescue mission! I'm good at those!"}, "rewards": {"exp": 1200, "gold": 500}},
+    {"id": "die_sumpfhexe_herausforderung", "name": "Die Sumpfhexen-Herausforderung", "type": "boss_quest", "difficulty": "very_hard", "level_required": 18, "giver": "sumpfhexe_morgana", "description": "Besiege Morgana im magischen Duell", "najika_reactions": {"megumin": "HEXEN-DUELL! MAGIE GEGEN MAGIE!"}, "rewards": {"exp": 8000, "items": ["hexen_besen", "nekromanten_stab"]}}
+  ]
+}

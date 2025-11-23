@@ -1,0 +1,27 @@
+{
+  "region": "tiefenhoehlen",
+  "items": [
+    {"category": "weapons", "items": [
+      {"id": "kristall_dolch", "name": "Kristall-Dolch", "rarity": "uncommon", "damage": 60, "price": 350, "special": {"armor_pierce": 25}},
+      {"id": "goblin_machete", "name": "Goblin-Machete", "rarity": "common", "damage": 50, "price": 200},
+      {"id": "edelstein_schwert", "name": "Edelstein-Schwert", "rarity": "epic", "damage": 135, "price": 2000, "special": {"gem_power": "Verschiedene Effekte je nach Edelstein"}},
+      {"id": "drachen_klaue", "name": "Drachen-Klaue Waffe", "rarity": "legendary", "damage": 160, "price": 3500, "special": {"dragon_breath": "Feueratem-Angriff"}}
+    ]},
+    {"category": "armor", "items": [
+      {"id": "kristall_ruestung", "name": "Kristall-Rüstung", "rarity": "rare", "defense": 90, "magic_def": 75, "price": 1100, "special": {"magic_reflect": 20}},
+      {"id": "goblin_leder", "name": "Goblin-Leder Rüstung", "rarity": "common", "defense": 40, "price": 250, "special": {"stealth_bonus": 15}}
+    ]},
+    {"category": "materials", "items": [
+      {"id": "rubin", "name": "Rubin", "rarity": "rare", "price": 400, "stackable": 99, "used_in": ["jewelry", "fire_magic"]},
+      {"id": "saphir", "name": "Saphir", "rarity": "rare", "price": 450, "stackable": 99, "used_in": ["jewelry", "ice_magic"]},
+      {"id": "diamant", "name": "Diamant", "rarity": "epic", "price": 1000, "stackable": 50, "used_in": ["legendary_crafting", "enchanting"]},
+      {"id": "magie_kristall", "name": "Magie-Kristall", "rarity": "uncommon", "price": 300, "stackable": 200, "used_in": ["staff_crafting", "magic_items"]},
+      {"id": "leucht_pilze", "name": "Leuchtpilze", "rarity": "common", "price": 30, "stackable": 999, "used_in": ["alchemy", "light_sources"]},
+      {"id": "hoehlen_kristall", "name": "Höhlen-Kristall", "rarity": "uncommon", "price": 200, "stackable": 300, "special": "Leuchtet im Dunkeln"}
+    ]},
+    {"category": "consumables", "items": [
+      {"id": "dunkel_sicht_trank", "name": "Dunkelsicht-Trank", "rarity": "uncommon", "price": 80, "effects": {"buffs": {"night_vision": {"value": 100, "duration": 3600}}}},
+      {"id": "kristall_heilung", "name": "Kristall-Heilung", "rarity": "rare", "price": 180, "effects": {"restore_hp": 350, "restore_mp": 200}}
+    ]}
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "region": "blitzebene",
+  "city": "runenheim",
+  "theme": "magic_academy_highland_runes",
+  "npcs": [
+    {
+      "id": "erzmagier_aldric",
+      "name": "Erzmagier Aldric",
+      "race": "Human",
+      "age": 156,
+      "occupation": "Akademie-Leiter",
+      "personality": {"trait": "Weise, streng, brilliant", "catchphrase": "Magie ist Wissenschaft!"},
+      "shop": {"type": "spell_vendor", "items": [{"id": "feuerball_zauber", "price": 200}, {"id": "blitz_zauber", "price": 250}, {"id": "teleport_scroll", "price": 500}]},
+      "quests": ["die_magische_prüfung", "das_verlorene_zauberbuch"],
+      "najika_reaction": {"megumin": "Ein ECHTER Erzmagier! Kann er mir EXPLOSION beibringen?!"}
+    },
+    {
+      "id": "runenmeisterin_thora",
+      "name": "Runenmeisterin Thora",
+      "race": "Dwarf",
+      "age": 203,
+      "occupation": "Runen-Schmiedin",
+      "personality": {"trait": "Präzise, geduldig, meisterhaft", "catchphrase": "Jede Rune erzählt eine Geschichte"},
+      "shop": {"type": "rune_vendor", "items": [{"id": "macht_rune", "price": 300}, {"id": "schutz_rune", "price": 250}, {"id": "geschwindigkeit_rune", "price": 200}]},
+      "services": {"rune_enchanting": true, "quality_bonus": 25},
+      "najika_reaction": {"shiro": "Runen-Magie: Alte Technologie. Effizienz: Hoch."}
+    },
+    {
+      "id": "bibliothekar_cornelius",
+      "name": "Bibliothekar Cornelius",
+      "race": "Elf",
+      "age": 512,
+      "occupation": "Bibliotheks-Hüter",
+      "personality": {"trait": "Still, wissend, lebt für Bücher"},
+      "services": {"research": {"price": 100, "provides": "Quest hints and lore"}},
+      "quests": ["die_verbotene_sektion"],
+      "najika_reaction": {"melissa": "So viele alte Bücher... So viel vergessenes Wissen."}
+    },
+    {
+      "id": "alchemist_paracelsus",
+      "name": "Meister-Alchemist Paracelsus",
+      "race": "Human",
+      "age": 67,
+      "occupation": "Alchemie-Professor",
+      "shop": {"type": "alchemy_vendor", "items": [{"id": "mana_elixier", "price": 150}, {"id": "intelligenz_trank", "price": 200}, {"id": "philosophers_stone_shard", "price": 1000}]},
+      "najika_reaction": {"harley": "Mad scientist vibes! I LOVE IT!"}
+    },
+    {
+      "id": "kampfmagier_lyra",
+      "name": "Kampfmagier Lyra",
+      "race": "Half-Elf",
+      "age": 28,
+      "occupation": "Kampfmagie-Trainerin",
+      "personality": {"trait": "Energisch, kämpferisch, jung"},
+      "services": {"combat_magic_training": {"price": 300, "unlocks": "combat_spells"}},
+      "quests": ["das_magier_duell"],
+      "najika_reaction": {"megumin": "KAMPFMAGIE! EINE SEELENVERWANDTE!"}
+    },
+    {
+      "id": "sternendeuter_orion",
+      "name": "Sternendeuter Orion",
+      "race": "Human",
+      "age": 71,
+      "occupation": "Astrologie-Meister",
+      "services": {"fortune_telling": {"price": 150, "accuracy": "cryptic"}},
+      "najika_reaction": {"shiro": "Astrologie: Pseudo-Wissenschaft. Aber... Daten zeigen 43% Genauigkeit."}
+    },
+    {
+      "id": "tierbegleiter_händler_fauna",
+      "name": "Fauna die Tierfreundin",
+      "race": "Human",
+      "age": 24,
+      "occupation": "Magische Tierverkäuferin",
+      "shop": {"type": "pet_vendor", "items": [{"id": "magie_eule", "price": 500}, {"id": "feuer_salamander", "price": 600}, {"id": "frost_fox", "price": 700}]},
+      "najika_reaction": {"harley": "MAGICAL PETS! Can I have ALL of them?!"}
+    },
+    {
+      "id": "student_elias",
+      "name": "Student Elias",
+      "race": "Human",
+      "age": 16,
+      "occupation": "Magie-Student",
+      "personality": {"trait": "Nervös, fleißig, talentiert"},
+      "quests": ["elias_erste_prüfung"],
+      "najika_reaction": {"megumin": "Ein Anfänger! Ich kann ihm EXPLOSION beibringen!"}
+    },
+    {
+      "id": "geist_des_gruenders",
+      "name": "Geist des Gründers Merlin",
+      "race": "Ghost",
+      "age": 823,
+      "occupation": "Akademie-Geist",
+      "personality": {"trait": "Mysteriös, allwissend, erscheint nur nachts"},
+      "quests": ["merlins_vermächtnis"],
+      "najika_reaction": {"melissa": "Merlin... Der Name ist Legende."}
+    },
+    {
+      "id": "dimensionsreisender_zyx",
+      "name": "Zyx der Dimensionsreisende",
+      "race": "Unknown",
+      "age": "???",
+      "occupation": "Interdimensionaler Händler",
+      "shop": {"type": "exotic_magical", "appears_only": "random", "items": [{"id": "dimensions_splitter", "price": 5000}, {"id": "realitäts_spiegel", "price": 3000}]},
+      "najika_reaction": {"shiro": "FEHLER: Existenz nicht klassifizierbar. Dimensional-Anomalie detektiert."}
+    }
+  ]
+}

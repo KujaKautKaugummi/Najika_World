@@ -1,0 +1,24 @@
+{
+  "region": "reich_der_drei",
+  "quests": [
+    {"id": "die_krone_des_lich_koenigs", "name": "Die Krone des Lich-Königs", "type": "boss_hunt", "difficulty": "legendary", "level_required": 22, "giver": "lich_könig_mortis", "description": "Besiege den Lich-König oder werde sein Diener", "choices": [{
+      "question": "Der Lich-König bietet dir Unsterblichkeit an, wenn du ihm dienst. Was tust du?",
+      "options": [
+        {"id": "fight", "text": "Kämpfe gegen ihn", "outcome": {"combat_triggered": "lich_koenig_boss", "rewards": {"exp": 25000, "items": ["lich_krone", "lich_stab"]}, "title": "Lich-Bezwinger"}},
+        {"id": "serve", "text": "Akzeptiere Unsterblichkeit und diene ihm", "outcome": {"transformation": "lich", "rewards": {"immortality": true, "power": "necromancy_master"}, "consequence": "Du wirst ein Lich", "alignment": "evil"}},
+        {"id": "trick", "text": "Täusche ihn und stiehl die Krone", "requires": "high_deception", "outcome": {"success_chance": 50, "success": {"rewards": {"items": ["lich_krone"]}}, "fail": {"combat_triggered": "lich_koenig_enraged"}}}
+      ]
+    }], "najika_reactions": {"melissa": "Unsterblichkeit... Aber zu welchem Preis?"}, "rewards": {"exp": 25000}},
+    {"id": "der_verfluchte_ritter", "name": "Der verfluchte Ritter", "type": "tragedy_quest", "difficulty": "medium", "level_required": 14, "giver": "untote_ritter", "description": "Hilf Sir Gawain, Frieden zu finden", "najika_reactions": {"melissa": "Ehre bindet ihn, selbst im Tod..."}, "rewards": {"exp": 3000, "items": ["ritter_schwert"]}},
+    {"id": "anna_mama", "name": "Annas Mama", "type": "emotional_quest", "difficulty": "easy", "level_required": 10, "giver": "geist_kind_anna", "description": "Hilf dem Geist-Kind, ihre Mutter zu finden", "najika_reactions": {"harley": "Poor little ghost... *sniff* We HAVE to help her!"}, "rewards": {"exp": 1500, "items": ["anna_puppe"], "emotional_impact": "very_sad"}},
+    {"id": "der_schrei_der_banshee", "name": "Der Schrei der Banshee", "type": "horror_quest", "difficulty": "hard", "level_required": 16, "giver": "banshee_königin", "description": "Überlebe den Schrei der Banshee", "najika_reactions": {"harley": "SCREAMING GHOST! My poor EARS!"}, "rewards": {"exp": 4000, "items": ["banshee_schleier"]}},
+    {"id": "das_schicksal_der_drei", "name": "Das Schicksal der Drei", "type": "mystery_quest", "difficulty": "legendary", "level_required": 20, "giver": "drei_schwestern", "description": "Die Drei Schwestern zeigen dir dein Schicksal", "choices": [{
+      "question": "Die Drei zeigen dir drei mögliche Schicksale. Welches wählst du?",
+      "options": [
+        {"id": "power", "text": "Macht und Ruhm", "outcome": {"buffs": {"all_stats": 50}, "consequence": "Du opferst Beziehungen"}},
+        {"id": "love", "text": "Liebe und Freundschaft", "outcome": {"companion": "true_love", "consequence": "Du opferst Macht"}},
+        {"id": "freedom", "text": "Freiheit vom Schicksal", "outcome": {"unique_ability": "fate_breaker", "consequence": "Ungewisse Zukunft"}}
+      ]
+    }], "najika_reactions": {"melissa": "Schicksal... Kann man es wirklich ändern?"}, "rewards": {"exp": 20000}}
+  ]
+}
