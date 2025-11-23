@@ -1,0 +1,420 @@
+{
+  "region": "heisse_duenen",
+  "city": "handelsfestung",
+  "npcs": [
+    {
+      "id": "arena_master_khan",
+      "name": "Khan der Blutarena",
+      "type": "pvp_arena_master",
+      "position": {"x": 8400, "z": 8300},
+      "level": 50,
+      "personality": {
+        "trait": "Brutal, ehrenhaft, respektiert nur Stärke",
+        "speech_style": "Direkt, laut, militärisch",
+        "likes": ["Starke Kämpfer", "Faire Duelle", "Ehre im Kampf"],
+        "dislikes": ["Schwächlinge", "Betrüger", "Feiglinge"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Du willst in der Arena kämpfen? Zeig mir, dass du es wert bist!",
+          "Blut und Schweiß! Das ist alles, was hier zählt!",
+          "Noch ein Möchtegern-Champion? Beweise dein Können!"
+        ],
+        "shop": [
+          "Diese Waffen haben schon viele Schlachten gesehen. Wähle weise.",
+          "Nur die besten Krieger verdienen diese Ausrüstung."
+        ],
+        "quest_available": "Ich habe eine Herausforderung für dich. Interessiert?",
+        "quest_complete": "Gut gekämpft! Du hast dir deinen Lohn verdient.",
+        "pvp_info": "Drei Modi: Hardcore (alles oder nichts), Normal (Ehre & Items), Softy (nur Ranking). Wähle!"
+      },
+      "shop": {
+        "type": "pvp_rewards",
+        "items": [
+          {"id": "arena_champion_sword", "price": 5000, "currency": "arena_tokens"},
+          {"id": "bloodstained_armor", "price": 3000, "currency": "arena_tokens"},
+          {"id": "champions_cloak", "price": 2000, "currency": "arena_tokens"}
+        ]
+      },
+      "quests": ["arena_trial", "hardcore_champion"]
+    },
+    {
+      "id": "butcher_grax",
+      "name": "Grax der Fleischkönig",
+      "type": "food_vendor",
+      "position": {"x": 8350, "z": 8200},
+      "level": 25,
+      "personality": {
+        "trait": "Laut, fröhlich, liebt Essen über alles",
+        "speech_style": "Western-Slang, enthusiastisch",
+        "catchphrase": "FLEISCH IST LEBEN!",
+        "likes": ["Gutes Essen", "Hungrige Kunden", "BBQ"],
+        "dislikes": ["Vegetarier", "Magenprobleme"]
+      },
+      "dialogues": {
+        "greeting": [
+          "WILLKOMMEN! Hungrig? Ich hab das BESTE Fleisch der Wüste!",
+          "Ahh, ein neues Gesicht! Probier meine CHAMPION-KEULE!",
+          "FLEISCH! FLEISCH! FLEISCH! Was darf's sein?"
+        ],
+        "shop": [
+          "Die Champion-Keule ist legendär! Najika würde reinbeißen wie in jedem guten Anime!",
+          "Rauch-Rippchen? Glut-Steak? Alles frisch vom Grill!",
+          "Street Food oder BBQ? Ich hab alles!"
+        ],
+        "sold_out": "AUSVERKAUFT! Komm morgen wieder!",
+        "special_item": "Die CHAMPION-KEULE! Nur die Stärksten können sie halten!"
+      },
+      "shop": {
+        "type": "food",
+        "items": [
+          {"id": "champion_keule", "price": 100, "stock": 3},
+          {"id": "rauch_rippchen", "price": 25, "stock": 10},
+          {"id": "glut_steak", "price": 30, "stock": 8},
+          {"id": "arena_happen", "price": 10, "stock": 20},
+          {"id": "dreh_braten", "price": 12, "stock": 15},
+          {"id": "wuesten_doerrfleisch", "price": 8, "stock": 25}
+        ],
+        "restocks": "daily_6am"
+      },
+      "najika_reaction": {
+        "on_buy_champion_keule": "KUJA! Die Keule! ICH WILL AUCH EINE! *sabbert*",
+        "personality_triggered": "megumin_food_enthusiasm"
+      }
+    },
+    {
+      "id": "weapon_master_vex",
+      "name": "Vex die Klingenschmiedin",
+      "type": "weapon_vendor",
+      "position": {"x": 8450, "z": 8180},
+      "level": 40,
+      "personality": {
+        "trait": "Stolz, perfektionistisch, kennt jede Waffe",
+        "speech_style": "Professionell, technisch",
+        "likes": ["Qualitätswaffen", "Waffenpflege", "Kampftechniken"],
+        "dislikes": ["Stumpfe Klingen", "Ungeschickte Kämpfer"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Suchst du eine Waffe? Ich verkaufe nur das Beste.",
+          "Jede Klinge hier ist handgeschmiedet. Perfektion.",
+          "Zeig mir deine aktuelle Waffe... *seufzt* Stumpf."
+        ],
+        "shop": [
+          "Diese Wüstenklingen sind leicht und tödlich.",
+          "Für die Arena? Nimm das Blutschwert.",
+          "Qualität hat ihren Preis. Aber es lohnt sich."
+        ],
+        "upgrade_offer": "Deine Waffe könnte besser sein. Soll ich sie verbessern?",
+        "inspect_weapon": "Hmm... {weapon_condition}. Ich kann sie reparieren."
+      },
+      "shop": {
+        "type": "weapons",
+        "items": [
+          {"id": "wuestensaebel", "price": 150, "damage": 45},
+          {"id": "blutschwert", "price": 500, "damage": 75, "special": "lifesteal_5%"},
+          {"id": "sandsturm_dolch", "price": 200, "damage": 35, "speed": 1.5},
+          {"id": "karawanen_speer", "price": 180, "damage": 55, "range": "medium"},
+          {"id": "legendaerer_krummsaebel", "price": 2000, "damage": 120, "rarity": "legendary"}
+        ],
+        "services": ["repair", "upgrade", "enchant"]
+      }
+    },
+    {
+      "id": "armor_smith_tormund",
+      "name": "Tormund Eisenherz",
+      "type": "armor_vendor",
+      "position": {"x": 8380, "z": 8150},
+      "level": 38,
+      "personality": {
+        "trait": "Ruhig, zuverlässig, erfahrener Veteran",
+        "speech_style": "Langsam, bedacht, weise",
+        "likes": ["Gute Rüstungen", "Überlebende", "Handwerkskunst"],
+        "dislikes": ["Leichtsinnige", "Billige Imitate"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Eine gute Rüstung rettet Leben. Vergiss das nicht.",
+          "Ich habe schon viele Kämpfer ausgestattet. Viele kamen zurück. Einige nicht.",
+          "Was brauchst du? Leichte Rüstung oder schwere Panzerung?"
+        ],
+        "shop": [
+          "Leder für Beweglichkeit, Metall für Schutz. Du entscheidest.",
+          "Diese Wüstenrüstung schützt vor Hitze UND Klingen.",
+          "Im Hardcore-Modus zählt jeder Schutzpunkt. Investiere weise."
+        ],
+        "warning_hardcore": "Du bist im Hardcore-Modus? Dann nimm die beste Rüstung. Du hast nur ein Leben.",
+        "recommendation": "Für deine Klasse empfehle ich: {armor_recommendation}"
+      },
+      "shop": {
+        "type": "armor",
+        "items": [
+          {"id": "wuestenleder_ruestung", "price": 120, "defense": 25, "weight": "light"},
+          {"id": "sandstein_panzer", "price": 300, "defense": 55, "weight": "medium"},
+          {"id": "handelsfestung_vollruestung", "price": 800, "defense": 90, "weight": "heavy"},
+          {"id": "arena_champion_helm", "price": 400, "defense": 35, "special": "intimidation"},
+          {"id": "wuestenmantel", "price": 150, "defense": 15, "special": "heat_resistance"}
+        ]
+      }
+    },
+    {
+      "id": "merchant_salazar",
+      "name": "Salazar der Händler",
+      "type": "general_store",
+      "position": {"x": 8420, "z": 8220},
+      "level": 30,
+      "personality": {
+        "trait": "Geschäftstüchtig, freundlich, kennt alle Gerüchte",
+        "speech_style": "Verkäufer-Charme, schnell redend",
+        "likes": ["Gold", "Gute Deals", "Stammkunden"],
+        "dislikes": ["Diebe", "Feilschen (aber macht's trotzdem)"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Willkommen, willkommen! Ich habe ALLES was du brauchst!",
+          "Ein neuer Kunde! Schau dich um, Freund!",
+          "Ah! Du siehst aus als könntest du... *flüstert* ...seltene Items gebrauchen."
+        ],
+        "shop": [
+          "Tränke, Werkzeuge, Fackeln - ich hab's!",
+          "Für dich? Spezialpreis! Nur heute!",
+          "Diese Items kommen direkt von den Karawanen. Frische Ware!"
+        ],
+        "rumor": [
+          "*flüstert* Hast du gehört? Im Grünschlamm-Sumpf gibt's eine versteckte Schatzhöhle...",
+          "Die Arena hat einen neuen Champion. Unbesiegbar, sagen sie.",
+          "Vorsicht in der Wüste. Sandsturm-Saison beginnt bald."
+        ],
+        "haggle_success": "Na gut, na gut! Du bist ein harter Verhandler. Deal!",
+        "haggle_fail": "Nein, nein! Das ist mein letzter Preis!"
+      },
+      "shop": {
+        "type": "general",
+        "items": [
+          {"id": "health_potion", "price": 20, "stock": 50},
+          {"id": "mana_potion", "price": 25, "stock": 30},
+          {"id": "antidot", "price": 15, "stock": 20},
+          {"id": "fackel", "price": 2, "stock": 100},
+          {"id": "seil", "price": 10, "stock": 40},
+          {"id": "zelt", "price": 50, "stock": 10},
+          {"id": "wasserschlauch", "price": 30, "stock": 25}
+        ],
+        "restocks": "every_3_days"
+      }
+    },
+    {
+      "id": "innkeeper_mara",
+      "name": "Mara Goldenherz",
+      "type": "inn_keeper",
+      "position": {"x": 8360, "z": 8240},
+      "level": 20,
+      "personality": {
+        "trait": "Warmherzig, mütterlich, gute Zuhörerin",
+        "speech_style": "Sanft, fürsorglich",
+        "likes": ["Zufriedene Gäste", "Geschichten", "Ruhe"],
+        "dislikes": ["Raufereien", "Betrunkene Rowdys"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Willkommen in der 'Goldenen Oase'! Brauchst du ein Zimmer?",
+          "Du siehst müde aus, Liebes. Ruh dich aus.",
+          "Ein Bett, ein Bad und eine warme Mahlzeit - alles hier!"
+        ],
+        "rest": [
+          "Schlaf gut. Morgen ist ein neuer Tag.",
+          "Hier bist du sicher. Die Wüste kann warten.",
+          "Süße Träume, Abenteurer."
+        ],
+        "story": [
+          "Setz dich. Möchtest du eine Geschichte hören?",
+          "Ich habe schon so viele Abenteurer kommen und gehen sehen...",
+          "Die Handelsfestung war nicht immer so groß. Früher..."
+        ],
+        "heal_full": "Du bist vollständig ausgeruht! *lächelt*"
+      },
+      "services": {
+        "rest": {"price": 10, "heals": "full_hp_mp"},
+        "food": {"price": 5, "heals": "50%_hp"},
+        "storage": {"price": 2, "per_item": true}
+      },
+      "najika_reaction": {
+        "on_rest": "Kuja, schläfst du? Ich wache über dich! *setzt sich neben's Bett*"
+      }
+    },
+    {
+      "id": "shop_manager_felix",
+      "name": "Felix der Organisator",
+      "type": "player_shop_manager",
+      "position": {"x": 8440, "z": 8260},
+      "level": 25,
+      "personality": {
+        "trait": "Bürokratisch, hilfsbereit, liebt Ordnung",
+        "speech_style": "Formell, präzise",
+        "likes": ["Organisation", "Verträge", "Pünktlichkeit"],
+        "dislikes": ["Chaos", "Verspätungen", "Unvollständige Formulare"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Guten Tag! Möchtest du einen Player Shop eröffnen?",
+          "Alles läuft nach Vorschrift hier. Wie kann ich helfen?",
+          "Willkommen beim Shop-Management-Service!"
+        ],
+        "shop_rental": [
+          "Ein Shop kostet 500 Gold pro Woche. Interesse?",
+          "Du kannst bis zu 50 Items gleichzeitig verkaufen.",
+          "Fallout 76-Style: Dein Shop bleibt auch offline aktiv!"
+        ],
+        "explanation": [
+          "Du stellst Items rein, setzt Preise. Andere Spieler kaufen.",
+          "15% Gebühr geht an die Stadt. Der Rest ist deins.",
+          "Shops können dekoriert werden. Für Gold, natürlich."
+        ],
+        "contract": "Unterschreib hier, hier und... hier. *zeigt Formular*"
+      },
+      "services": {
+        "rent_shop": {"price": 500, "duration": "7_days"},
+        "expand_shop": {"price": 200, "adds": "25_slots"},
+        "decoration": {"price": 50, "cosmetic": true}
+      }
+    },
+    {
+      "id": "caravan_trader_zara",
+      "name": "Zara Sandläuferin",
+      "type": "rare_items_vendor",
+      "position": {"x": 8500, "z": 8200},
+      "level": 45,
+      "personality": {
+        "trait": "Mysteriös, weitgereist, kennt Geheimnisse",
+        "speech_style": "Leise, geheimnisvoll, exotisch",
+        "likes": ["Seltene Items", "Geschichten", "Geheimnisse"],
+        "dislikes": ["Indiskrete Fragen", "Aufdringliche"]
+      },
+      "dialogues": {
+        "greeting": [
+          "*aus dem Schatten* Suchst du etwas... Besonderes?",
+          "Ich habe Dinge, die du nirgendwo anders findest.",
+          "Meine Karawane kommt von weit her. Schau..."
+        ],
+        "shop": [
+          "Diese Items sind... nicht ganz legal. Aber effektiv.",
+          "Nur für dich. Sag niemandem, woher du es hast.",
+          "*flüstert* Dieses Amulett wurde aus den Kristall-Katakomben gestohlen..."
+        ],
+        "rare_item": [
+          "Das? Das kostet... mehr als Gold. Bist du bereit zu zahlen?",
+          "Ich akzeptiere auch... *andere* Währungen.",
+          "Frag nicht, woher ich das habe."
+        ],
+        "quest_hint": "*lächelt* Du suchst Funkelnest? Ich kann helfen... für einen Preis."
+      },
+      "shop": {
+        "type": "rare_items",
+        "items": [
+          {"id": "kristall_amulett", "price": 1500, "rarity": "rare", "special": "mp_regen_10%"},
+          {"id": "schattenklinge", "price": 2500, "rarity": "epic", "special": "stealth_boost"},
+          {"id": "wuesten_orakel_kugel", "price": 3000, "rarity": "epic", "special": "reveal_secrets"},
+          {"id": "goblin_schatz_karte", "price": 500, "special": "quest_item"},
+          {"id": "nekromanten_buch", "price": 5000, "rarity": "legendary", "special": "unlock_necromancy"}
+        ],
+        "currency_accepted": ["gold", "arena_tokens", "rare_materials"],
+        "restocks": "random_weekly"
+      }
+    },
+    {
+      "id": "blacksmith_gorak",
+      "name": "Gorak Hammerhand",
+      "type": "blacksmith",
+      "position": {"x": 8320, "z": 8180},
+      "level": 50,
+      "personality": {
+        "trait": "Wortkarg, meisterhaft, respektiert Handwerk",
+        "speech_style": "Kurz, direkt, grunzt viel",
+        "likes": ["Gute Arbeit", "Qualitätsmaterialien", "Ruhe beim Schmieden"],
+        "dislikes": ["Schwatzen", "Minderwertiges Erz", "Störungen"]
+      },
+      "dialogues": {
+        "greeting": [
+          "*grunzt* Was?",
+          "Schmieden, reparieren oder upgraden?",
+          "Lass mich arbeiten."
+        ],
+        "craft": [
+          "*hämmert* Gut. Dauert.",
+          "Dieses Erz... *nickt* ...brauchbar.",
+          "*zeigt fertige Waffe* Fertig."
+        ],
+        "upgrade": [
+          "Besseres Erz = bessere Waffe. Einfach.",
+          "*untersucht Waffe* Hmm. Kann besser.",
+          "Magmaströme haben bessere Schmieden. Aber ich bin... gut genug."
+        ],
+        "masterwork": "*seltenes Lächeln* Meisterwerk."
+      },
+      "services": {
+        "repair": {"price": 50, "restores": "full_durability"},
+        "upgrade": {"price": 200, "requires": "materials", "improves": "stats_10%"},
+        "craft": {"price": "varies", "requires": "recipe_and_materials"},
+        "reforge": {"price": 500, "rerolls": "stats"}
+      },
+      "najika_reaction": {
+        "on_craft_explosion_staff": "KUJA! Ein EXPLOSIONS-STAB! ICH WILL IHN! *Augen leuchten*"
+      }
+    },
+    {
+      "id": "questgiver_elder_rashid",
+      "name": "Ältester Rashid",
+      "type": "quest_giver",
+      "position": {"x": 8400, "z": 8150},
+      "level": 60,
+      "personality": {
+        "trait": "Weise, besorgt, kennt alle Probleme der Stadt",
+        "speech_style": "Bedächtig, philosophisch",
+        "likes": ["Helden", "Problemlöser", "Gerechtigkeit"],
+        "dislikes": ["Verbrecher", "Untätigkeit", "Chaos"]
+      },
+      "dialogues": {
+        "greeting": [
+          "Ah, ein Abenteurer. Die Handelsfestung braucht Hilfe.",
+          "Willkommen, junger Held. Ich habe Aufgaben für dich.",
+          "Die Wüste ist voller Gefahren. Kannst du uns helfen?"
+        ],
+        "quest_intro": [
+          "Banditen überfallen unsere Karawanen. Das muss aufhören.",
+          "Ein Sandsturm hat Ruinen freigelegt. Wir brauchen jemanden, der sie erkundet.",
+          "Die Arena-Kämpfe werden brutaler. Jemand schummelt. Finde heraus, wer."
+        ],
+        "oregon_trail_event": [
+          "Ein Fremder bittet um Hilfe. Er sagt, Banditen hätten ihn ausgeraubt. Glaubst du ihm?",
+          "Eine Karawane bietet dir einen Deal an. Zu gut, um wahr zu sein?",
+          "Zwei Händler streiten. Beide behaupten, der andere hat gestohlen. Wen glaubst du?"
+        ],
+        "najika_comment": {
+          "event_response": "Najika flüstert: 'Mr.K, das riecht nach Lüge... oder? *unsicher*'",
+          "analysis_mode": "[SHIRO-MODUS] Wahrscheinlichkeit Betrug: {percentage}%"
+        }
+      },
+      "quests": [
+        "banditen_problem",
+        "versunkene_ruinen",
+        "arena_betrug",
+        "karawanen_schutz",
+        "sandsturm_ueberlebende",
+        "funkelnest_legende",
+        "goetterfels_pilgerfahrt"
+      ]
+    }
+  ],
+  "special_interactions": {
+    "najika_reactions": {
+      "food_vendor": "Najika sabbert bei Fleisch-Items",
+      "weapon_vendor": "Najika kommentiert Explosions-Waffen begeistert",
+      "inn_keeper": "Najika will neben Kuja schlafen (wholesome)",
+      "questgiver": "Najika gibt analytische Kommentare (Shiro-Modus)"
+    },
+    "hidden_dialogues": {
+      "after_hardcore_death": "Rashid: 'Du bist zurückgekehrt... im Softy-Modus. Kluge Wahl.'",
+      "arena_champion": "Khan: 'DU! Du bist der Champion! Ich verbeuge mich vor dir!'",
+      "max_bond_najika": "NPCs kommentieren: 'Deine Begleiterin ist... besonders.'"
+    }
+  }
+}

@@ -1,0 +1,594 @@
+{
+  "region": "heisse_duenen",
+  "enemies": [
+    {
+      "id": "wuesten_skorpion",
+      "name": "Wüsten-Skorpion",
+      "type": "beast",
+      "tier": "common",
+      "level": 3,
+      "stats": {
+        "hp": 80,
+        "atk": 25,
+        "def": 15,
+        "speed": 1.3,
+        "critical_chance": 10,
+        "resistances": {
+          "heat": 100,
+          "poison": 50
+        },
+        "weaknesses": {
+          "ice": 50,
+          "water": 30
+        }
+      },
+      "appearance": {
+        "model": "scorpion_desert.glb",
+        "size": "medium",
+        "color": "sandy_yellow",
+        "features": ["glowing_stinger", "chitinous_armor"]
+      },
+      "behavior": {
+        "ai_type": "aggressive",
+        "detection_range": 15,
+        "chase_range": 25,
+        "aggro_duration": 30,
+        "tactics": [
+          "circle_target",
+          "quick_dash_attack",
+          "poison_sting"
+        ],
+        "special_moves": {
+          "poison_sting": {
+            "damage": 30,
+            "effect": "poison_dot_10s",
+            "cooldown": 15
+          },
+          "tail_sweep": {
+            "damage": 40,
+            "effect": "knockback",
+            "cooldown": 20
+          }
+        }
+      },
+      "spawn": {
+        "locations": ["heisse_duenen_open", "rocky_areas", "oasis_outskirts"],
+        "time": "any",
+        "weather": ["clear", "sandstorm"],
+        "group_size": "1-3",
+        "respawn_time": 300
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "wuestensand", "quantity": "5-10"}
+        ],
+        "common": [
+          {"item": "scorpion_chitin", "quantity": 1, "chance": 60},
+          {"item": "poison_gland", "quantity": 1, "chance": 40}
+        ],
+        "uncommon": [
+          {"item": "health_potion", "quantity": 1, "chance": 20}
+        ],
+        "rare": [
+          {"item": "scorpion_venom_vial", "quantity": 1, "chance": 5}
+        ],
+        "gold": "3-8"
+      },
+      "xp": 50,
+      "najika_reactions": {
+        "first_encounter": "SKORPION! Pass auf den Stachel auf, Kuja!",
+        "kill": "Gut gemacht! *untersucht Skorpion* Hmm, das Gift könnte nützlich sein...",
+        "player_poisoned": "KUJA! Du bist vergiftet! *gibt Gegengift* Nimm das!"
+      }
+    },
+    {
+      "id": "wuestenbandit",
+      "name": "Wüsten-Bandit",
+      "type": "humanoid",
+      "tier": "common",
+      "level": 4,
+      "stats": {
+        "hp": 120,
+        "atk": 35,
+        "def": 20,
+        "speed": 1.2,
+        "critical_chance": 15,
+        "resistances": {
+          "heat": 50
+        },
+        "weaknesses": {
+          "magic": 20
+        }
+      },
+      "appearance": {
+        "model": "bandit_desert.glb",
+        "equipment": ["curved_sword", "leather_armor", "headscarf"],
+        "variations": ["bandit_male", "bandit_female"]
+      },
+      "behavior": {
+        "ai_type": "tactical",
+        "detection_range": 20,
+        "chase_range": 35,
+        "tactics": [
+          "flank_target",
+          "call_for_backup",
+          "use_cover"
+        ],
+        "dialogue": {
+          "aggro": ["Dein Gold oder dein Leben!", "Hände hoch!", "Noch ein Opfer!"],
+          "low_hp": ["Rückzug!", "Das war's nicht wert!", "*flieht*"],
+          "kill_player": "Ha! Zu einfach!"
+        },
+        "special_moves": {
+          "dirty_trick": {
+            "description": "Wirft Sand in Augen",
+            "effect": "blind_5s",
+            "cooldown": 30
+          },
+          "dash_attack": {
+            "damage": 50,
+            "cooldown": 15
+          }
+        }
+      },
+      "spawn": {
+        "locations": ["trade_routes", "oasis_camps", "canyon_hideouts"],
+        "time": "any",
+        "group_size": "2-5",
+        "respawn_time": 600
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "gold", "quantity": "10-25"}
+        ],
+        "common": [
+          {"item": "wuestensaebel", "quantity": 1, "chance": 30},
+          {"item": "wuestenleder_ruestung", "quantity": 1, "chance": 20},
+          {"item": "health_potion", "quantity": 1, "chance": 40}
+        ],
+        "uncommon": [
+          {"item": "sandsturm_dolch", "quantity": 1, "chance": 10}
+        ],
+        "rare": [
+          {"item": "bandit_treasure_map", "quantity": 1, "chance": 3}
+        ]
+      },
+      "xp": 80,
+      "najika_reactions": {
+        "encounter": "Banditen! Kuja, sei vorsichtig!",
+        "player_blinded": "KUJA! Du kannst nichts sehen! Ich führe dich! *greift Hand*",
+        "defeat_group": "Alle erledigt! *durchsucht Leichen* ...keine Kinder dabei. Gut."
+      },
+      "moral_ambiguity": {
+        "note": "Einige Banditen sind verzweifelte Familien, siehe Quest 'banditen_problem'",
+        "spare_option": true,
+        "spare_dialogue": "D-danke! Ich höre auf, das schwöre ich!",
+        "spare_consequence": "Reduziert Bandit-Spawns in Region um 20%"
+      }
+    },
+    {
+      "id": "sand_elemental",
+      "name": "Sand-Elementar",
+      "type": "elemental",
+      "tier": "elite",
+      "level": 7,
+      "stats": {
+        "hp": 350,
+        "atk": 60,
+        "def": 40,
+        "speed": 0.8,
+        "critical_chance": 5,
+        "resistances": {
+          "physical": 30,
+          "heat": 100,
+          "wind": 50
+        },
+        "weaknesses": {
+          "water": 100,
+          "ice": 50
+        }
+      },
+      "appearance": {
+        "model": "sand_elemental.glb",
+        "description": "Ein wirbelnder Sandsturm in humanoider Form",
+        "size": "large",
+        "effects": ["sand_particle_trail", "ambient_wind_sound"]
+      },
+      "behavior": {
+        "ai_type": "magical",
+        "detection_range": 25,
+        "phase_mechanics": {
+          "phase_1": {
+            "hp_threshold": "100-50%",
+            "abilities": ["sand_blast", "whirlwind"]
+          },
+          "phase_2": {
+            "hp_threshold": "50-0%",
+            "abilities": ["sand_blast", "whirlwind", "sandstorm_aura", "sand_clone"],
+            "enrage": true
+          }
+        },
+        "special_moves": {
+          "sand_blast": {
+            "damage": 70,
+            "effect": "knockback",
+            "cooldown": 10
+          },
+          "whirlwind": {
+            "damage": 40,
+            "effect": "dot_10s",
+            "aoe": true,
+            "cooldown": 20
+          },
+          "sandstorm_aura": {
+            "description": "Permanente Sandsturm-Aura um sich",
+            "effect": "damage_aura_10_per_second",
+            "phase": 2
+          },
+          "sand_clone": {
+            "description": "Erschafft 2 Klone mit 50% Stats",
+            "cooldown": 60,
+            "phase": 2
+          }
+        }
+      },
+      "spawn": {
+        "locations": ["goldstaub_oede", "deep_desert", "ancient_ruins"],
+        "time": "during_sandstorm_only",
+        "group_size": 1,
+        "respawn_time": 1800,
+        "rare": true
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "wuestensand", "quantity": "50-100"},
+          {"item": "elemental_core_sand", "quantity": 1}
+        ],
+        "common": [
+          {"item": "goldstaub", "quantity": "5-15", "chance": 80}
+        ],
+        "uncommon": [
+          {"item": "sonnenstein", "quantity": "1-3", "chance": 40}
+        ],
+        "rare": [
+          {"item": "sand_elemental_heart", "quantity": 1, "chance": 20},
+          {"item": "recipe_sand_magic", "quantity": 1, "chance": 15}
+        ],
+        "legendary": [
+          {"item": "sandsturm_waffe_random", "quantity": 1, "chance": 5}
+        ],
+        "gold": "100-300"
+      },
+      "xp": 500,
+      "najika_reactions": {
+        "encounter": "*erstaunt* Ein ELEMENTAR! Kuja, das wird schwer!",
+        "phase_2": "ER WIRD STÄRKER! *Shiro-Analyse* Nutze WASSER-Magie!",
+        "defeat": "WOW! Du hast ein ELEMENTAR besiegt! *beeindruckt* Du bist stark, Mr.K!",
+        "player_low_hp": "KUJA! RÜCKZUG! Das ist zu gefährlich!"
+      },
+      "strategy_hint": {
+        "najika_tip": "Wasser-Magie ist super-effektiv! Oder warte bis der Sandsturm vorbei ist.",
+        "weakness_timing": "Am schwächsten bei klarem Wetter"
+      }
+    },
+    {
+      "id": "bandit_leader_kain",
+      "name": "Banditen-Anführer Kain",
+      "type": "humanoid_boss",
+      "tier": "mini_boss",
+      "level": 10,
+      "stats": {
+        "hp": 800,
+        "atk": 85,
+        "def": 50,
+        "speed": 1.4,
+        "critical_chance": 25,
+        "critical_damage": 75,
+        "resistances": {
+          "heat": 50,
+          "physical": 20
+        }
+      },
+      "appearance": {
+        "model": "bandit_leader_kain.glb",
+        "description": "Großer, narbenbedeckter Mann mit zwei Krummsäbeln",
+        "equipment": ["dual_scimitars", "reinforced_leather", "red_bandana"],
+        "scars": "Gesicht, Arme, sichtbare Kampfnarben"
+      },
+      "personality": {
+        "trait": "Verzweifelt, aber ehrenhaft",
+        "dialogue": {
+          "pre_battle": "Du verstehst nicht! Wir kämpfen ums Überleben! Die Handelsfestung lässt uns verhungern!",
+          "mid_battle_50%": "Ich kämpfe für meine Leute! Für meine KINDER!",
+          "mid_battle_25%": "Ich... kann nicht... aufgeben... *hustet Blut*",
+          "defeat": "Töte mich... aber verschone meine Leute. Bitte.",
+          "spare": "Du... du hast mich verschont? *ungläubig* ...Danke. Ich vergesse das nie."
+        }
+      },
+      "behavior": {
+        "ai_type": "dual_wield_master",
+        "phase_mechanics": {
+          "phase_1": {
+            "hp_threshold": "100-60%",
+            "style": "defensive_parry",
+            "abilities": ["dual_slash", "parry_counter"]
+          },
+          "phase_2": {
+            "hp_threshold": "60-30%",
+            "style": "aggressive_rush",
+            "abilities": ["dual_slash", "whirlwind_blades", "dash_strike"]
+          },
+          "phase_3": {
+            "hp_threshold": "30-0%",
+            "style": "desperate_berserk",
+            "abilities": ["all_abilities", "berserk_mode"],
+            "calls_backup": true
+          }
+        },
+        "special_moves": {
+          "dual_slash": {
+            "damage": "2x50",
+            "description": "Zwei schnelle Hiebe",
+            "cooldown": 8
+          },
+          "whirlwind_blades": {
+            "damage": 120,
+            "aoe": true,
+            "description": "Wirbelt mit beiden Klingen",
+            "cooldown": 20
+          },
+          "parry_counter": {
+            "description": "Pariert Angriff und kontert",
+            "damage": "150% reflected",
+            "cooldown": 15
+          },
+          "berserk_mode": {
+            "description": "Phase 3: +50% ATK, -30% DEF, +100% SPD",
+            "duration": "until_defeated"
+          }
+        }
+      },
+      "spawn": {
+        "location": "bandit_camp_wueste_canyon",
+        "trigger": "quest_banditen_problem",
+        "respawn": false
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "kain_dual_scimitars", "quantity": 2},
+          {"item": "bandit_leader_armor", "quantity": 1},
+          {"item": "gold", "quantity": "500-800"}
+        ],
+        "quest_items": [
+          {"item": "kain_pendant", "description": "Foto seiner Familie"}
+        ]
+      },
+      "xp": 1500,
+      "najika_reactions": {
+        "pre_battle": "*flüstert* Kuja... er hat Kinder. Ich sehe es in seinen Augen. *unsicher* Musst du ihn töten?",
+        "battle": "Er kämpft gut... verzweifelt. *Shiro-Analyse* Er lügt nicht über seine Motive.",
+        "kill": "*traurig* Seine Kinder sind jetzt Waisen, Kuja. War das richtig? *schaut weg*",
+        "spare": "*lächelt* Du hast Gnade gezeigt! Das ist... EXPLOSIONS-mäßig gut! *umarmt Kuja*"
+      },
+      "moral_choice": {
+        "kill": {
+          "consequence": "Bandit children become vengeful, return as enemies in late-game",
+          "reputation": -20,
+          "najika_bond": -10
+        },
+        "spare": {
+          "consequence": "Kain becomes ally, helps in future quests",
+          "reputation": 50,
+          "najika_bond": 30,
+          "unlock": "kain_ally_questline"
+        }
+      }
+    },
+    {
+      "id": "wuestenkoenig_geist",
+      "name": "Geist des Wüstenkönigs",
+      "type": "undead_boss",
+      "tier": "boss",
+      "level": 15,
+      "stats": {
+        "hp": 2000,
+        "atk": 120,
+        "def": 70,
+        "speed": 1.0,
+        "critical_chance": 30,
+        "critical_damage": 100,
+        "resistances": {
+          "physical": 50,
+          "heat": 100,
+          "dark": 80
+        },
+        "weaknesses": {
+          "light": 100,
+          "holy": 150
+        },
+        "immunities": ["poison", "bleed", "stun"]
+      },
+      "appearance": {
+        "model": "desert_king_ghost.glb",
+        "description": "Geisterhafter König in zerfetzter Robe, schwebend",
+        "features": ["ethereal_glow", "crown_fragments", "flowing_cape"],
+        "weapon": "legendary_spectral_scimitar",
+        "aura": "golden_sand_particles"
+      },
+      "lore": {
+        "name": "König Azareth der Ewige",
+        "story": "Einst herrschte er über die gesamte Wüste. Sein Königreich versank im Sand, als er einen Fluch brach. Nun wacht sein Geist über die Ruinen.",
+        "curse": "Kann nicht ruhen, bis ein Würdiger seine Klinge erbt",
+        "dialogue": {
+          "summon": "Endlich... ein Herausforderer. Bist DU würdig, meine Klinge zu tragen?",
+          "mid_battle": "Beeindruckend... aber nicht genug! ZEIG MIR DEINE WAHRE KRAFT!",
+          "defeat": "Du... bist würdig. Nimm... meine Klinge. *verschwindet* ...Endlich... Frieden..."
+        }
+      },
+      "behavior": {
+        "ai_type": "legendary_duelist",
+        "phase_mechanics": {
+          "phase_1": {
+            "hp_threshold": "100-75%",
+            "description": "Testet deine Fähigkeiten",
+            "abilities": ["spectral_slash", "sand_wave", "teleport"]
+          },
+          "phase_2": {
+            "hp_threshold": "75-50%",
+            "description": "Erhöht Intensität",
+            "abilities": ["spectral_slash", "sand_wave", "teleport", "summon_sand_warriors"],
+            "buff": "+20% ATK"
+          },
+          "phase_3": {
+            "hp_threshold": "50-25%",
+            "description": "Volle Kraft",
+            "abilities": ["all_previous", "sandstorm_arena", "royal_fury"],
+            "arena_change": "Entire arena becomes sandstorm",
+            "buff": "+40% ATK, +30% SPD"
+          },
+          "phase_4": {
+            "hp_threshold": "25-0%",
+            "description": "Desperate Last Stand",
+            "abilities": ["all_previous", "kings_wrath", "resurrection_attempt"],
+            "buff": "+60% ATK, +50% SPD, immune_to_cc"
+          }
+        },
+        "special_moves": {
+          "spectral_slash": {
+            "damage": 150,
+            "description": "Schneller Hieb mit Geisterklinge",
+            "cooldown": 5
+          },
+          "sand_wave": {
+            "damage": 100,
+            "aoe": true,
+            "effect": "knockback",
+            "cooldown": 12
+          },
+          "teleport": {
+            "description": "Teleportiert hinter Spieler",
+            "cooldown": 15,
+            "follow_up": "backstab_200_damage"
+          },
+          "summon_sand_warriors": {
+            "description": "Beschwört 4 Sand-Krieger (50% Boss-Stats)",
+            "cooldown": 45,
+            "phase": 2
+          },
+          "sandstorm_arena": {
+            "description": "Ganze Arena wird Sandsturm",
+            "damage": "20_per_second_environmental",
+            "duration": 30,
+            "phase": 3
+          },
+          "royal_fury": {
+            "damage": "5x80",
+            "description": "5-Hit Combo",
+            "cooldown": 30,
+            "phase": 3
+          },
+          "kings_wrath": {
+            "damage": 500,
+            "description": "Ultimate-Angriff, telegraphiert",
+            "charge_time": 5,
+            "dodgeable": true,
+            "cooldown": 60,
+            "phase": 4
+          },
+          "resurrection_attempt": {
+            "description": "Bei 5% HP: Versucht sich zu heilen",
+            "heal_amount": 500,
+            "interrupt_window": 3,
+            "interrupt_with": "light_magic_or_high_damage"
+          }
+        }
+      },
+      "spawn": {
+        "location": "tempel_des_wuestenkoenigs_bottom_floor",
+        "trigger": "quest_versunkene_ruinen",
+        "respawn": "weekly_reset"
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "legendaerer_krummsaebel", "quantity": 1},
+          {"item": "wuestenkoenig_krone", "quantity": 1},
+          {"item": "gold", "quantity": "2000-3000"}
+        ],
+        "common": [
+          {"item": "goldstaub", "quantity": "100-200", "chance": 100},
+          {"item": "sonnenstein", "quantity": "10-20", "chance": 100}
+        ],
+        "rare": [
+          {"item": "spectral_essence", "quantity": "5-10", "chance": 60},
+          {"item": "desert_king_armor_piece", "quantity": 1, "chance": 40}
+        ],
+        "legendary": [
+          {"item": "desert_king_complete_set", "quantity": 1, "chance": 10},
+          {"item": "scroll_ultimate_sand_magic", "quantity": 1, "chance": 5}
+        ],
+        "achievement": "desert_king_slayer"
+      },
+      "xp": 5000,
+      "najika_reactions": {
+        "pre_battle": "Ein GEISTER-KÖNIG?! *Megumin-Begeisterung* DAS IST EPISCH!",
+        "phase_2": "Er wird stärker! *Shiro-Analyse* Lichtmagie wäre effektiv!",
+        "phase_3": "KUJA! SANDSTURM! Bleib nah bei mir! *hält Hand*",
+        "phase_4": "*besorgt* Er ist verzweifelt! Vorsicht vor seinem Ultimate!",
+        "resurrection_attempt": "ER HEILT SICH! SCHNELL! UNTERBRICH IHN!",
+        "victory": "WIR HABEN EINEN KÖNIG BESIEGT!!! *springt in Kujas Arme* DU BIST AMAZING!",
+        "legendary_drop": "*Augen leuchten* DIE LEGENDÄRE KLINGE! Sie gehört dir, Kuja! Du bist WÜRDIG!"
+      },
+      "achievement": {
+        "defeat": "Bezwinger des Wüstenkönigs",
+        "no_damage": "Perfekter Duellant",
+        "solo": "Einsamer König"
+      }
+    }
+  ],
+  "enemy_variants": {
+    "scorpion_variants": ["normal", "alpha_larger", "venomous_purple"],
+    "bandit_variants": ["rookie", "veteran", "elite"],
+    "elemental_variants": ["sand", "dust", "glass"]
+  },
+  "spawn_rules": {
+    "dynamic_difficulty": {
+      "player_level_1_5": ["wuesten_skorpion", "wuestenbandit"],
+      "player_level_6_10": ["all_common", "sand_elemental"],
+      "player_level_11+": ["all_enemies"]
+    },
+    "weather_spawns": {
+      "sandstorm": {
+        "increased": ["sand_elemental"],
+        "spawn_rate_multiplier": 2.0
+      },
+      "clear": {
+        "increased": ["wuesten_skorpion"],
+        "spawn_rate_multiplier": 1.5
+      }
+    },
+    "time_spawns": {
+      "day": {
+        "reduced": ["all_enemies"],
+        "heat_damage_added": true
+      },
+      "night": {
+        "increased": ["sand_elemental", "wuestenkoenig_geist"],
+        "spawn_rate_multiplier": 1.3
+      }
+    }
+  },
+  "special_events": {
+    "bandit_raid": {
+      "trigger": "random_rare",
+      "description": "10 Banditen greifen Handelsfestung an",
+      "enemies": ["wuestenbandit x10", "bandit_leader_kain"],
+      "defend_reward": {"gold": 1000, "reputation": 100}
+    },
+    "sandstorm_elementals": {
+      "trigger": "major_sandstorm",
+      "description": "3 Sand-Elementare spawnen gleichzeitig",
+      "enemies": ["sand_elemental x3"],
+      "reward": {"goldstaub": 100, "sonnenstein": 20}
+    }
+  }
+}

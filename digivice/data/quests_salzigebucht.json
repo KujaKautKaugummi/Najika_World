@@ -1,0 +1,322 @@
+{
+  "region": "salzwind_kueste",
+  "city": "salzige_bucht",
+  "quests": [
+    {
+      "id": "das_geister_schiff",
+      "name": "Das Geisterschiff",
+      "type": "main_quest",
+      "difficulty": "hard",
+      "level_required": 12,
+      "giver": "leuchtturmwaerterin_luna",
+      "description": "Luna hat ein Geisterschiff am Horizont gesehen. Es verschwindet bei Tageslicht.",
+      "objectives": [
+        {"type": "investigate", "target": "geister_schiff", "time": "night_only"},
+        {"type": "board_ship"},
+        {"type": "find_truth"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "GHOST SHIP?! That's SO COOL! Let's hunt some ghosts!"},
+        "boarding": {"personality": "melissa", "text": "Geister... Erinnerungen, die sich weigern zu sterben."}
+      },
+      "choices": [
+        {
+          "question": "Das Schiff ist voller Geister toter Seeleute. Sie greifen nicht an, sondern bitten um Hilfe. Was tust du?",
+          "options": [
+            {
+              "id": "help_ghosts",
+              "text": "Hilf den Geistern, Frieden zu finden",
+              "najika_reaction": {"personality": "melissa", "text": "Sie verdienen Ruhe. Lass uns ihnen helfen."},
+              "outcome": {
+                "success": true,
+                "consequence": "Du findest heraus, dass sie von einem Fluch gefangen sind. Du brichst den Fluch.",
+                "rewards": {"gold": 800, "items": ["geister_kompass", "kapitaens_logbuch"], "title": "Geisterbefreier"},
+                "reputation": +50
+              }
+            },
+            {
+              "id": "loot_ship",
+              "text": "Plündere das Schiff und ignoriere die Geister",
+              "najika_reaction": {"personality": "harley", "text": "That's... kinda mean. But treasure IS treasure..."},
+              "outcome": {
+                "success": false,
+                "consequence": "Die Geister werden wütend! Du musst fliehen!",
+                "rewards": {"gold": 300},
+                "reputation": -30,
+                "debuff": {"geister_fluch": {"duration": 86400}}
+              }
+            },
+            {
+              "id": "exorcism",
+              "text": "Vertreibe die Geister mit Magie",
+              "requires": "holy_magic",
+              "najika_reaction": {"personality": "megumin", "text": "EXPLOSION für Geister? ...Nein? Okay, dann halt Licht-Magie."},
+              "outcome": {
+                "success": true,
+                "consequence": "Die Geister werden befreit. Das Schiff löst sich auf.",
+                "rewards": {"exp": 2000, "items": ["heiliges_amulett"]},
+                "reputation": +40
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {"exp": 1500}
+    },
+    {
+      "id": "seeungeheuer_jagd",
+      "name": "Seeungeheuer-Jagd",
+      "type": "boss_hunt",
+      "difficulty": "very_hard",
+      "level_required": 15,
+      "giver": "kapitaen_magnus",
+      "description": "Ein riesiges Seeungeheuer terrorisiert die Schiffe. Magnus bittet dich, es zu jagen.",
+      "objectives": [
+        {"type": "prepare_ship"},
+        {"type": "sail_to_location", "location": "tiefsee"},
+        {"type": "boss_fight", "target": "riesenkrake"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "megumin", "text": "SEEUNGEHEUER! Wie Cthulhu! EXPLOSION!"}
+      },
+      "rewards": {"gold": 1500, "exp": 5000, "items": ["kraken_tentakel", "tiefsee_ruestung"], "title": "Kraken-Jäger"}
+    },
+    {
+      "id": "die_grosse_fang_herausforderung",
+      "name": "Die Große Fang-Herausforderung",
+      "type": "mini_game",
+      "difficulty": "easy",
+      "level_required": 1,
+      "giver": "fischer_ole",
+      "description": "Ole fordert dich zu einem Angel-Wettbewerb heraus.",
+      "objectives": [
+        {"type": "catch_fish", "amount": 10, "time_limit": 1800}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "FISHING CONTEST! I'm gonna catch SO MANY!"},
+        "winning": {"personality": "megumin", "text": "WIR HABEN GEWONNEN! ...Angeln ist entspannend!"}
+      },
+      "rewards": {"gold": 200, "exp": 300, "items": ["angelrute_profi"], "title": "Meister-Angler"}
+    },
+    {
+      "id": "tims_verlorener_schatz",
+      "name": "Tims verlorener Schatz",
+      "type": "side_quest",
+      "difficulty": "trivial",
+      "level_required": 1,
+      "giver": "kind_tim",
+      "description": "Tim hat seine liebste Muschel verloren. Hilf ihm sie zu finden.",
+      "objectives": [
+        {"type": "search", "area": "beach"},
+        {"type": "find", "target": "goldene_muschel"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "Aww, poor kid! Let's find his shell!"}
+      },
+      "special_event": {
+        "description": "Die Muschel ist magisch und ruft dich!",
+        "bonus_rewards": {"items": ["muschel_horn", "wasserkristall"]}
+      },
+      "rewards": {"gold": 50, "exp": 100, "relationship": {"kind_tim": 100}}
+    },
+    {
+      "id": "scarletts_rache",
+      "name": "Scarletts Rache",
+      "type": "combat_quest",
+      "difficulty": "medium",
+      "level_required": 10,
+      "giver": "piratin_scarlett",
+      "description": "Scarlett will Rache an einem Piraten-Captain der sie betrogen hat.",
+      "objectives": [
+        {"type": "find", "target": "captain_blackheart"},
+        {"type": "choice_event"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "REVENGE! I LOVE IT! Let's get 'em!"}
+      },
+      "choices": [
+        {
+          "question": "Du findest Captain Blackheart. Scarlett will ihn töten. Was tust du?",
+          "options": [
+            {
+              "id": "help_scarlett",
+              "text": "Hilf Scarlett, ihn zu töten",
+              "najika_reaction": {"personality": "harley", "text": "REVENGE TIME! *zieht Waffe*"},
+              "outcome": {
+                "combat_triggered": "captain_blackheart_boss",
+                "rewards": {"gold": 1000, "items": ["blackheart_saebel"]},
+                "relationship": {"piratin_scarlett": 100}
+              }
+            },
+            {
+              "id": "spare_him",
+              "text": "Überrede Scarlett, ihm zu verzeihen",
+              "najika_reaction": {"personality": "melissa", "text": "Rache ist leer. Vergebung ist Stärke."},
+              "outcome": {
+                "success": true,
+                "consequence": "Scarlett ist wütend, verzeiht dir aber später.",
+                "rewards": {"gold": 500},
+                "reputation": +30
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {"exp": 1200}
+    },
+    {
+      "id": "antonios_perfektes_gericht",
+      "name": "Antonios perfektes Gericht",
+      "type": "gathering_quest",
+      "difficulty": "easy",
+      "level_required": 5,
+      "giver": "koch_antonio",
+      "description": "Antonio braucht eine seltene Zutat für sein Meisterwerk.",
+      "objectives": [
+        {"type": "gather", "item": "goldener_fisch", "amount": 1}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "Golden fish for fancy cooking? I'm IN!"}
+      },
+      "rewards": {"gold": 300, "exp": 500, "items": ["antonios_spezial x3"], "relationship": {"koch_antonio": 75}}
+    },
+    {
+      "id": "das_erwachen_des_kraken",
+      "name": "Das Erwachen des Kraken",
+      "type": "main_quest",
+      "difficulty": "legendary",
+      "level_required": 20,
+      "giver": "seher_neptun",
+      "description": "Der uralte Kraken erwacht aus seinem Schlaf. Das Ende naht.",
+      "objectives": [
+        {"type": "investigate", "description": "Finde heraus warum der Kraken erwacht"},
+        {"type": "choice_event"},
+        {"type": "final_battle"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "shiro", "text": "Kraken. Legendäre Kreatur. Bedrohungslevel: EXTREM."},
+        "boss_fight": {"personality": "megumin", "text": "DAS ist ein ECHTER BOSS! ALLE EXPLOSIONEN!"}
+      },
+      "choices": [
+        {
+          "question": "Der Kraken erwacht weil die Menschen das Meer verschmutzen. Was tust du?",
+          "options": [
+            {
+              "id": "fight_kraken",
+              "text": "Kämpfe gegen den Kraken",
+              "najika_reaction": {"personality": "megumin", "text": "BOSSKAMPF! EXPLOSION!"},
+              "outcome": {
+                "combat_triggered": "kraken_boss",
+                "rewards": {"gold": 5000, "items": ["neptuns_dreizack", "kraken_herz"]},
+                "title": "Kraken-Bezwinger"
+              }
+            },
+            {
+              "id": "clean_ocean",
+              "text": "Reinige das Meer und besänftige den Kraken",
+              "najika_reaction": {"personality": "melissa", "text": "Die Natur heilen statt zerstören. Weise."},
+              "outcome": {
+                "success": true,
+                "consequence": "Der Kraken beruhigt sich. Er wird dein Beschützer.",
+                "rewards": {"companion": "baby_kraken", "items": ["neptuns_segen"]},
+                "reputation": +200,
+                "title": "Meeresretter"
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {"exp": 15000}
+    },
+    {
+      "id": "zephyrs_spiel",
+      "name": "Zephyrs Spiel",
+      "type": "puzzle_quest",
+      "difficulty": "medium",
+      "level_required": 8,
+      "giver": "wetterfee_zephyr",
+      "description": "Zephyr will mit dir spielen. Bestehe ihre drei Herausforderungen.",
+      "objectives": [
+        {"type": "challenge", "count": 3}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "Chaos fairy wants to PLAY? COUNT ME IN!"}
+      },
+      "challenges": [
+        {"name": "Fange mich im Wind", "type": "chase", "time_limit": 120},
+        {"name": "Überlebe den Sturm", "type": "survival", "duration": 180},
+        {"name": "Tanze mit dem Wind", "type": "rhythm_game"}
+      ],
+      "rewards": {"gold": 400, "exp": 800, "items": ["wind_kristall", "zephyr_feder"], "relationship": {"wetterfee_zephyr": 100}}
+    },
+    {
+      "id": "sternbilder_raetsel",
+      "name": "Sternbilder-Rätsel",
+      "type": "mystery_quest",
+      "difficulty": "medium",
+      "level_required": 10,
+      "giver": "leuchtturmwaerterin_luna",
+      "description": "Luna zeigt dir ein Sternbild das einen Schatz markiert.",
+      "objectives": [
+        {"type": "decipher", "target": "star_map"},
+        {"type": "navigate", "using": "sternbilder"},
+        {"type": "find_treasure"}
+      ],
+      "najika_reactions": {
+        "initial": {"personality": "shiro", "text": "Sternbilder als Navigation. Alte Methode. Effektiv."}
+      },
+      "rewards": {"gold": 800, "exp": 1000, "items": ["sternen_karte", "astronomie_buch"]}
+    },
+    {
+      "id": "der_verfluchte_schatz",
+      "name": "Der verfluchte Schatz",
+      "type": "oregon_trail_event",
+      "difficulty": "medium",
+      "giver": "kapitaen_magnus",
+      "description": "Du findest eine Schatzkarte. Der Schatz ist verflucht.",
+      "najika_reactions": {
+        "initial": {"personality": "harley", "text": "Cursed treasure? EVEN BETTER! *aufgeregt*"}
+      },
+      "choices": [
+        {
+          "question": "Du findest den Schatz, aber er ist verflucht. Wer ihn nimmt, wird gejagt. Was tust du?",
+          "options": [
+            {
+              "id": "take_treasure",
+              "text": "Nimm den Schatz (Risiko: Wirst gejagt)",
+              "najika_reaction": {"personality": "harley", "text": "YOLO! Take it ALL!"},
+              "outcome": {
+                "rewards": {"gold": 3000, "items": ["verfluchte_krone", "gold_barren x10"]},
+                "debuff": {"verfolgung": {"permanent": true, "effect": "Geister jagen dich"}},
+                "najika_aftermath": {"personality": "melissa", "text": "Gier hat schon viele zerstört..."}
+              }
+            },
+            {
+              "id": "leave_treasure",
+              "text": "Lass den Schatz liegen",
+              "najika_reaction": {"personality": "melissa", "text": "Weisheit. Manchmal ist weniger mehr."},
+              "outcome": {
+                "consequence": "Du gehst leer aus, aber sicher.",
+                "reputation": +20
+              }
+            },
+            {
+              "id": "break_curse",
+              "text": "Versuche den Fluch zu brechen",
+              "requires": "dispel_magic",
+              "najika_reaction": {"personality": "shiro", "text": "Fluch-Analyse: Komplex. Erfolgswahrscheinlichkeit: 68%."},
+              "outcome": {
+                "success": true,
+                "consequence": "Du brichst den Fluch! Der Schatz ist sicher!",
+                "rewards": {"gold": 3000, "items": ["entfluchte_krone", "gold_barren x10"]},
+                "reputation": +50,
+                "title": "Fluchbrecher"
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {"exp": 2000}
+    }
+  ]
+}

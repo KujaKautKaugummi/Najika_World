@@ -1,0 +1,909 @@
+{
+  "region": "samtmoos_tiefwald",
+  "city": "dampfhain",
+  "quests": [
+    {
+      "id": "das_kranke_herz_des_waldes",
+      "name": "Das kranke Herz des Waldes",
+      "type": "main_quest",
+      "difficulty": "medium",
+      "level_required": 8,
+      "giver": "druide_elowen",
+      "description": "Der uralte Baum im Zentrum des Waldes stirbt. Druide Elowen bittet dich, die Ursache zu finden.",
+      "objectives": [
+        {
+          "type": "investigate",
+          "target": "uralter_baum",
+          "description": "Untersuche den uralten Baum"
+        },
+        {
+          "type": "choice_event",
+          "description": "Du findest schwarze Wurzeln, die den Baum ersticken"
+        },
+        {
+          "type": "combat",
+          "target": "korrupte_waldgeister",
+          "count": 5
+        },
+        {
+          "type": "boss_fight",
+          "target": "quelle_der_korruption"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "melissa",
+          "text": "Ein sterbender Baum... Ich habe so etwas schon einmal gesehen. Im letzten Dämonenkrieg.",
+          "analysis": "Dies ist keine natürliche Krankheit. Es ist Korruption."
+        },
+        "investigation": {
+          "personality": "shiro",
+          "text": "Analysiere... Schwarze Wurzeln. Zusammensetzung: 67% nekrotische Energie, 33% unbekannt.",
+          "warning": "WARNUNG: Hochgiftig. Berührung nicht empfohlen."
+        },
+        "combat_start": {
+          "personality": "megumin",
+          "text": "ENDLICH ACTION! Zeit für EXPLOSION!",
+          "excitement": 100
+        }
+      },
+      "choices": [
+        {
+          "trigger": "Schwarze Wurzeln gefunden",
+          "question": "Die schwarzen Wurzeln ersticken den Baum. Was tust du?",
+          "options": [
+            {
+              "id": "burn_roots",
+              "text": "Verbrenne die Wurzeln sofort",
+              "najika_reaction": {
+                "personality": "megumin",
+                "text": "JA! FEUER! Das ist die Lösung für ALLES!"
+              },
+              "outcome": {
+                "success": false,
+                "consequence": "Das Feuer breitet sich aus! Der Baum nimmt Schaden!",
+                "reputation": -10,
+                "combat_triggered": "waldgeist_beschuetzer"
+              }
+            },
+            {
+              "id": "carefully_remove",
+              "text": "Entferne die Wurzeln vorsichtig von Hand",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Vorsichtig und präzise. Gut. Aber pass auf, die Korruption könnte dich infizieren."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Du entfernst die Wurzeln erfolgreich, aber es dauert 3 Stunden.",
+                "reputation": +15,
+                "rewards": {
+                  "gold": 200,
+                  "items": ["lebendiges_holz x2"]
+                }
+              }
+            },
+            {
+              "id": "use_magic",
+              "text": "Nutze Naturmagie um die Wurzeln zu lösen",
+              "requires": "nature_magic_skill",
+              "najika_reaction": {
+                "personality": "shiro",
+                "text": "Magie-Methode: 87% Erfolgswahrscheinlichkeit. Effizient."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Magie löst die Wurzeln sanft. Der Baum erholt sich sofort!",
+                "reputation": +25,
+                "rewards": {
+                  "gold": 300,
+                  "items": ["druiden_stab", "lebendiges_holz x3"],
+                  "skill_exp": {"nature_magic": 500}
+                }
+              }
+            },
+            {
+              "id": "ask_druids",
+              "text": "Kehre zu den Druiden zurück und bitte um Rat",
+              "najika_reaction": {
+                "personality": "harley",
+                "text": "Aww, playing it safe? Boring! But smart, I guess."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Druiden kommen und helfen dir. Es dauert 2 Tage.",
+                "reputation": +10,
+                "rewards": {
+                  "gold": 150,
+                  "items": ["heiltrank_gross x5"]
+                },
+                "time_passed": 2880
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "gold": 500,
+        "exp": 1200,
+        "items": ["natur_ruestung", "druiden_segen"],
+        "reputation": {"dampfhain": 50, "druiden": 100}
+      },
+      "follow_up_quest": "die_quelle_der_korruption"
+    },
+    {
+      "id": "die_weinende_dryade",
+      "name": "Die weinende Dryade",
+      "type": "side_quest",
+      "difficulty": "easy",
+      "level_required": 5,
+      "giver": "barden_lysander",
+      "description": "Lysander hat von einer weinenden Dryade in den Tiefen des Waldes gehört. Ihre Tränen verwandeln sich in Kristalle.",
+      "objectives": [
+        {
+          "type": "find",
+          "target": "weinende_dryade",
+          "location": "tiefer_wald"
+        },
+        {
+          "type": "dialogue",
+          "target": "dryade"
+        },
+        {
+          "type": "choice_event",
+          "description": "Die Dryade weint, weil ihr Baum von Holzfällern bedroht wird"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "harley",
+          "text": "A crying tree-lady? That's... actually kinda sad. *wird ernst*"
+        },
+        "meet_dryade": {
+          "personality": "melissa",
+          "text": "Dryaden sind uralte Wesen. Ihre Tränen sind kostbar... und tragisch."
+        }
+      },
+      "choices": [
+        {
+          "trigger": "Dryade getroffen",
+          "question": "Die Dryade weint weil Holzfäller ihren Baum fällen wollen. Was tust du?",
+          "options": [
+            {
+              "id": "stop_loggers",
+              "text": "Konfrontiere die Holzfäller und stoppe sie",
+              "najika_reaction": {
+                "personality": "megumin",
+                "text": "JA! Gerechtigkeit! Sollen wir sie explodieren?"
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Du überzeugst die Holzfäller. Der Baum ist sicher!",
+                "reputation": +20,
+                "rewards": {
+                  "items": ["traenen_kristall x10", "druiden_segen"]
+                },
+                "relationship": {"dryade": 100}
+              }
+            },
+            {
+              "id": "buy_tree",
+              "text": "Kaufe den Baum von den Holzfällern (500 Gold)",
+              "requires": {"gold": 500},
+              "najika_reaction": {
+                "personality": "shiro",
+                "text": "Pragmatisch. Beide Seiten zufrieden. Effizienz: 94%."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Holzfäller sind glücklich. Die Dryade ist gerettet!",
+                "rewards": {
+                  "items": ["traenen_kristall x20", "lebendiges_holz x5", "dryaden_segen"],
+                  "gold": -500
+                },
+                "relationship": {"dryade": 100, "holzfaeller": 50}
+              }
+            },
+            {
+              "id": "collect_tears",
+              "text": "Sammle die Tränen-Kristalle und gehe",
+              "najika_reaction": {
+                "personality": "harley",
+                "text": "Really? We're just gonna... take her tears and leave? That's cold. *disappointed*"
+              },
+              "outcome": {
+                "success": false,
+                "consequence": "Du nimmst die Kristalle. Der Baum wird gefällt. Die Dryade verflucht dich.",
+                "rewards": {
+                  "items": ["traenen_kristall x30"]
+                },
+                "reputation": -50,
+                "debuff": {"dryaden_fluch": {"duration": 86400, "effect": "-20% Naturmagie"}}
+              }
+            },
+            {
+              "id": "find_compromise",
+              "text": "Verhandle einen Kompromiss zwischen allen Parteien",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Diplomatie. Schwieriger, aber oft die beste Lösung."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Holzfäller nehmen andere Bäume. Die Dryade gibt dir ein Geschenk.",
+                "rewards": {
+                  "items": ["traenen_kristall x15", "lebendiges_holz x2", "dryaden_freundschaft"],
+                  "gold": 200
+                },
+                "reputation": +30,
+                "relationship": {"dryade": 100, "holzfaeller": 25}
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "gold": 300,
+        "exp": 600,
+        "special_reward": "dryaden_segen"
+      }
+    },
+    {
+      "id": "milas_verlorenes_kaninchen",
+      "name": "Milas verlorenes Kaninchen",
+      "type": "side_quest",
+      "difficulty": "trivial",
+      "level_required": 1,
+      "giver": "kind_mila",
+      "description": "Das kleine Mädchen Mila hat ihr Kaninchen verloren. Es ist irgendwo im Wald.",
+      "objectives": [
+        {
+          "type": "search",
+          "target": "weisses_kaninchen",
+          "area": "wald_nah"
+        },
+        {
+          "type": "catch",
+          "target": "kaninchen",
+          "difficulty": "easy"
+        },
+        {
+          "type": "return",
+          "target": "kind_mila"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "harley",
+          "text": "Awww! A lost bunny! We GOTTA find it! *Hundeaugen*"
+        },
+        "found_bunny": {
+          "personality": "megumin",
+          "text": "SO FLAUSCHIG! *will es streicheln* Kuja lass uns eins behalten!"
+        }
+      },
+      "special_event": {
+        "trigger": "kaninchen_gefunden",
+        "description": "Das Kaninchen führt dich zu einem versteckten Pilzring mit seltenen Pilzen!",
+        "bonus_rewards": {
+          "items": ["magische_pilze x10", "feenstaub x3"]
+        }
+      },
+      "rewards": {
+        "gold": 50,
+        "exp": 100,
+        "items": ["waldbeer_kuchen x3", "wildblumen x10"],
+        "relationship": {"kind_mila": 100},
+        "najika_reaction": {
+          "personality": "melissa",
+          "text": "Manchmal sind die kleinsten Quests die bedeutungsvollsten."
+        }
+      }
+    },
+    {
+      "id": "der_wuetende_waldgeist",
+      "name": "Der wütende Waldgeist",
+      "type": "combat_quest",
+      "difficulty": "hard",
+      "level_required": 12,
+      "giver": "holzfaeller_bjorn",
+      "description": "Ein riesiger Waldgeist terrorisiert die Holzfäller. Björn bittet dich um Hilfe.",
+      "objectives": [
+        {
+          "type": "investigate",
+          "description": "Finde heraus warum der Waldgeist wütend ist"
+        },
+        {
+          "type": "choice_event",
+          "description": "Entscheide wie du mit dem Waldgeist umgehst"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "megumin",
+          "text": "Ein RIESIGER Waldgeist?! EXPLOSION TIME!"
+        },
+        "investigation": {
+          "personality": "shiro",
+          "text": "Analyse: Der Waldgeist schützt ein Nest. Motivation: Elterliche Fürsorge."
+        }
+      },
+      "choices": [
+        {
+          "trigger": "waldgeist_confrontation",
+          "question": "Der Waldgeist schützt ein Nest mit Jungtieren. Was tust du?",
+          "options": [
+            {
+              "id": "fight_spirit",
+              "text": "Kämpfe gegen den Waldgeist",
+              "najika_reaction": {
+                "personality": "megumin",
+                "text": "KAMPF! EXPLOSION! EXPLOSIOOOOON!"
+              },
+              "outcome": {
+                "combat_triggered": "waldgeist_boss",
+                "success_consequence": "Du besiegst den Waldgeist. Die Holzfäller sind sicher.",
+                "rewards": {
+                  "gold": 800,
+                  "items": ["lebendholz_axt", "waldgeist_herz"]
+                },
+                "reputation": -30,
+                "najika_aftermath": {
+                  "personality": "melissa",
+                  "text": "Gewonnen... aber war es das wert? Die Jungtiere sind jetzt Waisen."
+                }
+              }
+            },
+            {
+              "id": "relocate_loggers",
+              "text": "Überzeuge die Holzfäller, woanders zu arbeiten",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Friedlich und weise. Beide Seiten können leben."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Holzfäller ziehen um. Der Waldgeist beruhigt sich.",
+                "rewards": {
+                  "gold": 500,
+                  "items": ["druiden_segen", "lebendiges_holz x3"]
+                },
+                "reputation": +40,
+                "relationship": {"natur_geister": 100}
+              }
+            },
+            {
+              "id": "build_fence",
+              "text": "Baue einen Zaun zwischen Holzfällern und Nest",
+              "requires": {"eichenholz": 50},
+              "najika_reaction": {
+                "personality": "shiro",
+                "text": "Praktische Lösung. Territorialkonflikt gelöst durch physische Trennung."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Der Zaun schützt beide Seiten. Frieden kehrt ein.",
+                "rewards": {
+                  "gold": 600,
+                  "items": ["waldgeist_freundschaft", "hartholz x20"]
+                },
+                "reputation": +25,
+                "relationship": {"holzfaeller": 50, "natur_geister": 75}
+              }
+            },
+            {
+              "id": "steal_eggs",
+              "text": "Stiehl die Eier aus dem Nest (verkaufe sie)",
+              "najika_reaction": {
+                "personality": "harley",
+                "text": "Whoa whoa WHOA. That's... that's actually evil. I'm chaotic, not a monster!"
+              },
+              "outcome": {
+                "success": false,
+                "consequence": "Der Waldgeist wird RASEND! Du musst fliehen!",
+                "combat_triggered": "waldgeist_boss_enraged",
+                "reputation": -100,
+                "wanted_status": "von_natur_geistern_gejagt",
+                "najika_aftermath": {
+                  "personality": "all",
+                  "text": "Kuja... das war falsch. Wirklich falsch."
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "exp": 1500
+      }
+    },
+    {
+      "id": "der_kranke_wolf",
+      "name": "Der kranke Wolf",
+      "type": "oregon_trail_event",
+      "difficulty": "easy",
+      "giver": "random_encounter",
+      "description": "Du findest einen kranken Wolf am Wegesrand. Er scheint Hilfe zu brauchen.",
+      "najika_reactions": {
+        "initial": {
+          "personality": "harley",
+          "text": "Oh no... poor puppy! *kniet nieder* Hey there, buddy..."
+        }
+      },
+      "choices": [
+        {
+          "question": "Der Wolf ist krank und geschwächt. Was tust du?",
+          "options": [
+            {
+              "id": "heal_wolf",
+              "text": "Heile den Wolf mit einem Heiltrank (1x Heiltrank)",
+              "requires": {"heiltrank_gross": 1},
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Mitgefühl für alle Lebewesen. Ehrenhaft."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Der Wolf wird dein treuer Begleiter!",
+                "rewards": {
+                  "companion": "wolf_schatten_junior",
+                  "relationship": {"woelfe": 100}
+                }
+              }
+            },
+            {
+              "id": "ignore",
+              "text": "Ignoriere den Wolf und gehe weiter",
+              "najika_reaction": {
+                "personality": "shiro",
+                "text": "Pragmatisch. Ressourcen gespart. Aber... empathisch suboptimal."
+              },
+              "outcome": {
+                "consequence": "Du gehst weiter. Der Wolf stirbt.",
+                "reputation": -5
+              }
+            },
+            {
+              "id": "mercy_kill",
+              "text": "Erlöse den Wolf von seinem Leiden",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Manchmal ist ein schnelles Ende barmherziger als langes Leiden."
+              },
+              "outcome": {
+                "consequence": "Du tötest den Wolf schmerzlos. Du fühlst dich schlecht.",
+                "rewards": {
+                  "items": ["wolfspelz", "wolf_zahn"]
+                },
+                "debuff": {"schuld": {"duration": 3600}}
+              }
+            },
+            {
+              "id": "bring_to_druid",
+              "text": "Bringe den Wolf zu den Druiden",
+              "najika_reaction": {
+                "personality": "harley",
+                "text": "Yes! The tree-huggers will know what to do!"
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Druiden heilen den Wolf. Er wird freigelassen.",
+                "rewards": {
+                  "reputation": +15,
+                  "relationship": {"druiden": 25}
+                },
+                "time_passed": 120
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "exp": 200
+      }
+    },
+    {
+      "id": "die_verlorene_quelle",
+      "name": "Die verlorene Quelle",
+      "type": "exploration_quest",
+      "difficulty": "medium",
+      "level_required": 10,
+      "giver": "druide_elowen",
+      "description": "Eine heilige Quelle ist versiegt. Finde heraus warum und stelle sie wieder her.",
+      "objectives": [
+        {
+          "type": "explore",
+          "target": "alte_quelle",
+          "location": "tiefer_wald"
+        },
+        {
+          "type": "investigate",
+          "description": "Finde die Blockade der Quelle"
+        },
+        {
+          "type": "clear",
+          "description": "Entferne die Blockade"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "shiro",
+          "text": "Versiegt Quelle. Wahrscheinlichste Ursache: Geologische Blockade oder magische Störung."
+        },
+        "found_blockade": {
+          "personality": "megumin",
+          "text": "Da! Ein riesiger Felsen! ICH KANN IHN EXPLODIEREN!"
+        }
+      },
+      "discovery": {
+        "description": "Die Quelle ist von einem magischen Felsen blockiert. Er pulsiert mit alter Magie.",
+        "choice_required": true
+      },
+      "choices": [
+        {
+          "question": "Ein magischer Felsen blockiert die Quelle. Was tust du?",
+          "options": [
+            {
+              "id": "explosion",
+              "text": "Sprenge den Felsen (Explosionsmagie)",
+              "requires": "explosion_magic",
+              "najika_reaction": {
+                "personality": "megumin",
+                "text": "JAAAAA! EXPLOSION IS THE ANSWER! *bereitet Zauber vor*"
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "BOOM! Der Felsen explodiert! Wasser fließt wieder!",
+                "rewards": {
+                  "gold": 400,
+                  "items": ["quelle_kristall x5", "magisches_wasser x20"]
+                },
+                "side_effect": "Die Explosion lockt Monster an",
+                "combat_triggered": "steingolem x3"
+              }
+            },
+            {
+              "id": "slow_removal",
+              "text": "Trage den Felsen vorsichtig ab",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Langsam und stetig. Respekt vor der alten Magie."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Nach 5 Stunden harter Arbeit: Die Quelle fließt wieder.",
+                "rewards": {
+                  "gold": 600,
+                  "items": ["quelle_kristall x10", "magisches_wasser x50", "alter_runen_stein"]
+                },
+                "reputation": +35,
+                "time_passed": 300
+              }
+            },
+            {
+              "id": "magic_dispel",
+              "text": "Versuche die Magie des Felsens aufzulösen",
+              "requires": "dispel_magic",
+              "najika_reaction": {
+                "personality": "shiro",
+                "text": "Magische Auflösung. Elegante Lösung. Erfolgswahrscheinlichkeit: 76%."
+              },
+              "outcome": {
+                "success": true,
+                "consequence": "Die Magie löst sich auf. Der Felsen zerfällt zu Staub.",
+                "rewards": {
+                  "gold": 500,
+                  "items": ["quelle_kristall x8", "magischer_staub x30", "runen_fragment x5"]
+                },
+                "reputation": +25,
+                "skill_exp": {"dispel_magic": 300}
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "exp": 1000,
+        "reputation": {"dampfhain": 40, "druiden": 75}
+      }
+    },
+    {
+      "id": "das_raetsel_des_wanderers",
+      "name": "Das Rätsel des Wanderers",
+      "type": "mystery_quest",
+      "difficulty": "hard",
+      "level_required": 15,
+      "giver": "mysterioeser_wanderer",
+      "description": "Der maskierte Wanderer stellt dir drei Rätsel. Löse sie für eine große Belohnung.",
+      "objectives": [
+        {
+          "type": "riddle",
+          "count": 3,
+          "description": "Löse drei Rätsel des Wanderers"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "shiro",
+          "text": "Rätsel. Logik-Herausforderung. Analysiere..."
+        }
+      },
+      "riddles": [
+        {
+          "id": "riddle_1",
+          "question": "Ich wachse ohne Leben. Ich atme ohne Lunge. Was bin ich?",
+          "answers": ["feuer", "flamme"],
+          "najika_hint": {
+            "personality": "harley",
+            "text": "Ohhh this is a tough one! Something that grows... but isn't alive... *denkt nach*"
+          },
+          "reward_correct": {"items": ["sternenstaub x5"]},
+          "penalty_wrong": {"debuff": "verwirrung"}
+        },
+        {
+          "id": "riddle_2",
+          "question": "Drei Schatten sind gefallen, einer bleibt. Der Erste starb im Feuer, der Zweite im Eis, der Dritte im Vergessen. Wer bleibt?",
+          "answers": ["du", "ich", "der spieler"],
+          "najika_hint": {
+            "personality": "melissa",
+            "text": "Eine Prophezeiung... Schatten sind Erinnerungen. Wer überlebt, wenn alle vergessen sind?"
+          },
+          "reward_correct": {"items": ["zeitkristall x3"]},
+          "penalty_wrong": {"hp_damage": "50%"}
+        },
+        {
+          "id": "riddle_3",
+          "question": "Was verbindet den Anfang mit dem Ende, kann aber niemals berührt werden?",
+          "answers": ["zeit", "die zeit"],
+          "najika_hint": {
+            "personality": "shiro",
+            "text": "Nicht-physisches Konzept. Verbindung: Linear. Dimension: Temporal."
+          },
+          "reward_correct": {"items": ["schatten_essenz x10"]},
+          "penalty_wrong": {"teleport": "random_location"}
+        }
+      ],
+      "completion_rewards": {
+        "all_correct": {
+          "items": ["verbotenes_wissen", "wanderers_maske_replica", "zeitmanipulation_scroll"],
+          "gold": 2000,
+          "exp": 5000,
+          "title": "Rätselmeister",
+          "najika_reaction": {
+            "personality": "megumin",
+            "text": "WIR HABEN ES GESCHAFFT! Kuja du bist so schlau!"
+          }
+        },
+        "partial": {
+          "items": ["trost_preis x1"],
+          "gold": 100,
+          "najika_reaction": {
+            "personality": "harley",
+            "text": "Aww, we tried! That's what counts... right? *nervöses Lachen*"
+          }
+        }
+      }
+    },
+    {
+      "id": "der_koenig_der_waeldern",
+      "name": "Der König der Wälder",
+      "type": "boss_hunt",
+      "difficulty": "very_hard",
+      "level_required": 18,
+      "giver": "jaeger_fenris",
+      "description": "Ein uralter Hirsch, groß wie ein Haus, terrorisiert den Wald. Fenris braucht deine Hilfe.",
+      "objectives": [
+        {
+          "type": "track",
+          "target": "uralter_hirsch_koenig",
+          "description": "Folge den Spuren des Hirschkönigs"
+        },
+        {
+          "type": "boss_fight",
+          "target": "hirschkoenig_boss"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "megumin",
+          "text": "Ein RIESIGER Hirsch? Das ist wie ein Boss-Monster! EXPLOSION!"
+        },
+        "tracking": {
+          "personality": "shiro",
+          "text": "Spuren analysiert. Gewicht: ca. 2000kg. Geweih-Spannweite: 5 Meter."
+        }
+      },
+      "boss_mechanics": {
+        "name": "Hirschkönig Eldaron",
+        "phases": 3,
+        "special_attacks": ["Geweih-Rammstoß", "Naturmagie-Fluch", "Wald-Beschwörung"]
+      },
+      "choices": [
+        {
+          "trigger": "boss_at_half_hp",
+          "question": "Der Hirschkönig ist schwer verwundet. Er fleht mit intelligenten Augen. Was tust du?",
+          "options": [
+            {
+              "id": "finish_him",
+              "text": "Töte ihn und beende die Quest",
+              "najika_reaction": {
+                "personality": "melissa",
+                "text": "Ein König fällt. So endet jede Herrschaft."
+              },
+              "outcome": {
+                "rewards": {
+                  "gold": 1500,
+                  "items": ["hirschkoenig_krone", "legendaeres_geweih", "koenig_des_waldes_fell"],
+                  "title": "Hirschjäger"
+                },
+                "reputation": -50,
+                "najika_aftermath": {
+                  "personality": "harley",
+                  "text": "He was... beautiful. *leise* I hope it was worth it."
+                }
+              }
+            },
+            {
+              "id": "spare_him",
+              "text": "Verschone ihn",
+              "najika_reaction": {
+                "personality": "megumin",
+                "text": "WAS?! Aber... aber die Belohnungen! *seufzt* ...okay, er ist zu majestätisch zum Töten."
+              },
+              "outcome": {
+                "consequence": "Der Hirschkönig verbeugt sich vor dir. Er wird dein Verbündeter!",
+                "rewards": {
+                  "companion": "hirschkoenig_eldaron",
+                  "items": ["koenig_des_waldes_segen", "naturmagie_affinitaet"],
+                  "reputation": +100,
+                  "title": "Freund der Bestien"
+                },
+                "najika_aftermath": {
+                  "personality": "melissa",
+                  "text": "Gnade ist manchmal stärker als Stahl. Gut gemacht."
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "rewards": {
+        "exp": 8000
+      }
+    },
+    {
+      "id": "onsen_entspannung",
+      "name": "Onsen-Entspannung",
+      "type": "relaxation_quest",
+      "difficulty": "trivial",
+      "level_required": 1,
+      "giver": "onsen_meisterin_yuki",
+      "description": "Yuki lädt dich zu einer kostenlosen Onsen-Session ein.",
+      "objectives": [
+        {
+          "type": "service",
+          "target": "onsen_bath",
+          "description": "Genieße ein entspannendes Bad"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "megumin",
+          "text": "ONSEN EPISODE! Wie in JEDEM ANIME! *rennt zum Onsen*"
+        },
+        "in_bath": {
+          "personality": "harley",
+          "text": "Ahhhh~ This is the life! *entspannt sich* Hey Kuja, want some sake?"
+        },
+        "after_bath": {
+          "personality": "melissa",
+          "text": "...Das habe ich gebraucht. Danke, Yuki."
+        }
+      },
+      "mini_events": [
+        {
+          "id": "najika_steals_sake",
+          "personality": "harley",
+          "description": "Najika klaut eine Flasche Sake und wird betrunken",
+          "outcome": "Comedy-Scene"
+        },
+        {
+          "id": "shiro_analyzes_water",
+          "personality": "shiro",
+          "description": "Shiro analysiert die Mineralzusammensetzung des Wassers",
+          "outcome": "Wissenschafts-Monolog"
+        }
+      ],
+      "rewards": {
+        "full_heal": true,
+        "buffs": {
+          "relaxed": {"value": 25, "duration": 14400},
+          "regeneration": {"value": 15, "duration": 7200}
+        },
+        "exp": 50,
+        "relationship": {"onsen_meisterin_yuki": 25}
+      }
+    },
+    {
+      "id": "lunas_explosion",
+      "name": "Lunas Explosions-Experiment",
+      "type": "comedy_quest",
+      "difficulty": "easy",
+      "level_required": 5,
+      "giver": "kraeuterhexe_luna",
+      "description": "Luna braucht jemanden der ihre neue 'völlig sichere' Trank-Erfindung testet.",
+      "objectives": [
+        {
+          "type": "test_potion",
+          "description": "Trinke Lunas experimentellen Trank"
+        }
+      ],
+      "najika_reactions": {
+        "initial": {
+          "personality": "megumin",
+          "text": "EXPLOSIONS-EXPERIMENT?! ICH BIN DABEI! Kuja wir MÜSSEN das machen!"
+        }
+      },
+      "random_outcomes": [
+        {
+          "probability": 30,
+          "effect": "transformation",
+          "description": "Du verwandelst dich in ein Eichhörnchen für 1 Stunde",
+          "najika_reaction": {
+            "personality": "harley",
+            "text": "HAHAHAHA! You're a SQUIRREL! *lacht sich kaputt* SO FLUFFY!"
+          }
+        },
+        {
+          "probability": 20,
+          "effect": "explosion",
+          "description": "Du explodierst in bunten Funken (kein Schaden)",
+          "najika_reaction": {
+            "personality": "megumin",
+            "text": "EXPLOSION! PERFECT! 10/10!"
+          }
+        },
+        {
+          "probability": 15,
+          "effect": "super_strength",
+          "description": "Du bekommst temporäre Superkraft!",
+          "buffs": {"strength": {"value": 50, "duration": 1800}},
+          "najika_reaction": {
+            "personality": "shiro",
+            "text": "Muskelkraft: +347%. Faszinierend."
+          }
+        },
+        {
+          "probability": 25,
+          "effect": "random_teleport",
+          "description": "Du teleportierst dich zufällig irgendwohin im Wald",
+          "najika_reaction": {
+            "personality": "melissa",
+            "text": "*seufzt* Warum bin ich nicht überrascht?"
+          }
+        },
+        {
+          "probability": 10,
+          "effect": "perfect_success",
+          "description": "Der Trank funktioniert PERFEKT! Du bekommst alle Stats +20!",
+          "buffs": {"all_stats": {"value": 20, "duration": 7200}},
+          "najika_reaction": {
+            "personality": "luna",
+            "text": "ES HAT FUNKTIONIERT! ICH BIN EIN GENIE!"
+          }
+        }
+      ],
+      "rewards": {
+        "gold": 100,
+        "exp": 300,
+        "items": ["random_trank x5"],
+        "relationship": {"kraeuterhexe_luna": 50},
+        "title": "Mutiger Tester"
+      }
+    }
+  ],
+  "quest_chains": {
+    "waldrettung": ["das_kranke_herz_des_waldes", "die_verlorene_quelle", "die_quelle_der_korruption"],
+    "natur_verbindung": ["die_weinende_dryade", "der_kranke_wolf", "der_koenig_der_waeldern"]
+  }
+}

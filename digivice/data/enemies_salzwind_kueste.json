@@ -1,0 +1,174 @@
+{
+  "region": "salzwind_kueste",
+  "biome": "coast",
+  "enemies": [
+    {
+      "id": "krabbe",
+      "name": "Riesen-Krabbe",
+      "type": "beast",
+      "tier": "common",
+      "level": 4,
+      "description": "Große Krabben mit harten Panzern. Kneifen tut weh!",
+      "stats": {"hp": 100, "atk": 25, "def": 30, "spd": 12},
+      "abilities": [
+        {"name": "Kneif-Angriff", "damage": 25, "effect": "Blutung"},
+        {"name": "Panzer-Verteidigung", "type": "defensive", "effect": "+50% Defense für 5 Sek"}
+      ],
+      "loot_table": {
+        "common": [{"item": "krabben_fleisch", "chance": 80}, {"item": "krabben_panzer", "chance": 50}]
+      },
+      "exp_reward": 80,
+      "najika_reaction": {"megumin": "RIESENKRABBE! Wie lecker! ...Warte, wir müssen sie töten zuerst."}
+    },
+    {
+      "id": "haifisch",
+      "name": "Haifisch",
+      "type": "beast",
+      "tier": "uncommon",
+      "level": 8,
+      "description": "Gefährliche Raubfische. Schnell und tödlich.",
+      "stats": {"hp": 250, "atk": 60, "def": 25, "spd": 35},
+      "abilities": [
+        {"name": "Hai-Biss", "damage": 60, "critical_chance": 25},
+        {"name": "Blut-Geruch", "type": "passive", "effect": "+50% Schaden gegen blutende Ziele"},
+        {"name": "Schnellangriff", "damage": 45, "strikes": 2}
+      ],
+      "behavior": {"aggression": "high", "pack_size": "1-3", "attracted_to": "blood"},
+      "loot_table": {
+        "common": [{"item": "haifisch_fleisch", "chance": 70}, {"item": "haifisch_zahn", "chance": 60}],
+        "rare": [{"item": "haifisch_flosse", "chance": 15}]
+      },
+      "exp_reward": 350,
+      "najika_reaction": {"harley": "SHARK! *nervös* Okay that's actually scary. Kuja help!"}
+    },
+    {
+      "id": "meerjungfrau_feindlich",
+      "name": "Feindliche Meerjungfrau",
+      "type": "humanoid",
+      "tier": "elite",
+      "level": 12,
+      "description": "Nicht alle Meerjungfrauen sind freundlich. Diese beschützen ihr Territorium.",
+      "stats": {"hp": 600, "atk": 50, "def": 40, "magic_atk": 85, "spd": 28},
+      "abilities": [
+        {"name": "Siren Song", "type": "magic", "effect": "Bezaubert Gegner für 5 Sek"},
+        {"name": "Wasserpeitsche", "type": "magic", "damage": 85, "range": "medium"},
+        {"name": "Heilende Wellen", "type": "heal", "amount": 100, "cooldown": 20},
+        {"name": "Dreizack-Stoß", "type": "physical", "damage": 50}
+      ],
+      "behavior": {"aggression": "territorial", "intelligence": "high"},
+      "weaknesses": ["lightning"],
+      "resistances": ["water", "ice"],
+      "loot_table": {
+        "common": [{"item": "meerjungfrauen_schuppe", "chance": 80}],
+        "uncommon": [{"item": "perlen", "chance": 50}, {"item": "wasserkristall", "chance": 35}],
+        "rare": [{"item": "siren_stimme_kristall", "chance": 15}],
+        "epic": [{"item": "meerjungfrauen_schuppen", "chance": 5}]
+      },
+      "exp_reward": 1200,
+      "najika_reaction": {"megumin": "Eine ECHTE Meerjungfrau! Aber... sie greift an. Schade."}
+    },
+    {
+      "id": "wasser_elementar",
+      "name": "Wasser-Elementar",
+      "type": "elemental",
+      "tier": "uncommon",
+      "level": 10,
+      "description": "Lebendiges Wasser. Formlos und gefährlich.",
+      "stats": {"hp": 400, "atk": 35, "def": 20, "magic_atk": 70, "magic_res": 60},
+      "abilities": [
+        {"name": "Wasser-Strahl", "type": "magic", "damage": 70, "range": "long"},
+        {"name": "Flüssigform", "type": "passive", "effect": "50% physischer Schaden-Reduktion"},
+        {"name": "Überschwemmung", "type": "magic_aoe", "damage": 50, "slow": 30},
+        {"name": "Absorption", "type": "heal", "amount": "50% des verursachten Schadens"}
+      ],
+      "weaknesses": ["lightning", "ice"],
+      "resistances": ["physical", "water"],
+      "immunities": ["poison"],
+      "loot_table": {
+        "common": [{"item": "reines_wasser", "chance": 90}],
+        "uncommon": [{"item": "wasserkristall", "chance": 40}],
+        "rare": [{"item": "elementar_essenz_wasser", "chance": 20}]
+      },
+      "exp_reward": 800,
+      "najika_reaction": {"shiro": "Wasser-Elementar. Physische Angriffe: Ineffektiv. Blitz-Magie empfohlen."}
+    },
+    {
+      "id": "riesenkrake",
+      "name": "Riesenkrake",
+      "type": "beast_boss",
+      "tier": "boss",
+      "level": 18,
+      "description": "Der Schrecken der Tiefsee. Ein massiver Krake mit 8 Tentakeln.",
+      "stats": {"hp": 4000, "atk": 130, "def": 70, "magic_res": 50, "spd": 25},
+      "phase_mechanics": {
+        "phase_1": {"hp_threshold": "100-66%", "tentacles_active": 8},
+        "phase_2": {"hp_threshold": "66-33%", "tentacles_active": 4, "enrage": "+30% Attack"},
+        "phase_3": {"hp_threshold": "33-0%", "tentacles_active": 0, "special": "Tinte-Explosion, Direktkampf"}
+      },
+      "abilities": [
+        {"name": "Tentakel-Schlag", "damage": 130, "range": "long", "count": "1-3 Tentakel"},
+        {"name": "Umklammern", "type": "grab", "damage": "50/Sek", "duration": 5, "escape_difficulty": "hard"},
+        {"name": "Tintenwolke", "type": "aoe", "effect": "Blind für 10 Sek", "damage": 40},
+        {"name": "Wasser-Wirbel", "type": "magic_aoe", "damage": 100, "pull": "Zieht alle Gegner zum Zentrum"},
+        {"name": "Tiefsee-Ruf", "type": "summon", "summons": "3x Haifisch"},
+        {"name": "Kraken-Wut", "type": "ultimate", "damage": 250, "aoe": "massive", "cooldown": 60, "warning": "AUSWEICHEN!"}
+      ],
+      "behavior": {"intelligence": "high", "uses_terrain": "underwater_advantage"},
+      "weaknesses": ["fire", "lightning"],
+      "resistances": ["water", "ice", "physical"],
+      "special_mechanics": {
+        "tentacles": {
+          "description": "Zerstöre zuerst die Tentakel (jeder hat 500 HP)",
+          "count": 8,
+          "respawn": "Nach 60 Sekunden wachsen 2 nach"
+        },
+        "underwater_fight": {
+          "description": "Der Kampf findet unter Wasser statt",
+          "requirement": "Wasser-Atem benötigt"
+        }
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "kraken_krone", "quantity": 1},
+          {"item": "kraken_tentakel", "quantity": "4-8"}
+        ],
+        "common": [
+          {"item": "riesenkrake_tinte", "quantity": "10-20", "chance": 100}
+        ],
+        "uncommon": [
+          {"item": "tiefsee_perle", "quantity": "3-7", "chance": 70}
+        ],
+        "rare": [
+          {"item": "kraken_herz", "quantity": 1, "chance": 40},
+          {"item": "wasserkristall", "quantity": "5-10", "chance": 50}
+        ],
+        "epic": [
+          {"item": "tiefsee_ruestung", "quantity": 1, "chance": 25}
+        ],
+        "legendary": [
+          {"item": "neptuns_dreizack", "quantity": 1, "chance": 10}
+        ]
+      },
+      "exp_reward": 12000,
+      "gold_reward": "2000-3000",
+      "title_reward": "Kraken-Bezwinger",
+      "najika_reactions": {
+        "initial": {"personality": "megumin", "text": "DAS IST RIESIG! Wie in Piraten der Karibik! EXPLOSION!"},
+        "phase_2": {"personality": "shiro", "text": "WARNUNG: Krake wird aggressiver. Tentakel: Reduziert. Gefahr: Steigt."},
+        "phase_3": {"personality": "melissa", "text": "Der Todeskampf beginnt. Sei bereit."},
+        "victory": {"personality": "harley", "text": "WE DID IT! We killed a FREAKING KRAKEN! *schreit vor Freude*"}
+      },
+      "achievement": {
+        "no_damage": "Perfekter Kampf: Besiege den Kraken ohne Schaden",
+        "speed_run": "Schneller Sieg: Besiege den Kraken in unter 5 Minuten",
+        "solo": "Einsamer Jäger: Besiege den Kraken alleine"
+      }
+    }
+  ],
+  "spawn_zones": {
+    "beach": {"enemies": ["krabbe"], "spawn_rate": "high"},
+    "shallow_water": {"enemies": ["krabbe", "haifisch"], "spawn_rate": "medium"},
+    "deep_sea": {"enemies": ["haifisch", "wasser_elementar", "meerjungfrau_feindlich"], "spawn_rate": "medium"},
+    "kraken_lair": {"enemies": ["riesenkrake"], "spawn_rate": "boss"}
+  }
+}

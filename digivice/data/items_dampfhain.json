@@ -1,0 +1,577 @@
+{
+  "region": "samtmoos_tiefwald",
+  "city": "dampfhain",
+  "items": [
+    {
+      "category": "weapons",
+      "items": [
+        {
+          "id": "waldjaeger_schwert",
+          "name": "Waldjäger-Schwert",
+          "type": "sword",
+          "rarity": "common",
+          "damage": 50,
+          "speed": 1.1,
+          "durability": 250,
+          "price": 300,
+          "description": "Ein leichtes Schwert aus Waldholz und Stahl. Perfekt für schnelle Kämpfe zwischen Bäumen.",
+          "stats": {
+            "attack": 50,
+            "critical_chance": 8,
+            "weight": 3
+          },
+          "special": {
+            "nature_affinity": "+10% Schaden gegen Bestien"
+          },
+          "vendor": "schmied_ironroot",
+          "crafting": {
+            "recipe": ["steel_ingot x2", "hartholz x3", "leather x2"],
+            "skill_required": "smithing_12"
+          }
+        },
+        {
+          "id": "druiden_stab",
+          "name": "Druiden-Stab des Wachstums",
+          "type": "staff",
+          "rarity": "rare",
+          "damage": 40,
+          "magic_power": 80,
+          "speed": 0.8,
+          "durability": 300,
+          "price": 400,
+          "description": "Ein lebendiger Stab aus dem Herzen eines alten Baumes. Pulsiert mit Naturmagie.",
+          "stats": {
+            "attack": 40,
+            "magic_attack": 80,
+            "nature_magic_bonus": 25,
+            "weight": 2
+          },
+          "special": {
+            "cast_speed_bonus": 15,
+            "mana_regeneration": 5,
+            "description": "Regeneriert 5 MP pro Minute"
+          },
+          "vendor": "druide_elowen",
+          "requires": "Nature Magic Skill"
+        },
+        {
+          "id": "elfen_bogen",
+          "name": "Elfenbogen der Stillen Jäger",
+          "type": "bow",
+          "rarity": "uncommon",
+          "damage": 65,
+          "speed": 1.4,
+          "range": "long",
+          "durability": 200,
+          "price": 350,
+          "description": "Ein Bogen aus biegsamen Waldholz. Fast lautlos beim Schießen.",
+          "stats": {
+            "attack": 65,
+            "critical_chance": 18,
+            "range": 5,
+            "weight": 2
+          },
+          "special": {
+            "silent_shot": "50% weniger Geräusche beim Schießen",
+            "accuracy_bonus": 15
+          },
+          "vendor": "jaeger_fenris"
+        },
+        {
+          "id": "lebendholz_axt",
+          "name": "Lebendholz-Kriegsaxt",
+          "type": "axe",
+          "rarity": "epic",
+          "damage": 95,
+          "speed": 0.9,
+          "durability": 600,
+          "price": 800,
+          "description": "Diese Axt wächst nach, wenn sie beschädigt wird. Sie lebt.",
+          "stats": {
+            "attack": 95,
+            "critical_chance": 12,
+            "weight": 6
+          },
+          "special": {
+            "self_repair": "Regeneriert 10 Haltbarkeit pro Stunde",
+            "tree_slayer": "+50% Schaden gegen Waldgeister"
+          },
+          "vendor": "schmied_ironroot",
+          "drop_from": ["waldgeist_boss"]
+        },
+        {
+          "id": "wurzelranken_peitsche",
+          "name": "Wurzelranken-Peitsche",
+          "type": "whip",
+          "rarity": "rare",
+          "damage": 55,
+          "speed": 1.5,
+          "range": "medium",
+          "durability": 180,
+          "price": 450,
+          "description": "Eine Peitsche aus lebenden Wurzeln. Kann Feinde fesseln.",
+          "stats": {
+            "attack": 55,
+            "critical_chance": 10,
+            "range": 3,
+            "weight": 2
+          },
+          "special": {
+            "root_entangle": {
+              "chance": 25,
+              "duration": 5,
+              "description": "25% Chance Gegner zu fesseln für 5 Sekunden"
+            }
+          },
+          "vendor": "druide_elowen",
+          "crafting": {
+            "recipe": ["lebendiges_holz x5", "moos_faser x10"],
+            "skill_required": "nature_magic_20"
+          }
+        }
+      ]
+    },
+    {
+      "category": "armor",
+      "items": [
+        {
+          "id": "natur_ruestung",
+          "name": "Naturhüter-Rüstung",
+          "type": "medium_armor",
+          "rarity": "uncommon",
+          "defense": 60,
+          "durability": 450,
+          "price": 500,
+          "description": "Rüstung aus gehärtetem Holz und Moos. Leicht und flexibel.",
+          "stats": {
+            "defense": 60,
+            "nature_resistance": 40,
+            "stealth_bonus": 10,
+            "weight": 10
+          },
+          "special": {
+            "camouflage": "Im Wald schwerer zu entdecken"
+          },
+          "vendor": "schmied_ironroot"
+        },
+        {
+          "id": "druiden_robe",
+          "name": "Druiden-Robe der Harmonie",
+          "type": "light_armor",
+          "rarity": "rare",
+          "defense": 35,
+          "durability": 300,
+          "price": 600,
+          "description": "Eine Robe aus Blättern und verzauberter Rinde. Atmet mit dem Wald.",
+          "stats": {
+            "defense": 35,
+            "magic_defense": 80,
+            "mana_bonus": 100,
+            "weight": 3
+          },
+          "special": {
+            "nature_attunement": "+20% Naturmagie-Kraft",
+            "mana_regen_bonus": 10
+          },
+          "vendor": "druide_elowen",
+          "set_piece": "druiden_set"
+        },
+        {
+          "id": "moos_schild",
+          "name": "Moosschild",
+          "type": "shield",
+          "rarity": "common",
+          "defense": 30,
+          "durability": 250,
+          "price": 200,
+          "description": "Ein Schild überwachsen mit lebendem Moos. Absorbiert Schläge.",
+          "stats": {
+            "defense": 30,
+            "block_chance": 25,
+            "weight": 4
+          },
+          "special": {
+            "regenerating": "Regeneriert 5 Haltbarkeit pro Stunde"
+          },
+          "vendor": "schmied_ironroot"
+        },
+        {
+          "id": "jaeger_mantel",
+          "name": "Jäger-Mantel des Schattens",
+          "type": "cloak",
+          "rarity": "uncommon",
+          "defense": 20,
+          "durability": 200,
+          "price": 300,
+          "description": "Ein dunkler Mantel aus Wolfspelz. Macht dich unsichtbar für Beute.",
+          "stats": {
+            "defense": 20,
+            "stealth": 30,
+            "cold_resistance": 25
+          },
+          "special": {
+            "hunter_instinct": "+15% Tracking-Fähigkeit"
+          },
+          "vendor": "jaeger_fenris"
+        },
+        {
+          "id": "baumrinden_helm",
+          "name": "Baumrinden-Helm",
+          "type": "helmet",
+          "rarity": "common",
+          "defense": 25,
+          "durability": 200,
+          "price": 150,
+          "description": "Ein Helm geschnitzt aus alter Baumrinde.",
+          "stats": {
+            "defense": 25,
+            "nature_resistance": 15
+          },
+          "vendor": "schmied_ironroot"
+        }
+      ]
+    },
+    {
+      "category": "food",
+      "items": [
+        {
+          "id": "pilzeintopf",
+          "name": "Erikas legendärer Pilzeintopf",
+          "type": "food_meal",
+          "rarity": "uncommon",
+          "price": 20,
+          "description": "Ein dampfender Eintopf voller Waldpilze. Geheimrezept!",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 150,
+            "buffs": {
+              "stamina": {
+                "value": 15,
+                "duration": 2400
+              },
+              "nature_resistance": {
+                "value": 20,
+                "duration": 3600
+              }
+            },
+            "satisfaction": 80
+          },
+          "vendor": "wirtin_erika"
+        },
+        {
+          "id": "waldbeer_kuchen",
+          "name": "Waldbeer-Kuchen",
+          "type": "food_dessert",
+          "rarity": "common",
+          "price": 15,
+          "description": "Süßer Kuchen mit frischen Waldbeeren. Schmeckt nach Kindheit.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 80,
+            "buffs": {
+              "happiness": {
+                "value": 25,
+                "duration": 1800
+              }
+            },
+            "satisfaction": 60
+          },
+          "vendor": "wirtin_erika",
+          "najika_reaction": "Harley: CAKE! *stopft sich voll* Nom nom nom!"
+        },
+        {
+          "id": "honigbrot",
+          "name": "Honigbrot",
+          "type": "food_snack",
+          "rarity": "common",
+          "price": 10,
+          "description": "Frisches Brot mit Waldhonig. Einfach aber lecker.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 60,
+            "restore_stamina": 50
+          },
+          "vendor": "wirtin_erika",
+          "stackable": 50
+        },
+        {
+          "id": "gebratener_fisch",
+          "name": "Gebratener Waldfisch",
+          "type": "food_meal",
+          "rarity": "common",
+          "price": 25,
+          "description": "Frisch gefangener Fisch aus den Waldbächen.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 120,
+            "buffs": {
+              "agility": {
+                "value": 12,
+                "duration": 2400
+              }
+            }
+          },
+          "vendor": "wirtin_erika"
+        },
+        {
+          "id": "beeren_mix",
+          "name": "Beeren-Mix",
+          "type": "food_snack",
+          "rarity": "common",
+          "price": 8,
+          "description": "Eine Handvoll frischer Waldbeeren.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 40,
+            "restore_mp": 30
+          },
+          "vendor": "kind_mila",
+          "stackable": 99
+        }
+      ]
+    },
+    {
+      "category": "materials",
+      "items": [
+        {
+          "id": "eichenholz",
+          "name": "Eichenholz",
+          "type": "material",
+          "rarity": "common",
+          "price": 20,
+          "description": "Stabiles Holz von alten Eichen.",
+          "stackable": 999,
+          "used_in": ["weapon_crafting", "building"],
+          "vendor": "holzfaeller_bjorn"
+        },
+        {
+          "id": "hartholz",
+          "name": "Hartholz",
+          "type": "material",
+          "rarity": "uncommon",
+          "price": 50,
+          "description": "Besonders dichtes Holz. Perfekt für Waffen.",
+          "stackable": 500,
+          "used_in": ["weapon_crafting", "armor_crafting"],
+          "vendor": "holzfaeller_bjorn"
+        },
+        {
+          "id": "magisches_holz",
+          "name": "Magisches Holz",
+          "type": "material_magical",
+          "rarity": "rare",
+          "price": 200,
+          "description": "Holz aus einem verzauberten Baum. Leuchtet schwach.",
+          "stackable": 50,
+          "used_in": ["staff_crafting", "enchanting"],
+          "special": "Leitet magische Energie",
+          "vendor": "holzfaeller_bjorn"
+        },
+        {
+          "id": "lebendiges_holz",
+          "name": "Lebendiges Holz",
+          "type": "material_legendary",
+          "rarity": "legendary",
+          "price": 500,
+          "description": "Holz das noch lebt. Wächst langsam nach.",
+          "stackable": 10,
+          "used_in": ["legendary_crafting", "druid_items"],
+          "special": "Wächst 1 Stück pro Woche nach",
+          "vendor": "holzfaeller_bjorn",
+          "drop_from": ["waldgeist_boss", "uralter_baum"]
+        },
+        {
+          "id": "heilkraeuter",
+          "name": "Heilkräuter",
+          "type": "material",
+          "rarity": "common",
+          "price": 15,
+          "description": "Frische Kräuter mit heilenden Eigenschaften.",
+          "stackable": 999,
+          "used_in": ["alchemy", "cooking"],
+          "vendor": "kind_mila"
+        },
+        {
+          "id": "moosfaser",
+          "name": "Moosfaser",
+          "type": "material",
+          "rarity": "common",
+          "price": 10,
+          "description": "Weiches, aber zähes Moos. Gut für Polsterung.",
+          "stackable": 999,
+          "used_in": ["armor_crafting", "alchemy"],
+          "gather_from": "samtmoos_tiefwald_region"
+        },
+        {
+          "id": "feenstaub",
+          "name": "Feenstaub",
+          "type": "material_magical",
+          "rarity": "epic",
+          "price": 300,
+          "description": "Glitzernder Staub von Waldfeen. Voller Magie.",
+          "stackable": 50,
+          "used_in": ["enchanting", "alchemy", "nature_magic"],
+          "special": "Leuchtet im Dunkeln",
+          "drop_from": ["waldgeister", "feen"],
+          "vendor": "mysterioeser_wanderer"
+        }
+      ]
+    },
+    {
+      "category": "consumables",
+      "items": [
+        {
+          "id": "heiltrank_klein",
+          "name": "Kleiner Heiltrank",
+          "type": "potion",
+          "rarity": "common",
+          "price": 30,
+          "description": "Heilt leichte Wunden.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 100
+          },
+          "stackable": 50,
+          "vendor": "kraeuterhexe_luna"
+        },
+        {
+          "id": "heiltrank_gross",
+          "name": "Großer Heiltrank",
+          "type": "potion",
+          "rarity": "uncommon",
+          "price": 100,
+          "description": "Heilt schwere Wunden.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 300
+          },
+          "stackable": 20,
+          "vendor": "kraeuterhexe_luna"
+        },
+        {
+          "id": "manatrank",
+          "name": "Manatrank",
+          "type": "potion",
+          "rarity": "uncommon",
+          "price": 80,
+          "description": "Stellt magische Energie wieder her.",
+          "consumable": true,
+          "effects": {
+            "restore_mp": 150
+          },
+          "stackable": 20,
+          "vendor": "kraeuterhexe_luna"
+        },
+        {
+          "id": "regenerations_elixier",
+          "name": "Regenerations-Elixier",
+          "type": "potion",
+          "rarity": "rare",
+          "price": 150,
+          "description": "Heilt kontinuierlich über Zeit.",
+          "consumable": true,
+          "effects": {
+            "regeneration": {
+              "hp_per_second": 10,
+              "duration": 60
+            }
+          },
+          "stackable": 10,
+          "vendor": "kraeuterhexe_luna"
+        },
+        {
+          "id": "gift_des_waldes",
+          "name": "Gift des Waldes",
+          "type": "poison",
+          "rarity": "uncommon",
+          "price": 120,
+          "description": "Natürliches Gift. Kann auf Waffen aufgetragen werden.",
+          "consumable": true,
+          "effects": {
+            "weapon_coating": {
+              "poison_damage": 20,
+              "duration": 300,
+              "applications": 10
+            }
+          },
+          "stackable": 10,
+          "vendor": "kraeuterhexe_luna"
+        },
+        {
+          "id": "kraeutertee",
+          "name": "Kräutertee",
+          "type": "drink",
+          "rarity": "common",
+          "price": 5,
+          "description": "Beruhigender Tee aus Waldkräutern.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 50,
+            "restore_mp": 50,
+            "remove_debuffs": ["poisoned", "confused"]
+          },
+          "stackable": 50,
+          "vendor": "wirtin_erika"
+        },
+        {
+          "id": "onsen_eintritt",
+          "name": "Onsen-Eintrittsticket",
+          "type": "service_ticket",
+          "rarity": "uncommon",
+          "price": 50,
+          "description": "Ein Ticket für ein entspannendes Bad im Onsen.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": "100%",
+            "restore_mp": "100%",
+            "remove_all_debuffs": true,
+            "buffs": {
+              "regeneration": {"value": 10, "duration": 3600},
+              "relaxed": {"value": 20, "duration": 7200}
+            }
+          },
+          "vendor": "onsen_meisterin_yuki",
+          "najika_reaction": {
+            "megumin": "ONSEN! ONSEN! ONSEN! Wie in Konosuba! *rennt los*",
+            "harley": "Hot springs? Count me IN! *zieht Kuja mit*"
+          }
+        },
+        {
+          "id": "aromatherapie_oel",
+          "name": "Aromatherapie-Öl",
+          "type": "consumable",
+          "rarity": "uncommon",
+          "price": 120,
+          "description": "Duftendes Öl für das ultimative Onsen-Erlebnis.",
+          "consumable": true,
+          "effects": {
+            "buffs": {
+              "relaxation": {"value": 30, "duration": 10800},
+              "mental_clarity": {"value": 15, "duration": 7200}
+            }
+          },
+          "vendor": "onsen_meisterin_yuki"
+        }
+      ]
+    }
+  ],
+  "item_sets": {
+    "druiden_set": {
+      "name": "Druiden-Set der Harmonie",
+      "pieces": ["druiden_robe", "druiden_stab", "baumrinden_helm"],
+      "set_bonus_2": "+30% Naturmagie, +50 Mana",
+      "set_bonus_3": "+50% Naturmagie, +100 Mana, Heilzauber kosten 25% weniger"
+    },
+    "jaeger_set": {
+      "name": "Jäger-Set des Schattens",
+      "pieces": ["jaeger_mantel", "elfen_bogen", "natur_ruestung"],
+      "set_bonus_2": "+20 Stealth, +15% Critical Chance",
+      "set_bonus_3": "+40 Stealth, +25% Critical Chance, Unsichtbar beim Stillstehen"
+    }
+  },
+  "drop_tables": {
+    "forest_enemies": ["eichenholz", "moosfaser", "heilkraeuter"],
+    "elite_enemies": ["magisches_holz", "feenstaub"],
+    "boss_rewards": ["lebendiges_holz", "legendäre Waffen"]
+  }
+}

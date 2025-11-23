@@ -1,0 +1,518 @@
+{
+  "region": "samtmoos_tiefwald",
+  "biome": "forest",
+  "enemies": [
+    {
+      "id": "waldkobold",
+      "name": "Waldkobold",
+      "type": "humanoid",
+      "tier": "common",
+      "level": 3,
+      "description": "Kleine grüne Kreaturen die im Wald leben. Nervig aber meist harmlos.",
+      "appearance": {
+        "size": "small",
+        "color": "green",
+        "features": "Spitze Ohren, große Augen, trägt Blätter"
+      },
+      "stats": {
+        "hp": 80,
+        "atk": 15,
+        "def": 10,
+        "spd": 18,
+        "magic_res": 5
+      },
+      "abilities": [
+        {
+          "name": "Steinwurf",
+          "type": "ranged",
+          "damage": 15,
+          "cooldown": 2
+        },
+        {
+          "name": "Feigling",
+          "type": "passive",
+          "effect": "Flieht bei 30% HP"
+        }
+      ],
+      "behavior": {
+        "aggression": "low",
+        "pack_size": "3-6",
+        "tactics": "Flieht schnell, wirft Steine aus der Distanz"
+      },
+      "loot_table": {
+        "common": [
+          {"item": "eichenholz", "quantity": "1-3", "chance": 60},
+          {"item": "wildblumen", "quantity": "2-5", "chance": 40}
+        ],
+        "uncommon": [
+          {"item": "kobold_ohr", "quantity": 1, "chance": 15}
+        ]
+      },
+      "exp_reward": 50,
+      "gold_reward": "5-10",
+      "najika_reaction": {
+        "megumin": "Die sind so NERVIG! *will Explosion nutzen*",
+        "harley": "Aww they're kinda cute! *wirft Stein zurück* But annoying!",
+        "shiro": "Waldkobold. Bedrohungslevel: Minimal. Nervfaktor: Maximum.",
+        "melissa": "Plagegeister. Ignoriere sie wenn möglich."
+      }
+    },
+    {
+      "id": "waldwolf",
+      "name": "Waldwolf",
+      "type": "beast",
+      "tier": "common",
+      "level": 5,
+      "description": "Wilde Wölfe die in Rudeln jagen. Gefährlich in Gruppen.",
+      "appearance": {
+        "size": "medium",
+        "color": "gray_brown",
+        "features": "Scharfe Zähne, bernsteinfarbene Augen"
+      },
+      "stats": {
+        "hp": 150,
+        "atk": 35,
+        "def": 20,
+        "spd": 25,
+        "magic_res": 10
+      },
+      "abilities": [
+        {
+          "name": "Rudel-Angriff",
+          "type": "physical",
+          "damage": 50,
+          "condition": "Nur wenn 3+ Wölfe in der Nähe",
+          "description": "+50% Schaden in Gruppen"
+        },
+        {
+          "name": "Heulen",
+          "type": "buff",
+          "effect": "Ruft 1-2 weitere Wölfe",
+          "cooldown": 30
+        },
+        {
+          "name": "Biss",
+          "type": "physical",
+          "damage": 35,
+          "effect": "Blutung (10 Schaden/Sek für 10 Sek)"
+        }
+      ],
+      "behavior": {
+        "aggression": "medium",
+        "pack_size": "2-5",
+        "tactics": "Umzingeln, koordinierte Angriffe, Heulen für Verstärkung"
+      },
+      "weaknesses": ["fire"],
+      "resistances": ["cold"],
+      "loot_table": {
+        "common": [
+          {"item": "wolfspelz", "quantity": 1, "chance": 70},
+          {"item": "wildschwein_fleisch", "quantity": "1-2", "chance": 50}
+        ],
+        "uncommon": [
+          {"item": "wolf_zahn", "quantity": "1-3", "chance": 25}
+        ],
+        "rare": [
+          {"item": "alpha_wolf_klaue", "quantity": 1, "chance": 5}
+        ]
+      },
+      "exp_reward": 120,
+      "gold_reward": "10-20",
+      "najika_reaction": {
+        "megumin": "Wölfe! Wie cool! Aber sie greifen an... EXPLOSION!",
+        "harley": "Doggies! Bad doggies! *wehrt sich* No biting!",
+        "shiro": "Canidae Lupus. Rudeltier. Taktik: Divide and conquer empfohlen.",
+        "melissa": "Wölfe respektieren Stärke. Zeig keine Schwäche."
+      }
+    },
+    {
+      "id": "waldgeist",
+      "name": "Waldgeist",
+      "type": "elemental",
+      "tier": "uncommon",
+      "level": 8,
+      "description": "Geister aus Blättern und Nebel. Schützen den Wald vor Eindringlingen.",
+      "appearance": {
+        "size": "medium",
+        "color": "translucent_green",
+        "features": "Schwebend, aus Blättern und Nebel, leuchtende Augen"
+      },
+      "stats": {
+        "hp": 200,
+        "atk": 25,
+        "def": 15,
+        "magic_atk": 60,
+        "spd": 15,
+        "magic_res": 40
+      },
+      "abilities": [
+        {
+          "name": "Blattwirbel",
+          "type": "magic",
+          "element": "nature",
+          "damage": 60,
+          "cooldown": 5,
+          "description": "Schneidende Blätter attackieren"
+        },
+        {
+          "name": "Nebelform",
+          "type": "defensive",
+          "effect": "Wird ätherisch, 50% Ausweichen für 5 Sekunden",
+          "cooldown": 15
+        },
+        {
+          "name": "Naturheilung",
+          "type": "heal",
+          "amount": 50,
+          "cooldown": 20,
+          "description": "Heilt sich selbst"
+        },
+        {
+          "name": "Wurzelschlag",
+          "type": "magic",
+          "damage": 40,
+          "effect": "Fesselt Ziel für 3 Sekunden"
+        }
+      ],
+      "behavior": {
+        "aggression": "defensive",
+        "pack_size": "1-2",
+        "tactics": "Nutzt Magie aus Distanz, wird ätherisch bei Gefahr"
+      },
+      "weaknesses": ["fire", "holy"],
+      "resistances": ["physical", "nature"],
+      "immunities": ["poison"],
+      "loot_table": {
+        "common": [
+          {"item": "moosfaser", "quantity": "3-7", "chance": 80},
+          {"item": "heilkraeuter", "quantity": "2-5", "chance": 60}
+        ],
+        "uncommon": [
+          {"item": "waldgeist_essenz", "quantity": 1, "chance": 35},
+          {"item": "magisches_holz", "quantity": "1-2", "chance": 25}
+        ],
+        "rare": [
+          {"item": "feenstaub", "quantity": "1-3", "chance": 10}
+        ]
+      },
+      "exp_reward": 300,
+      "gold_reward": "30-50",
+      "najika_reaction": {
+        "megumin": "Ein GEIST! Cool! Aber... kann man Geister explodieren?",
+        "harley": "Spooky ghost! *versucht zu fangen* Come here little floaty thing!",
+        "shiro": "Ätherische Entität. Physischer Schaden: 50% reduziert. Empfehle magische Angriffe.",
+        "melissa": "Waldgeister sind neutral. Verletze den Wald nicht, dann greifen sie nicht an."
+      }
+    },
+    {
+      "id": "uralter_baumwächter",
+      "name": "Uralter Baumwächter",
+      "type": "elemental_elite",
+      "tier": "elite",
+      "level": 12,
+      "description": "Massive Kreaturen aus lebendem Holz. Beschützer des Waldes.",
+      "appearance": {
+        "size": "huge",
+        "color": "brown_green",
+        "features": "Humanoide Form aus Baumstämmen, Moos-Bart, leuchtende Augen"
+      },
+      "stats": {
+        "hp": 800,
+        "atk": 80,
+        "def": 60,
+        "magic_atk": 50,
+        "spd": 8,
+        "magic_res": 45
+      },
+      "abilities": [
+        {
+          "name": "Wurzelschlag",
+          "type": "physical",
+          "damage": 80,
+          "range": "medium",
+          "effect": "Wirft Gegner zurück",
+          "cooldown": 5
+        },
+        {
+          "name": "Dornenranken",
+          "type": "magic",
+          "element": "nature",
+          "damage": 60,
+          "effect": "Fesselt und verursacht Blutung",
+          "cooldown": 10
+        },
+        {
+          "name": "Regeneration",
+          "type": "passive",
+          "effect": "Heilt 20 HP pro Sekunde im Wald"
+        },
+        {
+          "name": "Erd-Schlag",
+          "type": "physical_aoe",
+          "damage": 100,
+          "range": "close_aoe",
+          "effect": "Betäubt für 2 Sekunden",
+          "cooldown": 15,
+          "animation": "Schlägt auf den Boden"
+        },
+        {
+          "name": "Baumbeschwörung",
+          "type": "summon",
+          "summons": "2x kleine_baumwächter",
+          "cooldown": 30,
+          "uses": 2
+        }
+      ],
+      "behavior": {
+        "aggression": "high_when_provoked",
+        "pack_size": "1",
+        "tactics": "Langsam aber stark, nutzt Reichweite und Flächenangriffe"
+      },
+      "weaknesses": ["fire", "axe_weapons"],
+      "resistances": ["physical", "nature"],
+      "immunities": ["poison", "bleed"],
+      "special_mechanics": {
+        "enrage": {
+          "trigger": "Bei 30% HP",
+          "effect": "+50% Angriff, +20% Geschwindigkeit",
+          "description": "Der Baum wird wütend"
+        }
+      },
+      "loot_table": {
+        "common": [
+          {"item": "hartholz", "quantity": "5-10", "chance": 100},
+          {"item": "moosfaser", "quantity": "10-20", "chance": 80}
+        ],
+        "uncommon": [
+          {"item": "magisches_holz", "quantity": "3-5", "chance": 50},
+          {"item": "waldgeist_essenz", "quantity": "2-4", "chance": 40}
+        ],
+        "rare": [
+          {"item": "lebendiges_holz", "quantity": "1-2", "chance": 25},
+          {"item": "baumwächter_herz", "quantity": 1, "chance": 20}
+        ],
+        "epic": [
+          {"item": "uralter_baum_kern", "quantity": 1, "chance": 5}
+        ]
+      },
+      "exp_reward": 1000,
+      "gold_reward": "100-200",
+      "najika_reaction": {
+        "megumin": "EIN RIESIGER BAUM-MANN! Das ist wie ein BOSS! EXPLOSION!",
+        "harley": "Okay that's... that's BIG. *nervös* Kuja, got a plan?",
+        "shiro": "Analyse: 3,5 Meter hoch. Gewicht: ca. 600kg. Schwachstelle: Feuer.",
+        "melissa": "Respektiere ihn. Er beschützt nur sein Zuhause."
+      }
+    },
+    {
+      "id": "hirschkoenig_eldaron",
+      "name": "Hirschkönig Eldaron",
+      "type": "beast_boss",
+      "tier": "boss",
+      "level": 18,
+      "description": "Der legendäre König der Waldtiere. Ein majestätischer Hirsch, groß wie ein Haus.",
+      "appearance": {
+        "size": "giant",
+        "color": "white_gold",
+        "features": "Leuchtendes weißes Fell, goldenes Geweih mit Kristallen, intelligente Augen"
+      },
+      "stats": {
+        "hp": 3000,
+        "atk": 120,
+        "def": 80,
+        "magic_atk": 90,
+        "spd": 30,
+        "magic_res": 60
+      },
+      "phase_mechanics": {
+        "phase_1": {
+          "hp_threshold": "100-66%",
+          "behavior": "Normal attacks, uses Geweih-Rammstoß",
+          "adds": "Beschwört 3x Waldwölfe"
+        },
+        "phase_2": {
+          "hp_threshold": "66-33%",
+          "behavior": "Nutzt Naturmagie, Heilung",
+          "adds": "Beschwört 2x Waldgeister",
+          "special": "Geweih leuchtet golden, +25% Magic Attack"
+        },
+        "phase_3": {
+          "hp_threshold": "33-0%",
+          "behavior": "Wütend, sehr schnell, alle Fähigkeiten",
+          "adds": "Beschwört 1x Uralter Baumwächter",
+          "special": "Berserk: +50% Attack, +50% Speed",
+          "warning": "Sehr gefährlich!"
+        }
+      },
+      "abilities": [
+        {
+          "name": "Geweih-Rammstoß",
+          "type": "physical",
+          "damage": 150,
+          "range": "charge",
+          "effect": "Wirft Gegner weit zurück, betäubt 3 Sek",
+          "cooldown": 10,
+          "animation": "Rennt auf Gegner zu"
+        },
+        {
+          "name": "Natur-Explosion",
+          "type": "magic_aoe",
+          "element": "nature",
+          "damage": 120,
+          "range": "large_aoe",
+          "effect": "Heilt Verbündete für 200 HP",
+          "cooldown": 15
+        },
+        {
+          "name": "Heiliger Wald",
+          "type": "area_buff",
+          "effect": "Erschafft Zone: Heilt Eldaron 50 HP/Sek, Gegner -25% Schaden",
+          "duration": 20,
+          "cooldown": 30
+        },
+        {
+          "name": "Geweih-Kristalle",
+          "type": "ranged_magic",
+          "damage": 80,
+          "projectiles": 5,
+          "description": "Schießt Kristalle aus dem Geweih",
+          "cooldown": 8
+        },
+        {
+          "name": "Königlicher Ruf",
+          "type": "summon",
+          "summons": "Varies by phase",
+          "cooldown": 25,
+          "uses": "unlimited"
+        },
+        {
+          "name": "Trampling Charge",
+          "type": "physical_aoe",
+          "damage": 200,
+          "range": "line",
+          "effect": "Rennt in gerader Linie, zerstört alles",
+          "cooldown": 20,
+          "phase": "3 only",
+          "warning": "Sehr gefährlich! Ausweichen!"
+        }
+      ],
+      "behavior": {
+        "aggression": "high",
+        "intelligence": "very_high",
+        "tactics": "Nutzt Umgebung, beschwört Verbündete, heilt sich strategisch"
+      },
+      "weaknesses": [],
+      "resistances": ["physical", "nature", "ice"],
+      "immunities": ["poison", "stun (phase 3)"],
+      "special_mechanics": {
+        "intelligent_boss": {
+          "description": "Eldaron ist intelligent. Bei 50% HP kann er um Gnade bitten.",
+          "spare_option": true,
+          "spare_rewards": {
+            "companion": "hirschkoenig_eldaron",
+            "items": ["koenig_des_waldes_segen", "eldaron_freundschaft"],
+            "reputation": 100,
+            "title": "Freund der Bestien"
+          }
+        },
+        "enrage_final": {
+          "trigger": "Bei 10% HP",
+          "effect": "Wird komplett rasend, +100% All Stats",
+          "description": "Letzter verzweifelter Angriff"
+        }
+      },
+      "loot_table": {
+        "guaranteed": [
+          {"item": "hirschkoenig_krone", "quantity": 1}
+        ],
+        "common": [
+          {"item": "legendaeres_geweih", "quantity": 1, "chance": 100},
+          {"item": "koenig_des_waldes_fell", "quantity": 1, "chance": 100}
+        ],
+        "uncommon": [
+          {"item": "kristall_des_waldes", "quantity": "5-10", "chance": 80},
+          {"item": "eldaron_horn", "quantity": "2-4", "chance": 60}
+        ],
+        "rare": [
+          {"item": "lebendiges_holz", "quantity": "5-10", "chance": 50},
+          {"item": "waldkoenig_essenz", "quantity": 1, "chance": 40}
+        ],
+        "epic": [
+          {"item": "naturmagie_affinitaet", "quantity": 1, "chance": 20},
+          {"item": "koenig_des_waldes_waffe", "quantity": 1, "chance": 15}
+        ],
+        "legendary": [
+          {"item": "eldaron_wiedergeburt_totem", "quantity": 1, "chance": 5}
+        ]
+      },
+      "exp_reward": 10000,
+      "gold_reward": "1000-2000",
+      "title_reward": "Hirschjäger (wenn getötet) / Freund der Bestien (wenn verschont)",
+      "najika_reactions": {
+        "initial": {
+          "personality": "megumin",
+          "text": "DAS IST DER BOSS! Ein RIESIGER LEUCHTENDER HIRSCH! SO COOL!"
+        },
+        "phase_2": {
+          "personality": "shiro",
+          "text": "WARNUNG: Magie-Level steigt. Phase 2 aktiviert. Neue Taktik erforderlich."
+        },
+        "phase_3": {
+          "personality": "melissa",
+          "text": "Er wird verzweifelt. Ein König der um sein Leben kämpft... Tragisch."
+        },
+        "spare_option": {
+          "personality": "harley",
+          "text": "Kuja... look at his eyes. He's... asking. Can we... not kill him?"
+        },
+        "victory_kill": {
+          "personality": "melissa",
+          "text": "Ein König ist gefallen. Möge er in Frieden ruhen."
+        },
+        "victory_spare": {
+          "personality": "megumin",
+          "text": "WIR HABEN EINEN RIESENHIRSCH ALS FREUND! DAS IST BESSER ALS EXPLOSION!"
+        }
+      },
+      "achievement": {
+        "kill": "Boss-Jäger: Hirschkönig",
+        "spare": "Gnadenvoll: Verschone den König",
+        "no_damage": "Perfekter Kampf: Besiege Eldaron ohne Schaden"
+      }
+    }
+  ],
+  "enemy_spawn_zones": {
+    "wald_nah": {
+      "enemies": ["waldkobold", "waldwolf"],
+      "spawn_rate": "high"
+    },
+    "tiefer_wald": {
+      "enemies": ["waldgeist", "waldwolf", "uralter_baumwächter"],
+      "spawn_rate": "medium"
+    },
+    "heiliger_hain": {
+      "enemies": ["waldgeist", "uralter_baumwächter"],
+      "spawn_rate": "low",
+      "boss_spawn": "hirschkoenig_eldaron"
+    }
+  },
+  "difficulty_scaling": {
+    "easy_mode": {
+      "hp_multiplier": 0.7,
+      "damage_multiplier": 0.8
+    },
+    "normal_mode": {
+      "hp_multiplier": 1.0,
+      "damage_multiplier": 1.0
+    },
+    "hard_mode": {
+      "hp_multiplier": 1.5,
+      "damage_multiplier": 1.3
+    },
+    "hardcore_mode": {
+      "hp_multiplier": 2.0,
+      "damage_multiplier": 1.5,
+      "special": "Boss kann permanenten Tod verursachen"
+    }
+  }
+}
