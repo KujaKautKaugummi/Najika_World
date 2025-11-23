@@ -1,0 +1,418 @@
+{
+  "region": "heisse_duenen",
+  "city": "handelsfestung",
+  "items": [
+    {
+      "category": "weapons",
+      "items": [
+        {
+          "id": "wuestensaebel",
+          "name": "Wüstensäbel",
+          "type": "sword",
+          "rarity": "common",
+          "damage": 45,
+          "speed": 1.2,
+          "durability": 200,
+          "price": 150,
+          "description": "Ein leichter, gebogener Säbel. Perfekt für schnelle Angriffe in der Hitze.",
+          "stats": {
+            "attack": 45,
+            "critical_chance": 5,
+            "weight": 3
+          },
+          "special": null,
+          "vendor": "weapon_master_vex",
+          "crafting": {
+            "recipe": ["iron_ingot x3", "leather x2", "sandstone x1"],
+            "skill_required": "smithing_15"
+          }
+        },
+        {
+          "id": "blutschwert",
+          "name": "Blutschwert der Arena",
+          "type": "sword",
+          "rarity": "rare",
+          "damage": 75,
+          "speed": 1.0,
+          "durability": 400,
+          "price": 500,
+          "description": "Geschmiedet aus dem Blut gefallener Champions. Saugt Leben aus Feinden.",
+          "stats": {
+            "attack": 75,
+            "critical_chance": 10,
+            "weight": 5
+          },
+          "special": {
+            "lifesteal": 5,
+            "description": "Heilt 5% des verursachten Schadens"
+          },
+          "vendor": "weapon_master_vex",
+          "drop_from": ["arena_champion_npc"]
+        },
+        {
+          "id": "sandsturm_dolch",
+          "name": "Sandsturm-Dolch",
+          "type": "dagger",
+          "rarity": "uncommon",
+          "damage": 35,
+          "speed": 1.5,
+          "durability": 150,
+          "price": 200,
+          "description": "Schnell wie der Wind, tödlich wie ein Sandsturm.",
+          "stats": {
+            "attack": 35,
+            "critical_chance": 20,
+            "weight": 1
+          },
+          "special": {
+            "attack_speed_bonus": 15,
+            "description": "+15% Angriffsgeschwindigkeit"
+          },
+          "vendor": "weapon_master_vex"
+        },
+        {
+          "id": "karawanen_speer",
+          "name": "Karawanen-Speer",
+          "type": "spear",
+          "rarity": "common",
+          "damage": 55,
+          "speed": 0.9,
+          "range": "medium",
+          "durability": 250,
+          "price": 180,
+          "description": "Standardwaffe der Karawanen-Wachen. Reich weitend und stabil.",
+          "stats": {
+            "attack": 55,
+            "critical_chance": 8,
+            "range": 3,
+            "weight": 4
+          },
+          "vendor": "weapon_master_vex"
+        },
+        {
+          "id": "legendaerer_krummsaebel",
+          "name": "Legendärer Krummsäbel des Wüstenkönigs",
+          "type": "sword",
+          "rarity": "legendary",
+          "damage": 120,
+          "speed": 1.3,
+          "durability": 1000,
+          "price": 2000,
+          "description": "Die Klinge des ersten Wüstenkönigs. Leuchtet im Mondlicht.",
+          "stats": {
+            "attack": 120,
+            "critical_chance": 25,
+            "critical_damage": 50,
+            "weight": 4
+          },
+          "special": {
+            "sandstorm_slash": {
+              "description": "Spezialangriff: Sandsturm-Hieb",
+              "damage": 300,
+              "cooldown": 60,
+              "aoe": true
+            },
+            "heat_immunity": "Immune gegen Hitze-Schaden"
+          },
+          "vendor": "weapon_master_vex",
+          "quest_reward": "wuestenkoenig_vermaechtnis"
+        }
+      ]
+    },
+    {
+      "category": "armor",
+      "items": [
+        {
+          "id": "wuestenleder_ruestung",
+          "name": "Wüstenleder-Rüstung",
+          "type": "light_armor",
+          "rarity": "common",
+          "defense": 25,
+          "durability": 300,
+          "price": 120,
+          "description": "Leichte Lederrüstung. Schützt vor Sonne und Klingen.",
+          "stats": {
+            "defense": 25,
+            "heat_resistance": 10,
+            "weight": 5
+          },
+          "vendor": "armor_smith_tormund"
+        },
+        {
+          "id": "sandstein_panzer",
+          "name": "Sandstein-Panzer",
+          "type": "medium_armor",
+          "rarity": "uncommon",
+          "defense": 55,
+          "durability": 500,
+          "price": 300,
+          "description": "Rüstung aus versteinerten Wüstenpanzern. Schwer, aber robust.",
+          "stats": {
+            "defense": 55,
+            "heat_resistance": 20,
+            "weight": 15
+          },
+          "vendor": "armor_smith_tormund"
+        },
+        {
+          "id": "handelsfestung_vollruestung",
+          "name": "Handelsfestung-Vollrüstung",
+          "type": "heavy_armor",
+          "rarity": "rare",
+          "defense": 90,
+          "durability": 800,
+          "price": 800,
+          "description": "Die offizielle Rüstung der Festungsgarde. Maximaler Schutz.",
+          "stats": {
+            "defense": 90,
+            "heat_resistance": 30,
+            "intimidation": 10,
+            "weight": 25
+          },
+          "vendor": "armor_smith_tormund",
+          "set_bonus": "Wenn komplettes Set: +20 Defense"
+        },
+        {
+          "id": "arena_champion_helm",
+          "name": "Arena-Champion Helm",
+          "type": "helmet",
+          "rarity": "epic",
+          "defense": 35,
+          "durability": 400,
+          "price": 400,
+          "description": "Nur Champions der Arena dürfen diesen Helm tragen.",
+          "stats": {
+            "defense": 35,
+            "intimidation": 15,
+            "critical_resistance": 10
+          },
+          "special": {
+            "arena_respect": "NPCs in Handelsfestung respektieren dich mehr"
+          },
+          "vendor": "arena_master_khan",
+          "requires": "arena_champion_rank"
+        },
+        {
+          "id": "wuestenmantel",
+          "name": "Wüstenmantel des Wanderers",
+          "type": "cloak",
+          "rarity": "uncommon",
+          "defense": 15,
+          "durability": 200,
+          "price": 150,
+          "description": "Ein langer Mantel zum Schutz vor Sonne und Sand.",
+          "stats": {
+            "defense": 15,
+            "heat_resistance": 50,
+            "sandstorm_protection": 30
+          },
+          "special": {
+            "description": "Reduziert Sandsturm-Schaden um 30%"
+          },
+          "vendor": "merchant_salazar"
+        }
+      ]
+    },
+    {
+      "category": "food",
+      "items": [
+        {
+          "id": "champion_keule",
+          "name": "CHAMPION-KEULE",
+          "type": "food_legendary",
+          "rarity": "legendary",
+          "price": 100,
+          "description": "Die legendäre große Fleischkeule! Najika beißt rein wie in jedem guten Anime!",
+          "consumable": true,
+          "eating_style": "two_handed",
+          "effects": {
+            "restore_hp": 300,
+            "buffs": {
+              "strength": {
+                "value": 20,
+                "duration": 3600
+              },
+              "stamina": {
+                "value": 20,
+                "duration": 3600
+              },
+              "combat_power": {
+                "value": 15,
+                "duration": 3600
+              }
+            },
+            "satisfaction": 100
+          },
+          "vendor": "butcher_grax",
+          "stock": 3,
+          "najika_reaction": "KUJA! DIE KEULE! *sabbert* ICH WILL AUCH EINE!"
+        },
+        {
+          "id": "rauch_rippchen",
+          "name": "Rauch-Rippchen",
+          "type": "food_bbq",
+          "rarity": "uncommon",
+          "price": 25,
+          "description": "Saftige Rippchen vom Grill. Rauchig und zart.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 100,
+            "buffs": {
+              "strength": {
+                "value": 10,
+                "duration": 1800
+              }
+            }
+          },
+          "vendor": "butcher_grax"
+        },
+        {
+          "id": "glut_steak",
+          "name": "Glut-Steak",
+          "type": "food_bbq",
+          "rarity": "uncommon",
+          "price": 30,
+          "description": "Perfekt gegrilltes Steak. Gibt dir Ausdauer für den Kampf.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 120,
+            "restore_stamina": 100,
+            "buffs": {
+              "stamina": {
+                "value": 15,
+                "duration": 2400
+              }
+            }
+          },
+          "vendor": "butcher_grax"
+        },
+        {
+          "id": "arena_happen",
+          "name": "Arena-Happen",
+          "type": "food_fast",
+          "rarity": "common",
+          "price": 10,
+          "description": "Schneller Burger. Gut für zwischendurch.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 50
+          },
+          "vendor": "butcher_grax"
+        },
+        {
+          "id": "wuesten_doerrfleisch",
+          "name": "Wüsten-Dörrfleisch",
+          "type": "food_preserved",
+          "rarity": "common",
+          "price": 8,
+          "description": "Getrocknetes Fleisch. Hält ewig, schmeckt... okay.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 30,
+            "buffs": {
+              "combat_power": {
+                "value": 5,
+                "duration": 600
+              }
+            }
+          },
+          "stackable": 99,
+          "vendor": "butcher_grax"
+        }
+      ]
+    },
+    {
+      "category": "materials",
+      "items": [
+        {
+          "id": "wuestensand",
+          "name": "Wüstensand (gereinigt)",
+          "type": "material",
+          "rarity": "common",
+          "price": 2,
+          "description": "Feiner Sand aus der Wüste. Gut für Glas-Herstellung.",
+          "stackable": 999,
+          "used_in": ["glass_crafting", "sandstone_blocks"],
+          "gather_from": "heisse_duenen_region"
+        },
+        {
+          "id": "goldstaub",
+          "name": "Goldstaub",
+          "type": "material_rare",
+          "rarity": "rare",
+          "price": 50,
+          "description": "Goldpartikel aus den Dünen. Wertvoll für Schmuck und Verzauberungen.",
+          "stackable": 99,
+          "used_in": ["jewelry", "enchanting", "legendary_crafting"],
+          "gather_from": "goldstaub_oede_dungeon"
+        },
+        {
+          "id": "sonnenstein",
+          "name": "Sonnenstein",
+          "type": "material_magical",
+          "rarity": "epic",
+          "price": 200,
+          "description": "Ein Kristall, der Sonnenlicht speichert. Warm und leuchtend.",
+          "stackable": 50,
+          "used_in": ["fire_magic_items", "light_sources", "heat_weapons"],
+          "special": "Leuchtet im Dunkeln",
+          "gather_from": "rare_spawn_heisse_duenen"
+        }
+      ]
+    },
+    {
+      "category": "consumables",
+      "items": [
+        {
+          "id": "sandsturm_schutz_trank",
+          "name": "Sandsturm-Schutz Trank",
+          "type": "potion",
+          "rarity": "uncommon",
+          "price": 40,
+          "description": "Schützt vor Sandsturm-Schaden für 10 Minuten.",
+          "consumable": true,
+          "effects": {
+            "sandstorm_immunity": {
+              "duration": 600
+            }
+          },
+          "stackable": 20,
+          "vendor": "merchant_salazar",
+          "crafting": {
+            "recipe": ["cactus_essence", "water", "wuestensand"],
+            "skill_required": "alchemy_10"
+          }
+        },
+        {
+          "id": "wasser_des_lebens",
+          "name": "Wasser des Lebens",
+          "type": "water_premium",
+          "rarity": "rare",
+          "price": 60,
+          "description": "Reines Wasser aus einer Oasen-Quelle. Erfrischt Körper und Geist.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 200,
+            "restore_mp": 100,
+            "remove_debuffs": ["dehydration", "heat_exhaustion"]
+          },
+          "stackable": 10,
+          "vendor": "innkeeper_mara"
+        }
+      ]
+    }
+  ],
+  "item_sets": {
+    "handelsfestung_garde_set": {
+      "name": "Handelsfestung Garde Set",
+      "pieces": ["handelsfestung_vollruestung", "arena_champion_helm", "wuestenmantel"],
+      "set_bonus_2": "+20 Defense",
+      "set_bonus_3": "+50 Heat Resistance, Intimidation +20"
+    }
+  },
+  "drop_tables": {
+    "desert_enemies": ["wuestensand", "wuesten_doerrfleisch"],
+    "elite_enemies": ["goldstaub", "sonnenstein"],
+    "arena_rewards": ["arena_champion_helm", "blutschwert"]
+  }
+}

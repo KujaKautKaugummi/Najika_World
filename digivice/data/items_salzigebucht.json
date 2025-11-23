@@ -1,0 +1,716 @@
+{
+  "region": "salzwind_kueste",
+  "city": "salzige_bucht",
+  "items": [
+    {
+      "category": "weapons",
+      "items": [
+        {
+          "id": "seesaebel",
+          "name": "Seesäbel",
+          "type": "sword",
+          "rarity": "common",
+          "damage": 48,
+          "speed": 1.3,
+          "durability": 220,
+          "price": 200,
+          "description": "Ein rostfreier Säbel für Seeleute. Schnell und effektiv.",
+          "stats": {
+            "attack": 48,
+            "critical_chance": 12,
+            "weight": 3
+          },
+          "special": {
+            "rust_resistant": "Verliert keine Haltbarkeit durch Wasser"
+          },
+          "vendor": "kapitaen_magnus"
+        },
+        {
+          "id": "neptuns_dreizack",
+          "name": "Neptuns Dreizack",
+          "type": "spear",
+          "rarity": "legendary",
+          "damage": 110,
+          "speed": 1.1,
+          "range": "medium",
+          "durability": 900,
+          "price": 1800,
+          "description": "Der legendäre Dreizack des Meergottes. Kontrolliert Wasser.",
+          "stats": {
+            "attack": 110,
+            "magic_attack": 90,
+            "critical_chance": 20,
+            "range": 4,
+            "weight": 5
+          },
+          "special": {
+            "water_control": {
+              "description": "Kann Wasser manipulieren",
+              "abilities": ["Wasserwelle", "Heilung durch Wasser", "Unterwasser-Atmung permanent"]
+            },
+            "bonus_underwater": "+100% Schaden unter Wasser"
+          },
+          "vendor": "seher_neptun",
+          "requires": "Quest: Das Erwachen des Kraken"
+        },
+        {
+          "id": "harpune",
+          "name": "Jäger-Harpune",
+          "type": "ranged",
+          "rarity": "uncommon",
+          "damage": 70,
+          "speed": 0.8,
+          "range": "long",
+          "durability": 180,
+          "price": 320,
+          "description": "Eine schwere Harpune für große Meerestiere.",
+          "stats": {
+            "attack": 70,
+            "critical_chance": 15,
+            "range": 6,
+            "weight": 7
+          },
+          "special": {
+            "bonus_vs_sea_creatures": "+50% Schaden gegen Meereskreaturen",
+            "retrieval": "Kann zurückgeholt werden"
+          },
+          "vendor": "fischer_ole"
+        },
+        {
+          "id": "piraten_enterhaken",
+          "name": "Piraten-Enterhaken",
+          "type": "hook",
+          "rarity": "uncommon",
+          "damage": 40,
+          "speed": 1.6,
+          "range": "medium",
+          "durability": 200,
+          "price": 250,
+          "description": "Perfekt zum Entern von Schiffen... oder Klettern.",
+          "stats": {
+            "attack": 40,
+            "critical_chance": 18,
+            "range": 3,
+            "weight": 2
+          },
+          "special": {
+            "grappling": "Kann als Greifhaken benutzt werden",
+            "pull_enemies": "Zieht Gegner zu dir"
+          },
+          "vendor": "piratin_scarlett"
+        },
+        {
+          "id": "korallen_schwert",
+          "name": "Korallenschwert",
+          "type": "sword",
+          "rarity": "rare",
+          "damage": 85,
+          "speed": 1.2,
+          "durability": 450,
+          "price": 650,
+          "description": "Ein Schwert aus versteinerter Koralle. Leicht und scharf.",
+          "stats": {
+            "attack": 85,
+            "critical_chance": 16,
+            "weight": 2
+          },
+          "special": {
+            "water_affinity": "+25% Wasser-Magie Schaden",
+            "light_weight": "Sehr leicht, +10% Angriffsgeschwindigkeit"
+          },
+          "crafting": {
+            "recipe": ["koralle x20", "perlmutt x10", "meeressalz x5"],
+            "skill_required": "smithing_18"
+          }
+        }
+      ]
+    },
+    {
+      "category": "armor",
+      "items": [
+        {
+          "id": "seemann_ruestung",
+          "name": "Seemann-Rüstung",
+          "type": "light_armor",
+          "rarity": "common",
+          "defense": 30,
+          "durability": 280,
+          "price": 180,
+          "description": "Leichte Lederrüstung für Seeleute. Wasserfest.",
+          "stats": {
+            "defense": 30,
+            "water_resistance": 30,
+            "weight": 6
+          },
+          "special": {
+            "swimming_bonus": "+20% Schwimmgeschwindigkeit"
+          },
+          "vendor": "kapitaen_magnus"
+        },
+        {
+          "id": "muschelschalen_ruestung",
+          "name": "Muschelschalen-Rüstung",
+          "type": "medium_armor",
+          "rarity": "uncommon",
+          "defense": 65,
+          "durability": 400,
+          "price": 450,
+          "description": "Rüstung aus großen Muschelschalen. Elegant und schützend.",
+          "stats": {
+            "defense": 65,
+            "water_resistance": 50,
+            "magic_defense": 30,
+            "weight": 12
+          },
+          "vendor": "haendler_salim"
+        },
+        {
+          "id": "tiefsee_panzer",
+          "name": "Tiefsee-Panzer",
+          "type": "heavy_armor",
+          "rarity": "rare",
+          "defense": 95,
+          "durability": 700,
+          "price": 900,
+          "description": "Massive Rüstung für Tiefsee-Expeditionen. Druckbeständig.",
+          "stats": {
+            "defense": 95,
+            "water_resistance": 100,
+            "pressure_resistance": 100,
+            "weight": 28
+          },
+          "special": {
+            "deep_sea_protection": "Ermöglicht Tiefsee-Tauchen",
+            "slow_on_land": "-15% Bewegungsgeschwindigkeit an Land"
+          },
+          "vendor": "mechaniker_greta",
+          "requires": "Special Order"
+        },
+        {
+          "id": "kapitaens_mantel",
+          "name": "Kapitäns-Mantel",
+          "type": "cloak",
+          "rarity": "uncommon",
+          "defense": 25,
+          "durability": 250,
+          "price": 300,
+          "description": "Ein wehender Mantel für echte Kapitäne.",
+          "stats": {
+            "defense": 25,
+            "charisma": 15,
+            "leadership": 20
+          },
+          "special": {
+            "crew_morale": "+10% Team-Buffs",
+            "looks_cool": "Sieht einfach cool aus"
+          },
+          "vendor": "kapitaen_magnus"
+        },
+        {
+          "id": "meerjungfrauen_schuppen",
+          "name": "Meerjungfrauen-Schuppenpanzer",
+          "type": "light_armor",
+          "rarity": "epic",
+          "defense": 70,
+          "durability": 500,
+          "price": 1200,
+          "description": "Schimmernde Schuppen einer Meerjungfrau. Leicht und schön.",
+          "stats": {
+            "defense": 70,
+            "magic_defense": 80,
+            "water_resistance": 100,
+            "charisma": 25,
+            "weight": 5
+          },
+          "special": {
+            "underwater_breathing": "Permanent unter Wasser atmen",
+            "swim_speed": "+50% Schwimmgeschwindigkeit",
+            "siren_song": "Kann Feinde bezaubern (1x pro Tag)"
+          },
+          "drop_from": ["meerjungfrau_boss"],
+          "najika_reaction": {
+            "harley": "PRETTY SHINY SCALES! I want it SO BAD!"
+          }
+        }
+      ]
+    },
+    {
+      "category": "food",
+      "items": [
+        {
+          "id": "frischer_fisch",
+          "name": "Frischer Fisch",
+          "type": "food_raw",
+          "rarity": "common",
+          "price": 15,
+          "description": "Frisch gefangener Fisch. Muss gekocht werden.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 40
+          },
+          "vendor": "fischer_ole",
+          "stackable": 99
+        },
+        {
+          "id": "gegrillter_fisch_deluxe",
+          "name": "Gegrillter Fisch Deluxe",
+          "type": "food_cooked",
+          "rarity": "uncommon",
+          "price": 60,
+          "description": "Antonios Meisterwerk. Perfekt gegrillt.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 200,
+            "buffs": {
+              "agility": {
+                "value": 18,
+                "duration": 3600
+              },
+              "swimming_speed": {
+                "value": 25,
+                "duration": 3600
+              }
+            },
+            "satisfaction": 90
+          },
+          "vendor": "koch_antonio"
+        },
+        {
+          "id": "meeresfrüchte_pasta",
+          "name": "Meeresfrüchte Pasta",
+          "type": "food_gourmet",
+          "rarity": "uncommon",
+          "price": 45,
+          "description": "Pasta mit frischen Meeresfrüchten. Magnifico!",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 180,
+            "restore_mp": 100,
+            "buffs": {
+              "stamina": {
+                "value": 20,
+                "duration": 2400
+              }
+            },
+            "satisfaction": 85
+          },
+          "vendor": "koch_antonio"
+        },
+        {
+          "id": "rum",
+          "name": "Piraten-Rum",
+          "type": "drink_alcohol",
+          "rarity": "common",
+          "price": 10,
+          "description": "Starker Rum. Für harte Kerle.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 30,
+            "buffs": {
+              "courage": {
+                "value": 15,
+                "duration": 600
+              }
+            },
+            "debuffs": {
+              "drunk": {
+                "value": 10,
+                "duration": 300,
+                "effect": "Schwankende Bewegung"
+              }
+            }
+          },
+          "vendor": "piratin_scarlett",
+          "najika_reaction": {
+            "harley": "*klaut und trinkt* WHOO! That burns! *lacht*"
+          }
+        },
+        {
+          "id": "seefahrer_eintopf",
+          "name": "Seefahrer-Eintopf",
+          "type": "food_meal",
+          "rarity": "common",
+          "price": 20,
+          "description": "Herzhafter Eintopf. Hält lange satt.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 120,
+            "buffs": {
+              "stamina": {
+                "value": 12,
+                "duration": 3600
+              },
+              "cold_resistance": {
+                "value": 20,
+                "duration": 3600
+              }
+            }
+          },
+          "vendor": "piratin_scarlett"
+        },
+        {
+          "id": "kaviar",
+          "name": "Premium Kaviar",
+          "type": "food_luxury",
+          "rarity": "rare",
+          "price": 100,
+          "description": "Exklusiver Kaviar. Nur für die Elite.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 250,
+            "restore_mp": 200,
+            "buffs": {
+              "all_stats": {
+                "value": 10,
+                "duration": 7200
+              },
+              "charisma": {
+                "value": 30,
+                "duration": 7200
+              }
+            },
+            "satisfaction": 100
+          },
+          "vendor": "fischer_ole",
+          "stock": 5,
+          "najika_reaction": {
+            "melissa": "Kaviar... Eine Erinnerung an bessere Zeiten."
+          }
+        }
+      ]
+    },
+    {
+      "category": "materials",
+      "items": [
+        {
+          "id": "muscheln",
+          "name": "Muscheln",
+          "type": "material",
+          "rarity": "common",
+          "price": 3,
+          "description": "Einfache Muscheln vom Strand.",
+          "stackable": 999,
+          "used_in": ["crafting", "decoration"],
+          "vendor": "kind_tim"
+        },
+        {
+          "id": "perlen_klein",
+          "name": "Kleine Perlen",
+          "type": "material",
+          "rarity": "uncommon",
+          "price": 20,
+          "description": "Kleine glänzende Perlen.",
+          "stackable": 999,
+          "used_in": ["jewelry", "enchanting"],
+          "vendor": "kind_tim"
+        },
+        {
+          "id": "perlen",
+          "name": "Hochwertige Perlen",
+          "type": "material",
+          "rarity": "rare",
+          "price": 80,
+          "description": "Große, perfekte Perlen. Sehr wertvoll.",
+          "stackable": 99,
+          "used_in": ["jewelry", "luxury_items"],
+          "vendor": "haendler_salim"
+        },
+        {
+          "id": "koralle",
+          "name": "Koralle",
+          "type": "material",
+          "rarity": "uncommon",
+          "price": 25,
+          "description": "Bunte Koralle aus dem Riff.",
+          "stackable": 500,
+          "used_in": ["crafting", "alchemy", "decoration"],
+          "vendor": "kind_tim",
+          "gather_from": "coral_reef"
+        },
+        {
+          "id": "perlmutt",
+          "name": "Perlmutt",
+          "type": "material",
+          "rarity": "uncommon",
+          "price": 35,
+          "description": "Schimmerndes Perlmutt aus großen Muscheln.",
+          "stackable": 200,
+          "used_in": ["weapon_crafting", "armor_crafting"],
+          "gather_from": "deep_sea"
+        },
+        {
+          "id": "meeressalz",
+          "name": "Meeressalz",
+          "type": "material",
+          "rarity": "common",
+          "price": 5,
+          "description": "Gereinigtes Salz aus dem Meer.",
+          "stackable": 999,
+          "used_in": ["cooking", "alchemy"],
+          "gather_from": "salzwind_kueste"
+        },
+        {
+          "id": "seide",
+          "name": "Exotische Seide",
+          "type": "material",
+          "rarity": "rare",
+          "price": 120,
+          "description": "Feine Seide aus fernen Ländern.",
+          "stackable": 99,
+          "used_in": ["armor_crafting", "luxury_items"],
+          "vendor": "haendler_salim"
+        },
+        {
+          "id": "wasserkristall",
+          "name": "Wasserkristall",
+          "type": "material_magical",
+          "rarity": "epic",
+          "price": 250,
+          "description": "Ein Kristall voller magischem Wasser.",
+          "stackable": 50,
+          "used_in": ["water_magic", "enchanting"],
+          "special": "Leuchtet blau",
+          "drop_from": ["wasser_elementare", "tiefsee_kreaturen"]
+        }
+      ]
+    },
+    {
+      "category": "fishing",
+      "items": [
+        {
+          "id": "angelrute_einfach",
+          "name": "Einfache Angelrute",
+          "type": "tool_fishing",
+          "rarity": "common",
+          "durability": 150,
+          "price": 80,
+          "description": "Eine basic Angelrute. Funktioniert.",
+          "stats": {
+            "catch_chance": 50,
+            "rare_fish_chance": 5
+          },
+          "vendor": "fischer_ole"
+        },
+        {
+          "id": "angelrute_profi",
+          "name": "Profi-Angelrute",
+          "type": "tool_fishing",
+          "rarity": "uncommon",
+          "durability": 300,
+          "price": 300,
+          "description": "Hochwertige Rute für ernsthafte Fischer.",
+          "stats": {
+            "catch_chance": 80,
+            "rare_fish_chance": 20,
+            "legendary_fish_chance": 5
+          },
+          "vendor": "fischer_ole"
+        },
+        {
+          "id": "fischernetz",
+          "name": "Fischernetz",
+          "type": "tool_fishing",
+          "rarity": "uncommon",
+          "durability": 200,
+          "price": 120,
+          "description": "Fängt mehrere Fische gleichzeitig.",
+          "stats": {
+            "catch_amount": "3-6",
+            "catch_chance": 60
+          },
+          "vendor": "kapitaen_magnus"
+        },
+        {
+          "id": "legendaere_angelrute",
+          "name": "Legendäre Neptun-Rute",
+          "type": "tool_fishing",
+          "rarity": "legendary",
+          "durability": 1000,
+          "price": 2000,
+          "description": "Die beste Angelrute der Welt. Gesegnet von Neptun.",
+          "stats": {
+            "catch_chance": 100,
+            "rare_fish_chance": 50,
+            "legendary_fish_chance": 25
+          },
+          "special": {
+            "auto_catch": "Fängt automatisch Fische in der Nähe",
+            "water_breathing": "Verleiht Unterwasser-Atmung beim Angeln"
+          },
+          "vendor": "seher_neptun",
+          "requires": "Fishing Skill 100"
+        }
+      ]
+    },
+    {
+      "category": "consumables",
+      "items": [
+        {
+          "id": "wasser_atem_trank",
+          "name": "Wasser-Atem Trank",
+          "type": "potion",
+          "rarity": "uncommon",
+          "price": 80,
+          "description": "Ermöglicht Atmung unter Wasser für 10 Minuten.",
+          "consumable": true,
+          "effects": {
+            "underwater_breathing": {
+              "duration": 600
+            }
+          },
+          "stackable": 20,
+          "crafting": {
+            "recipe": ["wasserkristall", "seegras", "wasser"],
+            "skill_required": "alchemy_12"
+          }
+        },
+        {
+          "id": "schwimm_geschwindigkeits_trank",
+          "name": "Schwimm-Geschwindigkeits Trank",
+          "type": "potion",
+          "rarity": "uncommon",
+          "price": 60,
+          "description": "Macht dich schneller im Wasser.",
+          "consumable": true,
+          "effects": {
+            "buffs": {
+              "swim_speed": {
+                "value": 50,
+                "duration": 900
+              }
+            }
+          },
+          "stackable": 20
+        },
+        {
+          "id": "meersalz_heilsalbe",
+          "name": "Meersalz Heilsalbe",
+          "type": "medicine",
+          "rarity": "uncommon",
+          "price": 50,
+          "description": "Heilt Wunden und entfernt Gifte.",
+          "consumable": true,
+          "effects": {
+            "restore_hp": 150,
+            "remove_debuffs": ["poison", "infection"]
+          },
+          "stackable": 30,
+          "crafting": {
+            "recipe": ["meeressalz x5", "heilkraeuter x3"],
+            "skill_required": "alchemy_8"
+          }
+        },
+        {
+          "id": "navigationskristall",
+          "name": "Navigationskristall",
+          "type": "tool",
+          "rarity": "uncommon",
+          "price": 150,
+          "description": "Zeigt immer nach Norden. Nützlich auf See.",
+          "consumable": false,
+          "special": {
+            "navigation": "Zeigt Richtung zu markierten Zielen",
+            "map_reveal": "Deckt besuchte Gebiete auf"
+          },
+          "vendor": "leuchtturmwaerterin_luna"
+        },
+        {
+          "id": "leuchtstein",
+          "name": "Leuchtstein",
+          "type": "light_source",
+          "rarity": "common",
+          "price": 80,
+          "description": "Ein Stein der permanent leuchtet.",
+          "consumable": false,
+          "special": {
+            "light_radius": 5,
+            "underwater_works": true
+          },
+          "vendor": "leuchtturmwaerterin_luna",
+          "stackable": 10
+        }
+      ]
+    },
+    {
+      "category": "special",
+      "items": [
+        {
+          "id": "mysterioese_kiste",
+          "name": "Mysteriöse Kiste",
+          "type": "lootbox",
+          "rarity": "rare",
+          "price": 500,
+          "description": "Eine versiegelte Kiste. Wer weiß was drin ist?",
+          "consumable": true,
+          "effects": {
+            "random_loot": {
+              "common": 50,
+              "uncommon": 30,
+              "rare": 15,
+              "epic": 4,
+              "legendary": 1
+            }
+          },
+          "vendor": "haendler_salim",
+          "najika_reaction": {
+            "harley": "MYSTERY BOX! *schüttelt* What's inside?! OPEN IT!"
+          }
+        },
+        {
+          "id": "schatzkarte",
+          "name": "Alte Schatzkarte",
+          "type": "quest_item",
+          "rarity": "uncommon",
+          "price": 200,
+          "description": "Eine vergilbte Karte mit einem X.",
+          "consumable": true,
+          "effects": {
+            "starts_quest": "schatzsuche",
+            "reveals_location": "hidden_treasure"
+          },
+          "vendor": "piratin_scarlett"
+        },
+        {
+          "id": "flaschenpost",
+          "name": "Flaschenpost",
+          "type": "quest_item",
+          "rarity": "uncommon",
+          "price": 0,
+          "description": "Eine Flasche mit einer Nachricht drin.",
+          "consumable": true,
+          "effects": {
+            "random_quest": true,
+            "random_reward": true
+          },
+          "found_at": "random_beach_spawns"
+        }
+      ]
+    }
+  ],
+  "item_sets": {
+    "kapitaens_set": {
+      "name": "Kapitäns-Set",
+      "pieces": ["seesaebel", "kapitaens_mantel", "seemann_ruestung"],
+      "set_bonus_2": "+15 Charisma, +10% Schiffsgeschwindigkeit",
+      "set_bonus_3": "+30 Charisma, +25% Schiffsgeschwindigkeit, Crew folgt dir"
+    },
+    "tiefsee_set": {
+      "name": "Tiefsee-Forscher Set",
+      "pieces": ["tiefsee_panzer", "harpune", "wasser_atem_trank"],
+      "set_bonus_2": "Permanent Unterwasser-Atmung",
+      "set_bonus_3": "+50% Schaden unter Wasser, Kann Tiefsee betreten"
+    }
+  },
+  "fishing_catches": {
+    "common_fish": ["frischer_fisch", "sardine", "makrele"],
+    "rare_fish": ["thunfisch", "lachs", "schwertfisch"],
+    "legendary_fish": ["riesenkrake_baby", "goldener_fisch", "meerjungfrauen_freund"],
+    "treasure": ["muscheln", "perlen_klein", "koralle", "schatzkarte"],
+    "junk": ["alter_stiefel", "seegras", "leere_flasche"]
+  },
+  "drop_tables": {
+    "sea_enemies": ["meeressalz", "muscheln", "seegras"],
+    "elite_sea_enemies": ["perlen", "koralle", "perlmutt"],
+    "boss_rewards": ["wasserkristall", "legendäre Waffen"]
+  }
+}

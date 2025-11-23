@@ -1,0 +1,519 @@
+{
+  "region": "samtmoos_tiefwald",
+  "city": "dampfhain",
+  "npcs": [
+    {
+      "id": "druide_elowen",
+      "name": "Druide Elowen die Weise",
+      "race": "Elf",
+      "gender": "female",
+      "age": 437,
+      "occupation": "Oberdruidin",
+      "location": "Druid Hut (Zentrum)",
+      "personality": {
+        "trait": "Weise, ruhig, mysteriös",
+        "speech_style": "Spricht in Rätseln und Naturmetaphern",
+        "likes": ["Alte Bäume", "Meditation", "Kristalle"],
+        "dislikes": ["Zerstörung der Natur", "Hektik", "Feuer"],
+        "catchphrase": "Die Bäume flüstern... hörst du sie?"
+      },
+      "appearance": {
+        "hair": "Langes grünes Haar mit Moos",
+        "eyes": "Smaragdgrün",
+        "outfit": "Robe aus Blättern und Rinde",
+        "special": "Leuchtende Runen auf der Haut"
+      },
+      "dialogue": {
+        "greeting": "Willkommen, Wanderer. Der Wald hat dein Kommen vorausgesehen.",
+        "quest_available": "Es gibt eine Störung im Gleichgewicht... Kannst du sie spüren?",
+        "quest_complete": "Die Harmonie kehrt zurück. Die Bäume danken dir.",
+        "farewell": "Mögen die Wurzeln dich tragen."
+      },
+      "shop": {
+        "type": "spell_vendor",
+        "items": [
+          {"id": "heilzauber_natur", "price": 200},
+          {"id": "wurzel_fesseln", "price": 300},
+          {"id": "blatt_schild", "price": 250}
+        ]
+      },
+      "quests": ["das_kranke_herz_des_waldes", "die_verlorene_quelle"],
+      "najika_reaction": {
+        "megumin": "Explosion-Magie ist viel besser als Naturkram! Aber... sie ist irgendwie cool.",
+        "harley": "Ohhh, die grüne Lady! Kannste mir auch leuchtende Tattoos machen? *funkelnde Augen*",
+        "shiro": "Ihre Biometrie zeigt 437 Jahre... Faszinierend. Ihre Zellteilung ist extrem verlangsamt.",
+        "melissa": "Eine Druidin... Respektabel. Die Natur ist die älteste Lehrerin."
+      }
+    },
+    {
+      "id": "onsen_meisterin_yuki",
+      "name": "Onsen-Meisterin Yuki",
+      "race": "Human",
+      "gender": "female",
+      "age": 52,
+      "occupation": "Onsen Betreiberin",
+      "location": "Onsen (Nord)",
+      "personality": {
+        "trait": "Freundlich, warmherzig, geschäftstüchtig",
+        "speech_style": "Höflich und einladend",
+        "likes": ["Entspannung", "Sake", "Zufriedene Gäste"],
+        "dislikes": ["Lärm im Onsen", "Unhöflichkeit"],
+        "catchphrase": "Willkommen im Paradies der Entspannung!"
+      },
+      "appearance": {
+        "hair": "Kurzes schwarzes Haar mit Silbersträhnen",
+        "eyes": "Braun, freundlich",
+        "outfit": "Traditioneller Yukata mit Blumenmuster",
+        "special": "Trägt immer ein Handtuch über der Schulter"
+      },
+      "dialogue": {
+        "greeting": "Ah! Willkommen in meinem Onsen! Du siehst müde aus... ein Bad würde dir gut tun!",
+        "onsen_entry": "Das Wasser kommt direkt aus der heiligen Quelle. Es heilt Körper und Seele!",
+        "shop_talk": "Ich habe auch besondere Handtücher und Öle... für das ultimative Onsen-Erlebnis!",
+        "farewell": "Komm bald wieder! Das Wasser wartet auf dich!"
+      },
+      "shop": {
+        "type": "onsen_vendor",
+        "items": [
+          {"id": "onsen_eintritt", "price": 50},
+          {"id": "premium_handtuch", "price": 80},
+          {"id": "aromatherapie_oel", "price": 120},
+          {"id": "sake_premium", "price": 150}
+        ]
+      },
+      "services": {
+        "onsen_bath": {
+          "price": 50,
+          "effects": {
+            "restore_hp": "100%",
+            "restore_mp": "100%",
+            "remove_all_debuffs": true,
+            "buffs": {
+              "regeneration": {"value": 10, "duration": 3600},
+              "relaxed": {"value": 20, "duration": 7200}
+            }
+          },
+          "duration": 300
+        }
+      },
+      "najika_reaction": {
+        "megumin": "EIN ONSEN?! Wie in Konosuba! *Augen leuchten* KUJA KOMM WIR BADEN!",
+        "harley": "Hot springs, huh? Perfect for plotting... I mean relaxing! *kichert*",
+        "shiro": "Die Mineralzusammensetzung des Wassers ist optimal für Muskelregeneration.",
+        "melissa": "Ein Onsen... Wie lange ist es her, dass ich mich entspannt habe?"
+      }
+    },
+    {
+      "id": "holzfaeller_bjorn",
+      "name": "Björn der Baumriese",
+      "race": "Human",
+      "gender": "male",
+      "age": 34,
+      "occupation": "Holzfäller & Zimmermann",
+      "location": "Sawmill (Ost)",
+      "personality": {
+        "trait": "Stark, ehrlich, naturverbunden",
+        "speech_style": "Direkt und bodenständig",
+        "likes": ["Harte Arbeit", "Bier", "Handwerk"],
+        "dislikes": ["Faulheit", "Verschwendung", "Waldbrände"],
+        "catchphrase": "Ein guter Baum gibt gutes Holz!"
+      },
+      "appearance": {
+        "hair": "Roter Vollbart, langes rotes Haar",
+        "eyes": "Blau",
+        "build": "Muskulös, 2m groß",
+        "outfit": "Lederschürze, zerrissenes Hemd",
+        "special": "Trägt immer seine legendäre Axt 'Baumbeißer'"
+      },
+      "dialogue": {
+        "greeting": "Ho! Du siehst aus als könntest du zupacken! Brauchst du Holz?",
+        "shop_talk": "Mein Holz ist das beste im ganzen Wald. Handverlesen von mir persönlich!",
+        "quest_available": "Es gibt da ein Problem mit... besonders großen Bäumen.",
+        "farewell": "Möge deine Axt immer scharf sein!"
+      },
+      "shop": {
+        "type": "material_vendor",
+        "items": [
+          {"id": "eichenholz", "price": 20, "stock": 999},
+          {"id": "hartholz", "price": 50, "stock": 500},
+          {"id": "magisches_holz", "price": 200, "stock": 50},
+          {"id": "lebendiges_holz", "price": 500, "stock": 10}
+        ]
+      },
+      "crafting_service": {
+        "available": true,
+        "specialization": "Wooden weapons and furniture",
+        "fee_percentage": 10
+      },
+      "quests": ["der_wuetende_waldgeist"],
+      "najika_reaction": {
+        "megumin": "Der ist riesig! Aber... kann er explodieren? Nein? Langweilig.",
+        "harley": "Ohhh, muscles! *kicher* Hey big guy, wanna chop some wood for me? *zwinkert*",
+        "shiro": "2,03 Meter. Muskelmasse: 42% des Körpergewichts. Optimiert für Holzfällerarbeit.",
+        "melissa": "Ein ehrlicher Arbeiter. Solche Leute sind selten geworden."
+      }
+    },
+    {
+      "id": "kraeuterhexe_luna",
+      "name": "Luna die Kräuterhexe",
+      "race": "Human",
+      "gender": "female",
+      "age": 28,
+      "occupation": "Alchemistin & Kräuterkundige",
+      "location": "Herb Shop (West)",
+      "personality": {
+        "trait": "Exzentrisch, neugierig, etwas verrückt",
+        "speech_style": "Schnell, aufgeregt, springt zwischen Themen",
+        "likes": ["Experimente", "Seltene Pflanzen", "Explosionen"],
+        "dislikes": ["Langeweile", "Ordnung", "Ungeduld"],
+        "catchphrase": "Warte warte! Ich hab da eine PERFEKTE Mischung!"
+      },
+      "appearance": {
+        "hair": "Wilde schwarze Locken mit Blättern drin",
+        "eyes": "Heterochromie: Links grün, rechts braun",
+        "outfit": "Fleckiger Alchemisten-Mantel, zu viele Taschen",
+        "special": "Riecht immer nach verschiedenen Kräutern"
+      },
+      "dialogue": {
+        "greeting": "OH! Ein Kunde! Warte, rühr das nicht an, das könnte- *PUFF* ...okay das war nur Rauch.",
+        "shop_talk": "Ich hab ALLES! Heiltränke, Gifttränke, Tränke die dich verwandeln! Willste einen?",
+        "experiment_talk": "Ich experimentiere gerade mit Moossporen und Feenstaub... Es könnte explodieren oder fliegen lassen!",
+        "farewell": "Tschüss! Und wenn du plötzlich grün wirst, komm zurück!"
+      },
+      "shop": {
+        "type": "alchemy_vendor",
+        "items": [
+          {"id": "heiltrank_klein", "price": 30},
+          {"id": "heiltrank_gross", "price": 100},
+          {"id": "manatrank", "price": 80},
+          {"id": "regenerations_elixier", "price": 150},
+          {"id": "gift_des_waldes", "price": 120},
+          {"id": "unsichtbarkeits_trank", "price": 250},
+          {"id": "staerke_des_baeren", "price": 200}
+        ]
+      },
+      "crafting_service": {
+        "available": true,
+        "specialization": "Potions and elixirs",
+        "experimental_crafting": {
+          "enabled": true,
+          "random_bonus_chance": 25,
+          "explosion_chance": 10
+        }
+      },
+      "najika_reaction": {
+        "megumin": "EINE SEELENVERWANDTE! Sie mag Explosionen! *umarmt Luna*",
+        "harley": "Chaos in a bottle? I LOVE IT! Let's make something CRAZY together!",
+        "shiro": "Ihre Methoden sind... unorthodox. Aber die Erfolgsquote ist erstaunlich hoch.",
+        "melissa": "Sie erinnert mich an meine jüngere Tage... vor dem ersten Krieg."
+      }
+    },
+    {
+      "id": "jaeger_fenris",
+      "name": "Fenris der Wolfsjäger",
+      "race": "Human",
+      "gender": "male",
+      "age": 41,
+      "occupation": "Jäger & Tracker",
+      "location": "Hunter's Lodge (Süd)",
+      "personality": {
+        "trait": "Schweigsam, fokussiert, respektiert die Natur",
+        "speech_style": "Kurz, präzise, spricht nur wenn nötig",
+        "likes": ["Die Jagd", "Stille", "Wölfe"],
+        "dislikes": ["Unnötiges Gerede", "Wilderei", "Städter"],
+        "catchphrase": "..."
+      },
+      "appearance": {
+        "hair": "Grau-braun, kurz",
+        "eyes": "Bernsteinfarben, wie ein Wolf",
+        "outfit": "Pelzmantel, Lederrüstung",
+        "special": "Hat einen gezähmten Wolf als Begleiter namens 'Schatten'"
+      },
+      "dialogue": {
+        "greeting": "...",
+        "shop_talk": "Pelze. Fleisch. Fair gehandelt.",
+        "quest_available": "Bestie im Wald. Zu groß für mich allein.",
+        "farewell": "Gute Jagd."
+      },
+      "shop": {
+        "type": "hunter_vendor",
+        "items": [
+          {"id": "wolfspelz", "price": 80},
+          {"id": "wildschwein_fleisch", "price": 25},
+          {"id": "hirschgeweih", "price": 60},
+          {"id": "baerenklaue", "price": 150},
+          {"id": "jagdmesser", "price": 120},
+          {"id": "fallen_set", "price": 200}
+        ]
+      },
+      "companion": {
+        "name": "Schatten",
+        "type": "Wolf",
+        "loyalty": 100,
+        "can_help_in_combat": true
+      },
+      "quests": ["der_koenig_der_waeldern"],
+      "najika_reaction": {
+        "megumin": "Der redet ja gar nicht! Langweilig. Aber sein Wolf ist cool!",
+        "harley": "Strong, silent type... *kichert* I like a challenge!",
+        "shiro": "Kommunikationseffizienz: Maximum. Interessant.",
+        "melissa": "Ein wahrer Jäger. Kein Blendwerk, nur Können."
+      }
+    },
+    {
+      "id": "barden_lysander",
+      "name": "Lysander der Waldbarde",
+      "race": "Half-Elf",
+      "gender": "male",
+      "age": 87,
+      "occupation": "Barde & Geschichtenerzähler",
+      "location": "Inn (Zentrum)",
+      "personality": {
+        "trait": "Charismatisch, romantisch, etwas dramatisch",
+        "speech_style": "Poetisch, singt oft statt zu sprechen",
+        "likes": ["Musik", "Geschichten", "Schöne Menschen"],
+        "dislikes": ["Stille", "Unkultiviertheit", "Falsche Töne"],
+        "catchphrase": "♫ Jede Geschichte verdient ein Lied! ♫"
+      },
+      "appearance": {
+        "hair": "Langes blondes Haar mit Blumenkranz",
+        "eyes": "Violett",
+        "outfit": "Grüne Barden-Robe mit goldenen Stickereien",
+        "special": "Trägt immer seine verzauberte Laute"
+      },
+      "dialogue": {
+        "greeting": "♫ Ah, ein neues Gesicht, eine neue Geschichte! Willkommen, Freund! ♫",
+        "performance": "Möchtest du ein Lied hören? Ich kenne 1.000 Balladen!",
+        "quest_talk": "Ich habe Gerüchte gehört... von einem verlorenen Schatz und einer weinenden Dryade.",
+        "farewell": "♫ Möge dein Leben ein schönes Lied sein! ♫"
+      },
+      "services": {
+        "performance": {
+          "price": 20,
+          "effects": {
+            "buffs": {
+              "morale": {"value": 15, "duration": 3600},
+              "charisma": {"value": 10, "duration": 3600}
+            }
+          }
+        },
+        "information": {
+          "price": 50,
+          "provides": "Rumors and quest hints"
+        }
+      },
+      "quests": ["die_weinende_dryade"],
+      "najika_reaction": {
+        "megumin": "Der singt die ganze Zeit! Kann er auch Explosions-Lieder?",
+        "harley": "Ohhh, pretty boy with a lute! Play me a love song! *dramatische Pose*",
+        "shiro": "Seine Stimme hat eine Frequenz von 432 Hz. Optimal für emotionale Resonanz.",
+        "melissa": "Musik... eine der wenigen Künste, die ich noch schätze."
+      }
+    },
+    {
+      "id": "schmied_ironroot",
+      "name": "Ironroot der Waldschmied",
+      "race": "Dwarf",
+      "gender": "male",
+      "age": 156,
+      "occupation": "Schmied",
+      "location": "Forge (Ost)",
+      "personality": {
+        "trait": "Grumpy, perfektionistisch, stolz",
+        "speech_style": "Brummt und flucht viel",
+        "likes": ["Qualitätswerkzeug", "Bier", "Ruhe beim Arbeiten"],
+        "dislikes": ["Schlechte Handwerkskunst", "Eile", "Elfen"],
+        "catchphrase": "Bah! Das nenn ich Schmiedekunst!"
+      },
+      "appearance": {
+        "hair": "Grauer Bart, bis zum Bauch",
+        "eyes": "Braun",
+        "build": "Stämmig, muskulös",
+        "outfit": "Russige Schmiedeschürze",
+        "special": "Trägt einen Ring aus Lebendholz (Geschenk seiner Elfenfrau)"
+      },
+      "dialogue": {
+        "greeting": "Was willste? Ich hab zu tun!",
+        "shop_talk": "Meine Waffen sind die besten im Wald. Keine Massenware!",
+        "crafting_talk": "Bring mir gute Materialien und ich mach dir was Ordentliches.",
+        "farewell": "Jaja, geh schon. Und pass auf meine Klinge auf!"
+      },
+      "shop": {
+        "type": "weapon_armor_vendor",
+        "items": [
+          {"id": "waldjaeger_schwert", "price": 300},
+          {"id": "druiden_stab", "price": 400},
+          {"id": "elfen_bogen", "price": 350},
+          {"id": "natur_ruestung", "price": 500},
+          {"id": "moos_schild", "price": 200}
+        ]
+      },
+      "crafting_service": {
+        "available": true,
+        "specialization": "Nature-infused weapons and armor",
+        "quality_bonus": 15
+      },
+      "najika_reaction": {
+        "megumin": "Ein Zwerg! Wie in... warte, die sind echt? COOL!",
+        "harley": "Grumpy dwarf! Bet I can make ya smile! *macht Grimassen*",
+        "shiro": "Zwergische Schmiedekunst: 23% effizienter als menschliche Standards.",
+        "melissa": "Zwerge... verlässlich wie immer."
+      }
+    },
+    {
+      "id": "kind_mila",
+      "name": "Mila das Waldkind",
+      "race": "Human",
+      "gender": "female",
+      "age": 8,
+      "occupation": "Sammler",
+      "location": "Wandert durch die Stadt",
+      "personality": {
+        "trait": "Neugierig, verspielt, unschuldig",
+        "speech_style": "Kindlich, aufgeregt",
+        "likes": ["Blumen", "Tiere", "Spielen"],
+        "dislikes": ["Dunkelheit", "Laute Geräusche", "Böse Menschen"],
+        "catchphrase": "Schau mal was ich gefunden hab!"
+      },
+      "appearance": {
+        "hair": "Braune Zöpfe mit Blumen",
+        "eyes": "Große grüne Augen",
+        "outfit": "Einfaches Leinenkleid, barfuß",
+        "special": "Tiere folgen ihr überall hin"
+      },
+      "dialogue": {
+        "greeting": "Hallo! Bist du ein Abenteurer? Das ist SO COOL!",
+        "shop_talk": "Ich sammle Blumen! Willst du welche kaufen? Ich brauch Geld für Süßigkeiten!",
+        "animal_talk": "Die Tiere sind meine Freunde! Sie zeigen mir wo die besten Pilze sind!",
+        "farewell": "Tschüss! Pass auf die Kobolde auf!"
+      },
+      "shop": {
+        "type": "gatherer_vendor",
+        "items": [
+          {"id": "wildblumen", "price": 5},
+          {"id": "heilkraeuter", "price": 15},
+          {"id": "pilze_essbar", "price": 10},
+          {"id": "beeren", "price": 8}
+        ]
+      },
+      "special_ability": {
+        "animal_friend": "Can communicate with forest animals",
+        "lucky_find": "Sometimes finds rare items"
+      },
+      "quests": ["milas_verlorenes_kaninchen"],
+      "najika_reaction": {
+        "megumin": "Awww sie ist süß! *will sie beschützen*",
+        "harley": "Adorable! Reminds me of... before everything went crazy. *kurz ernst*",
+        "shiro": "Alter: 8 Jahre. Ungewöhnliche Verbindung zur lokalen Fauna. Interessant.",
+        "melissa": "Unschuld... wie erfrischend in dieser Welt."
+      }
+    },
+    {
+      "id": "mysterioeser_wanderer",
+      "name": "Der Maskierte Wanderer",
+      "race": "???",
+      "gender": "???",
+      "age": "???",
+      "occupation": "Unbekannt",
+      "location": "Erscheint zufällig nachts",
+      "personality": {
+        "trait": "Mysteriös, kryptisch, allwissend",
+        "speech_style": "Spricht in Rätseln",
+        "likes": ["???"],
+        "dislikes": ["???"],
+        "catchphrase": "Alles ist verbunden..."
+      },
+      "appearance": {
+        "face": "Trägt eine weiße Maske",
+        "outfit": "Schwarzer Mantel mit Sternen",
+        "special": "Scheint zu schweben statt zu gehen"
+      },
+      "dialogue": {
+        "greeting": "Du bist gekommen. Wie vorhergesehen.",
+        "cryptic_talk": "Die Wurzeln reichen tiefer als du denkst. Die Wahrheit liegt unter der Erde.",
+        "prophecy": "Drei Schatten werden fallen. Einer wird bleiben. Wähle weise.",
+        "farewell": "Wir sehen uns wieder... oder auch nicht."
+      },
+      "shop": {
+        "type": "rare_vendor",
+        "appears_only": "Night, random chance",
+        "items": [
+          {"id": "sternenstaub", "price": 1000},
+          {"id": "zeitkristall", "price": 2000},
+          {"id": "schatten_essenz", "price": 1500},
+          {"id": "verbotenes_wissen", "price": 5000}
+        ]
+      },
+      "quests": ["das_raetsel_des_wanderers"],
+      "najika_reaction": {
+        "megumin": "Wer ist das?! Ist das ein Boss? KANN ICH IHN EXPLODIEREN?",
+        "harley": "Ohhh mysterious! I LOVE mysterious! *versucht Maske abzunehmen*",
+        "shiro": "Fehler: Biometrische Daten nicht erfassbar. Lebenszeichen: Anomalie.",
+        "melissa": "...Ich kenne diesen Geruch. Zeitmagie."
+      }
+    },
+    {
+      "id": "wirtin_erika",
+      "name": "Wirtin Erika",
+      "race": "Human",
+      "gender": "female",
+      "age": 45,
+      "occupation": "Gastwirtin",
+      "location": "Inn (Zentrum)",
+      "personality": {
+        "trait": "Mütterlich, fürsorglich, klatschsüchtig",
+        "speech_style": "Warm, gesprächig",
+        "likes": ["Gäste", "Klatsch", "Kochen"],
+        "dislikes": ["Unhöflichkeit", "Betrunkene Rowdys", "Ungeziefer"],
+        "catchphrase": "Komm rein, Schatz! Du siehst hungrig aus!"
+      },
+      "appearance": {
+        "hair": "Braun mit grauen Strähnen, zu einem Dutt",
+        "eyes": "Warm braun",
+        "build": "Rundlich, freundlich",
+        "outfit": "Schürze über einfachem Kleid"
+      },
+      "dialogue": {
+        "greeting": "Willkommen im 'Grünen Kessel'! Setz dich, ich bring dir was Warmes!",
+        "gossip": "Hast du schon gehört? Die Druiden sagen, der Wald ist unruhig...",
+        "food_talk": "Mein Pilzeintopf ist legendär! Geheimrezept meiner Großmutter!",
+        "farewell": "Pass auf dich auf, Schatz! Und komm bald wieder!"
+      },
+      "shop": {
+        "type": "food_vendor",
+        "items": [
+          {"id": "pilzeintopf", "price": 20},
+          {"id": "waldbeer_kuchen", "price": 15},
+          {"id": "kraeutertee", "price": 5},
+          {"id": "honigbrot", "price": 10},
+          {"id": "gebratener_fisch", "price": 25}
+        ]
+      },
+      "services": {
+        "room_rental": {
+          "price": 30,
+          "effects": {
+            "full_restore": true,
+            "well_rested_buff": {"value": 10, "duration": 14400}
+          }
+        }
+      },
+      "information_source": {
+        "provides_rumors": true,
+        "knows_local_quests": true
+      },
+      "najika_reaction": {
+        "megumin": "Sie erinnert mich an... Mama. *wird kurz emotional*",
+        "harley": "Aww, she's like a cuddly bear! Can I have extra cake? *Hundeblick*",
+        "shiro": "Ihre Kochfähigkeiten sind 87% über Durchschnitt.",
+        "melissa": "Eine gute Seele. Selten in diesen Zeiten."
+      }
+    }
+  ],
+  "npc_interactions": {
+    "druide_elowen_und_kraeuterhexe_luna": "Arbeiten zusammen, streiten aber über Methoden",
+    "schmied_ironroot_und_holzfaeller_bjorn": "Alte Freunde, trinken zusammen Bier",
+    "kind_mila_und_wirtin_erika": "Erika kümmert sich um Mila wie eine Großmutter",
+    "jaeger_fenris_und_druide_elowen": "Respektieren sich, sprechen aber selten"
+  }
+}

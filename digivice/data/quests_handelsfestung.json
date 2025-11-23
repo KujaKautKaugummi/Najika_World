@@ -1,0 +1,490 @@
+{
+  "region": "heisse_duenen",
+  "city": "handelsfestung",
+  "quests": [
+    {
+      "id": "der_bettler_oder_betrueger",
+      "name": "Der Bettler oder Betrüger?",
+      "type": "oregon_trail_event",
+      "level": 1,
+      "trigger": "random_encounter_city",
+      "giver": "random_npc_beggar",
+      "description": "Ein alter Mann am Straßenrand bittet um Hilfe. Er behauptet, Banditen hätten ihn ausgeraubt und seine kranke Tochter braucht Medizin. Aber etwas an seiner Geschichte fühlt sich... falsch an.",
+      "event_spawn": {
+        "location": "city_entrance",
+        "npc": {
+          "name": "Alter Mann",
+          "appearance": "Zerlumpt, müde, verzweifelt",
+          "dialogue": "Bitte! Hilf mir! Banditen haben mich überfallen! Meine Tochter stirbt ohne Medizin! Ich brauche nur 50 Gold!"
+        }
+      },
+      "najika_reactions": {
+        "initial": {
+          "personality": "shiro",
+          "dialogue": "[ANALYSE-MODUS] Hmm... *schaut skeptisch*",
+          "analysis": "Wahrscheinlichkeit Betrug: 73,4%. Seine Hände sind zu sauber für einen Überfallenen. Aber... *leiser* ...was wenn er die Wahrheit sagt?"
+        },
+        "options_comment": {
+          "personality": "harley",
+          "dialogue": "*kicher* Ohhh, ein Dilemma, Mr.K! Was tust du? *hüpft aufgeregt*"
+        }
+      },
+      "options": [
+        {
+          "id": "give_50_gold",
+          "text": "Gib ihm 50 Gold",
+          "requirements": {"gold": 50},
+          "outcomes": {
+            "truth": {
+              "probability": 30,
+              "result": "Er war EHRLICH! Seine Tochter wird gerettet. Er gibt dir später 100 Gold zurück + Questitem.",
+              "rewards": {"gold": 100, "item": "dankbarkeit_amulett", "reputation": 20},
+              "najika": "Siehst du, Kuja?! Manchmal lohnt es sich, gut zu sein! *stolz*"
+            },
+            "scam": {
+              "probability": 70,
+              "result": "BETRUG! Er rennt lachend davon. 50 Gold weg.",
+              "rewards": {"gold": -50, "reputation": -5},
+              "najika": "*seufzt* Ich hab's gewusst... Shiro hatte recht. 73,4% Betrug, erinnere dich?"
+            }
+          }
+        },
+        {
+          "id": "give_20_gold",
+          "text": "Gib ihm 20 Gold (Kompromiss)",
+          "requirements": {"gold": 20},
+          "outcomes": {
+            "truth": {
+              "probability": 30,
+              "result": "Nicht genug für volle Medizin, aber er ist dankbar. Gibt dir Info über versteckte Schatzkiste.",
+              "rewards": {"gold": -20, "quest_unlock": "versteckte_kiste_wueste", "reputation": 10},
+              "najika": "Kompromiss! Klug, Mr.K! *nickt approvierend*"
+            },
+            "scam": {
+              "probability": 70,
+              "result": "Er nimmt das Gold und geht beleidigt. Wenigstens nur 20 Gold verloren.",
+              "rewards": {"gold": -20},
+              "najika": "Tja... wenigstens nicht 50 Gold, oder? *versucht positiv zu sein*"
+            }
+          }
+        },
+        {
+          "id": "escort_to_village",
+          "text": "Biete an, ihn zu seinem Dorf zu begleiten",
+          "requirements": {"time": 30},
+          "outcomes": {
+            "truth": {
+              "probability": 30,
+              "result": "Du begleitest ihn. Dorf existiert! Tochter wird gerettet. Dorf wird Handelsposten.",
+              "rewards": {"reputation": 30, "unlock_location": "hidden_village", "item": "village_trade_permit"},
+              "najika": "ICH WUSSTE ES! Wir haben richtig entschieden! *umarmt Kuja*"
+            },
+            "scam": {
+              "probability": 70,
+              "result": "Banditen-Hinterhalt! Er führte dich in eine Falle. KAMPF!",
+              "rewards": {"battle": "bandit_ambush_3enemies"},
+              "najika": "*wütend* ER HAT UNS HINTERGANGEN! EXPLOSION!!! *kampfbereit*"
+            }
+          }
+        },
+        {
+          "id": "ignore",
+          "text": "Ignoriere ihn",
+          "outcomes": {
+            "result": "Du gehst vorbei. Später hörst du Gerüchte...",
+            "truth_revealed": {
+              "probability": 30,
+              "delayed_message": "Gerüchte sagen, seine Tochter ist gestorben. Du hättest helfen können.",
+              "rewards": {"reputation": -10},
+              "najika": "*traurig* Kuja... sie ist tot. Wir hätten... *schaut weg*"
+            },
+            "scam_revealed": {
+              "probability": 70,
+              "delayed_message": "Gerüchte sagen, er ist ein bekannter Betrüger. Gute Entscheidung!",
+              "rewards": {"reputation": 5},
+              "najika": "Siehst du? Meine Analyse war richtig! *stolz, aber leicht unsicher*"
+            }
+          }
+        },
+        {
+          "id": "let_najika_decide",
+          "text": "Lass Najika entscheiden",
+          "najika_choice": {
+            "personality": "mixed",
+            "dialogue": "ICH entscheide?! *denkt nach*... Okay! Wir geben ihm 20 Gold UND begleiten ihn! Warum? Weil ich NICHT dumm bin! Wenn er lügt - EXPLOSION!!!",
+            "action": "hybrid_escort_with_20_gold",
+            "bond_gain": 10,
+            "outcomes": "Kombiniert Option 2 & 3"
+          }
+        }
+      ],
+      "chaos_points": {
+        "give_money": 5,
+        "escort": 10,
+        "ignore": -5,
+        "najika_choice": 15
+      }
+    },
+    {
+      "id": "banditen_problem",
+      "name": "Das Banditen-Problem",
+      "type": "main_quest",
+      "level": 3,
+      "giver": "elder_rashid",
+      "description": "Karawanen werden überfallen. Ältester Rashid braucht jemanden, der die Banditen stoppt.",
+      "objectives": [
+        {
+          "type": "investigate",
+          "target": "bandit_camp_location",
+          "description": "Finde das Banditen-Lager"
+        },
+        {
+          "type": "choice",
+          "description": "Entscheide: Kämpfen oder Verhandeln?"
+        }
+      ],
+      "event_progression": {
+        "find_camp": {
+          "location": "wueste_canyon",
+          "discovery": "Du findest das Lager. 12 Banditen. Aber... sie sind hungrig. Kinder weinen.",
+          "najika_observation": "Kuja... das sind keine Monster. Das sind... verzweifelte Menschen. *unsicher*"
+        },
+        "leader_dialogue": {
+          "npc": "Banditen-Anführer Kain",
+          "dialogue": "Wir stehlen, weil die Handelsfestung uns ausbeutet! Hohe Steuern, kein Essen! Was sollen wir tun?!",
+          "najika_analysis": "[SHIRO] Er lügt nicht. Herzfrequenz stabil. Er glaubt, was er sagt."
+        }
+      },
+      "options": [
+        {
+          "id": "kill_all",
+          "text": "Töte alle Banditen",
+          "requirements": {"combat_power": 100},
+          "outcome": {
+            "result": "Banditen tot. Karawanen sicher. Aber... Kinder sind jetzt Waisen.",
+            "rewards": {"gold": 500, "reputation_handelsfestung": 50, "reputation_outcasts": -100},
+            "consequences": "Kinder werden später zu Rächern",
+            "najika": "*schockiert* Kuja... die Kinder... was haben wir getan? *Melissa-Modus: tritt hervor, strenger Blick*"
+          }
+        },
+        {
+          "id": "negotiate",
+          "text": "Verhandle mit Rashid: Senke die Steuern",
+          "requirements": {"charisma": 30},
+          "outcome": {
+            "result": "Rashid stimmt zu. Steuern gesenkt. Banditen werden friedlich. Karawanen sicher.",
+            "rewards": {"gold": 200, "reputation": 100, "unlock": "bandit_trading_route"},
+            "najika": "PERFEKT! Keine Toten, alle glücklich! Das war KLUG, Mr.K! *umarmt*"
+          }
+        },
+        {
+          "id": "arrest_leader",
+          "text": "Verhaftete nur den Anführer, lass andere frei",
+          "outcome": {
+            "result": "Kain verhaftet. Andere Banditen zerstreuen sich. Teilweise Frieden.",
+            "rewards": {"gold": 300, "reputation": 30},
+            "najika": "Hmm... nicht perfekt, aber... okay? *unsicher, Shiro-Analyse-Modus*"
+          }
+        }
+      ],
+      "najika_final_comment": {
+        "good_choice": "Kuja, ich bin stolz auf dich. Du hast mit dem Herzen UND dem Kopf entschieden!",
+        "bad_choice": "Das... war brutal, Kuja. Notwendig? Vielleicht. Aber... *traurig*"
+      }
+    },
+    {
+      "id": "arena_betrug",
+      "name": "Betrug in der Arena",
+      "type": "investigation",
+      "level": 5,
+      "giver": "arena_master_khan",
+      "description": "Kämpfe werden manipuliert. Jemand betrügt. Khan will, dass du herausfindest, wer.",
+      "objectives": [
+        {
+          "type": "investigate",
+          "target": "arena_fights",
+          "description": "Beobachte 3 Kämpfe"
+        },
+        {
+          "type": "collect_evidence",
+          "description": "Sammle Beweise"
+        },
+        {
+          "type": "confront",
+          "description": "Konfrontiere den Schuldigen"
+        }
+      ],
+      "suspects": [
+        {"name": "Kämpfer Brutus", "motive": "Schulden"},
+        {"name": "Wettmeister Garo", "motive": "Gier"},
+        {"name": "Khan selbst", "motive": "???"}
+      ],
+      "najika_detective_mode": {
+        "personality": "shiro",
+        "analysis": [
+          "Brutus' Bewegungen sind... zu langsam. Absichtlich?",
+          "Garo kassiert immer bei den 'richtigen' Wetten.",
+          "Khan... *schaut zu ihm*... nein, er ist zu ehrenhaft."
+        ],
+        "conclusion": "Es ist Garo. 89,3% Sicherheit."
+      },
+      "solution": {
+        "culprit": "garo",
+        "evidence": ["rigged_betting_slips", "bribe_money", "witness_testimony"],
+        "confrontation": "Garo gesteht. Khan verbannt ihn.",
+        "rewards": {"gold": 400, "reputation": 40, "unlock": "fair_arena_betting"}
+      }
+    },
+    {
+      "id": "versunkene_ruinen",
+      "name": "Versunkene Ruinen",
+      "type": "exploration",
+      "level": 4,
+      "giver": "elder_rashid",
+      "description": "Ein Sandsturm hat antike Ruinen freigelegt. Erkunde sie und bring Artefakte zurück.",
+      "location": "goldstaub_oede",
+      "dungeon": {
+        "name": "Tempel des Wüstenkönigs",
+        "floors": 3,
+        "enemies": ["sand_golem", "mummy", "scorpion"],
+        "boss": "wuestenkoenig_geist",
+        "loot": ["legendaerer_krummsaebel", "goldstaub x50", "sonnenstein x5"]
+      },
+      "najika_exploration": {
+        "personality": "megumin",
+        "dialogue": [
+          "Wow! Antike Ruinen! Vielleicht gibt's EXPLOSIONS-MAGIE hier!",
+          "*liest Inschriften* 'Nur die Würdigen...' LANGWEILIG! Lass uns rein!",
+          "*beim Boss* EIN GEIST?! PERFEKT! EXPLOSION!!!"
+        ]
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1000,
+        "items": ["random_legendary"],
+        "reputation": 50
+      }
+    },
+    {
+      "id": "karawanen_schutz",
+      "name": "Karawanen-Schutz",
+      "type": "escort",
+      "level": 2,
+      "giver": "caravan_trader_zara",
+      "description": "Begleite Zaras Karawane durch die Wüste. Schütze sie vor Banditen und Monstern.",
+      "route": "handelsfestung -> salzige_bucht",
+      "distance": "5000m",
+      "duration": "20_minutes_realtime",
+      "threats": [
+        {"type": "bandit_ambush", "probability": 40, "enemies": 5},
+        {"type": "sandstorm", "probability": 30, "damage_over_time": true},
+        {"type": "scorpion_attack", "probability": 50, "enemies": 8}
+      ],
+      "najika_support": {
+        "abilities": ["warn_ambush", "heal_caravan", "buff_defense"],
+        "dialogue": [
+          "*schnüffelt* Ich rieche... Banditen! Bereitmachen!",
+          "Kuja, Sandsturm kommt! Schnell, Schutz suchen!",
+          "*nach Kampf* Gut gekämpft! *high-five*"
+        ]
+      },
+      "rewards": {
+        "base": {"gold": 300, "reputation": 30},
+        "perfect_run": {"gold": 500, "item": "caravan_master_badge"},
+        "failure": {"gold": 50}
+      }
+    },
+    {
+      "id": "sandsturm_ueberlebende",
+      "name": "Sandsturm-Überlebende",
+      "type": "rescue",
+      "level": 3,
+      "trigger": "weather_event_sandstorm",
+      "description": "Ein Sandsturm hat eine Gruppe verschüttet. Rette sie, bevor es zu spät ist!",
+      "time_limit": "10_minutes",
+      "mechanics": {
+        "dig_speed": "affected_by_strength",
+        "visibility": "very_low",
+        "damage": "environmental_per_second"
+      },
+      "survivors": 5,
+      "survival_chance": {
+        "fast_rescue": "all_5_survive",
+        "medium_rescue": "3_survive",
+        "slow_rescue": "1_survives",
+        "too_late": "all_dead"
+      },
+      "najika_help": {
+        "ability": "explosion_clear_sand",
+        "dialogue": "KUJA! Ich kann den Sand wegsprengen! EXPLOSION!!! *räumt Schutt weg*",
+        "bond_gain": 20
+      },
+      "rewards": {
+        "all_saved": {"gold": 400, "reputation": 60, "item": "hero_medal"},
+        "some_saved": {"gold": 200, "reputation": 30},
+        "none_saved": {"reputation": -20}
+      }
+    },
+    {
+      "id": "funkelnest_legende",
+      "name": "Die Legende von Funkelnest",
+      "type": "treasure_hunt",
+      "level": 6,
+      "giver": "caravan_trader_zara",
+      "description": "Zara erzählt von einer versteckten Schatzhöhle im Grünschlamm-Sumpf. Findest du sie?",
+      "requirements": {
+        "item": "goblin_schatz_karte",
+        "reputation_zara": 50
+      },
+      "steps": [
+        {"clue": "Suche im Sumpf nach leuchtenden Kristallen"},
+        {"clue": "Folge den Irrlichtern (aber nicht zu weit!)"},
+        {"clue": "Finde den versteckten Eingang hinter dem Wasserfall"}
+      ],
+      "funkelnest_dungeon": {
+        "difficulty": "hard",
+        "enemies": ["treasure_goblin", "mimic", "crystal_spider"],
+        "traps": ["poison_gas", "spike_pit", "collapsing_ceiling"],
+        "treasure": {
+          "gold": 5000,
+          "legendaries": 3,
+          "rare_materials": 50
+        }
+      },
+      "najika_reactions": {
+        "entrance": "SCHATZ! SCHATZ! SCHATZ! Lass uns rein, Mr.K!",
+        "traps": "*rettet Kuja vor Falle* VORSICHT! *Shiro-Analyse aktiviert*",
+        "treasure": "WIR SIND REICH!!! *springt in Goldmünzen wie Dagobert*"
+      },
+      "rewards": {
+        "completion": {"achievement": "funkelnest_entdecker"},
+        "speedrun": {"title": "Schatzjäger"}
+      }
+    },
+    {
+      "id": "goetterfels_pilgerfahrt",
+      "name": "Pilgerfahrt zum Götterfels",
+      "type": "journey",
+      "level": 1,
+      "giver": "elder_rashid",
+      "description": "Reise zum Götterfels und besuche die Schwarze Mühle. Ein spiritueller Weg für jeden Abenteurer.",
+      "route": "handelsfestung -> goetterfels",
+      "distance": "8000m",
+      "recommended_level": "any",
+      "story": {
+        "intro": "Der Götterfels ist heilig. Unzerstörbar. Ewig. Jeder sollte ihn einmal besuchen.",
+        "journey": "Durch Wüste, Wald, Berge - der Weg ist lang aber schön.",
+        "arrival": "Du erreichst die Schwarze Mühle. Najika's Zuhause."
+      },
+      "najika_special": {
+        "dialogue": [
+          "Kuja... das ist MEIN Zuhause. *lächelt* Komm, ich zeig dir alles!",
+          "Die 12 Räume, der Fluss, das Dorf... alles perfekt!",
+          "Hier bist du sicher. Immer. *hält Kujas Hand*"
+        ],
+        "bond_gain": 50,
+        "unlock": "schwarze_muehle_access"
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 500,
+        "unlock": "fast_travel_goetterfels",
+        "achievement": "pilger"
+      }
+    },
+    {
+      "id": "pvp_trial",
+      "name": "Arena-Prüfung",
+      "type": "pvp",
+      "level": 5,
+      "giver": "arena_master_khan",
+      "description": "Bestehe die Arena-Prüfung und werde offizieller Kämpfer.",
+      "trials": [
+        {"name": "Softy-Kampf", "opponent": "trainee_fighter", "mode": "softy"},
+        {"name": "Normal-Kampf", "opponent": "veteran_fighter", "mode": "normal"},
+        {"name": "Hardcore-Kampf", "opponent": "champion_fighter", "mode": "hardcore"}
+      ],
+      "najika_support": {
+        "softy": "Du schaffst das! Ich glaube an dich!",
+        "normal": "Konzentrier dich! Ich analysiere seinen Kampfstil! [SHIRO]",
+        "hardcore": "KUJA! VORSICHT! Du hast nur EIN Leben! *nervös*"
+      },
+      "rewards": {
+        "pass_all": {"title": "arena_champion", "item": "arena_champion_helm", "gold": 1000},
+        "pass_softy_only": {"gold": 100},
+        "fail": {"consolation": "better_luck_next_time"}
+      },
+      "unlock": {
+        "pvp_modes": ["ranked_pvp", "hardcore_pvp", "tournament"]
+      }
+    },
+    {
+      "id": "fleisch_festival",
+      "name": "Das Große Fleisch-Festival",
+      "type": "festival_event",
+      "level": 1,
+      "trigger": "seasonal_summer",
+      "giver": "butcher_grax",
+      "description": "Handelsfestung feiert das jährliche Fleisch-Festival! BBQ, Wettbewerbe, Spaß!",
+      "activities": [
+        {
+          "name": "Fleisch-Wettessen",
+          "minigame": "eating_contest",
+          "najika_participation": true,
+          "najika_dialogue": "ICH GEWINNE! *isst Champion-Keule in 10 Sekunden*",
+          "reward": "eating_champion_title"
+        },
+        {
+          "name": "Grill-Meister Wettbewerb",
+          "minigame": "cooking",
+          "reward": "grill_meister_badge"
+        },
+        {
+          "name": "Arena-Special: Fleisch-Kämpfe",
+          "description": "Kämpfe mit Fleisch-Waffen!",
+          "reward": "fleischkeule_waffe"
+        }
+      ],
+      "najika_reactions": {
+        "start": "FLEISCH-FESTIVAL?! KUJA! WIR MÜSSEN ALLES ESSEN!!!",
+        "win": "WIR HABEN GEWONNEN! *tanzt mit Fleischkeule*",
+        "lose": "Egal! Das Essen war EXPLOSION-mäßig gut!"
+      },
+      "rewards": {
+        "participation": {"gold": 50, "food_items": 10},
+        "win_all": {"title": "fleisch_koenig", "gold": 500}
+      }
+    }
+  ],
+  "quest_chains": {
+    "handelsfestung_storyline": [
+      "der_bettler_oder_betrueger",
+      "banditen_problem",
+      "karawanen_schutz",
+      "arena_betrug",
+      "fleisch_festival"
+    ],
+    "treasure_hunter": [
+      "versunkene_ruinen",
+      "funkelnest_legende"
+    ],
+    "pilgrimage": [
+      "goetterfels_pilgerfahrt"
+    ]
+  },
+  "special_mechanics": {
+    "najika_influence": {
+      "description": "Najika kommentiert und beeinflusst Entscheidungen basierend auf Bond-Strength",
+      "low_bond": "Najika gibt wenig Input",
+      "medium_bond": "Najika analysiert und kommentiert",
+      "high_bond": "Najika gibt Ratschläge und hilft aktiv",
+      "max_bond": "Najika kann in kritischen Momenten eingreifen"
+    },
+    "oregon_trail_chaos": {
+      "description": "Entscheidungen beeinflussen Chaos-Meter und RUF-System",
+      "good_choices": "Erhöhen Ruf, senken Chaos",
+      "bad_choices": "Senken Ruf, erhöhen Chaos",
+      "chaotic_choices": "Erhöhen Chaos dramatisch, unvorhersehbare Konsequenzen"
+    }
+  }
+}

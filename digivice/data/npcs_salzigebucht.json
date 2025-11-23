@@ -1,0 +1,497 @@
+{
+  "region": "salzwind_kueste",
+  "city": "salzige_bucht",
+  "npcs": [
+    {
+      "id": "kapitaen_magnus",
+      "name": "Kapitän Magnus der Sturmsegler",
+      "race": "Human",
+      "gender": "male",
+      "age": 58,
+      "occupation": "Kapitän & Hafenmeister",
+      "location": "Harbor Docks",
+      "personality": {
+        "trait": "Rau aber herzlich, erfahren, erzählt gerne Geschichten",
+        "speech_style": "Seemannssprache, viele Metaphern",
+        "likes": ["Das Meer", "Rum", "Gute Geschichten", "Treue Crew"],
+        "dislikes": ["Piraten", "Feiglinge", "Stillstand"],
+        "catchphrase": "Ahoi! Die See ruft, Matrose!"
+      },
+      "appearance": {
+        "hair": "Grau mit Bart, wettergegerbt",
+        "eyes": "Meeresblau",
+        "build": "Muskulös, Narben überall",
+        "outfit": "Kapitänsjacke, Dreispitz",
+        "special": "Holzbein (rechts), Fernrohr am Gürtel"
+      },
+      "dialogue": {
+        "greeting": "Ahoi there! Suchst du Arbeit oder Abenteuer? Die See hat beides!",
+        "quest_available": "Ich hab da ein Problem mit... gewissen Kreaturen. Interessiert?",
+        "sea_story": "Lass mich dir von der Zeit erzählen, als ich einem Seeungeheuer ins Auge sah...",
+        "farewell": "Glatte Fahrt, Matrose!"
+      },
+      "shop": {
+        "type": "ship_vendor",
+        "items": [
+          {"id": "angelrute_einfach", "price": 80},
+          {"id": "angelrute_profi", "price": 300},
+          {"id": "fischernetz", "price": 120},
+          {"id": "schiffs_vorraete", "price": 200}
+        ]
+      },
+      "services": {
+        "ship_travel": {
+          "available_routes": ["Dampf-Hain", "Handelsfestung", "Funken-Siedlung"],
+          "prices": {"short": 50, "medium": 100, "long": 200}
+        }
+      },
+      "quests": ["der_verfluchte_schatz", "seeungeheuer_jagd"],
+      "najika_reaction": {
+        "megumin": "Ein ECHTER Seemann mit Holzbein! Wie in One Piece!",
+        "harley": "Arr matey! *macht Piraten-Stimme* I like this old sea dog!",
+        "shiro": "Holzbein: Funktional. Narben: 23 gezählt. Überlebensrate: Beeindruckend.",
+        "melissa": "Ein Mann der das Meer überlebt hat. Respektabel."
+      }
+    },
+    {
+      "id": "fischer_ole",
+      "name": "Fischer Ole",
+      "race": "Human",
+      "gender": "male",
+      "age": 42,
+      "occupation": "Fischer & Fisch-Verkäufer",
+      "location": "Fish Market",
+      "personality": {
+        "trait": "Entspannt, freundlich, ein bisschen faul",
+        "speech_style": "Langsam, gemütlich",
+        "likes": ["Angeln", "Bier", "Nickerchen"],
+        "dislikes": ["Eile", "Komplizierte Dinge", "Stürme"],
+        "catchphrase": "Immer mit der Ruhe, Freund!"
+      },
+      "appearance": {
+        "hair": "Blond, zerzaust, Salz im Bart",
+        "eyes": "Grün",
+        "build": "Ein bisschen Bauch",
+        "outfit": "Einfache Fischer-Kleidung, Gummistiefel",
+        "special": "Riecht immer nach Fisch"
+      },
+      "dialogue": {
+        "greeting": "Moin! Frischer Fisch heute! Gerade gefangen!",
+        "shop_talk": "Mein Fisch ist der beste an der ganzen Küste!",
+        "fishing_tip": "Willst du angeln lernen? Ich zeig dir die besten Spots!",
+        "farewell": "Bis später! Und immer schön entspannt bleiben!"
+      },
+      "shop": {
+        "type": "food_vendor",
+        "items": [
+          {"id": "frischer_fisch", "price": 15, "stock": 50},
+          {"id": "thunfisch", "price": 30},
+          {"id": "lachs", "price": 35},
+          {"id": "meeresfrüchte", "price": 40},
+          {"id": "kaviar", "price": 100}
+        ]
+      },
+      "services": {
+        "fishing_lessons": {
+          "price": 50,
+          "unlocks": "fishing_skill",
+          "duration": 600
+        }
+      },
+      "quests": ["die_grosse_fang_herausforderung"],
+      "najika_reaction": {
+        "megumin": "Der riecht... interessant. Aber er ist nett!",
+        "harley": "Fishy fishy! *hält sich die Nase zu* Phew!",
+        "shiro": "Geruchsanalyse: 94% Fisch, 6% Salzwasser.",
+        "melissa": "Ein einfacher Mann. Zufrieden mit seinem Leben."
+      }
+    },
+    {
+      "id": "leuchtturmwaerterin_luna",
+      "name": "Leuchtturmwärterin Luna",
+      "race": "Human",
+      "gender": "female",
+      "age": 31,
+      "occupation": "Leuchtturmwärterin",
+      "location": "Lighthouse",
+      "personality": {
+        "trait": "Einsam, verträumt, liebt die Sterne",
+        "speech_style": "Leise, poetisch",
+        "likes": ["Sterne", "Einsamkeit", "Bücher", "Das Meer"],
+        "dislikes": ["Große Menschenmengen", "Lärm"],
+        "catchphrase": "Die Sterne kennen alle Geheimnisse..."
+      },
+      "appearance": {
+        "hair": "Langes silbernes Haar",
+        "eyes": "Dunkelblau, wie das Meer",
+        "build": "Schlank",
+        "outfit": "Lange Robe, Teleskop um den Hals",
+        "special": "Leuchtet schwach im Dunkeln"
+      },
+      "dialogue": {
+        "greeting": "Oh... Besuch. Willkommen im Leuchtturm.",
+        "star_talk": "Siehst du das Sternbild dort? Es zeigt den Weg zu... etwas Besonderem.",
+        "quest_available": "Ich habe etwas Seltsames am Horizont gesehen. Etwas... Unmögliches.",
+        "farewell": "Mögen die Sterne dich leiten."
+      },
+      "shop": {
+        "type": "magic_vendor",
+        "items": [
+          {"id": "sternen_karte", "price": 200},
+          {"id": "navigationskristall", "price": 150},
+          {"id": "leuchtstein", "price": 80}
+        ]
+      },
+      "services": {
+        "star_reading": {
+          "price": 100,
+          "effect": "Zeigt versteckte Schätze auf der Karte",
+          "cooldown": 86400
+        }
+      },
+      "quests": ["das_geister_schiff", "sternbilder_raetsel"],
+      "najika_reaction": {
+        "megumin": "Sie ist so mysteriös... und cool!",
+        "harley": "Aww, she's lonely up here. *will Freunde sein*",
+        "shiro": "Biolumineszenz detektiert. Ursache: Unbekannt. Faszinierend.",
+        "melissa": "Einsamkeit kann Weisheit bringen... oder Wahnsinn."
+      }
+    },
+    {
+      "id": "haendler_salim",
+      "name": "Händler Salim der Exotische",
+      "race": "Human",
+      "gender": "male",
+      "age": 36,
+      "occupation": "Exotischer Händler",
+      "location": "Trading Post",
+      "personality": {
+        "trait": "Charmant, geschäftstüchtig, geheimnisvoll",
+        "speech_style": "Blumig, überzeugend",
+        "likes": ["Handel", "Geschäfte", "Seltene Waren", "Gold"],
+        "dislikes": ["Diebe", "Schlechte Angebote"],
+        "catchphrase": "Ich habe GENAU was du suchst, Freund!"
+      },
+      "appearance": {
+        "hair": "Schwarz, Turban",
+        "eyes": "Goldbraun",
+        "outfit": "Bunte Gewänder aus fernen Ländern",
+        "special": "Viele Ringe und Ketten"
+      },
+      "dialogue": {
+        "greeting": "Ah! Ein Kunde! Komm, komm! Sieh dir meine Waren an!",
+        "shop_talk": "Diese Waren kommen aus den entlegensten Ecken der Welt!",
+        "haggle": "Für DICH, mein Freund, ein Spezialpreis!",
+        "farewell": "Komm wieder! Salim hat immer neue Schätze!"
+      },
+      "shop": {
+        "type": "exotic_vendor",
+        "items": [
+          {"id": "gewuerze_exotisch", "price": 50},
+          {"id": "seide", "price": 120},
+          {"id": "perlen", "price": 80},
+          {"id": "korallen_schmuck", "price": 150},
+          {"id": "mysterioese_kiste", "price": 500}
+        ],
+        "special_feature": "Rotating stock, changes daily"
+      },
+      "najika_reaction": {
+        "megumin": "Ohhh glitzernde Sachen! Kuja können wir-",
+        "harley": "Mysterious boxes? COUNT ME IN! *kauft alles*",
+        "shiro": "Preise: 37% über Marktwert. Verhandlung empfohlen.",
+        "melissa": "Ein cleverer Geschäftsmann. Vertraue ihm nicht zu sehr."
+      }
+    },
+    {
+      "id": "mechaniker_greta",
+      "name": "Schiffs-Mechanikerin Greta",
+      "race": "Dwarf",
+      "gender": "female",
+      "age": 89,
+      "occupation": "Schiffs-Mechanikerin",
+      "location": "Ship Repair Dock",
+      "personality": {
+        "trait": "Tough, kompetent, flucht viel",
+        "speech_style": "Direkt, technisch, viele Flüche",
+        "likes": ["Maschinen", "Reparaturen", "Gute Werkzeuge"],
+        "dislikes": ["Inkompetenz", "Billige Arbeit", "Wasser"],
+        "catchphrase": "Verdammte Bolzen!"
+      },
+      "appearance": {
+        "hair": "Rote Haare zu Zöpfen geflochten",
+        "eyes": "Grün",
+        "build": "Stämmig, muskulös",
+        "outfit": "Ölige Arbeitskluft, Werkzeuggürtel",
+        "special": "Mechanischer Arm (links)"
+      },
+      "dialogue": {
+        "greeting": "Was?! Kann ich dir helfen oder stehst du nur rum?",
+        "shop_talk": "Brauchst du Reparaturen? Ich bin die BESTE!",
+        "repair_talk": "Dein Kram ist Schrott. Aber ich kann ihn reparieren.",
+        "farewell": "Jaja, verschwinde. Ich hab Arbeit!"
+      },
+      "services": {
+        "equipment_repair": {
+          "available": true,
+          "price_per_durability": 1,
+          "quality_bonus": 20
+        },
+        "ship_repair": {
+          "available": true,
+          "base_price": 200
+        },
+        "upgrade_equipment": {
+          "available": true,
+          "specialization": "Mechanical enhancements"
+        }
+      },
+      "najika_reaction": {
+        "megumin": "Eine Zwerg-Lady mit ROBOTERARM?! SO COOL!",
+        "harley": "Tough gal! I like her! *high five*",
+        "shiro": "Mechanischer Arm: Hydraulisch. Stärke: 340% über biologischem Durchschnitt.",
+        "melissa": "Handwerkskunst auf höchstem Niveau."
+      }
+    },
+    {
+      "id": "seher_neptun",
+      "name": "Seher Neptun",
+      "race": "Merfolk",
+      "gender": "male",
+      "age": 203,
+      "occupation": "Meerseher & Orakel",
+      "location": "Underwater Grotto (accessible)",
+      "personality": {
+        "trait": "Weise, kryptisch, sieht die Zukunft",
+        "speech_style": "Spricht in Wellen-Metaphern",
+        "likes": ["Das Meer", "Ruhe", "Wahrheit"],
+        "dislikes": ["Verschmutzung", "Lügen", "Landgänger (manchmal)"],
+        "catchphrase": "Die Wellen flüstern... hörst du?"
+      },
+      "appearance": {
+        "hair": "Langes grün-blaues Haar wie Algen",
+        "eyes": "Pupillenlos, leuchtend blau",
+        "skin": "Schuppig, blau-grün",
+        "outfit": "Korallen-Krone, Muschelschmuck",
+        "special": "Kann an Land atmen, aber bevorzugt Wasser"
+      },
+      "dialogue": {
+        "greeting": "Die Wellen haben deine Ankunft vorhergesagt...",
+        "prophecy": "Ich sehe... drei Pfade. Einer führt zum Licht, einer zur Dunkelheit, einer zu... dir selbst.",
+        "quest_available": "Das Meer ist in Aufruhr. Etwas Altes erwacht.",
+        "farewell": "Mögen die Gezeiten dich tragen."
+      },
+      "services": {
+        "prophecy": {
+          "price": 200,
+          "effect": "Zeigt zukünftige Event-Hinweise",
+          "accuracy": "cryptic"
+        },
+        "water_blessing": {
+          "price": 150,
+          "effect": "Unterwasser-Atmung für 1 Stunde"
+        }
+      },
+      "quests": ["das_erwachen_des_kraken"],
+      "najika_reaction": {
+        "megumin": "EIN ECHTER MEERMANN! Wie Aquaman!",
+        "harley": "Ohhh fishy person! Can you talk to dolphins? *aufgeregt*",
+        "shiro": "Spezies: Merfolk. Atmung: Amphibisch. Lebenserwartung: 400+ Jahre.",
+        "melissa": "Meerleute kennen Geheimnisse, die älter sind als die Zivilisation."
+      }
+    },
+    {
+      "id": "piratin_scarlett",
+      "name": "Ex-Piratin Scarlett",
+      "race": "Human",
+      "gender": "female",
+      "age": 29,
+      "occupation": "Ex-Piratin, jetzt Taverne-Besitzerin",
+      "location": "Salty Anchor Tavern",
+      "personality": {
+        "trait": "Wild, frei, rebellisch aber fair",
+        "speech_style": "Rau, direkt, viele Flüche",
+        "likes": ["Freiheit", "Rum", "Schwertkämpfe", "Gute Geschichten"],
+        "dislikes": ["Autoritäten", "Regeln", "Langweile"],
+        "catchphrase": "Trink oder verschwinde!"
+      },
+      "appearance": {
+        "hair": "Feuerrotes Haar, wild",
+        "eyes": "Grün wie Smaragde",
+        "build": "Athletisch",
+        "outfit": "Zerrissene Piraten-Kleidung, viele Waffen",
+        "special": "Narbe über linkem Auge, Ohrring"
+      },
+      "dialogue": {
+        "greeting": "Oi! Du siehst aus als könntest du was vertragen! Rum?",
+        "story_time": "Willste hören wie ich Kapitän Magnus' Schiff fast versenkt hab? *lacht*",
+        "quest_available": "Ich hab da noch eine... offene Rechnung. Interessiert?",
+        "farewell": "Hau rein! Und komm mit Geschichten zurück!"
+      },
+      "shop": {
+        "type": "tavern_vendor",
+        "items": [
+          {"id": "rum", "price": 10},
+          {"id": "premium_rum", "price": 50},
+          {"id": "seefahrer_eintopf", "price": 20},
+          {"id": "piraten_burger", "price": 25}
+        ]
+      },
+      "services": {
+        "room_rental": {
+          "price": 25,
+          "quality": "rough"
+        },
+        "information": {
+          "price": 50,
+          "provides": "Pirate rumors and treasure maps"
+        }
+      },
+      "quests": ["scarletts_rache"],
+      "najika_reaction": {
+        "megumin": "Eine ECHTE Piratin! Mit Narbe und allem!",
+        "harley": "YAAAS QUEEN! *trinkt zusammen* You're my kinda gal!",
+        "shiro": "Kampferfahrung: Hoch. Narben: 17. Überlebensinstinkt: Exzellent.",
+        "melissa": "Eine Kämpferin. Ich respektiere das."
+      }
+    },
+    {
+      "id": "kind_tim",
+      "name": "Tim der Muschelsucher",
+      "race": "Human",
+      "gender": "male",
+      "age": 7,
+      "occupation": "Muschelsammler",
+      "location": "Beach",
+      "personality": {
+        "trait": "Neugierig, verspielt, liebt das Meer",
+        "speech_style": "Kindlich, aufgeregt",
+        "likes": ["Muscheln", "Strand", "Krebse", "Geschichten"],
+        "dislikes": ["Große Wellen", "Gemeine Kinder"],
+        "catchphrase": "Schau! Ich hab eine schöne Muschel gefunden!"
+      },
+      "appearance": {
+        "hair": "Braun, zerzaust, Sand drin",
+        "eyes": "Große blaue Augen",
+        "outfit": "Kurze Hose, barfuß, Muschel-Halskette",
+        "special": "Immer nass und sandig"
+      },
+      "dialogue": {
+        "greeting": "Hallo! Suchst du auch Muscheln? Ich kenne die besten Stellen!",
+        "shell_talk": "Diese Muschel ist SO schön! Willst du sie kaufen?",
+        "scared": "Manchmal... sehe ich Schatten unter Wasser. Große Schatten...",
+        "farewell": "Tschüss! Viel Spaß am Strand!"
+      },
+      "shop": {
+        "type": "gatherer_vendor",
+        "items": [
+          {"id": "muscheln", "price": 3},
+          {"id": "perlen_klein", "price": 20},
+          {"id": "seestern", "price": 15},
+          {"id": "koralle", "price": 25}
+        ]
+      },
+      "quests": ["tims_verlorener_schatz"],
+      "najika_reaction": {
+        "megumin": "Awww er ist süß! *will beschützen*",
+        "harley": "Little beach boy! *baut Sandburgen mit ihm*",
+        "shiro": "Alter: 7. Aktivität: Harmlos. Niedlichkeitsfaktor: Hoch.",
+        "melissa": "Kinder sollten unbeschwert sein dürfen."
+      }
+    },
+    {
+      "id": "wetterfee_zephyr",
+      "name": "Wetterfee Zephyr",
+      "race": "Fae",
+      "gender": "female",
+      "age": 412,
+      "occupation": "Wetter-Kontrolleurin",
+      "location": "Top of Lighthouse (sometimes)",
+      "personality": {
+        "trait": "Launisch wie das Wetter, verspielt, mächtig",
+        "speech_style": "Singt oft statt zu sprechen",
+        "likes": ["Stürme", "Wind", "Chaos", "Lachen"],
+        "dislikes": ["Stille", "Langeweile"],
+        "catchphrase": "♫ Der Wind tanzt! ♫"
+      },
+      "appearance": {
+        "size": "Tiny (30cm hoch)",
+        "hair": "Weiß wie Wolken, ändert sich mit Wetter",
+        "eyes": "Silber",
+        "wings": "Durchsichtig, wie Luft",
+        "special": "Schwebt immer, berührt nie den Boden"
+      },
+      "dialogue": {
+        "greeting": "♫ Oh! Ein Sterblicher! Wie erfrischend! ♫",
+        "weather_talk": "Möchtest du Regen? Sonne? Sturm? Ich kann alles! *kichert*",
+        "mischief": "Ups! Habe ich diesen Sturm gemacht? *unschuldig*",
+        "farewell": "♫ Flieg mit dem Wind! ♫"
+      },
+      "services": {
+        "weather_control": {
+          "price": 100,
+          "options": ["sunny", "rainy", "stormy", "clear"],
+          "duration": 3600,
+          "warning": "She might not do what you ask..."
+        }
+      },
+      "quests": ["zephyrs_spiel"],
+      "najika_reaction": {
+        "megumin": "Eine WETTER-FEE! Sie kann STÜRME machen! Cool!",
+        "harley": "Tiny chaos fairy! I LOVE IT! *versucht sie zu fangen*",
+        "shiro": "Spezies: Fae. Macht: Wetter-Manipulation. Berechenbarkeit: 0%.",
+        "melissa": "Feen sind... schwierig. Sei höflich."
+      }
+    },
+    {
+      "id": "koch_antonio",
+      "name": "Meisterkoch Antonio",
+      "race": "Human",
+      "gender": "male",
+      "age": 45,
+      "occupation": "Koch & Restaurant-Besitzer",
+      "location": "Seaside Restaurant",
+      "personality": {
+        "trait": "Leidenschaftlich, perfektionistisch, künstlerisch",
+        "speech_style": "Italienischer Akzent, dramatisch",
+        "likes": ["Perfektes Essen", "Frische Zutaten", "Anerkennung"],
+        "dislikes": ["Schlechte Kritik", "Verschwendung", "Fast Food"],
+        "catchphrase": "Magnifico! Bellissimo!"
+      },
+      "appearance": {
+        "hair": "Schwarz mit grau, Schnurrbart",
+        "eyes": "Braun, expressiv",
+        "build": "Etwas Bauch (von eigenem Essen)",
+        "outfit": "Weiße Kochjacke, hohe Kochmütze",
+        "special": "Spricht mit den Händen"
+      },
+      "dialogue": {
+        "greeting": "Benvenuto! Welcome to Antonio's! The BEST restaurant in all the coast!",
+        "cooking": "Cooking is not just food... it is ARTE! Art!",
+        "quest_available": "I need the PERFECT ingredient... can you help?",
+        "farewell": "Arrivederci! Come back soon!"
+      },
+      "shop": {
+        "type": "restaurant_vendor",
+        "items": [
+          {"id": "meeresfrüchte_pasta", "price": 45},
+          {"id": "gegrillter_fisch_deluxe", "price": 60},
+          {"id": "antonios_spezial", "price": 100},
+          {"id": "tiramisu", "price": 35}
+        ]
+      },
+      "quests": ["antonios_perfektes_gericht"],
+      "najika_reaction": {
+        "megumin": "Er ist so... dramatisch. Aber das Essen riecht GUT!",
+        "harley": "Italian food! *Hundeaugen* Can I have EVERYTHING?",
+        "shiro": "Koch-Level: Meister. Geschmacks-Optimierung: 96%.",
+        "melissa": "Ein Künstler in der Küche. Respektabel."
+      }
+    }
+  ],
+  "npc_interactions": {
+    "kapitaen_magnus_und_piratin_scarlett": "Alte Rivalen, respektieren sich aber insgeheim",
+    "leuchtturmwaerterin_luna_und_wetterfee_zephyr": "Beobachten zusammen die Sterne",
+    "kind_tim_und_fischer_ole": "Ole bringt Tim das Angeln bei",
+    "koch_antonio_und_fischer_ole": "Geschäftsbeziehung: Antonio kauft Fisch von Ole"
+  }
+}
