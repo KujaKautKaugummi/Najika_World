@@ -2044,7 +2044,7 @@
     async function loadRoomConfigs() {
         if (roomConfigs) return roomConfigs;
         try {
-            const response = await fetch('/config/room_config_detailed.json');
+            const response = await fetch('http://localhost:8000/config/room_config_detailed.json');
             roomConfigs = await response.json();
             console.log('✅ Room configs loaded:', roomConfigs.rooms.length, 'rooms');
             return roomConfigs;
@@ -2374,7 +2374,7 @@
         const loader = new THREE.GLTFLoader();
         return new Promise((resolve) => {
             loader.load(
-                `/assets/${floorConfig.model}`,
+                `http://localhost:8000/assets/${floorConfig.model}`,
                 (gltf) => {
                     const instance = gltf.scene;
 
@@ -2433,7 +2433,7 @@
         // Lade BASE Wand-Model nur EINMAL
         return new Promise((resolve) => {
             loader.load(
-                `/assets/${wallConfig.model}`,
+                `http://localhost:8000/assets/${wallConfig.model}`,
                 (gltf) => {
                     const base = gltf.scene;
 
@@ -2519,7 +2519,7 @@
         const loader = new THREE.GLTFLoader();
         return new Promise((resolve) => {
             loader.load(
-                `/assets/${propConfig.model}`,
+                `http://localhost:8000/assets/${propConfig.model}`,
                 (gltf) => {
                     const prop = gltf.scene;
                     prop.position.set(...propConfig.position);
@@ -3740,7 +3740,7 @@
 
         const loader = new THREE.GLTFLoader();
         loader.load(
-            `/assets/${building.model}`,
+            `http://localhost:8000/assets/${building.model}`,
             gltf => {
                 const model = gltf.scene;
                 model.traverse(node => {
@@ -4105,7 +4105,7 @@
         }
         const loader = new THREE.GLTFLoader();
         loader.load(
-            '/assets/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
+            'http://localhost:8000/assets/KayKit_Skeletons_1.0_FREE/characters/gltf/Skeleton_Mage.glb',
             gltf => {
                 characterGroup = gltf.scene;
                 characterGroup.traverse(node => {
