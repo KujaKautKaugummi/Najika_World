@@ -349,6 +349,19 @@
                 this.combo.lastHitTime = Date.now();
                 this.combo.multiplier = Math.min(2.0, 1.0 + (this.combo.hits * 0.1));
 
+                // Visual Effect (Phase 5)
+                if (characterGroup && typeof createAttackEffect === 'function') {
+                    const effectPos = characterGroup.position.clone();
+                    effectPos.y += 2;
+                    const direction = new THREE.Vector3(
+                        Math.sin(characterHeading),
+                        0,
+                        Math.cos(characterHeading)
+                    );
+                    effectPos.add(direction.multiplyScalar(5));
+                    createAttackEffect(effectPos, hand, type);
+                }
+
                 if (typeof notify === 'function') {
                     notify(`💥 ${Math.round(damage)} DMG (${this.combo.hits}x Combo!)`, 'success');
                 }
@@ -1229,6 +1242,56 @@
                 equipArmor.textContent = `${armorName} (${totalDef} DEF)`;
             }
         }
+    }
+
+    // ⚔️ ATTACK VISUAL EFFECTS (Phase 5)
+    function createAttackEffect(position, hand, type) {
+        if (!THREE) return;
+
+        const color = hand === 'left' ? 0x00ffff : 0xff4444;  // Cyan für Zauber, Rot für Schwert
+        const size = type === 'heavy' ? 3 : 1.5;
+
+        const particleCount = type === 'heavy' ? 20 : 10;
+        const geometry = new THREE.BufferGeometry();
+        const positions = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            const x = (Math.random() - 0.5) * size;
+            const y = (Math.random() - 0.5) * size;
+            const z = (Math.random() - 0.5) * size;
+            positions.push(x, y, z);
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+        const material = new THREE.PointsMaterial({
+            color: color,
+            size: 0.3,
+            transparent: true,
+            opacity: 1.0,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        particles.position.copy(position);
+        scene.add(particles);
+
+        // Animate particles
+        let frame = 0;
+        const animate = () => {
+            frame++;
+            material.opacity = 1.0 - (frame / 30);
+            particles.position.y += 0.2;
+
+            if (frame < 30) {
+                requestAnimationFrame(animate);
+            } else {
+                scene.remove(particles);
+                geometry.dispose();
+                material.dispose();
+            }
+        };
+        animate();
     }
 
     // 🎯 Find Nearest Enemy für Auto-Targeting
@@ -2954,6 +3017,8 @@
         window.addEventListener('resize', onWindowResize, false);
         window.addEventListener('keydown', onKeyDown, false);
         window.addEventListener('keyup', onKeyUp, false);
+        window.addEventListener('mousedown', onMouseDown, false);
+        window.addEventListener('mouseup', onMouseUp, false);
 
         const canvas = renderer.domElement;
         orbitCanvas = canvas;
@@ -3274,6 +3339,81 @@
     function onKeyUp(event) {
         activeKeys.delete(event.code);
     }
+
+    // ⚔️ MOUSE COMBAT HANDLERS (Phase 2)
+    let mouseHoldTimer = null;
+    let isHoldingMouse = false;
+
+    function onMouseDown(event) {
+        // Ignore if clicking on UI elements
+        if (event.target.tagName === 'BUTTON' ||
+            event.target.tagName === 'INPUT' ||
+            event.target.closest('#combat-stats-ui') ||
+            event.target.closest('.cloud-btn')) {
+            return;
+        }
+
+        const isShiftPressed = event.shiftKey;
+
+        // Left Mouse Button
+        if (event.button === 0) {
+            // Start hold timer for heavy attack
+            mouseHoldTimer = setTimeout(() => {
+                isHoldingMouse = true;
+                if (COMBAT_SYSTEM.attackLeftHeavy()) {
+                    console.log('🔮 Linke Hand: HEAVY Zauber (LMB Hold)!');
+                }
+            }, 200);  // 200ms hold = heavy attack
+
+            // If released before timer, it's a light attack
+        }
+
+        // Right Mouse Button
+        if (event.button === 2) {
+            event.preventDefault();  // Prevent context menu
+
+            mouseHoldTimer = setTimeout(() => {
+                isHoldingMouse = true;
+                if (COMBAT_SYSTEM.attackRightHeavy()) {
+                    console.log('⚔️ Rechte Hand: HEAVY Schwert (RMB Hold)!');
+                }
+            }, 200);
+        }
+    }
+
+    function onMouseUp(event) {
+        const isShiftPressed = event.shiftKey;
+
+        // Clear hold timer
+        if (mouseHoldTimer) {
+            clearTimeout(mouseHoldTimer);
+            mouseHoldTimer = null;
+        }
+
+        // If not holding, execute light attack
+        if (!isHoldingMouse) {
+            if (event.button === 0) {
+                if (COMBAT_SYSTEM.attackLeftLight()) {
+                    console.log('🔮 Linke Hand: Light Zauber (LMB)!');
+                }
+            }
+
+            if (event.button === 2) {
+                if (COMBAT_SYSTEM.attackRightLight()) {
+                    console.log('⚔️ Rechte Hand: Light Schwert (RMB)!');
+                }
+            }
+        }
+
+        isHoldingMouse = false;
+    }
+
+    // Disable context menu on canvas
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.tagName === 'CANVAS') {
+            e.preventDefault();
+        }
+    });
 
     function onPointerDown(event) {
         if (!orbitCanvas) {
