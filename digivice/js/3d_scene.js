@@ -3102,12 +3102,21 @@
                 pickupLoot();
                 return;
             }
-            // Priorität 2: Interaktion mit Objekten (wenn drinnen)
+            // Priorität 2: Boss-Interaktion
+            if (window.bossMarkerSystem && characterGroup) {
+                const nearbyBoss = window.bossMarkerSystem.getNearbyBoss(characterGroup.position);
+                if (nearbyBoss) {
+                    console.log(`🏰 Interacting with boss: ${nearbyBoss.name}`);
+                    window.bossMarkerSystem.interactWithBoss(nearbyBoss.id);
+                    return;
+                }
+            }
+            // Priorität 3: Interaktion mit Objekten (wenn drinnen)
             if (currentInterior && currentInteractable) {
                 handleInteraction();
                 return;
             }
-            // Priorität 3: Gebäude betreten
+            // Priorität 4: Gebäude betreten
             if (nearBuilding && !currentInterior) {
                 enterBuilding();
                 return;

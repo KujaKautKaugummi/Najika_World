@@ -1,0 +1,139 @@
+{
+  "bosses": [
+    {
+      "id": "boss_goetterfels",
+      "name": "Schattenritter",
+      "region": "goetterfels",
+      "position": { "x": 4900, "y": 0, "z": 4750 },
+      "level": 10,
+      "markerColor": "#ff0000",
+      "arenaType": "nemesis_tier_1",
+      "description": "Ein dunkler Ritter bewacht die Schwarze Mühle",
+      "rewards": {
+        "gold": 500,
+        "xp": 1000,
+        "items": ["shadow_sword", "dark_helm"]
+      }
+    },
+    {
+      "id": "boss_crimson_desert",
+      "name": "Wüstentitan",
+      "region": "crimson_desert",
+      "position": { "x": 1200, "y": 0, "z": 1200 },
+      "level": 25,
+      "markerColor": "#ff4400",
+      "arenaType": "nemesis_tier_2",
+      "description": "Ein massiver Golem aus brennendem Sand",
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000,
+        "items": ["flame_gauntlets", "desert_amulet"]
+      }
+    },
+    {
+      "id": "boss_emerald_grasslands",
+      "name": "Sturmwächter",
+      "region": "emerald_grasslands",
+      "position": { "x": 7200, "y": 0, "z": 1800 },
+      "level": 15,
+      "markerColor": "#00ff00",
+      "arenaType": "nemesis_tier_1",
+      "description": "Ein Elementar des Windes herrscht über die Ebenen",
+      "rewards": {
+        "gold": 800,
+        "xp": 1500,
+        "items": ["wind_staff", "emerald_ring"]
+      }
+    },
+    {
+      "id": "boss_azure_coastline",
+      "name": "Tiefseekraken",
+      "region": "azure_coastline",
+      "position": { "x": 7800, "y": 0, "z": 7200 },
+      "level": 30,
+      "markerColor": "#0044ff",
+      "arenaType": "nemesis_tier_2",
+      "description": "Eine uralte Kreatur aus den Tiefen des Ozeans",
+      "rewards": {
+        "gold": 2000,
+        "xp": 4000,
+        "items": ["trident_of_tides", "azure_pearl"]
+      }
+    },
+    {
+      "id": "boss_obsidian_peaks",
+      "name": "Vulkandrache",
+      "region": "obsidian_peaks",
+      "position": { "x": 1800, "y": 0, "z": 7800 },
+      "level": 40,
+      "markerColor": "#880000",
+      "arenaType": "nemesis_tier_3",
+      "description": "Ein feuriger Drache nistet in den Lavahöhlen",
+      "rewards": {
+        "gold": 3000,
+        "xp": 6000,
+        "items": ["dragon_scale_armor", "obsidian_blade"]
+      }
+    },
+    {
+      "id": "boss_amber_forests",
+      "name": "Urwaldwächter",
+      "region": "amber_forests",
+      "position": { "x": 4200, "y": 0, "z": 1500 },
+      "level": 20,
+      "markerColor": "#ffaa00",
+      "arenaType": "nemesis_tier_2",
+      "description": "Ein uralter Ent beschützt den heiligen Hain",
+      "rewards": {
+        "gold": 1200,
+        "xp": 2500,
+        "items": ["nature_bow", "amber_sap_potion"]
+      }
+    },
+    {
+      "id": "boss_ivory_tundra",
+      "name": "Frostgigant",
+      "region": "ivory_tundra",
+      "position": { "x": 1500, "y": 0, "z": 4200 },
+      "level": 35,
+      "markerColor": "#aaeeff",
+      "arenaType": "nemesis_tier_3",
+      "description": "Ein eisiger Riese wandert durch die gefrorenen Ebenen",
+      "rewards": {
+        "gold": 2500,
+        "xp": 5000,
+        "items": ["frost_hammer", "ice_crown"]
+      }
+    },
+    {
+      "id": "boss_violet_swamps",
+      "name": "Giftbasilisk",
+      "region": "violet_swamps",
+      "position": { "x": 7800, "y": 0, "z": 4500 },
+      "level": 28,
+      "markerColor": "#8800ff",
+      "arenaType": "nemesis_tier_2",
+      "description": "Eine giftige Schlange lauert in den Sümpfen",
+      "rewards": {
+        "gold": 1800,
+        "xp": 3500,
+        "items": ["venom_dagger", "violet_antidote"]
+      }
+    },
+    {
+      "id": "boss_golden_highlands",
+      "name": "Lichkönig",
+      "region": "golden_highlands",
+      "position": { "x": 4500, "y": 0, "z": 8100 },
+      "level": 50,
+      "markerColor": "#ffdd00",
+      "arenaType": "nemesis_tier_4",
+      "description": "Ein untotes Wesen herrscht über die goldenen Hügel",
+      "rewards": {
+        "gold": 5000,
+        "xp": 10000,
+        "items": ["lich_staff", "crown_of_gold", "resurrection_tome"]
+      }
+    }
+  ]
+}
