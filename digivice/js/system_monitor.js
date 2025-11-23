@@ -120,7 +120,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch('http://localhost:8000/api/najika/status');
+            const response = await fetch('/api/najika/status');
             const data = await response.json();
 
             if (data.najika) {
@@ -187,7 +187,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch('http://localhost:8000/api/status');
+            const response = await fetch('/api/status');
             const data = await response.json();
 
             panel.innerHTML = `
@@ -227,7 +227,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch('http://localhost:8000/api/training/status');
+            const response = await fetch('/api/training/status');
             const data = await response.json();
 
             const training = data.training || {};
@@ -271,8 +271,8 @@ const SystemMonitor = {
 
         try {
             const [securityResp, memoryResp] = await Promise.all([
-                fetch('http://localhost:8000/api/security/status'),
-                fetch('http://localhost:8000/api/memory/export')
+                fetch('/api/security/status'),
+                fetch('/api/memory/export')
             ]);
 
             const security = await securityResp.json();
