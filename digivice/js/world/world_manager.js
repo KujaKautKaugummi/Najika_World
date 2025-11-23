@@ -124,6 +124,16 @@ class WorldManager {
         window.bossMarkerSystem = this.bossMarkerSystem; // Expose globally
       }
 
+      // 🏠 Place Schwarze Mühle on Götterfels
+      console.log('🏠 Placing Schwarze Mühle on Götterfels...');
+      this.schwarzeMuehle = this.cityBuilder.buildSpecialBuilding(
+        'windmill',    // Template type
+        4800,          // X position (center of Götterfels)
+        4200,          // Z position (600 units north of center, as per regions.json)
+        'goetterfels', // Region ID for terrain height
+        'Schwarze Mühle'  // Building name
+      );
+
       this.initialized = true;
       console.log('✅ Najika World initialized successfully!');
 
@@ -472,6 +482,14 @@ class WorldManager {
       if (region.underground) console.log('   🕳️ Underground');
     });
     console.log('===================================');
+  }
+
+  /**
+   * Get all interactable buildings in the world
+   * Used by 3d_scene.js for nearBuilding detection
+   */
+  getInteractableBuildings() {
+    return this.cityBuilder.getInteractableBuildings();
   }
 
   /**
