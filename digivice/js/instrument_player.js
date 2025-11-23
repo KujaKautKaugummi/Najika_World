@@ -7,6 +7,9 @@ class InstrumentPlayer {
         this.isVisible = false;
         this.currentMode = 'free'; // 'free' or 'teacher'
 
+        // 🎵 3D Animation (if available)
+        this.animator = null;
+
         // Recording
         this.isRecording = false;
         this.recordedNotes = [];
@@ -327,6 +330,11 @@ class InstrumentPlayer {
             }, 200);
         }
 
+        // 🎵 3D Animation - Play note particles
+        if (this.animator) {
+            this.animator.playNote(note.note, note.color);
+        }
+
         // Play sound
         const oscillator = this.audioContext.createOscillator();
         const gainNode = this.audioContext.createGain();
@@ -457,11 +465,30 @@ class InstrumentPlayer {
         this.isVisible = true;
         this.container.style.display = 'block';
         this.initAudio();
+
+        // 🎵 Start 3D animation
+        if (this.animator) {
+            this.animator.startPlaying('harmonica');
+        }
     }
 
     hide() {
         this.isVisible = false;
         this.container.style.display = 'none';
+
+        // 🎵 Stop 3D animation
+        if (this.animator) {
+            this.animator.stopPlaying();
+        }
+    }
+
+    /**
+     * Set 3D animator reference (called from 3d_scene.js)
+     * @param {InstrumentAnimator} animator
+     */
+    setAnimator(animator) {
+        this.animator = animator;
+        console.log('🎵 Animator connected to InstrumentPlayer');
     }
 }
 
