@@ -70,6 +70,9 @@
     // 🎲 3D Dice System
     let diceSystem3D = null;
 
+    // 🎵 Instrument Animator
+    let instrumentAnimator = null;
+
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
         leftHand: null,     // Zauber, Schild, Zweithwaffe
@@ -968,6 +971,19 @@
             diceSystem3D = new DiceSystem3D(scene, camera);
             window.diceSystem3D = diceSystem3D; // Expose globally for dice_monsters_ui.js
             console.log('🎲 3D Dice System initialized');
+        }
+
+        // 🎵 Initialize Instrument Animator
+        if (typeof InstrumentAnimator !== 'undefined' && scene) {
+            instrumentAnimator = new InstrumentAnimator(scene, characterGroup);
+            window.instrumentAnimator = instrumentAnimator; // Expose globally
+
+            // Connect to InstrumentPlayer (if loaded)
+            if (window.instrumentPlayer) {
+                window.instrumentPlayer.setAnimator(instrumentAnimator);
+            }
+
+            console.log('🎵 Instrument Animator initialized');
         }
 
         // 🏠 Initialize Housing System
@@ -3013,6 +3029,11 @@
             // 🎲 Update 3D Dice System
             if (diceSystem3D) {
                 diceSystem3D.update(delta);
+            }
+
+            // 🎵 Update Instrument Animator
+            if (instrumentAnimator) {
+                instrumentAnimator.update(delta);
             }
 
             // 🏠 Update Housing System
