@@ -43,6 +43,9 @@ class WorldManager {
     this.vegetationSystem.assetLoader = this.assetLoader;
     this.cityBuilder.assetLoader = this.assetLoader;
 
+    // 🏰 Boss Marker System
+    this.bossMarkerSystem = null;  // Initialized after scene is ready
+
     // State
     this.initialized = false;
     this.playerPosition = new THREE.Vector3(4800, 0, 4800);  // Start at Götterfels
@@ -110,6 +113,15 @@ class WorldManager {
       if (this.enableVegetationBatching) {
         console.log('🌿 Batching vegetation (instanced meshes)...');
         this.vegetationSystem.batchVegetation();
+      }
+
+      // 🏰 Initialize Boss Marker System
+      if (typeof BossMarkerSystem !== 'undefined') {
+        console.log('🏰 Initializing Boss Marker System...');
+        this.bossMarkerSystem = new BossMarkerSystem(this.scene, this);
+        await this.bossMarkerSystem.loadBossData();
+        this.bossMarkerSystem.spawnMarkers();
+        window.bossMarkerSystem = this.bossMarkerSystem; // Expose globally
       }
 
       this.initialized = true;
@@ -187,6 +199,11 @@ class WorldManager {
 
     // Update vegetation system
     this.vegetationSystem.update(this.camera.position);
+
+    // 🏰 Update Boss Marker System
+    if (this.bossMarkerSystem) {
+      this.bossMarkerSystem.update(this.playerPosition, deltaTime);
+    }
   }
 
   /**
