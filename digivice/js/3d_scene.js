@@ -73,6 +73,9 @@
     // 🎵 Instrument Animator
     let instrumentAnimator = null;
 
+    // 🌍 World HUD
+    let worldHUD = null;
+
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
         leftHand: null,     // Zauber, Schild, Zweithwaffe
@@ -984,6 +987,13 @@
             }
 
             console.log('🎵 Instrument Animator initialized');
+        }
+
+        // 🌍 Initialize World HUD
+        if (typeof WorldHUD !== 'undefined') {
+            worldHUD = new WorldHUD();
+            window.worldHUD = worldHUD; // Expose globally
+            console.log('🌍 World HUD initialized');
         }
 
         // 🏠 Initialize Housing System
@@ -3034,6 +3044,23 @@
             // 🎵 Update Instrument Animator
             if (instrumentAnimator) {
                 instrumentAnimator.update(delta);
+            }
+
+            // 🌍 Update World HUD
+            if (worldHUD && characterGroup) {
+                // Update position
+                worldHUD.updatePosition(characterGroup.position);
+
+                // Update heading (from character rotation)
+                const heading = worldHUD.calculateHeading(characterGroup.rotation.y);
+                worldHUD.updateHeading(heading);
+
+                // Auto-detect region
+                const regionInfo = worldHUD.detectRegion(characterGroup.position);
+                worldHUD.updateRegion(regionInfo.region, regionInfo.biome);
+
+                // TODO: Get time & weather from DayNightCycle/WeatherSystem
+                // For now, use static values
             }
 
             // 🏠 Update Housing System
