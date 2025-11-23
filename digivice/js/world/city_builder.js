@@ -40,6 +40,7 @@ class CityBuilder {
     this.createBlacksmithTemplate('blacksmith');
     this.createLavaDockTemplate('lava_dock');
     this.createFireproofHouseTemplate('fireproof_house');
+    this.createWindmillTemplate('windmill');  // Schwarze Mühle
 
     console.log(`🏘️ Templates initialized: ${this.buildingTemplates.size} types`);
   }
@@ -539,6 +540,91 @@ class CityBuilder {
     group.add(roof);
 
     this.buildingTemplates.set(type, { geometry: group, footprint: { width: 6, depth: 6 } });
+  }
+
+  /**
+   * Windmill Template (Schwarze Mühle)
+   */
+  createWindmillTemplate(type) {
+    const group = new THREE.Group();
+
+    // Tower (Cylinder) - Dark/Black
+    const towerGeo = new THREE.CylinderGeometry(8, 10, 40, 8);
+    const towerMat = new THREE.MeshStandardMaterial({
+      color: 0x2C2C2C,
+      roughness: 0.8
+    });
+    const tower = new THREE.Mesh(towerGeo, towerMat);
+    tower.position.y = 20;
+    tower.castShadow = true;
+    tower.receiveShadow = true;
+    group.add(tower);
+
+    // Roof (Cone) - Brown
+    const roofGeo = new THREE.ConeGeometry(12, 15, 8);
+    const roofMat = new THREE.MeshStandardMaterial({
+      color: 0x8B4513,
+      roughness: 0.9
+    });
+    const roof = new THREE.Mesh(roofGeo, roofMat);
+    roof.position.y = 47;
+    roof.castShadow = true;
+    group.add(roof);
+
+    // Windmill blades (4 blades)
+    const bladeGroup = new THREE.Group();
+    for (let i = 0; i < 4; i++) {
+      const bladeGeo = new THREE.BoxGeometry(2, 20, 1);
+      const bladeMat = new THREE.MeshStandardMaterial({
+        color: 0x654321,
+        roughness: 0.7
+      });
+      const blade = new THREE.Mesh(bladeGeo, bladeMat);
+      blade.position.y = 10 * Math.sin(i * Math.PI / 2);
+      blade.position.x = 10 * Math.cos(i * Math.PI / 2);
+      blade.rotation.z = i * Math.PI / 2;
+      blade.castShadow = true;
+      bladeGroup.add(blade);
+    }
+    bladeGroup.position.set(0, 30, 10);
+    bladeGroup.rotation.y = Math.PI / 4;
+    group.add(bladeGroup);
+
+    // Door
+    const doorGeo = new THREE.BoxGeometry(6, 12, 0.5);
+    const doorMat = new THREE.MeshStandardMaterial({
+      color: 0x4A2511,
+      roughness: 0.9
+    });
+    const door = new THREE.Mesh(doorGeo, doorMat);
+    door.position.set(0, 6, 10);
+    door.castShadow = true;
+    group.add(door);
+
+    // Windows (2, illuminated)
+    const windowGeo = new THREE.BoxGeometry(3, 4, 0.3);
+    const windowMat = new THREE.MeshStandardMaterial({
+      color: 0xFFFFAA,
+      emissive: 0x888800,
+      emissiveIntensity: 0.3
+    });
+
+    const window1 = new THREE.Mesh(windowGeo, windowMat);
+    window1.position.set(7, 25, 7);
+    window1.rotation.y = -Math.PI / 4;
+    group.add(window1);
+
+    const window2 = new THREE.Mesh(windowGeo, windowMat);
+    window2.position.set(-7, 25, 7);
+    window2.rotation.y = Math.PI / 4;
+    group.add(window2);
+
+    // Store blade group reference for animation
+    group.userData.bladeGroup = bladeGroup;
+    group.userData.buildingName = 'Schwarze Mühle';
+    group.userData.buildingRadius = 80;
+
+    this.buildingTemplates.set(type, { geometry: group, footprint: { width: 20, depth: 20 } });
   }
 
   /**

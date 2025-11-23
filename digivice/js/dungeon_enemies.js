@@ -486,17 +486,33 @@
         }
 
         performAttack(playerPosition) {
-            console.log(`⚔️ ${this.data.name} attacks! Damage: ${this.damage}`);
+            let damage = this.damage;
+            let isCrit = false;
 
-            // TODO: Damage player via API
-            // For now: Visual feedback
+            // 💥 CRIT MECHANIC: Wenn Player staggered ist, 50% Crit Chance!
+            if (window.DungeonEnemies && window.DungeonEnemies.playerIsStaggered) {
+                if (Math.random() < 0.5) {
+                    isCrit = true;
+                    console.log(`💀 ${this.data.name} CRITICAL HIT! Player is staggered!`);
+                }
+            }
+
+            console.log(`⚔️ ${this.data.name} attacks! Damage: ${damage}${isCrit ? ' (CRIT!)' : ''}`);
+
+            // Play attack animation
             if (this.animations['Attack']) {
                 this.animations['Attack'].reset().play();
             }
 
-            // Trigger damage event
+            // Damage Player via COMBAT_SYSTEM
+            if (window.Scene3D && window.Scene3D.COMBAT_SYSTEM) {
+                const actualDamage = window.Scene3D.COMBAT_SYSTEM.takeDamage(damage, isCrit);
+                console.log(`💥 Player took ${actualDamage} damage!`);
+            }
+
+            // Legacy event trigger
             if (typeof window.onEnemyAttack === 'function') {
-                window.onEnemyAttack(this.damage, this.position);
+                window.onEnemyAttack(damage, this.position, isCrit);
             }
         }
 
@@ -693,6 +709,16 @@
         clearAllEnemies,
         damageNearestEnemy,
         getLivingEnemies,
+        getActiveEnemies: () => activeEnemies,
+        damageEnemy: (enemyId, damage) => {
+            const enemy = activeEnemies.find(e => e.group && e.group.userData.enemyId === enemyId);
+            if (enemy) {
+                enemy.takeDamage(damage);
+                return true;
+            }
+            return false;
+        },
+        playerIsStaggered: false,  // Flag für CRIT Mechanic
         Enemy,
         ENEMY_TYPES,
         AI_STATE

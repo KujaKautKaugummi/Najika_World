@@ -1,0 +1,29 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Najika Voice System",
+	"Description": "Complete voice chat system with Whisper AI integration for Najika Digivice",
+	"Category": "Voice",
+	"CreatedBy": "Najika Development Team",
+	"CreatedByURL": "https://github.com/KujaKautKaugummi/Najika_World",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "NajikaVoiceSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64",
+				"Android"
+			]
+		}
+	],
+	"Plugins": []
+}

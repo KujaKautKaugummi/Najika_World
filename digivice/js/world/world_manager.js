@@ -20,7 +20,7 @@ class WorldManager {
     this.config = {
       worldSize: 9600,
       center: { x: 4800, z: 4800 },
-      dataPath: '/entwicklung/data/'
+      dataPath: '/digivice/data/'  // FIX: Changed from /entwicklung/data/
     };
 
     // Initialize subsystems
@@ -109,7 +109,7 @@ class WorldManager {
       // Apply vegetation batching
       if (this.enableVegetationBatching) {
         console.log('🌿 Batching vegetation (instanced meshes)...');
-        // TODO: Batch vegetation after generation
+        this.vegetationSystem.batchVegetation();
       }
 
       this.initialized = true;

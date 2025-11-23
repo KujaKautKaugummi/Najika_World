@@ -105,4 +105,91 @@ assets/
 
 # Savegame-Dateien (automatisch generiert beim Spielen)
 backend/saves/*.json
-backend/saves/*.json
+
+# ============================================================================
+# UNREAL ENGINE 5 SPECIFIC (OPTIONAL - added for UE5 implementation)
+# ============================================================================
+
+# Visual Studio Files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.sln.ide/
+
+# Unreal Engine Build Files
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.target.cs.backup
+
+# Unreal Engine Cache Files
+*.sln
+*.xcodeproj
+*.xcworkspace
+
+# Compiled source files (C++)
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.pdb
+*.ipdb
+*.iobj
+
+# C++ Precompiled Headers
+*.gch
+*.pch
+
+# Crashlogs
+CrashReportClient/
+
+# Android Build (UE5)
+android/
+*.apk
+*.ap_
+*.aab
+.gradle/
+local.properties
+*.iml
+.externalNativeBuild
+.cxx/
+
+# Android NDK
+obj/
+
+# Keystore (WICHTIG - niemals committen!)
+*.keystore
+*.jks
+
+# UE5 Plugins - Keep Plugin Source but Ignore Binaries
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+Plugins/*/Saved/
+
+# Project Specific (UE5)
+/Builds/
+/Packages/
+/Archives/
+*.utrace
+/Profiling/
+*.dmp
+*.mdmp
+/Backups/
+*.backup
+LocalConfig/
+*.local.ini
+
+# UE5 Large Assets (track with Git LFS wenn benötigt)
+# Bereits oben definiert, aber zur Klarheit:
+# *.uasset
+# *.umap
+# *.psd
+# *.psb
+# *.tga
+# *.exr
