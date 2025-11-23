@@ -46,5 +46,101 @@
       "concepts_learned": 0
     },
     "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-19T02:06:01.460416",
+    "session_end": "2025-11-19T02:13:08.072364",
+    "duration_minutes": 7.110199133333333,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 19,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-19T02:13:08.136364",
+    "session_end": "2025-11-19T02:20:12.541286",
+    "duration_minutes": 7.073415366666667,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-19T02:20:12.612801",
+    "session_end": "2025-11-19T02:27:20.986968",
+    "duration_minutes": 7.13956945,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-19T02:27:21.053497",
+    "session_end": "2025-11-19T02:35:12.818358",
+    "duration_minutes": 7.862747683333334,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-20T02:36:33.843732",
+    "session_end": "2025-11-20T03:01:04.808016",
+    "duration_minutes": 24.516071399999998,
+    "stats": {
+      "codes_reviewed": 21,
+      "codes_completed": 0,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-20T03:01:05.306080",
+    "session_end": "2025-11-20T03:17:38.173538",
+    "duration_minutes": 16.547790966666668,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 6,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-20T03:17:38.261483",
+    "session_end": "2025-11-20T03:25:19.590093",
+    "duration_minutes": 7.688810166666667,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2025-11-20T03:25:19.650607",
+    "session_end": "2025-11-20T03:32:57.667927",
+    "duration_minutes": 7.633622,
+    "stats": {
+      "codes_reviewed": 23,
+      "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
   }
 ]

@@ -1,0 +1,281 @@
+# ============================================================================
+# OPTIONAL: GitHub Actions Workflow for UE5 Build
+# ============================================================================
+#
+# HINWEIS: Dieser Workflow ist OPTIONAL und wurde für CI/CD vorbereitet.
+#
+# Features:
+# - Automated C++ compilation
+# - Unit test execution
+# - APK building for Android
+# - Artifact upload
+#
+# REQUIREMENTS:
+# - Self-hosted runner with UE5 installed
+# - OR GitHub Enterprise with Windows runners
+#
+# WICHTIG: Public repos haben keine Windows runners!
+# Dieser Workflow ist für self-hosted runners oder Enterprise accounts.
+#
+# ============================================================================
+
+name: UE5 Build & Test (OPTIONAL)
+
+on:
+  push:
+    branches: [main, dev, claude/*]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Manual trigger
+
+env:
+  UE5_PATH: 'C:\Program Files\Epic Games\UE_5.3'
+  PROJECT_NAME: 'NajikaDigivice'
+
+jobs:
+  # ==========================================================================
+  # JOB 1: C++ Compilation
+  # ==========================================================================
+  compile-cpp:
+    name: Compile C++ Plugins
+    runs-on: self-hosted  # Requires self-hosted runner with UE5
+    # runs-on: windows-latest  # Use this for GitHub Enterprise
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Check UE5 Installation
+        run: |
+          if (Test-Path "${{ env.UE5_PATH }}\Engine\Binaries\Win64\UnrealEditor.exe") {
+            Write-Host "✅ UE5 found at ${{ env.UE5_PATH }}"
+          } else {
+            Write-Error "❌ UE5 not found! Install UE5 or adjust UE5_PATH"
+            exit 1
+          }
+        shell: powershell
+
+      - name: Find UProject File
+        id: find-uproject
+        run: |
+          $UProjectFiles = Get-ChildItem -Recurse -Filter "*.uproject" | Select-Object -First 1
+          if ($UProjectFiles) {
+            $ProjectPath = $UProjectFiles.FullName
+            Write-Host "Found UProject: $ProjectPath"
+            echo "PROJECT_PATH=$ProjectPath" >> $env:GITHUB_ENV
+          } else {
+            Write-Error "No .uproject file found!"
+            exit 1
+          }
+        shell: powershell
+
+      - name: Generate Visual Studio Project Files
+        run: |
+          & "${{ env.UE5_PATH }}\Engine\Build\BatchFiles\Build.bat" `
+            -projectfiles `
+            -project="$env:PROJECT_PATH" `
+            -game `
+            -rocket `
+            -progress
+        shell: powershell
+
+      - name: Build C++ Plugins (Development Editor)
+        run: |
+          $SolutionFile = Get-ChildItem -Filter "*.sln" | Select-Object -First 1
+          if ($SolutionFile) {
+            msbuild $SolutionFile.FullName `
+              /p:Configuration="Development Editor" `
+              /p:Platform=Win64 `
+              /t:Build `
+              /m `
+              /v:minimal
+          } else {
+            Write-Error "No .sln file found!"
+            exit 1
+          }
+        shell: powershell
+
+      - name: Check for Build Errors
+        run: |
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Build failed with exit code $LASTEXITCODE"
+            exit 1
+          }
+          Write-Host "✅ Build succeeded!"
+        shell: powershell
+
+  # ==========================================================================
+  # JOB 2: Run Unit Tests
+  # ==========================================================================
+  run-tests:
+    name: Run Unit Tests
+    needs: compile-cpp
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run Automated Tests
+        run: |
+          & "${{ env.UE5_PATH }}\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" `
+            "$env:PROJECT_PATH" `
+            -ExecCmds="Automation RunTests Najika;Quit" `
+            -TestExit="Automation Test Queue Empty" `
+            -log `
+            -unattended `
+            -nopause `
+            -nosplash
+        shell: powershell
+        continue-on-error: true
+
+      - name: Parse Test Results
+        run: |
+          $LogFile = Get-ChildItem -Path "Saved\Logs" -Filter "*.log" -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($LogFile) {
+            $LogContent = Get-Content $LogFile.FullName
+            $FailedTests = $LogContent | Select-String "Test failed"
+            if ($FailedTests) {
+              Write-Error "❌ Some tests failed:"
+              $FailedTests | ForEach-Object { Write-Host $_ }
+              exit 1
+            } else {
+              Write-Host "✅ All tests passed!"
+            }
+          }
+        shell: powershell
+
+  # ==========================================================================
+  # JOB 3: Build Android APK (Development)
+  # ==========================================================================
+  build-android:
+    name: Build Android APK
+    needs: run-tests
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Check Android SDK
+        run: |
+          if (-not (Test-Path "$env:ANDROID_HOME")) {
+            Write-Error "ANDROID_HOME not set! Install Android SDK."
+            exit 1
+          }
+          Write-Host "✅ Android SDK found at $env:ANDROID_HOME"
+        shell: powershell
+
+      - name: Package Android APK (Development)
+        run: |
+          & "${{ env.UE5_PATH }}\Engine\Build\BatchFiles\RunUAT.bat" `
+            BuildCookRun `
+            -project="$env:PROJECT_PATH" `
+            -platform=Android `
+            -clientconfig=Development `
+            -cook `
+            -stage `
+            -package `
+            -build `
+            -pak `
+            -archive `
+            -archivedirectory="$env:GITHUB_WORKSPACE\Builds" `
+            -utf8output
+        shell: powershell
+        timeout-minutes: 90
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: NajikaDigivice-Development-APK
+          path: Builds/**/*.apk
+          retention-days: 30
+
+      - name: Get APK Info
+        run: |
+          $APKFile = Get-ChildItem -Path "Builds" -Filter "*.apk" -Recurse | Select-Object -First 1
+          if ($APKFile) {
+            $Size = [math]::Round($APKFile.Length / 1MB, 2)
+            Write-Host "📦 APK: $($APKFile.Name)"
+            Write-Host "📊 Size: $Size MB"
+            Write-Host "📅 Built: $($APKFile.LastWriteTime)"
+          }
+        shell: powershell
+
+  # ==========================================================================
+  # JOB 4: Backend Tests (Optional Backend)
+  # ==========================================================================
+  test-backend:
+    name: Test Optional Backend
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[backend]') || github.event_name == 'workflow_dispatch'
+
+    defaults:
+      run:
+        working-directory: OPTIONAL_Backend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Start Backend Server
+        run: |
+          python main.py &
+          sleep 5
+        env:
+          SECRET_KEY: test_secret_key_for_ci
+
+      - name: Test Health Endpoint
+        run: |
+          curl http://localhost:8000/api/health
+
+      - name: Run Backend Tests (if exist)
+        run: |
+          if [ -d "tests" ]; then
+            pytest tests/ -v
+          else
+            echo "No tests found, skipping..."
+          fi
+
+# ============================================================================
+# SUMMARY
+# ============================================================================
+#
+# This workflow provides:
+# - ✅ C++ compilation for UE5 plugins
+# - ✅ Automated unit test execution
+# - ✅ Android APK building
+# - ✅ Artifact upload for downloads
+# - ✅ Optional backend testing
+#
+# SETUP REQUIREMENTS:
+# 1. Self-hosted runner with:
+#    - Windows 10/11
+#    - UE5.3+ installed
+#    - Visual Studio 2022
+#    - Android SDK/NDK
+#    - Git
+#
+# 2. Add runner to repository:
+#    Settings > Actions > Runners > Add runner
+#
+# 3. Configure secrets (if needed):
+#    Settings > Secrets > Actions
+#    - ANDROID_KEYSTORE (for signing)
+#    - KEYSTORE_PASSWORD
+#
+# ============================================================================

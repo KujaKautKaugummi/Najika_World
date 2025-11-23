@@ -259,6 +259,7 @@ def get_proactive_message(current_state):
     return random.choice(messages)
 
 # ===== AUTONOME AKTIVITÄTEN =====
+# (Legacy - wird durch najika_game_actions.py erweitert)
 
 ACTIVITIES = {
     "reading": {
@@ -299,8 +300,43 @@ ACTIVITIES = {
     }
 }
 
+# ===== GAME ACTIONS INTEGRATION =====
+try:
+    from najika_game_actions import (
+        update_game_actions,
+        get_game_action_state,
+        suggest_actions,
+        decide_next_action,
+        start_action,
+        check_action_completion,
+        teleport_to_location,
+        get_current_location,
+        LOCATIONS
+    )
+    GAME_ACTIONS_AVAILABLE = True
+except ImportError:
+    GAME_ACTIONS_AVAILABLE = False
+    print("⚠️ najika_game_actions.py nicht gefunden - Game Actions deaktiviert")
+
 def start_autonomous_activity(current_state, najika_stats):
-    """Startet eine autonome Aktivität"""
+    """
+    Startet eine autonome Aktivität
+
+    Nutzt Game Actions System wenn verfügbar, sonst Legacy Activities
+    """
+
+    # Game Actions System verfügbar? → Nutze das!
+    if GAME_ACTIONS_AVAILABLE:
+        # Entscheide nächste Aktion basierend auf Bedürfnissen
+        next_action = decide_next_action(current_state, najika_stats)
+
+        if next_action:
+            result = start_action(next_action)
+            return result.get("message", "Ich mache was...")
+
+        return None
+
+    # Legacy Activity System
     # Prüfe ob bereits aktiv
     if current_state.get("current_activity"):
         return None
@@ -327,7 +363,27 @@ def start_autonomous_activity(current_state, najika_stats):
     return activity["message"]
 
 def check_activity_completion(current_state, najika_stats):
-    """Prüft ob Aktivität abgeschlossen ist"""
+    """
+    Prüft ob Aktivität abgeschlossen ist
+
+    Nutzt Game Actions System wenn verfügbar, sonst Legacy Activities
+    """
+
+    # Game Actions System verfügbar? → Nutze das!
+    if GAME_ACTIONS_AVAILABLE:
+        completion = check_action_completion()
+
+        if completion and completion.get("completed"):
+            # Stat Changes anwenden
+            if "stat_changes" in completion:
+                from najika_game_actions import apply_stat_changes
+                apply_stat_changes(current_state, najika_stats, completion["stat_changes"])
+
+            return completion.get("message", "Fertig! ✨")
+
+        return None
+
+    # Legacy Activity System
     activity_name = current_state.get("current_activity")
     if not activity_name:
         return None
@@ -908,13 +964,20 @@ def set_control_mode(current_state, mode="ai", player_online=False):
 
 # ===== HAUPT-UPDATE-FUNKTION =====
 
-def update_living_system(current_state):
-    """Haupt-Update: Needs, Auto-Care, Unfälle"""
+def update_living_system(current_state, player_state=None):
+    """
+    Haupt-Update: Needs, Auto-Care, Unfälle, Game Actions
+
+    Args:
+        current_state: Living State
+        player_state: Optional Player State (für Game Actions)
+    """
     results = {
         "needs_updated": False,
         "auto_care_actions": [],
         "accidents": [],
-        "warnings": []
+        "warnings": [],
+        "game_actions": None  # NEU
     }
 
     # 1. Update Needs über Zeit
@@ -931,7 +994,12 @@ def update_living_system(current_state):
     if accident:
         results["accidents"].append(accident)
 
-    # 4. Warnings generieren
+    # 4. Update Game Actions (NEU!)
+    if GAME_ACTIONS_AVAILABLE and player_state:
+        game_action_result = update_game_actions(current_state, player_state)
+        results["game_actions"] = game_action_result
+
+    # 5. Warnings generieren
     if current_state["hunger"] < 20:
         results["warnings"].append("⚠️ Hunger kritisch!")
     if current_state["energy"] < 20:

@@ -50,7 +50,8 @@ class NajikaVoiceCall:
         }
 
         print("[VOICE CALL] Initialisiere Voice Call System...")
-        self._load_whisper_model()
+        # Whisper Model wird LAZY geladen (erst beim ersten Call)
+        # # self._load_whisper_model()  # DISABLED: Blocks server start!  # DEAKTIVIERT: Blockiert Server-Start!
 
     def _load_whisper_model(self):
         """Lädt Whisper Model (lazy loading)"""
@@ -239,7 +240,7 @@ class NajikaVoiceCall:
 
         self.whisper_model_name = model_name
         self.whisper_model = None  # Force reload
-        self._load_whisper_model()
+        # self._load_whisper_model()  # DISABLED: Blocks server start!
 
         return {
             "status": "model_changed",

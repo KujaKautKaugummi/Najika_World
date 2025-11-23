@@ -1,0 +1,132 @@
+# ============================================================================
+# NAJIKA BACKEND REQUIREMENTS
+# Python dependencies for the consolidated backend API
+# ============================================================================
+
+# Core Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.25
+alembic==1.13.1  # Database migrations
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0  # JWT tokens
+bcrypt==4.1.2  # Password hashing
+python-multipart==0.0.6  # Form data
+
+# WebSocket
+websockets==12.0
+
+# HTTP Client (for external APIs)
+httpx==0.26.0
+requests==2.31.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# ============================================================================
+# AI & MACHINE LEARNING
+# ============================================================================
+
+# Training
+torch==2.1.2
+transformers==4.37.0
+datasets==2.16.1
+accelerate==0.26.1
+bitsandbytes==0.42.0
+
+# LoRA Training
+peft==0.8.2
+trl==0.7.10
+
+# Unsloth (if available)
+# unsloth @ git+https://github.com/unslothai/unsloth.git
+
+# Vector Database
+chromadb==0.4.22
+sentence-transformers==2.3.1
+
+# ============================================================================
+# VOICE & AUDIO
+# ============================================================================
+
+# Speech-to-Text (Whisper AI)
+openai-whisper==20231117
+# OR faster-whisper (optional)
+# faster-whisper==0.10.0
+
+# Text-to-Speech
+edge-tts==6.1.9  # Edge TTS
+# coqui-tts==0.21.0  # Coqui TTS (alternative)
+
+# Audio Processing
+pydub==0.25.1
+librosa==0.10.1
+soundfile==0.12.1
+numpy==1.26.3
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+# Data Processing
+pandas==2.1.4
+pillow==10.2.0
+
+# PDF Processing
+PyPDF2==3.0.1
+pdfplumber==0.10.3
+
+# Progress Bars
+tqdm==4.66.1
+
+# Async Tasks (optional - for background jobs)
+celery==5.3.6
+redis==5.0.1
+
+# ============================================================================
+# DEVELOPMENT TOOLS (Optional)
+# ============================================================================
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0  # For testing async endpoints
+
+# Code Quality
+black==24.1.1  # Code formatter
+flake8==7.0.0  # Linter
+mypy==1.8.0  # Type checking
+
+# ============================================================================
+# PRODUCTION (Optional)
+# ============================================================================
+
+# Gunicorn (WSGI server for production)
+gunicorn==21.2.0
+
+# Monitoring
+# sentry-sdk==1.39.2  # Error tracking
+
+# ============================================================================
+# NOTES
+# ============================================================================
+#
+# Install all dependencies:
+#   pip install -r requirements.txt
+#
+# Install only core dependencies (minimal):
+#   pip install fastapi uvicorn sqlalchemy python-jose bcrypt python-dotenv
+#
+# Install with GPU support (PyTorch):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu118
+#
+# For development:
+#   pip install -r requirements.txt
+#   pip install pytest black flake8
+#
+# ============================================================================

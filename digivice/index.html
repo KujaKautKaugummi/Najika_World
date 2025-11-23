@@ -428,6 +428,17 @@ input {
             <button id="webcamBtn" class="cloud-btn">Webcam</button>
             <button id="cloud" class="cloud-btn" style="display:none">Cloud aktivieren</button>
             <button id="voiceCallBtn" class="cloud-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); font-weight: bold;">📞 Voice Call</button>
+
+            <!-- Game System Buttons -->
+            <button onclick="window.cardGameUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #667eea, #764ba2); font-weight: bold;">🃏 Card Game</button>
+            <button onclick="window.diceMonstersUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #f39c12, #d68910); font-weight: bold;">🎲 Dice Monsters</button>
+            <button onclick="window.regionBossUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #e74c3c, #c0392b); font-weight: bold;">🏰 Region Boss</button>
+            <button onclick="window.oregonEventsUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #f39c12, #e67e22); font-weight: bold;">🛤️ Oregon Trail</button>
+            <button onclick="window.magicSchoolsUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); font-weight: bold;">✨ Magic</button>
+            <button onclick="window.instrumentPlayer?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #3498db, #2980b9); font-weight: bold;">🎵 Instruments</button>
+            <button onclick="window.worldInfoUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #16a085, #1abc9c); font-weight: bold;">🌍 World Info</button>
+            <button onclick="window.worldMapUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #2c3e50, #34495e); font-weight: bold;">🗺️ World Map</button>
+            <button onclick="window.housingUI?.show()" class="cloud-btn" style="background: linear-gradient(135deg, #27ae60, #229954); font-weight: bold;">🏠 Housing & Farm</button>
         </div>
     </header>
 
@@ -744,11 +755,9 @@ if (cameraButtons[2]) cameraButtons[2].addEventListener('click', () => applyCame
 // World Mode Toggle
 const worldModeToggle = document.getElementById('worldModeToggle');
 if (worldModeToggle) {
-    worldModeToggle.addEventListener('click', () => {
-        if (window.worldModeManager) {
-            const newMode = window.worldModeManager.currentMode === 'digivice' ? 'openworld' : 'digivice';
-            window.worldModeManager.switchMode(newMode);
-        }
+    worldModeToggle.addEventListener("click", () => {
+        // Open the CORRECT 9-region world with World Manager and Götterfels
+        window.open("/digivice/najika_world_9regions_test.html", "_blank", "width=1400,height=900");
     });
 }
 
@@ -2359,12 +2368,55 @@ async function updateSkillsPanel() {
 }
 </script>
 
+<!-- 🌍 World System (ES6 Modules) - Load BEFORE 3d_scene.js -->
+<script type="module">
+    // Import World Manager and expose globally
+    import WorldManager from '/digivice/js/world/world_manager.js?v=1';
+    import DayNightCycle from '/digivice/js/world/day_night_cycle.js?v=1';
+    import WeatherSystem from '/digivice/js/world/weather_system.js?v=1';
+
+    // Expose to global scope for 3d_scene.js
+    window.WorldManager = WorldManager;
+    window.DayNightCycle = DayNightCycle;
+    window.WeatherSystem = WeatherSystem;
+
+    console.log('🌍 World System modules loaded and exposed globally');
+</script>
+
 <script src="/digivice/js/fishing.js"></script>
 <script src="/digivice/js/garden.js?v=23"></script>
+<script src="/digivice/js/housing_3d.js?v=1"></script>
+<script src="/digivice/js/farming_3d.js?v=1"></script>
 <script src="/digivice/js/buildings_custom.js?v=25"></script>
 <script src="/digivice/js/character_animations.js?v=26"></script>
-<script src="/digivice/js/3d_scene.js?v=33"></script>
+<script src="/digivice/static/js/skill_system.js"></script>
+<script src="/digivice/static/js/inventory_system.js"></script>
+<script src="/digivice/static/js/quest_system.js"></script>
+<script src="/digivice/static/js/npc_system.js"></script>
+<script src="/digivice/static/js/crafting_system.js"></script>
+<script src="/digivice/js/3d_scene.js?v=34"></script>
+<script src="/digivice/js/ui/game_systems_ui.js"></script>
+<script src="/digivice/js/ui/card_game_ui.js"></script>
+<script src="/digivice/js/ui/dice_monsters_ui.js"></script>
+<script src="/digivice/js/ui/housing_ui.js"></script>
+<script src="/digivice/js/ui/world_map_ui.js"></script>
 <script src="/digivice/js/voice_call.js?v=1"></script>
+<script src="/digivice/js/instrument_player.js"></script>
+
+<script>
+// Initialize Game System UIs
+window.addEventListener('load', () => {
+    window.regionBossUI = new RegionBossUI();
+    window.oregonEventsUI = new OregonEventsUI();
+    window.magicSchoolsUI = new MagicSchoolsUI();
+    window.instrumentPlayer = new InstrumentUI();
+    window.worldInfoUI = new WorldInfoUI();
+    window.cardGameUI = new CardGameUI();
+    window.diceMonstersUI = new DiceMonstersUI();
+
+    console.log('✅ All Game System UIs initialized!');
+});
+</script>
 
 </body>
 </html>

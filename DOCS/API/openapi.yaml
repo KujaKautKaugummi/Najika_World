@@ -1,0 +1,1657 @@
+openapi: 3.0.3
+info:
+  title: Najika World Complete API
+  description: |
+    Complete backend API for Najika World ecosystem.
+
+    ## Features
+    - 🔐 JWT Authentication & Security
+    - 🎮 Game Systems (Combat, Inventory, Quests, Progression)
+    - 🤖 AI Training (LoRA, Sessions, Code, Voice, Personality)
+    - 🎤 Voice (Whisper AI, Edge TTS, WebSocket Streaming)
+    - 👥 Multiplayer (Real-time WebSocket, Rooms, Player Sync)
+    - ⚙️ Admin (User Management, System Monitoring, Logs)
+    - 📊 Analytics & Monitoring (User tracking, Performance)
+    - 🔒 Security (Encryption, TOR Integration)
+
+    ## Base URL
+    - Development: `http://localhost:8000`
+    - Production: `https://api.najika.world`
+
+    ## Authentication
+    Most endpoints require JWT Bearer token authentication.
+    Obtain a token via `/api/auth/login` or `/api/auth/register`.
+
+  version: 5.0.0
+  contact:
+    name: Najika World Development Team
+    url: https://najika.world
+    email: support@najika.world
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.najika.world
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication and JWT token management
+  - name: Users
+    description: User management and profile operations
+  - name: Game
+    description: Game systems (combat, inventory, quests, progression)
+  - name: Training
+    description: AI training job management and monitoring
+  - name: Voice
+    description: Voice chat, speech-to-text, and text-to-speech
+  - name: Multiplayer
+    description: Real-time multiplayer functionality
+  - name: Admin
+    description: Admin-only endpoints for system management
+  - name: System
+    description: System health, monitoring, and logs
+  - name: Analytics
+    description: Analytics and user tracking
+  - name: Security
+    description: Security and encryption utilities
+
+paths:
+  # ============================================================================
+  # AUTHENTICATION
+  # ============================================================================
+  /api/auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register new user
+      description: Create a new user account with username and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: testuser
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: SecurePass123!
+                email:
+                  type: string
+                  format: email
+                  example: test@example.com
+                display_name:
+                  type: string
+                  example: Test User
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Invalid input or username already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login with credentials
+      description: Authenticate and receive JWT access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  example: testuser
+                password:
+                  type: string
+                  format: password
+                  example: SecurePass123!
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/me:
+    get:
+      tags: [Authentication]
+      summary: Get current user info
+      description: Retrieve authenticated user's profile information
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /api/auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      description: Obtain a new access token using refresh token
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: bearer
+
+  /api/auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout user
+      description: Invalidate current session
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Logged out successfully
+
+  # ============================================================================
+  # USERS
+  # ============================================================================
+  /api/users:
+    get:
+      tags: [Users, Admin]
+      summary: List all users (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 1000
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /api/users/{user_id}:
+    get:
+      tags: [Users]
+      summary: Get user by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    patch:
+      tags: [Users, Admin]
+      summary: Update user (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                display_name:
+                  type: string
+                is_admin:
+                  type: boolean
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags: [Users, Admin]
+      summary: Delete user (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User deleted
+
+  /api/users/{user_id}/activate:
+    post:
+      tags: [Users, Admin]
+      summary: Activate user account (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User activated
+
+  /api/users/{user_id}/deactivate:
+    post:
+      tags: [Users, Admin]
+      summary: Deactivate user account (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deactivated
+
+  # ============================================================================
+  # GAME
+  # ============================================================================
+  /api/game/character/create:
+    post:
+      tags: [Game]
+      summary: Create new character
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  example: MyDigimon
+                species:
+                  type: string
+                  example: Jellysquish
+                  default: Jellysquish
+                nickname:
+                  type: string
+                  example: Jelly
+      responses:
+        '200':
+          description: Character created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+
+  /api/game/character:
+    get:
+      tags: [Game]
+      summary: Get user's character
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Character data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+
+    patch:
+      tags: [Game]
+      summary: Update character
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                position:
+                  type: object
+                rotation:
+                  type: object
+      responses:
+        '200':
+          description: Character updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+
+  /api/game/combat/action:
+    post:
+      tags: [Game]
+      summary: Execute combat action
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action:
+                  type: string
+                  enum: [attack, dodge, block, parry, skill, item]
+                enemy_id:
+                  type: string
+                skill_id:
+                  type: string
+                item_id:
+                  type: string
+      responses:
+        '200':
+          description: Combat result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CombatResult'
+
+  /api/game/inventory:
+    get:
+      tags: [Game]
+      summary: Get inventory
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Inventory items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryItem'
+                  capacity:
+                    type: integer
+                  weight:
+                    type: number
+
+  /api/game/inventory/use:
+    post:
+      tags: [Game]
+      summary: Use inventory item
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [item_id]
+              properties:
+                item_id:
+                  type: string
+                quantity:
+                  type: integer
+                  default: 1
+      responses:
+        '200':
+          description: Item used
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  effect:
+                    type: string
+
+  /api/game/quests:
+    get:
+      tags: [Game]
+      summary: Get active quests
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of quests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Quest'
+
+  /api/game/quests/{quest_id}/complete:
+    post:
+      tags: [Game]
+      summary: Complete quest
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: quest_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Quest completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  rewards:
+                    type: object
+                  xp_gained:
+                    type: integer
+
+  # ============================================================================
+  # TRAINING
+  # ============================================================================
+  /api/training/jobs:
+    get:
+      tags: [Training]
+      summary: List training jobs
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status_filter
+          in: query
+          schema:
+            type: string
+            enum: [pending, queued, running, completed, failed, cancelled]
+        - name: type_filter
+          in: query
+          schema:
+            type: string
+            enum: [text, image, voice, custom]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: List of training jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingJob'
+
+    post:
+      tags: [Training]
+      summary: Create training job
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [job_name, training_type]
+              properties:
+                job_name:
+                  type: string
+                  example: LoRA Training - Weekly
+                training_type:
+                  type: string
+                  enum: [text, image, voice, custom]
+                dataset_id:
+                  type: integer
+                base_model:
+                  type: string
+                description:
+                  type: string
+                priority:
+                  type: string
+                  enum: [low, normal, high]
+                  default: normal
+                config:
+                  type: object
+                  properties:
+                    epochs:
+                      type: integer
+                      default: 10
+                    batch_size:
+                      type: integer
+                      default: 8
+                    learning_rate:
+                      type: number
+                      default: 0.001
+                    auto_save:
+                      type: boolean
+                      default: true
+                    notify_complete:
+                      type: boolean
+                      default: true
+      responses:
+        '201':
+          description: Job created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingJob'
+
+  /api/training/jobs/{job_id}:
+    get:
+      tags: [Training]
+      summary: Get training job details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingJob'
+
+    delete:
+      tags: [Training]
+      summary: Delete training job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Job deleted
+
+  /api/training/jobs/{job_id}/start:
+    post:
+      tags: [Training]
+      summary: Start training job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /api/training/jobs/{job_id}/pause:
+    post:
+      tags: [Training]
+      summary: Pause training job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job paused
+
+  /api/training/jobs/{job_id}/cancel:
+    post:
+      tags: [Training]
+      summary: Cancel training job
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job cancelled
+
+  /api/training/models:
+    get:
+      tags: [Training]
+      summary: List trained models
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of models
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainedModel'
+
+  /api/training/models/{model_id}:
+    get:
+      tags: [Training]
+      summary: Get model details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Model details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainedModel'
+
+    delete:
+      tags: [Training]
+      summary: Delete model
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Model deleted
+
+  /api/training/models/{model_id}/download:
+    get:
+      tags: [Training]
+      summary: Download trained model
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Model file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  /api/training/datasets:
+    get:
+      tags: [Training]
+      summary: List datasets
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of datasets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+
+    post:
+      tags: [Training]
+      summary: Upload dataset
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, name, type]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [text, image, voice]
+      responses:
+        '201':
+          description: Dataset uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+
+  /api/training/datasets/{dataset_id}:
+    get:
+      tags: [Training]
+      summary: Get dataset details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dataset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+
+    delete:
+      tags: [Training]
+      summary: Delete dataset
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Dataset deleted
+
+  /api/training/activity:
+    get:
+      tags: [Training]
+      summary: Get recent training activity
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Recent activity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      format: date-time
+                    message:
+                      type: string
+                    type:
+                      type: string
+
+  # ============================================================================
+  # VOICE
+  # ============================================================================
+  /api/voice/transcribe:
+    post:
+      tags: [Voice]
+      summary: Transcribe audio (Whisper AI)
+      description: Convert audio to text using OpenAI Whisper
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [audio_base64]
+              properties:
+                audio_base64:
+                  type: string
+                  description: Base64 encoded audio (WAV/MP3)
+                audio_format:
+                  type: string
+                  enum: [wav, mp3, ogg]
+                  default: wav
+                language:
+                  type: string
+                  example: en
+      responses:
+        '200':
+          description: Transcription result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  text:
+                    type: string
+                    example: Hello, this is a test.
+                  language:
+                    type: string
+                    example: en
+                  confidence:
+                    type: number
+
+  /api/voice/tts:
+    post:
+      tags: [Voice]
+      summary: Text-to-Speech (Edge TTS)
+      description: Convert text to speech audio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                  example: EXPLOSION!
+                language:
+                  type: string
+                  enum: [en, de, ja, es, fr]
+                  default: en
+                voice:
+                  type: string
+                  example: en-US-JennyNeural
+                rate:
+                  type: string
+                  example: "+0%"
+                personality:
+                  type: string
+                  enum: [megumin, aqua, darkness, kazuma]
+      responses:
+        '200':
+          description: Generated audio
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  audio_base64:
+                    type: string
+                  format:
+                    type: string
+                    example: mp3
+                  cached:
+                    type: boolean
+
+  # ============================================================================
+  # MULTIPLAYER
+  # ============================================================================
+  /api/multiplayer/stats:
+    get:
+      tags: [Multiplayer]
+      summary: Get multiplayer server stats
+      responses:
+        '200':
+          description: Server statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_players:
+                    type: integer
+                  active_rooms:
+                    type: integer
+                  total_messages:
+                    type: integer
+
+  /api/multiplayer/rooms:
+    get:
+      tags: [Multiplayer]
+      summary: Get list of active rooms
+      responses:
+        '200':
+          description: Active rooms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rooms:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                  total_players:
+                    type: integer
+
+  /api/multiplayer/rooms/{room_id}:
+    get:
+      tags: [Multiplayer]
+      summary: Get room information
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Room information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_id:
+                    type: string
+                  player_count:
+                    type: integer
+                  max_players:
+                    type: integer
+                  is_full:
+                    type: boolean
+
+  # ============================================================================
+  # SYSTEM
+  # ============================================================================
+  /api/system/health:
+    get:
+      tags: [System]
+      summary: Get system health status
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded, unhealthy]
+                  version:
+                    type: string
+                  cpu_usage:
+                    type: number
+                  memory_usage:
+                    type: number
+                  disk_usage:
+                    type: number
+                  database_connected:
+                    type: boolean
+                  uptime:
+                    type: number
+
+  /api/system/gpu:
+    get:
+      tags: [System]
+      summary: Get GPU metrics
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: GPU information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: boolean
+                  name:
+                    type: string
+                  devices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        utilization:
+                          type: number
+                        memory_used:
+                          type: number
+                        memory_total:
+                          type: number
+                        temperature:
+                          type: number
+
+  /api/system/logs:
+    get:
+      tags: [System, Admin]
+      summary: Get system logs (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: level
+          in: query
+          schema:
+            type: string
+            enum: [INFO, WARNING, ERROR, CRITICAL]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: System logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      format: date-time
+                    level:
+                      type: string
+                    message:
+                      type: string
+
+  /api/system/settings:
+    get:
+      tags: [System, Admin]
+      summary: Get system settings (Admin only)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: System settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemSettings'
+
+    put:
+      tags: [System, Admin]
+      summary: Update system settings (Admin only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemSettings'
+      responses:
+        '200':
+          description: Settings updated
+
+  # ============================================================================
+  # ADMIN
+  # ============================================================================
+  /api/admin/stats:
+    get:
+      tags: [Admin]
+      summary: Get admin statistics
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: System statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_users:
+                    type: integer
+                  active_users:
+                    type: integer
+                  total_characters:
+                    type: integer
+                  total_training_jobs:
+                    type: integer
+                  running_training_jobs:
+                    type: integer
+                  total_quests_completed:
+                    type: integer
+
+  # ============================================================================
+  # ANALYTICS
+  # ============================================================================
+  /api/analytics/track:
+    post:
+      tags: [Analytics]
+      summary: Track user event
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [event_type]
+              properties:
+                event_type:
+                  type: string
+                  example: page_view
+                event_data:
+                  type: object
+                metadata:
+                  type: object
+      responses:
+        '200':
+          description: Event tracked
+
+  /api/analytics/user/{user_id}:
+    get:
+      tags: [Analytics, Admin]
+      summary: Get user analytics (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: User analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_events:
+                    type: integer
+                  session_count:
+                    type: integer
+                  avg_session_duration:
+                    type: number
+                  events:
+                    type: array
+                    items:
+                      type: object
+
+  /api/analytics/game:
+    get:
+      tags: [Analytics, Admin]
+      summary: Get game analytics (Admin only)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: metric
+          in: query
+          schema:
+            type: string
+            enum: [combat, quests, items, players]
+      responses:
+        '200':
+          description: Game analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metric:
+                    type: string
+                  data:
+                    type: object
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token authentication
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    # ============================================================================
+    # CORE SCHEMAS
+    # ============================================================================
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: testuser
+        email:
+          type: string
+          format: email
+          example: test@example.com
+        display_name:
+          type: string
+          example: Test User
+        is_admin:
+          type: boolean
+          example: false
+        is_active:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+        last_login:
+          type: string
+          format: date-time
+
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        token_type:
+          type: string
+          example: bearer
+        user_id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: testuser
+        display_name:
+          type: string
+          example: Test User
+        expires_in:
+          type: integer
+          example: 3600
+
+    # ============================================================================
+    # GAME SCHEMAS
+    # ============================================================================
+    Character:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        species:
+          type: string
+        level:
+          type: integer
+          example: 5
+        experience:
+          type: integer
+          example: 1234
+        stats:
+          type: object
+          properties:
+            health:
+              type: number
+            max_health:
+              type: number
+            mana:
+              type: number
+            max_mana:
+              type: number
+            attack:
+              type: number
+            defense:
+              type: number
+            speed:
+              type: number
+        position:
+          type: object
+          properties:
+            x:
+              type: number
+            y:
+              type: number
+            z:
+              type: number
+        rotation:
+          type: object
+          properties:
+            x:
+              type: number
+            y:
+              type: number
+            z:
+              type: number
+        status:
+          type: object
+          properties:
+            is_alive:
+              type: boolean
+            in_combat:
+              type: boolean
+            effects:
+              type: array
+              items:
+                type: string
+
+    CombatResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        action:
+          type: string
+        damage:
+          type: integer
+        player_health:
+          type: number
+        player_max_health:
+          type: number
+        enemy_health:
+          type: number
+        enemy_max_health:
+          type: number
+        message:
+          type: string
+        loot:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+        xp_gained:
+          type: integer
+        level_up:
+          type: boolean
+
+    InventoryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        item_id:
+          type: string
+        item_type:
+          type: string
+          enum: [weapon, armor, consumable, material, quest]
+        name:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+        quality:
+          type: number
+          minimum: 0
+          maximum: 100
+        rarity:
+          type: string
+          enum: [common, uncommon, rare, epic, legendary]
+        stats:
+          type: object
+
+    Quest:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        quest_type:
+          type: string
+          enum: [main, side, daily, event]
+        status:
+          type: string
+          enum: [active, completed, failed]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        objectives:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+              completed:
+                type: boolean
+        rewards:
+          type: object
+          properties:
+            xp:
+              type: integer
+            gold:
+              type: integer
+            items:
+              type: array
+              items:
+                type: string
+
+    # ============================================================================
+    # TRAINING SCHEMAS
+    # ============================================================================
+    TrainingJob:
+      type: object
+      properties:
+        id:
+          type: integer
+        job_name:
+          type: string
+        training_type:
+          type: string
+          enum: [text, image, voice, custom]
+        status:
+          type: string
+          enum: [pending, queued, running, completed, failed, cancelled]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 100
+        current_epoch:
+          type: integer
+        total_epochs:
+          type: integer
+        current_loss:
+          type: number
+        accuracy:
+          type: number
+        learning_rate:
+          type: number
+        dataset_id:
+          type: integer
+        base_model:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+          enum: [low, normal, high]
+        config:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        error:
+          type: string
+        logs:
+          type: string
+
+    TrainedModel:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
+        size:
+          type: integer
+          description: Size in bytes
+        accuracy:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+        job_id:
+          type: integer
+        file_path:
+          type: string
+
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [text, image, voice]
+        size:
+          type: integer
+          description: Size in bytes
+        samples:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        file_path:
+          type: string
+
+    # ============================================================================
+    # SYSTEM SCHEMAS
+    # ============================================================================
+    SystemSettings:
+      type: object
+      properties:
+        enable_registration:
+          type: boolean
+          default: true
+        enable_voice:
+          type: boolean
+          default: true
+        enable_training:
+          type: boolean
+          default: true
+        max_training_jobs:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+        maintenance_mode:
+          type: boolean
+          default: false
