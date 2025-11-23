@@ -11,8 +11,8 @@
 class DiceMonstersUI {
     constructor() {
         this.apiBase = {
-            dice: '/api/dice',
-            duel: '/api/dice-duel'
+            dice: 'http://localhost:8000/api/dice',
+            duel: 'http://localhost:8000/api/dice-duel'
         };
 
         this.playerId = 1; // TODO: Get from session

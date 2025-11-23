@@ -2,7 +2,7 @@
 (function() {
     const HOUSING_CONFIG = {
         // API Endpoint
-        apiBaseUrl: '/api/housing',
+        apiBaseUrl: 'http://localhost:8000/api/housing',
 
         // House Positions in World (Schwarze Mühle Housing District)
         housePositions: {

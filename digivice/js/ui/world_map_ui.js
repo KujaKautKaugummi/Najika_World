@@ -6,7 +6,7 @@
 
 class WorldMapUI {
     constructor() {
-        this.apiBase = '/api/world-map';
+        this.apiBase = 'http://localhost:8000/api/world-map';
         this.playerId = 1; // TODO: Get from session
 
         // Map state

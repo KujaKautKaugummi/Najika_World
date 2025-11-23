@@ -17,7 +17,7 @@
 
 class PvPUI {
   constructor() {
-    this.apiBase = '/api/pvp';
+    this.apiBase = 'http://localhost:8000/api/pvp';
     this.currentBattle = null;
     this.playerInventory = [];
 

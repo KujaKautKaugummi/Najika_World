@@ -2,7 +2,7 @@
 (function() {
     const FARMING_CONFIG = {
         // API Endpoint
-        apiBaseUrl: '/api/farming',
+        apiBaseUrl: 'http://localhost:8000/api/farming',
 
         // Farm Area in World (Near Schwarze Mühle)
         farmAreaCenter: [550, 0, 600],
