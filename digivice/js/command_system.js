@@ -247,7 +247,7 @@ class CommandSystem {
   async praise(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('/api/najika/praise', {
+      const response = await fetch('http://localhost:8000/api/najika/praise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -312,7 +312,7 @@ class CommandSystem {
   async scold(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('/api/najika/scold', {
+      const response = await fetch('http://localhost:8000/api/najika/scold', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -420,7 +420,7 @@ class CommandSystem {
   // Sync happiness/discipline from server
   async syncFromServer() {
     try {
-      const response = await fetch('/api/status');
+      const response = await fetch('http://localhost:8000/api/status');
       const data = await response.json();
       if (data.najika) {
         this.happiness = data.najika.happiness || 50;

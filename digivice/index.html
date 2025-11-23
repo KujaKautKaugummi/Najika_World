@@ -691,7 +691,7 @@ async function api(path, method = 'GET', body) {
 }
 
 async function cloudStatus() {
-    return api('/api/cloud/status');
+    return api('http://localhost:8000/api/cloud/status');
 }
 
 async function toggleCloud() {
@@ -700,9 +700,9 @@ async function toggleCloud() {
         if (!info.enabled) {
             const pin = prompt('PIN eingeben:');
             if (!pin) return;
-            await api('/api/cloud/enable', 'POST', {pin});
+            await api('http://localhost:8000/api/cloud/enable', 'POST', {pin});
         } else {
-            await api('/api/cloud/disable', 'POST');
+            await api('http://localhost:8000/api/cloud/disable', 'POST');
         }
     } catch (error) {
         console.warn('Cloud-Umschaltung fehlgeschlagen.', error);
@@ -814,7 +814,7 @@ async function handleAction(room, action) {
     switch (action) {
         case 'Füttern':
             try {
-                const r = await api('/api/najika/feed', 'POST', {});
+                const r = await api('http://localhost:8000/api/najika/feed', 'POST', {});
                 notify(r.msg || 'Najika wurde gefüttert!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -823,7 +823,7 @@ async function handleAction(room, action) {
             break;
         case 'Trinken':
             try {
-                const r = await api('/api/najika/drink', 'POST', {});
+                const r = await api('http://localhost:8000/api/najika/drink', 'POST', {});
                 notify(r.msg || 'Najika hat getrunken! 💧', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -835,7 +835,7 @@ async function handleAction(room, action) {
             break;
         case 'Schlafen':
             try {
-                const r = await api('/api/najika/sleep', 'POST', {});
+                const r = await api('http://localhost:8000/api/najika/sleep', 'POST', {});
                 notify(r.msg || 'Najika hat gut geschlafen!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -857,7 +857,7 @@ async function handleAction(room, action) {
             break;
         case 'Waschen':
             try {
-                const r = await api('/api/najika/wash', 'POST', {});
+                const r = await api('http://localhost:8000/api/najika/wash', 'POST', {});
                 notify(r.msg || 'Najika ist jetzt sauber!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -866,7 +866,7 @@ async function handleAction(room, action) {
             break;
         case 'Gießen':
             try {
-                await api('/api/minigame/garden', 'POST', {mode: 'water'});
+                await api('http://localhost:8000/api/minigame/garden', 'POST', {mode: 'water'});
             } catch (error) {
                 console.warn('Gießen offline.', error);
             }
@@ -880,7 +880,7 @@ async function handleAction(room, action) {
                 MiniGames.open('garden');
             } else {
                 try {
-                    const gg = await api('/api/minigame/garden', 'POST', {});
+                    const gg = await api('http://localhost:8000/api/minigame/garden', 'POST', {});
                     notify('Garten-Spiel Score: ' + (gg?.result?.score ?? 0));
                 } catch (error) {
                     notify('Garten-Spiel nicht verfügbar.');
@@ -889,7 +889,7 @@ async function handleAction(room, action) {
             break;
         case 'Rhythmus-Spiel':
             try {
-                const r = await api('/api/najika/train', 'POST', {stat: 'charisma'});
+                const r = await api('http://localhost:8000/api/najika/train', 'POST', {stat: 'charisma'});
                 notify(r.msg || 'Rhythmus-Training abgeschlossen!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -898,7 +898,7 @@ async function handleAction(room, action) {
             break;
         case 'Heilen':
             try {
-                const h = await api('/api/heal', 'POST', {});
+                const h = await api('http://localhost:8000/api/heal', 'POST', {});
                 notify('Geheilt! HP: ' + h.hp);
                 updateBattleHUD({hp: h.hp, max_hp: 100});
             } catch (error) {
@@ -918,7 +918,7 @@ async function handleAction(room, action) {
             break;
         case 'Studieren':
             try {
-                const r = await api('/api/najika/train', 'POST', {stat: 'intelligence'});
+                const r = await api('http://localhost:8000/api/najika/train', 'POST', {stat: 'intelligence'});
                 notify(r.msg || 'Studieren abgeschlossen!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -927,7 +927,7 @@ async function handleAction(room, action) {
             break;
         case 'Crafting':
             try {
-                const r = await api('/api/najika/train', 'POST', {stat: 'dexterity'});
+                const r = await api('http://localhost:8000/api/najika/train', 'POST', {stat: 'dexterity'});
                 notify(r.msg || 'Crafting abgeschlossen!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -939,7 +939,7 @@ async function handleAction(room, action) {
                 MiniGames.open('reflex');
             } else {
                 try {
-                    const rx = await api('/api/minigame/reflex', 'POST', {});
+                    const rx = await api('http://localhost:8000/api/minigame/reflex', 'POST', {});
                     notify('Reflex-Spiel Score: ' + (rx?.result?.score ?? 0));
                 } catch (error) {
                     notify('Reflex-Spiel nicht verfügbar.');
@@ -948,7 +948,7 @@ async function handleAction(room, action) {
             break;
         case 'Trainieren':
             try {
-                const r = await api('/api/najika/train', 'POST', {stat: 'strength'});
+                const r = await api('http://localhost:8000/api/najika/train', 'POST', {stat: 'strength'});
                 notify(r.msg || 'Training abgeschlossen!', 'success');
                 await fetchNajikaStatus();
             } catch (error) {
@@ -981,7 +981,7 @@ async function handleAction(room, action) {
                     // Determine dungeon level (from backend or default 1)
                     let dungeonLevel = 1;
                     try {
-                        const statusRes = await api('/api/status', 'GET');
+                        const statusRes = await api('http://localhost:8000/api/status', 'GET');
                         dungeonLevel = statusRes.progress?.dungeon_level || 1;
                     } catch (e) {
                         console.warn('Could not fetch dungeon level, using 1');
@@ -992,7 +992,7 @@ async function handleAction(room, action) {
                     notify(`🏰 ${room} Level ${dungeonLevel} gestartet!`, 'success');
                 } else {
                     // Fallback: Old battle system
-                    const kb = await api('/api/battle/start', 'POST', {room});
+                    const kb = await api('http://localhost:8000/api/battle/start', 'POST', {room});
                     if (kb.active) {
                         document.getElementById('battlePanel').style.display = 'block';
                         updateBattleHUD({
@@ -1019,7 +1019,7 @@ async function handleAction(room, action) {
 async function renderActions(room) {
     let resp;
     try {
-        resp = await api('/api/room/actions', 'POST', {room});
+        resp = await api('http://localhost:8000/api/room/actions', 'POST', {room});
     } catch (error) {
         console.warn('Nutze Fallback-Aktionen für "' + room + '".', error);
         resp = {
@@ -1156,7 +1156,7 @@ function updateNajikaHUD(data) {
 
 async function fetchEquipmentStats() {
     try {
-        const data = await api('/api/najika/equipment', 'POST');
+        const data = await api('http://localhost:8000/api/najika/equipment', 'POST');
         if (data && data.stats) {
             const atkEl = document.getElementById('equipAtk');
             const defEl = document.getElementById('equipDef');
@@ -1174,7 +1174,7 @@ async function fetchEquipmentStats() {
 
 async function praiseNajika() {
     try {
-        const r = await api('/api/najika/praise', 'POST');
+        const r = await api('http://localhost:8000/api/najika/praise', 'POST');
         notify(r.msg || 'Najika freut sich!', 'success');
         await fetchNajikaStatus();
     } catch (error) {
@@ -1184,7 +1184,7 @@ async function praiseNajika() {
 
 async function scoldNajika() {
     try {
-        const r = await api('/api/najika/scold', 'POST');
+        const r = await api('http://localhost:8000/api/najika/scold', 'POST');
         notify(r.msg || 'Najika wurde getadelt!', 'warning');
         await fetchNajikaStatus();
     } catch (error) {
@@ -1206,7 +1206,7 @@ function toggleEquipmentPanel() {
 
 async function fetchNajikaStatus() {
     try {
-        const data = await api('/api/najika/status');
+        const data = await api('http://localhost:8000/api/najika/status');
         updateNajikaHUD(data);
     } catch (error) {
         console.warn('Najika-Status konnte nicht geladen werden.', error);
@@ -1238,7 +1238,7 @@ async function battleAttack() {
         }
 
         // API Call mit Multiplier
-        const r = await api('/api/battle/action', 'POST', {
+        const r = await api('http://localhost:8000/api/battle/action', 'POST', {
             action: 'attack',
             target_index: 0,
             damage_multiplier: damageMultiplier
@@ -1304,7 +1304,7 @@ async function playVoice() {
         console.log('[TTS] Requesting voice for:', lastMessage.content.substring(0, 50) + '...');
         notify('Generiere Megumin-Stimme... (kann 5-10s dauern)', 'info');
 
-        const r = await api('/api/tts', 'POST', {
+        const r = await api('http://localhost:8000/api/tts', 'POST', {
             text: lastMessage.content,
             personality: 'megumin' // TODO: Dynamisch basierend auf Najika-State
         });
@@ -1415,7 +1415,7 @@ function renderChatMessage(role, content, animate = true) {
 
 async function loadChatHistory() {
     try {
-        const data = await api('/api/chat/history');
+        const data = await api('http://localhost:8000/api/chat/history');
         if (data.history && Array.isArray(data.history)) {
             chatHistory = data.history;
             // Render history ohne Animation
@@ -1448,7 +1448,7 @@ async function sendChatMessage() {
     typingDiv.classList.add('active');
 
     try {
-        const r = await api('/api/chat', 'POST', {message: text});
+        const r = await api('http://localhost:8000/api/chat', 'POST', {message: text});
         typingDiv.classList.remove('active');
 
         // Najika-Response anzeigen
@@ -1862,7 +1862,7 @@ let trainingInterval = null;
 async function openLoRATraining() {
     // Checke Status
     try {
-        const status = await api('/api/training/status');
+        const status = await api('http://localhost:8000/api/training/status');
 
         // Erstelle Modal
         if (trainingModal) trainingModal.remove();
@@ -1893,7 +1893,7 @@ async function openLoRATraining() {
         // Auto-Update alle 3 Sekunden wenn Training aktiv
         if (status.active) {
             trainingInterval = setInterval(async () => {
-                const s = await api('/api/training/status');
+                const s = await api('http://localhost:8000/api/training/status');
                 updateTrainingUI(s);
                 if (!s.active) clearInterval(trainingInterval);
             }, 3000);
@@ -1960,16 +1960,16 @@ async function startTraining() {
 
     try {
         notify('Training wird gestartet...', 'info');
-        await api('/api/training/start', 'POST', { epochs, batch_size: batchSize });
+        await api('http://localhost:8000/api/training/start', 'POST', { epochs, batch_size: batchSize });
 
         // Warte kurz und update UI
         setTimeout(async () => {
-            const status = await api('/api/training/status');
+            const status = await api('http://localhost:8000/api/training/status');
             updateTrainingUI(status);
 
             // Starte Auto-Update
             trainingInterval = setInterval(async () => {
-                const s = await api('/api/training/status');
+                const s = await api('http://localhost:8000/api/training/status');
                 updateTrainingUI(s);
                 if (!s.active) {
                     clearInterval(trainingInterval);
@@ -2284,7 +2284,7 @@ async function updateInventoryPanel() {
 
     // Lade Status vom Server
     try {
-        const response = await fetch('/api/status');
+        const response = await fetch('http://localhost:8000/api/status');
         const data = await response.json();
         window.currentStatus = data;  // Speichern für andere Funktionen
 
@@ -2324,7 +2324,7 @@ async function updateSkillsPanel() {
 
     // Lade Status vom Server
     try {
-        const response = await fetch('/api/status');
+        const response = await fetch('http://localhost:8000/api/status');
         const data = await response.json();
         window.currentStatus = data;  // Speichern für andere Funktionen
 
