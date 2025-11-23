@@ -811,10 +811,37 @@ class DiceMonstersUI {
             return;
         }
 
+        // 🎲 3D Dice Animation (if available)
+        let actualResults = [];
+        if (window.diceSystem3D && window.characterGroup) {
+            try {
+                this.addLog('🎲 Rolling 3D dice...');
+                // Roll 3 dice in 3D scene
+                actualResults = await window.diceSystem3D.rollDice(3, window.characterGroup.position);
+                this.addLog(`🎲 Rolled: ${actualResults.join(', ')}`);
+            } catch (error) {
+                console.error('3D Dice failed, using fallback:', error);
+                // Fallback to random
+                actualResults = [
+                    Math.floor(Math.random() * 6) + 1,
+                    Math.floor(Math.random() * 6) + 1,
+                    Math.floor(Math.random() * 6) + 1
+                ];
+            }
+        } else {
+            // Fallback: No 3D dice available
+            actualResults = [
+                Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1
+            ];
+        }
+
         // Roll dice (simulate)
         const diceResult = {
             faces: this.generateDiceFaces(),
-            crest: this.getRandomCrest()
+            crest: this.getRandomCrest(),
+            diceValues: actualResults // Store 3D dice results
         };
 
         this.gameState.selectedDice = diceResult;

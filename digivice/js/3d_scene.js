@@ -67,6 +67,9 @@
     let worldManager = null;
     let useWorldManager = false;  // Start in Mühle Interior, nicht Open World
 
+    // 🎲 3D Dice System
+    let diceSystem3D = null;
+
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls + Dark Messiah)
     const COMBAT_SYSTEM = {
         leftHand: null,     // Zauber, Schild, Zweithwaffe
@@ -958,6 +961,13 @@
         if (typeof CraftingSystem !== 'undefined') {
             window.craftingSystem = new CraftingSystem(COMBAT_SYSTEM.inventorySystem);
             console.log('🔨 Crafting System initialized');
+        }
+
+        // 🎲 Initialize 3D Dice System
+        if (typeof DiceSystem3D !== 'undefined' && scene && camera) {
+            diceSystem3D = new DiceSystem3D(scene, camera);
+            window.diceSystem3D = diceSystem3D; // Expose globally for dice_monsters_ui.js
+            console.log('🎲 3D Dice System initialized');
         }
 
         // 🏠 Initialize Housing System
@@ -2998,6 +3008,11 @@
                         GardenSystem.hideGardenUI();
                     }
                 }
+            }
+
+            // 🎲 Update 3D Dice System
+            if (diceSystem3D) {
+                diceSystem3D.update(delta);
             }
 
             // 🏠 Update Housing System
