@@ -20,7 +20,7 @@
 
 class RegionBossUI {
   constructor() {
-    this.apiBase = '/api/region-boss';
+    this.apiBase = 'http://localhost:8000/api/region-boss';
     this.createUI();
   }
 
@@ -140,7 +140,7 @@ class RegionBossUI {
 
 class OregonEventsUI {
   constructor() {
-    this.apiBase = '/api/oregon';
+    this.apiBase = 'http://localhost:8000/api/oregon';
     this.currentEvent = null;
     this.createUI();
   }
@@ -338,7 +338,7 @@ class OregonEventsUI {
 
 class MagicSchoolsUI {
   constructor() {
-    this.apiBase = '/api/magic';
+    this.apiBase = 'http://localhost:8000/api/magic';
     this.createUI();
   }
 
@@ -468,7 +468,7 @@ class MagicSchoolsUI {
 
 class InstrumentUI {
   constructor() {
-    this.apiBase = '/api/instrument';
+    this.apiBase = 'http://localhost:8000/api/instrument';
     this.currentInstrument = 'mundharmonika';
     this.createUI();
   }
@@ -721,7 +721,7 @@ class InstrumentUI {
 
 class WorldInfoUI {
   constructor() {
-    this.apiBase = '/api/world';
+    this.apiBase = 'http://localhost:8000/api/world';
     this.createUI();
     this.startAutoUpdate();
   }

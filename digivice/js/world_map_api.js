@@ -13,7 +13,7 @@
 
 class WorldMapAPI {
     constructor() {
-        this.apiBase = '/api/world-map';
+        this.apiBase = 'http://localhost:8000/api/world-map';
         this.playerId = null;
 
         // Cache

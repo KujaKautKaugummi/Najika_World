@@ -244,12 +244,6 @@
       "role": "assistant",
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
-      "timestamp": 1763435656.9126382
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
-      "importance": 50,
       "timestamp": 1763437457.0099735
     },
     {
@@ -299,6 +293,12 @@
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
       "timestamp": 1763452277.773995
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1763883428.3656251
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 38.166330010692214,
+    "hunger": 25.0,
     "thirst": 0,
-    "energy": 95.89979800641538,
-    "hygiene": 50.0,
+    "energy": 40.0,
+    "hygiene": 32.0,
     "happiness": 0,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 48,
-    "care_mistakes": 3974,
+    "care_mistakes": 3978,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1763452877.8079734,
+    "last_fed": 1763883428.3816361,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1763448601.9937677,
-    "last_update": 1763453477.8491728,
+    "last_sleep": 1763883428.3816361,
+    "last_update": 1763883823.850478,
     "last_drink": 1763448600.101319
   },
   "bond_strength": 23,
@@ -364,10 +364,10 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 38.166330010692214,
-    "energy": 95.89979800641538,
-    "mood_game": -8,
-    "anger_level": 106,
+    "hunger": 30.0,
+    "energy": 40.0,
+    "mood_game": -33,
+    "anger_level": 124,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
@@ -385,10 +385,10 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1763453477.85718,
+    "last_update": 1763883428.3806365,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1763452277.77349,
+    "last_proactive_message": 1763883428.3656251,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -3989,5 +3989,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-18 09:11:17"
+  "saved_at": "2025-11-23 08:43:43"
 }
