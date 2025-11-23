@@ -677,7 +677,8 @@ async function api(path, method = 'GET', body) {
         options.body = JSON.stringify(body);
     }
     try {
-        const response = await fetch(path, options);
+        const url = path.startsWith("http") ? path : `http://localhost:8000${path}`;
+        const response = await fetch(url, options);
         if (!response.ok) {
             throw new Error(response.status + ' ' + response.statusText);
         }
@@ -2284,7 +2285,7 @@ async function updateInventoryPanel() {
 
     // Lade Status vom Server
     try {
-        const response = await fetch('/api/status');
+        const response = await fetch('http://localhost:8000/api/status');
         const data = await response.json();
         window.currentStatus = data;  // Speichern für andere Funktionen
 
@@ -2324,7 +2325,7 @@ async function updateSkillsPanel() {
 
     // Lade Status vom Server
     try {
-        const response = await fetch('/api/status');
+        const response = await fetch('http://localhost:8000/api/status');
         const data = await response.json();
         window.currentStatus = data;  // Speichern für andere Funktionen
 

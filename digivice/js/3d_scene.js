@@ -2664,7 +2664,7 @@
         showFloatingMessage('💤 Najika schläft und regeneriert Energie...', '#7a8bff');
 
         try {
-            const response = await fetch('/api/najika/sleep', {
+            const response = await fetch('http://localhost:8000/api/najika/sleep', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2685,7 +2685,7 @@
         showFloatingMessage('🍳 Najika bereitet eine Mahlzeit zu...', '#ffb74d');
 
         try {
-            const response = await fetch('/api/najika/feed', {
+            const response = await fetch('http://localhost:8000/api/najika/feed', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2705,7 +2705,7 @@
         showFloatingMessage('🚿 Najika wird sauber und erfrischt...', '#8be6ff');
 
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch('http://localhost:8000/api/najika/wash', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2726,7 +2726,7 @@
 
         // Toilet increases happiness slightly
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch('http://localhost:8000/api/najika/wash', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2746,7 +2746,7 @@
         showFloatingMessage('🚰 Najika wäscht die Hände...', '#81d4fa');
 
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch('http://localhost:8000/api/najika/wash', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2766,7 +2766,7 @@
         showFloatingMessage('🪑 Najika isst am Tisch...', '#ff9b71');
 
         try {
-            const response = await fetch('/api/najika/feed', {
+            const response = await fetch('http://localhost:8000/api/najika/feed', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
