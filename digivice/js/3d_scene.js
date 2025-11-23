@@ -2002,7 +2002,7 @@
     };
 
     function checkNearBuilding() {
-        if (!characterGroup || !roomGroup) {
+        if (!characterGroup) {
             nearBuilding = null;
             hideBuildingPrompt();
             return;
@@ -2011,19 +2011,45 @@
         let closestBuilding = null;
         let minDist = Infinity;
 
-        roomGroup.traverse(obj => {
-            if (obj.userData && obj.userData.buildingName && obj.userData.buildingRadius) {
+        // Check buildings in old room system (2400×2400)
+        if (roomGroup) {
+            roomGroup.traverse(obj => {
+                if (obj.userData && obj.userData.buildingName && obj.userData.buildingRadius) {
+                    const dist = Math.sqrt(
+                        Math.pow(characterGroup.position.x - obj.position.x, 2) +
+                        Math.pow(characterGroup.position.z - obj.position.z, 2)
+                    );
+
+                    if (dist < obj.userData.buildingRadius + 30 && dist < minDist) {
+                        closestBuilding = obj;
+                        minDist = dist;
+                    }
+                }
+            });
+        }
+
+        // Check buildings in WorldManager (9600×9600 Open World)
+        if (worldManager && worldManager.getInteractableBuildings) {
+            const buildings = worldManager.getInteractableBuildings();
+            buildings.forEach(buildingData => {
                 const dist = Math.sqrt(
-                    Math.pow(characterGroup.position.x - obj.position.x, 2) +
-                    Math.pow(characterGroup.position.z - obj.position.z, 2)
+                    Math.pow(characterGroup.position.x - buildingData.position.x, 2) +
+                    Math.pow(characterGroup.position.z - buildingData.position.z, 2)
                 );
 
-                if (dist < obj.userData.buildingRadius + 30 && dist < minDist) {
-                    closestBuilding = obj;
+                if (dist < buildingData.radius + 30 && dist < minDist) {
+                    // Create a pseudo-object for the building prompt
+                    closestBuilding = {
+                        userData: {
+                            buildingName: buildingData.name,
+                            buildingRadius: buildingData.radius
+                        },
+                        position: buildingData.position
+                    };
                     minDist = dist;
                 }
-            }
-        });
+            });
+        }
 
         if (closestBuilding) {
             nearBuilding = closestBuilding;
