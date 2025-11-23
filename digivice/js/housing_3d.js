@@ -949,6 +949,87 @@
         });
     }
 
+    // === 3D PLACEMENT INTEGRATION ===
+
+    /**
+     * Start 3D placement mode (called from housing UI)
+     * @param {string} furnitureType - Furniture type key
+     */
+    function startPlacingFurniture(furnitureType) {
+        if (!window.housing3DPlacement) {
+            console.warn('⚠️ Housing3DPlacement not available');
+            return;
+        }
+
+        const furnitureConfig = HOUSING_CONFIG.furnitureTypes[furnitureType];
+        if (!furnitureConfig) {
+            console.error(`❌ Unknown furniture type: ${furnitureType}`);
+            return;
+        }
+
+        // Prepare furniture data for placement
+        const furniture = {
+            type: furnitureType,
+            name: furnitureConfig.icon + ' ' + furnitureType,
+            size: {
+                x: furnitureConfig.width,
+                y: furnitureConfig.height,
+                z: furnitureConfig.depth
+            },
+            color: furnitureConfig.color
+        };
+
+        // Get house position
+        const housePos = getHousePosition();
+        const houseSize = getHouseSize();
+
+        window.housing3DPlacement.startPlacement(furniture, housePos, houseSize);
+
+        if (typeof notify === 'function') {
+            notify(`🏠 Platziere ${furnitureType} (R = Drehen, Esc = Abbrechen)`, 'info');
+        }
+    }
+
+    /**
+     * Get current house position in world
+     * @returns {THREE.Vector3}
+     */
+    function getHousePosition() {
+        const THREE = window.THREE;
+        const pos = HOUSING_CONFIG.housePositions[`player${currentPlayerId}`] || [0, 0, 0];
+        return new THREE.Vector3(pos[0], pos[1], pos[2]);
+    }
+
+    /**
+     * Get current house size
+     * @returns {Object} {width, depth}
+     */
+    function getHouseSize() {
+        const level = currentPlayerHouse?.level || 1;
+        const size = HOUSING_CONFIG.houseSizes[level];
+        return { width: size.width, depth: size.depth };
+    }
+
+    /**
+     * Callback when furniture is placed (called from Housing3DPlacement)
+     * @param {Object} placementData - {furniture, position, rotation}
+     */
+    async function onFurniturePlaced(placementData) {
+        const furnitureData = {
+            type: placementData.furniture.type,
+            pos_x: placementData.position.x,
+            pos_y: placementData.position.y,
+            pos_z: placementData.position.z,
+            rotation: placementData.rotation
+        };
+
+        const success = await placeFurniture(currentPlayerId, furnitureData);
+
+        if (success && typeof notify === 'function') {
+            notify('✅ Möbel platziert!', 'success');
+        }
+    }
+
     // === EXPORT ===
 
     window.HousingSystem = {
@@ -967,6 +1048,8 @@
         showHousingUI,
         hideHousingUI,
         updateHousingUI,
+        startPlacingFurniture,
+        onFurniturePlaced,
         get isInsideHouse() { return isInsideHouse; },
         get selectedHouse() { return selectedHouse; },
         get currentPlayerHouse() { return currentPlayerHouse; }

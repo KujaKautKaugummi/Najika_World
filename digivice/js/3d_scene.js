@@ -996,6 +996,12 @@
             console.log('🌍 World HUD initialized');
         }
 
+        // 🏠 Initialize Housing 3D Placement
+        if (typeof Housing3DPlacement !== 'undefined' && scene && camera) {
+            window.housing3DPlacement = new Housing3DPlacement(scene, camera);
+            console.log('🏠 Housing 3D Placement initialized');
+        }
+
         // 🏠 Initialize Housing System
         if (typeof HousingSystem !== 'undefined' && scene) {
             HousingSystem.init(scene, 1); // Player ID 1 for now
