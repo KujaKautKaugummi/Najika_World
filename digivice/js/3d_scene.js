@@ -1040,6 +1040,8 @@
             // 🏠 AUTO-START: Lade Schwarze Mühle Interior
             setTimeout(() => {
                 console.log("🏠 Auto-loading Schwarze Mühle interior...");
+                // Set exterior position to Götterfels for when player exits
+                exteriorPosition = { x: 4800, y: 0, z: 4800 };
                 loadBuildingInterior("Schwarze Mühle");
             }, 1500);
         }
