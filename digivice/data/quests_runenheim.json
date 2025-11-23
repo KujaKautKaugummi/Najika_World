@@ -1,0 +1,127 @@
+{
+  "region": "blitzebene",
+  "city": "runenheim",
+  "quests": [
+    {
+      "id": "die_magische_prüfung",
+      "name": "Die Magische Prüfung",
+      "type": "main_quest",
+      "difficulty": "medium",
+      "level_required": 10,
+      "giver": "erzmagier_aldric",
+      "description": "Bestehe die Aufnahmeprüfung der Magieakademie",
+      "objectives": [{"type": "test", "challenges": 3}, {"type": "boss_battle", "target": "magischer_golem"}],
+      "najika_reactions": {"megumin": "MAGIEPRÜFUNG! Ich zeige ihnen EXPLOSION!"},
+      "rewards": {"exp": 1500, "items": ["magier_robe", "magier_stab"], "title": "Akademie-Magier"}
+    },
+    {
+      "id": "das_magier_duell",
+      "name": "Das Magier-Duell",
+      "type": "pvp_quest",
+      "difficulty": "hard",
+      "level_required": 15,
+      "giver": "kampfmagier_lyra",
+      "description": "Duelliere dich mit den besten Magiern der Akademie",
+      "najika_reactions": {"megumin": "DUELL! Ich werde sie mit EXPLOSION besiegen!"},
+      "rewards": {"exp": 3000, "items": ["kampfmagier_titel", "blitz_zepter"]}
+    },
+    {
+      "id": "die_verbotene_sektion",
+      "name": "Die verbotene Sektion",
+      "type": "mystery_quest",
+      "difficulty": "hard",
+      "level_required": 12,
+      "giver": "bibliothekar_cornelius",
+      "description": "Erforsche die verbotene Sektion der Bibliothek",
+      "choices": [{
+        "question": "Du findest ein verbotenes Zauberbuch. Was tust du?",
+        "options": [
+          {"id": "take_book", "text": "Nimm das Buch", "outcome": {"consequence": "Du lernst dunkle Magie", "rewards": {"items": ["forbidden_spellbook"]}, "reputation": -30}},
+          {"id": "report", "text": "Melde es dem Bibliothekar", "outcome": {"consequence": "Du wirst belohnt für deine Ehrlichkeit", "reputation": +50, "rewards": {"gold": 500}}}
+        ]
+      }],
+      "najika_reactions": {"melissa": "Verbotenes Wissen... Manchmal ist es verboten aus gutem Grund."},
+      "rewards": {"exp": 2000}
+    },
+    {
+      "id": "merlins_vermächtnis",
+      "name": "Merlins Vermächtnis",
+      "type": "legendary_quest",
+      "difficulty": "very_hard",
+      "level_required": 20,
+      "giver": "geist_des_gruenders",
+      "description": "Finde Merlins verlorene Artefakte",
+      "najika_reactions": {"melissa": "Merlin... Seine Macht war legendär."},
+      "rewards": {"exp": 10000, "items": ["merlins_staff", "archmage_title"], "title": "Erbe Merlins"}
+    },
+    {
+      "id": "das_verlorene_zauberbuch",
+      "name": "Das verlorene Zauberbuch",
+      "type": "fetch_quest",
+      "difficulty": "easy",
+      "level_required": 8,
+      "giver": "erzmagier_aldric",
+      "description": "Finde das verlorene Zauberbuch in den Ruinen",
+      "rewards": {"exp": 600, "gold": 300, "items": ["spell_scroll x3"]}
+    },
+    {
+      "id": "elias_erste_prüfung",
+      "name": "Elias' erste Prüfung",
+      "type": "escort_quest",
+      "difficulty": "easy",
+      "level_required": 5,
+      "giver": "student_elias",
+      "description": "Hilf dem nervösen Studenten bei seiner ersten Prüfung",
+      "najika_reactions": {"harley": "Aww, help the nervous kid! *protective*"},
+      "rewards": {"exp": 400, "relationship": {"student_elias": 100}}
+    },
+    {
+      "id": "runen_rätsel",
+      "name": "Das Runen-Rätsel",
+      "type": "puzzle_quest",
+      "difficulty": "medium",
+      "level_required": 10,
+      "giver": "runenmeisterin_thora",
+      "description": "Löse alte Runen-Rätsel",
+      "najika_reactions": {"shiro": "Runen-Puzzle. Logik-Herausforderung. Analysiere..."},
+      "rewards": {"exp": 1200, "items": ["macht_rune x3", "schutz_rune x3"]}
+    },
+    {
+      "id": "der_dimensionsriss",
+      "name": "Der Dimensionsriss",
+      "type": "oregon_trail_event",
+      "difficulty": "hard",
+      "giver": "dimensionsreisender_zyx",
+      "description": "Ein Riss in der Dimension bedroht Runenheim",
+      "choices": [{
+        "question": "Der Dimensionsriss zieht alles ein. Was tust du?",
+        "options": [
+          {"id": "close_rift", "text": "Schließe den Riss mit Magie", "requires": "high_magic_skill", "outcome": {"success": true, "rewards": {"exp": 5000, "items": ["dimensions_seal"]}}},
+          {"id": "enter_rift", "text": "Betrete den Riss (GEFÄHRLICH)", "outcome": {"teleport": "random_dimension", "rewards": {"items": ["dimensional_artifact"]}, "warning": "Kein Weg zurück garantiert!"}}
+        ]
+      }],
+      "najika_reactions": {"shiro": "WARNUNG: Dimensionale Instabilität detektiert. Gefahr: EXTREM."},
+      "rewards": {"exp": 3000}
+    },
+    {
+      "id": "der_verrückte_alchemist",
+      "name": "Der verrückte Alchemist",
+      "type": "comedy_quest",
+      "difficulty": "easy",
+      "giver": "alchemist_paracelsus",
+      "description": "Paracelsus' Experiment ist außer Kontrolle geraten",
+      "najika_reactions": {"harley": "Mad scientist experiments? I'm IN!"},
+      "rewards": {"exp": 800, "items": ["random_potion x5"]}
+    },
+    {
+      "id": "sternzeichen_prophezeiung",
+      "name": "Die Sternzeichen-Prophezeiung",
+      "type": "mystery_quest",
+      "difficulty": "medium",
+      "giver": "sternendeuter_orion",
+      "description": "Die Sterne prophezeien eine große Veränderung",
+      "najika_reactions": {"melissa": "Prophezeiungen... Manchmal Wahrheit, manchmal Täuschung."},
+      "rewards": {"exp": 1500, "items": ["star_crystal"]}
+    }
+  ]
+}

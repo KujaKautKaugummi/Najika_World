@@ -1,0 +1,51 @@
+{
+  "region": "blitzebene",
+  "city": "runenheim",
+  "items": [
+    {
+      "category": "weapons",
+      "items": [
+        {"id": "magier_stab", "name": "Magier-Stab", "rarity": "uncommon", "damage": 35, "magic_atk": 75, "price": 400, "special": {"mana_regen": 5}},
+        {"id": "runen_schwert", "name": "Runenschwert", "rarity": "rare", "damage": 90, "price": 700, "special": {"rune_slots": 2}},
+        {"id": "blitz_zepter", "name": "Blitz-Zepter", "rarity": "epic", "magic_atk": 120, "price": 1200, "special": {"lightning_mastery": "+50%"}},
+        {"id": "archmage_staff", "name": "Erzmagier-Stab", "rarity": "legendary", "magic_atk": 150, "price": 2500, "special": {"all_spells_cost_reduced": "25%"}}
+      ]
+    },
+    {
+      "category": "armor",
+      "items": [
+        {"id": "magier_robe", "name": "Magier-Robe", "rarity": "uncommon", "defense": 40, "magic_def": 70, "price": 500, "special": {"mana_bonus": 150}},
+        {"id": "runen_ruestung", "name": "Runen-Rüstung", "rarity": "rare", "defense": 75, "magic_def": 90, "price": 900, "special": {"rune_power": "+30%"}},
+        {"id": "arkane_robe", "name": "Arkane Meisterrobe", "rarity": "epic", "magic_def": 120, "price": 1500, "special": {"spell_reflect": "20% Chance"}}
+      ]
+    },
+    {
+      "category": "consumables",
+      "items": [
+        {"id": "mana_trank", "name": "Manatrank", "rarity": "common", "price": 50, "effects": {"restore_mp": 100}},
+        {"id": "mana_elixier", "name": "Mana-Elixier", "rarity": "rare", "price": 150, "effects": {"restore_mp": 300, "buffs": {"magic_power": {"value": 20, "duration": 3600}}}},
+        {"id": "intelligenz_trank", "name": "Intelligenz-Trank", "rarity": "uncommon", "price": 200, "effects": {"buffs": {"intelligence": {"value": 25, "duration": 7200}}}},
+        {"id": "zauber_verstärker", "name": "Zauber-Verstärker", "rarity": "rare", "price": 300, "effects": {"buffs": {"spell_damage": {"value": 50, "duration": 1800}}}}
+      ]
+    },
+    {
+      "category": "materials",
+      "items": [
+        {"id": "macht_rune", "name": "Macht-Rune", "rarity": "uncommon", "price": 300, "used_in": ["enchanting", "weapon_upgrades"]},
+        {"id": "schutz_rune", "name": "Schutz-Rune", "rarity": "uncommon", "price": 250, "used_in": ["enchanting", "armor_upgrades"]},
+        {"id": "magie_kristall", "name": "Magie-Kristall", "rarity": "rare", "price": 400, "used_in": ["staff_crafting", "enchanting"]},
+        {"id": "arkaner_staub", "name": "Arkaner Staub", "rarity": "common", "price": 50, "stackable": 999, "used_in": ["alchemy", "enchanting"]},
+        {"id": "philosophers_stone_shard", "name": "Philosophenstein-Splitter", "rarity": "legendary", "price": 1000, "used_in": ["legendary_alchemy"]}
+      ]
+    },
+    {
+      "category": "spells",
+      "items": [
+        {"id": "feuerball_zauber", "name": "Feuerball-Zauber", "rarity": "common", "price": 200, "teaches": "Feuerball"},
+        {"id": "blitz_zauber", "name": "Blitz-Zauber", "rarity": "uncommon", "price": 250, "teaches": "Blitzschlag"},
+        {"id": "teleport_scroll", "name": "Teleport-Schriftrolle", "rarity": "rare", "price": 500, "single_use": true, "effect": "Teleportiert zu gespeichertem Ort"},
+        {"id": "zeit_stop_scroll", "name": "Zeitstopp-Schriftrolle", "rarity": "epic", "price": 2000, "single_use": true, "effect": "Stoppt Zeit für 5 Sekunden"}
+      ]
+    }
+  ]
+}

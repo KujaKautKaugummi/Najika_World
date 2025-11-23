@@ -1,0 +1,17 @@
+{
+  "region": "reich_der_drei",
+  "city": "none",
+  "note": "Eisregion mit Nekromantie. Keine Stadt, nur vereinzelte NPCs und Wanderer",
+  "npcs": [
+    {"id": "lich_könig_mortis", "name": "Lich-König Mortis", "race": "Lich", "age": 847, "occupation": "Undead King", "personality": {"trait": "Kalt, berechnend, unsterblich"}, "quests": ["die_krone_des_lich_koenigs"], "najika_reaction": {"melissa": "Ein Lich... Ein König der Untoten. Gefährlich."}},
+    {"id": "eis_zauberin_crystal", "name": "Eiszauberin Crystal", "race": "Human", "age": 67, "occupation": "Ice Mage", "shop": {"type": "ice_magic_vendor", "items": [{"id": "eisblitz_zauber", "price": 250}, {"id": "frostpanzer_scroll", "price": 400}]}, "najika_reaction": {"megumin": "Eis-Magie! Das Gegenteil von Feuer!"}},
+    {"id": "untote_ritter", "name": "Untoter Ritter Sir Gawain", "race": "Undead Knight", "age": 312, "occupation": "Cursed Guardian", "personality": {"trait": "Ehre auch im Tod"}, "quests": ["der_verfluchte_ritter"], "najika_reaction": {"melissa": "Ein Ritter... Selbst im Tod hält er seinen Eid."}},
+    {"id": "frost_riese_ymir", "name": "Frost-Riese Ymir", "race": "Frost Giant", "age": 523, "occupation": "Wanderer", "personality": {"trait": "Ruhig, massiv, einsam"}, "najika_reaction": {"shiro": "Frost-Riese. Höhe: 5,4 Meter. Temperatur-Aura: -30°C."}},
+    {"id": "geist_kind_anna", "name": "Geist-Kind Anna", "race": "Ghost", "age": 89, "occupation": "Lost Spirit", "personality": {"trait": "Traurig, verloren, sucht ihre Mama"}, "quests": {"anna_mama"}, "najika_reaction": {"harley": "Poor ghost kid... *will helfen*"}},
+    {"id": "nekromant_erebus", "name": "Nekromant Erebus", "race": "Human", "age": 78, "occupation": "Necromancer", "shop": {"type": "necromancy_vendor", "items": [{"id": "seelen_kristall", "price": 500}, {"id": "untoten_beschwörung_buch", "price": 1200}]}, "najika_reaction": {"melissa": "Nekromantie... Die verbotene Kunst."}},
+    {"id": "polarfuchs_geist", "name": "Polarfuchs-Geist Fenrir", "race": "Spirit Beast", "age": 412, "occupation": "Guide Spirit", "services": {"spirit_guidance": true}, "najika_reaction": {"harley": "Ghost fox! SO PRETTY!"}},
+    {"id": "eisjäger_boreas", "name": "Eisjäger Boreas", "race": "Human", "age": 45, "occupation": "Ice Hunter", "shop": {"type": "materials", "items": [{"id": "eis_kristall", "price": 200}, {"id": "frost_pelz", "price": 150}]}, "najika_reaction": {"shiro": "Eisjäger. Überlebensrate in dieser Region: 23%. Mit ihm: 78%."}},
+    {"id": "banshee_königin", "name": "Banshee-Königin Morwen", "race": "Banshee", "age": 678, "occupation": "Undead Queen", "personality": {"trait": "Schreit, klagt, trauert ewig"}, "quests": ["der_schrei_der_banshee"], "najika_reaction": {"harley": "Screaming ghost lady? My ears! *hält sich Ohren zu*"}},
+    {"id": "drei_schwestern", "name": "Die Drei Schwestern (Vergangenheit, Gegenwart, Zukunft)", "race": "Fate Spirits", "age": "Timeless", "occupation": "Fate Weavers", "personality": {"trait": "Mysteriös, kennen alle Schicksale"}, "quests": ["das_schicksal_der_drei"], "najika_reaction": {"melissa": "Die Drei... Schicksalsweber. Mächtig und gefährlich."}}
+  ]
+}

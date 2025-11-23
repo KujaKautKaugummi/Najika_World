@@ -1,0 +1,21 @@
+{
+  "region": "magmastroeme",
+  "biome": "volcano",
+  "enemies": [
+    {"id": "feuer_slime", "name": "Feuer-Slime", "tier": "common", "level": 8, "stats": {"hp": 160, "atk": 30, "fire_damage": 20}, "abilities": [{"name": "Feuerspucken", "damage": 50}], "loot_table": {"common": [{"item": "vulkan_asche", "chance": 90}]}, "exp_reward": 200, "najika_reaction": {"harley": "Burny slime! Ouch!"}},
+    {"id": "lava_golem", "name": "Lava-Golem", "tier": "uncommon", "level": 12, "stats": {"hp": 600, "atk": 80, "def": 90}, "abilities": [{"name": "Lava-Schlag", "damage": 80, "burn": true}, {"name": "Geschmolzen", "passive": "Immune to fire"}], "loot_table": {"uncommon": [{"item": "lava_kristall", "chance": 40}, {"item": "obsidian", "chance": 60}]}, "exp_reward": 1000, "najika_reaction": {"shiro": "Lava-Golem. Körpertemperatur: 1100°C. Berührung nicht empfohlen."}},
+    {"id": "feuerdrache", "name": "Feuerdrache", "tier": "elite", "level": 16, "stats": {"hp": 1200, "atk": 110, "def": 70, "spd": 35}, "abilities": [{"name": "Feueratem", "damage": 150, "aoe": true}, {"name": "Feuersturm", "ultimate": true, "damage": 250}, {"name": "Flug", "evasion_bonus": 30}], "loot_table": {"rare": [{"item": "drachen_schuppe", "chance": 70}, {"item": "drachen_herz", "chance": 25}], "epic": [{"item": "drachen_feuer_essenz", "chance": 15}]}, "exp_reward": 3500, "najika_reaction": {"megumin": "EIN DRACHE! EIN ECHTER FEUERDRACHE!"}},
+    {"id": "magma_wurm", "name": "Magma-Wurm", "tier": "elite", "level": 14, "stats": {"hp": 900, "atk": 95, "def": 60}, "abilities": [{"name": "Tunnel", "type": "ambush"}, {"name": "Magma-Spray", "damage": 100, "aoe": true}], "loot_table": {"uncommon": [{"item": "wurm_zahn", "chance": 65}], "rare": [{"item": "lava_kristall", "chance": 35}]}, "exp_reward": 2200, "najika_reaction": {"harley": "GIANT LAVA WORM! That's SO gross but cool!"}},
+    {"id": "vulkan_titan", "name": "Vulkan-Titan", "tier": "boss", "level": 20, "stats": {"hp": 8000, "atk": 160, "def": 120, "fire_damage": 100}, "phase_mechanics": {
+      "phase_1": {"hp_threshold": "100-66%", "behavior": "Normal attacks"},
+      "phase_2": {"hp_threshold": "66-33%", "summons": "2x Lava Golems", "enrage": "+30% Attack"},
+      "phase_3": {"hp_threshold": "33-0%", "ultimate": "Vulkan-Eruption", "all_stats": "+50%"}
+    }, "abilities": [
+      {"name": "Titan-Schlag", "damage": 160, "knockback": true},
+      {"name": "Lava-Welle", "aoe": true, "damage": 140},
+      {"name": "Vulkan-Eruption", "ultimate": true, "damage": 400, "aoe": "massive", "warning": "RUN!"},
+      {"name": "Erderschütterung", "aoe": true, "damage": 100, "stun": 3},
+      {"name": "Geschmolzene Haut", "passive": "Reflect 20% melee damage as fire"}
+    ], "loot_table": {"guaranteed": [{"item": "titan_herz", "quantity": 1}], "rare": [{"item": "lava_schwert", "chance": 50}, {"item": "obsidian_ruestung", "chance": 40}], "epic": [{"item": "vulkan_herz", "chance": 25}], "legendary": [{"item": "titan_krone", "chance": 10}]}, "exp_reward": 18000, "najika_reactions": {"initial": {"personality": "megumin", "text": "EIN TITAN! Ein VULKAN-TITAN! Das ist EPISCH!"}, "phase_3": {"personality": "shiro", "text": "KRITISCH: Vulkan-Eruption erkannt. Flucht DRINGEND empfohlen!"}, "victory": {"personality": "megumin", "text": "WIR HABEN EINEN TITAN BESIEGT! MIT EXPLOSION!"}}}
+  ]
+}

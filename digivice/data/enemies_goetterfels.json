@@ -1,0 +1,226 @@
+{
+  "region": "goetterfels",
+  "biome": "mountain_divine",
+  "note": "Zentrale Berg-Region mit göttlichen und legendären Gegnern. Schwierigste Gegner im Spiel.",
+  "enemies": [
+    {
+      "id": "berg_steinbock",
+      "name": "Berg-Steinbock",
+      "type": "beast",
+      "tier": "uncommon",
+      "level": 14,
+      "stats": {"hp": 400, "atk": 70, "def": 60, "spd": 35},
+      "abilities": [
+        {"name": "Rammstoß", "damage": 70, "knockback": true},
+        {"name": "Berg-Sprung", "type": "mobility", "description": "Springt auf Felsen"}
+      ],
+      "behavior": {"aggression": "low", "territorial": true},
+      "loot_table": {
+        "common": [{"item": "steinbock_fell", "chance": 70}, {"item": "steinbock_horn", "chance": 50}]
+      },
+      "exp_reward": 800,
+      "najika_reaction": {"harley": "Mountain goat! They're kinda cute!"}
+    },
+    {
+      "id": "berg_adler",
+      "name": "Riesiger Berg-Adler",
+      "type": "beast",
+      "tier": "uncommon",
+      "level": 15,
+      "stats": {"hp": 350, "atk": 85, "spd": 50},
+      "abilities": [
+        {"name": "Sturzflug", "damage": 100, "from_above": true},
+        {"name": "Klauen-Griff", "damage": 85, "grab": true}
+      ],
+      "loot_table": {
+        "uncommon": [{"item": "adler_feder", "chance": 80}, {"item": "adler_auge", "chance": 30}]
+      },
+      "exp_reward": 1000,
+      "najika_reaction": {"megumin": "RIESEN-ADLER! Wie majestätisch!"}
+    },
+    {
+      "id": "stein_golem_göttlich",
+      "name": "Göttlicher Stein-Golem",
+      "type": "construct",
+      "tier": "elite",
+      "level": 18,
+      "stats": {"hp": 2000, "atk": 120, "def": 150, "magic_res": 100},
+      "abilities": [
+        {"name": "Golem-Schlag", "damage": 120},
+        {"name": "Erd-Stampfer", "aoe": true, "damage": 100, "stun": 3},
+        {"name": "Göttliche Haut", "passive": "Reduziert allen Schaden um 30%"}
+      ],
+      "weaknesses": ["magic"],
+      "resistances": ["physical"],
+      "immunities": ["poison", "bleed"],
+      "loot_table": {
+        "rare": [{"item": "goetter_erz", "chance": 50}, {"item": "golem_herz", "chance": 35}],
+        "epic": [{"item": "berg_kristall", "chance": 20}]
+      },
+      "exp_reward": 4500,
+      "najika_reaction": {"shiro": "Göttlicher Konstrukt. Panzerung: Extrem. Empfehle Magie-Angriffe."}
+    },
+    {
+      "id": "gefallener_engel",
+      "name": "Gefallener Engel",
+      "type": "divine",
+      "tier": "elite",
+      "level": 20,
+      "stats": {"hp": 1500, "atk": 110, "magic_atk": 140, "spd": 40},
+      "abilities": [
+        {"name": "Verdorbenes Licht", "magic_damage": 140, "corruption": true},
+        {"name": "Gefallene Schwingen", "aoe": true, "damage": 100},
+        {"name": "Finstere Heilung", "heal": 200, "cooldown": 20},
+        {"name": "Seelen-Raub", "magic_damage": 130, "heals": "50% damage dealt"}
+      ],
+      "behavior": {"intelligence": "very_high", "uses_magic": true},
+      "weaknesses": ["holy"],
+      "resistances": ["dark", "physical"],
+      "loot_table": {
+        "rare": [{"item": "gefallene_feder", "chance": 70}, {"item": "dunkler_heiligenschein", "chance": 40}],
+        "epic": [{"item": "engel_essenz", "chance": 25}]
+      },
+      "exp_reward": 6000,
+      "najika_reaction": {"melissa": "Ein gefallener Engel... Wie tragisch."}
+    },
+    {
+      "id": "zeit_paradox",
+      "name": "Zeit-Paradox",
+      "type": "aberration_boss",
+      "tier": "boss",
+      "level": 26,
+      "stats": {"hp": 15000, "atk": 150, "magic_atk": 180, "def": 120, "magic_res": 140, "spd": 60},
+      "phase_mechanics": {
+        "phase_1": {"hp_threshold": "100-75%", "timeline": "present"},
+        "phase_2": {"hp_threshold": "75-50%", "timeline": "past", "summons": "past_versions"},
+        "phase_3": {"hp_threshold": "50-25%", "timeline": "future", "all_stats": "+50%"},
+        "phase_4": {"hp_threshold": "25-0%", "timeline": "all", "chaos_mode": true}
+      },
+      "abilities": [
+        {"name": "Zeit-Schlag", "damage": 150, "age_effect": "Altert oder verjüngt Gegner"},
+        {"name": "Paradox-Welle", "magic_damage": 180, "aoe": true, "confuse": true},
+        {"name": "Zeit-Schleife", "type": "rewind", "effect": "Kehrt 10 Sekunden zurück"},
+        {"name": "Zukunfts-Blick", "type": "counter", "effect": "Sieht alle Angriffe voraus, +80% Ausweichen"},
+        {"name": "Vergangenheits-Echo", "summons": "2x Kopien von sich selbst"},
+        {"name": "Zeit-Stop", "ultimate": true, "effect": "Stoppt Zeit für alle außer sich selbst für 5 Sek", "damage": "300 während Stop"}
+      ],
+      "special_mechanics": {
+        "temporal_instability": {"description": "Teleportiert sich zufällig durch Zeit"},
+        "causality_break": {"description": "Kann Schaden rückgängig machen"}
+      },
+      "loot_table": {
+        "guaranteed": [{"item": "zeit_sense", "quantity": 1}],
+        "rare": [{"item": "zeitkristall", "quantity": "3-6", "chance": 100}],
+        "epic": [{"item": "paradox_essenz", "chance": 50}],
+        "legendary": [{"item": "ewigkeit_uhr", "chance": 15}]
+      },
+      "exp_reward": 35000,
+      "najika_reactions": {
+        "initial": {"personality": "shiro", "text": "FEHLER: Temporale Anomalie. Zeit-Fluss: Instabil. GEFAHR: EXTREM."},
+        "phase_3": {"personality": "melissa", "text": "Es zeigt uns die Zukunft... unseren Tod."},
+        "victory": {"personality": "megumin", "text": "WIR HABEN DIE ZEIT SELBST BESIEGT!"}
+      }
+    },
+    {
+      "id": "urgöttin_korrupt",
+      "name": "Korrumpierte Urgöttin",
+      "type": "divine_boss",
+      "tier": "final_boss",
+      "level": 35,
+      "stats": {"hp": 50000, "atk": 250, "magic_atk": 300, "def": 200, "magic_res": 200, "spd": 50},
+      "phase_mechanics": {
+        "phase_1": {"hp_threshold": "100-80%", "element": "holy", "behavior": "Defensive"},
+        "phase_2": {"hp_threshold": "80-60%", "element": "dark", "corruption_spreads": true, "summons": "gefallene_engel x3"},
+        "phase_3": {"hp_threshold": "60-40%", "transformation": "corrupted_form", "all_stats": "+50%"},
+        "phase_4": {"hp_threshold": "40-20%", "element": "chaos", "reality_breaks": true},
+        "phase_5": {"hp_threshold": "20-0%", "final_form": "true_goddess", "ultimate_power": true, "enrage": "MAXIMUM"}
+      },
+      "abilities": [
+        {"name": "Göttlicher Strahl", "magic_damage": 300, "holy_element": true},
+        {"name": "Korruptions-Welle", "aoe": "map-wide", "damage": 250, "corruption": "permanent"},
+        {"name": "Schöpfung & Zerstörung", "type": "dual", "damage": 400, "heal": 500},
+        {"name": "Realitäts-Bruch", "ultimate": true, "damage": 800, "aoe": "entire_map", "breaks_reality": true},
+        {"name": "Göttliche Auferstehung", "type": "resurrection", "heals": "Full HP (einmalig bei 0% HP)"},
+        {"name": "Zeit-Stopp Omega", "effect": "Stoppt Zeit, instant kill auf alle Gegner (Phase 5)"},
+        {"name": "Universum-Kollaps", "final_attack": true, "damage": 9999, "aoe": "everything", "warning": "10 Sekunden Vorwarnung"}
+      ],
+      "special_mechanics": {
+        "goddess_power": {"description": "Immun gegen die meisten Status-Effekte"},
+        "divine_resurrection": {"description": "Steht einmal bei 0 HP wieder auf mit 50% HP"},
+        "reality_manipulation": {"description": "Kann Kampffeld ändern"},
+        "final_phase_requirement": {"description": "Muss mit göttlicher Waffe besiegt werden"}
+      },
+      "weaknesses": ["divine_weapons_only"],
+      "resistances": ["all_elements"],
+      "immunities": ["instant_death", "poison", "bleed", "stun", "freeze"],
+      "loot_table": {
+        "guaranteed": [
+          {"item": "urgöttin_krone", "quantity": 1},
+          {"item": "goetter_klinge_perfekt", "quantity": 1},
+          {"item": "schöpfung_kristall", "quantity": 1}
+        ],
+        "common": [{"item": "gold_barren", "quantity": "50-100", "chance": 100}],
+        "rare": [
+          {"item": "göttliche_essenz", "quantity": "10-20", "chance": 100},
+          {"item": "realitäts_splitter", "quantity": "5-10", "chance": 80}
+        ],
+        "epic": [
+          {"item": "unsterblichkeits_amulett", "chance": 60},
+          {"item": "goettin_herz", "chance": 40}
+        ],
+        "legendary": [
+          {"item": "schöpfer_macht", "chance": 30},
+          {"item": "universum_samen", "chance": 15},
+          {"item": "true_godhood_artifact", "chance": 5}
+        ]
+      },
+      "exp_reward": 150000,
+      "title_reward": "Götter-Bezwinger",
+      "achievement": "True Ending Unlocked",
+      "najika_reactions": {
+        "initial": {
+          "personality": "melissa",
+          "text": "Die Urgöttin... korrumpiert. Die Schöpferin unserer Welt ist gefallen."
+        },
+        "phase_2": {
+          "personality": "shiro",
+          "text": "KRITISCH: Korruption breitet sich aus. Realitäts-Integrität: 67%."
+        },
+        "phase_3": {
+          "personality": "megumin",
+          "text": "Sie verwandelt sich! Sie wird noch STÄRKER! Aber wir geben nicht auf!"
+        },
+        "phase_4": {
+          "personality": "melissa",
+          "text": "Die Realität selbst zerbricht... Können wir überhaupt gewinnen?"
+        },
+        "phase_5": {
+          "personality": "all",
+          "text": "KUJA! Dies ist das Ende! Gib ALLES! ALLE EXPLOSIONEN! ALLE KRAFT! JETZT!"
+        },
+        "resurrection": {
+          "personality": "harley",
+          "text": "SHE'S NOT DEAD?! She came back?! *panisch* Kuja what do we DO?!"
+        },
+        "near_death": {
+          "personality": "megumin",
+          "text": "Fast... Fast haben wir sie! EINE LETZTE EXPLOSION!"
+        },
+        "victory": {
+          "personality": "all",
+          "text": "Wir... wir haben es geschafft. Wir haben eine GÖTTIN besiegt. Kuja... Du bist ein Held."
+        }
+      },
+      "victory_cutscene": {
+        "description": "Nach dem Sieg erscheint die gereinigte Urgöttin und dankt dir. Sie bietet dir die Wahl zwischen Göttlichkeit oder Sterblichkeit.",
+        "unlocks": "true_ending_choice"
+      }
+    }
+  ],
+  "spawn_zones": {
+    "bergpfade": {"enemies": ["berg_steinbock", "berg_adler"], "spawn_rate": "medium"},
+    "goettlicher_gipfel": {"enemies": ["stein_golem_göttlich", "gefallener_engel"], "spawn_rate": "low"},
+    "zeit_dimension": {"enemies": ["zeit_paradox"], "spawn_rate": "boss"},
+    "goettin_tempel": {"enemies": ["urgöttin_korrupt"], "spawn_rate": "final_boss"}
+  }
+}

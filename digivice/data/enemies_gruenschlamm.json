@@ -1,0 +1,20 @@
+{
+  "region": "gruenschlamm_sumpf",
+  "biome": "swamp",
+  "enemies": [
+    {"id": "gift_schlange", "name": "Giftschlange", "tier": "common", "level": 7, "stats": {"hp": 140, "atk": 35, "spd": 22}, "abilities": [{"name": "Giftbiss", "damage": 35, "poison": 20}], "loot_table": {"common": [{"item": "gift_pilz", "chance": 70}]}, "exp_reward": 180, "najika_reaction": {"harley": "Snakey! I hate snakes! *screams*"}},
+    {"id": "sumpfzombie", "name": "Sumpfzombie", "tier": "uncommon", "level": 9, "stats": {"hp": 300, "atk": 50, "def": 30}, "abilities": [{"name": "Zombie-Biss", "damage": 50, "infection": true}], "loot_table": {"common": [{"item": "knochen", "chance": 80}], "uncommon": [{"item": "nekrotische_essenz", "chance": 25}]}, "exp_reward": 450, "najika_reaction": {"megumin": "ZOMBIES! Wie in Resident Evil!"}},
+    {"id": "riesen_alligator", "name": "Riesen-Alligator", "tier": "elite", "level": 13, "stats": {"hp": 700, "atk": 90, "def": 60}, "abilities": [{"name": "Tod-Rolle", "damage": 120}, {"name": "Panzer", "defense_buff": 50}], "loot_table": {"uncommon": [{"item": "alligator_haut", "chance": 70}], "rare": [{"item": "alligator_zahn", "chance": 30}]}, "exp_reward": 1600, "najika_reaction": {"harley": "BIG GATOR! Run RUN RUUUN!"}},
+    {"id": "sumpfgeist", "name": "Sumpfgeist", "tier": "uncommon", "level": 11, "stats": {"hp": 250, "magic_atk": 80, "magic_res": 70}, "abilities": [{"name": "Nebelform", "evasion": 60}, {"name": "Seelenraub", "magic_damage": 80}], "resistances": ["physical"], "weaknesses": ["holy"], "loot_table": {"uncommon": [{"item": "nebel_essenz", "chance": 40}]}, "exp_reward": 900, "najika_reaction": {"melissa": "Geister... Überall Geister..."}},
+    {"id": "sumpfhexe_morgana_boss", "name": "Sumpfhexe Morgana (Boss)", "tier": "boss", "level": 18, "stats": {"hp": 3500, "magic_atk": 150, "def": 70, "magic_res": 90}, "phase_mechanics": {
+      "phase_1": {"hp_threshold": "100-66%", "summons": "zombies"},
+      "phase_2": {"hp_threshold": "66-33%", "element": "dark_magic"},
+      "phase_3": {"hp_threshold": "33-0%", "transformation": "true_form", "all_stats": "+50%"}
+    }, "abilities": [
+      {"name": "Dunkler Fluch", "magic_damage": 150, "debuff": "cursed"},
+      {"name": "Zombie-Beschwörung", "summons": "3x Sumpfzombies"},
+      {"name": "Hexen-Explosion", "ultimate": true, "damage": 250, "aoe": true},
+      {"name": "Seelentausch", "type": "control", "effect": "Kontrolliert Spieler für 5 Sek"}
+    ], "loot_table": {"guaranteed": [{"item": "hexen_besen", "quantity": 1}], "rare": [{"item": "nekromanten_stab", "chance": 40}], "epic": [{"item": "morganas_zauberbuch", "chance": 20}], "legendary": [{"item": "seelenstein", "chance": 8}]}, "exp_reward": 10000, "najika_reactions": {"initial": {"personality": "melissa", "text": "Eine mächtige Hexe... Dies wird kein leichter Kampf."}, "victory": {"personality": "megumin", "text": "HEXE BESIEGT! Mit Magie gegen Magie!"}}}
+  ]
+}

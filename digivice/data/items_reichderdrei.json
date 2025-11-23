@@ -1,0 +1,27 @@
+{
+  "region": "reich_der_drei",
+  "items": [
+    {"category": "weapons", "items": [
+      {"id": "eis_klinge", "name": "Eisklinge", "rarity": "rare", "damage": 100, "price": 1000, "special": {"freeze_chance": 30, "ice_damage": 40}},
+      {"id": "untoten_sense", "name": "Untoten-Sense", "rarity": "epic", "damage": 125, "price": 1600, "special": {"soul_steal": "Absorbiert 10% HP", "summon_undead": true}},
+      {"id": "frost_axt", "name": "Frost-Axt", "rarity": "rare", "damage": 110, "price": 1200, "special": {"freeze_aura": "Verlangsamt Gegner in der Nähe"}},
+      {"id": "lich_stab", "name": "Lich-König Stab", "rarity": "legendary", "magic_atk": 180, "price": 3500, "special": {"necromancy_master": "+100% Nekromantie-Kraft", "immortality_buff": "Cheat Death 1x/Tag"}}
+    ]},
+    {"category": "armor", "items": [
+      {"id": "frostpanzer", "name": "Frostpanzer", "rarity": "rare", "defense": 85, "price": 900, "special": {"cold_immunity": 100, "freeze_attackers": "20% Chance"}},
+      {"id": "lich_robe", "name": "Lich-Robe", "rarity": "epic", "defense": 60, "magic_def": 130, "price": 1700, "special": {"undead_immunity": true, "mana_regen": 15}},
+      {"id": "frost_riesen_ruestung", "name": "Frost-Riesen Rüstung", "rarity": "legendary", "defense": 150, "price": 2800, "special": {"ice_immunity": 100, "giant_strength": "+50 STR"}}
+    ]},
+    {"category": "consumables", "items": [
+      {"id": "kaelte_resistenz_trank", "name": "Kälteresistenz-Trank", "rarity": "common", "price": 50, "effects": {"buffs": {"cold_resistance": {"value": 80, "duration": 1800}}}},
+      {"id": "untoten_essenz", "name": "Untoten-Essenz", "rarity": "rare", "price": 200, "effects": {"buffs": {"necromancy_power": {"value": 40, "duration": 3600}}}},
+      {"id": "seelenstein", "name": "Seelenstein", "rarity": "epic", "price": 800, "single_use": true, "effect": "Beschwört mächtige Untote"}
+    ]},
+    {"category": "materials", "items": [
+      {"id": "eis_kristall", "name": "Eis-Kristall", "rarity": "uncommon", "price": 200, "stackable": 500, "used_in": ["ice_weapons", "ice_magic"]},
+      {"id": "frost_pelz", "name": "Frost-Pelz", "rarity": "uncommon", "price": 150, "stackable": 300, "used_in": ["cold_armor"]},
+      {"id": "seelen_kristall", "name": "Seelen-Kristall", "rarity": "rare", "price": 500, "stackable": 99, "used_in": ["necromancy", "soul_magic"]},
+      {"id": "lich_staub", "name": "Lich-Staub", "rarity": "epic", "price": 800, "stackable": 50, "used_in": ["undead_summoning", "dark_magic"]}
+    ]}
+  ]
+}

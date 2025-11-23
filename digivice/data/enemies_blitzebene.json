@@ -1,0 +1,90 @@
+{
+  "region": "blitzebene",
+  "biome": "highland_magic",
+  "enemies": [
+    {
+      "id": "magisches_wisp",
+      "name": "Magisches Wisp",
+      "type": "elemental",
+      "tier": "common",
+      "level": 6,
+      "stats": {"hp": 120, "atk": 20, "magic_atk": 50, "spd": 25},
+      "abilities": [{"name": "Magie-Schuss", "damage": 50}, {"name": "Teleport", "type": "escape"}],
+      "loot_table": {"common": [{"item": "arkaner_staub", "chance": 80}, {"item": "magie_kristall", "chance": 20}]},
+      "exp_reward": 150,
+      "najika_reaction": {"megumin": "Kleine Licht-Dinger! Niedlich aber nervig!"}
+    },
+    {
+      "id": "runen_golem",
+      "name": "Runen-Golem",
+      "type": "construct",
+      "tier": "uncommon",
+      "level": 10,
+      "stats": {"hp": 500, "atk": 70, "def": 80, "magic_res": 40},
+      "abilities": [{"name": "Runen-Schlag", "damage": 70}, {"name": "Magie-Schild", "effect": "+100 Defense für 5 Sek"}],
+      "weaknesses": ["lightning"],
+      "loot_table": {"common": [{"item": "golem_kern", "chance": 60}], "uncommon": [{"item": "macht_rune", "chance": 30}]},
+      "exp_reward": 600,
+      "najika_reaction": {"shiro": "Golem. Konstrukt. Schwachstelle: Blitz-Magie."}
+    },
+    {
+      "id": "arkaner_magier",
+      "name": "Feindlicher Arkaner Magier",
+      "type": "humanoid",
+      "tier": "elite",
+      "level": 14,
+      "stats": {"hp": 400, "atk": 40, "magic_atk": 100, "spd": 18},
+      "abilities": [
+        {"name": "Feuerball", "damage": 100},
+        {"name": "Eisstrahl", "damage": 90, "slow": 30},
+        {"name": "Blitzschlag", "damage": 110},
+        {"name": "Teleport", "type": "evasive"}
+      ],
+      "loot_table": {"uncommon": [{"item": "magier_stab", "chance": 40}], "rare": [{"item": "spell_scroll", "chance": 25}]},
+      "exp_reward": 1400,
+      "najika_reaction": {"megumin": "Ein feindlicher Magier! MAGIE GEGEN MAGIE!"}
+    },
+    {
+      "id": "donnerwolf",
+      "name": "Donnerwolf",
+      "type": "beast",
+      "tier": "uncommon",
+      "level": 12,
+      "stats": {"hp": 350, "atk": 75, "spd": 40},
+      "abilities": [{"name": "Blitz-Biss", "damage": 75, "element": "lightning"}, {"name": "Donner-Heulen", "type": "aoe", "damage": 50}],
+      "loot_table": {"common": [{"item": "donnerwolf_pelz", "chance": 70}], "rare": [{"item": "blitz_kristall", "chance": 20}]},
+      "exp_reward": 800,
+      "najika_reaction": {"harley": "THUNDER DOGGO! Cool but scary!"}
+    },
+    {
+      "id": "erzdaemon_magus",
+      "name": "Erzdämon Magus",
+      "type": "demon_boss",
+      "tier": "boss",
+      "level": 20,
+      "stats": {"hp": 5000, "atk": 100, "magic_atk": 180, "def": 90, "magic_res": 80},
+      "phase_mechanics": {
+        "phase_1": {"hp_threshold": "100-50%", "element": "fire"},
+        "phase_2": {"hp_threshold": "50-0%", "element": "all", "enrage": true}
+      },
+      "abilities": [
+        {"name": "Inferno", "type": "ultimate", "damage": 300, "aoe": true},
+        {"name": "Dimensionsschnitt", "damage": 200},
+        {"name": "Magie-Absorption", "type": "counter", "heals": "50% absorbed damage"},
+        {"name": "Dunkle Beschwörung", "summons": "3x Magische Wisps"}
+      ],
+      "weaknesses": ["holy_magic"],
+      "loot_table": {
+        "guaranteed": [{"item": "daemon_horn", "quantity": 1}],
+        "rare": [{"item": "archmage_staff", "chance": 30}],
+        "epic": [{"item": "philosophers_stone_shard", "chance": 15}],
+        "legendary": [{"item": "daemon_soul_crystal", "chance": 5}]
+      },
+      "exp_reward": 15000,
+      "najika_reactions": {
+        "initial": {"personality": "melissa", "text": "Ein Dämon... Alte Erinnerungen..."},
+        "victory": {"personality": "megumin", "text": "WIR HABEN EINEN DÄMONEN BESIEGT! MIT EXPLOSION!"}
+      }
+    }
+  ]
+}

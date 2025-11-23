@@ -1,0 +1,114 @@
+{
+  "region": "goetterfels",
+  "city": "schwarze_muehle",
+  "theme": "central_hub_mountain_divine",
+  "note": "Zentrale Region. Verbindet alle 8 Regionen. Göttlicher Berg mit mysteriöser Schwarzer Mühle.",
+  "npcs": [
+    {
+      "id": "muehlen_wirt_otto",
+      "name": "Mühlenwirt Otto",
+      "race": "Human",
+      "age": 61,
+      "occupation": "Wirt der Schwarzen Mühle",
+      "personality": {"trait": "Freundlich, wissend, kennt alle Reisenden", "catchphrase": "Willkommen in der Mühle, Wanderer!"},
+      "shop": {"type": "general_goods", "items": [{"id": "reise_proviant", "price": 50}, {"id": "landkarte", "price": 100}, {"id": "reparatur_kit", "price": 80}]},
+      "services": {"inn": {"price": 30, "quality": "comfortable"}, "information_hub": true},
+      "najika_reaction": {"melissa": "Ein Ort wo alle Wege zusammenlaufen... Wie passend."}
+    },
+    {
+      "id": "goetterbote_hermes",
+      "name": "Götterbote Hermes",
+      "race": "Divine Being",
+      "age": "Eternal",
+      "occupation": "Messenger of Gods",
+      "personality": {"trait": "Schnell, witzig, allwissend"},
+      "services": {"fast_travel": {"price": 200, "description": "Teleportiert zu allen Städten"}, "divine_messages": true},
+      "quests": ["die_botschaft_der_goetter"],
+      "najika_reaction": {"megumin": "EIN ECHTER GOTT! Wie in den Legenden!"}
+    },
+    {
+      "id": "zeitwaechterin_chrona",
+      "name": "Zeitwächterin Chrona",
+      "race": "Time Guardian",
+      "age": "Outside Time",
+      "occupation": "Guardian of Time",
+      "personality": {"trait": "Mysteriös, sieht Vergangenheit und Zukunft"},
+      "services": {"time_travel": {"price": 5000, "warning": "GEFÄHRLICH"}},
+      "quests": ["die_zerbrochene_zeit"],
+      "najika_reaction": {"shiro": "FEHLER: Temporale Anomalie. Zeit-Signatur: Nicht-linear."}
+    },
+    {
+      "id": "bergfuehrer_atlas",
+      "name": "Bergführer Atlas",
+      "race": "Half-Giant",
+      "age": 156,
+      "occupation": "Mountain Guide",
+      "personality": {"trait": "Stark, ruhig, kennt jeden Pfad"},
+      "services": {"mountain_guiding": {"price": 150}},
+      "najika_reaction": {"harley": "BIG mountain man! He could carry us UP the mountain!"}
+    },
+    {
+      "id": "bibliothekarin_sophia",
+      "name": "Bibliothekarin Sophia",
+      "race": "Elf",
+      "age": 689,
+      "occupation": "Zentral-Bibliothekarin",
+      "personality": {"trait": "Allwissend, sammelt Wissen aus allen 9 Regionen"},
+      "shop": {"type": "knowledge_vendor", "items": [{"id": "weltkarte_komplett", "price": 500}, {"id": "enzyklopaedie", "price": 1000}]},
+      "services": {"research": {"price": 200, "provides": "Any information about any region"}},
+      "najika_reaction": {"melissa": "So viel Wissen an einem Ort..."}
+    },
+    {
+      "id": "schmied_vulcan",
+      "name": "Meisterschmied Vulcan",
+      "race": "Divine Smith",
+      "age": "Ancient",
+      "occupation": "Göttlicher Schmied",
+      "personality": {"trait": "Perfektionist, erschafft legendäre Waffen"},
+      "services": {"legendary_forge": {"price": "very_high", "quality_bonus": 100}, "artifact_creation": true},
+      "najika_reaction": {"megumin": "DER Vulcan?! Der Waffenschmied der GÖTTER?!"}
+    },
+    {
+      "id": "seher_orakel",
+      "name": "Das Orakel",
+      "race": "Divine Oracle",
+      "age": "Timeless",
+      "occupation": "Prophet",
+      "personality": {"trait": "Spricht nur in Rätseln, sieht alles"},
+      "services": {"prophecy": {"price": 1000, "accuracy": 100}},
+      "quests": ["die_letzte_prophezeiung"],
+      "najika_reaction": {"melissa": "Ein wahres Orakel... Ihre Worte sind schwer zu deuten."}
+    },
+    {
+      "id": "questgeber_zentral",
+      "name": "Gildenmeister Marcus",
+      "race": "Human",
+      "age": 52,
+      "occupation": "Quest Guild Master",
+      "personality": {"trait": "Organisiert, verteilt Quests aus allen Regionen"},
+      "services": {"quest_board": true, "bounty_system": true},
+      "najika_reaction": {"harley": "Quest guy! He's got ALL the jobs!"}
+    },
+    {
+      "id": "haendler_zentral",
+      "name": "Zentral-Händler Maximus",
+      "race": "Human",
+      "age": 48,
+      "occupation": "Central Trader",
+      "personality": {"trait": "Reich, hat ALLES"},
+      "shop": {"type": "everything", "items": "All items from all regions", "prices": "10% markup"},
+      "najika_reaction": {"shiro": "Zentral-Händler. Inventar: Komplett. Preise: +10% über Standard."}
+    },
+    {
+      "id": "goettin_statue",
+      "name": "Statue der Urgöttin",
+      "race": "Divine Artifact",
+      "age": "Ancient",
+      "occupation": "Divine Statue",
+      "personality": {"trait": "Still, aber manchmal... bewegt sie sich"},
+      "special": {"save_point": true, "resurrection_point": true, "blessing": "Divine Blessing möglich"},
+      "quests": ["das_erwachen_der_goettin"],
+      "najika_reaction": {"melissa": "Eine Göttin... Oder was von ihr übrig ist."}
+    }
+  ]
+}

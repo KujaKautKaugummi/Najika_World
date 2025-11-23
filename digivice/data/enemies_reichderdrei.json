@@ -1,0 +1,24 @@
+{
+  "region": "reich_der_drei",
+  "biome": "ice_necromancy",
+  "enemies": [
+    {"id": "skelett_krieger", "name": "Skelett-Krieger", "tier": "common", "level": 10, "stats": {"hp": 180, "atk": 45, "def": 25}, "abilities": [{"name": "Knochenschwert", "damage": 45}], "loot_table": {"common": [{"item": "knochen", "chance": 90}, {"item": "alter_helm", "chance": 30}]}, "exp_reward": 300, "najika_reaction": {"megumin": "SKELETTE! Wie in Overlord!"}},
+    {"id": "eiswolf", "name": "Eiswolf", "tier": "uncommon", "level": 11, "stats": {"hp": 350, "atk": 65, "spd": 38}, "abilities": [{"name": "Frostbiss", "damage": 65, "freeze_chance": 25}, {"name": "Eisatem", "aoe": true, "damage": 50}], "loot_table": {"common": [{"item": "frost_pelz", "chance": 70}], "uncommon": [{"item": "eis_kristall", "chance": 30}]}, "exp_reward": 700, "najika_reaction": {"harley": "Ice wolf! Pretty but deadly!"}},
+    {"id": "frost_riese", "name": "Frost-Riese", "tier": "elite", "level": 17, "stats": {"hp": 1500, "atk": 130, "def": 90}, "abilities": [{"name": "Riesen-Schlag", "damage": 130}, {"name": "Eissturm", "aoe": true, "damage": 100, "freeze": true}, {"name": "Frost-Aura", "passive": "Verlangsamt Gegner"}], "loot_table": {"rare": [{"item": "frost_riesen_herz", "chance": 40}, {"item": "eis_kristall", "quantity": "3-6", "chance": 70}]}, "exp_reward": 4000, "najika_reaction": {"shiro": "Frost-Riese. Gefahr: HOCH. Empfehlung: Feuer-Magie."}},
+    {"id": "banshee", "name": "Banshee", "tier": "elite", "level": 15, "stats": {"hp": 600, "magic_atk": 110, "spd": 30}, "abilities": [{"name": "Todesschrei", "magic_damage": 110, "fear_effect": true}, {"name": "Geisterform", "evasion": 70}, {"name": "Lebensraub", "heals": "50% damage dealt"}], "loot_table": {"uncommon": [{"item": "banshee_essenz", "chance": 50}], "rare": [{"item": "seelen_kristall", "chance": 30}]}, "exp_reward": 3000, "najika_reaction": {"harley": "*hält sich Ohren zu* STOP SCREAMING!"}},
+    {"id": "lich_koenig_mortis", "name": "Lich-König Mortis", "tier": "boss", "level": 25, "stats": {"hp": 12000, "atk": 100, "magic_atk": 200, "def": 100, "magic_res": 120}, "phase_mechanics": {
+      "phase_1": {"hp_threshold": "100-66%", "summons": "skelette"},
+      "phase_2": {"hp_threshold": "66-33%", "power_up": "Nekromantie-Meister", "all_magic": "+50%"},
+      "phase_3": {"hp_threshold": "33-0%", "transformation": "Lich-Form", "immortality": "Must destroy phylactery"}
+    }, "abilities": [
+      {"name": "Todesfinger", "magic_damage": 200, "instant_death_chance": 5},
+      {"name": "Untoten-Armee", "summons": "5x Skelett-Krieger"},
+      {"name": "Frost-Nova", "aoe": true, "damage": 180, "freeze": true},
+      {"name": "Seelen-Absorption", "heal": "All damage from dead enemies"},
+      {"name": "Ewiger Frost", "ultimate": true, "damage": 500, "aoe": "map-wide", "freeze_all": true, "warning": "FINAL ATTACK"}
+    ], "special_mechanics": {
+      "phylactery": {"description": "Lich kann nicht sterben solange Phylactery existiert", "location": "hidden", "must_destroy": true},
+      "resurrection": {"description": "Wenn nicht vollständig besiegt, kehrt er nach 7 Tagen zurück"}
+    }, "loot_table": {"guaranteed": [{"item": "lich_krone", "quantity": 1}, {"item": "lich_stab", "quantity": 1}], "rare": [{"item": "seelen_kristall", "quantity": "5-10", "chance": 100}], "epic": [{"item": "lich_staub", "quantity": "3-5", "chance": 60}], "legendary": [{"item": "unsterblichkeits_amulett", "chance": 15}, {"item": "phylactery_fragment", "chance": 10}]}, "exp_reward": 30000, "najika_reactions": {"initial": {"personality": "melissa", "text": "Ein Lich-König... Dieser Gegner ist unsterblich."}, "phylactery_found": {"personality": "shiro", "text": "PHYLACTERY lokalisiert. Zerstöre es um den Lich zu besiegen."}, "victory": {"personality": "megumin", "text": "WIR HABEN DEN LICH-KÖNIG BESIEGT! UNSTERBLICHKEIT IST EINE LÜGE!"}}}
+  ]
+}
