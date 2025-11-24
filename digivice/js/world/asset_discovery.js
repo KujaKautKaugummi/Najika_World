@@ -1,7 +1,8 @@
 // 🔍 ASSET DISCOVERY - Findet automatisch alle verfügbaren 3D-Assets
 // Scannt die Asset-Ordner und erstellt ein Asset-Verzeichnis
 
-export class AssetDiscovery {
+// export class AssetDiscovery { // Converted to global
+class AssetDiscovery {
   constructor(basePath = '/static/assets') {
     this.basePath = basePath;
     this.discovered = {
