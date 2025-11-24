@@ -1872,14 +1872,14 @@
                 isCrouching = false;
             }
 
-            // Movement Speed basierend auf State
-            let moveSpeed = 0.5;  // Base
+            // Movement Speed basierend auf State (Realistisch für 3200m Map!)
+            let moveSpeed = 0.1;  // Base walking speed (~6 m/s @ 60fps)
             if (isSliding) {
-                moveSpeed = slideVelocity;  // Sliding (wird weniger)
+                moveSpeed = slideVelocity * 0.2;  // Sliding (schneller aber kontrolliert)
             } else if (isSprinting) {
-                moveSpeed = 1.0;  // Sprint (2x base)
+                moveSpeed = 0.15;  // Sprint (~9 m/s @ 60fps, wie Fortnite)
             } else if (isCrouching) {
-                moveSpeed = 0.25;  // Crouch (0.5x base)
+                moveSpeed = 0.05;  // Crouch (langsam, ~3 m/s @ 60fps)
             }
 
             let dx = 0;
