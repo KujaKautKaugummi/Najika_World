@@ -420,6 +420,7 @@
     <script src="static/js/sound_system.js"></script>
     <script src="static/js/tutorial_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
+    <script src="static/js/game_data_loader.js"></script>
 
     <script>
         const THREE = window.THREE;
@@ -1480,7 +1481,10 @@
             document.getElementById('loading').style.display = 'none';
             console.log('🎉 Alle Assets geladen!');
 
-            // Spawn Enemies in allen 9 Regionen (Phase 3: Combat)
+            // WICHTIG: Lade Game Content JSON-Dateien (NPCs, Items, Quests, Enemies)
+            await gameDataLoader.loadAll();
+
+            // Spawn Enemies aus JSON-Daten statt hardcoded (Phase 3: Combat)
             realtimeCombat.spawnEnemiesInAllRegions(regions);
             console.log('⚔️ Realtime Combat System bereit!');
         }
