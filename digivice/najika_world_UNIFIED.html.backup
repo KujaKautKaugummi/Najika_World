@@ -584,10 +584,10 @@
         // Optimierte Shadow Map (2048 statt 4096 für Performance)
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
-        directionalLight.shadow.camera.left = -5000;
-        directionalLight.shadow.camera.right = 5000;
-        directionalLight.shadow.camera.top = 5000;
-        directionalLight.shadow.camera.bottom = -5000;
+        directionalLight.shadow.camera.left = -150;
+        directionalLight.shadow.camera.right = 150;
+        directionalLight.shadow.camera.top = 150;
+        directionalLight.shadow.camera.bottom = -150;
         directionalLight.shadow.camera.near = 0.5;
         directionalLight.shadow.camera.far = 500;
         directionalLight.shadow.bias = -0.0001;
@@ -598,20 +598,20 @@
         scene.add(hemiLight);
 
         // 9 REGIONS (3x3 Grid, each ~133x133 - 4x größer!)
-        const regionSize = 3200;
+        const regionSize = 133.32;
         const regions = [
             // Row 1 (top): z=133.32
-            { name: 'ice',      color: 0xf0f8ff, x: -3200, z: 3200,  y: 0 },
-            { name: 'highland', color: 0x8b7355, x: 0,     z: 3200,  y: 0 },
-            { name: 'desert',   color: 0xe8d4a0, x: 3200,  z: 3200,  y: 0 },
+            { name: 'ice',      color: 0xf0f8ff, x: -133.32, z: 133.32,  y: 0 },
+            { name: 'highland', color: 0x8b7355, x: 0,       z: 133.32,  y: 0 },
+            { name: 'desert',   color: 0xe8d4a0, x: 133.32,  z: 133.32,  y: 0 },
             // Row 2 (middle): z=0
-            { name: 'swamp',    color: 0x556b2f, x: -3200, z: 0,       y: 0 },
-            { name: 'mountain', color: 0x808080, x: 0, z: 0, y: 50 },  // Berg höher!
-            { name: 'coast',    color: 0xc2b280, x: 3200,  z: 0,       y: 0 },
+            { name: 'swamp',    color: 0x556b2f, x: -133.32, z: 0,       y: 0 },
+            { name: 'mountain', color: 0x808080, x: 0, z: 0,       y: 5 },  // Berg höher!
+            { name: 'coast',    color: 0xc2b280, x: 133.32,  z: 0,       y: 0 },
             // Row 3 (bottom): z=-133.32
-            { name: 'caves',    color: 0x2f2f2f, x: -3200, z: -3200, y: 0 },
-            { name: 'forest',   color: 0x2d5016, x: 0,     z: -3200, y: 0 },
-            { name: 'volcano',  color: 0x8b4513, x: 3200,  z: -3200, y: 0 }
+            { name: 'caves',    color: 0x2f2f2f, x: -133.32, z: -133.32, y: 0 },
+            { name: 'forest',   color: 0x2d5016, x: 0,       z: -133.32, y: 0 },
+            { name: 'volcano',  color: 0x8b4513, x: 133.32,  z: -133.32, y: 0 }
         ];
 
         regions.forEach(region => {
@@ -630,7 +630,7 @@
         });
 
         // Grid (4x größer: 400x400)
-        const gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+        const gridHelper = new THREE.GridHelper(400, 80, 0x000000, 0x444444);
         gridHelper.visible = true;
         scene.add(gridHelper);
 
@@ -669,7 +669,7 @@
         }
 
         // Position: Mitte der Map (Berg-Region, leicht erhöht)
-        character.position.set(0, 55, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
+        character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
         scene.add(character);
 
         // Camera folgt Character (Third-Person Mode)
@@ -1204,7 +1204,7 @@
             // Mountain is at center (x: 0, z: 0) with Y=5
             // All others at Y=0
 
-            const regionSize = 3200;
+            const regionSize = 133.32;
             const halfSize = regionSize / 2;
 
             // Check if in mountain region (center)
