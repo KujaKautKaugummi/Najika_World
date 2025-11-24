@@ -1498,8 +1498,8 @@
                 });
 
                 schwarzeMuehle = gltf.scene;
-                schwarzeMuehle.position.set(0, 5, 0); // Berg-Gipfel (Mountain Region)
-                schwarzeMuehle.scale.set(2.5, 2.5, 2.5); // Größer und imposanter
+                schwarzeMuehle.position.set(0, 50, 0); // Berg-Gipfel (Mountain ist jetzt bei y=50!)
+                schwarzeMuehle.scale.set(3.0, 3.0, 3.0); // Etwas größer für 3200m Map
 
                 // Färbe Windmühle SCHWARZ
                 schwarzeMuehle.traverse((child) => {
@@ -1534,7 +1534,7 @@
                     opacity: 0.8
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                marker.position.set(0, 18, 0); // Über der Windmühle
+                marker.position.set(0, 65, 0); // Über der Windmühle (Berg ist bei y=50 + Mühle ~10m hoch)
                 scene.add(marker);
 
                 // Pulsing Animation für Marker
@@ -1553,14 +1553,14 @@
         // ===== STÄDTE & BESONDERE ORTE (Phase 5) - 4x größere Welt =====
         const buildings = [];
         const cityLocations = [
-            // 5 STÄDTE
+            // 5 STÄDTE (Positionen für 3200m Regionen!)
             {
                 name: 'Handelsfestung',
                 type: 'city',
                 region: 'desert',
-                position: { x: 140, y: 0, z: 140 },
+                position: { x: 3200, y: 0, z: 3200 }, // Desert Region (top-right)
                 model: 'static/assets/kaykit/medieval/building_castle_yellow.gltf',
-                scale: 2.0,
+                scale: 4.0, // Größer für 3200m Map
                 color: 0xffd700, // Gold
                 description: 'PvP Arena & Player Shops'
             },
@@ -1568,9 +1568,9 @@
                 name: 'Dampf-Hain',
                 type: 'city',
                 region: 'forest',
-                position: { x: 0, y: 0, z: -140 },
+                position: { x: 0, y: 0, z: -3200 }, // Forest Region (bottom-center)
                 model: 'static/assets/jellysquish/oasis/house_large.glb',
-                scale: 1.8,
+                scale: 3.5, // Größer für 3200m Map
                 color: 0x2ecc71, // Grün
                 description: 'Onsen & Restaurants'
             },
@@ -1578,9 +1578,9 @@
                 name: 'Salzige Bucht',
                 type: 'city',
                 region: 'coast',
-                position: { x: 140, y: 0, z: 0 },
+                position: { x: 3200, y: 0, z: 0 }, // Coast Region (middle-right)
                 model: 'static/assets/kaykit/medieval/building_tower_A_blue.gltf',
-                scale: 2.2,
+                scale: 4.2, // Größer für 3200m Map
                 color: 0x3498db, // Blau
                 description: 'Hafen & Leuchtturm'
             },
@@ -1588,9 +1588,9 @@
                 name: 'Runenheim',
                 type: 'city',
                 region: 'highland',
-                position: { x: 0, y: 0, z: 140 },
+                position: { x: 0, y: 0, z: 3200 }, // Highland Region (top-center)
                 model: 'static/assets/kaykit/medieval/building_tower_A_red.gltf',
-                scale: 2.0,
+                scale: 4.0, // Größer für 3200m Map
                 color: 0x9b59b6, // Lila
                 description: 'Magie-Akademie'
             },
@@ -1598,9 +1598,9 @@
                 name: 'Funken-Siedlung',
                 type: 'city',
                 region: 'volcano',
-                position: { x: 140, y: 0, z: -140 },
+                position: { x: 3200, y: 0, z: -3200 }, // Volcano Region (bottom-right)
                 model: 'static/assets/kaykit/medieval/building_blacksmith_red.gltf',
-                scale: 1.8,
+                scale: 3.5, // Größer für 3200m Map
                 color: 0xe74c3c, // Rot
                 description: 'Schmieden'
             },
@@ -1609,9 +1609,9 @@
                 name: 'Reich der Drei',
                 type: 'special',
                 region: 'ice',
-                position: { x: -140, y: 0, z: 140 },
+                position: { x: -3200, y: 0, z: 3200 }, // Ice Region (top-left)
                 model: 'static/assets/kaykit/dungeon/column.gltf',
-                scale: 2.5,
+                scale: 5.0, // Größer für 3200m Map
                 color: 0x00ffff, // Cyan
                 description: 'Untote & Nekromanten'
             },
@@ -1619,9 +1619,9 @@
                 name: 'Funkelnest',
                 type: 'special',
                 region: 'swamp',
-                position: { x: -140, y: 0, z: 0 },
+                position: { x: -3200, y: 0, z: 0 }, // Swamp Region (middle-left)
                 model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone.gltf',
-                scale: 2.0,
+                scale: 4.0, // Größer für 3200m Map
                 color: 0xff1493, // Pink
                 description: 'Schatzhöhle & Hexen'
             },
@@ -1629,9 +1629,9 @@
                 name: 'Tiefenhöhlen',
                 type: 'special',
                 region: 'caves',
-                position: { x: -140, y: 0, z: -140 },
+                position: { x: -3200, y: 0, z: -3200 }, // Caves Region (bottom-left)
                 model: 'static/assets/kaykit/dungeon/wall.gltf',
-                scale: 2.2,
+                scale: 4.2, // Größer für 3200m Map
                 color: 0x8b4513, // Braun
                 description: 'Goblin-Siedlungen'
             }
