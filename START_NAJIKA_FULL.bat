@@ -38,7 +38,13 @@ echo   Backend:  http://localhost:8000 (Fenster 1)
 echo   Frontend: http://localhost:5173 (Fenster 2)
 echo.
 echo   Status: Backend Online (grüner Punkt)
-echo   Features: Chat, Teleport, Stats Sync
+echo   Features: Chat, Teleport, Stats Sync, Voice
+echo.
+echo   Alle Dependencies vorhanden:
+echo   - Ollama: najika-local, najika-wizard
+echo   - ChromaDB: Memories + Training Data
+echo   - Coqui TTS: Megumin Voice Clone
+echo   - PyTorch: CUDA 12.1 (GPU)
 echo.
 echo   Press CTRL+C to stop Frontend
 echo   Schließe "Backend" Fenster für Server
