@@ -854,7 +854,7 @@
             // Check Schwarze Windmühle
             if (schwarzeMuehle) {
                 const distance = character.position.distanceTo(schwarzeMuehle.position);
-                const radius = schwarzeMuehle.userData.proximityRadius || 15;
+                const radius = schwarzeMuehle.userData.proximityRadius || 150; // Default 150m für 3200m Map
 
                 if (distance < radius && distance < closestDistance) {
                     closestBuilding = schwarzeMuehle;
@@ -865,7 +865,7 @@
             // Check alle Städte & Besondere Orte
             for (const building of buildings) {
                 const distance = character.position.distanceTo(building.position);
-                const radius = building.userData.proximityRadius || 12;
+                const radius = building.userData.proximityRadius || 120; // Default 120m für 3200m Map
 
                 if (distance < radius && distance < closestDistance) {
                     closestBuilding = building;
@@ -1034,7 +1034,7 @@
 
             // Distance zum Exit-Portal
             const distance = character.position.distanceTo(interior.exitPortal.position);
-            const radius = 10; // Proximity Radius
+            const radius = 50; // Proximity Radius (100m für 3200m Map, aber Interior ist kleiner)
 
             if (distance < radius) {
                 // Zeige E-Prompt
@@ -1499,7 +1499,7 @@
 
                 schwarzeMuehle = gltf.scene;
                 schwarzeMuehle.position.set(0, 50, 0); // Berg-Gipfel (Mountain ist jetzt bei y=50!)
-                schwarzeMuehle.scale.set(3.0, 3.0, 3.0); // Etwas größer für 3200m Map
+                schwarzeMuehle.scale.set(25, 25, 25); // VIEL größer für 3200m Map! (24x Skalierung)
 
                 // Färbe Windmühle SCHWARZ
                 schwarzeMuehle.traverse((child) => {
@@ -1520,12 +1520,12 @@
                 // UserData für E-Taste System
                 schwarzeMuehle.userData.buildingType = 'schwarze_muehle';
                 schwarzeMuehle.userData.buildingName = 'Schwarze Windmühle';
-                schwarzeMuehle.userData.proximityRadius = 15; // 15 Einheiten Radius
+                schwarzeMuehle.userData.proximityRadius = 150; // 150m Radius (war 15 für 133m Map)
 
                 scene.add(schwarzeMuehle);
 
                 // Leuchtender Marker über der Windmühle
-                const markerGeometry = new THREE.SphereGeometry(1, 16, 16);
+                const markerGeometry = new THREE.SphereGeometry(10, 16, 16); // Größerer Marker (10m statt 1m)
                 const markerMaterial = new THREE.MeshStandardMaterial({
                     color: 0x8b00ff,
                     emissive: 0x8b00ff,
@@ -1534,7 +1534,7 @@
                     opacity: 0.8
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                marker.position.set(0, 65, 0); // Über der Windmühle (Berg ist bei y=50 + Mühle ~10m hoch)
+                marker.position.set(0, 300, 0); // HOCH über der Windmühle (sichtbar von weit weg!)
                 scene.add(marker);
 
                 // Pulsing Animation für Marker
@@ -1659,13 +1659,13 @@
                     building.userData.buildingType = location.type;
                     building.userData.buildingName = location.name;
                     building.userData.buildingDescription = location.description;
-                    building.userData.proximityRadius = 12;
+                    building.userData.proximityRadius = 120; // 120m Radius (war 12 für 133m Map)
 
                     scene.add(building);
                     buildings.push(building);
 
                     // Leuchtender Marker über Gebäude
-                    const markerGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+                    const markerGeometry = new THREE.SphereGeometry(8, 16, 16); // 8m statt 0.8m
                     const markerMaterial = new THREE.MeshStandardMaterial({
                         color: location.color,
                         emissive: location.color,
@@ -1674,7 +1674,7 @@
                         opacity: 0.9
                     });
                     const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                    marker.position.set(location.position.x, location.position.y + 15, location.position.z);
+                    marker.position.set(location.position.x, location.position.y + 150, location.position.z); // +150m hoch (war +15)
                     scene.add(marker);
 
                     // Pulsing Animation
@@ -3043,7 +3043,7 @@
             for (const building of currentBuildings) {
                 if (building.userData.buildingType === 'arena') {
                     const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                    if (distance < 15) {
+                    if (distance < 150) { // 150m für 3200m Map (war 15)
                         // Show Arena prompt
                         const prompt = document.getElementById('building-prompt');
                         if (prompt) {
@@ -3057,7 +3057,7 @@
                 // Check Player Shop
                 if (building.userData.buildingType === 'player_shop') {
                     const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                    if (distance < 5) {
+                    if (distance < 50) { // 50m für 3200m Map (war 5)
                         const prompt = document.getElementById('building-prompt');
                         if (prompt) {
                             prompt.textContent = `🛒 Drücke E für ${building.userData.buildingName}`;
@@ -3128,7 +3128,7 @@
                 for (const building of currentBuildings) {
                     if (building.userData.buildingType === 'arena') {
                         const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                        if (distance < 15) {
+                        if (distance < 150) { // 150m für 3200m Map (war 15)
                             // Show Arena UI
                             const arenaUI = document.getElementById('arena-ui');
                             if (arenaUI) {
@@ -3142,7 +3142,7 @@
                     // Check Player Shop
                     if (building.userData.buildingType === 'player_shop') {
                         const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                        if (distance < 5) {
+                        if (distance < 50) { // 50m für 3200m Map (war 5)
                             alert(building.userData.buildingName + '\n\nComing Soon: Multiplayer Player Shops! 🛒');
                             return;
                         }
