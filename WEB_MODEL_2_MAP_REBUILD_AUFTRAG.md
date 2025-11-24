@@ -254,10 +254,13 @@ const WORLD_BOUNDS = {
 
 ---
 
-## 📋 PHASE 2: TERRAIN VARIATION (Priorität: MITTEL)
+## 📋 PHASE 2: TERRAIN VARIATION (Priorität: HOCH - PFLICHT!)
+
+### ⚠️ WICHTIG: Phase 2 ist NICHT optional!
+Die Welt MUSS lebendig sein mit Bergen, Tälern und organischem Terrain. Phase 1 (flat) ist nur zum Testing, Phase 2 ist das finale Produkt.
 
 ### Aufgabe 2.1: Höhenprofile pro Biome
-Füge **nach** Phase 1 Höhenvariation hinzu:
+Füge **direkt nach** Phase 1 Höhenvariation hinzu:
 
 ```javascript
 // Götterfels (Mountain) - HÖCHSTER PUNKT
@@ -338,8 +341,8 @@ Oder bessere Implementierung mit simplex-noise.js:
 - ✅ Combat-System funktionsfähig
 - ✅ JSON-Daten geladen (~90 NPCs, ~200 Items, ~80 Quests, ~45 Enemies)
 - ✅ Enemies spawnen in richtigen Regionen
-- ✅ Phase 1: Flat terrain
-- ✅ Phase 2: Höhenvariation (optional, aber empfohlen)
+- ✅ Phase 1: Flat terrain (NUR zum Testen!)
+- ✅ Phase 2: Höhenvariation (PFLICHT! Finale Version!)
 - ✅ Minimap skaliert auf 9.6km
 - ✅ Teleport-System zu allen 9 Regionen
 
@@ -383,26 +386,30 @@ Oder bessere Implementierung mit simplex-noise.js:
 
 1. **Map-Größe korrekt:** 9600m x 9600m (mit `console.log` bestätigen)
 2. **Regionen zusammenhängend:** Keine Lücken zwischen Regionen
-3. **Combat funktioniert:** Enemies spawnen und angreifen
-4. **JSON-Daten geladen:** ~90 NPCs, ~200 Items, ~80 Quests, ~45 Enemies
-5. **Performance gut:** Mindestens 30 FPS
+3. **Höhenvariation vorhanden:** Berg bei Götterfels sichtbar, Dünen in Desert, etc.
+4. **Combat funktioniert:** Enemies spawnen und angreifen
+5. **JSON-Daten geladen:** ~90 NPCs, ~200 Items, ~80 Quests, ~45 Enemies
+6. **Performance gut:** Mindestens 30 FPS
+7. **Phase 2 abgeschlossen:** Terrain ist NICHT flat, sondern hat organische Höhen!
 
 ---
 
 ## 🎯 ZEITPLAN
 
-**Phase 1 (Flat Prototype):** 2-3 Stunden
+**Phase 1 (Flat Prototype - Testing Only):** 2-3 Stunden
 - Map-Größe anpassen
 - Combat-System übernehmen
 - JSON-Loader schreiben
 - Testing
+- ⚠️ NICHT als finale Version committen!
 
-**Phase 2 (Terrain Variation):** 2-3 Stunden
-- Höhenprofile implementieren
+**Phase 2 (Terrain Variation - FINALE VERSION):** 2-3 Stunden
+- Höhenprofile implementieren (PFLICHT!)
 - Edge-Blending zwischen Regionen
 - Testing + Performance-Optimierung
+- ✅ Diese Version committen und pushen!
 
-**Total:** 4-6 Stunden
+**Total:** 4-6 Stunden (BEIDE Phasen müssen gemacht werden!)
 
 ---
 
