@@ -1,30 +1,42 @@
 @echo off
-title Najika World - Complete Game (9 Regions + Full Content)
+title Najika World - Game Only (No Backend)
 color 0B
 
 echo ========================================
-echo   NAJIKA WORLD - COMPLETE GAME
+echo   NAJIKA WORLD - GAME ONLY
 echo ========================================
 echo.
 echo   9.6km x 9.6km Open World (1.75x Fortnite BR!)
 echo   9 Regions - Full Content
-echo   ~90 NPCs with Najika Reactions
-echo   ~200 Items (Weapons, Armor, etc)
-echo   ~80 Quests (Oregon Trail Style)
-echo   ~45 Enemies + 9 Boss Fights
+echo   Combat System - Realtime
+echo.
+echo   NOTE: Backend NOT started!
+echo   Status: "Backend Offline" (red dot)
+echo.
+echo   Features OHNE Backend:
+echo   - Open World Map
+echo   - Combat System
+echo   - Mühle betreten (Räume Basic)
+echo   - Movement + Enemies
+echo.
+echo   Features MIT Backend (starte: START_NAJIKA_FULL.bat):
+echo   - Najika AI Chat
+echo   - Teleport System
+echo   - Stats Sync
+echo   - Voice Call (falls TTS)
 echo ========================================
 echo.
-echo Starting game...
+echo Starting game server...
 echo.
 echo Game will open at:
 echo   http://localhost:5173/najika_world_UNIFIED.html
 echo.
 echo Controls:
-echo   WASD - Movement (80 units/s, fast!)
-echo   Mouse - Look around
-echo   E - Interact with NPCs
-echo   Q/E/SPACE/C/X/V - Combat (MANUAL mode)
-echo   Tab - Switch Combat Mode (MANUAL/ASSIST/AUTO)
+echo   WASD - Movement (6-9 m/s)
+echo   Shift - Sprint
+echo   E - Interact (Mühle/Städte)
+echo   Tab - Combat Mode (MANUAL/ASSIST/AUTO)
+echo   Q/E/SPACE/C/X/V - Combat Actions
 echo.
 echo Press CTRL+C to stop
 echo ========================================
