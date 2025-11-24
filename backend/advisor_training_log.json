@@ -1,0 +1,13 @@
+[
+  {
+    "session_start": "2025-11-24T02:05:33.048839",
+    "session_end": "2025-11-24T02:07:32.283183",
+    "duration_minutes": 1.9872390666666666,
+    "stats": {
+      "decisions_helped": 3,
+      "problems_solved": 5,
+      "advice_given": 5,
+      "pro_contra_created": 4
+    }
+  }
+]
