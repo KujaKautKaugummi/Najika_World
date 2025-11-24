@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika World UNIFIED - 9.6km x 9.6km Open World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            z-index: 100;
+            border: 2px solid #4CAF50;
+        }
+
+        #ui h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #4CAF50;
+            text-shadow: 0 0 10px #4CAF50;
+        }
+
+        #ui p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .label {
+            color: #FFC107;
+            font-weight: bold;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px 60px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 200;
+            border: 3px solid #4CAF50;
+        }
+
+        #loading h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        #progress-bar {
+            width: 350px;
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="loading">
+        <h2>🌍 Lade Najika World...</h2>
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+        <p id="progress-text">Initialisiere 9.6km Map...</p>
+    </div>
+
+    <div id="ui">
+        <h1>🌍 NAJIKA WORLD UNIFIED</h1>
+        <p><strong>Map-Größe:</strong> <span class="label">9.6km x 9.6km</span></p>
+        <p><strong>Position:</strong> <span id="position" class="label">0, 0</span></p>
+        <p><strong>Region:</strong> <span id="current-region" class="label">Götterfels</span></p>
+        <p><strong>FPS:</strong> <span id="fps" class="label">60</span></p>
+        <p><strong>Geladen:</strong> <span id="loaded-data" class="label">0/36 JSON</span></p>
+        <p><strong>Bewegung:</strong> WASD | <strong>Sprint:</strong> Shift+W | <strong>Combat:</strong> Q/E/C/X/V</p>
+    </div>
+
+    <div id="combat-ui" style="position: absolute; top: 10px; right: 20px; background: rgba(0,0,0,0.85); color: white; padding: 15px; border-radius: 10px; font-size: 14px; min-width: 250px; border: 2px solid #e74c3c;">
+        <h3 style="margin: 0 0 10px 0; color: #e74c3c;">⚔️ COMBAT STATUS</h3>
+        <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span>❤️ HP:</span>
+                <span id="player-hp" style="color: #2ecc71;">1000 / 1000</span>
+            </div>
+            <div style="background: #333; height: 20px; border-radius: 5px; overflow: hidden;">
+                <div id="player-hp-bar" style="background: linear-gradient(90deg, #2ecc71, #27ae60); width: 100%; height: 100%; transition: width 0.3s;"></div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span>⚔️ Mode:</span>
+            <span id="combat-mode" style="color: #3498db; font-weight: bold;">MANUAL</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span>👹 Enemies:</span>
+            <span id="enemy-count" style="color: #e74c3c; font-weight: bold;">0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>💀 Kills:</span>
+            <span id="kill-count" style="color: #f39c12; font-weight: bold;">0</span>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="teleportTo('reich_der_drei')">❄️ Reich der Drei</button>
+        <button onclick="teleportTo('blitzebene')">⛰️ Blitzebene</button>
+        <button onclick="teleportTo('heisse_duenen')">🏜️ Heiße Dünen</button>
+        <button onclick="teleportTo('gruenschlamm')">🧪 Grünschlamm</button>
+        <button onclick="teleportTo('goetterfels')">🗻 Götterfels</button>
+        <button onclick="teleportTo('salzwind_kueste')">🌊 Salzwind-Küste</button>
+        <button onclick="teleportTo('tiefenhoehlen')">🕳️ Tiefenhöhlen</button>
+        <button onclick="teleportTo('samtmoos_tiefwald')">🌲 Samtmoos-Tiefwald</button>
+        <button onclick="teleportTo('magmastroeme')">🌋 Magmaströme</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/dist/esm/simplex-noise.js" type="module"></script>
+
+    <script type="module">
+        const THREE = window.THREE;
+
+        // ===== PROGRESS SYSTEM =====
+        let loadProgress = 0;
+        function updateProgress(percent, text) {
+            loadProgress = percent;
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = text;
+        }
+
+        updateProgress(10, 'Initialisiere Three.js Scene...');
+
+        // ===== SCENE SETUP =====
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+        scene.fog = new THREE.Fog(0x87CEEB, 500, 8000);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 150, 300);
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        updateProgress(20, 'Scene erstellt...');
+
+        // ===== LIGHTING =====
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xfff8dc, 0.8);
+        directionalLight.position.set(5000, 3000, 4000);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.camera.left = -5000;
+        directionalLight.shadow.camera.right = 5000;
+        directionalLight.shadow.camera.top = 5000;
+        directionalLight.shadow.camera.bottom = -5000;
+        scene.add(directionalLight);
+
+        updateProgress(30, 'Lighting setup...');
+
+        // ===== CONSTANTS =====
+        const REGION_SIZE = 3200;  // 3.2km pro Region
+        const WORLD_SIZE = 9600;   // 9.6km total
+        const MOVE_SPEED = 80;     // Schneller für große Map
+        const SPRINT_MULTIPLIER = 2.5;
+
+        // ===== 9 REGIONS (3x3 Grid) =====
+        const regionData = [
+            // Row 1 (North): z = 3200
+            { name: 'reich_der_drei', displayName: 'Reich der Drei', biome: 'ice', color: 0xf0f8ff, x: -3200, z: 3200, y: 0 },
+            { name: 'blitzebene', displayName: 'Blitzebene', biome: 'highland', color: 0x8b7355, x: 0, z: 3200, y: 0 },
+            { name: 'heisse_duenen', displayName: 'Heiße Dünen', biome: 'desert', color: 0xe8d4a0, x: 3200, z: 3200, y: 0 },
+
+            // Row 2 (Center): z = 0
+            { name: 'gruenschlamm', displayName: 'Grünschlamm-Sumpf', biome: 'swamp', color: 0x556b2f, x: -3200, z: 0, y: 0 },
+            { name: 'goetterfels', displayName: 'Götterfels', biome: 'mountain', color: 0x808080, x: 0, z: 0, y: 0 },
+            { name: 'salzwind_kueste', displayName: 'Salzwind-Küste', biome: 'coast', color: 0xc2b280, x: 3200, z: 0, y: 0 },
+
+            // Row 3 (South): z = -3200
+            { name: 'tiefenhoehlen', displayName: 'Tiefenhöhlen', biome: 'caves', color: 0x2f2f2f, x: -3200, z: -3200, y: 0 },
+            { name: 'samtmoos_tiefwald', displayName: 'Samtmoos-Tiefwald', biome: 'forest', color: 0x2d5016, x: 0, z: -3200, y: 0 },
+            { name: 'magmastroeme', displayName: 'Magmaströme', biome: 'volcano', color: 0x8b4513, x: 3200, z: -3200, y: 0 }
+        ];
+
+        updateProgress(40, 'Region-Daten geladen...');
+
+        // ===== COMBAT SYSTEM VARIABLES =====
+        const player = {
+            hp: 1000,
+            maxHp: 1000,
+            damage: 50,
+            attackSpeed: 1.0,
+            lastAttack: 0
+        };
+
+        const combat = {
+            mode: 'MANUAL', // MANUAL, ASSIST, AUTO
+            enemies: [],
+            kills: 0,
+            isAttacking: false,
+            isDodging: false,
+            isBlocking: false,
+            isParrying: false
+        };
+
+        // ===== PERLIN NOISE (Simple) =====
+        function perlin2D(x, z) {
+            return (Math.sin(x * 0.05) + Math.sin(z * 0.05) + Math.cos(x * 0.03) * Math.cos(z * 0.03)) * 0.25;
+        }
+
+        // ===== TERRAIN FUNCTIONS (Phase 2) =====
+        function applyTerrainHeights(geometry, regionName, biome) {
+            const vertices = geometry.attributes.position.array;
+
+            for (let i = 0; i < vertices.length; i += 3) {
+                const x = vertices[i];
+                const z = vertices[i + 1];
+                let height = 0;
+
+                if (biome === 'mountain') {
+                    // Götterfels: Berg in der Mitte
+                    const distFromCenter = Math.sqrt(x * x + z * z);
+                    const maxDist = REGION_SIZE / 2;
+                    const heightFactor = Math.max(0, 1 - (distFromCenter / maxDist));
+                    height = heightFactor * 150 + perlin2D(x * 0.1, z * 0.1) * 20;
+                } else if (biome === 'desert') {
+                    // Heiße Dünen: Sanfte Wellen
+                    height = perlin2D(x * 0.08, z * 0.08) * 15 + perlin2D(x * 0.2, z * 0.2) * 5;
+                } else if (biome === 'volcano') {
+                    // Magmaströme: Raues Terrain
+                    height = perlin2D(x * 0.1, z * 0.1) * 25 + Math.random() * 10;
+                } else if (biome === 'highland') {
+                    // Blitzebene: Hügelig
+                    height = perlin2D(x * 0.15, z * 0.15) * 30;
+                } else if (biome === 'swamp') {
+                    // Grünschlamm: Flach mit kleinen Erhebungen
+                    height = perlin2D(x * 0.2, z * 0.2) * 8;
+                } else if (biome === 'ice') {
+                    // Reich der Drei: Eisig, flach mit Buckeln
+                    height = perlin2D(x * 0.12, z * 0.12) * 12;
+                } else if (biome === 'forest') {
+                    // Samtmoos-Tiefwald: Leicht hügelig
+                    height = perlin2D(x * 0.15, z * 0.15) * 18;
+                } else if (biome === 'coast') {
+                    // Salzwind-Küste: Sandig, flach
+                    height = perlin2D(x * 0.2, z * 0.2) * 10;
+                } else if (biome === 'caves') {
+                    // Tiefenhöhlen: Dunkel, uneben
+                    height = perlin2D(x * 0.1, z * 0.1) * 15;
+                }
+
+                vertices[i + 2] = height;  // Y-Koordinate setzen
+            }
+
+            geometry.attributes.position.needsUpdate = true;
+            geometry.computeVertexNormals();
+        }
+
+        // ===== GENERATE REGIONS =====
+        const regionMeshes = [];
+
+        regionData.forEach((region, index) => {
+            const geometry = new THREE.PlaneGeometry(
+                REGION_SIZE,
+                REGION_SIZE,
+                100,  // Mehr Segments für Details
+                100
+            );
+
+            // PHASE 2: Terrain-Variation anwenden
+            applyTerrainHeights(geometry, region.name, region.biome);
+
+            const material = new THREE.MeshStandardMaterial({
+                color: region.color,
+                roughness: 0.9,
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.position.set(region.x, region.y, region.z);
+            mesh.receiveShadow = true;
+            mesh.castShadow = false;  // Terrain wirft keine Schatten (Performance)
+            mesh.name = `region_${region.name}`;
+            mesh.userData = { regionData: region };
+
+            scene.add(mesh);
+            regionMeshes.push(mesh);
+
+            updateProgress(40 + (index * 3), `Region ${index + 1}/9 generiert...`);
+        });
+
+        updateProgress(70, 'Alle Regionen generiert...');
+
+        // ===== CHARACTER =====
+        const character = new THREE.Group();
+        const charGeometry = new THREE.BoxGeometry(2, 4, 2);
+        const charMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
+        const charMesh = new THREE.Mesh(charGeometry, charMaterial);
+        charMesh.castShadow = true;
+        charMesh.receiveShadow = true;
+        character.add(charMesh);
+        character.position.set(0, 10, 0);  // Start in Götterfels
+        scene.add(character);
+
+        updateProgress(75, 'Character erstellt...');
+
+        // ===== DATA LOADER =====
+        class DataLoader {
+            constructor() {
+                this.npcs = {};
+                this.items = {};
+                this.quests = {};
+                this.enemies = {};
+                this.loadedCount = 0;
+            }
+
+            async loadAll() {
+                const regions = [
+                    'reichderdrei', 'runenheim', 'handelsfestung',
+                    'gruenschlamm', 'goetterfels', 'salzigebucht',
+                    'tiefenhoehlen', 'dampfhain', 'funkensiedlung'
+                ];
+
+                let totalLoaded = 0;
+                const totalFiles = regions.length * 4;  // 36 files
+
+                for (const region of regions) {
+                    try {
+                        // NPCs
+                        const npcsRes = await fetch(`data/npcs_${region}.json`);
+                        if (npcsRes.ok) {
+                            this.npcs[region] = await npcsRes.json();
+                            totalLoaded++;
+                            updateProgress(75 + (totalLoaded / totalFiles * 20), `Loading ${totalLoaded}/${totalFiles} JSON files...`);
+                        }
+
+                        // Items
+                        const itemsRes = await fetch(`data/items_${region}.json`);
+                        if (itemsRes.ok) {
+                            this.items[region] = await itemsRes.json();
+                            totalLoaded++;
+                            updateProgress(75 + (totalLoaded / totalFiles * 20), `Loading ${totalLoaded}/${totalFiles} JSON files...`);
+                        }
+
+                        // Quests
+                        const questsRes = await fetch(`data/quests_${region}.json`);
+                        if (questsRes.ok) {
+                            this.quests[region] = await questsRes.json();
+                            totalLoaded++;
+                            updateProgress(75 + (totalLoaded / totalFiles * 20), `Loading ${totalLoaded}/${totalFiles} JSON files...`);
+                        }
+
+                        // Enemies
+                        const enemiesRes = await fetch(`data/enemies_${region}.json`);
+                        if (enemiesRes.ok) {
+                            this.enemies[region] = await enemiesRes.json();
+                            totalLoaded++;
+                            updateProgress(75 + (totalLoaded / totalFiles * 20), `Loading ${totalLoaded}/${totalFiles} JSON files...`);
+                        }
+                    } catch (error) {
+                        console.warn(`⚠️  Could not load data for ${region}:`, error);
+                    }
+                }
+
+                this.loadedCount = totalLoaded;
+                document.getElementById('loaded-data').textContent = `${this.loadedCount}/${totalFiles} JSON`;
+
+                console.log('✅ All JSON data loaded:', {
+                    npcs: Object.keys(this.npcs).length,
+                    items: Object.keys(this.items).length,
+                    quests: Object.keys(this.quests).length,
+                    enemies: Object.keys(this.enemies).length
+                });
+            }
+        }
+
+        const dataLoader = new DataLoader();
+        await dataLoader.loadAll();
+
+        // ===== COMBAT FUNCTIONS =====
+        function updateCombatUI() {
+            document.getElementById('player-hp').textContent = `${player.hp} / ${player.maxHp}`;
+            const hpPercent = (player.hp / player.maxHp) * 100;
+            document.getElementById('player-hp-bar').style.width = hpPercent + '%';
+
+            if (hpPercent > 50) {
+                document.getElementById('player-hp-bar').style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
+            } else if (hpPercent > 25) {
+                document.getElementById('player-hp-bar').style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
+            } else {
+                document.getElementById('player-hp-bar').style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
+            }
+
+            document.getElementById('combat-mode').textContent = combat.mode;
+            document.getElementById('enemy-count').textContent = combat.enemies.length;
+            document.getElementById('kill-count').textContent = combat.kills;
+        }
+
+        function spawnEnemy(regionData, enemyData) {
+            // Create enemy mesh
+            const enemyGeom = new THREE.BoxGeometry(5, 8, 5);
+            const enemyMat = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+            const enemyMesh = new THREE.Mesh(enemyGeom, enemyMat);
+
+            // Random position in region (±1500m from center = 3000m range)
+            const spawnX = regionData.x + (Math.random() - 0.5) * 3000;
+            const spawnZ = regionData.z + (Math.random() - 0.5) * 3000;
+
+            enemyMesh.position.set(spawnX, 5, spawnZ);
+            scene.add(enemyMesh);
+
+            const enemy = {
+                mesh: enemyMesh,
+                hp: enemyData.stats?.hp || 100,
+                maxHp: enemyData.stats?.hp || 100,
+                damage: enemyData.stats?.atk || 20,
+                speed: (enemyData.stats?.spd || 10) * 0.5,
+                level: enemyData.level || 1,
+                name: enemyData.name || 'Enemy',
+                lastAttack: 0,
+                region: regionData.name
+            };
+
+            combat.enemies.push(enemy);
+            return enemy;
+        }
+
+        function spawnEnemiesForCurrentRegion() {
+            // Find current region
+            const px = character.position.x;
+            const pz = character.position.z;
+
+            let currentRegion = null;
+            for (const region of regionData) {
+                const dx = Math.abs(px - region.x);
+                const dz = Math.abs(pz - region.z);
+                if (dx < REGION_SIZE / 2 && dz < REGION_SIZE / 2) {
+                    currentRegion = region;
+                    break;
+                }
+            }
+
+            if (!currentRegion) return;
+
+            // Map region name to JSON key
+            const regionKey = currentRegion.name.replace(/_/g, '');
+            const enemyData = dataLoader.enemies[regionKey];
+
+            if (!enemyData || !enemyData.enemies) {
+                console.warn(`No enemies found for region: ${currentRegion.name}`);
+                return;
+            }
+
+            // Spawn 3-5 random enemies from this region
+            const spawnCount = Math.floor(Math.random() * 3) + 3;
+            for (let i = 0; i < spawnCount; i++) {
+                const randomEnemy = enemyData.enemies[Math.floor(Math.random() * enemyData.enemies.length)];
+                spawnEnemy(currentRegion, randomEnemy);
+            }
+
+            console.log(`✅ Spawned ${spawnCount} enemies in ${currentRegion.displayName}`);
+            updateCombatUI();
+        }
+
+        function playerAttack(attackType = 'left') {
+            const now = Date.now();
+            if (now - player.lastAttack < 500 / player.attackSpeed) return;  // Attack cooldown
+
+            player.lastAttack = now;
+            combat.isAttacking = true;
+
+            // Find closest enemy within 50 units
+            let closestEnemy = null;
+            let closestDist = 50;
+
+            for (const enemy of combat.enemies) {
+                const dist = character.position.distanceTo(enemy.mesh.position);
+                if (dist < closestDist) {
+                    closestEnemy = enemy;
+                    closestDist = dist;
+                }
+            }
+
+            if (closestEnemy) {
+                closestEnemy.hp -= player.damage;
+                console.log(`⚔️  Hit ${closestEnemy.name} for ${player.damage} damage! (${closestEnemy.hp}/${closestEnemy.maxHp} HP)`);
+
+                // Visual feedback
+                closestEnemy.mesh.material.color.setHex(0xffff00);
+                setTimeout(() => {
+                    if (closestEnemy.mesh) {
+                        closestEnemy.mesh.material.color.setHex(0xff0000);
+                    }
+                }, 100);
+
+                if (closestEnemy.hp <= 0) {
+                    // Enemy died
+                    scene.remove(closestEnemy.mesh);
+                    combat.enemies = combat.enemies.filter(e => e !== closestEnemy);
+                    combat.kills++;
+                    console.log(`💀 Killed ${closestEnemy.name}!`);
+                }
+
+                updateCombatUI();
+            }
+
+            setTimeout(() => {
+                combat.isAttacking = false;
+            }, 200);
+        }
+
+        function enemyAI(enemy, delta) {
+            const distToPlayer = enemy.mesh.position.distanceTo(character.position);
+
+            if (distToPlayer > 2000) return;  // Too far, don't update
+
+            if (distToPlayer > 15) {
+                // Move towards player
+                const dir = new THREE.Vector3()
+                    .subVectors(character.position, enemy.mesh.position)
+                    .normalize();
+
+                enemy.mesh.position.x += dir.x * enemy.speed * delta;
+                enemy.mesh.position.z += dir.z * enemy.speed * delta;
+            } else {
+                // Attack player
+                const now = Date.now();
+                if (now - enemy.lastAttack > 1500) {  // 1.5s attack cooldown
+                    enemy.lastAttack = now;
+
+                    if (!combat.isBlocking && !combat.isDodging) {
+                        player.hp -= enemy.damage;
+                        console.log(`💥 ${enemy.name} hit you for ${enemy.damage} damage!`);
+                        updateCombatUI();
+
+                        if (player.hp <= 0) {
+                            console.log('💀 You died!');
+                            player.hp = player.maxHp;  // Respawn
+                            character.position.set(0, 10, 0);  // Back to Götterfels
+                        }
+                    } else {
+                        console.log(`🛡️  Blocked ${enemy.name}'s attack!`);
+                    }
+                }
+            }
+        }
+
+        function updateCombat(delta) {
+            // Update all enemies
+            for (const enemy of combat.enemies) {
+                if (combat.mode === 'MANUAL') {
+                    enemyAI(enemy, delta);
+                } else if (combat.mode === 'ASSIST') {
+                    enemyAI(enemy, delta);
+                    // TODO: Auto-target closest enemy
+                } else if (combat.mode === 'AUTO') {
+                    enemyAI(enemy, delta);
+                    // TODO: Full auto-combat
+                }
+            }
+        }
+
+        // ===== KEYBOARD CONTROLS (Combat) =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'q' || e.key === 'Q') {
+                playerAttack('left');
+            }
+            if (e.key === 'e' || e.key === 'E') {
+                playerAttack('right');
+            }
+            if (e.key === 'c' || e.key === 'C') {
+                combat.isDodging = true;
+                setTimeout(() => { combat.isDodging = false; }, 300);
+                console.log('🏃 Dodge!');
+            }
+            if (e.key === 'x' || e.key === 'X') {
+                combat.isBlocking = true;
+                setTimeout(() => { combat.isBlocking = false; }, 500);
+                console.log('🛡️  Block!');
+            }
+            if (e.key === 'v' || e.key === 'V') {
+                combat.isParrying = true;
+                setTimeout(() => { combat.isParrying = false; }, 200);
+                console.log('⚡ Parry!');
+            }
+            if (e.key === 'F6') {
+                // Cycle combat modes
+                if (combat.mode === 'MANUAL') combat.mode = 'ASSIST';
+                else if (combat.mode === 'ASSIST') combat.mode = 'AUTO';
+                else combat.mode = 'MANUAL';
+                updateCombatUI();
+                console.log(`Combat mode: ${combat.mode}`);
+            }
+            if (e.key === 'F7') {
+                // Spawn enemies in current region
+                spawnEnemiesForCurrentRegion();
+            }
+        });
+
+        updateProgress(95, 'Finalisiere...');
+
+        // ===== CAMERA CONTROLS =====
+        let cameraDistance = 100;
+        let cameraYaw = 0;
+        let cameraPitch = -0.3;
+
+        // Mouse controls
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        renderer.domElement.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        renderer.domElement.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        renderer.domElement.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+
+            cameraYaw -= deltaX * 0.005;
+            cameraPitch = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, cameraPitch - deltaY * 0.005));
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        // Zoom with mouse wheel
+        renderer.domElement.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            cameraDistance = Math.max(20, Math.min(500, cameraDistance + e.deltaY * 0.1));
+        });
+
+        // ===== MOVEMENT =====
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            shift: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (key in keys) keys[key] = true;
+            if (key === 'shift') keys.shift = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            const key = e.key.toLowerCase();
+            if (key in keys) keys[key] = false;
+            if (key === 'shift') keys.shift = false;
+        });
+
+        // ===== TELEPORT FUNCTION =====
+        window.teleportTo = function(regionName) {
+            const region = regionData.find(r => r.name === regionName);
+            if (region) {
+                character.position.set(region.x, region.y + 10, region.z);
+                console.log(`🚀 Teleported to ${region.displayName}`);
+            }
+        };
+
+        // ===== UPDATE REGION =====
+        function updateCurrentRegion() {
+            const pos = character.position;
+            const region = regionData.find(r =>
+                Math.abs(pos.x - r.x) < REGION_SIZE / 2 &&
+                Math.abs(pos.z - r.z) < REGION_SIZE / 2
+            );
+            if (region) {
+                document.getElementById('current-region').textContent = region.displayName;
+            }
+        }
+
+        // ===== FPS COUNTER =====
+        let lastTime = performance.now();
+        let frames = 0;
+        let fps = 60;
+
+        function updateFPS() {
+            frames++;
+            const now = performance.now();
+            if (now >= lastTime + 1000) {
+                fps = Math.round((frames * 1000) / (now - lastTime));
+                document.getElementById('fps').textContent = fps;
+                frames = 0;
+                lastTime = now;
+            }
+        }
+
+        // ===== ANIMATION LOOP =====
+        let lastFrameTime = performance.now();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Calculate delta time
+            const now = performance.now();
+            const delta = (now - lastFrameTime) / 1000;  // Convert to seconds
+            lastFrameTime = now;
+
+            // Movement
+            const speed = keys.shift ? MOVE_SPEED * SPRINT_MULTIPLIER : MOVE_SPEED;
+            const moveVector = new THREE.Vector3();
+
+            if (keys.w) moveVector.z -= 1;
+            if (keys.s) moveVector.z += 1;
+            if (keys.a) moveVector.x -= 1;
+            if (keys.d) moveVector.x += 1;
+
+            if (moveVector.length() > 0) {
+                moveVector.normalize();
+                moveVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraYaw);
+                character.position.x += moveVector.x * speed * 0.016;
+                character.position.z += moveVector.z * speed * 0.016;
+
+                // Clamp to world bounds
+                character.position.x = Math.max(-4800, Math.min(4800, character.position.x));
+                character.position.z = Math.max(-4800, Math.min(4800, character.position.z));
+            }
+
+            // Update camera position
+            const offsetX = Math.sin(cameraYaw) * Math.cos(cameraPitch) * cameraDistance;
+            const offsetY = Math.sin(cameraPitch) * cameraDistance;
+            const offsetZ = Math.cos(cameraYaw) * Math.cos(cameraPitch) * cameraDistance;
+
+            camera.position.x = character.position.x + offsetX;
+            camera.position.y = character.position.y + offsetY;
+            camera.position.z = character.position.z + offsetZ;
+            camera.lookAt(character.position);
+
+            // Update UI
+            const pos = character.position;
+            document.getElementById('position').textContent = `${Math.round(pos.x)}, ${Math.round(pos.z)}`;
+            updateCurrentRegion();
+            updateFPS();
+
+            // Update Combat
+            updateCombat(delta);
+
+            renderer.render(scene, camera);
+        }
+
+        // ===== WINDOW RESIZE =====
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // ===== START =====
+        updateProgress(100, 'Fertig! Starte Welt...');
+        setTimeout(() => {
+            document.getElementById('loading').classList.add('hidden');
+            updateCombatUI();  // Initialize combat UI
+            animate();
+            console.log('🌍 Najika World UNIFIED gestartet!');
+            console.log('📊 Map Size: 9.6km x 9.6km');
+            console.log('🗺️  9 Regions loaded with terrain variation');
+            console.log('📦 JSON Data:', dataLoader.loadedCount, 'files loaded');
+            console.log('');
+            console.log('⚔️  COMBAT CONTROLS:');
+            console.log('   Q/E = Attack Left/Right');
+            console.log('   C = Dodge | X = Block | V = Parry');
+            console.log('   F6 = Toggle Combat Mode (MANUAL/ASSIST/AUTO)');
+            console.log('   F7 = Spawn Enemies in current region');
+        }, 500);
+    </script>
+</body>
+</html>
