@@ -646,7 +646,7 @@
 
         // 9 REGIONS (3x3 Grid, each 3200×3200m)
         const regionSize = 3200;
-        const regions = [
+        let regions = [
             // Row 1 (top): z=133.32
             { name: 'ice',      color: 0xf0f8ff, x: -3200, z: 3200,  y: 0 },
             { name: 'highland', color: 0x8b7355, x: 0,     z: 3200,  y: 0 },
@@ -683,6 +683,19 @@
 
         } else {
             console.log('🌍 Skipping flat regions (using Phase 2 Terrain System)');
+            // Dummy regions für Minimap und Enemy Spawning (Phase 2)
+            const regionSize = 3200;
+            regions = [
+                { name: 'ice', color: 0xf0f8ff, x: -3200, z: 3200, y: 0 },
+                { name: 'highland', color: 0x8b7355, x: 0, z: 3200, y: 0 },
+                { name: 'desert', color: 0xe8d4a0, x: 3200, z: 3200, y: 0 },
+                { name: 'swamp', color: 0x556b2f, x: -3200, z: 0, y: 0 },
+                { name: 'mountain', color: 0x808080, x: 0, z: 0, y: 50 },
+                { name: 'coast', color: 0xc2b280, x: 3200, z: 0, y: 0 },
+                { name: 'caves', color: 0x2f2f2f, x: -3200, z: -3200, y: 0 },
+                { name: 'forest', color: 0x2d5016, x: 0, z: -3200, y: 0 },
+                { name: 'volcano', color: 0x8b4513, x: 3200, z: -3200, y: 0 }
+            ];
         }
         // ======================================== END PHASE 1 ========================================
 
@@ -1883,7 +1896,9 @@
             // Clear
             minimapCtx.clearRect(0, 0, minimapSize, minimapSize);
 
-            // Draw 9 regions (3x3 grid)
+            // Draw 9 regions (3x3 grid) - only if regions exist
+            if (!regions || regions.length === 0) return;
+
             regions.forEach(region => {
                 // Convert world position to minimap position
                 // World: -200 to 200 -> Minimap: 0 to 200
