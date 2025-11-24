@@ -785,9 +785,9 @@ class RealtimeCombat {
 
                 if (!enemyData) continue;
 
-                // Random Position innerhalb der Region
-                const offsetX = (Math.random() - 0.5) * 100;
-                const offsetZ = (Math.random() - 0.5) * 100;
+                // Random Position innerhalb der Region (3200m!)
+                const offsetX = (Math.random() - 0.5) * 3000; // ±1500m für 3200m Region
+                const offsetZ = (Math.random() - 0.5) * 3000;
 
                 this.spawnEnemy(
                     randomType,
