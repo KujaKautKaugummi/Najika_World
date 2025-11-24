@@ -1,7 +1,6 @@
 // 🎨 BIOME SYSTEM - Verwaltet Biome-Konfigurationen und visuelle Eigenschaften
 // Lädt Biome-Daten, erstellt Materialien, Himmel, Nebel, Beleuchtung
 
-const THREE = window.THREE;
 
 class BiomeSystem {
   constructor(scene, camera) {

@@ -1,7 +1,6 @@
 // 🌍 REGION STREAMING - Load/Unload Regionen basierend auf Spieler-Position
 // Optimiert Performance für die große 9600x9600 Welt
 
-const THREE = window.THREE;
 
 class RegionStreaming {
   constructor(scene, terrainGenerator, biomeSystem, vegetationSystem, cityBuilder) {
