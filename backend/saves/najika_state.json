@@ -244,12 +244,6 @@
       "role": "assistant",
       "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
       "importance": 60,
-      "timestamp": 1762871856.2963514
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
       "timestamp": 1762873702.302596
     },
     {
@@ -299,6 +293,12 @@
       "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
       "importance": 60,
       "timestamp": 1762888776.3834245
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1764014630.2881184
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 93.91301121645503,
-    "thirst": 93,
-    "energy": 60.384930349985595,
-    "hygiene": 97,
-    "happiness": 98,
+    "hunger": 30.0,
+    "thirst": 0,
+    "energy": 40.0,
+    "hygiene": 35.0,
+    "happiness": 0,
     "strength": 108,
     "intelligence": 106,
     "dexterity": 104,
-    "charisma": 30,
-    "care_mistakes": 2616,
+    "charisma": 31,
+    "care_mistakes": 2619,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1762888304.4821825,
+    "last_fed": 1764014630.3051178,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1762849494.5884187,
-    "last_update": 1762888601.28988,
+    "last_sleep": 1764014630.3061185,
+    "last_update": 1764014630.2951179,
     "last_drink": 1762888306.0733185
   },
   "bond_strength": 22,
@@ -364,10 +364,10 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 93.91301121645503,
-    "energy": 60.384930349985595,
-    "mood_game": 0,
-    "anger_level": 100,
+    "hunger": 30.0,
+    "energy": 40.0,
+    "mood_game": -33,
+    "anger_level": 124,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
@@ -385,10 +385,10 @@
     },
     "accidents_today": 2,
     "max_accidents_per_day": 3,
-    "last_update": 1762888716.3795018,
+    "last_update": 1764014630.3041182,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1762888776.3799293,
+    "last_proactive_message": 1764014630.2871184,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1666,7 +1666,7 @@
     "last_interaction": 1762819140.655091,
     "total_time_together": 4620,
     "days_since_meeting": 0,
-    "current_activity": "thinking",
+    "current_activity": null,
     "activity_started": 1762888536.3670452,
     "activities_completed": [
       {
@@ -2880,8 +2880,12 @@
       {
         "name": "crafting",
         "completed_at": 1762887993.747652
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1764014630.2807493
       }
     ]
   },
-  "saved_at": "2025-11-11 20:19:36"
+  "saved_at": "2025-11-24 21:03:50"
 }

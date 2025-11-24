@@ -1,7 +1,6 @@
 // 🏘️ CITY BUILDER - Erstellt Städte mit Gebäuden und Features
 // Platziert: Handelsfestung, Dampf-Hain, Salzige Bucht, Runenheim, Funken-Siedlung
 
-const THREE = window.THREE;
 
 class CityBuilder {
   constructor(scene, terrainGenerator) {
