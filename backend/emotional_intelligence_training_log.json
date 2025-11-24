@@ -1,0 +1,20 @@
+[
+  {
+    "session_start": "2025-11-24T02:10:33.027840",
+    "session_end": "2025-11-24T02:11:38.552599",
+    "duration_minutes": 1.0920793166666667,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  }
+]
