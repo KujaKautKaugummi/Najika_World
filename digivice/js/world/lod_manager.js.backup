@@ -477,5 +477,4 @@ class LODManager {
   }
 }
 
-// export default LODManager; // Converted to global
-window.LODManager = LODManager;
+export default LODManager;

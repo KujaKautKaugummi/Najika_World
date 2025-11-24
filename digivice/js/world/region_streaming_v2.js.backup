@@ -449,5 +449,4 @@ class RegionStreaming {
   }
 }
 
-// export default RegionStreaming; // Converted to global
-window.RegionStreaming = RegionStreaming;
+export default RegionStreaming;

@@ -333,5 +333,4 @@ class TerrainGenerator {
   }
 }
 
-// export default TerrainGenerator; // Converted to global
-window.TerrainGenerator = TerrainGenerator;
+export default TerrainGenerator;

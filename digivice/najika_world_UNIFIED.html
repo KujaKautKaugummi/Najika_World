@@ -422,6 +422,35 @@
     <script src="static/js/realtime_combat.js"></script>
     <script src="static/js/game_data_loader.js"></script>
 
+    <!-- ========================================== -->
+    <!-- PHASE 2: World Manager System (OPTIONAL)   -->
+    <!-- ========================================== -->
+    <!-- Toggle USE_PHASE_2 um Phase 2 zu aktivieren -->
+    <script>
+        // 🎮 PHASE 2 TOGGLE - Setze auf true für Terrain Variation!
+        // false = Phase 1 (Flat Terrain, stabil, getestet)
+        // true  = Phase 2 (Terrain Variation, Vegetation, experimentell)
+        const USE_PHASE_2 = false;
+
+        if (USE_PHASE_2) {
+            console.log('🌍 Phase 2 enabled: Terrain Variation, Vegetation, LOD');
+        } else {
+            console.log('🌍 Phase 1 enabled: Flat Terrain (stable)');
+        }
+    </script>
+
+    <!-- Phase 2 Module (in Reihenfolge laden!) -->
+    <script src="js/world/terrain_generator.js"></script>
+    <script src="js/world/biome_system.js"></script>
+    <script src="js/world/vegetation_system.js"></script>
+    <script src="js/world/city_builder.js"></script>
+    <script src="js/world/region_streaming_v2.js"></script>
+    <script src="js/world/lod_manager.js"></script>
+    <script src="js/world/asset_loader.js"></script>
+    <script src="js/world/asset_discovery.js"></script>
+    <script src="js/world/world_manager.js"></script>
+    <!-- ========================================== -->
+
     <script>
         const THREE = window.THREE;
 
@@ -598,7 +627,24 @@
         const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x8B7355, 0.3);
         scene.add(hemiLight);
 
-        // 9 REGIONS (3x3 Grid, each ~133x133 - 4x größer!)
+        // ========================================
+        // PHASE 2 WORLD MANAGER (OPTIONAL)
+        // ========================================
+        let worldManager = null;
+
+        if (USE_PHASE_2) {
+            console.log('🌍 Initializing Phase 2: World Manager System...');
+            // WorldManager wird nach DataLoader initialisiert (async)
+            // Siehe weiter unten bei initGame()
+        }
+
+        // ========================================
+        // PHASE 1: FLAT REGIONS (wenn nicht Phase 2)
+        // ========================================
+        if (!USE_PHASE_2) {
+            console.log('🌍 Creating Phase 1: Flat Regions (9×3200m)...');
+
+        // 9 REGIONS (3x3 Grid, each 3200×3200m)
         const regionSize = 3200;
         const regions = [
             // Row 1 (top): z=133.32
@@ -634,6 +680,11 @@
         const gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
         gridHelper.visible = true;
         scene.add(gridHelper);
+
+        } else {
+            console.log('🌍 Skipping flat regions (using Phase 2 Terrain System)');
+        }
+        // ======================================== END PHASE 1 ========================================
 
         // Najika Character (KayKit Mage Model - Phase 6)
         let character = new THREE.Group();
@@ -1484,8 +1535,53 @@
             // WICHTIG: Lade Game Content JSON-Dateien (NPCs, Items, Quests, Enemies)
             await gameDataLoader.loadAll();
 
+            // ========================================
+            // PHASE 2: Initialize World Manager (OPTIONAL)
+            // ========================================
+            if (USE_PHASE_2) {
+                console.log('🌍 Initializing World Manager...');
+
+                try {
+                    worldManager = new window.WorldManager(scene, camera);
+
+                    await worldManager.initialize({
+                        dataPath: '/data/',
+                        enableLOD: true,
+                        enableStreaming: true,
+                        enableVegetationBatching: true
+                    });
+
+                    console.log('✅ Phase 2 World Manager initialized!');
+                    worldManager.logStats();
+                } catch (error) {
+                    console.error('❌ Phase 2 World Manager failed to initialize:', error);
+                    console.log('⚠️ Falling back to Phase 1 (Flat Terrain)');
+                    worldManager = null;
+                }
+            }
+            // ========================================
+
             // Spawn Enemies aus JSON-Daten statt hardcoded (Phase 3: Combat)
-            realtimeCombat.spawnEnemiesInAllRegions(regions);
+            if (!USE_PHASE_2) {
+                realtimeCombat.spawnEnemiesInAllRegions(regions);
+            } else if (worldManager && worldManager.initialized) {
+                // Phase 2: Spawn enemies über WorldManager
+                console.log('🐉 Spawning enemies (Phase 2)...');
+                // TODO: Implement enemy spawning for Phase 2
+                // For now: fallback to basic spawning
+                const dummyRegions = [
+                    { name: 'ice', x: -3200, z: 3200 },
+                    { name: 'highland', x: 0, z: 3200 },
+                    { name: 'desert', x: 3200, z: 3200 },
+                    { name: 'swamp', x: -3200, z: 0 },
+                    { name: 'mountain', x: 0, z: 0 },
+                    { name: 'coast', x: 3200, z: 0 },
+                    { name: 'caves', x: -3200, z: -3200 },
+                    { name: 'forest', x: 0, z: -3200 },
+                    { name: 'volcano', x: 3200, z: -3200 }
+                ];
+                realtimeCombat.spawnEnemiesInAllRegions(dummyRegions);
+            }
             console.log('⚔️ Realtime Combat System bereit!');
         }
 
@@ -1842,6 +1938,15 @@
             // Update Kamera
             const delta = 0.016;
             cameraController.update(delta);
+
+            // ========================================
+            // PHASE 2: Update World Manager (OPTIONAL)
+            // ========================================
+            if (USE_PHASE_2 && worldManager && worldManager.initialized) {
+                worldManager.update(delta);
+                worldManager.setPlayerPosition(character.position);
+            }
+            // ========================================
 
             // First-Person: Character dreht sich mit der Kamera
             const currentCameraMode = cameraController.getMode();
