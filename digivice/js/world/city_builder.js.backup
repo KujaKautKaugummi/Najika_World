@@ -643,5 +643,4 @@ class CityBuilder {
   }
 }
 
-// export default CityBuilder; // Converted to global
-window.CityBuilder = CityBuilder;
+export default CityBuilder;

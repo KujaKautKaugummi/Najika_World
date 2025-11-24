@@ -245,5 +245,4 @@ export class AssetDiscovery {
   }
 }
 
-// export default AssetDiscovery; // Converted to global
-window.AssetDiscovery = AssetDiscovery;
+export default AssetDiscovery;

@@ -438,5 +438,4 @@ class VegetationSystem {
   }
 }
 
-// export default VegetationSystem; // Converted to global
-window.VegetationSystem = VegetationSystem;
+export default VegetationSystem;

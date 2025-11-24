@@ -361,5 +361,4 @@ class BiomeSystem {
   }
 }
 
-// export default BiomeSystem; // Converted to global
-window.BiomeSystem = BiomeSystem;
+export default BiomeSystem;
