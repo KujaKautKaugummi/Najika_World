@@ -645,7 +645,7 @@
                 });
 
                 najikaModel = gltf.scene;
-                najikaModel.scale.set(1.0, 1.0, 1.0); // Realistisch für 3200m Map (war 2.5 für 133m)
+                najikaModel.scale.set(0.75, 0.75, 0.75); // Najika ist 1.35-1.40m groß (kleiner als Erwachsene)
 
                 najikaModel.traverse((child) => {
                     if (child.isMesh) {
@@ -658,8 +658,8 @@
                 console.log('✅ Najika Character (Mage) geladen!');
             } catch (error) {
                 console.warn('⚠️  Najika Character konnte nicht geladen werden, verwende Fallback:', error);
-                // Fallback: Simple colored cube (realistisch 1.8m hoch)
-                const fallbackGeometry = new THREE.BoxGeometry(0.6, 1.8, 0.6);
+                // Fallback: Simple colored cube (Najika: 1.35m hoch)
+                const fallbackGeometry = new THREE.BoxGeometry(0.45, 1.35, 0.45);
                 const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
                 const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
                 fallback.castShadow = true;
@@ -673,7 +673,7 @@
         scene.add(character);
 
         // Camera folgt Character (Third-Person Mode)
-        cameraController.setCharacter(character, 2.0); // Angepasst für realistischen 1.8m Character
+        cameraController.setCharacter(character, 1.8); // Angepasst für Najika (1.35-1.40m)
         cameraController.setMode(cameraController.MODES.THIRD);
         document.getElementById('camera-mode').textContent = 'THIRD';
 
