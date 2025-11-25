@@ -36,10 +36,18 @@
 - **Shift+E** = Rechte Hand Schwer
 - **SPACE** = Beide Hände Leicht
 - **Shift+SPACE** = Beide Hände Schwer
-- **Q+E** = **Dual-Strike / Element-Weave** (gleichzeitig drücken!)
+- **Q+E** = **Element-Weave** (beide Tasten GLEICHZEITIG gedrückt halten!)
 - **C** = Dodge/Roll
 - **X** = Block (halten)
 - **V** = Parry (Timing!)
+
+**Combo-System:**
+- Schnelle aufeinanderfolgende Angriffe = Combo-Chain
+- Jeder Hit in Combo = +10% Damage Bonus
+- Beispiel: Q → E → Shift+Q → Shift+E (4-Hit Combo = +40% Damage!)
+- **WICHTIG:** Angriffe sind AUFEINANDERFOLGEND, nicht simultan!
+- **KEINE** Mixed-Combos wie "Links leicht + Rechts schwer gleichzeitig"
+- **NUR** Element-Weave erlaubt simultane Dual-Hand Attacks (mit Elementen!)
 
 **Element-Weaves (7 Kombinationen):**
 ```javascript
