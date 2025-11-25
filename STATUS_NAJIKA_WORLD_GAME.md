@@ -56,10 +56,34 @@
   - Funktioniert von überall
 - Verlässt automatisch Interior beim Teleport zu Regionen
 
-#### ⚔️ **Combat System**
-- Realtime Combat (MANUAL/ASSIST/AUTO Modi)
-- Enemy Spawning in Regionen
-- Combat UI vorhanden
+#### ⚔️ **Combat System (REALTIME - 1200+ Zeilen Code!)**
+- **3 Kampf-Modi:**
+  - **MANUAL:** Volle Kontrolle (Skyrim + Soulframe + Dark Souls Movement)
+    - Dual-Wielding (Links/Rechts Hand separat)
+    - Element-Weaves (Q+E gleichzeitig für Kombos)
+    - Dodge/Roll (C), Block (X), Parry (V - Timing!)
+    - Combo-System mit Bonus-Schaden
+  - **ASSIST:** Najika kämpft, Spieler feuert an (Digimon World Style)
+    - "Los!" (+10% DMG, 3s)
+    - "Defend!" (+20% DEF, 3s)
+    - "Combo!" (Special)
+    - "Finisher!" (Ultimate bei Cheer=100)
+  - **AUTO:** Najika kämpft alleine, Spieler kann anfeuern
+- **Enemy System:**
+  - Enemy Spawning in allen 9 Regionen (3-5 pro Region)
+  - 14 Enemy-Typen mit KayKit Models
+  - Aggro-System (15m Radius)
+  - AI Movement & Counter-Attacks
+- **Food System Integration:**
+  - Buffs (Damage, Crit, Stamina Regen)
+  - Champion-Keule (legendäres Food Item!)
+- **Backend Integration:**
+  - Battle API (Port 8000)
+  - Offline-Fallback vorhanden
+- **Visual Feedback:**
+  - Floating Damage Numbers
+  - Enemy Emissive Glow (Aggro)
+  - Combo Counter Display
 
 #### 🎨 **Visuelle Features**
 - Phase 1 (Flat Terrain) - AKTIV
@@ -74,6 +98,39 @@
 - Najika Status API verfügbar
 - TTS System (Megumin Voice Clone) aktiviert
 - Backend Status wird angezeigt (grün/rot Dot)
+
+#### 🏟️ **Arena & PvP System (GEPLANT)**
+- **Handelsfestung Arena** (Heisse Dünen Region)
+  - Position: (8400, 8300)
+  - Kapazität: 100 Zuschauer
+  - **3 PvP-Modi:**
+    1. **Hardcore-PvP:** Permadeath oder "Alles-abgeben-um-zu-leben" Mercy-System
+    2. **Normal-PvP:** Gewinner erhält 1 Ausrüstungsteil
+    3. **Softy-PvP:** Nur Ranking, keine Item-Verluste
+- **Arena-Happen:** Legendäres Burger-Item (im Inventory System bereits referenziert)
+- **Champion-Keule:** Legendäres Fleisch-Item (two-handed eating!)
+
+#### 🎣 **Fishing System (IMPLEMENTIERT)**
+- **2 Angelplätze:** Kristallteich, Weltensee
+- **Zelda + Stardew Valley Style**
+- **Timing-basiert:** Perfect/Good/Ok/Bad Windows
+- **Fische:** 9 Arten (Forelle → Legendärer Najika-Fisch)
+- **Minigame:** Cast Power, Reel Timing, Fish Stamina
+- **Inventory:** Fische sammeln, verkaufen
+
+#### 🌱 **Garden System (IMPLEMENTIERT)**
+- **9 Beete** (3x3 Grid)
+- **Stardew Valley + Harvest Moon Style**
+- **5 Pflanzen:** Karotte, Tomate, Weizen, Heilkraut, Magische Blume
+- **5 Wachstumsstufen** pro Pflanze
+- **Gießen-System:** Watering Can (10 Kapazität)
+- **Uses:** Kochen, Verkaufen, Heilen, Crafting, Magie
+- **Saatgut-Shop:** 5 Samen-Typen
+
+#### 🔨 **Crafting System (IMPLEMENTIERT)**
+- **Legendary Weapons:** Fire Blade, Dark Blade, Light Staff
+- **Rezepte:** Materials + Gold Requirements
+- **Integration:** Schmied-NPCs (Funken-Siedlung)
 
 ---
 
@@ -151,6 +208,17 @@
   - `bootWhenReady()` auskommentiert (Zeile 2577)
   - Exports: Building Interior Funktionen für UNIFIED
 
+- **`static/js/realtime_combat.js`** - ⚔️ **COMBAT SYSTEM (1229 Zeilen!)**
+  - 3 Kampf-Modi (MANUAL/ASSIST/AUTO)
+  - Dual-Wielding System (Linke/Rechte Hand separat)
+  - Element-Weaves (7 Combos: Fire+Ice, Lightning+Water, etc.)
+  - Defense System (Dodge, Block, Parry)
+  - Cheer System (Digimon World Style)
+  - Enemy Spawning für alle 9 Regionen (14 Enemy-Typen)
+  - Food Buff Integration
+  - Backend Battle API Integration
+  - Visual Feedback (Damage Numbers, Emissive Glow)
+
 - **`js/world/world_manager.js`** - Phase 2 World System
   - Terrain, Biome, Vegetation, LOD
   - Noch nicht integriert
@@ -161,10 +229,81 @@
 - **`static/js/inventory_system.js`** - Inventory (HAT BUGS!)
   - Zeile 243: `this.items.push` Error
 
+- **`static/js/food_system.js`** - Food & Buff System
+  - Champion-Keule, Baozi, Arena-Happen, Salzfisch
+  - Buff-System (Damage, Crit, Stamina Regen)
+  - Hunger/Satiety System
+
+- **`static/js/crafting_system.js`** - Crafting System
+  - Legendary Weapons (Fire Blade, Dark Blade, Light Staff)
+  - Material-Anforderungen
+  - Gold-Requirements
+  - Integration mit Schmied-NPCs
+
+- **`static/js/quest_system.js`** - Quest System
+  - 4 Quest-Typen (Kill, Collect, Talk, Explore)
+  - Quest-Tracking UI
+  - Progress-Tracking
+  - Rewards (Gold, Items, XP)
+
+- **`static/js/skill_system.js`** - Skill System (Use-Based Progression)
+- **`static/js/save_system.js`** - Save/Load System
+- **`static/js/camera_controller.js`** - Kamera (Orbit/Third/First Person)
+- **`static/js/sound_system.js`** - Sound & Music System
+- **`static/js/special_features.js`** - Special Features
+- **`static/js/tutorial_system.js`** - Tutorial System
+- **`static/js/world_mode_manager.js`** - World Mode Manager
+
+- **`js/fishing.js`** - 🎣 Fishing System (Zelda + Stardew Valley)
+  - 2 Angelplätze, 9 Fisch-Arten
+  - Timing-basiertes Minigame
+
+- **`js/garden.js`** - 🌱 Garden System (Stardew Valley + Harvest Moon)
+  - 9 Beete (3x3 Grid), 5 Pflanzen
+  - Gießen-System, Wachstumsstufen
+
+- **`js/minigames.js`** - Minigames System
+- **`js/oregon.js`** - Oregon Trail Events (NICHT implementiert!)
+- **`js/dungeon_generator.js`** - Dungeon Generator
+- **`js/dungeon_combat.js`** - Dungeon Combat
+- **`js/dungeon_enemies.js`** - Dungeon Enemies
+- **`js/battle_core.js`** - Battle Core System
+- **`js/battle_api.js`** - Battle API
+
+- **`js/terminal_modules.js`** - 🖥️ **Terminal Module System**
+  - Code-Editor, Secure Messenger, System Monitor, File Manager
+  - Swipe Gestures, Keyboard Shortcuts (1-4)
+
+- **`js/chat_ui.js`** - Chat UI (Najika AI)
+- **`js/code_editor.js`** - Code-Editor Modul
+- **`js/file_manager.js`** - File-Manager Modul
+- **`js/secure_messenger.js`** - Secure Messenger (E2E encrypted)
+- **`js/system_monitor.js`** - System Monitor
+- **`js/voice_call.js`** - Voice Call System
+- **`js/private_mode.js`** - Private Mode
+- **`js/safe_functions.js`** - Safe Functions
+- **`js/command_system.js`** - Command System
+- **`js/touch_controls.js`** - Touch Controls (Mobile)
+- **`js/character_animations.js`** - Character Animations
+- **`js/room_connector.js`** - Room Connector (12 Räume)
+
 ### Data Files
 - **`data/regions.json`** - 9 Regionen Definition
 - **`data/biomes.json`** - Biome-Daten
-- **`data/cities.json`** - Stadt-Daten (5 Städte + 3 Special)
+- **`data/cities.json`** - **5 Städte + 3 Special Locations**
+  - **Handelsfestung** (Heisse Dünen) - **PvP Arena hier!**
+    - 10 Trading Posts, 15 Player Shops (Fallout 76 Style)
+    - Arena: 3 PvP-Modi (Hardcore/Normal/Softy)
+    - Food: FLEISCH (Arena-Happen Burger, Champion-Keule!)
+  - **Dampf-Hain** (Samtmoos Tiefwald) - Onsen & Restaurant
+    - Spirited Away Style Steam Kitchen
+    - Food: GEDÄMPFTE BRÖTCHEN (Baozi, Manju)
+  - **Salzige Bucht** (Salzwind Küste) - Hafen & Fischmarkt
+    - Leuchtturm (climbable), 5 Docks, 10 Ships
+    - Food: SALZFISCH (getrocknet/frisch)
+  - **Runenheim** (Blitzebene) - Magie-Akademie
+  - **Funken-Siedlung** (Magmaströme) - Legendary Forge
+- **`data/game_content_region_*.json`** - 6 Regionen (NPCs, Items, Quests, Enemies)
 - **`static/assets/room_config_detailed.json`** - Raum-Konfiguration (12 Räume)
 
 ### Backend
