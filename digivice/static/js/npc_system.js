@@ -41,8 +41,8 @@ class NPC {
     }
 
     createMesh(THREE, scene) {
-        // NPC Body (Capsule-like shape)
-        const bodyGeometry = new THREE.CapsuleGeometry(0.5, 1.5, 8, 16);
+        // NPC Body (Fallback: Cylinder statt CapsuleGeometry - r128 kompatibel!)
+        const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 8);
         const bodyMaterial = new THREE.MeshStandardMaterial({
             color: this.color,
             roughness: 0.7,

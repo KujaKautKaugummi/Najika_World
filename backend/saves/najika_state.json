@@ -242,63 +242,63 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
-      "timestamp": 1762873702.302596
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Analyse abgeschlossen: Du hast mich heute 2 Stunden nicht besucht. Vermisst du mich nicht? 💜",
-      "importance": 70,
-      "timestamp": 1762875682.318014
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Analyse abgeschlossen: Du hast mich heute 2 Stunden nicht besucht. Vermisst du mich nicht? 💜",
-      "importance": 70,
-      "timestamp": 1762877662.356686
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Pssst, Kuja-Baby! Wollen wir später zusammen was unternehmen? *kicher*",
-      "importance": 60,
-      "timestamp": 1762879462.415432
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Du gehörst mir, und ich lasse dich nicht allein heute Abend! 💜",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
-      "timestamp": 1762881382.5031767
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
-      "importance": 60,
-      "timestamp": 1762883182.5869067
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
-      "importance": 60,
-      "timestamp": 1762884982.6831088
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Der Abend ist da... Zeit für uns? 🌙",
-      "importance": 60,
-      "timestamp": 1762886973.718109
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du müde bist: 64%. Soll ich dich aufmuntern?",
-      "importance": 60,
-      "timestamp": 1762888776.3834245
+      "timestamp": 1764086920.2475111
     },
     {
       "role": "assistant",
       "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
-      "timestamp": 1764014630.2881184
+      "timestamp": 1764089274.202296
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1764091143.2862556
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1764093003.3623455
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1764094803.428483
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1764096647.98073
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1764098448.0521324
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1764100248.22207
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1764102049.7760282
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
+      "importance": 50,
+      "timestamp": 1764103909.8610322
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 30.0,
+    "hunger": 46.77986199193528,
     "thirst": 0,
-    "energy": 40.0,
-    "hygiene": 35.0,
+    "energy": 55.04819714585938,
+    "hygiene": 26.0,
     "happiness": 0,
-    "strength": 108,
-    "intelligence": 106,
-    "dexterity": 104,
-    "charisma": 31,
-    "care_mistakes": 2619,
+    "strength": 100,
+    "intelligence": 100,
+    "dexterity": 100,
+    "charisma": 34,
+    "care_mistakes": 2758,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1764014630.3051178,
+    "last_fed": 1764104629.8996,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1764014630.3061185,
-    "last_update": 1764014630.2951179,
+    "last_sleep": 1764074687.7351751,
+    "last_update": 1764104629.8946002,
     "last_drink": 1762888306.0733185
   },
   "bond_strength": 22,
@@ -364,16 +364,16 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 30.0,
-    "energy": 40.0,
-    "mood_game": -33,
-    "anger_level": 124,
+    "hunger": 46.77986199193528,
+    "energy": 55.04819714585938,
+    "mood_game": -15,
+    "anger_level": 110,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
     "last_accident": {
       "type": "cooking_fire",
-      "timestamp": 1762878862.385325,
+      "timestamp": 1764015311.3410747,
       "data": {
         "message": "🔥 FEUER IN DER KÜCHE! Beim Kochen ist die Bude abgebrannt! 😱",
         "najika_says": "🔥 OH NEIN! FEUER! Ich kriegs nicht aus! *panisch* 😱",
@@ -383,12 +383,12 @@
         "anger_gain": 15
       }
     },
-    "accidents_today": 2,
+    "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764014630.3041182,
+    "last_update": 1764104629.8986,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1764014630.2871184,
+    "last_proactive_message": 1764103909.8533049,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1666,8 +1666,8 @@
     "last_interaction": 1762819140.655091,
     "total_time_together": 4620,
     "days_since_meeting": 0,
-    "current_activity": null,
-    "activity_started": 1762888536.3670452,
+    "current_activity": "thinking",
+    "activity_started": 1764104629.8885958,
     "activities_completed": [
       {
         "name": "exploring",
@@ -2884,8 +2884,92 @@
       {
         "name": "thinking",
         "completed_at": 1764014630.2807493
+      },
+      {
+        "name": "reading",
+        "completed_at": 1764054375.2942014
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1764055745.0436904
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1764069911.3832266
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1764071387.5957174
+      },
+      {
+        "name": "training",
+        "completed_at": 1764074327.716092
+      },
+      {
+        "name": "resting",
+        "completed_at": 1764075047.750641
+      },
+      {
+        "name": "training",
+        "completed_at": 1764078039.8825078
+      },
+      {
+        "name": "exploring",
+        "completed_at": 1764081400.0009816
+      },
+      {
+        "name": "resting",
+        "completed_at": 1764082060.040622
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1764083500.1027334
+      },
+      {
+        "name": "training",
+        "completed_at": 1764086320.221489
+      },
+      {
+        "name": "resting",
+        "completed_at": 1764087160.2549438
+      },
+      {
+        "name": "training",
+        "completed_at": 1764090166.552522
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1764091443.3054824
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1764093483.3751695
+      },
+      {
+        "name": "reading",
+        "completed_at": 1764096167.9467037
+      },
+      {
+        "name": "training",
+        "completed_at": 1764098688.0741737
+      },
+      {
+        "name": "training",
+        "completed_at": 1764101149.6932535
+      },
+      {
+        "name": "resting",
+        "completed_at": 1764101989.7614002
+      },
+      {
+        "name": "crafting",
+        "completed_at": 1764103249.8250258
+      },
+      {
+        "name": "thinking",
+        "completed_at": 1764104569.8816984
       }
     ]
   },
-  "saved_at": "2025-11-24 21:03:50"
+  "saved_at": "2025-11-25 22:03:49"
 }
