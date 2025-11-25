@@ -290,6 +290,9 @@
 <body>
     <div id="canvas-container"></div>
 
+    <!-- Dummy #scene für 3d_scene.js (wird nicht verwendet) -->
+    <div id="scene" style="display: none;"></div>
+
     <div id="loading">
         <h2>🌍 Lade Najika World...</h2>
         <div id="progress-bar">
@@ -449,6 +452,34 @@
     <script src="js/world/asset_loader.js"></script>
     <script src="js/world/asset_discovery.js"></script>
     <script src="js/world/world_manager.js"></script>
+    <!-- ========================================== -->
+
+    <!-- ========================================== -->
+    <!-- ROOM SYSTEM & BUILDING INTERIORS           -->
+    <!-- ========================================== -->
+    <script src="js/kaykit_loader.js"></script>
+    <script src="js/command_system.js"></script>
+    <script src="js/battle_api.js"></script>
+    <script src="js/dungeon_generator.js"></script>
+    <script src="js/dungeon_enemies.js"></script>
+    <script src="js/dungeon_combat.js"></script>
+    <script src="js/minigames.js"></script>
+    <script src="js/chat_ui.js"></script>
+    <script src="js/touch_controls.js"></script>
+    <script src="js/private_mode.js"></script>
+    <script src="js/code_editor.js"></script>
+    <script src="js/file_manager.js"></script>
+    <script src="js/system_monitor.js"></script>
+    <script src="js/secure_messenger.js"></script>
+    <script src="js/terminal_modules.js"></script>
+    <script src="static/js/api_client.js"></script>
+    <script src="static/js/world_mode_manager.js"></script>
+    <script src="js/fishing.js"></script>
+    <script src="js/garden.js"></script>
+    <script src="js/buildings_custom.js"></script>
+    <script src="js/character_animations.js"></script>
+    <script src="js/3d_scene.js"></script>
+    <script src="js/voice_call.js"></script>
     <!-- ========================================== -->
 
     <script>
@@ -942,8 +973,10 @@
             if (closestBuilding) {
                 nearBuilding = closestBuilding;
                 const buildingName = closestBuilding.userData.buildingName || 'Gebäude';
+                const buildingType = closestBuilding.userData.buildingType || 'unknown';
                 ePromptText.textContent = buildingName + ' betreten';
                 ePrompt.style.display = 'block';
+                console.log(`🏠 Nähe: ${buildingName} (Type: ${buildingType}, Distance: ${closestDistance.toFixed(1)}m)`);
             } else {
                 nearBuilding = null;
                 ePrompt.style.display = 'none';
@@ -956,11 +989,13 @@
             const buildingName = building.userData.buildingName;
             const buildingDescription = building.userData.buildingDescription;
 
-            console.log(`🏠 Betrete ${buildingName}...`);
+            console.log(`🏠 Betrete ${buildingName}... (Type: ${buildingType})`);
 
             if (buildingType === 'schwarze_muehle') {
-                // Öffne Schwarze Windmühle (vollständiges Digivice mit 12 Räumen)
-                window.open('http://localhost:5173/index.html', '_blank', 'width=1400,height=900');
+                console.log('🏰 Schwarze Mühle erkannt! Öffne Digivice...');
+                // Öffne index.html (funktionierendes Raum-System)
+                window.location.href = 'index.html';
+                return;
             }
             else if (buildingType === 'city') {
                 // Stadt betreten - Lade Stadt-Interior
@@ -1085,8 +1120,360 @@
                 isInInterior = false;
                 currentInteriorState = null;
 
+                // 8. Verstecke Mühle-UI (falls vorhanden)
+                hideMuehleFloorUI();
+
                 console.log('✅ Zurück in Exterior!');
             }, 300);
+        }
+
+        // ===== EINFACHE MÜHLE VERSION (1 Raum: Wohnzimmer) =====
+        function loadMuehleInteriorSimple() {
+            console.log('🏰 Lade Schwarze Mühle Interior (Simple)...');
+
+            // 1. Speichere Exterior-Position
+            currentInteriorState = {
+                position: character.position.clone(),
+                cameraMode: cameraController.getMode(),
+                worldObjects: []
+            };
+
+            // 2. Fade-Out
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(() => {
+                // 3. Verstecke Exterior
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = false;
+                });
+                loadedAssets.forEach(asset => {
+                    if (asset.model) asset.model.visible = false;
+                });
+                buildings.forEach(building => building.visible = false);
+                if (schwarzeMuehle) schwarzeMuehle.visible = false;
+                gridHelper.visible = false;
+
+                // 4. Erstelle EINFACHEN Raum (Wohnzimmer, 48x48m)
+                const roomSize = 48;
+                const wallHeight = 6;
+
+                // Entferne alte Raum-Objekte
+                const oldRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                oldRooms.forEach(room => scene.remove(room));
+
+                // Boden (grün für Test)
+                const floorGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+                const floorMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x8b7355, // Braun (Holz)
+                    roughness: 0.9
+                });
+                const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                floorMesh.rotation.x = -Math.PI / 2;
+                floorMesh.position.y = 0;
+                floorMesh.receiveShadow = true;
+                floorMesh.userData.isMuehleRoom = true;
+                scene.add(floorMesh);
+
+                // 4 Wände
+                const wallMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x5a4a3a // Dunkelbraun
+                });
+
+                // Nord-Wand
+                const wallNorth = new THREE.Mesh(
+                    new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                    wallMaterial
+                );
+                wallNorth.position.set(0, wallHeight / 2, -roomSize / 2);
+                wallNorth.userData.isMuehleRoom = true;
+                wallNorth.castShadow = true;
+                scene.add(wallNorth);
+
+                // Süd-Wand
+                const wallSouth = new THREE.Mesh(
+                    new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                    wallMaterial
+                );
+                wallSouth.position.set(0, wallHeight / 2, roomSize / 2);
+                wallSouth.userData.isMuehleRoom = true;
+                wallSouth.castShadow = true;
+                scene.add(wallSouth);
+
+                // West-Wand
+                const wallWest = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                    wallMaterial
+                );
+                wallWest.position.set(-roomSize / 2, wallHeight / 2, 0);
+                wallWest.userData.isMuehleRoom = true;
+                wallWest.castShadow = true;
+                scene.add(wallWest);
+
+                // Ost-Wand
+                const wallEast = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                    wallMaterial
+                );
+                wallEast.position.set(roomSize / 2, wallHeight / 2, 0);
+                wallEast.userData.isMuehleRoom = true;
+                wallEast.castShadow = true;
+                scene.add(wallEast);
+
+                // 5. Positioniere Character IM RAUM (Zentrum, auf dem Boden)
+                character.position.set(0, 3.5, 0);
+
+                // 6. Setze Kamera
+                cameraController.setTarget(0, 0, 0);
+                cameraController.setMode(cameraController.MODES.THIRD);
+
+                // 7. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 8. Markiere als "in Interior"
+                isInInterior = true;
+
+                console.log('✅ Wohnzimmer geladen! Drücke [Q] zum Verlassen.');
+            }, 300);
+        }
+
+        // Schwarze Mühle Interior laden (4 Etagen) - ALTE VERSION
+        let currentMuehleFloor = 0;
+        let muehleFloorUI = null;
+        const muehleFloors = [
+            {
+                name: 'Erdgeschoss',
+                rooms: ['Wohnzimmer', 'Küche', 'Badezimmer']
+            },
+            { name: 'Obergeschoss', rooms: ['Schlafzimmer'] },
+            { name: 'Turm', rooms: ['Terminal'] },
+            { name: 'Keller', rooms: ['Studieren & Crafting'] }
+        ];
+
+        async function loadMuehleInterior() {
+            console.log('🏰 Lade Schwarze Mühle Interior...');
+
+            // 1. Speichere Exterior-Position
+            currentInteriorState = {
+                position: character.position.clone(),
+                cameraMode: cameraController.getMode(),
+                worldObjects: []
+            };
+
+            // 2. Fade-Out
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(async () => {
+                // 3. Verstecke Exterior
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = false;
+                });
+                loadedAssets.forEach(asset => {
+                    if (asset.model) asset.model.visible = false;
+                });
+                buildings.forEach(building => building.visible = false);
+                if (schwarzeMuehle) schwarzeMuehle.visible = false;
+                gridHelper.visible = false;
+
+                // 4. Lade Erdgeschoss (Floor 0)
+                currentMuehleFloor = 0;
+                await loadMuehleFloor(0);
+
+                // 5. Zeige Floor-Switch UI
+                showMuehleFloorUI();
+
+                // 6. Positioniere Character
+                character.position.set(0, 3.5, 0);
+
+                // 7. Setze Kamera
+                cameraController.setTarget(0, 0, 0);
+                cameraController.setMode(cameraController.MODES.THIRD);
+
+                // 8. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 9. Markiere als "in Interior"
+                isInInterior = true;
+
+                console.log('✅ Schwarze Mühle geladen! (Erdgeschoss)');
+            }, 300);
+        }
+
+        async function loadMuehleFloor(floorIndex) {
+            const floor = muehleFloors[floorIndex];
+            console.log(`🏠 Lade ${floor.name}...`);
+
+            // Lade room_config_detailed.json
+            try {
+                const response = await fetch('/digivice/static/assets/room_config_detailed.json');
+                const roomConfigs = await response.json();
+
+                // Entferne alte Raum-Objekte
+                const oldRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                oldRooms.forEach(room => scene.remove(room));
+
+                // Lade Räume für diese Etage
+                for (const roomName of floor.rooms) {
+                    const roomConfig = roomConfigs.rooms.find(r => r.name === roomName);
+                    if (!roomConfig) {
+                        console.warn(`⚠️ Room config not found: ${roomName}`);
+                        continue;
+                    }
+
+                    // Erstelle einfachen Raum (Boden)
+                    const roomSize = 48;
+                    const floorGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+                    const floorMaterial = new THREE.MeshStandardMaterial({
+                        color: roomConfig.palette?.floor || 0x8b7355,
+                        roughness: 0.9
+                    });
+                    const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                    floorMesh.rotation.x = -Math.PI / 2;
+                    floorMesh.position.y = 0;
+                    floorMesh.receiveShadow = true;
+                    floorMesh.userData.isMuehleRoom = true;
+                    scene.add(floorMesh);
+
+                    // Wände (4 Wände um den Raum)
+                    const wallHeight = 6;
+                    const wallMaterial = new THREE.MeshStandardMaterial({
+                        color: roomConfig.palette?.wall || 0x5a4a3a
+                    });
+
+                    // Nord-Wand
+                    const wallNorth = new THREE.Mesh(
+                        new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                        wallMaterial
+                    );
+                    wallNorth.position.set(0, wallHeight / 2, -roomSize / 2);
+                    wallNorth.userData.isMuehleRoom = true;
+                    wallNorth.castShadow = true;
+                    scene.add(wallNorth);
+
+                    // Süd-Wand
+                    const wallSouth = new THREE.Mesh(
+                        new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                        wallMaterial
+                    );
+                    wallSouth.position.set(0, wallHeight / 2, roomSize / 2);
+                    wallSouth.userData.isMuehleRoom = true;
+                    wallSouth.castShadow = true;
+                    scene.add(wallSouth);
+
+                    // West-Wand
+                    const wallWest = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                        wallMaterial
+                    );
+                    wallWest.position.set(-roomSize / 2, wallHeight / 2, 0);
+                    wallWest.userData.isMuehleRoom = true;
+                    wallWest.castShadow = true;
+                    scene.add(wallWest);
+
+                    // Ost-Wand
+                    const wallEast = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                        wallMaterial
+                    );
+                    wallEast.position.set(roomSize / 2, wallHeight / 2, 0);
+                    wallEast.userData.isMuehleRoom = true;
+                    wallEast.castShadow = true;
+                    scene.add(wallEast);
+                }
+
+                // Update UI
+                updateMuehleFloorUI();
+
+                console.log(`✅ ${floor.name} geladen (${floor.rooms.length} Räume)`);
+            } catch (error) {
+                console.error('❌ Fehler beim Laden der Räume:', error);
+            }
+        }
+
+        function showMuehleFloorUI() {
+            if (muehleFloorUI) {
+                muehleFloorUI.style.display = 'block';
+                return;
+            }
+
+            muehleFloorUI = document.createElement('div');
+            muehleFloorUI.id = 'muehle-floor-ui';
+            muehleFloorUI.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.9);
+                border: 2px solid #ff9b71;
+                border-radius: 10px;
+                padding: 15px;
+                color: white;
+                font-family: monospace;
+                font-size: 14px;
+                z-index: 1000;
+                min-width: 200px;
+            `;
+            muehleFloorUI.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 10px; text-align: center;">
+                    🏰 Schwarze Mühle
+                </div>
+                <div id="muehle-floor-buttons" style="display: flex; flex-direction: column; gap: 8px;">
+                    ${muehleFloors.map((floor, index) => `
+                        <button
+                            id="muehle-floor-btn-${index}"
+                            onclick="window.switchMuehleFloor(${index})"
+                            style="
+                                padding: 8px;
+                                background: ${index === 0 ? '#ff9b71' : '#444'};
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-family: monospace;
+                                font-size: 13px;
+                            "
+                        >${floor.name}</button>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 10px; font-size: 11px; color: #aaa; text-align: center;">
+                    [1-4] Schnellwahl | [Q] Verlassen
+                </div>
+            `;
+            document.body.appendChild(muehleFloorUI);
+
+            // Global function for onclick
+            window.switchMuehleFloor = async (index) => {
+                currentMuehleFloor = index;
+                await loadMuehleFloor(currentMuehleFloor);
+            };
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (isInInterior && currentInteriorState) {
+                    if (e.code === 'Digit1' || e.code === 'Numpad1') window.switchMuehleFloor(0);
+                    if (e.code === 'Digit2' || e.code === 'Numpad2') window.switchMuehleFloor(1);
+                    if (e.code === 'Digit3' || e.code === 'Numpad3') window.switchMuehleFloor(2);
+                    if (e.code === 'Digit4' || e.code === 'Numpad4') window.switchMuehleFloor(3);
+                }
+            });
+        }
+
+        function updateMuehleFloorUI() {
+            if (!muehleFloorUI) return;
+            muehleFloors.forEach((floor, index) => {
+                const btn = document.getElementById(`muehle-floor-btn-${index}`);
+                if (btn) {
+                    btn.style.background = index === currentMuehleFloor ? '#ff9b71' : '#444';
+                }
+            });
+        }
+
+        function hideMuehleFloorUI() {
+            if (muehleFloorUI) {
+                muehleFloorUI.style.display = 'none';
+            }
         }
 
         // Exit-Portal Proximity Detection (Phase 2)
@@ -2172,12 +2559,12 @@
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
         // Backend URL (localhost:8000)
-        const BACKEND_URL = 'http://localhost:8000';
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
             try {
-                const response = await fetch(`${BACKEND_URL}/api/najika/status`);
+                const response = await fetch(`${window.BACKEND_URL}/api/najika/status`);
                 if (!response.ok) throw new Error('Backend nicht erreichbar');
 
                 const data = await response.json();

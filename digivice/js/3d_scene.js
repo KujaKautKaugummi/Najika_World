@@ -280,7 +280,10 @@
         installEventHandlers();
         ensureKayKitLoader();
         loadCharacter();
-        scheduleRoomBuild();
+
+        // 🌍 Starte AUF der Open World (neben der Mühle)
+        buildRoom();  // Baut Open World
+
         createCombatStatsUI();
         createBuildingPromptUI();
         startAnimationLoop();
@@ -557,6 +560,9 @@
         currentInterior = buildingName;
         window.currentInterior = buildingName; // Sync to window
 
+        // WICHTIG: Verhindere dass buildRoom() die Mühle überschreibt!
+        pendingRoomBuild = false;
+
         // Schwarze Mühle hat mehrere Stockwerke
         if (buildingName === 'Schwarze Mühle') {
             currentFloor = 0; // Start im Erdgeschoss
@@ -696,6 +702,9 @@
             applyRoomPalette(firstRoomConfig.palette);
         }
 
+        // Setze Bewegungsradius für Mühlen-Räume (3 Räume nebeneinander = 48*3 + Abstand)
+        currentRoomSpan = 200;  // Genug Platz für alle Räume auf der Etage
+
         // Spawn Position im Zentrum
         resetCharacterPosition([0, 0, 0]);
 
@@ -740,6 +749,9 @@
         currentInteractable = null;
         hideInteractionPrompt();
 
+        // Merke welches Gebäude verlassen wurde
+        const wasInMuehle = (currentInterior === 'Schwarze Mühle');
+
         currentInterior = null;
         window.currentInterior = null; // Sync to window
         currentFloor = 0;
@@ -754,6 +766,9 @@
                 exteriorPosition.y,
                 exteriorPosition.z
             );
+        } else if (wasInMuehle) {
+            // Wenn wir von der Mühle kommen (Start-Spawn), spawne draußen vor der Mühle
+            resetCharacterPosition([0, 0, 100]);  // 100m südlich der Mühle
         }
 
         hideExitBuildingPrompt();
@@ -1710,27 +1725,38 @@
         if (!characterReady && modelName && modelName.includes('wand')) {
             attachStaffToCharacter();
         }
-        scheduleRoomBuild();
+        // WICHTIG: Open World baut sich NICHT neu! Nur Dungeons regenerieren sich.
+        // scheduleRoomBuild() wird NICHT mehr hier aufgerufen!
     }
 
     function scheduleRoomBuild() {
         pendingRoomBuild = true;
     }
 
+    let openWorldBuilt = false;  // Flag: Open World wurde schon gebaut
+
     function buildRoom() {
         pendingRoomBuild = false;
 
+        // 🌍 OPEN WORLD MODE - Großer Raum statt einzelner Room
+        const OPEN_WORLD_SIZE = 9600;  // 9.6km x 9.6km (war vorher 2400)
+        currentRoomSpan = OPEN_WORLD_SIZE;  // IMMER setzen!
+
+        // Wenn Open World schon gebaut wurde, NUR currentRoomSpan updaten
+        if (openWorldBuilt) {
+            console.log('✅ Open World bereits gebaut, nur Span aktualisiert');
+            return;
+        }
+
+        // Baue Open World das erste Mal
         if (roomGroup) {
             scene.remove(roomGroup);
             disposeHierarchy(roomGroup);
             roomGroup = null;
         }
 
-        // 🌍 OPEN WORLD MODE - Großer Raum statt einzelner Room
-        const OPEN_WORLD_SIZE = 2400;
         usingFallbackRoom = false;
         showFallbackRoom(false);
-        currentRoomSpan = OPEN_WORLD_SIZE;
 
         const group = new THREE.Group();
 
@@ -1746,87 +1772,42 @@
         floor.receiveShadow = true;
         group.add(floor);
 
-        // 🏠 BUILD GEBÄUDE (6 Stück mit GLTF-Modellen)
-        const buildings = [
-            {
-                name: 'Schwarze Mühle',
-                pos: [0, 0, 0],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/neutral/structure_C.gltf',
-                scale: 12.0,
-                radius: 80
-            },
-            {
-                name: 'Kampfarena',
-                pos: [-600, 0, -600],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/red/arch_tall_red.gltf',
-                scale: 10.0,
-                radius: 50
-            },
-            {
-                name: 'Garten',
-                pos: [600, 0, 600],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/neutral/structure_A.gltf',
-                scale: 5.0,
-                radius: 60
-            },
-            {
-                name: 'Dungeon des Schattens',
-                pos: [-720, 0, -720],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/blue/arch_tall_blue.gltf',
-                scale: 6.0,
-                radius: 70
-            },
-            {
-                name: 'Dungeon der Explosion',
-                pos: [720, 0, -720],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/green/arch_tall_green.gltf',
-                scale: 6.0,
-                radius: 70
-            },
-            {
-                name: 'Dungeon des Chaos',
-                pos: [0, 0, 720],
-                model: 'KayKit_Platformer_Pack_1.0_FREE/KayKit_Platformer_Pack_1.0_FREE/Assets/gltf/yellow/arch_tall_yellow.gltf',
-                scale: 6.0,
-                radius: 70
-            }
-        ];
-
         // 🏗️ CUSTOM BUILDINGS - Baue echte Gebäude aus THREE.js Primitives
+        // Map ist 9600x9600, Zentrum bei 0,0 → Schwarze Mühle in Götterfels (Zentrum)
 
-        // Schwarze Mühle (Position [0,0,0])
+        // Schwarze Mühle (Götterfels - Zentrum bei [0,0,0])
         if (window.CustomBuildings) {
             window.CustomBuildings.buildWindmill([0, 0, 0], 1.0, group);
         }
 
-        // Kampfarena (Position [-600,0,-600])
+        // Kampfarena (weiter weg positioniert für 9.6km Map)
         if (window.CustomBuildings) {
-            window.CustomBuildings.buildArena([-600, 0, -600], 0.8, group);
+            window.CustomBuildings.buildArena([-2000, 0, -2000], 0.8, group);
         }
 
-        // Garten-Haus (Position [600,0,600])
+        // Garten-Haus (weiter weg positioniert für 9.6km Map)
         if (window.CustomBuildings) {
-            window.CustomBuildings.buildHouse([600, 0, 600], 0.6, 0x90EE90, 'Gartenhaus', 60, group);
+            window.CustomBuildings.buildHouse([2000, 0, 2000], 0.6, 0x90EE90, 'Gartenhaus', 60, group);
         }
 
-        // Dungeons als kleine dunkle Häuser
+        // Dungeons verteilt auf der Map
         if (window.CustomBuildings) {
-            window.CustomBuildings.buildHouse([-720, 0, -720], 0.7, 0x4169E1, 'Dungeon 1', 70, group);
-            window.CustomBuildings.buildHouse([720, 0, -720], 0.7, 0x228B22, 'Dungeon 2', 70, group);
-            window.CustomBuildings.buildHouse([0, 0, 720], 0.7, 0xFFD700, 'Dungeon 3', 70, group);
+            window.CustomBuildings.buildHouse([-3000, 0, -3000], 0.7, 0x4169E1, 'Dungeon 1', 70, group);
+            window.CustomBuildings.buildHouse([3000, 0, -3000], 0.7, 0x228B22, 'Dungeon 2', 70, group);
+            window.CustomBuildings.buildHouse([0, 0, 3000], 0.7, 0xFFD700, 'Dungeon 3', 70, group);
         }
 
-        // 🌱 9 GARTEN-BEETE (3x3 Grid nahe Garten-Gebäude bei [600,0,600])
+        // 🌱 9 GARTEN-BEETE (3x3 Grid nahe Garten-Gebäude bei [2000,0,2000])
         const gardenPlots = [
-            { id: 1, position: [550, 0, 550], size: 20 },
-            { id: 2, position: [600, 0, 550], size: 20 },
-            { id: 3, position: [650, 0, 550], size: 20 },
-            { id: 4, position: [550, 0, 600], size: 20 },
-            { id: 5, position: [600, 0, 600], size: 20 },
-            { id: 6, position: [650, 0, 600], size: 20 },
-            { id: 7, position: [550, 0, 650], size: 20 },
-            { id: 8, position: [600, 0, 650], size: 20 },
-            { id: 9, position: [650, 0, 650], size: 20 }
+            { id: 1, position: [1950, 0, 1950], size: 20 },
+            { id: 2, position: [2000, 0, 1950], size: 20 },
+            { id: 3, position: [2050, 0, 1950], size: 20 },
+            { id: 4, position: [1950, 0, 2000], size: 20 },
+            { id: 5, position: [2000, 0, 2000], size: 20 },
+            { id: 6, position: [2050, 0, 2000], size: 20 },
+            { id: 7, position: [1950, 0, 2050], size: 20 },
+            { id: 8, position: [2000, 0, 2050], size: 20 },
+            { id: 9, position: [2050, 0, 2050], size: 20 }
         ];
 
         gardenPlots.forEach(plot => {
@@ -1874,10 +1855,10 @@
             });
         });
 
-        // 🎣 WASSER-PLANES für Fishing Spots
+        // 🎣 WASSER-PLANES für Fishing Spots (angepasst für 9.6km Map)
         const fishingSpots = [
-            { name: 'Kristallteich', position: [800, 0, 800], radius: 100 },
-            { name: 'Weltensee', position: [-800, 0, -800], radius: 150 }  // Weg von der Mühle!
+            { name: 'Kristallteich', position: [2500, 0, 2500], radius: 100 },
+            { name: 'Weltensee', position: [-2500, 0, -2500], radius: 150 }
         ];
 
         fishingSpots.forEach(spot => {
@@ -1920,8 +1901,12 @@
         // Palette für Open World (blauer Himmel)
         applyPalette({ background: 0x87CEEB, fog: 0xb5d8e0, ambient: 0.6 });
 
-        // Character spawnt in Mitte
-        resetCharacterPosition([0, 0, 0]);
+        // Character spawnt NEBEN der Mühle (100m südlich)
+        resetCharacterPosition([0, 0, 100]);
+
+        // Markiere Open World als gebaut
+        openWorldBuilt = true;
+        console.log('✅ Open World gebaut (9.6km x 9.6km) - Spawn bei Mühle');
     }
 
 
@@ -2514,7 +2499,7 @@
 
     function setPrivateMode(active) {
         privateModeActive = !!active;
-        scheduleRoomBuild();
+        // Open World baut sich NICHT neu!
     }
 
     function getCameraMode() {
@@ -2566,7 +2551,7 @@
                 if (name === 'Schwarze Mühle – Keller' && window.DungeonGenerator) {
                     DungeonGenerator.preloadDungeonAssets();
                 }
-                scheduleRoomBuild();
+                // Open World baut sich NICHT neu!
             }
         },
         setCameraMode: updateCameraMode,
@@ -2578,8 +2563,16 @@
         get scene() { return scene; },
         get characterGroup() { return characterGroup; },
         // ⚔️ Export Combat System
-        get combat() { return COMBAT_SYSTEM; }
+        get combat() { return COMBAT_SYSTEM; },
+        // Export building functions for UNIFIED.html
+        loadBuildingInterior,
+        exitBuilding,
+        loadMuehleFloor,
+        muehleFloors,
+        get currentFloor() { return currentFloor; }
     };
 
-    bootWhenReady();
+    // ⚠️ WICHTIG: bootWhenReady() ist für UNIFIED.html DEAKTIVIERT!
+    // UNIFIED.html hat sein eigenes Scene-System und ruft nur Building-Funktionen auf.
+    // bootWhenReady(); // DEAKTIVIERT für UNIFIED.html
 })();

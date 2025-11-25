@@ -45,8 +45,8 @@ echo   Features:
 echo   - Flat Map (9.6km x 9.6km)
 echo   - 9 Regions (3x3 Grid)
 echo   - 8 Cities + Goetterfels
-echo   - Combat System
-echo   - All Game Content (40 JSON)
+echo   - Schwarze Muhle (4 Etagen: EG/OG/Turm/Keller)
+echo   - Combat System + All Game Content (40 JSON)
 echo.
 echo   Performance: BEST (recommended!)
 echo.

@@ -14,9 +14,9 @@ echo   NOTE: Backend NOT started!
 echo   Status: "Backend Offline" (red dot)
 echo.
 echo   Features OHNE Backend:
-echo   - Open World Map
-echo   - Combat System
-echo   - Mühle betreten (Räume Basic)
+echo   - Open World Map (9.6km x 9.6km)
+echo   - Combat System (Realtime)
+echo   - Schwarze Muhle (4 Etagen: EG/OG/Turm/Keller)
 echo   - Movement + Enemies
 echo.
 echo   Features MIT Backend (starte: START_NAJIKA_FULL.bat):

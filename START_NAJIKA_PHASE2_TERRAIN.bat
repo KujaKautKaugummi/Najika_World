@@ -45,8 +45,8 @@ echo   Features:
 echo   - Terrain Variation (Mountains, Valleys)
 echo   - Vegetation System (Trees, Grass)
 echo   - Biome Effects (Fog, Lighting)
-echo   - Region Streaming (Performance)
-echo   - LOD System (3 Detail Levels)
+echo   - Schwarze Muhle (4 Etagen: EG/OG/Turm/Keller)
+echo   - Region Streaming + LOD System
 echo.
 echo   Performance: Medium-High (GPU required)
 echo   Status: EXPERIMENTAL - May have issues!
