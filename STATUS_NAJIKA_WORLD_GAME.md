@@ -59,10 +59,13 @@
 #### ⚔️ **Combat System (REALTIME - 1200+ Zeilen Code!)**
 - **3 Kampf-Modi:**
   - **MANUAL:** Volle Kontrolle (Skyrim + Soulframe + Dark Souls Movement)
-    - Dual-Wielding (Links/Rechts Hand separat)
-    - Element-Weaves (Q+E gleichzeitig für Kombos)
-    - Dodge/Roll (C), Block (X), Parry (V - Timing!)
-    - Combo-System mit Bonus-Schaden
+    - **Dual-Wielding:** Jede Hand einzeln steuerbar (Q/E)
+    - **6 Angriffsarten:** Leicht/Schwer pro Hand + Beide Hände
+    - **Element-Weaves:** Q+E gleichzeitig = 7 Elementar-Kombos
+    - **Combo-Chain:** Schnelle Angriffe = +10% Damage pro Hit
+    - **Defense:** Dodge/Roll (C), Block (X), Parry (V - Timing!)
+    - **WICHTIG:** Angriffe sind aufeinanderfolgend, NICHT simultan!
+    - **NUR** Element-Weave erlaubt simultane Dual-Attacks!
   - **ASSIST:** Najika kämpft, Spieler feuert an (Digimon World Style)
     - "Los!" (+10% DMG, 3s)
     - "Defend!" (+20% DEF, 3s)
