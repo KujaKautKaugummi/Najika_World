@@ -285,6 +285,27 @@
                 font-size: 12px;
             }
         }
+
+        /* Notification Animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
     </style>
 
     <!-- Chaos Events CSS -->
@@ -938,6 +959,11 @@
         window.addEventListener('keydown', (e) => {
             // E-Taste: Gebäude betreten/verlassen
             if (e.key === 'e' || e.key === 'E') {
+                // WICHTIG: E-Taste nur AUSSERHALB von Interiors!
+                if (isInInterior) {
+                    return; // Ignoriere E-Taste wenn bereits im Interior
+                }
+
                 if (nearBuilding) {
                     // Check if it's an Exit Portal
                     if (nearBuilding.userData && nearBuilding.userData.isExitPortal) {
@@ -1546,6 +1572,81 @@
                         >${floor.name}</button>
                     `).join('')}
                 </div>
+
+                <!-- Najika Interaction Buttons -->
+                <div style="margin-top: 15px; border-top: 1px solid #555; padding-top: 10px;">
+                    <div style="font-weight: bold; margin-bottom: 8px; text-align: center; color: #FFD700; font-size: 12px;">
+                        🎀 Najika Pflege
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button onclick="window.najikaInteraction('feed')" style="
+                            padding: 6px;
+                            background: #4CAF50;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🍖 Füttern</button>
+
+                        <button onclick="window.najikaInteraction('drink')" style="
+                            padding: 6px;
+                            background: #2196F3;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">💧 Trinken</button>
+
+                        <button onclick="window.najikaInteraction('cook')" style="
+                            padding: 6px;
+                            background: #FF9800;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🔥 Herd</button>
+
+                        <button onclick="window.najikaInteraction('shower')" style="
+                            padding: 6px;
+                            background: #00BCD4;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🚿 Dusche</button>
+
+                        <button onclick="window.najikaInteraction('toilet')" style="
+                            padding: 6px;
+                            background: #9C27B0;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🚽 Toilette</button>
+
+                        <button onclick="window.najikaInteraction('sleep')" style="
+                            padding: 6px;
+                            background: #673AB7;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🛏️ Bett</button>
+                    </div>
+                </div>
+
                 <div style="margin-top: 10px; font-size: 11px; color: #aaa; text-align: center;">
                     [1-4] Schnellwahl | [Q] Verlassen
                 </div>
@@ -1556,6 +1657,74 @@
             window.switchMuehleFloor = async (index) => {
                 currentMuehleFloor = index;
                 await loadMuehleFloor(currentMuehleFloor);
+            };
+
+            // Najika interaction handler
+            window.najikaInteraction = async (action) => {
+                if (!isInInterior) return;
+
+                let endpoint = '';
+                let message = '';
+
+                switch(action) {
+                    case 'feed':
+                        endpoint = '/api/najika/feed';
+                        message = '🍖 Najika wird gefüttert...';
+                        break;
+                    case 'drink':
+                        endpoint = '/api/najika/drink';
+                        message = '💧 Najika trinkt...';
+                        break;
+                    case 'cook':
+                        // Cook action - could combine with feed or be separate
+                        message = '🔥 Am Herd kochen...';
+                        console.log('[Najika] Cooking interaction - TODO: Add cooking system');
+                        return;
+                    case 'shower':
+                        endpoint = '/api/najika/wash';
+                        message = '🚿 Najika duscht...';
+                        break;
+                    case 'toilet':
+                        endpoint = '/api/najika/wash';
+                        message = '🚽 Najika geht zur Toilette...';
+                        break;
+                    case 'sleep':
+                        endpoint = '/api/najika/sleep';
+                        message = '🛏️ Najika schläft...';
+                        break;
+                }
+
+                if (endpoint) {
+                    try {
+                        console.log(`[Najika] ${message}`);
+
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({})
+                        });
+
+                        const result = await response.json();
+
+                        if (result.ok) {
+                            console.log(`[Najika] ✅ ${result.message || 'Success'}`);
+
+                            // Update UI if stat display exists
+                            if (window.commandSystem) {
+                                window.commandSystem.updateNajikaStats(result.najika);
+                            }
+
+                            // Visual feedback
+                            showNotification(message, 2000);
+                        } else {
+                            console.error(`[Najika] ❌ ${result.error || 'Failed'}`);
+                            showNotification(`❌ ${result.error || 'Fehler'}`, 2000);
+                        }
+                    } catch (error) {
+                        console.error(`[Najika] Interaction error:`, error);
+                        showNotification('❌ Verbindungsfehler', 2000);
+                    }
+                }
             };
 
             // Keyboard shortcuts
@@ -1583,6 +1752,35 @@
             if (muehleFloorUI) {
                 muehleFloorUI.style.display = 'none';
             }
+        }
+
+        // Notification System
+        function showNotification(message, duration = 3000) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.9);
+                color: #FFD700;
+                padding: 15px 30px;
+                border-radius: 10px;
+                border: 2px solid #FFD700;
+                font-family: monospace;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+                animation: slideInFromTop 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
         }
 
         // Exit-Portal Proximity Detection (Phase 2)

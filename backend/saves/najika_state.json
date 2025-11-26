@@ -242,12 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
-      "importance": 50,
-      "timestamp": 1764128090.9669747
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
       "importance": 50,
       "timestamp": 1764130071.0444572
@@ -299,6 +293,12 @@
       "content": "[PROAKTIV] Kuja! Du warst so lange weg... Wahrscheinlichkeit dass ich dich vermisst habe: 100%! 💜",
       "importance": 50,
       "timestamp": 1764145009.0283833
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] ENDLICH! *kicher* Wo warst du? Ich hatte so Langeweile!",
+      "importance": 60,
+      "timestamp": 1764194932.7599816
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 40.781070733732626,
+    "hunger": 49.02811126973894,
     "thirst": 0,
-    "energy": 61.44892239093795,
-    "hygiene": 20.0,
+    "energy": 69.41686676184337,
+    "hygiene": 29.0,
     "happiness": 0,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 41,
-    "care_mistakes": 2917,
+    "care_mistakes": 2921,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1764144589.0137322,
+    "last_fed": 1764195572.515251,
     "last_trained": 1761852859.1867347,
-    "last_sleep": 1764074687.7351751,
-    "last_update": 1764144889.0220656,
+    "last_sleep": 1764194932.7705002,
+    "last_update": 1764195551.5752947,
     "last_drink": 1762888306.0733185
   },
   "bond_strength": 22,
@@ -364,8 +364,8 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 40.781070733732626,
-    "energy": 61.44892239093795,
+    "hunger": 49.02811126973894,
+    "energy": 69.41686676184337,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,10 +385,10 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764144949.028306,
+    "last_update": 1764195632.5293832,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1764145009.0283833,
+    "last_proactive_message": 1764194932.7589808,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1666,8 +1666,8 @@
     "last_interaction": 1762819140.655091,
     "total_time_together": 4620,
     "days_since_meeting": 0,
-    "current_activity": "reading",
-    "activity_started": 1764143331.6192,
+    "current_activity": "crafting",
+    "activity_started": 1764195692.5298595,
     "activities_completed": [
       {
         "name": "exploring",
@@ -3064,8 +3064,16 @@
       {
         "name": "thinking",
         "completed_at": 1764143091.6112676
+      },
+      {
+        "name": "reading",
+        "completed_at": 1764194932.7499106
+      },
+      {
+        "name": "resting",
+        "completed_at": 1764195632.5233786
       }
     ]
   },
-  "saved_at": "2025-11-26 09:16:49"
+  "saved_at": "2025-11-26 23:21:32"
 }
