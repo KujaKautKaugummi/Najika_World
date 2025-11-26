@@ -1810,19 +1810,19 @@
             scene.add(sprite);
         }
 
-        // Regionen markieren (alle 9) - 4x größere Welt
-        // Row 1 (top): z=133.32
-        createRegionMarker(-133.32, 133.32, '#f0f8ff', 'ICE');       // Nordwest
-        createRegionMarker(0, 133.32, '#8b7355', 'HIGHLAND');        // Nord
-        createRegionMarker(133.32, 133.32, '#e8d4a0', 'DESERT');     // Nordost
+        // Regionen markieren (alle 9) - 9.6km x 9.6km Map (jede Region 3.2km x 3.2km)
+        // Row 1 (top): z=3200
+        createRegionMarker(-3200, 3200, '#f0f8ff', 'ICE');       // Nordwest
+        createRegionMarker(0, 3200, '#8b7355', 'HIGHLAND');        // Nord
+        createRegionMarker(3200, 3200, '#e8d4a0', 'DESERT');     // Nordost
         // Row 2 (middle): z=0
-        createRegionMarker(-133.32, 0, '#556b2f', 'SWAMP');          // West
-        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum
-        createRegionMarker(133.32, 0, '#c2b280', 'COAST');           // Ost
-        // Row 3 (bottom): z=-133.32
-        createRegionMarker(-133.32, -133.32, '#2f2f2f', 'CAVES');   // Südwest
-        createRegionMarker(0, -133.32, '#2d5016', 'FOREST');         // Süd
-        createRegionMarker(133.32, -133.32, '#8b4513', 'VOLCANO');   // Südost
+        createRegionMarker(-3200, 0, '#556b2f', 'SWAMP');          // West
+        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum (Götterfels - Schwarze Mühle hier!)
+        createRegionMarker(3200, 0, '#c2b280', 'COAST');           // Ost
+        // Row 3 (bottom): z=-3200
+        createRegionMarker(-3200, -3200, '#2f2f2f', 'CAVES');   // Südwest
+        createRegionMarker(0, -3200, '#2d5016', 'FOREST');         // Süd
+        createRegionMarker(3200, -3200, '#8b4513', 'VOLCANO');   // Südost
 
         // Asset Loading
         const gltfLoader = new THREE.GLTFLoader();
@@ -2773,8 +2773,10 @@
         }
 
         // Open Terminal (Digivice)
+        // TODO: Implement terminal module overlay
         window.openTerminal = () => {
-            window.open('http://localhost:5173/index.html', '_blank', 'width=1200,height=800');
+            console.log('💻 Terminal: Not yet implemented. Please visit Terminal room in Schwarze Mühle (Tower floor).');
+            alert('💻 Terminal System\n\nBitte besuche den Terminal-Raum im Turm der Schwarzen Mühle.\n\n(Drücke E beim Mühle-Eingang, dann nutze die Stockwerk-Buttons um zum Turm zu gelangen)');
         };
 
         // Auto-Update: Fetch Najika Status alle 5 Sekunden

@@ -204,6 +204,72 @@ class InventorySystem {
                 rarity: 'uncommon',
                 value: 50,
                 stackable: true
+            },
+
+            // ===== FOOD ITEMS =====
+            'baozi': {
+                id: 'baozi',
+                name: 'Gedämpftes Brötchen (Baozi)',
+                type: 'food',
+                icon: '🥟',
+                description: 'Dampf-Hain Special - Spirited Away Style',
+                effects: {
+                    hunger: 30,
+                    health: 15,
+                    stamina: 20
+                },
+                rarity: 'uncommon',
+                value: 25,
+                stackable: true
+            },
+            'arena_happen': {
+                id: 'arena_happen',
+                name: 'Arena-Happen Burger',
+                type: 'food',
+                icon: '🍔',
+                description: 'Legendärer Burger aus der Handelsfestung Arena',
+                effects: {
+                    hunger: 50,
+                    health: 25,
+                    damage_boost: 10,
+                    duration: 300
+                },
+                rarity: 'rare',
+                value: 100,
+                stackable: true
+            },
+            'salted_fish': {
+                id: 'salted_fish',
+                name: 'Salzfisch',
+                type: 'food',
+                icon: '🐟',
+                description: 'Getrockneter Fisch von der Salzigen Bucht',
+                effects: {
+                    hunger: 25,
+                    health: 10,
+                    stamina_regen: 5,
+                    duration: 180
+                },
+                rarity: 'common',
+                value: 15,
+                stackable: true
+            },
+            'champion_keule': {
+                id: 'champion_keule',
+                name: 'Champion-Keule',
+                type: 'food',
+                icon: '🍖',
+                description: 'Legendäres Fleisch - Two-handed eating!',
+                effects: {
+                    hunger: 80,
+                    health: 50,
+                    damage_boost: 20,
+                    crit_chance: 15,
+                    duration: 600
+                },
+                rarity: 'legendary',
+                value: 250,
+                stackable: true
             }
         };
     }

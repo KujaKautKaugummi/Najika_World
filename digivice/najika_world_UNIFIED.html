@@ -386,12 +386,18 @@
         <span id="e-prompt-text">Schwarze Windmühle betreten</span>
     </div>
 
+    <div id="q-prompt" style="display: none;">
+        <span class="e-key" style="background: #FF6B6B;">Q</span>
+        <span>Gebäude verlassen</span>
+    </div>
+
     <div id="mobile-joystick">
         <div id="mobile-joystick-thumb"></div>
     </div>
 
     <div id="controls">
         <button onclick="switchCameraMode()">📷 Kamera</button>
+        <button onclick="teleportToMuehle()" style="background: #8b00ff; color: white;">🏠 Schwarze Mühle</button>
         <button onclick="teleportTo('ice')">❄️ Ice</button>
         <button onclick="teleportTo('highland')">⛰️ Highland</button>
         <button onclick="teleportTo('desert')">🏜️ Desert</button>
@@ -672,12 +678,16 @@
         // ========================================
         // PHASE 1: FLAT REGIONS (wenn nicht Phase 2)
         // ========================================
+
+        // 9 REGIONS (3x3 Grid, each 3200×3200m) - MUSS GLOBAL sein für Minimap!
+        const regionSize = 3200;
+        let regions = [];
+        let gridHelper = null;
+
         if (!USE_PHASE_2) {
             console.log('🌍 Creating Phase 1: Flat Regions (9×3200m)...');
 
-        // 9 REGIONS (3x3 Grid, each 3200×3200m)
-        const regionSize = 3200;
-        let regions = [
+        regions = [
             // Row 1 (top): z=133.32
             { name: 'ice',      color: 0xf0f8ff, x: -3200, z: 3200,  y: 0 },
             { name: 'highland', color: 0x8b7355, x: 0,     z: 3200,  y: 0 },
@@ -708,14 +718,13 @@
         });
 
         // Grid (4x größer: 400x400)
-        const gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+        gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
         gridHelper.visible = true;
         scene.add(gridHelper);
 
         } else {
             console.log('🌍 Skipping flat regions (using Phase 2 Terrain System)');
             // Dummy regions für Minimap und Enemy Spawning (Phase 2)
-            const regionSize = 3200;
             regions = [
                 { name: 'ice', color: 0xf0f8ff, x: -3200, z: 3200, y: 0 },
                 { name: 'highland', color: 0x8b7355, x: 0, z: 3200, y: 0 },
@@ -936,6 +945,13 @@
                 }
             }
 
+            // Q-Taste: Interior verlassen (Mühle/Stadt)
+            if (e.key === 'q' || e.key === 'Q') {
+                if (isInInterior) {
+                    unloadBuildingInterior();
+                }
+            }
+
             // Combat-Steuerung wird vom RealtimeCombat System übernommen!
         });
 
@@ -943,6 +959,13 @@
         function checkBuildingProximity() {
             const ePrompt = document.getElementById('e-prompt');
             const ePromptText = document.getElementById('e-prompt-text');
+
+            // WICHTIG: Wenn im Interior, zeige KEINEN E-Prompt!
+            if (isInInterior) {
+                ePrompt.style.display = 'none';
+                nearBuilding = null;
+                return;
+            }
 
             let closestBuilding = null;
             let closestDistance = Infinity;
@@ -976,7 +999,7 @@
                 const buildingType = closestBuilding.userData.buildingType || 'unknown';
                 ePromptText.textContent = buildingName + ' betreten';
                 ePrompt.style.display = 'block';
-                console.log(`🏠 Nähe: ${buildingName} (Type: ${buildingType}, Distance: ${closestDistance.toFixed(1)}m)`);
+                // console.log(`🏠 Nähe: ${buildingName} (Type: ${buildingType}, Distance: ${closestDistance.toFixed(1)}m)`);
             } else {
                 nearBuilding = null;
                 ePrompt.style.display = 'none';
@@ -992,9 +1015,8 @@
             console.log(`🏠 Betrete ${buildingName}... (Type: ${buildingType})`);
 
             if (buildingType === 'schwarze_muehle') {
-                console.log('🏰 Schwarze Mühle erkannt! Öffne Digivice...');
-                // Öffne index.html (funktionierendes Raum-System)
-                window.location.href = 'index.html';
+                console.log('🏰 Schwarze Mühle - Lade 4-Etagen Interior...');
+                loadMuehleInterior();
                 return;
             }
             else if (buildingType === 'city') {
@@ -1082,11 +1104,18 @@
             document.getElementById('canvas-container').style.opacity = '0.3';
 
             setTimeout(() => {
-                // 2. Entferne Interior
-                interiorGenerator.unloadInterior();
+                // 2. Entferne Interior (City) und Mühle-Räume
+                if (typeof interiorGenerator !== 'undefined') {
+                    interiorGenerator.unloadInterior();
+                }
+                // Entferne Mühle-Räume
+                const muehleRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                muehleRooms.forEach(room => scene.remove(room));
 
                 // 2.5. Clear NPCs (Phase 6)
-                npcSystem.clearNPCs();
+                if (typeof npcSystem !== 'undefined') {
+                    npcSystem.clearNPCs();
+                }
 
                 // 3. Zeige Exterior-Objekte wieder
                 regions.forEach(region => {
@@ -1100,7 +1129,15 @@
                     building.visible = true;
                 });
                 if (schwarzeMuehle) schwarzeMuehle.visible = true;
-                gridHelper.visible = true;
+                if (gridHelper) gridHelper.visible = true;
+                // Zeige Region Marker wieder
+                scene.children.forEach(obj => {
+                    if (obj.userData.isRegionMarker) obj.visible = true;
+                });
+
+                // 3.5. Stelle Außenwelt-Fog/Background wieder her
+                scene.background = new THREE.Color(0x87CEEB); // Himmelblau
+                scene.fog = new THREE.Fog(0x87CEEB, 80, 250); // Weite Sicht
 
                 // 4. Stelle Character-Position wieder her
                 character.position.copy(currentInteriorState.position);
@@ -1122,6 +1159,9 @@
 
                 // 8. Verstecke Mühle-UI (falls vorhanden)
                 hideMuehleFloorUI();
+
+                // 9. Verstecke Q-Prompt
+                document.getElementById('q-prompt').style.display = 'none';
 
                 console.log('✅ Zurück in Exterior!');
             }, 300);
@@ -1271,12 +1311,20 @@
                     const mesh = scene.getObjectByName(`region_${region.name}`);
                     if (mesh) mesh.visible = false;
                 });
-                loadedAssets.forEach(asset => {
-                    if (asset.model) asset.model.visible = false;
-                });
-                buildings.forEach(building => building.visible = false);
+                if (typeof loadedAssets !== 'undefined') {
+                    loadedAssets.forEach(asset => {
+                        if (asset.model) asset.model.visible = false;
+                    });
+                }
+                if (typeof buildings !== 'undefined') {
+                    buildings.forEach(building => building.visible = false);
+                }
                 if (schwarzeMuehle) schwarzeMuehle.visible = false;
-                gridHelper.visible = false;
+                if (gridHelper) gridHelper.visible = false;
+                // Verstecke Region Marker
+                scene.children.forEach(obj => {
+                    if (obj.userData.isRegionMarker) obj.visible = false;
+                });
 
                 // 4. Lade Erdgeschoss (Floor 0)
                 currentMuehleFloor = 0;
@@ -1288,8 +1336,8 @@
                 // 6. Positioniere Character
                 character.position.set(0, 3.5, 0);
 
-                // 7. Setze Kamera
-                cameraController.setTarget(0, 0, 0);
+                // 7. Setze Kamera (Third-Person über Character)
+                cameraController.setTarget(0, 3.5, 0);
                 cameraController.setMode(cameraController.MODES.THIRD);
 
                 // 8. Fade-In
@@ -1297,6 +1345,9 @@
 
                 // 9. Markiere als "in Interior"
                 isInInterior = true;
+
+                // 10. Zeige Q-Prompt (Verlassen)
+                document.getElementById('q-prompt').style.display = 'block';
 
                 console.log('✅ Schwarze Mühle geladen! (Erdgeschoss)');
             }, 300);
@@ -1382,7 +1433,62 @@
                     wallEast.userData.isMuehleRoom = true;
                     wallEast.castShadow = true;
                     scene.add(wallEast);
+
+                    // Decke (Ceiling)
+                    const ceilingMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                    ceilingMesh.rotation.x = Math.PI / 2;
+                    ceilingMesh.position.y = wallHeight;
+                    ceilingMesh.receiveShadow = true;
+                    ceilingMesh.userData.isMuehleRoom = true;
+                    scene.add(ceilingMesh);
+
+                    // Möbel/Geräte hinzufügen
+                    if (roomName === 'Küche') {
+                        // Herd (roter Würfel)
+                        const herd = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 1.5, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x8B0000 })
+                        );
+                        herd.position.set(-15, 0.75, 0);
+                        herd.userData.isMuehleRoom = true;
+                        herd.userData.interactable = { type: 'kochen', label: 'Kochen [F]' };
+                        scene.add(herd);
+
+                        // Kühlschrank (weißer Würfel)
+                        const kuehlschrank = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 3, 2),
+                            new THREE.MeshStandardMaterial({ color: 0xFFFFFF })
+                        );
+                        kuehlschrank.position.set(15, 1.5, 0);
+                        kuehlschrank.userData.isMuehleRoom = true;
+                        kuehlschrank.userData.interactable = { type: 'essen', label: 'Essen [F]' };
+                        scene.add(kuehlschrank);
+                    } else if (roomName === 'Badezimmer') {
+                        // Dusche (blauer Würfel)
+                        const dusche = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 3, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x0000FF })
+                        );
+                        dusche.position.set(-15, 1.5, 0);
+                        dusche.userData.isMuehleRoom = true;
+                        dusche.userData.interactable = { type: 'duschen', label: 'Duschen [F]' };
+                        scene.add(dusche);
+                    } else if (roomName === 'Wohnzimmer') {
+                        // Sofa (grüner Würfel)
+                        const sofa = new THREE.Mesh(
+                            new THREE.BoxGeometry(4, 1, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x228B22 })
+                        );
+                        sofa.position.set(0, 0.5, -15);
+                        sofa.userData.isMuehleRoom = true;
+                        sofa.userData.interactable = { type: 'sitzen', label: 'Hinsetzen [F]' };
+                        scene.add(sofa);
+                    }
                 }
+
+                // Ändere Fog/Background für Interior
+                scene.background = new THREE.Color(0x222222); // Dunkler
+                scene.fog = new THREE.Fog(0x222222, 10, 60); // Kurze Sichtweite
 
                 // Update UI
                 updateMuehleFloorUI();
@@ -1680,6 +1786,7 @@
             const marker = new THREE.Mesh(markerGeometry, markerMaterial);
             marker.position.set(x, 5, z);
             marker.castShadow = true;
+            marker.userData.isRegionMarker = true; // Tag für Ausblenden
             scene.add(marker);
 
             // Text-Sprite (simuliert mit einer Plane)
@@ -1699,22 +1806,23 @@
             const sprite = new THREE.Sprite(spriteMaterial);
             sprite.position.set(x, 15, z);
             sprite.scale.set(20, 10, 1);
+            sprite.userData.isRegionMarker = true; // Tag für Ausblenden
             scene.add(sprite);
         }
 
-        // Regionen markieren (alle 9) - 4x größere Welt
-        // Row 1 (top): z=133.32
-        createRegionMarker(-133.32, 133.32, '#f0f8ff', 'ICE');       // Nordwest
-        createRegionMarker(0, 133.32, '#8b7355', 'HIGHLAND');        // Nord
-        createRegionMarker(133.32, 133.32, '#e8d4a0', 'DESERT');     // Nordost
+        // Regionen markieren (alle 9) - 9.6km x 9.6km Map (jede Region 3.2km x 3.2km)
+        // Row 1 (top): z=3200
+        createRegionMarker(-3200, 3200, '#f0f8ff', 'ICE');       // Nordwest
+        createRegionMarker(0, 3200, '#8b7355', 'HIGHLAND');        // Nord
+        createRegionMarker(3200, 3200, '#e8d4a0', 'DESERT');     // Nordost
         // Row 2 (middle): z=0
-        createRegionMarker(-133.32, 0, '#556b2f', 'SWAMP');          // West
-        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum
-        createRegionMarker(133.32, 0, '#c2b280', 'COAST');           // Ost
-        // Row 3 (bottom): z=-133.32
-        createRegionMarker(-133.32, -133.32, '#2f2f2f', 'CAVES');   // Südwest
-        createRegionMarker(0, -133.32, '#2d5016', 'FOREST');         // Süd
-        createRegionMarker(133.32, -133.32, '#8b4513', 'VOLCANO');   // Südost
+        createRegionMarker(-3200, 0, '#556b2f', 'SWAMP');          // West
+        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum (Götterfels - Schwarze Mühle hier!)
+        createRegionMarker(3200, 0, '#c2b280', 'COAST');           // Ost
+        // Row 3 (bottom): z=-3200
+        createRegionMarker(-3200, -3200, '#2f2f2f', 'CAVES');   // Südwest
+        createRegionMarker(0, -3200, '#2d5016', 'FOREST');         // Süd
+        createRegionMarker(3200, -3200, '#8b4513', 'VOLCANO');   // Südost
 
         // Asset Loading
         const gltfLoader = new THREE.GLTFLoader();
@@ -2269,14 +2377,50 @@
 
         // Grid Toggle
         window.toggleGrid = () => {
-            gridHelper.visible = !gridHelper.visible;
+            if (gridHelper) {
+                gridHelper.visible = !gridHelper.visible;
+            }
         };
 
-        // Minimap Setup - 4x größere Welt
+        // Teleport to Region
+        window.teleportTo = (regionName) => {
+            const regionPositions = {
+                'ice': { x: -3200, z: 3200 },
+                'highland': { x: 0, z: 3200 },
+                'desert': { x: 3200, z: 3200 },
+                'swamp': { x: -3200, z: 0 },
+                'mountain': { x: 0, z: 0 },
+                'coast': { x: 3200, z: 0 },
+                'caves': { x: -3200, z: -3200 },
+                'forest': { x: 0, z: -3200 },
+                'volcano': { x: 3200, z: -3200 }
+            };
+
+            const pos = regionPositions[regionName];
+            if (pos) {
+                // Verlasse Interior falls drin
+                if (isInInterior) {
+                    unloadBuildingInterior();
+                }
+                // Teleport
+                character.position.set(pos.x, 55, pos.z);
+                cameraController.setTarget(pos.x, 50, pos.z);
+                console.log(`✈️ Teleportiert nach ${regionName.toUpperCase()}`);
+            }
+        };
+
+        // Teleport zur Schwarzen Mühle (direkt rein wie Soulframe!)
+        window.teleportToMuehle = () => {
+            console.log('🏠 Teleportiere zur Schwarzen Mühle...');
+            // Rufe direkt loadMuehleInterior auf
+            loadMuehleInterior();
+        };
+
+        // Minimap Setup - 9.6km x 9.6km Welt (9600x9600 units)
         const minimapCanvas = document.getElementById('minimap');
         const minimapCtx = minimapCanvas.getContext('2d');
         const minimapSize = 200;
-        const worldSize = 400; // -200 to 200 = 400 units (4x größer)
+        const worldSize = 9600; // 9.6km x 9.6km (9 Regionen × 3200m)
         const minimapScale = minimapSize / worldSize;
 
         function drawMinimap() {
@@ -2288,9 +2432,9 @@
 
             regions.forEach(region => {
                 // Convert world position to minimap position
-                // World: -200 to 200 -> Minimap: 0 to 200
-                const minimapX = (region.x + 200) * minimapScale - (regionSize * minimapScale / 2);
-                const minimapZ = (region.z + 200) * minimapScale - (regionSize * minimapScale / 2);
+                // World: -4800 to 4800 -> Minimap: 0 to 200
+                const minimapX = (region.x + 4800) * minimapScale;
+                const minimapZ = (region.z + 4800) * minimapScale;
                 const minimapRegionSize = regionSize * minimapScale;
 
                 // Draw region rectangle
@@ -2304,8 +2448,8 @@
             });
 
             // Draw Najika (character position)
-            const najikaMinimapX = (character.position.x + 200) * minimapScale;
-            const najikaMinimapZ = (character.position.z + 200) * minimapScale;
+            const najikaMinimapX = (character.position.x + 4800) * minimapScale;
+            const najikaMinimapZ = (character.position.z + 4800) * minimapScale;
 
             // Draw character as green dot
             minimapCtx.fillStyle = '#4CAF50';
@@ -2486,13 +2630,13 @@
 
             // Keep character within map bounds
             if (isInInterior) {
-                // Interior Bounds: ±66 (133.32 / 2)
+                // Interior Bounds: ±66 (Raum-Größe)
                 character.position.x = Math.max(-66, Math.min(66, character.position.x));
                 character.position.z = Math.max(-66, Math.min(66, character.position.z));
             } else {
-                // Exterior Bounds: ±200 (400 / 2) - 4x größere Welt
-                character.position.x = Math.max(-200, Math.min(200, character.position.x));
-                character.position.z = Math.max(-200, Math.min(200, character.position.z));
+                // Exterior Bounds: ±4800 (9600 / 2) - 9.6km x 9.6km Welt!
+                character.position.x = Math.max(-4800, Math.min(4800, character.position.x));
+                character.position.z = Math.max(-4800, Math.min(4800, character.position.z));
             }
 
             // Update character height based on region
@@ -2629,8 +2773,10 @@
         }
 
         // Open Terminal (Digivice)
+        // TODO: Implement terminal module overlay
         window.openTerminal = () => {
-            window.open('http://localhost:5173/index.html', '_blank', 'width=1200,height=800');
+            console.log('💻 Terminal: Not yet implemented. Please visit Terminal room in Schwarze Mühle (Tower floor).');
+            alert('💻 Terminal System\n\nBitte besuche den Terminal-Raum im Turm der Schwarzen Mühle.\n\n(Drücke E beim Mühle-Eingang, dann nutze die Stockwerk-Buttons um zum Turm zu gelangen)');
         };
 
         // Auto-Update: Fetch Najika Status alle 5 Sekunden
