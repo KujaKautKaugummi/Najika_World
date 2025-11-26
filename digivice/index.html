@@ -955,21 +955,30 @@
 
         // E-Taste für Gebäude-Zugang
         let nearBuilding = null;
+        let lastInteriorToggle = 0;
+        const INTERIOR_TOGGLE_COOLDOWN = 1000; // 1 second cooldown
 
         window.addEventListener('keydown', (e) => {
             // E-Taste: Gebäude betreten/verlassen
             if (e.key === 'e' || e.key === 'E') {
-                // WICHTIG: E-Taste nur AUSSERHALB von Interiors!
-                if (isInInterior) {
-                    return; // Ignoriere E-Taste wenn bereits im Interior
+                // Cooldown check to prevent rapid enter/exit
+                if (Date.now() - lastInteriorToggle < INTERIOR_TOGGLE_COOLDOWN) {
+                    return;
                 }
 
                 if (nearBuilding) {
-                    // Check if it's an Exit Portal
+                    // Check if it's an Exit Portal (only works INSIDE interior)
                     if (nearBuilding.userData && nearBuilding.userData.isExitPortal) {
-                        unloadBuildingInterior();
+                        if (isInInterior) {
+                            lastInteriorToggle = Date.now();
+                            unloadBuildingInterior();
+                        }
                     } else {
-                        enterBuilding(nearBuilding);
+                        // Regular building entry (only works OUTSIDE)
+                        if (!isInInterior) {
+                            lastInteriorToggle = Date.now();
+                            enterBuilding(nearBuilding);
+                        }
                     }
                 }
             }
