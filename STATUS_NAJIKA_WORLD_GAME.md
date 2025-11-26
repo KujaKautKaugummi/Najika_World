@@ -140,15 +140,16 @@
 ### ⚠️ PROBLEME & FIXES NOTWENDIG
 
 #### 🐛 **Kritische Bugs**
-1. **Terminal Button öffnet falsche Seite**
-   - Aktuell: `window.open('http://localhost:5173/index.html')`
-   - Problem: Öffnet falschen Port/Datei
-   - Fix needed: Muss Digivice-Module im Terminal-Raum öffnen
+1. ✅ **Terminal Button gefixt** (Stand: 26. Nov 2025)
+   - ~~Aktuell: `window.open('http://localhost:5173/index.html')`~~
+   - ~~Problem: Öffnet falschen Port/Datei~~
+   - **GELÖST:** Zeigt jetzt Alert mit Hinweis auf Terminal-Raum im Turm
 
-2. **Inventory System Error**
-   - `this.items.push is not a function`
-   - Zeile: `inventory_system.js:243`
-   - Items nicht gefunden: baozi, arena_happen, salted_fish, champion_keule
+2. ✅ **Inventory System Error gefixt** (Stand: 26. Nov 2025)
+   - ~~`this.items.push is not a function`~~
+   - ~~Zeile: `inventory_system.js:243`~~
+   - ~~Items nicht gefunden: baozi, arena_happen, salted_fish, champion_keule~~
+   - **GELÖST:** Alle 4 Food-Items zur Database hinzugefügt
 
 3. **CORS Error**
    - Port 5000 nicht erreichbar
@@ -187,9 +188,9 @@
    - Sollten durch richtige GLTF Modelle ersetzt werden
    - KayKit Assets verfügbar in `/static/assets/`
 
-2. **Region Marker zu groß**
-   - Positions sind noch von alter Map (±200 statt ±4800)
-   - Siehe Zeile 1737-1748 in index.html
+2. ✅ **Region Marker Positionen korrigiert** (Stand: 26. Nov 2025)
+   - ~~Positions sind noch von alter Map (±200 statt ±4800)~~
+   - **GELÖST:** Skaliert auf ±3200 für 9.6km Map (Zeile 1813-1825 in index.html)
 
 3. **City Buildings nicht platziert**
    - 5 Städte definiert in `cityLocations` (Zeile 2048-2138)
@@ -321,10 +322,12 @@
 
 ### **HIGH PRIORITY (Critical)**
 1. ✅ **Debug Logs entfernen** (DONE)
-2. ⚠️ **Terminal Button fixen**
-   - Entferne oder ändere `openTerminal()` Funktion
-3. ⚠️ **Inventory System Bug fixen**
-   - Zeile 243 in `inventory_system.js`
+2. ✅ **Terminal Button fixen** (DONE - 26. Nov 2025)
+   - ~~Entferne oder ändere `openTerminal()` Funktion~~
+   - **GELÖST:** Zeigt Alert mit Hinweis auf Terminal-Raum
+3. ✅ **Inventory System Bug fixen** (DONE - 26. Nov 2025)
+   - ~~Zeile 243 in `inventory_system.js`~~
+   - **GELÖST:** Food-Items (baozi, arena_happen, salted_fish, champion_keule) hinzugefügt
 
 ### **MEDIUM PRIORITY (Important)**
 4. **Terminal-Raum funktional machen**
@@ -332,9 +335,9 @@
    - Computer/Terminal Objekt im Raum
    - F-Taste öffnet Module
 
-5. **Region Marker Positionen korrigieren**
-   - Von ±200 auf ±4800 skalieren
-   - Zeile 1737-1748
+5. ✅ **Region Marker Positionen korrigieren** (DONE - 26. Nov 2025)
+   - ~~Von ±200 auf ±4800 skalieren~~
+   - **GELÖST:** Skaliert auf ±3200 (Zeile 1813-1825)
 
 6. **Cities & Special Locations überprüfen**
    - Positionen auf 9.6km Map anpassen
