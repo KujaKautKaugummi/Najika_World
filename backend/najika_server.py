@@ -1258,6 +1258,14 @@ class Handler(SimpleHTTPRequestHandler):
         if path.startswith("/assets/"):
             return os.path.join(PROJECT_ROOT, "digivice", "static", path.lstrip("/"))
 
+        # Map /js/ to digivice/js/
+        if path.startswith("/js/"):
+            return os.path.join(PROJECT_ROOT, "digivice", path.lstrip("/"))
+
+        # Map /static/ to digivice/static/
+        if path.startswith("/static/"):
+            return os.path.join(PROJECT_ROOT, "digivice", path.lstrip("/"))
+
         return os.path.join(PROJECT_ROOT, path.lstrip("/"))
     def do_GET(self):
         if self.path == "/health":
