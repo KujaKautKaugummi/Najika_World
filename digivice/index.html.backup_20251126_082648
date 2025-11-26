@@ -286,9 +286,6 @@
             }
         }
     </style>
-
-    <!-- Chaos Events CSS -->
-    <link rel="stylesheet" href="static/css/chaos_events.css">
 </head>
 <body>
     <div id="canvas-container"></div>
@@ -441,8 +438,8 @@
     <script>
         // 🎮 PHASE 2 TOGGLE - Setze auf true für Terrain Variation!
         // false = Phase 1 (Flat Terrain, stabil, getestet)
-        // true  = Phase 2 (Terrain Variation, Vegetation, FINALE VERSION!)
-        const USE_PHASE_2 = true;
+        // true  = Phase 2 (Terrain Variation, Vegetation, experimentell)
+        const USE_PHASE_2 = false;
 
         if (USE_PHASE_2) {
             console.log('🌍 Phase 2 enabled: Terrain Variation, Vegetation, LOD');
@@ -4489,39 +4486,5 @@
         setInterval(updateBuffUI, 1000);
 
 </script>
-
-<!-- ============================================ -->
-<!-- CHAOS EVENT SYSTEM -->
-<!-- ============================================ -->
-<script src="js/chaos_event_ui.js"></script>
-
-<!-- ============================================ -->
-<!-- COMBAT INPUT SYSTEM -->
-<!-- ============================================ -->
-<script src="js/game_input.js"></script>
-
-<!-- ============================================ -->
-<!-- INIT NEW SYSTEMS -->
-<!-- ============================================ -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('[Najika] Initializing new systems...');
-
-    // Chaos Events
-    if (typeof ChaosEventUI !== 'undefined') {
-        window.chaosEventUI = new ChaosEventUI();
-        console.log('[Najika] ✓ Chaos Event UI');
-    }
-
-    // Combat Input (Desktop)
-    if (window.commandSystem && typeof CombatInputHandler !== 'undefined') {
-        window.combatInput = new CombatInputHandler(window.commandSystem);
-        console.log('[Najika] ✓ Combat Input Handler');
-    }
-
-    console.log('[Najika] New systems initialized!');
-});
-</script>
-
 </body>
 </html>

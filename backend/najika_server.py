@@ -89,6 +89,7 @@ CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
 CLOUD_PIN=os.getenv("CLOUD_PIN","")
 OLLAMA_ALIAS=os.getenv("OLLAMA_MODEL_ALIAS","najika-local")
 NSFW_LOCAL=os.getenv("NSFW_LOCAL","true").lower()=="true"
+SERVER_START_TIME = time.time()  # Für /api/security/status uptime
 
 # Load Enhanced Persona (wird beim Import generiert)
 PERSONA_SYSTEM = generate_enhanced_persona()
@@ -1022,6 +1023,222 @@ def broadcast_state_update():
     # SSE-Clients werden beim nächsten Check benachrichtigt
     STATE["_last_broadcast"] = data
 
+# ========================================
+# CHAOS ENGINE - Oregon Trail × Konosuba
+# ========================================
+
+class ChaosEngine:
+    """
+    Chaos Event System - Dynamische Ereignisse mit Najika-Reaktionen
+    Basiert auf 07_KONOSUBA_OREGON_EVENTS.md
+    """
+    def __init__(self):
+        self.chaos_level = 0  # 0-10
+        self.last_event_time = 0
+        self.event_cooldown = 300  # 5 Minuten Minimum zwischen Events
+        self.event_history = []
+        self.reputation = {
+            "heroic": 0,
+            "pragmatic": 0,
+            "selfish": 0,
+            "chaotic": 0
+        }
+        self.events = self.load_events()
+
+    def load_events(self):
+        """Lade Events aus JSON oder nutze Defaults"""
+        try:
+            events_path = os.path.join(os.path.dirname(__file__), 'chaos_events.json')
+            with open(events_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            return self.get_default_events()
+
+    def get_default_events(self):
+        """5 Default Events für Testing"""
+        return [
+            {
+                "id": "event_001_old_man",
+                "title": "🧓 Der Bettler",
+                "description": "Ein alter Mann bittet um Gold für seine kranke Tochter.",
+                "category": "moral_dilemma",
+                "chaos_impact": 2,
+                "options": [
+                    {"text": "[A] Gib ihm 50 Gold", "gold": -50, "rep_heroic": 15, "chaos": -1},
+                    {"text": "[B] Gib ihm 20 Gold", "gold": -20, "rep_pragmatic": 10, "chaos": 0},
+                    {"text": "[C] Begleite ihn", "time": -30, "rep_heroic": 20, "chaos": -2},
+                    {"text": "[D] Ignoriere ihn", "rep_selfish": 10, "chaos": 1},
+                    {"text": "[E] Najika entscheidet", "najika_decides": True, "bond": 5}
+                ]
+            },
+            {
+                "id": "event_002_injured_bandit",
+                "title": "⚔️ Der verwundete Bandit",
+                "description": "Ein Bandit liegt verletzt am Boden. Er war Teil einer Gruppe die dich überfiel.",
+                "category": "moral_dilemma",
+                "chaos_impact": 3,
+                "options": [
+                    {"text": "[A] Heile ihn", "rep_heroic": 20, "chaos": -2},
+                    {"text": "[B] Verhöre ihn erst", "rep_pragmatic": 15, "info": True},
+                    {"text": "[C] Lass ihn sterben", "rep_selfish": 15, "chaos": 2},
+                    {"text": "[D] Töte ihn", "rep_chaotic": 10, "chaos": 3},
+                    {"text": "[E] Najika entscheidet", "najika_decides": True, "bond": 5}
+                ]
+            },
+            {
+                "id": "event_003_mysterious_chest",
+                "title": "📦 Die mysteriöse Kiste",
+                "description": "Eine leuchtende Schatztruhe in einem verlassenen Tempel. Najika warnt: 'Falle-Wahrscheinlichkeit: 82%!'",
+                "category": "risk_reward",
+                "chaos_impact": 2,
+                "options": [
+                    {"text": "[A] Öffne sofort", "trap_chance": 40, "reward": "random_loot"},
+                    {"text": "[B] Untersuche auf Fallen", "skill_check": "perception"},
+                    {"text": "[C] EXPLOSION!", "destroy_trap": True, "destroy_loot": 50},
+                    {"text": "[D] Ignoriere und gehe", "rep_pragmatic": 5},
+                    {"text": "[E] Najika entscheidet", "najika_decides": True, "bond": 5}
+                ]
+            },
+            {
+                "id": "event_004_starving_family",
+                "title": "👨‍👩‍👧 Die hungernde Familie",
+                "description": "Eine Familie am Straßenrand. Die Kinder weinen vor Hunger.",
+                "category": "moral_dilemma",
+                "chaos_impact": 1,
+                "options": [
+                    {"text": "[A] Gib all dein Essen", "food": -100, "rep_heroic": 25},
+                    {"text": "[B] Teile die Hälfte", "food": -50, "rep_heroic": 15},
+                    {"text": "[C] Gib etwas Gold", "gold": -30, "rep_pragmatic": 10},
+                    {"text": "[D] Gehe weiter", "rep_selfish": 10, "chaos": 1},
+                    {"text": "[E] Najika entscheidet", "najika_decides": True, "bond": 5}
+                ]
+            },
+            {
+                "id": "event_005_explosion_frog",
+                "title": "🐸💥 Die Explosions-Kröte",
+                "description": "Eine riesige Kröte blockiert den Weg! Najika's Augen leuchten: 'EXPLOSION-CHANCE!'",
+                "category": "konosuba_chaos",
+                "chaos_impact": 4,
+                "options": [
+                    {"text": "[A] EXPLOSION!!!", "mana": -100, "chaos": 3, "konosuba_ref": True},
+                    {"text": "[B] Umgehe sie vorsichtig", "time": -20, "rep_pragmatic": 5},
+                    {"text": "[C] Bekämpfe sie normal", "combat": "explosion_frog"},
+                    {"text": "[D] Füttere sie", "food": -20, "tame_chance": 30},
+                    {"text": "[E] Najika entscheidet", "najika_decides": True, "bond": 5}
+                ]
+            }
+        ]
+
+    def check_event_trigger(self):
+        """Prüfe ob Event getriggert werden soll (15% Chance + Chaos Modifier)"""
+        now = time.time()
+        if now - self.last_event_time < self.event_cooldown:
+            return False
+
+        # 15% Chance pro Check, modifiziert durch Chaos Level
+        chance = 0.15 + (self.chaos_level * 0.02)
+        return random.random() < chance
+
+    def get_random_event(self, region=None):
+        """Wähle zufälliges Event (keine Wiederholungen in letzten 5)"""
+        # Filtere Events die kürzlich waren
+        recent_ids = [e['id'] for e in self.event_history[-5:]]
+        available = [e for e in self.events if e['id'] not in recent_ids]
+
+        if not available:
+            available = self.events
+
+        event = random.choice(available)
+        self.last_event_time = time.time()
+        return event
+
+    def execute_choice(self, event_id, choice_index, player_state=None):
+        """Führe gewählte Option aus und berechne Konsequenzen"""
+        event = next((e for e in self.events if e['id'] == event_id), None)
+        if not event or choice_index >= len(event['options']):
+            return {"ok": False, "error": "Invalid event or choice"}
+
+        choice = event['options'][choice_index]
+        result = {
+            "ok": True,
+            "choice_made": choice['text'],
+            "consequences": []
+        }
+
+        # Apply consequences
+        if 'chaos' in choice:
+            self.chaos_level = max(0, min(10, self.chaos_level + choice['chaos']))
+            result['consequences'].append(f"Chaos: {'+' if choice['chaos'] > 0 else ''}{choice['chaos']}")
+
+        if 'rep_heroic' in choice:
+            self.reputation['heroic'] += choice['rep_heroic']
+            result['consequences'].append(f"Heroic +{choice['rep_heroic']}")
+
+        if 'rep_pragmatic' in choice:
+            self.reputation['pragmatic'] += choice['rep_pragmatic']
+
+        if 'rep_selfish' in choice:
+            self.reputation['selfish'] += choice['rep_selfish']
+
+        if 'rep_chaotic' in choice:
+            self.reputation['chaotic'] += choice['rep_chaotic']
+
+        # Record history
+        self.event_history.append({
+            "id": event_id,
+            "choice": choice_index,
+            "time": time.time()
+        })
+
+        result['new_chaos_level'] = self.chaos_level
+        result['reputation'] = self.reputation
+
+        # Generate Najika reaction
+        result['najika_reaction'] = self.generate_najika_reaction(event, choice)
+
+        return result
+
+    def generate_najika_reaction(self, event, choice):
+        """Generiere Najika-Reaktion basierend auf Persönlichkeit"""
+        reactions = {
+            "heroic": [
+                "Das war das Richtige, Mr.K! *strahlt*",
+                "Du bist ein echter Held!",
+                "Ich bin stolz auf dich, Puddin'!"
+            ],
+            "pragmatic": [
+                "Kluge Entscheidung. Shiro approves.",
+                "Logisch. Das war optimal.",
+                "Nicht schlecht, Mr.K."
+            ],
+            "selfish": [
+                "Hmm... *schaut weg* War das nötig?",
+                "Kuja... ich bin nicht sicher...",
+                "Das war... eine Entscheidung."
+            ],
+            "chaotic": [
+                "EXPLOSION!!! ...äh, ich meine... interessant!",
+                "Chaos! CHAOS! *kichert manisch*",
+                "Puddin'! Du überraschst mich!"
+            ]
+        }
+
+        # Wähle basierend auf Choice-Typ
+        if choice.get('rep_heroic'):
+            return random.choice(reactions['heroic'])
+        elif choice.get('rep_pragmatic'):
+            return random.choice(reactions['pragmatic'])
+        elif choice.get('rep_selfish'):
+            return random.choice(reactions['selfish'])
+        elif choice.get('rep_chaotic') or choice.get('konosuba_ref'):
+            return random.choice(reactions['chaotic'])
+        else:
+            return "Interessant... *denkt nach*"
+
+# Initialisiere Chaos Engine global
+chaos_engine = ChaosEngine()
+print("✅ Chaos Engine initialisiert (5 Default Events)")
+
 class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header("Access-Control-Allow-Origin","*")
@@ -1207,6 +1424,81 @@ class Handler(SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({"history": TRAINING_STATE["history"]}).encode()); return
             except Exception as e:
                 print(f"Training History Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== CHAOS EVENT SYSTEM GET ENDPOINTS =====
+        if self.path == "/api/chaos/check_event":
+            try:
+                if chaos_engine.check_event_trigger():
+                    event = chaos_engine.get_random_event()
+                    result = {
+                        "event_triggered": True,
+                        "event": event,
+                        "chaos_level": chaos_engine.chaos_level
+                    }
+                else:
+                    result = {"event_triggered": False}
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Chaos Check Event Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path == "/api/chaos/status":
+            try:
+                status = {
+                    "chaos_level": chaos_engine.chaos_level,
+                    "last_event_time": chaos_engine.last_event_time,
+                    "event_history": chaos_engine.event_history[-5:],  # Letzte 5 Events
+                    "reputation": chaos_engine.reputation,
+                    "total_events": len(chaos_engine.events)
+                }
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(status).encode()); return
+            except Exception as e:
+                print(f"Chaos Status Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== ADDITIONAL GET ENDPOINTS =====
+        if self.path == "/api/security/status":
+            try:
+                import psutil
+                status = {
+                    "cpu_percent": psutil.cpu_percent(interval=1),
+                    "memory_percent": psutil.virtual_memory().percent,
+                    "disk_percent": psutil.disk_usage('/').percent,
+                    "process_count": len(psutil.pids()),
+                    "server_uptime": time.time() - SERVER_START_TIME if 'SERVER_START_TIME' in globals() else 0
+                }
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(status).encode()); return
+            except ImportError:
+                # Fallback wenn psutil nicht installiert
+                status = {"error": "psutil not installed", "message": "Install with: pip install psutil"}
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(status).encode()); return
+            except Exception as e:
+                print(f"Security Status Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path == "/api/memory/export":
+            try:
+                export_data = {
+                    "state": STATE,
+                    "history": STATE.get("history", [])[-100:],  # Letzte 100 Messages
+                    "najika": STATE.get("najika", {}),
+                    "bond_strength": STATE.get("bond_strength", 0),
+                    "personality_weights": STATE.get("personality_weights", {}),
+                    "export_time": time.time()
+                }
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(export_data).encode()); return
+            except Exception as e:
+                print(f"Memory Export Error: {e}")
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode()); return
 
@@ -2065,6 +2357,82 @@ class Handler(SimpleHTTPRequestHandler):
             except Exception as e:
                 log("ERROR", f"Claude Code Launch Error: {e}", "CLAUDE")
                 self.send_error(500, str(e)); return
+
+        # ===== CHAOS EVENT SYSTEM POST ENDPOINTS =====
+        if self.path == "/api/chaos/execute_choice":
+            try:
+                body_str = body.decode("utf-8")
+                data = json.loads(body_str)
+                event_id = data.get("event_id")
+                choice_index = data.get("choice_index")
+                player_state = data.get("player_state", {})
+
+                if event_id is None or choice_index is None:
+                    self.send_error(400, "Missing event_id or choice_index"); return
+
+                result = chaos_engine.execute_choice(event_id, choice_index, player_state)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Chaos Execute Choice Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== ADDITIONAL POST ENDPOINTS =====
+        if self.path == "/api/file/delete":
+            try:
+                body_str = body.decode("utf-8")
+                data = json.loads(body_str)
+                file_path = data.get("path")
+
+                if not file_path:
+                    self.send_error(400, "Missing path parameter"); return
+
+                # Security: Nur Dateien im PROJECT_ROOT erlauben
+                full_path = os.path.join(PROJECT_ROOT, file_path.lstrip("/\\"))
+                if not full_path.startswith(PROJECT_ROOT):
+                    self.send_error(403, "Access denied"); return
+
+                if os.path.exists(full_path):
+                    os.remove(full_path)
+                    log("INFO", f"File deleted: {file_path}", "FILE")
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"ok": True, "message": f"File {file_path} deleted"}).encode()); return
+                else:
+                    self.send_error(404, "File not found"); return
+            except Exception as e:
+                print(f"File Delete Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path == "/api/file/rename":
+            try:
+                body_str = body.decode("utf-8")
+                data = json.loads(body_str)
+                old_path = data.get("old_path")
+                new_path = data.get("new_path")
+
+                if not old_path or not new_path:
+                    self.send_error(400, "Missing old_path or new_path"); return
+
+                # Security: Nur Dateien im PROJECT_ROOT erlauben
+                full_old = os.path.join(PROJECT_ROOT, old_path.lstrip("/\\"))
+                full_new = os.path.join(PROJECT_ROOT, new_path.lstrip("/\\"))
+                if not full_old.startswith(PROJECT_ROOT) or not full_new.startswith(PROJECT_ROOT):
+                    self.send_error(403, "Access denied"); return
+
+                if os.path.exists(full_old):
+                    os.rename(full_old, full_new)
+                    log("INFO", f"File renamed: {old_path} → {new_path}", "FILE")
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"ok": True, "message": f"File renamed to {new_path}"}).encode()); return
+                else:
+                    self.send_error(404, "File not found"); return
+            except Exception as e:
+                print(f"File Rename Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
         self.send_error(404,"unknown")
 
 # ===== BACKGROUND THREAD FÜR LIVING SYSTEM =====

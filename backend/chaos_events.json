@@ -1,0 +1,134 @@
+{
+  "events": [
+    {
+      "id": "old_man",
+      "title": "Mysteriöser alter Mann",
+      "description": "Ein alter Mann mit faltigem Gesicht steht am Wegrand und starrt dich an. 'Bist du ein Abenteurer? Ich habe ein Angebot für dich...'",
+      "chaos_probability": 0.15,
+      "choices": [
+        {
+          "text": "Höre ihm zu",
+          "consequence": "Du erhältst eine mysteriöse Quest und 50 Gold.",
+          "effects": {"gold": 50, "chaos": 1},
+          "reputation": "heroic"
+        },
+        {
+          "text": "Ignoriere ihn",
+          "consequence": "Du gehst weiter. Nichts passiert.",
+          "effects": {"chaos": -1},
+          "reputation": "pragmatic"
+        },
+        {
+          "text": "Raube ihn aus",
+          "consequence": "Du erhältst 100 Gold, aber dein Ruf sinkt!",
+          "effects": {"gold": 100, "chaos": 3, "reputation": -10},
+          "reputation": "selfish"
+        }
+      ]
+    },
+    {
+      "id": "injured_bandit",
+      "title": "Verletzter Bandit",
+      "description": "Ein verletzter Bandit liegt am Boden. Er fleht um Hilfe: 'Bitte... ich sterbe...'",
+      "chaos_probability": 0.12,
+      "choices": [
+        {
+          "text": "Heile ihn",
+          "consequence": "Du heilst ihn. Er bedankt sich und gibt dir einen Trank.",
+          "effects": {"health_potion": 1, "chaos": -1},
+          "reputation": "heroic"
+        },
+        {
+          "text": "Gib ihm den Gnadenstoß",
+          "consequence": "Du tötest ihn schnell. Er leidet nicht mehr. Du findest 80 Gold.",
+          "effects": {"gold": 80, "chaos": 2},
+          "reputation": "pragmatic"
+        },
+        {
+          "text": "Plündere ihn aus",
+          "consequence": "Du nimmst alles was er hat und lässt ihn sterben.",
+          "effects": {"gold": 120, "chaos": 4, "reputation": -15},
+          "reputation": "selfish"
+        }
+      ]
+    },
+    {
+      "id": "mysterious_chest",
+      "title": "Mysteriöse Truhe",
+      "description": "Eine leuchtende Truhe steht mitten auf dem Weg. Sie sieht... verdächtig aus.",
+      "chaos_probability": 0.18,
+      "choices": [
+        {
+          "text": "Öffne sie vorsichtig",
+          "consequence": "Du findest einen seltenen Ring!",
+          "effects": {"rare_ring": 1, "chaos": 1},
+          "reputation": "pragmatic"
+        },
+        {
+          "text": "Zerstöre sie mit Magie",
+          "consequence": "EXPLOSION! Du verlierst 30 HP aber findest 200 Gold in den Trümmern.",
+          "effects": {"health": -30, "gold": 200, "chaos": 3},
+          "reputation": "chaotic"
+        },
+        {
+          "text": "Ignoriere sie",
+          "consequence": "Du gehst weiter. Sicher ist sicher.",
+          "effects": {"chaos": -1},
+          "reputation": "pragmatic"
+        }
+      ]
+    },
+    {
+      "id": "starving_family",
+      "title": "Hungernde Familie",
+      "description": "Eine Familie bettelt um Essen: 'Bitte, unsere Kinder verhungern!'",
+      "chaos_probability": 0.10,
+      "choices": [
+        {
+          "text": "Gib ihnen Essen",
+          "consequence": "Du gibst ihnen 3 Brote. Sie segnen dich.",
+          "effects": {"bread": -3, "chaos": -2, "reputation": 15},
+          "reputation": "heroic"
+        },
+        {
+          "text": "Gib ihnen Gold",
+          "consequence": "Du gibst ihnen 50 Gold. Sie danken dir.",
+          "effects": {"gold": -50, "chaos": -1, "reputation": 10},
+          "reputation": "heroic"
+        },
+        {
+          "text": "Ignoriere sie",
+          "consequence": "Du gehst weiter. Du fühlst dich schlecht.",
+          "effects": {"chaos": 1, "reputation": -5},
+          "reputation": "selfish"
+        }
+      ]
+    },
+    {
+      "id": "explosion_frog",
+      "title": "Explodierende Kröte (KONOSUBA!)",
+      "description": "Eine RIESIGE Kröte hüpft auf dich zu! Sie sieht aus als würde sie gleich platzen!",
+      "chaos_probability": 0.20,
+      "choices": [
+        {
+          "text": "EXPLOSION! (Megumin Style)",
+          "consequence": "Du zerstörst die Kröte mit einem gigantischen EXPLOSION Zauber! ALLES ist zerstört. Du fällst erschöpft um.",
+          "effects": {"gold": 150, "chaos": 5, "mana": -100, "health": -20},
+          "reputation": "chaotic"
+        },
+        {
+          "text": "Renne weg!",
+          "consequence": "Du rennst so schnell du kannst. Die Kröte explodiert hinter dir.",
+          "effects": {"chaos": 2},
+          "reputation": "pragmatic"
+        },
+        {
+          "text": "Versuche sie zu zähmen",
+          "consequence": "Du versuchst sie zu beruhigen... SIE EXPLODIERT IN DEINEM GESICHT!",
+          "effects": {"health": -50, "chaos": 4},
+          "reputation": "chaotic"
+        }
+      ]
+    }
+  ]
+}

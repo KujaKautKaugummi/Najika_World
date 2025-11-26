@@ -1,0 +1,313 @@
+/* =============================================================================
+   CHAOS EVENT SYSTEM - Styling
+   ============================================================================= */
+
+/* Chaos Meter (Top Right Corner) */
+#chaos-meter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 150px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #FF4444;
+    z-index: 1000;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.chaos-meter-label {
+    color: #FF4444;
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.chaos-meter-bar {
+    background: #333;
+    height: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.chaos-meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #FFD700, #FF4444);
+    transition: width 0.5s ease;
+}
+
+.chaos-meter-value {
+    color: #fff;
+    font-size: 10px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Event Overlay */
+#chaos-event-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+#chaos-event-overlay.fade-out {
+    animation: fadeOut 0.3s ease;
+}
+
+/* Event Container */
+.event-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 3px solid #4CAF50;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow:
+        0 0 30px rgba(76, 175, 80, 0.5),
+        inset 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.5s ease;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 15px;
+}
+
+.event-header h2 {
+    color: #4CAF50;
+    font-size: 24px;
+    margin: 0;
+    text-shadow: 0 0 10px #4CAF50;
+}
+
+.event-category {
+    background: rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.event-description {
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    white-space: pre-line;
+}
+
+/* Najika Reaction Box */
+.najika-reaction {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.najika-portrait {
+    flex-shrink: 0;
+}
+
+.najika-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #FF69B4, #FFD700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border: 3px solid #FFD700;
+}
+
+.najika-speech p {
+    color: #FFD700;
+    font-style: italic;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Event Options */
+.event-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.event-option {
+    background: linear-gradient(90deg, #2d5a3d 0%, #1e3a2a 100%);
+    color: #fff;
+    border: 2px solid #4CAF50;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-option:hover:not(:disabled) {
+    background: linear-gradient(90deg, #4CAF50 0%, #2d5a3d 100%);
+    transform: translateX(10px);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+}
+
+.event-option:active {
+    transform: translateX(5px);
+}
+
+.najika-badge {
+    background: #FFD700;
+    color: #000;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Outcome Display */
+.event-outcome {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 15px;
+    border: 2px solid #FFD700;
+    animation: fadeIn 0.5s ease;
+}
+
+.event-outcome h3 {
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.outcome-consequences {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.consequence-badge {
+    background: rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    border: 1px solid #4CAF50;
+}
+
+.najika-final-reaction {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.najika-final-reaction .najika-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+}
+
+.najika-final-reaction p {
+    color: #FFD700;
+    font-style: italic;
+    margin: 0;
+    flex: 1;
+}
+
+.continue-button {
+    width: 100%;
+    background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.continue-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .event-container {
+        padding: 20px;
+        margin: 10px;
+        max-height: 90vh;
+    }
+
+    .event-header h2 {
+        font-size: 18px;
+    }
+
+    .event-description {
+        font-size: 14px;
+    }
+
+    .event-option {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    #chaos-meter {
+        top: 10px;
+        right: 10px;
+        width: 100px;
+    }
+}
