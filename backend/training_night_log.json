@@ -317,5 +317,151 @@
       "errors": 4,
       "success_rate": 80.0
     }
+  },
+  {
+    "session_start": "2025-11-26T00:00:01.669290",
+    "session_end": "2025-11-26T02:34:21.431592",
+    "total_hours": 2.5721558480555555,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.9562215050061543,
+        "status": "success",
+        "timestamp": "2025-11-26T02:01:01.678510"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.38667553265889487,
+        "status": "success",
+        "timestamp": "2025-11-26T02:01:24.880043"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.9038493633270264,
+        "status": "success",
+        "timestamp": "2025-11-26T02:02:19.111005"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.4062194546063741,
+        "status": "success",
+        "timestamp": "2025-11-26T02:02:43.485172"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.9885469714800517,
+        "status": "success",
+        "timestamp": "2025-11-26T02:03:42.798991"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.4562681674957275,
+        "status": "success",
+        "timestamp": "2025-11-26T02:04:10.176082"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.915692138671875,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:05.118607"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.4889365275700887,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:34.456800"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.05173283020655314,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:51.900615"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.03922603925069173,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:54.255178"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.03885198434193929,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:56.587298"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.03934155702590943,
+        "status": "success",
+        "timestamp": "2025-11-26T02:05:58.947791"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 7.049239412943522,
+        "status": "success",
+        "timestamp": "2025-11-26T02:13:01.903156"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 7.073213648796082,
+        "status": "success",
+        "timestamp": "2025-11-26T02:20:06.296978"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 7.3668900847435,
+        "status": "success",
+        "timestamp": "2025-11-26T02:27:28.311381"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 6.885279170672098,
+        "status": "success",
+        "timestamp": "2025-11-26T02:34:21.429132"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_advisor_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 300, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 281, in run\n    self.train_decision_support()\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 93, in train_decision_support\n    log(f\"    \\u2705 Entscheidungshilfe: {len(response)} Zeichen\")\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2025-11-26T02:05:41.983611"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 324, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 306, in run\n    self.train_chaos_to_structure()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 53, in train_chaos_to_structure\n    log(\"\\n[TRAINING 1/4] Chaos \\u2192 Structure...\")\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2192' in position 34: character maps to <undefined>\n",
+        "timestamp": "2025-11-26T02:05:42.149721"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 371, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 352, in run\n    self.train_error_detection()\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 90, in train_error_detection\n    log(f\"    \\u2705 Fehler erkannt: {len(response)} Zeichen\")\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2025-11-26T02:05:45.863747"
+      },
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 454, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 431, in run\n    self.train_emotion_recognition()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 103, in train_emotion_recognition\n    log(f\"    \\u2705 Emotion erkannt\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 27, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2025-11-26T02:05:48.795646"
+      }
+    ],
+    "stats": {
+      "success": 16,
+      "errors": 4,
+      "success_rate": 80.0
+    }
   }
 ]
