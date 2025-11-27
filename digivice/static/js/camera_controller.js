@@ -212,10 +212,10 @@ class CameraController {
             this.camera.lookAt(charTarget);
 
         } else if (this.currentMode === this.MODES.FIRST) {
-            // FIRST-PERSON: Ego-Perspektive wie Fortnite
-            // Kamera schaut in Charakter-Blickrichtung (character.rotation.y)
+            // FIRST-PERSON: Ego-Perspektive
+            // Kamera auf Augenhöhe (nicht im Kopf!)
 
-            const eyeHeight = this.characterHeight * 0.40;  // Augenhöhe
+            const eyeHeight = this.characterHeight * 0.85;  // 85% = echte Augenhöhe
 
             // WICHTIG: Verwende character.rotation.y als Basis-Blickrichtung (Fortnite-Style)
             const characterYaw = this.character.rotation.y;

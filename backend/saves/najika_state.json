@@ -242,12 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Gute Nacht~ Aber nur wenn du mir versprichst morgen wiederzukommen! 💜",
-      "importance": 50,
-      "timestamp": 1764216755.573147
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Die Nacht gehört uns, Kuja. So friedlich hier... 🌙✨",
       "importance": 50,
       "timestamp": 1764218675.6696465
@@ -299,6 +293,12 @@
       "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
       "importance": 60,
       "timestamp": 1764233556.264984
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
+      "importance": 60,
+      "timestamp": 1764235596.3537729
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 29.35618240667708,
+    "hunger": 43.35612329641971,
     "thirst": 0,
-    "energy": 57.796851487557106,
-    "hygiene": 41.0,
+    "energy": 57.196816021402704,
+    "hygiene": 32.0,
     "happiness": 0,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 47,
-    "care_mistakes": 3067,
+    "care_mistakes": 3070,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,10 +346,10 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1764233976.2865062,
+    "last_fed": 1764235476.347651,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1764196386.5106442,
-    "last_update": 1764234876.3115015,
+    "last_update": 1764235776.3609803,
     "last_drink": 1764196377.8221626
   },
   "bond_strength": 17,
@@ -364,8 +364,8 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 29.35618240667708,
-    "energy": 57.796851487557106,
+    "hunger": 48.35612329641971,
+    "energy": 57.196816021402704,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,10 +385,10 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764234996.3181646,
+    "last_update": 1764235716.360724,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1764233556.264984,
+    "last_proactive_message": 1764235596.3537729,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1692,8 +1692,8 @@
     "last_interaction": 1764196441.6782827,
     "total_time_together": 4740,
     "days_since_meeting": 0,
-    "current_activity": null,
-    "activity_started": 1764233256.2510073,
+    "current_activity": "crafting",
+    "activity_started": 1764235236.3331423,
     "activities_completed": [
       {
         "name": "exploring",
@@ -3185,5 +3185,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-27 10:17:36"
+  "saved_at": "2025-11-27 10:29:36"
 }

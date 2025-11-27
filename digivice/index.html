@@ -2754,10 +2754,10 @@
 
             // WASD Keyboard Input (relativ zur Kamera-Blickrichtung)
             if (!isSliding) {
-                if (keys.w) { dz += 1; hasMovementInput = true; }
-                if (keys.s) { dz -= 1; hasMovementInput = true; }
-                if (keys.a) { dx += 1; hasMovementInput = true; }
-                if (keys.d) { dx -= 1; hasMovementInput = true; }
+                if (keys.w) { dz -= 1; hasMovementInput = true; }  // W = vorwärts (negative Z)
+                if (keys.s) { dz += 1; hasMovementInput = true; }  // S = rückwärts (positive Z)
+                if (keys.a) { dx -= 1; hasMovementInput = true; }  // A = links (negative X)
+                if (keys.d) { dx += 1; hasMovementInput = true; }  // D = rechts (positive X)
 
                 // Normalize diagonal movement
                 if (dx !== 0 && dz !== 0) {
