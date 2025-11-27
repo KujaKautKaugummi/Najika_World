@@ -200,8 +200,11 @@ class ChatUI {
 
             const data = await response.json();
 
-            if (data.ok) {
+            if (data.response) {
                 // Add Najika's response
+                this.addMessage('Najika', data.response, 'najika');
+            } else if (data.ok && data.response) {
+                // Fallback for old API format
                 this.addMessage('Najika', data.response, 'najika');
             } else {
                 this.addMessage('System', 'Fehler: ' + (data.error || 'Unbekannter Fehler'), 'system');
@@ -258,9 +261,11 @@ class ChatUI {
             const response = await fetch('/api/chat/history');
             const data = await response.json();
 
-            if (data.ok && data.history && data.history.length > 0) {
+            // Support both data.history array and data.ok format
+            const history = data.history || (data.ok && data.history) || [];
+            if (history.length > 0) {
                 // Load last 20 messages
-                const recentMessages = data.history.slice(-20);
+                const recentMessages = history.slice(-20);
                 recentMessages.forEach(msg => {
                     this.addMessage(msg.sender, msg.message, msg.sender === 'Mr.K' ? 'user' : 'najika');
                 });

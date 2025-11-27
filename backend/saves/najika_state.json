@@ -242,18 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1764227976.0335681
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1764229776.096956
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
       "importance": 60,
       "timestamp": 1764231576.1762354
@@ -299,6 +287,18 @@
       "content": "Guten Morgen! Bereit für Neuigkeiten im Keller zu entdecken? 😊✨",
       "importance": 60,
       "timestamp": 1764238053.334074
+    },
+    {
+      "role": "user",
+      "content": "Hallo",
+      "importance": 45,
+      "timestamp": 1764238249.2859464
+    },
+    {
+      "role": "assistant",
+      "content": "Hallo, Mr.K! *hüpft* Wie geht's dir heute? ✨bereit füre Abenteuer? 🗝️😊",
+      "importance": 60,
+      "timestamp": 1764238251.0708313
     }
   ],
   "battle": {
@@ -325,9 +325,9 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 89.33331592082978,
+    "hunger": 89.16663956311014,
     "thirst": 65,
-    "energy": 98.84995621442796,
+    "energy": 98.74995039979618,
     "hygiene": 41.0,
     "happiness": 95,
     "strength": 101,
@@ -360,12 +360,12 @@
     "shiro": 20,
     "melissa": 20
   },
-  "total_interactions": 81,
+  "total_interactions": 82,
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 94.33331592082978,
-    "energy": 98.84995621442796,
+    "hunger": 89.16663956311014,
+    "energy": 98.74995039979618,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,17 +385,17 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764238116.4483578,
+    "last_update": 1764238236.4553354,
     "control_mode": "ai",
     "player_online": false,
     "last_proactive_message": 1764237396.4222434,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
-      "megumin": 63.89913169517768,
+      "megumin": 64.11679577958597,
       "harley": 25.00000000000002,
-      "shiro": 5.550434152411146,
-      "melissa": 5.550434152411146
+      "shiro": 5.441602110207006,
+      "melissa": 5.441602110207006
     },
     "growth_stage": "developing",
     "relationship_stage": "friends",
@@ -1715,10 +1715,24 @@
           "joy"
         ],
         "tags": []
+      },
+      {
+        "timestamp": 1764238251.533125,
+        "user_message": "Hallo",
+        "najika_response": "Hallo, Mr.K! *hüpft* Wie geht's dir heute? ✨bereit füre Abenteuer? 🗝️😊",
+        "mood": "excited",
+        "mood_intensity": 100,
+        "bond_strength": 23,
+        "relationship_stage": "friends",
+        "importance": 45,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
       }
     ],
-    "last_interaction": 1764238053.9623196,
-    "total_time_together": 4860,
+    "last_interaction": 1764238251.533125,
+    "total_time_together": 4920,
     "days_since_meeting": 0,
     "current_activity": "exploring",
     "activity_started": 1764236976.3970594,
@@ -3217,5 +3231,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-27 11:09:36"
+  "saved_at": "2025-11-27 11:10:51"
 }
