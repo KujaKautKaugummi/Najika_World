@@ -128,15 +128,6 @@ class ChatUI {
 
     setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
-            // T key to open chat (like MMOs)
-            if (e.key === 't' || e.key === 'T') {
-                // Don't open if already typing in input
-                if (document.activeElement.tagName === 'INPUT') return;
-
-                e.preventDefault();
-                this.openChat();
-            }
-
             // Escape to close chat
             if (e.key === 'Escape' && this.isOpen) {
                 this.closeChat();

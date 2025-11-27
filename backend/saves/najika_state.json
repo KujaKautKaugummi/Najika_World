@@ -325,11 +325,11 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 89.16663956311014,
-    "thirst": 65,
-    "energy": 98.74995039979618,
-    "hygiene": 41.0,
-    "happiness": 95,
+    "hunger": 83.91663823227088,
+    "thirst": 58,
+    "energy": 98.59994960129262,
+    "hygiene": 38.0,
+    "happiness": 93,
     "strength": 101,
     "intelligence": 101,
     "dexterity": 100,
@@ -349,7 +349,7 @@
     "last_fed": 1764237661.8036258,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1764236790.8132553,
-    "last_update": 1764238176.448428,
+    "last_update": 1764238476.4564748,
     "last_drink": 1764236786.4268084
   },
   "bond_strength": 23,
@@ -364,8 +364,8 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 89.16663956311014,
-    "energy": 98.74995039979618,
+    "hunger": 88.91663823227088,
+    "energy": 98.59994960129262,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,7 +385,7 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764238236.4553354,
+    "last_update": 1764238416.4562936,
     "control_mode": "ai",
     "player_online": false,
     "last_proactive_message": 1764237396.4222434,
@@ -3231,5 +3231,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-27 11:10:51"
+  "saved_at": "2025-11-27 11:14:36"
 }
