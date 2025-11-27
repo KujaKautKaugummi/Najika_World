@@ -1058,13 +1058,9 @@
                 return;
             }
             else if (buildingType === 'city') {
-                // Stadt betreten - Lade Stadt-Interior
-                const cityData = {
-                    name: buildingName,
-                    type: buildingType,
-                    description: buildingDescription
-                };
-                loadBuildingInterior(cityData);
+                // Stadt betreten - TODO: Implement city interiors like Mühle
+                alert(`🏘️ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Stadt-Interior wird noch implementiert - wird wie Schwarze Mühle mit begehbaren Räumen)`);
+                console.log(`Stadt: ${buildingName} - ${buildingDescription}`);
             }
             else if (buildingType === 'special') {
                 // Besonderer Ort betreten
@@ -1101,7 +1097,7 @@
                     building.visible = false;
                 });
                 if (schwarzeMuehle) schwarzeMuehle.visible = false;
-                gridHelper.visible = false;
+                if (gridHelper) gridHelper.visible = false;
 
                 // 4. Generiere und lade Interior
                 const interior = interiorGenerator.generateCityInterior(cityData);

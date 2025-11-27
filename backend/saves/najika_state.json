@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 100,
-    "thirst": 100,
-    "energy": 99.94999984284242,
-    "hygiene": 23.0,
-    "happiness": 40,
+    "hunger": 94.83333212700155,
+    "thirst": 93,
+    "energy": 99.84999911904336,
+    "hygiene": 20.0,
+    "happiness": 33,
     "strength": 100,
     "intelligence": 100,
     "dexterity": 100,
     "charisma": 47,
-    "care_mistakes": 3073,
+    "care_mistakes": 3074,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -349,7 +349,7 @@
     "last_fed": 1764236798.5068536,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1764236790.8132553,
-    "last_update": 1764236676.3891108,
+    "last_update": 1764236976.40308,
     "last_drink": 1764236786.4268084
   },
   "bond_strength": 17,
@@ -364,8 +364,8 @@
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 86.8560742967658,
-    "energy": 99.94999984284242,
+    "hunger": 99.83333212700155,
+    "energy": 99.84999911904336,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,7 +385,7 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764236796.3960037,
+    "last_update": 1764236916.3968723,
     "control_mode": "ai",
     "player_online": false,
     "last_proactive_message": 1764235596.3537729,
@@ -1692,8 +1692,8 @@
     "last_interaction": 1764196441.6782827,
     "total_time_together": 4740,
     "days_since_meeting": 0,
-    "current_activity": null,
-    "activity_started": 1764235236.3331423,
+    "current_activity": "exploring",
+    "activity_started": 1764236976.3970594,
     "activities_completed": [
       {
         "name": "exploring",
@@ -3189,5 +3189,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-27 10:46:38"
+  "saved_at": "2025-11-27 10:49:36"
 }
