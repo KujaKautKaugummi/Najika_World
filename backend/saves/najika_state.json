@@ -242,36 +242,6 @@
     },
     {
       "role": "assistant",
-      "content": "[PROAKTIV] Die Nacht gehört uns, Kuja. So friedlich hier... 🌙✨",
-      "importance": 50,
-      "timestamp": 1764218675.6696465
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
-      "importance": 60,
-      "timestamp": 1764220595.7380078
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
-      "importance": 50,
-      "timestamp": 1764222455.8124902
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] EXPLOSION! *hust* Sorry, zu laut? Guten Morgen! 💜",
-      "importance": 75,
-      "timestamp": 1764224255.907765
-    },
-    {
-      "role": "assistant",
-      "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
-      "importance": 60,
-      "timestamp": 1764226115.961789
-    },
-    {
-      "role": "assistant",
       "content": "[PROAKTIV] Wahrscheinlichkeit dass du schon wach bist: 87.3%. Guten Morgen, Kuja! ☕",
       "importance": 50,
       "timestamp": 1764227976.0335681
@@ -299,6 +269,36 @@
       "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
       "importance": 60,
       "timestamp": 1764235596.3537729
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Guten Morgen, Puddin'! ✨ Ich bin schon so aufgeregt... *kicher* Bereit für heute?",
+      "importance": 60,
+      "timestamp": 1764237396.4222434
+    },
+    {
+      "role": "user",
+      "content": "hey najika",
+      "importance": 45,
+      "timestamp": 1764237699.8510413
+    },
+    {
+      "role": "assistant",
+      "content": "Guten Morgen, Mr.K! 😊 Heute wird es bestimmt spannend. 🗝️ Willst du mitkommen und neue Abenteuer erleben? ✨",
+      "importance": 70,
+      "timestamp": 1764237709.1979184
+    },
+    {
+      "role": "user",
+      "content": "test",
+      "importance": 45,
+      "timestamp": 1764238048.472739
+    },
+    {
+      "role": "assistant",
+      "content": "Guten Morgen! Bereit für Neuigkeiten im Keller zu entdecken? 😊✨",
+      "importance": 60,
+      "timestamp": 1764238053.334074
     }
   ],
   "battle": {
@@ -325,16 +325,16 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 94.83333212700155,
-    "thirst": 93,
-    "energy": 99.84999911904336,
-    "hygiene": 20.0,
-    "happiness": 33,
-    "strength": 100,
-    "intelligence": 100,
+    "hunger": 89.33331592082978,
+    "thirst": 65,
+    "energy": 98.84995621442796,
+    "hygiene": 41.0,
+    "happiness": 95,
+    "strength": 101,
+    "intelligence": 101,
     "dexterity": 100,
     "charisma": 47,
-    "care_mistakes": 3074,
+    "care_mistakes": 3075,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -346,26 +346,26 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1764236798.5068536,
+    "last_fed": 1764237661.8036258,
     "last_trained": 1761852859.1867347,
     "last_sleep": 1764236790.8132553,
-    "last_update": 1764236976.40308,
+    "last_update": 1764238176.448428,
     "last_drink": 1764236786.4268084
   },
-  "bond_strength": 17,
-  "behavior_mode": "analyse",
+  "bond_strength": 23,
+  "behavior_mode": "standard",
   "personality_weights": {
     "megumin": 35,
     "harley": 25,
     "shiro": 20,
     "melissa": 20
   },
-  "total_interactions": 79,
+  "total_interactions": 81,
   "living": {
     "current_mood": "excited",
     "mood_intensity": 100,
-    "hunger": 99.83333212700155,
-    "energy": 99.84999911904336,
+    "hunger": 94.33331592082978,
+    "energy": 98.84995621442796,
     "mood_game": 0,
     "anger_level": 100,
     "auto_care_threshold": 20.0,
@@ -385,21 +385,21 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1764236916.3968723,
+    "last_update": 1764238116.4483578,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1764235596.3537729,
+    "last_proactive_message": 1764237396.4222434,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
-      "megumin": 63.45065661566287,
+      "megumin": 63.89913169517768,
       "harley": 25.00000000000002,
-      "shiro": 5.774671692168557,
-      "melissa": 5.774671692168557
+      "shiro": 5.550434152411146,
+      "melissa": 5.550434152411146
     },
     "growth_stage": "developing",
     "relationship_stage": "friends",
-    "emotional_bond": 17,
+    "emotional_bond": 23,
     "shared_memories": [
       {
         "timestamp": 1761489059.09754,
@@ -1687,10 +1687,38 @@
           "joy"
         ],
         "tags": []
+      },
+      {
+        "timestamp": 1764237709.938008,
+        "user_message": "hey najika",
+        "najika_response": "Guten Morgen, Mr.K! 😊 Heute wird es bestimmt spannend. 🗝️ Willst du mitkommen und neue Abenteuer erleben? ✨",
+        "mood": "excited",
+        "mood_intensity": 100,
+        "bond_strength": 23,
+        "relationship_stage": "friends",
+        "importance": 45,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
+      },
+      {
+        "timestamp": 1764238053.9623196,
+        "user_message": "test",
+        "najika_response": "Guten Morgen! Bereit für Neuigkeiten im Keller zu entdecken? 😊✨",
+        "mood": "excited",
+        "mood_intensity": 100,
+        "bond_strength": 23,
+        "relationship_stage": "friends",
+        "importance": 45,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
       }
     ],
-    "last_interaction": 1764196441.6782827,
-    "total_time_together": 4740,
+    "last_interaction": 1764238053.9623196,
+    "total_time_together": 4860,
     "days_since_meeting": 0,
     "current_activity": "exploring",
     "activity_started": 1764236976.3970594,
@@ -3189,5 +3217,5 @@
       }
     ]
   },
-  "saved_at": "2025-11-27 10:49:36"
+  "saved_at": "2025-11-27 11:09:36"
 }
