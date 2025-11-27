@@ -24,15 +24,58 @@
             position: relative;
         }
 
+        /* UI Top Bar */
+        #ui-top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        #ui-top-bar button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        #ui-top-bar button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        #ui-top-bar button.active {
+            background: #FFD700;
+            color: #000;
+        }
+
         #ui {
             position: absolute;
-            top: 10px;
+            top: 70px;
             left: 10px;
             background: rgba(0, 0, 0, 0.85);
             padding: 20px;
             border-radius: 10px;
             max-width: 350px;
             z-index: 100;
+            display: none;
+        }
+
+        #ui.visible {
+            display: block;
         }
 
         #ui h1 {
@@ -124,7 +167,7 @@
 
         #minimap {
             position: absolute;
-            top: 10px;
+            top: 70px;
             right: 10px;
             width: 200px;
             height: 200px;
@@ -132,11 +175,16 @@
             border: 2px solid #4CAF50;
             border-radius: 10px;
             z-index: 100;
+            display: none;
+        }
+
+        #minimap.visible {
+            display: block;
         }
 
         #najika-stats {
             position: absolute;
-            bottom: 80px;
+            top: 70px;
             left: 10px;
             background: rgba(0, 0, 0, 0.85);
             padding: 15px;
@@ -144,6 +192,11 @@
             max-width: 300px;
             z-index: 100;
             border: 2px solid #667eea;
+            display: none;
+        }
+
+        #najika-stats.visible {
+            display: block;
         }
 
         #najika-stats h2 {
@@ -312,6 +365,16 @@
     <link rel="stylesheet" href="static/css/chaos_events.css">
 </head>
 <body>
+    <!-- UI Top Bar -->
+    <div id="ui-top-bar">
+        <button onclick="togglePanel('ui')" id="btn-info">ℹ️ Info</button>
+        <button onclick="togglePanel('najika-stats')" id="btn-najika">🎀 Najika</button>
+        <button onclick="togglePanel('minimap')" id="btn-minimap">🗺️ Karte</button>
+        <button onclick="window.chatUI?.toggleChat()" id="btn-chat">💬 Chat</button>
+        <button onclick="togglePraise(true)" id="btn-praise">👍 Lob</button>
+        <button onclick="togglePraise(false)" id="btn-criticize">👎 Tadel</button>
+    </div>
+
     <div id="canvas-container"></div>
 
     <!-- Dummy #scene für 3d_scene.js (wird nicht verwendet) -->
@@ -513,6 +576,46 @@
     <!-- ========================================== -->
 
     <script>
+        // ===== UI TOGGLE SYSTEM =====
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            const button = document.getElementById(`btn-${panelId === 'najika-stats' ? 'najika' : panelId}`);
+
+            if (panel) {
+                panel.classList.toggle('visible');
+                if (button) {
+                    button.classList.toggle('active');
+                }
+            }
+        }
+
+        async function togglePraise(isPositive) {
+            const action = isPositive ? 'praise' : 'criticize';
+            const emoji = isPositive ? '👍' : '👎';
+            const text = isPositive ? 'Lob' : 'Tadel';
+
+            try {
+                const response = await fetch(`/api/najika/${action}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                });
+
+                const result = await response.json();
+
+                if (result.ok) {
+                    showNotification(`${emoji} ${text} gegeben! Najika: "${result.message}"`, 3000);
+                    console.log(`[Najika] ${text}:`, result);
+                } else {
+                    showNotification(`❌ ${text} fehlgeschlagen`, 2000);
+                }
+            } catch (error) {
+                console.error(`[Najika] ${text} error:`, error);
+                showNotification('❌ Verbindungsfehler', 2000);
+            }
+        }
+
+        // ===== MAIN SCRIPT =====
         const THREE = window.THREE;
 
         // Scene Setup (Phase 6: Optimiert für Performance)
