@@ -444,6 +444,10 @@
                 <div class="stat-bar-fill" id="hygiene-fill" style="background: linear-gradient(90deg, #4caf50, #388e3c); width: 0%;"></div>
             </div>
         </div>
+        <div class="stat-bar" style="margin-top: 10px; padding: 8px; background: rgba(255, 215, 0, 0.1); border-radius: 5px; border: 1px solid #FFD700;">
+            <div style="font-size: 11px; color: #FFD700; margin-bottom: 4px; font-weight: bold;">🎀 Aktuelle Aktivität:</div>
+            <div id="najika-activity" style="font-size: 12px; color: #fff; font-style: italic;">Idle...</div>
+        </div>
         <hr style="margin: 10px 0; border-color: #333;">
         <div class="stat-inline">
             <span>💪 STR: <span id="najika-str">--</span></span>
@@ -4864,7 +4868,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     console.log('[Najika] New systems initialized!');
+
+    // Start Najika Status Auto-Update (alle 5 Sekunden)
+    startNajikaStatusUpdates();
 });
+
+// Auto-Update Najika Stats from Backend
+function startNajikaStatusUpdates() {
+    async function fetchAndUpdateNajikaStatus() {
+        try {
+            const response = await fetch('/api/najika/status');
+            const data = await response.json();
+
+            if (data) {
+                updateNajikaStats(data);
+
+                // Update activity display
+                const activityEl = document.getElementById('najika-activity');
+                if (activityEl) {
+                    // Generate activity text based on stats
+                    let activity = 'Idle...';
+                    if (data.hunger < 30) activity = '🍖 Hungrig...';
+                    else if (data.thirst < 30) activity = '💧 Durstig...';
+                    else if (data.hygiene < 30) activity = '🚿 Braucht Dusche...';
+                    else if (data.energy < 30) activity = '💤 Müde...';
+                    else if (data.happiness > 80) activity = '✨ Glücklich!';
+
+                    activityEl.textContent = activity;
+                }
+            }
+        } catch (error) {
+            console.error('[NajikaStats] Update failed:', error);
+        }
+    }
+
+    // Initial update
+    fetchAndUpdateNajikaStatus();
+
+    // Update alle 5 Sekunden
+    setInterval(fetchAndUpdateNajikaStatus, 5000);
+}
 </script>
 
 </body>
