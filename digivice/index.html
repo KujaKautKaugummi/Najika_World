@@ -1137,6 +1137,11 @@
 
             console.log('🚪 Verlasse Interior...');
 
+            // WICHTIG: Markiere SOFORT als "nicht in Interior" um weitere E-Taste Events zu blockieren
+            isInInterior = false;
+            const savedInteriorState = currentInteriorState;
+            currentInteriorState = null;
+
             // 1. Fade-Out
             document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
             document.getElementById('canvas-container').style.opacity = '0.3';
@@ -1178,22 +1183,18 @@
                 scene.fog = new THREE.Fog(0x87CEEB, 80, 250); // Weite Sicht
 
                 // 4. Stelle Character-Position wieder her
-                character.position.copy(currentInteriorState.position);
+                character.position.copy(savedInteriorState.position);
 
                 // 5. Stelle Kamera wieder her
-                cameraController.setMode(currentInteriorState.cameraMode);
+                cameraController.setMode(savedInteriorState.cameraMode);
                 cameraController.setTarget(
-                    currentInteriorState.position.x,
-                    getGroundHeight(currentInteriorState.position.x, currentInteriorState.position.z),
-                    currentInteriorState.position.z
+                    savedInteriorState.position.x,
+                    getGroundHeight(savedInteriorState.position.x, savedInteriorState.position.z),
+                    savedInteriorState.position.z
                 );
 
                 // 6. Fade-In
                 document.getElementById('canvas-container').style.opacity = '1';
-
-                // 7. Markiere als "nicht in Interior"
-                isInInterior = false;
-                currentInteriorState = null;
 
                 // 8. Verstecke Mühle-UI (falls vorhanden)
                 hideMuehleFloorUI();
