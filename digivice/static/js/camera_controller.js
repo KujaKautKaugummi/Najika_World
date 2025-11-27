@@ -100,9 +100,11 @@ class CameraController {
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
 
-            this.orbitYaw = this.dragStartYaw - dx * 0.005;
+            // Maus nach rechts = Kamera dreht nach rechts (positive rotation)
+            this.orbitYaw = this.dragStartYaw + dx * 0.005;
+            // Maus nach unten = Kamera schaut nach unten (negative pitch)
             this.orbitPitch = this.clamp(
-                this.dragStartPitch - dy * 0.003,
+                this.dragStartPitch + dy * 0.003,
                 this.ORBIT_MIN_PITCH,
                 this.ORBIT_MAX_PITCH
             );
