@@ -1,7 +1,7 @@
 {
   "start_date": "2025-10-29T16:17:02.437965",
-  "total_problems": 89,
-  "solved_problems": 89,
+  "total_problems": 117,
+  "solved_problems": 117,
   "current_day": 3,
   "current_level": "beginner",
   "performance_history": [
@@ -627,7 +627,203 @@
       "score": 100,
       "attempts": 1,
       "timestamp": "2025-11-26T02:05:31.440567"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 1: FizzBuzz",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:00:19.900010"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 2: Palindrom-Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:00:29.780120"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 3: Fibonacci",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:00:39.519573"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 4: Array Rotation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:00:49.989500"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 5: Zwei-Summen Problem",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:01:01.487931"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 6: Stack Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:01:17.202092"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 7: Queue Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:01:30.063940"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 1: FizzBuzz",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:01:41.559598"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 2: Palindrom-Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:01:54.167416"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 3: Fibonacci",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:02:03.346330"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 4: Array Rotation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:02:14.895334"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 5: Zwei-Summen Problem",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:02:26.272728"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 6: Stack Implementation",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:02:39.656680"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 7: Queue Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:02:51.609708"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 1: FizzBuzz",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:03:04.000119"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 2: Palindrom-Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:03:13.048557"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 3: Fibonacci",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:03:27.374039"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 4: Array Rotation",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:03:40.109195"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 5: Zwei-Summen Problem",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:03:50.569219"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 6: Stack Implementation",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:04:01.839874"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 7: Queue Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:04:14.766515"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 1: FizzBuzz",
+      "score": 75,
+      "attempts": 2,
+      "timestamp": "2025-11-27T02:04:36.502404"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 2: Palindrom-Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:04:47.748828"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 3: Fibonacci",
+      "score": 75,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:04:57.731112"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 4: Array Rotation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:05:09.565717"
+    },
+    {
+      "day": 1,
+      "problem": "TAG 5: Zwei-Summen Problem",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:05:21.842015"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 6: Stack Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:05:33.720214"
+    },
+    {
+      "day": 2,
+      "problem": "TAG 7: Queue Implementation",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2025-11-27T02:05:46.364560"
     }
   ],
-  "last_training": "2025-11-26T02:05:34.440790"
+  "last_training": "2025-11-27T02:05:49.365086"
 }
