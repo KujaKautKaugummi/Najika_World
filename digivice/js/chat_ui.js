@@ -155,9 +155,11 @@ class ChatUI {
     openChat() {
         const chatContainer = document.getElementById('chat-container');
         const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const topBarBtn = document.getElementById('btn-chat');
 
         chatContainer.style.display = 'flex';
-        chatToggleBtn.style.display = 'none';
+        if (chatToggleBtn) chatToggleBtn.style.display = 'none';
+        if (topBarBtn) topBarBtn.classList.add('active');
         this.isOpen = true;
 
         // Focus input
@@ -169,9 +171,11 @@ class ChatUI {
     closeChat() {
         const chatContainer = document.getElementById('chat-container');
         const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const topBarBtn = document.getElementById('btn-chat');
 
         chatContainer.style.display = 'none';
-        chatToggleBtn.style.display = 'block';
+        if (chatToggleBtn) chatToggleBtn.style.display = 'block';
+        if (topBarBtn) topBarBtn.classList.remove('active');
         this.isOpen = false;
     }
 
