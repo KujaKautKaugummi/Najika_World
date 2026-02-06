@@ -26,8 +26,8 @@ except ImportError:
 # ===== KONFIGURATION =====
 
 SOURCE_DIR = Path("C:/Users/0KKK0/Desktop/neu neu")
-OUTPUT_FILE = Path("C:/NajikaCore/NAJIKA_PDF_EXTRACTION.md")
-PROGRESS_FILE = Path("C:/NajikaCore/najika_extraction_progress.json")
+OUTPUT_FILE = Path("C:/Najika_World/NAJIKA_PDF_EXTRACTION.md")
+PROGRESS_FILE = Path("C:/Najika_World/najika_extraction_progress.json")
 
 PRIORITY_PDFS = [
     "Najika Projekt – Umfassende Detailübersicht.pdf",

@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Suchverzeichnisse
 SEARCH_DIRS = [
-    Path("C:/NajikaCore"),
+    Path("C:/Najika_World"),
     Path("C:/Users/0KKK0/Desktop/zip"),
     Path("C:/Users/0KKK0/Desktop")
 ]

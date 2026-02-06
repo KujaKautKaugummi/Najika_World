@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime, time
 import pytz
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 TRAINING_DIR = NAJIKA_DIR / 'training'
 SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
 CURRENT_SESSION_FILE = NAJIKA_DIR / 'NAJIKA_CURRENT_TRAINING.md'
@@ -196,7 +196,7 @@ def generate_current_session():
         lines.append('## CODE-READING RESSOURCE:')
         lines.append('')
         lines.append('**Heute zu lesen:**')
-        lines.append('- `C:/NajikaCore/najika_server.py`')
+        lines.append('- `C:/Najika_World/najika_server.py`')
         lines.append('- Fokus: Server-Architektur, Routing, Error Handling')
         lines.append('')
 
@@ -231,7 +231,7 @@ def generate_current_session():
     lines.append('')
     lines.append('**Wenn Session abgeschlossen:**')
     lines.append('```bash')
-    lines.append('python C:/NajikaCore/najika_complete_training_session.py')
+    lines.append('python C:/Najika_World/najika_complete_training_session.py')
     lines.append('```')
     lines.append('')
     lines.append('**Das macht:**')

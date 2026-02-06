@@ -37,7 +37,7 @@
         "question": "Du findest ein verbotenes Zauberbuch. Was tust du?",
         "options": [
           {"id": "take_book", "text": "Nimm das Buch", "outcome": {"consequence": "Du lernst dunkle Magie", "rewards": {"items": ["forbidden_spellbook"]}, "reputation": -30}},
-          {"id": "report", "text": "Melde es dem Bibliothekar", "outcome": {"consequence": "Du wirst belohnt für deine Ehrlichkeit", "reputation": +50, "rewards": {"gold": 500}}}
+          {"id": "report", "text": "Melde es dem Bibliothekar", "outcome": {"consequence": "Du wirst belohnt für deine Ehrlichkeit", "reputation": 50, "rewards": {"gold": 500}}}
         ]
       }],
       "najika_reactions": {"melissa": "Verbotenes Wissen... Manchmal ist es verboten aus gutem Grund."},

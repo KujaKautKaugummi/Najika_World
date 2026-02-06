@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-BAUSTEIN_FILE = Path('C:/NajikaCore/BAUSTEIN_SYSTEM.json')
-OUTPUT_FILE = Path('C:/NajikaCore/FINALE_KONFIGURATION.json')
-CHANGELOG_FILE = Path('C:/NajikaCore/ÄNDERUNGEN_LOG.md')
+BAUSTEIN_FILE = Path('C:/Najika_World/BAUSTEIN_SYSTEM.json')
+OUTPUT_FILE = Path('C:/Najika_World/FINALE_KONFIGURATION.json')
+CHANGELOG_FILE = Path('C:/Najika_World/ÄNDERUNGEN_LOG.md')
 
 print('='*80)
 print('NAJIKA: Wende Baustein-Entscheidungen an')

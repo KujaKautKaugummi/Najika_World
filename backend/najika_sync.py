@@ -25,7 +25,7 @@ if sys.platform == 'win32':
         pass
 
 # Paths
-NAJIKA_DIR = Path("C:/NajikaCore")
+NAJIKA_DIR = Path("C:/Najika_World")
 CLAUDE_DIR = Path("C:/Users/0KKK0/.claude")
 UPDATE_FILE = NAJIKA_DIR / "CLAUDE_UPDATE.md"
 SYNC_STATE = NAJIKA_DIR / "knowledge" / "sync_state.json"

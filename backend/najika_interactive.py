@@ -131,7 +131,7 @@ Code-Dateien: {stats.get('code_files', 0)}
 Zeilen Code: {stats.get('total_lines', 0):,}
 
 Du hast Zugriff auf:
-- C:/NajikaCore/ (alle Dateien)
+- C:/Najika_World/ (alle Dateien)
 - C:/Users/0KKK0/Desktop/zip/ (alle Dateien)
 - C:/Users/0KKK0/.claude/ (alle Dateien)
 

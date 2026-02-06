@@ -22,8 +22,8 @@ from collections import defaultdict
 
 # ===== CONFIG =====
 
-GRUNDSTEIN_FILE = Path("C:/NajikaCore/grundstein_output/NAJIKA_FINAL_GRUNDSTEIN.json")
-OUTPUT_DIR = Path("C:/NajikaCore/grundstein_output")
+GRUNDSTEIN_FILE = Path("C:/Najika_World/grundstein_output/NAJIKA_FINAL_GRUNDSTEIN.json")
+OUTPUT_DIR = Path("C:/Najika_World/grundstein_output")
 
 # Keywords für Mechaniken (werden aus BASIS extrahiert + diese defaults)
 MECHANIC_KEYWORDS = [

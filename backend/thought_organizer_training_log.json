@@ -9,5 +9,82 @@
       "priorities_set": 2,
       "action_items_extracted": 2
     }
+  },
+  {
+    "session_start": "2026-01-24T02:07:42.842876",
+    "session_end": "2026-01-24T02:08:54.692653",
+    "duration_minutes": 1.1974962833333334,
+    "stats": {
+      "thoughts_organized": 3,
+      "mindmaps_created": 3,
+      "priorities_set": 2,
+      "action_items_extracted": 1
+    }
+  },
+  {
+    "session_start": "2026-01-25T02:07:27.394861",
+    "session_end": "2026-01-25T02:08:52.074869",
+    "duration_minutes": 1.4113334666666666,
+    "stats": {
+      "thoughts_organized": 3,
+      "mindmaps_created": 3,
+      "priorities_set": 2,
+      "action_items_extracted": 0
+    }
+  },
+  {
+    "session_start": "2026-01-26T02:06:14.005762",
+    "session_end": "2026-01-26T02:07:14.727070",
+    "duration_minutes": 1.0120218,
+    "stats": {
+      "thoughts_organized": 3,
+      "mindmaps_created": 3,
+      "priorities_set": 2,
+      "action_items_extracted": 2
+    }
+  },
+  {
+    "session_start": "2026-01-28T03:19:26.574172",
+    "session_end": "2026-01-28T03:27:07.147312",
+    "duration_minutes": 7.676219000000001,
+    "stats": {
+      "thoughts_organized": 3,
+      "mindmaps_created": 1,
+      "priorities_set": 2,
+      "action_items_extracted": 2
+    }
+  },
+  {
+    "session_start": "2026-02-02T03:13:18.602454",
+    "session_end": "2026-02-02T03:22:51.038299",
+    "duration_minutes": 9.540597416666666,
+    "stats": {
+      "thoughts_organized": 2,
+      "mindmaps_created": 4,
+      "priorities_set": 2,
+      "action_items_extracted": 1
+    }
+  },
+  {
+    "session_start": "2026-02-06T01:01:37.052395",
+    "session_end": "2026-02-06T01:08:07.597894",
+    "duration_minutes": 6.50909165,
+    "stats": {
+      "thoughts_organized": 2,
+      "mindmaps_created": 1,
+      "priorities_set": 2,
+      "action_items_extracted": 0
+    }
+  },
+  {
+    "session_start": "2026-02-07T00:06:13.527793",
+    "session_end": "2026-02-07T00:06:42.420746",
+    "duration_minutes": 0.48154921666666667,
+    "stats": {
+      "thoughts_organized": 3,
+      "mindmaps_created": 1,
+      "priorities_set": 1,
+      "action_items_extracted": 1
+    }
   }
 ]

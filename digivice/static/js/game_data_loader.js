@@ -68,25 +68,32 @@ class GameDataLoader {
     async loadMetaData() {
         try {
             // Regions
-            const regionsRes = await fetch('/data/regions.json');
+            const regionsRes = await fetch('data/regions.json');
+            if (!regionsRes.ok) throw new Error(`Regions fetch failed: ${regionsRes.status}`);
             this.regions = await regionsRes.json();
 
             // Cities
-            const citiesRes = await fetch('/data/cities.json');
+            const citiesRes = await fetch('data/cities.json');
+            if (!citiesRes.ok) throw new Error(`Cities fetch failed: ${citiesRes.status}`);
             this.cities = await citiesRes.json();
 
             // Biomes
-            const biomesRes = await fetch('/data/biomes.json');
+            const biomesRes = await fetch('data/biomes.json');
+            if (!biomesRes.ok) throw new Error(`Biomes fetch failed: ${biomesRes.status}`);
             this.biomes = await biomesRes.json();
 
             console.log('✅ Meta-Daten geladen:', {
-                regions: this.regions.length,
-                cities: this.cities.length,
-                biomes: this.biomes.length
+                regions: this.regions?.length || 0,
+                cities: this.cities?.length || 0,
+                biomes: this.biomes?.length || 0
             });
 
         } catch (error) {
             console.warn('⚠️ Meta-Daten teilweise nicht verfügbar:', error);
+            // Fallback empty arrays to prevent null reference
+            this.regions = this.regions || [];
+            this.cities = this.cities || [];
+            this.biomes = this.biomes || [];
         }
     }
 
@@ -108,7 +115,7 @@ class GameDataLoader {
 
         for (const stadt of stadtNamen) {
             try {
-                const response = await fetch(`/data/npcs_${stadt}.json`);
+                const response = await fetch(`data/npcs_${stadt}.json`);
                 this.npcs[stadt] = await response.json();
             } catch (error) {
                 console.warn(`⚠️ NPCs für ${stadt} nicht gefunden`);
@@ -137,7 +144,7 @@ class GameDataLoader {
 
         for (const stadt of stadtNamen) {
             try {
-                const response = await fetch(`/data/items_${stadt}.json`);
+                const response = await fetch(`data/items_${stadt}.json`);
                 this.items[stadt] = await response.json();
             } catch (error) {
                 console.warn(`⚠️ Items für ${stadt} nicht gefunden`);
@@ -166,7 +173,7 @@ class GameDataLoader {
 
         for (const stadt of stadtNamen) {
             try {
-                const response = await fetch(`/data/quests_${stadt}.json`);
+                const response = await fetch(`data/quests_${stadt}.json`);
                 this.quests[stadt] = await response.json();
             } catch (error) {
                 console.warn(`⚠️ Quests für ${stadt} nicht gefunden`);
@@ -195,7 +202,7 @@ class GameDataLoader {
 
         for (const region of regionsNamen) {
             try {
-                const response = await fetch(`/data/enemies_${region}.json`);
+                const response = await fetch(`data/enemies_${region}.json`);
                 this.enemies[region] = await response.json();
             } catch (error) {
                 console.warn(`⚠️ Enemies für ${region} nicht gefunden`);

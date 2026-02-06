@@ -6,7 +6,7 @@ Speichere auf Desktop in EINEM Dokument
 from pathlib import Path
 import json
 
-NAJIKACORE = Path('C:/NajikaCore')
+NAJIKACORE = Path('C:/Najika_World')
 ZIP_DIR = Path('C:/Users/0KKK0/Desktop/zip')
 JETZT_DIR = Path('C:/Users/0KKK0/Desktop/jetzt')
 DESKTOP = Path('C:/Users/0KKK0/Desktop')

@@ -184,7 +184,7 @@ class NajikaConflictFilter:
                     output.append(f"- {f}")
                 output.append("")
 
-        output_file = "C:/NajikaCore/NAJIKA_CATEGORIZATION_FILTERED.md"
+        output_file = "C:/Najika_World/NAJIKA_CATEGORIZATION_FILTERED.md"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write("\n".join(output))
 
@@ -193,7 +193,7 @@ class NajikaConflictFilter:
         return output_file
 
 if __name__ == "__main__":
-    filter = NajikaConflictFilter("C:/NajikaCore/NAJIKA_CATEGORIZATION_COMPLETE.md")
+    filter = NajikaConflictFilter("C:/Najika_World/NAJIKA_CATEGORIZATION_COMPLETE.md")
 
     # 1. Lade Kategorisierung
     categories = filter.load_categorization()

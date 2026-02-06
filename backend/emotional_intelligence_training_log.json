@@ -16,5 +16,167 @@
       "Yuna AI v2/v3 (Human-like behavior)",
       "AgenticAI (16 MBTI Personas)"
     ]
+  },
+  {
+    "session_start": "2026-01-23T02:05:56.868383",
+    "session_end": "2026-01-23T02:06:52.186075",
+    "duration_minutes": 0.9219615333333333,
+    "stats": {
+      "emotions_recognized": 0,
+      "empathetic_responses": 0,
+      "sentiment_shifts_handled": 0,
+      "vulnerability_moments": 0,
+      "emotional_modulation": 0
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-01-24T02:10:13.845276",
+    "session_end": "2026-01-24T02:11:09.436255",
+    "duration_minutes": 0.9265163166666667,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-01-25T02:10:24.708498",
+    "session_end": "2026-01-25T02:12:27.405462",
+    "duration_minutes": 2.0449493999999997,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 7
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-01-26T02:08:37.170825",
+    "session_end": "2026-01-26T02:09:48.726583",
+    "duration_minutes": 1.1925959666666666,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-01-27T02:05:57.010451",
+    "session_end": "2026-01-27T02:06:52.302399",
+    "duration_minutes": 0.9215324666666667,
+    "stats": {
+      "emotions_recognized": 0,
+      "empathetic_responses": 0,
+      "sentiment_shifts_handled": 0,
+      "vulnerability_moments": 0,
+      "emotional_modulation": 0
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-01-28T03:47:19.228320",
+    "session_end": "2026-01-28T03:58:20.484962",
+    "duration_minutes": 11.020944033333334,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-02-02T03:37:43.258953",
+    "session_end": "2026-02-02T03:48:59.660324",
+    "duration_minutes": 11.273356183333334,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-02-06T01:21:39.908228",
+    "session_end": "2026-02-06T01:28:25.510896",
+    "duration_minutes": 6.760044466666667,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
+  },
+  {
+    "session_start": "2026-02-07T00:07:43.191858",
+    "session_end": "2026-02-07T00:08:30.021121",
+    "duration_minutes": 0.7804877166666666,
+    "stats": {
+      "emotions_recognized": 7,
+      "empathetic_responses": 4,
+      "sentiment_shifts_handled": 2,
+      "vulnerability_moments": 4,
+      "emotional_modulation": 8
+    },
+    "research_based_on": [
+      "MYAIGF/ai-companion-emotional-roleplay-2025",
+      "DEVILWHERE/girlfriend-simulation-model",
+      "Yuna AI v2/v3 (Human-like behavior)",
+      "AgenticAI (16 MBTI Personas)"
+    ]
   }
 ]

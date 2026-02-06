@@ -10,7 +10,7 @@ from datetime import datetime
 import sys
 
 # Ordner-Definitionen
-NAJIKACORE = Path('C:/NajikaCore')
+NAJIKACORE = Path('C:/Najika_World')
 CLAUDE_SESSIONS = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
 ZIP_ORDNER = Path('C:/Users/0KKK0/Desktop/zip')
 
@@ -382,7 +382,7 @@ def main():
     # Interaktiver Modus
     if len(sys.argv) == 1:
         print('WO SUCHST DU?')
-        print('  1 - NajikaCore (C:/NajikaCore)')
+        print('  1 - NajikaCore (C:/Najika_World)')
         print('  2 - Claude Sessions')
         print('  3 - ZIP-Ordner (Desktop/zip)')
         print('  4 - ALLE Ordner')

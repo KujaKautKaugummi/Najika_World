@@ -51,7 +51,7 @@ lines.append('')
 
 lines.append('### Konstanten am Anfang definieren')
 lines.append('```python')
-lines.append('NAJIKA_DIR = Path("C:/NajikaCore")')
+lines.append('NAJIKA_DIR = Path("C:/Najika_World")')
 lines.append('CLAUDE_PROJECTS = Path("C:/Users/0KKK0/.claude/projects/C--NajikaCore")')
 lines.append('CLAUDE_TODOS = Path("C:/Users/0KKK0/.claude/todos")')
 lines.append('UPDATE_FILE = NAJIKA_DIR / "CLAUDE_SMART_UPDATE.md"')

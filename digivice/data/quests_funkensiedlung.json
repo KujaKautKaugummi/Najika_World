@@ -7,9 +7,9 @@
     {"id": "besänftige_den_vulkan", "name": "Besänftige den Vulkan", "type": "main_quest", "difficulty": "legendary", "level_required": 20, "giver": "lava_druide_magmus", "description": "Der Vulkan wird aktiv. Besänftige ihn bevor er ausbricht.", "choices": [{
       "question": "Der Vulkan ist wütend. Was tust du?",
       "options": [
-        {"id": "ritual", "text": "Führe das Besänftigungs-Ritual durch", "requires": "lava_druide_trust", "outcome": {"success": true, "rewards": {"exp": 15000, "items": ["vulkan_herz"], "reputation": +200}}},
+        {"id": "ritual", "text": "Führe das Besänftigungs-Ritual durch", "requires": "lava_druide_trust", "outcome": {"success": true, "rewards": {"exp": 15000, "items": ["vulkan_herz"], "reputation": 200}}},
         {"id": "seal", "text": "Versiegle den Vulkan mit Magie", "requires": "high_magic", "outcome": {"success": true, "consequence": "Vulkan versiegelt für 100 Jahre", "rewards": {"exp": 12000}}},
-        {"id": "evacuate", "text": "Evakuiere die Siedlung", "outcome": {"consequence": "Siedlung wird zerstört", "refugees_saved": true, "rewards": {"exp": 8000, "reputation": +100}}}
+        {"id": "evacuate", "text": "Evakuiere die Siedlung", "outcome": {"consequence": "Siedlung wird zerstört", "refugees_saved": true, "rewards": {"exp": 8000, "reputation": 100}}}
       ]
     }], "najika_reactions": {"melissa": "Ein Vulkan... Die Macht der Natur selbst."}, "rewards": {"exp": 15000}},
     {"id": "das_ewige_feuer", "name": "Das ewige Feuer", "type": "legendary_quest", "difficulty": "legendary", "level_required": 22, "giver": "feuer_phoenix", "description": "Hüte das ewige Feuer mit dem Phoenix", "najika_reactions": {"megumin": "PHOENIX-QUEST! Das ist legendär!"}, "rewards": {"exp": 20000, "items": ["phoenix_ei", "ewige_flamme"], "title": "Hüter des ewigen Feuers"}}

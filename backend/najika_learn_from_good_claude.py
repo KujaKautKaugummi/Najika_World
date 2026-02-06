@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 GOOD_SESSION = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore/1e75a874-27fc-4133-a038-22081b5aae06.jsonl')
-OUTPUT = Path('C:/NajikaCore/WIE_GUTER_CLAUDE_ARBEITET.md')
+OUTPUT = Path('C:/Najika_World/WIE_GUTER_CLAUDE_ARBEITET.md')
 
 print('='*80)
 print('NAJIKA: Analysiere GUTEN Claude')

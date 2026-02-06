@@ -666,12 +666,52 @@ class InventorySystem {
     loadFromLocalStorage() {
         const saveData = localStorage.getItem('najika_inventory');
         if (saveData) {
-            const data = JSON.parse(saveData);
-            this.items = data.items || [];
-            this.equipment = data.equipment || {};
-            this.gold = data.gold || 0;
-            console.log('💾 Inventar geladen');
-            return true;
+            try {
+                const data = JSON.parse(saveData);
+
+                // Validate and ensure items is an array
+                if (Array.isArray(data.items)) {
+                    this.items = data.items;
+                } else {
+                    console.warn('⚠️ Invalid items data, keeping current inventory');
+                    this.items = [];
+                }
+
+                // Validate equipment is an object
+                if (data.equipment && typeof data.equipment === 'object' && !Array.isArray(data.equipment)) {
+                    this.equipment = data.equipment;
+                } else {
+                    console.warn('⚠️ Invalid equipment data, resetting');
+                    this.equipment = {
+                        weapon_left: null,
+                        weapon_right: null,
+                        armor_head: null,
+                        armor_chest: null,
+                        armor_legs: null,
+                        accessory_1: null,
+                        accessory_2: null
+                    };
+                }
+
+                this.gold = data.gold || 0;
+                console.log('💾 Inventar geladen');
+                return true;
+            } catch (error) {
+                console.error('❌ Fehler beim Laden des Inventars:', error);
+                console.warn('⚠️ Inventar wird zurückgesetzt');
+                this.items = [];
+                this.equipment = {
+                    weapon_left: null,
+                    weapon_right: null,
+                    armor_head: null,
+                    armor_chest: null,
+                    armor_legs: null,
+                    accessory_1: null,
+                    accessory_2: null
+                };
+                this.gold = 0;
+                return false;
+            }
         }
         return false;
     }

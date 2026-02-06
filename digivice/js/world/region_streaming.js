@@ -38,18 +38,21 @@ class RegionStreaming {
     try {
       // Load regions.json
       const regionResponse = await fetch(regionDataPath);
+      if (!regionResponse.ok) throw new Error(`Regions fetch failed: ${regionResponse.status}`);
       this.regionData = await regionResponse.json();
-      console.log(`  ✅ Regions loaded: ${Object.keys(this.regionData.regions).length}`);
+      console.log(`  ✅ Regions loaded: ${Object.keys(this.regionData?.regions || {}).length}`);
 
       // Load biomes.json
       const biomeResponse = await fetch(biomeDataPath);
+      if (!biomeResponse.ok) throw new Error(`Biomes fetch failed: ${biomeResponse.status}`);
       this.biomeData = await biomeResponse.json();
-      console.log(`  ✅ Biomes loaded: ${Object.keys(this.biomeData.biomes).length}`);
+      console.log(`  ✅ Biomes loaded: ${Object.keys(this.biomeData?.biomes || {}).length}`);
 
       // Load cities.json
       const cityResponse = await fetch(cityDataPath);
+      if (!cityResponse.ok) throw new Error(`Cities fetch failed: ${cityResponse.status}`);
       this.cityData = await cityResponse.json();
-      console.log(`  ✅ Cities loaded: ${this.cityData.cities.length}`);
+      console.log(`  ✅ Cities loaded: ${this.cityData?.cities?.length || 0}`);
 
       // Initialize subsystems
       this.biomeSystem.loadBiomes(this.biomeData);

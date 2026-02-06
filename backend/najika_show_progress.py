@@ -7,7 +7,7 @@ from pathlib import Path
 from datetime import datetime
 import pytz
 
-TRAINING_DIR = Path('C:/NajikaCore/training')
+TRAINING_DIR = Path('C:/Najika_World/training')
 SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
 BERLIN_TZ = pytz.timezone('Europe/Berlin')
 

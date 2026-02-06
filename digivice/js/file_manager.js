@@ -3,6 +3,9 @@
  * Full-featured file explorer with drag-drop, context menus
  */
 
+// API Base URL - Backend auf Port 8000
+const FM_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
+
 const FileManager = {
     isOpen: false,
     overlay: null,
@@ -102,7 +105,7 @@ const FileManager = {
         fileList.innerHTML = '<div class="loading-indicator">🔄 Lädt Dateien...</div>';
 
         try {
-            const response = await fetch('/api/file/list', {
+            const response = await fetch(`${FM_API_BASE}/api/file/list`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path})
@@ -266,7 +269,7 @@ const FileManager = {
         const filePath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
 
         try {
-            const response = await fetch('/api/file/read', {
+            const response = await fetch(`${FM_API_BASE}/api/file/read`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path: filePath})
@@ -319,7 +322,7 @@ const FileManager = {
         const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
         try {
-            const response = await fetch('/api/file/write', {
+            const response = await fetch(`${FM_API_BASE}/api/file/write`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -347,7 +350,7 @@ const FileManager = {
         const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
         try {
-            const response = await fetch('/api/file/write', {
+            const response = await fetch(`${FM_API_BASE}/api/file/write`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -371,16 +374,54 @@ const FileManager = {
     async deleteFile(filename) {
         if (!confirm(`Wirklich löschen: ${filename}?`)) return;
 
-        // TODO: Backend needs /api/file/delete endpoint
-        notify('⚠️ Delete-Funktion noch nicht im Backend implementiert', 'warning');
+        try {
+            const fullPath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
+            const response = await fetch('/api/file/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: fullPath })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            const result = await response.json();
+            notify(`✅ ${filename} gelöscht!`, 'success');
+            this.refresh();
+        } catch (error) {
+            console.error('Delete error:', error);
+            notify(`❌ Löschen fehlgeschlagen: ${error.message}`, 'error');
+        }
     },
 
     async renameFile(filename) {
         const newName = prompt('Neuer Name:', filename);
         if (!newName || newName === filename) return;
 
-        // TODO: Backend needs /api/file/rename endpoint
-        notify('⚠️ Rename-Funktion noch nicht im Backend implementiert', 'warning');
+        try {
+            const oldPath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
+            const newPath = this.currentPath === '.' ? newName : `${this.currentPath}/${newName}`;
+
+            const response = await fetch('/api/file/rename', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ old_path: oldPath, new_path: newPath })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            const result = await response.json();
+            notify(`✅ Umbenannt zu: ${newName}`, 'success');
+            this.refresh();
+        } catch (error) {
+            console.error('Rename error:', error);
+            notify(`❌ Umbenennen fehlgeschlagen: ${error.message}`, 'error');
+        }
     },
 
     goBack() {

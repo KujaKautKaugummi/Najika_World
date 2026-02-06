@@ -16,9 +16,9 @@ from collections import defaultdict
 
 # ===== CONFIG =====
 
-INTELLIGENT_GRUNDSTEIN = Path("C:/NajikaCore/grundstein_output/NAJIKA_INTELLIGENT_GRUNDSTEIN.json")
-MASTER_KERN = Path("C:/NajikaCore/NAJIKA_MASTER_KERN_KOMPLETT.md")
-OUTPUT_DIR = Path("C:/NajikaCore")
+INTELLIGENT_GRUNDSTEIN = Path("C:/Najika_World/grundstein_output/NAJIKA_INTELLIGENT_GRUNDSTEIN.json")
+MASTER_KERN = Path("C:/Najika_World/NAJIKA_MASTER_KERN_KOMPLETT.md")
+OUTPUT_DIR = Path("C:/Najika_World")
 
 # Najika-relevante Keywords (für Suche)
 NAJIKA_KEYWORDS = [

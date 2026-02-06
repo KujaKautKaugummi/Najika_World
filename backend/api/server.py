@@ -153,14 +153,32 @@ class LoadGameRequest(BaseModel):
 
 @app.get("/")
 async def root():
+    systems = [
+        "combat", "food", "inventory", "quests", "skills",
+        "crafting", "npcs", "save/load"
+    ]
+
+    # Add Najika Game Actions if available
+    if NAJIKA_ACTIONS_AVAILABLE:
+        systems.append("najika_game_actions")
+
     return {
         "status": "online",
-        "version": "3.0",
+        "version": "3.1",
         "najika": "Ready to serve Kuja! 💥",
-        "systems": [
-            "combat", "food", "inventory", "quests", "skills",
-            "crafting", "npcs", "save/load"
-        ]
+        "systems": systems,
+        "new_features": {
+            "najika_autonomous_actions": NAJIKA_ACTIONS_AVAILABLE,
+            "najika_endpoints": [
+                "/najika/status",
+                "/najika/current-activity",
+                "/najika/suggest-action",
+                "/najika/auto-decide-action",
+                "/najika/locations",
+                "/najika/teleport",
+                "/najika/recipes"
+            ] if NAJIKA_ACTIONS_AVAILABLE else []
+        }
     }
 
 @app.get("/health")
@@ -176,13 +194,87 @@ async def health_check():
 async def chat(message: ChatMessage):
     """
     Main chat endpoint for Najika
+
+    Returns Najika's response with context about her current activities
     """
-    # TODO: Implement AI response logic
-    return {
-        "response": "Kuja! Ich bin noch nicht vollständig implementiert, aber ich bin hier! 💥",
+
+    response_data = {
+        "response": "",
         "mode": message.mode,
-        "emotion": "excited"
+        "emotion": "excited",
+        "current_activity": None,
+        "stats": {}
     }
+
+    # Check if Game Actions available
+    if NAJIKA_ACTIONS_AVAILABLE:
+        living_state = LIVING_STATE
+        game_action_state = get_game_action_state()
+
+        # Get current activity
+        current_action = game_action_state.get("current_action")
+        current_location = game_action_state.get("current_location")
+
+        # Add activity context to response
+        activity_context = ""
+        if current_action:
+            action_data = game_action_state.get("action_data", {})
+            activity_name = action_data.get("name", current_action)
+            activity_context = f"\n\n*Ich bin gerade am {activity_name}... 🌟*"
+
+        # Location context
+        location_data = get_current_location()
+        location_context = f"\n📍 Ich bin gerade: {location_data.get('name', 'Zuhause')}"
+
+        # Stats context
+        hunger = living_state.get("hunger", 100)
+        energy = living_state.get("energy", 100)
+        mood = living_state.get("mood_game", 100)
+
+        stats_emoji = ""
+        if hunger < 30:
+            stats_emoji += " 🍽️"
+        if energy < 30:
+            stats_emoji += " 😴"
+        if mood < 40:
+            stats_emoji += " 😔"
+
+        # Build response
+        base_response = "Kuja! Ich bin hier! 💥"
+
+        # Add personality based on stats
+        if hunger < 30:
+            base_response = "Kuja! *rumble* Ich hab Hunger... 🍽️"
+        elif energy < 30:
+            base_response = "Kuja... *gähn* Bin ein bisschen müde... 😴"
+        elif mood < 40:
+            base_response = "Hey Kuja... mir ist langweilig... 😔"
+        elif mood > 70:
+            base_response = "KUJA! 💥 Ich bin so glücklich! ✨"
+
+        response_data["response"] = base_response + activity_context + location_context + stats_emoji
+        response_data["current_activity"] = current_action
+        response_data["stats"] = {
+            "hunger": hunger,
+            "energy": energy,
+            "mood": mood
+        }
+
+        # Determine emotion
+        if mood > 70:
+            response_data["emotion"] = "happy"
+        elif mood < 40:
+            response_data["emotion"] = "bored"
+        elif energy < 30:
+            response_data["emotion"] = "tired"
+        else:
+            response_data["emotion"] = "excited"
+
+    else:
+        # Fallback without Game Actions
+        response_data["response"] = "Kuja! Ich bin noch nicht vollständig implementiert, aber ich bin hier! 💥"
+
+    return response_data
 
 # ═══════════════════════════════════════════════════════════════
 # GAME STATE ENDPOINTS
@@ -448,15 +540,121 @@ async def learn_skill(skill_data: Dict[str, Any]):
 @app.post("/crafting/craft")
 async def craft_item(craft: CraftingAction):
     """Craft an item"""
-    # TODO: Implement material checking and crafting logic
+    # Define crafting recipes
+    recipes = {
+        "wooden_sword": {
+            "name": "Wooden Sword",
+            "type": "weapon",
+            "materials": [
+                {"id": "wood", "count": 5},
+                {"id": "rope", "count": 2}
+            ],
+            "result": {
+                "id": "wooden_sword",
+                "name": "Wooden Sword",
+                "type": "weapon",
+                "stats": {"attack": 10, "durability": 50}
+            }
+        },
+        "health_potion": {
+            "name": "Health Potion",
+            "type": "consumable",
+            "materials": [
+                {"id": "herb", "count": 3},
+                {"id": "water", "count": 1}
+            ],
+            "result": {
+                "id": "health_potion",
+                "name": "Health Potion",
+                "type": "food",
+                "stats": {"health_restore": 50}
+            }
+        },
+        "leather_armor": {
+            "name": "Leather Armor",
+            "type": "armor",
+            "materials": [
+                {"id": "leather", "count": 8},
+                {"id": "thread", "count": 4}
+            ],
+            "result": {
+                "id": "leather_armor",
+                "name": "Leather Armor",
+                "type": "armor",
+                "stats": {"defense": 15, "durability": 100}
+            }
+        }
+    }
+
+    # Check if recipe exists
+    if craft.recipe_id not in recipes:
+        return {
+            "success": False,
+            "message": f"Rezept {craft.recipe_id} nicht gefunden",
+            "error": "unknown_recipe"
+        }
+
+    recipe = recipes[craft.recipe_id]
+
+    # Check if player has required materials
+    inventory_items = game_state["inventory"]["items"]
+
+    # Count available materials
+    material_counts = {}
+    for item in inventory_items:
+        item_id = item.get("id")
+        item_count = item.get("count", 1)
+        material_counts[item_id] = material_counts.get(item_id, 0) + item_count
+
+    # Check if all materials are available
+    missing_materials = []
+    for material in recipe["materials"]:
+        mat_id = material["id"]
+        mat_count = material["count"]
+        available = material_counts.get(mat_id, 0)
+
+        if available < mat_count:
+            missing_materials.append({
+                "id": mat_id,
+                "required": mat_count,
+                "available": available,
+                "missing": mat_count - available
+            })
+
+    if missing_materials:
+        return {
+            "success": False,
+            "message": "Nicht genug Materialien!",
+            "missing_materials": missing_materials,
+            "error": "insufficient_materials"
+        }
+
+    # Remove materials from inventory
+    for material in recipe["materials"]:
+        mat_id = material["id"]
+        mat_count = material["count"]
+        remaining = mat_count
+
+        # Remove from inventory
+        game_state["inventory"]["items"] = [
+            item for item in game_state["inventory"]["items"]
+            if not (item.get("id") == mat_id and (remaining := remaining - item.get("count", 1)) >= 0)
+        ]
+
+    # Add crafted item to inventory
+    crafted_item = {
+        **recipe["result"],
+        "count": 1,
+        "crafted_at": datetime.now().isoformat()
+    }
+    game_state["inventory"]["items"].append(crafted_item)
+
     return {
         "success": True,
-        "message": f"Item {craft.recipe_id} gecraftet!",
-        "result": {
-            "id": craft.recipe_id,
-            "name": "Crafted Item",
-            "timestamp": datetime.now().isoformat()
-        }
+        "message": f"{recipe['name']} erfolgreich gecraftet!",
+        "result": crafted_item,
+        "materials_used": recipe["materials"],
+        "timestamp": datetime.now().isoformat()
     }
 
 # ═══════════════════════════════════════════════════════════════
@@ -553,6 +751,266 @@ async def game_action(action: GameAction):
         "data": action.data
     }
 
+# ═══════════════════════════════════════════════════════════════
+# NAJIKA GAME ACTIONS ENDPOINTS (NEU!)
+# ═══════════════════════════════════════════════════════════════
+
+# Import Game Actions System
+try:
+    from backend.najika_game_actions import (
+        get_game_action_state,
+        suggest_actions,
+        decide_next_action,
+        start_action,
+        check_action_completion,
+        teleport_to_location,
+        get_current_location,
+        LOCATIONS,
+        COOKING_RECIPES,
+        AUTONOMOUS_CRAFTING_RECIPES,
+        FARMING_ACTIONS,
+        EXPLORING_ACTIONS
+    )
+    from backend.najika_living_system import LIVING_STATE, update_living_system
+    NAJIKA_ACTIONS_AVAILABLE = True
+except ImportError:
+    NAJIKA_ACTIONS_AVAILABLE = False
+    print("⚠️ Najika Game Actions nicht verfügbar")
+
+
+@app.get("/najika/current-activity")
+async def get_najika_current_activity():
+    """
+    Get Najika's current activity/action
+
+    Returns what Najika is currently doing
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "message": "Game Actions System nicht geladen"
+        }
+
+    state = get_game_action_state()
+
+    return {
+        "current_action": state.get("current_action"),
+        "action_data": state.get("action_data"),
+        "current_location": state.get("current_location"),
+        "location_data": state.get("current_location_data"),
+        "inventory": state.get("inventory"),
+        "action_history": state.get("completed_actions", [])[-5:]  # Last 5 actions
+    }
+
+
+@app.post("/najika/suggest-action")
+async def suggest_najika_action():
+    """
+    Get suggested actions for Najika based on her current state
+
+    Returns list of actions Najika could/should do
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "suggestions": []
+        }
+
+    # Get current states
+    living_state = LIVING_STATE
+    player_state = game_state["player"]
+
+    suggestions = suggest_actions(living_state, player_state)
+
+    return {
+        "status": "success",
+        "suggestions": suggestions,
+        "najika_stats": {
+            "hunger": living_state.get("hunger", 100),
+            "energy": living_state.get("energy", 100),
+            "mood": living_state.get("mood_game", 100),
+            "anger": living_state.get("anger_level", 0)
+        }
+    }
+
+
+@app.post("/najika/start-action")
+async def start_najika_action(action_type: str, action_data: Optional[Dict] = None):
+    """
+    Manually start a specific action for Najika
+
+    Example:
+    POST /najika/start-action?action_type=cooking
+    Body: {"details": {...}}
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "success": False,
+            "message": "Game Actions System nicht geladen"
+        }
+
+    # Create action object
+    action = {
+        "type": action_type,
+        "details": action_data or {},
+        "reason": "manual_trigger",
+        "priority": "high"
+    }
+
+    result = start_action(action)
+
+    return {
+        "success": True,
+        "action_started": result
+    }
+
+
+@app.post("/najika/auto-decide-action")
+async def auto_decide_najika_action():
+    """
+    Let Najika autonomously decide and start her next action
+
+    Najika will analyze her needs and start an appropriate action
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "success": False,
+            "message": "Game Actions System nicht geladen"
+        }
+
+    living_state = LIVING_STATE
+    player_state = game_state["player"]
+
+    # Decide next action
+    next_action = decide_next_action(living_state, player_state)
+
+    if not next_action:
+        return {
+            "success": False,
+            "message": "Najika kann gerade keine Action starten (Cooldown oder bereits aktiv)"
+        }
+
+    # Start action
+    result = start_action(next_action)
+
+    return {
+        "success": True,
+        "action": next_action,
+        "started": result,
+        "najika_says": result.get("message", "Los geht's! ✨")
+    }
+
+
+@app.get("/najika/locations")
+async def get_najika_locations():
+    """
+    Get all available locations Najika can teleport to
+
+    Returns list of locations with activities
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "locations": []
+        }
+
+    return {
+        "status": "success",
+        "locations": LOCATIONS,
+        "current_location": get_current_location()
+    }
+
+
+@app.post("/najika/teleport")
+async def teleport_najika(location_id: str):
+    """
+    Teleport Najika to a specific location
+
+    Example: POST /najika/teleport?location_id=farm
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "success": False,
+            "message": "Game Actions System nicht geladen"
+        }
+
+    result = teleport_to_location(location_id)
+
+    return result
+
+
+@app.get("/najika/recipes")
+async def get_najika_recipes():
+    """
+    Get all cooking and crafting recipes Najika knows
+
+    Returns categorized recipes
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "recipes": {}
+        }
+
+    return {
+        "status": "success",
+        "cooking_recipes": COOKING_RECIPES,
+        "crafting_recipes": AUTONOMOUS_CRAFTING_RECIPES,
+        "farming_actions": FARMING_ACTIONS,
+        "exploring_actions": EXPLORING_ACTIONS
+    }
+
+
+@app.get("/najika/status")
+async def get_najika_full_status():
+    """
+    Get Najika's complete status including living state and game actions
+
+    Comprehensive endpoint for dashboard/UI
+    """
+    if not NAJIKA_ACTIONS_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "message": "Game Actions System nicht geladen"
+        }
+
+    living_state = LIVING_STATE
+    game_action_state = get_game_action_state()
+    player_state = game_state["player"]
+
+    # Check for action completion
+    completion = check_action_completion()
+
+    return {
+        "status": "success",
+        "najika": {
+            "hunger": living_state.get("hunger", 100),
+            "energy": living_state.get("energy", 100),
+            "mood": living_state.get("mood_game", 100),
+            "anger": living_state.get("anger_level", 0),
+            "current_mood": living_state.get("current_mood", "neutral"),
+            "mood_intensity": living_state.get("mood_intensity", 50)
+        },
+        "current_activity": {
+            "action": game_action_state.get("current_action"),
+            "data": game_action_state.get("action_data"),
+            "progress": completion.get("progress", 0) if completion and not completion.get("completed") else 0,
+            "remaining_seconds": completion.get("remaining_seconds", 0) if completion and not completion.get("completed") else 0
+        },
+        "location": {
+            "current": game_action_state.get("current_location"),
+            "data": game_action_state.get("current_location_data")
+        },
+        "inventory": game_action_state.get("inventory", {}),
+        "player": {
+            "health": player_state.get("health", 100),
+            "mana": player_state.get("mana", 100),
+            "stamina": player_state.get("stamina", 100),
+            "level": player_state.get("level", 1)
+        },
+        "suggestions": suggest_actions(living_state, player_state)
+    }
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     """
@@ -567,14 +1025,52 @@ async def websocket_endpoint(websocket: WebSocket):
         pass
 
 # ═══════════════════════════════════════════════════════════════
+# REGISTER NEW API ROUTERS (für UE5 Integration)
+# ═══════════════════════════════════════════════════════════════
+
+# Companion API (Najika's 4 Persönlichkeiten)
+try:
+    from backend.api.companion import router as companion_router
+    app.include_router(companion_router)
+    print("✅ Companion API registriert")
+except ImportError as e:
+    print(f"⚠️ Companion API nicht verfügbar: {e}")
+
+# Mimik API (Kuja's exklusiver Charakter)
+try:
+    from backend.api.mimik import router as mimik_router
+    app.include_router(mimik_router)
+    print("✅ Mimik API registriert")
+except ImportError as e:
+    print(f"⚠️ Mimik API nicht verfügbar: {e}")
+
+# Combat Hands API (Zwei-Hand-Kampfsystem)
+try:
+    from backend.api.combat_hands import router as combat_hands_router
+    app.include_router(combat_hands_router)
+    print("✅ Combat Hands API registriert")
+except ImportError as e:
+    print(f"⚠️ Combat Hands API nicht verfügbar: {e}")
+
+# Stat Training API (Learning by Doing)
+try:
+    from backend.api.stat_training import router as stat_training_router
+    app.include_router(stat_training_router)
+    print("✅ Stat Training API registriert")
+except ImportError as e:
+    print(f"⚠️ Stat Training API nicht verfügbar: {e}")
+
+# ═══════════════════════════════════════════════════════════════
 # RUN SERVER
 # ═══════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     host = os.getenv("BACKEND_HOST", "127.0.0.1")
-    port = int(os.getenv("BACKEND_PORT", 5000))
-    
+    # WICHTIG: Port 8000 laut den 8 Geboten! NIEMALS Port 5000!
+    port = int(os.getenv("BACKEND_PORT", 8000))
+
     print("🌟 Najika Backend starting...")
     print(f"🔗 Listening on {host}:{port}")
-    
+    print("💥 EXPLOSION!!! Backend bereit für UE5!")
+
     uvicorn.run(app, host=host, port=port)

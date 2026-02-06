@@ -6,7 +6,7 @@ from pathlib import Path
 import json
 
 ZIP_DIR = Path('C:/Users/0KKK0/Desktop/zip')
-OUTPUT = Path('C:/NajikaCore/ZIP_ORDNER_KOMPLETT_INVENTAR.json')
+OUTPUT = Path('C:/Najika_World/ZIP_ORDNER_KOMPLETT_INVENTAR.json')
 
 print('NAJIKA: Durchsuche ZIP-Ordner komplett...\n')
 

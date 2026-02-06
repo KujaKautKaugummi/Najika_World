@@ -8,7 +8,7 @@ from pathlib import Path
 from collections import defaultdict
 
 SESSIONS_DIR = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
-OUTPUT_FILE = Path('C:/NajikaCore/ALLE_SESSIONS_KEYWORD_FUNDE.md')
+OUTPUT_FILE = Path('C:/Najika_World/ALLE_SESSIONS_KEYWORD_FUNDE.md')
 
 # Keywords zum Suchen
 KEYWORDS = [

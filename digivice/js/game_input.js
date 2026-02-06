@@ -17,6 +17,14 @@ class CombatInputHandler {
 
     setupKeyboardControls() {
         document.addEventListener('keydown', (e) => {
+            // WICHTIG: Ignorieren wenn Chat-Input oder andere Input-Felder fokussiert sind
+            if (window.chatInputFocused ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.isContentEditable) {
+                return;
+            }
+
             this.pressedKeys.add(e.code);
 
             switch(e.code) {

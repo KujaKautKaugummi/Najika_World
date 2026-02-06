@@ -106,15 +106,26 @@ class WorldModeManager {
 
     loadScript(src) {
         return new Promise((resolve, reject) => {
+            // Check if already loaded
+            const existing = document.querySelector(`script[src^="${src}"]`);
+            if (existing) {
+                console.log(`⏭️ Already loaded: ${src}`);
+                resolve();
+                return;
+            }
+
             const script = document.createElement('script');
             script.src = src + `?v=${Date.now()}`; // Cache busting
             script.onload = () => {
                 console.log(`✅ Loaded: ${src}`);
                 resolve();
             };
-            script.onerror = () => {
-                console.warn(`⚠️ Failed to load: ${src}`);
-                resolve(); // Don't reject, continue loading
+            script.onerror = (err) => {
+                console.error(`❌ Failed to load: ${src}`, err);
+                // Still resolve to continue loading other scripts, but track failure
+                this.failedScripts = this.failedScripts || [];
+                this.failedScripts.push(src);
+                resolve(); // Continue loading other scripts
             };
             document.body.appendChild(script);
         });
@@ -138,23 +149,44 @@ class WorldModeManager {
         // Initialize 9-region world
         this.createOpenWorldScene();
 
-        // Initialize all systems
-        this.openWorldSystems = {
-            interiorGenerator: new InteriorGenerator(window.Scene3D.scene, THREE),
-            realtimeCombat: new RealtimeCombat(window.Scene3D.scene, THREE),
-            foodSystem: new FoodSystem(),
-            inventorySystem: new InventorySystem(),
-            npcSystem: new NPCSystem(window.Scene3D.scene, THREE),
-            questManager: new QuestManager(),
-            specialFeatures: new SpecialFeatures(window.Scene3D.scene, THREE),
-            skillSystem: new SkillSystem(),
-            craftingSystem: new CraftingSystem(),
-            specialLocations: new SpecialLocations(window.Scene3D.scene, THREE),
-            performanceMonitor: new PerformanceMonitor(),
-            saveSystem: new SaveSystem(),
-            soundSystem: new SoundSystem(),
-            tutorialSystem: new TutorialSystem()
+        // Initialize all systems with existence checks
+        this.openWorldSystems = {};
+        const scene = window.Scene3D?.scene;
+
+        // Helper function to safely create instance
+        const safeCreate = (name, ClassRef, ...args) => {
+            if (typeof ClassRef !== 'function') {
+                console.warn(`⚠️ ${name} class not loaded, skipping`);
+                return null;
+            }
+            try {
+                return new ClassRef(...args);
+            } catch (err) {
+                console.error(`❌ Failed to create ${name}:`, err);
+                return null;
+            }
         };
+
+        // Initialize with safety checks
+        this.openWorldSystems.interiorGenerator = safeCreate('InteriorGenerator', window.InteriorGenerator || InteriorGenerator, scene, THREE);
+        this.openWorldSystems.realtimeCombat = safeCreate('RealtimeCombat', window.RealtimeCombat || RealtimeCombat, scene, THREE);
+        this.openWorldSystems.foodSystem = safeCreate('FoodSystem', window.FoodSystem || FoodSystem);
+        this.openWorldSystems.inventorySystem = safeCreate('InventorySystem', window.InventorySystem || InventorySystem);
+        this.openWorldSystems.npcSystem = safeCreate('NPCSystem', window.NPCSystem || NPCSystem, scene, THREE);
+        this.openWorldSystems.questManager = safeCreate('QuestManager', window.QuestManager || QuestManager);
+        this.openWorldSystems.specialFeatures = safeCreate('SpecialFeatures', window.SpecialFeatures || SpecialFeatures, scene, THREE);
+        this.openWorldSystems.skillSystem = safeCreate('SkillSystem', window.SkillSystem || SkillSystem);
+        this.openWorldSystems.craftingSystem = safeCreate('CraftingSystem', window.CraftingSystem || CraftingSystem);
+        this.openWorldSystems.specialLocations = safeCreate('SpecialLocations', window.SpecialLocations || SpecialLocations, scene, THREE);
+        this.openWorldSystems.performanceMonitor = safeCreate('PerformanceMonitor', window.PerformanceMonitor || PerformanceMonitor);
+        this.openWorldSystems.saveSystem = safeCreate('SaveSystem', window.SaveSystem || SaveSystem);
+        this.openWorldSystems.soundSystem = safeCreate('SoundSystem', window.SoundSystem || SoundSystem);
+        this.openWorldSystems.tutorialSystem = safeCreate('TutorialSystem', window.TutorialSystem || TutorialSystem);
+
+        // Log failed scripts if any
+        if (this.failedScripts?.length > 0) {
+            console.warn(`⚠️ ${this.failedScripts.length} scripts failed to load:`, this.failedScripts);
+        }
 
         // Connect systems
         this.openWorldSystems.inventorySystem.foodSystem = this.openWorldSystems.foodSystem;

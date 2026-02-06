@@ -28,10 +28,10 @@ except ImportError:
 # ===== CONFIG =====
 
 PDF_DIR = Path("C:/Users/0KKK0/Desktop/neu neu")
-MASTER_KERN = Path("C:/NajikaCore/NAJIKA_MASTER_KERN_KOMPLETT.md")
+MASTER_KERN = Path("C:/Najika_World/NAJIKA_MASTER_KERN_KOMPLETT.md")
 NEU_NEU_DIR = Path("C:/Users/0KKK0/Desktop/neu neu")
 ZIP_DIR = Path("C:/Users/0KKK0/Desktop/zip")
-OUTPUT_DIR = Path("C:/NajikaCore/grundstein_output")
+OUTPUT_DIR = Path("C:/Najika_World/grundstein_output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Die 5 Basis-PDFs

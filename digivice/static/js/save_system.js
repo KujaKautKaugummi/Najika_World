@@ -164,8 +164,30 @@ class SaveSystem {
     loadInventoryData(data) {
         const { inventorySystem } = this.gameState;
 
-        inventorySystem.items = data.items || [];
-        inventorySystem.equipment = data.equipment || {};
+        // Validate and ensure items is an array
+        if (Array.isArray(data.items)) {
+            inventorySystem.items = data.items;
+        } else {
+            console.warn('⚠️ Invalid items data, resetting to empty array');
+            inventorySystem.items = [];
+        }
+
+        // Validate equipment is an object
+        if (data.equipment && typeof data.equipment === 'object' && !Array.isArray(data.equipment)) {
+            inventorySystem.equipment = data.equipment;
+        } else {
+            console.warn('⚠️ Invalid equipment data, resetting');
+            inventorySystem.equipment = {
+                weapon_left: null,
+                weapon_right: null,
+                armor_head: null,
+                armor_chest: null,
+                armor_legs: null,
+                accessory_1: null,
+                accessory_2: null
+            };
+        }
+
         inventorySystem.gold = data.gold || 0;
     }
 

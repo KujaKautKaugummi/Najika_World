@@ -166,32 +166,6 @@
       "rewards": {"exp": 15000, "items": ["goetter_klinge", "meister_handwerker_titel"], "title": "Meisterhandwerker"}
     },
     {
-      "id": "die_neun_helden",
-      "name": "Die Neun Helden",
-      "type": "epic_quest",
-      "difficulty": "legendary",
-      "level_required": 28,
-      "giver": "gildenmeister_marcus",
-      "description": "Rekrutiere einen Helden aus jeder der 9 Regionen für die finale Schlacht.",
-      "objectives": [
-        {"type": "recruit", "region": "heisse_duenen", "hero": "khan"},
-        {"type": "recruit", "region": "samtmoos_tiefwald", "hero": "druide_elowen"},
-        {"type": "recruit", "region": "salzwind_kueste", "hero": "kapitaen_magnus"},
-        {"type": "recruit", "region": "blitzebene", "hero": "erzmagier_aldric"},
-        {"type": "recruit", "region": "gruenschlamm_sumpf", "hero": "sumpfhexe_morgana"},
-        {"type": "recruit", "region": "magmastroeme", "hero": "meisterschmied_hephaestus"},
-        {"type": "recruit", "region": "reich_der_drei", "hero": "untote_ritter"},
-        {"type": "recruit", "region": "tiefenhoehlen", "hero": "goblin_könig_grix"},
-        {"type": "unite", "description": "Vereine alle 9 Helden"},
-        {"type": "final_battle", "target": "ultimate_threat"}
-      ],
-      "najika_reactions": {
-        "initial": {"personality": "megumin", "text": "NEUN HELDEN! Wie die Avengers! EPISCH!"},
-        "final_battle": {"personality": "melissa", "text": "Vereint stehen wir. Geteilt fallen wir."}
-      },
-      "rewards": {"exp": 80000, "items": ["einheit_amulett"], "title": "Vereiniger der Neun", "achievement": "True Hero"}
-    },
-    {
       "id": "die_schwarze_muehle_geheimnis",
       "name": "Das Geheimnis der Schwarzen Mühle",
       "type": "mystery_quest",
@@ -260,8 +234,7 @@
     "zeit_saga": [
       "die_zerbrochene_zeit"
     ],
-    "vereinigungs_saga": [
-      "die_neun_helden",
+    "wissens_saga": [
       "bibliothek_der_welten"
     ]
   }

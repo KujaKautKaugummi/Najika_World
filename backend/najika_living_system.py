@@ -25,6 +25,7 @@ LIVING_STATE = {
 
     # === GAME STATS (NEU) ===
     "hunger": 100.0,          # 0-100 (0 = verhungert, 100 = satt)
+    "thirst": 100.0,          # 0-100 (0 = verdurstet, 100 = genug getrunken)
     "energy": 100.0,          # 0-100 (0 = erschöpft, 100 = ausgeruht)
     "mood_game": 100.0,       # 0-100 (Game-Mood, beeinflusst Anger)
 
@@ -597,7 +598,7 @@ ACCIDENT_TYPES = {
 }
 
 def update_needs_over_time(current_state):
-    """Update Hunger/Energy/Mood über Zeit (kontinuierlich)"""
+    """Update Hunger/Thirst/Energy/Mood über Zeit (kontinuierlich)"""
     now = time.time()
     last_update = current_state.get("last_update", now)
     delta = now - last_update
@@ -609,13 +610,20 @@ def update_needs_over_time(current_state):
     current_state["hunger"] -= hours * 5.0
     current_state["hunger"] = max(0, min(100, current_state["hunger"]))
 
+    # Thirst sinkt schneller! (-7 pro Stunde)
+    current_state["thirst"] = current_state.get("thirst", 100.0)
+    current_state["thirst"] -= hours * 7.0
+    current_state["thirst"] = max(0, min(100, current_state["thirst"]))
+
     # Energy sinkt (-3 pro Stunde)
     current_state["energy"] -= hours * 3.0
     current_state["energy"] = max(0, min(100, current_state["energy"]))
 
-    # Mood sinkt basierend auf Hunger/Energy
+    # Mood sinkt basierend auf Hunger/Thirst/Energy
     if current_state["hunger"] < 30:
         current_state["mood_game"] -= hours * 2.0
+    if current_state["thirst"] < 30:
+        current_state["mood_game"] -= hours * 3.0  # Durst macht schlechtere Laune!
     if current_state["energy"] < 20:
         current_state["mood_game"] -= hours * 1.0
     current_state["mood_game"] = max(0, min(100, current_state["mood_game"]))
@@ -623,6 +631,8 @@ def update_needs_over_time(current_state):
     # Anger steigt bei niedrigen Werten
     if current_state["hunger"] < 10:
         current_state["anger_level"] += hours * 5.0
+    if current_state["thirst"] < 10:
+        current_state["anger_level"] += hours * 7.0  # Durst macht SEHR wütend!
     if current_state["energy"] < 10:
         current_state["anger_level"] += hours * 3.0
     if current_state["mood_game"] < 20:
@@ -694,6 +704,29 @@ def auto_sleep(current_state):
         "najika_says": "Bin auf dem Boden eingepennt... 😒"
     }
 
+def auto_drink(current_state, thirst_before):
+    """Najika trinkt selbst (notgedrungen)"""
+    # Füllt nur bis max 50%
+    thirst_gain = 35.0
+    thirst_after = min(current_state["auto_care_max"], thirst_before + thirst_gain)
+
+    # Anger steigt (sie mag es nicht wenn sie selbst für sich sorgen muss)
+    current_state["anger_level"] += 8
+    current_state["mood_game"] -= 12
+
+    # Notification-Message
+    message = f"🥤 Najika hat sich selbst was zu trinken geholt (Thirst: {thirst_before:.0f}% → {thirst_after:.0f}%)\n"
+    message += f"😤 Sie ist nicht glücklich darüber! (Anger: {current_state['anger_level']:.0f}%)"
+
+    return {
+        "action": "auto_drink",
+        "thirst_before": thirst_before,
+        "thirst_after": thirst_after,
+        "anger_level": current_state["anger_level"],
+        "message": message,
+        "najika_says": "Musste mir selbst was zu trinken holen... 😤"
+    }
+
 def auto_wash(current_state, hygiene_before):
     """Najika geht selbst auf Toilette / wäscht sich"""
     # Füllt nur bis max 50%
@@ -743,6 +776,13 @@ def check_auto_care(current_state, najika_state=None):
     if current_state["energy"] < threshold:
         result = auto_sleep(current_state)
         actions.append(result)
+
+    # Thirst zu niedrig? (nur wenn najika_state übergeben wurde)
+    if najika_state and najika_state.get("thirst", 100) < threshold:
+        result = auto_drink(current_state, najika_state["thirst"])
+        actions.append(result)
+        # Update thirst in najika_state
+        najika_state["thirst"] = result["thirst_after"]
 
     # Hygiene zu niedrig? (nur wenn najika_state übergeben wurde)
     if najika_state and najika_state.get("hygiene", 100) < threshold:

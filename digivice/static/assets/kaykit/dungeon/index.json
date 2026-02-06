@@ -1,0 +1,40 @@
+{
+  "name": "KayKit Dungeon Pack",
+  "version": "1.0",
+  "format": "gltf",
+  "assets": [
+    "banner_blue", "banner_brown", "banner_green", "banner_red", "banner_white", "banner_yellow",
+    "barrel_large", "barrel_small", "barrel_small_stack",
+    "barrier", "barrier_column", "barrier_corner", "barrier_half",
+    "bed_decorated", "bed_floor", "bed_frame",
+    "bottle_A_brown", "bottle_A_green", "bottle_B_brown", "bottle_B_green",
+    "box_large", "box_small", "box_stacked",
+    "candle", "candle_lit", "candle_melted", "candle_thin", "candle_triple",
+    "ceiling_tile", "chair", "chest", "chest_gold",
+    "coin", "coin_stack_large", "coin_stack_medium", "coin_stack_small",
+    "column", "crates_stacked",
+    "floor_tile_large", "floor_tile_small", "floor_wood_large", "floor_wood_small",
+    "keg", "keg_decorated", "key", "keyring",
+    "pillar", "pillar_decorated",
+    "plate", "plate_food_A", "plate_food_B",
+    "shelf_large", "shelf_small", "shelves",
+    "stairs", "stairs_long", "stairs_narrow", "stairs_wide", "stairs_wood",
+    "stool", "sword_shield", "sword_shield_broken",
+    "table_long", "table_medium", "table_small",
+    "torch", "torch_lit", "torch_mounted",
+    "trunk_large_A", "trunk_medium_A", "trunk_small_A",
+    "wall", "wall_arched", "wall_broken", "wall_corner", "wall_doorway",
+    "wall_half", "wall_pillar", "wall_window_closed", "wall_window_open"
+  ],
+  "categories": {
+    "banners": ["banner_*"],
+    "barrels": ["barrel_*", "keg*"],
+    "furniture": ["bed_*", "chair", "stool", "table_*", "shelf_*", "shelves"],
+    "containers": ["box_*", "chest*", "trunk_*", "crates_*"],
+    "lighting": ["candle*", "torch*"],
+    "floors": ["floor_*", "ceiling_*"],
+    "walls": ["wall_*", "barrier*", "pillar*", "column"],
+    "stairs": ["stairs*"],
+    "decorations": ["bottle_*", "plate*", "coin*", "key*", "sword_*"]
+  }
+}

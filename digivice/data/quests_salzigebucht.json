@@ -31,7 +31,7 @@
                 "success": true,
                 "consequence": "Du findest heraus, dass sie von einem Fluch gefangen sind. Du brichst den Fluch.",
                 "rewards": {"gold": 800, "items": ["geister_kompass", "kapitaens_logbuch"], "title": "Geisterbefreier"},
-                "reputation": +50
+                "reputation": 50
               }
             },
             {
@@ -55,7 +55,7 @@
                 "success": true,
                 "consequence": "Die Geister werden befreit. Das Schiff löst sich auf.",
                 "rewards": {"exp": 2000, "items": ["heiliges_amulett"]},
-                "reputation": +40
+                "reputation": 40
               }
             }
           ]
@@ -156,7 +156,7 @@
                 "success": true,
                 "consequence": "Scarlett ist wütend, verzeiht dir aber später.",
                 "rewards": {"gold": 500},
-                "reputation": +30
+                "reputation": 30
               }
             }
           ]
@@ -219,7 +219,7 @@
                 "success": true,
                 "consequence": "Der Kraken beruhigt sich. Er wird dein Beschützer.",
                 "rewards": {"companion": "baby_kraken", "items": ["neptuns_segen"]},
-                "reputation": +200,
+                "reputation": 200,
                 "title": "Meeresretter"
               }
             }
@@ -297,7 +297,7 @@
               "najika_reaction": {"personality": "melissa", "text": "Weisheit. Manchmal ist weniger mehr."},
               "outcome": {
                 "consequence": "Du gehst leer aus, aber sicher.",
-                "reputation": +20
+                "reputation": 20
               }
             },
             {
@@ -309,7 +309,7 @@
                 "success": true,
                 "consequence": "Du brichst den Fluch! Der Schatz ist sicher!",
                 "rewards": {"gold": 3000, "items": ["entfluchte_krone", "gold_barren x10"]},
-                "reputation": +50,
+                "reputation": 50,
                 "title": "Fluchbrecher"
               }
             }

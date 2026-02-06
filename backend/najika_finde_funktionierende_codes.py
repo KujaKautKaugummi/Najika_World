@@ -9,7 +9,7 @@ import json
 import re
 
 SEARCH_DIRS = [
-    Path('C:/NajikaCore'),
+    Path('C:/Najika_World'),
     Path('C:/Users/0KKK0/Desktop/zip')
 ]
 

@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 SESSIONS_DIR = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
-OUTPUT = Path('C:/NajikaCore/GELERNT_AUS_ALLEN_SESSIONS.md')
+OUTPUT = Path('C:/Najika_World/GELERNT_AUS_ALLEN_SESSIONS.md')
 
 print('='*80)
 print('NAJIKA: Analysiere ALLE letzten Sessions')

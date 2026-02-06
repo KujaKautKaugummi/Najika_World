@@ -1,6 +1,9 @@
 // Najika Command System - Digimon World 1 Style
 // Rookie → Champion → Ultimate → Mega Evolution
 
+// API Base URL - Backend auf Port 8000
+const CMD_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
+
 class CommandSystem {
   constructor() {
     // Battle XP for evolution
@@ -279,7 +282,7 @@ class CommandSystem {
   async praise(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('/api/najika/praise', {
+      const response = await fetch(`${CMD_API_BASE}/api/najika/praise`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -344,7 +347,7 @@ class CommandSystem {
   async scold(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('/api/najika/scold', {
+      const response = await fetch(`${CMD_API_BASE}/api/najika/scold`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -452,7 +455,7 @@ class CommandSystem {
   // Sync happiness/discipline from server
   async syncFromServer() {
     try {
-      const response = await fetch('/api/status');
+      const response = await fetch(`${CMD_API_BASE}/api/status`);
       const data = await response.json();
       if (data.najika) {
         this.happiness = data.najika.happiness || 50;

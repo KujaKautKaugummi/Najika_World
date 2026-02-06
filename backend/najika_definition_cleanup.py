@@ -15,8 +15,8 @@ from collections import defaultdict
 
 # ===== CONFIG =====
 
-INPUT_FILE = Path("C:/NajikaCore/NAJIKA_FINALE_DEFINITION.md")
-OUTPUT_FILE = Path("C:/NajikaCore/NAJIKA_FINALE_DEFINITION_CLEAN.md")
+INPUT_FILE = Path("C:/Najika_World/NAJIKA_FINALE_DEFINITION.md")
+OUTPUT_FILE = Path("C:/Najika_World/NAJIKA_FINALE_DEFINITION_CLEAN.md")
 
 # ===== FUNCTIONS =====
 

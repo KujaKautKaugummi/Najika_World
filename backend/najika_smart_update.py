@@ -9,7 +9,7 @@ import re
 from pathlib import Path
 from datetime import datetime
 
-NAJIKA_DIR = Path("C:/NajikaCore")
+NAJIKA_DIR = Path("C:/Najika_World")
 CLAUDE_PROJECTS = Path("C:/Users/0KKK0/.claude/projects/C--NajikaCore")
 UPDATE_FILE = NAJIKA_DIR / "CLAUDE_SMART_UPDATE.md"
 

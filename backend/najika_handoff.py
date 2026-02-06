@@ -7,7 +7,7 @@ Usage:
     python najika_handoff.py <files/folders> --output <summary.md>
 
 Beispiel:
-    python najika_handoff.py "C:/NajikaCore/*.py" --output claude_summary.md
+    python najika_handoff.py "C:/Najika_World/*.py" --output claude_summary.md
 """
 
 import sys
@@ -248,7 +248,7 @@ def main():
         print()
         print("Beispiele:")
         print("  python najika_handoff.py '*.py' --output summary.md")
-        print("  python najika_handoff.py 'C:/NajikaCore/saves' --output saves_summary.md")
+        print("  python najika_handoff.py 'C:/Najika_World/saves' --output saves_summary.md")
         print("  python najika_handoff.py 'najika_server.py' --output server_summary.md")
         print()
         return

@@ -8,7 +8,7 @@ from datetime import datetime
 import pytz
 import subprocess
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 TRAINING_DIR = NAJIKA_DIR / 'training'
 SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
 

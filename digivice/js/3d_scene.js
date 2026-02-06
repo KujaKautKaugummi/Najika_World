@@ -1,5 +1,7 @@
 // Najika Digivice – Three.js scene manager with KayKit rooms, character controls and camera modes
 (function () {
+    // API Base URL - Backend auf Port 8000
+    const API_BASE = window.API_BASE_URL || 'http://localhost:8000';
     const CAMERA_MODES = {
         ORBIT: 'orbit',
         THIRD: 'third',
@@ -479,9 +481,11 @@
 
         if (closestBuilding) {
             nearBuilding = closestBuilding;
+            window.nearBuilding = closestBuilding; // Expose for combat system
             showBuildingPrompt(closestBuilding);
         } else {
             nearBuilding = null;
+            window.nearBuilding = null; // Expose for combat system
             hideBuildingPrompt();
         }
     }
@@ -1115,7 +1119,7 @@
         showFloatingMessage('💤 Najika schläft und regeneriert Energie...', '#7a8bff');
 
         try {
-            const response = await fetch('/api/najika/sleep', {
+            const response = await fetch(`${API_BASE}/api/najika/sleep`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1136,7 +1140,7 @@
         showFloatingMessage('🍳 Najika bereitet eine Mahlzeit zu...', '#ffb74d');
 
         try {
-            const response = await fetch('/api/najika/feed', {
+            const response = await fetch(`${API_BASE}/api/najika/feed`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1156,7 +1160,7 @@
         showFloatingMessage('🚿 Najika wird sauber und erfrischt...', '#8be6ff');
 
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch(`${API_BASE}/api/najika/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1177,7 +1181,7 @@
 
         // Toilet increases happiness slightly
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch(`${API_BASE}/api/najika/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1197,7 +1201,7 @@
         showFloatingMessage('🚰 Najika wäscht die Hände...', '#81d4fa');
 
         try {
-            const response = await fetch('/api/najika/wash', {
+            const response = await fetch(`${API_BASE}/api/najika/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1217,7 +1221,7 @@
         showFloatingMessage('🪑 Najika isst am Tisch...', '#ff9b71');
 
         try {
-            const response = await fetch('/api/najika/feed', {
+            const response = await fetch(`${API_BASE}/api/najika/feed`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1558,6 +1562,14 @@
     }
 
     function onKeyDown(event) {
+        // WICHTIG: Ignorieren wenn Chat-Input oder andere Input-Felder fokussiert sind
+        if (window.chatInputFocused ||
+            event.target.tagName === 'INPUT' ||
+            event.target.tagName === 'TEXTAREA' ||
+            event.target.isContentEditable) {
+            return;
+        }
+
         activeKeys.add(event.code);
         // F-Taste: Najika dreht sich zum Spieler
         if (event.code === 'KeyF') {

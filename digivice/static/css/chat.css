@@ -22,13 +22,13 @@
     width: 95%;
     max-width: 800px;
     height: 90vh;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
     border-radius: 20px;
-    border: 2px solid #667eea;
+    border: 2px solid #4CAF50;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(76, 175, 80, 0.3);
     animation: slideUp 0.3s ease;
 }
 
@@ -53,7 +53,7 @@
 
 .chat-header {
     padding: 1rem 1.5rem;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -127,11 +127,11 @@
 }
 
 .chat-message.user .chat-avatar {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #2196F3, #1565C0);
 }
 
 .chat-message.assistant .chat-avatar {
-    background: linear-gradient(135deg, #f093fb, #f5576c);
+    background: linear-gradient(135deg, #FFD700, #FF69B4);
 }
 
 .chat-bubble {
@@ -143,7 +143,7 @@
 }
 
 .chat-message.user .chat-bubble {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #2196F3, #1565C0);
     border-bottom-right-radius: 4px;
 }
 
@@ -170,7 +170,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #667eea;
+    background: #4CAF50;
     animation: typing 1.4s infinite;
 }
 
@@ -207,13 +207,13 @@
 }
 
 .chat-input-area input:focus {
-    border-color: #667eea;
+    border-color: #4CAF50;
     background: rgba(255, 255, 255, 0.08);
 }
 
 .chat-input-area button {
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
     border: none;
     border-radius: 25px;
     color: white;
@@ -223,7 +223,7 @@
 
 .chat-input-area button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.5);
 }
 
 .chat-input-area button:disabled {
@@ -242,10 +242,77 @@
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
     border-radius: 10px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #764ba2, #667eea);
+    background: linear-gradient(135deg, #66BB6A, #4CAF50);
+}
+
+/* System Messages */
+.chat-message.system {
+    justify-content: center;
+}
+
+.chat-message.system .chat-avatar {
+    background: linear-gradient(135deg, #666, #444);
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+}
+
+.chat-message.system .chat-bubble {
+    background: rgba(100, 100, 100, 0.3);
+    font-size: 0.85rem;
+    color: #aaa;
+    max-width: 80%;
+}
+
+/* Najika Emotes - Expression System */
+.najika-emote {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin-right: 6px;
+    animation: emoteWiggle 0.5s ease;
+}
+
+@keyframes emoteWiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+/* Mood indicators */
+.chat-message.assistant.mood-explosion .chat-avatar {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    animation: explosionPulse 0.8s ease infinite;
+}
+
+.chat-message.assistant.mood-happy .chat-avatar {
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+}
+
+.chat-message.assistant.mood-thinking .chat-avatar {
+    background: linear-gradient(135deg, #00bcd4, #4dd0e1);
+}
+
+.chat-message.assistant.mood-love .chat-avatar {
+    background: linear-gradient(135deg, #e91e63, #f48fb1);
+}
+
+@keyframes explosionPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(255, 107, 53, 0.9); }
+}
+
+/* Message with EXPLOSION! */
+.chat-bubble.has-explosion {
+    border: 2px solid #ff6b35;
+    animation: explosionBorder 1s ease;
+}
+
+@keyframes explosionBorder {
+    0% { border-color: #ff6b35; box-shadow: 0 0 30px rgba(255, 107, 53, 0.8); }
+    100% { border-color: transparent; box-shadow: none; }
 }

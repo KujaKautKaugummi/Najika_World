@@ -40,11 +40,13 @@ class AssetLoader {
   async loadAssetMapping(mappingPath = '/data/asset_mapping.json') {
     try {
       const response = await fetch(mappingPath);
+      if (!response.ok) throw new Error(`Asset mapping fetch failed: ${response.status}`);
       this.assetMapping = await response.json();
       console.log('📦 Asset mapping loaded');
       return true;
     } catch (error) {
       console.error('❌ Failed to load asset mapping:', error);
+      this.assetMapping = {}; // Fallback empty mapping
       return false;
     }
   }

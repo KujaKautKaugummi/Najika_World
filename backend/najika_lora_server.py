@@ -18,7 +18,7 @@ from peft import PeftModel
 
 # ===== CONFIG =====
 
-LORA_ADAPTER = "C:/NajikaCore/lora_checkpoints/najika_lora_latest"
+LORA_ADAPTER = "C:/Najika_World/lora_checkpoints/najika_lora_latest"
 BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct"
 PORT = 11435  # Port 11435 (Ollama ist 11434)
 
@@ -49,7 +49,7 @@ try:
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True,
-        offload_folder="C:/NajikaCore/offload_temp"  # Nutze Disk für Offload
+        offload_folder="C:/Najika_World/offload_temp"  # Nutze Disk für Offload
     )
 
     # Lade Tokenizer
@@ -61,7 +61,7 @@ try:
     model = PeftModel.from_pretrained(
         base_model,
         LORA_ADAPTER,
-        offload_folder="C:/NajikaCore/offload_temp"
+        offload_folder="C:/Najika_World/offload_temp"
     )
 
     print("✅ Model geladen!")

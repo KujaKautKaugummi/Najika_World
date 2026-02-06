@@ -144,7 +144,7 @@ class NajikaAutonomousSearch:
                     output.append(f"- {f}")
                 output.append("")
 
-        output_file = "C:/NajikaCore/NAJIKA_DISCOVERED_FILES.md"
+        output_file = "C:/Najika_World/NAJIKA_DISCOVERED_FILES.md"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write("\n".join(output))
 

@@ -177,6 +177,14 @@ class RealtimeCombat {
 
     bindControls() {
         window.addEventListener('keydown', (e) => {
+            // WICHTIG: Ignorieren wenn Chat-Input oder andere Input-Felder fokussiert sind
+            if (window.chatInputFocused ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.isContentEditable) {
+                return;
+            }
+
             const key = e.key.toLowerCase();
             if (key in this.keys) this.keys[key] = true;
 

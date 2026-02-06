@@ -17,9 +17,9 @@ from collections import defaultdict
 
 # ===== CONFIG =====
 
-DIGIVICE_DIR = Path("C:/NajikaCore/digivice")
-GAME_DESIGN_JSON = Path("C:/NajikaCore/NAJIKA_GAME_DESIGN.json")
-OUTPUT_DIR = Path("C:/NajikaCore")
+DIGIVICE_DIR = Path("C:/Najika_World/digivice")
+GAME_DESIGN_JSON = Path("C:/Najika_World/NAJIKA_GAME_DESIGN.json")
+OUTPUT_DIR = Path("C:/Najika_World")
 
 # Aktuelle Features (im Digivice vorhanden)
 CURRENT_FEATURES = {

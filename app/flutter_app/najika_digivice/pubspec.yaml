@@ -116,6 +116,20 @@ dependencies:
   package_info_plus: ^5.0.1
   url_launcher: ^6.2.3
 
+  # ============================================================================
+  # WEBVIEW (for Three.js Lebensraum)
+  # ============================================================================
+  webview_flutter: ^4.4.2
+  webview_flutter_android: ^3.12.1
+  webview_flutter_wkwebview: ^3.9.2
+
+  # ============================================================================
+  # AUDIO (for TTS/STT)
+  # ============================================================================
+  record: ^5.0.4
+  audioplayers: ^5.2.1
+  just_audio: ^0.9.36
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -131,6 +145,10 @@ flutter:
     - assets/images/
     - assets/images/najika/
     - assets/lottie/
+    - assets/web/
+    - assets/web/js/
+    - assets/web/css/
+    - assets/web/data/
 
   # Fonts (Gothic Lolita theme)
   fonts:

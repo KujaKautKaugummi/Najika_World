@@ -33,8 +33,8 @@ except ImportError:
 
 # ===== CONFIG =====
 
-GRUNDSTEIN_FILE = Path("C:/NajikaCore/grundstein_output/NAJIKA_GRUNDSTEIN.json")
-OUTPUT_DIR = Path("C:/NajikaCore/grundstein_output")
+GRUNDSTEIN_FILE = Path("C:/Najika_World/grundstein_output/NAJIKA_GRUNDSTEIN.json")
+OUTPUT_DIR = Path("C:/Najika_World/grundstein_output")
 
 # ===== GRUNDSTEIN UI =====
 

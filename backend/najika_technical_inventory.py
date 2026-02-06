@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 OUTPUT_FILE = Path('C:/Users/0KKK0/Desktop/NAJIKACORE_TECHNISCHER_STATUS.txt')
 
 # Wichtige Config/Code Files

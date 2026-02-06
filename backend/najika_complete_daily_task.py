@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import subprocess
 
-NAJIKA_DIR = Path("C:/NajikaCore")
+NAJIKA_DIR = Path("C:/Najika_World")
 TRAINING_DIR = NAJIKA_DIR / "training"
 PROGRESS_FILE = TRAINING_DIR / "progress.json"
 

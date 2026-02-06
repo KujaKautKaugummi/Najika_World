@@ -627,6 +627,14 @@
 
     function setupKeyboardHandler() {
         document.addEventListener('keydown', (e) => {
+            // Ignorieren wenn Chat-Input oder andere Input-Felder fokussiert sind
+            if (window.chatInputFocused ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.isContentEditable) {
+                return;
+            }
+
             // T: Open Shop (global - immer verfügbar)
             if (e.code === 'KeyT') {
                 if (shopUI && shopUI.style.display === 'block') {

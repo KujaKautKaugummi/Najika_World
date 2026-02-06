@@ -30,7 +30,7 @@ class NajikaExternalDataImporter:
 
     def __init__(
         self,
-        import_log="C:/NajikaCore/external_import_log.json",
+        import_log="C:/Najika_World/external_import_log.json",
         github_token=None  # Optional: GitHub Personal Access Token
     ):
         self.import_log_file = import_log

@@ -5,7 +5,7 @@ NAJIKA PERSONALITY IMPORTER
 Importiert Text-Dateien als Persönlichkeits-Daten
 
 VERWENDUNG:
-1. Lege .txt Dateien in C:/NajikaCore/personality_sources/
+1. Lege .txt Dateien in C:/Najika_World/personality_sources/
 2. Benenne sie: CATEGORY_description.txt
    z.B.: SAKURA_beispiel1.txt, HARLEY_witzig.txt
 3. Führe dieses Script aus oder nutze IMPORT_PERSONALITIES.bat
@@ -30,8 +30,8 @@ class PersonalityImporter:
 
     def __init__(
         self,
-        source_dir="C:/NajikaCore/personality_sources",
-        import_log="C:/NajikaCore/personality_import_log.json"
+        source_dir="C:/Najika_World/personality_sources",
+        import_log="C:/Najika_World/personality_import_log.json"
     ):
         self.source_dir = source_dir
         self.import_log_file = import_log

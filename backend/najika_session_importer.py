@@ -32,7 +32,7 @@ class NajikaSessionImporter:
     def __init__(
         self,
         sessions_dir="C:/Users/0KKK0/.claude/projects",
-        import_log="C:/NajikaCore/session_import_log.json"
+        import_log="C:/Najika_World/session_import_log.json"
     ):
         self.sessions_dir = sessions_dir
         self.import_log_file = import_log

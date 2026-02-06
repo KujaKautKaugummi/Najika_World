@@ -4,7 +4,7 @@ NAJIKA: Update CLAUDE.md mit PFLICHT-START Sektion
 """
 from pathlib import Path
 
-CLAUDE_MD = Path('C:/NajikaCore/CLAUDE.md')
+CLAUDE_MD = Path('C:/Najika_World/CLAUDE.md')
 
 # Lese aktuelle Datei
 content = CLAUDE_MD.read_text(encoding='utf-8')

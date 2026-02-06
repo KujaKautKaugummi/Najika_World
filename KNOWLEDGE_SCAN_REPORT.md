@@ -1,0 +1,169 @@
+# 🔍 NAJIKA KNOWLEDGE SCAN REPORT
+
+**Scan-Datum:** 2026-02-05T12:52:55.546558
+
+## 📊 Statistiken
+
+- **Gesamt:** 29834 Dateien
+- **.md:** 25619
+- **.txt:** 923
+- **.json:** 3050
+- **.pdf:** 242
+- **Wichtige Docs:** 467
+- **Potenziell vergessen:** 498
+
+## ⚠️ Wichtige Dokumente
+
+- `00_FINALE_KOMPLETT_UEBERSICHT_V7.md`
+- `ALLE_UEBERSICHTEN_GESAMMELT.md`
+- `BROWSER_CACHE_FINAL_FIX.md`
+- `CHAOS_EVENT_SYSTEM_TODO.md`
+- `CLAUDE.md`
+- `CLAUDE_CODE_CLI_NAJIKA_VOLLSTAENDIGE_ANWEISUNG.md`
+- `CLAUDE_CODE_WEB_LEITFADEN.md`
+- `CLAUDE_SESSION_HANDOFF_2025_11_03.md`
+- `CLAUDE_SESSION_HANDOFF_2025_11_04.md`
+- `CLAUDE_TEAM_ONBOARDING.md`
+- `CLAUDE_ULTIMATIVE_UEBERSICHT_2026-01-27.md`
+- `CLAUDE_ULTIMATIVE_UEBERSICHT_V2.md`
+- `COMBAT_STATUS_SYNC_KOMPLETT_GEFIXT.md`
+- `COMPLETE_INTEGRATION_FINAL.md`
+- `DIGIVICE_UE5_MIGRATION_COMPLETE_TODO.md`
+- `DOCS\CLAUDE.md`
+- `DOCS\CLAUDE_CODE_INTEGRATION.md`
+- `DOCS\CLAUDE_LEVEL_ROADMAP.md`
+- `DOCS\CLAUDE_MASTER_WORKINGDOC.md`
+- `DOCS\CLAUDE_PFLICHT_START.md`
+- `DOCS\CLAUDE_SMART_UPDATE.md`
+- `DOCS\CLAUDE_UPDATE.md`
+- `DOCS\ECHOHARP_LORE_KOMPLETT.md`
+- `DOCS\FINALE_ZUSAMMENFASSUNG.md`
+- `DOCS\FINAL_HANDOFF.md`
+- `DOCS\NAJIKA_AKTUELLER_STAND_KOMPLETT.md`
+- `DOCS\NAJIKA_CLAUDE_SYNC_GUIDE.md`
+- `DOCS\NAJIKA_FEATURES_KOMPLETT.md`
+- `DOCS\NAJIKA_FINALE_DEFINITION.md`
+- `DOCS\NAJIKA_FINALE_DEFINITION_CLEAN.md`
+- `DOCS\NAJIKA_FINAL_DESIGN.md`
+- `DOCS\NAJIKA_GAME_DESIGN_KOMPLETT.md`
+- `DOCS\NAJIKA_GAME_DESIGN_UEBERSICHT.md`
+- `DOCS\NAJIKA_KOMPLETTE_UEBERSICHT_FINAL.md`
+- `DOCS\NAJIKA_MASTER_INDEX.md`
+- `DOCS\NAJIKA_MASTER_KERN_KOMPLETT.md`
+- `DOCS\NAJIKA_MASTER_ZUSAMMENFASSUNG.md`
+- `DOCS\NAJIKA_MODELS_OVERVIEW.md`
+- `DOCS\NAJIKA_ROADMAP.md`
+- `DOCS\ROADMAP_EMPFEHLUNGEN.md`
+- `DOCS\WAS_LIEGT_BEREIT_ZUSAMMENFASSUNG.md`
+- `DOCS\WICHTIG_VIDEO_TRAINING_ERKLAERUNG.md`
+- `DOCS\WIE_GUTER_CLAUDE_ARBEITET.md`
+- `DOCS\backend\CLAUDE.md`
+- `DOCS\backend\CLAUDE_CODE_INTEGRATION.md`
+- `DOCS\backend\CLAUDE_MASTER_WORKINGDOC.md`
+- `DOCS\backend\CLAUDE_PFLICHT_START.md`
+- `DOCS\backend\CLAUDE_SMART_UPDATE.md`
+- `DOCS\backend\CLAUDE_UPDATE.md`
+- `DOCS\backend\FINALE_ZUSAMMENFASSUNG.md`
+
+## 🔎 Potenziell vergessene Ressourcen
+
+- `aasd\### 11-Erstellung von Najika als KI.pdf`
+- `aasd\1111111111111111.txt`
+- `aasd\NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md`
+- `aasd\Projekt Najika – Allumfassende Übersicht.pdf`
+- `aasd\Projektübersicht __Najika__ – Technik & Konzept.pdf`
+- `aasd\Umfassende Projektübersicht und Replizierungsanleitung.pdf`
+- `aasd\Umfassende detaillierte Projektübersicht.pdf`
+- `aasd\roadmap.pdf`
+- `aasd\ultimative giga explosion.pdf`
+- `alles wissen\NAJIKA_SUCHE_20251022_202857.txt`
+- `alles wissen\Najika finale\00_MASTER_INDEX_LESEN.md`
+- `alles wissen\Najika finale\01_START_HIER_8_GEBOTE.md`
+- `alles wissen\Najika finale\02_V5_HANDOFF.md`
+- `alles wissen\Najika finale\03_FEATURES_STATUS.md`
+- `alles wissen\Najika finale\04_ANATOMIE_KAETZCHEN.md`
+- `alles wissen\Najika finale\05_COMBAT_SYSTEM.md`
+- `alles wissen\Najika finale\06_MASTER_ZUSAMMENFASSUNG.md`
+- `alles wissen\Najika finale\07_KONOSUBA_OREGON_EVENTS.md`
+- `alles wissen\Najika finale\08_1_SKILL_WEG_SYSTEM.md`
+- `alles wissen\Najika finale\12_TRAINING_SYSTEM.md`
+- `alles wissen\Najika finale\BEKANNTE_FEHLER_FIXEN.md`
+- `alles wissen\Najika finale\NAJIKA_8_GEBOTE_UND_PDF_MASTER.md`
+- `alles wissen\Najika finale\NAJIKA_FEATURES_KOMPLETT.md`
+- `alles wissen\Najika finale\NAJIKA_V5_HANDOFF_NAECHSTE_KI.md`
+- `alles wissen\Najika finale\NAJIKA_V7_PLAN_FINAL.md`
+- `alles wissen\Najika finale\PFLICHT_DOKUMENTE_FUER_NAECHSTE_KI.md`
+- `alles wissen\Najika finale\TRAINING_SYSTEM_KOMPLETT.md`
+- `alles wissen\Najika finale\TRAINING_UND_AVATAR_INFO.md`
+- `alles wissen\Najika finalee\NAJIKA_VOLLSTAENDIGE_SPEZIFIKATION_V6.md`
+- `alles wissen\Najika finalee\PHASE3_ALLE_FUNDE_ZUSAMMENFASSUNG.md`
+- `alles wissen\Najika finalee\PHASE3_CLAUDE_SESSIONS_IDEEN.md`
+- `alles wissen\Najika finalee\PHASE3_NAJIKACORE_IDEEN.md`
+- `alles wissen\Najika finalee\PHASE3_ZIP_ORDNER_IDEEN.md`
+- `alles wissen\Najika finalee\grund idee ki nicht perfekt\NAJIKA_PROJEKT_KONZEPT_UEBERSICHT.md`
+- `alles wissen\Najika finalee\grund idee ki nicht perfekt\NAJIKA_PROJEKT_ZUSAMMENFASSUNG.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\KONOSUBA_OREGON_TRAIL_KOMPLETT.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\KONOSUBA_OREGON_TRAIL_TEIL1_GRUNDKONZEPT.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\KONOSUBA_OREGON_TRAIL_TEIL2_KLASSEN_EVENTS.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_MASTER_INDEX.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_PROJEKT_ERGAENZUNGEN_V2.5.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_PROJEKT_KOMPLETT_V3_MIT_UNSERER_KI.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_PROJEKT_V4_ERGAENZUNGEN.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_PROJEKT_V4_OPTIONAL_SAMMLUNG.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\NAJIKA_VOLLSTAENDIGE_PROJEKT_UEBERSICHT_V2.md`
+- `alles wissen\Najika finalee\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\V3_ERSTELLUNGS_BERICHT.md`
+- `alles wissen\Najika finalee\najika installer nach claud zusammenfassung v 2 plus 2.5 extra infos\INSTALLATION_GUIDE.md`
+- `alles wissen\Najika finalee\zusammenfassung aus allen datein lokal kann sein das dinge fehlen oder falsch sind\NAJIKA_VOLLSTAENDIGE_GAMEPLAY_MECHANIKEN.md`
+- `alles wissen\alte_versionen_archiv\AENDERUNGEN_HEUTE.md`
+- `alles wissen\alte_versionen_archiv\API_REFERENCE.md`
+- `alles wissen\alte_versionen_archiv\AUDIO_UND_PFADE_GEFIXT.md`
+- `alles wissen\alte_versionen_archiv\CLAUDE_CODE_INTEGRATION.md`
+- `alles wissen\alte_versionen_archiv\CLAUDE_MASTER_WORKINGDOC.md`
+- `alles wissen\alte_versionen_archiv\CLAUDE_PFLICHT_START.md`
+- `alles wissen\alte_versionen_archiv\CLAUDE_SMART_UPDATE.md`
+- `alles wissen\alte_versionen_archiv\CLAUDE_UPDATE.md`
+- `alles wissen\alte_versionen_archiv\CODE_TRAINING_FUNKTIONIERT.md`
+- `alles wissen\alte_versionen_archiv\COMBAT_STATUS_SYNC_KOMPLETT_GEFIXT.md`
+- `alles wissen\alte_versionen_archiv\COMBAT_UI_EXIT_GEFIXT.md`
+- `alles wissen\alte_versionen_archiv\DISCIPLINE_SYSTEM_GEFIXT.md`
+- `alles wissen\alte_versionen_archiv\DUNGEON_SYSTEM_GUIDE.md`
+- `alles wissen\alte_versionen_archiv\FINALE_SESSION_REPORT.md`
+- `alles wissen\alte_versionen_archiv\GELERNT_AUS_ALLEN_SESSIONS.md`
+- `alles wissen\alte_versionen_archiv\HAPPINESS_DISCIPLINE_SYNC_GEFIXT.md`
+- `alles wissen\alte_versionen_archiv\INSTALLATION_ERFOLGREICH.md`
+- `alles wissen\alte_versionen_archiv\INSTALLER_ANALYSE_UND_FIXES.md`
+- `alles wissen\alte_versionen_archiv\INSTALLER_PROBLEM_ANALYSE.md`
+- `alles wissen\alte_versionen_archiv\INSTALLER_UPLOAD_PACKAGE_LISTE.md`
+- `alles wissen\alte_versionen_archiv\KORREKTUR_FEHLER.md`
+- `alles wissen\alte_versionen_archiv\MEGUMIN_VOICE_CLONE_INTEGRIERT.md`
+- `alles wissen\alte_versionen_archiv\MERGE_ERFOLG.md`
+- `alles wissen\alte_versionen_archiv\MOBILE_APP_ARCHITECTURE.md`
+- `alles wissen\alte_versionen_archiv\MONTAG_READY_ANLEITUNG.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_3D_CHARACTER.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_3D_MODEL_SPECS.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_AKTUELLER_STAND_KOMPLETT.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_AUTO_LEARNING_PLAN.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_CATEGORIZATION_COMPLETE.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_CATEGORIZATION_FILTERED.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_CLAUDE_SYNC_GUIDE.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_COMBAT_SYSTEM_DESIGN.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_CURRENT_TRAINING.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_DAILY_TASK.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_DISCOVERED_FILES.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_DOKUMENTATION_STATUS.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_EXTRACTION_TASK.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_FEATURES_KOMPLETT.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_FINALE_DEFINITION.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_FINALE_DEFINITION_CLEAN.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_FINAL_DESIGN.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_GAME_DESIGN_COMPLETE.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_GAME_DESIGN_KOMPLETT.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_GAME_DESIGN_UEBERSICHT.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_KI_KERN_FEST.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_KOMPLETTE_UEBERSICHT_FINAL.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_LORA_README.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_LORA_STATUS.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_LORA_SYSTEM_FERTIG.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_MASTER_INDEX.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_MASTER_KERN_KOMPLETT.md`
+- `alles wissen\alte_versionen_archiv\NAJIKA_MASTER_ZUSAMMENFASSUNG.md`

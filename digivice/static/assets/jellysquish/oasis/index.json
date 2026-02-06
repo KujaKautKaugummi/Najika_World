@@ -1,0 +1,26 @@
+{
+  "name": "JellySquish Oasis Pack",
+  "version": "1.0",
+  "format": "glb",
+  "assets": [
+    "basket_large", "basket_small",
+    "blue_grass_large", "blue_grass_small",
+    "cactus_large", "cactus_small",
+    "chest",
+    "grass_1", "grass_2", "grass_3",
+    "house_large", "house_small",
+    "ladder",
+    "palm_l", "palm_m", "palm_s",
+    "platform_l", "platform_m", "platform_s",
+    "pot_l", "pot_s",
+    "rocks_1", "rocks_2", "rocks_3",
+    "steps"
+  ],
+  "categories": {
+    "vegetation": ["palm_*", "cactus_*", "grass_*", "blue_grass_*"],
+    "buildings": ["house_*"],
+    "props": ["basket_*", "chest", "pot_*", "ladder", "steps"],
+    "terrain": ["rocks_*", "platform_*"]
+  },
+  "biome": "desert"
+}

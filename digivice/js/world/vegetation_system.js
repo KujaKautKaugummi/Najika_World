@@ -1,14 +1,196 @@
 // 🌿 VEGETATION SYSTEM - Verwaltet Vegetation-Placement pro Biome
 // Platziert Bäume, Pflanzen, Mushrooms, Cacti basierend auf Biome-Daten
 
+// ============================================================================
+// INSTANCED MESH INFRASTRUCTURE (Performance Optimization)
+// ============================================================================
+
+/**
+ * SPATIAL GRID - Fast proximity queries
+ * Divides world into grid cells for O(1) spatial lookups
+ */
+class SpatialGrid {
+  constructor(cellSize = 50) {
+    this.cellSize = cellSize;
+    this.grid = new Map(); // cellKey → Set<instanceId>
+  }
+
+  getCellKey(x, z) {
+    const cx = Math.floor(x / this.cellSize);
+    const cz = Math.floor(z / this.cellSize);
+    return `${cx},${cz}`;
+  }
+
+  insert(instanceId, position) {
+    const key = this.getCellKey(position.x, position.z);
+    if (!this.grid.has(key)) {
+      this.grid.set(key, new Set());
+    }
+    this.grid.get(key).add(instanceId);
+  }
+
+  remove(instanceId, position) {
+    const key = this.getCellKey(position.x, position.z);
+    const cell = this.grid.get(key);
+    if (cell) {
+      cell.delete(instanceId);
+      if (cell.size === 0) {
+        this.grid.delete(key);
+      }
+    }
+  }
+
+  queryRadius(position, radius) {
+    const results = [];
+    const minCellX = Math.floor((position.x - radius) / this.cellSize);
+    const maxCellX = Math.floor((position.x + radius) / this.cellSize);
+    const minCellZ = Math.floor((position.z - radius) / this.cellSize);
+    const maxCellZ = Math.floor((position.z + radius) / this.cellSize);
+
+    for (let cx = minCellX; cx <= maxCellX; cx++) {
+      for (let cz = minCellZ; cz <= maxCellZ; cz++) {
+        const key = `${cx},${cz}`;
+        const cell = this.grid.get(key);
+        if (cell) {
+          results.push(...cell);
+        }
+      }
+    }
+    return results;
+  }
+
+  clear() {
+    this.grid.clear();
+  }
+}
+
+/**
+ * INSTANCE METADATA - Stores per-instance data
+ */
+class InstanceMetadata {
+  constructor(instanceId, type, position, rotation, scale) {
+    this.id = instanceId;
+    this.type = type;
+    this.position = position.clone();
+    this.rotation = rotation;
+    this.scale = scale;
+    this.visible = true;
+  }
+}
+
+/**
+ * INSTANCED MESH DATA - Manages one instanced mesh (one vegetation type)
+ */
+class InstancedMeshData {
+  constructor(geometry, material, maxInstances) {
+    this.mesh = new THREE.InstancedMesh(geometry, material, maxInstances);
+    this.count = 0; // Current active count
+    this.maxCount = maxInstances;
+
+    // Visibility tracking (for dynamic removal)
+    this.visibilityArray = new Float32Array(maxInstances);
+    this.visibilityArray.fill(1.0); // All visible by default
+
+    // Free slots (for reuse after removal)
+    this.freeSlots = [];
+
+    // Instance ID mapping
+    this.indexToId = new Map(); // instanceIndex → instanceId
+    this.idToIndex = new Map(); // instanceId → instanceIndex
+  }
+
+  allocateInstance(instanceId) {
+    let index;
+    if (this.freeSlots.length > 0) {
+      // Reuse freed slot
+      index = this.freeSlots.pop();
+    } else if (this.count < this.maxCount) {
+      // Allocate new slot
+      index = this.count++;
+    } else {
+      // Buffer full
+      return null;
+    }
+
+    this.indexToId.set(index, instanceId);
+    this.idToIndex.set(instanceId, index);
+    this.visibilityArray[index] = 1.0; // Visible
+    return index;
+  }
+
+  freeInstance(instanceId) {
+    const index = this.idToIndex.get(instanceId);
+    if (index !== undefined) {
+      this.visibilityArray[index] = 0.0; // Hide
+      this.freeSlots.push(index);
+      this.indexToId.delete(index);
+      this.idToIndex.delete(instanceId);
+      return true;
+    }
+    return false;
+  }
+
+  dispose() {
+    this.mesh.geometry.dispose();
+    if (Array.isArray(this.mesh.material)) {
+      this.mesh.material.forEach(m => m.dispose());
+    } else {
+      this.mesh.material.dispose();
+    }
+  }
+}
+
+/**
+ * REGION INSTANCED VEGETATION - Manages all instanced meshes for one region
+ */
+class RegionInstancedVegetation {
+  constructor(regionId) {
+    this.regionId = regionId;
+
+    // Map<vegetationType, InstancedMeshData>
+    this.instancedMeshes = new Map();
+
+    // Spatial index for fast queries
+    this.spatialGrid = new SpatialGrid(50);
+
+    // Instance metadata tracking
+    // Map<instanceId, InstanceMetadata>
+    this.instanceMetadata = new Map();
+
+    this.nextInstanceId = 0;
+  }
+
+  dispose() {
+    // Dispose all instanced meshes
+    for (const instancedMeshData of this.instancedMeshes.values()) {
+      instancedMeshData.dispose();
+    }
+    this.instancedMeshes.clear();
+    this.instanceMetadata.clear();
+    this.spatialGrid.clear();
+  }
+}
+
+// ============================================================================
+// VEGETATION SYSTEM (Main Class)
+// ============================================================================
 
 class VegetationSystem {
   constructor(scene, terrainGenerator) {
     this.scene = scene;
     this.terrainGenerator = terrainGenerator;
+
+    // Legacy implementation (kept for compatibility during migration)
     this.vegetationGroups = new Map();  // Per-region vegetation groups
     this.vegetationTemplates = new Map();  // Reusable geometries
-    this.instancedMeshes = new Map();  // For performance optimization
+    this.instancedMeshes = new Map();  // For performance optimization (unused)
+
+    // NEW: Instanced mesh implementation
+    this.instancedRegions = new Map();  // regionId → RegionInstancedVegetation
+    this.useInstancing = true;  // Feature flag (set to false to use legacy)
+    this.bufferOverhead = 1.3;  // Allocate 30% extra for dynamic spawning
+
+    console.log('[VEGETATION SYSTEM] 🌿 Initialized (Instancing: ' + this.useInstancing + ')');
   }
 
   /**
@@ -211,12 +393,26 @@ class VegetationSystem {
   }
 
   /**
-   * Populate Region mit Vegetation
+   * Populate Region mit Vegetation (Wrapper with feature flag)
    * @param {string} regionId - Region ID
    * @param {Object} regionData - Region data from regions.json
    * @param {Object} biomeData - Biome data from biomes.json
    */
   populateRegion(regionId, regionData, biomeData) {
+    if (this.useInstancing) {
+      return this.populateRegionInstanced(regionId, regionData, biomeData);
+    } else {
+      return this.populateRegionLegacy(regionId, regionData, biomeData);
+    }
+  }
+
+  /**
+   * Populate Region mit Vegetation (LEGACY - individual meshes)
+   * @param {string} regionId - Region ID
+   * @param {Object} regionData - Region data from regions.json
+   * @param {Object} biomeData - Biome data from biomes.json
+   */
+  populateRegionLegacy(regionId, regionData, biomeData) {
     console.log(`🌿 Populating vegetation: ${regionData.name}`);
 
     const biome = biomeData.biomes[regionData.biome];
@@ -308,9 +504,20 @@ class VegetationSystem {
   }
 
   /**
-   * Remove vegetation for a region (for streaming)
+   * Remove vegetation for a region (Wrapper with feature flag)
    */
   removeRegionVegetation(regionId) {
+    if (this.useInstancing) {
+      return this.removeRegionVegetationInstanced(regionId);
+    } else {
+      return this.removeRegionVegetationLegacy(regionId);
+    }
+  }
+
+  /**
+   * Remove vegetation for a region (LEGACY)
+   */
+  removeRegionVegetationLegacy(regionId) {
     const vegetationGroup = this.vegetationGroups.get(regionId);
     if (vegetationGroup) {
       this.scene.remove(vegetationGroup);
@@ -347,12 +554,26 @@ class VegetationSystem {
   }
 
   /**
-   * Get vegetation at position (for collision, interaction)
+   * Get vegetation at position (Wrapper with feature flag)
+   * @param {THREE.Vector3} position
+   * @param {number} radius
+   * @returns {Array<THREE.Object3D|Object>} Nearby vegetation
+   */
+  getVegetationNear(position, radius = 5) {
+    if (this.useInstancing) {
+      return this.getVegetationNearInstanced(position, radius);
+    } else {
+      return this.getVegetationNearLegacy(position, radius);
+    }
+  }
+
+  /**
+   * Get vegetation at position (LEGACY)
    * @param {THREE.Vector3} position
    * @param {number} radius
    * @returns {Array<THREE.Object3D>} Nearby vegetation
    */
-  getVegetationNear(position, radius = 5) {
+  getVegetationNearLegacy(position, radius = 5) {
     const nearby = [];
 
     for (const group of this.vegetationGroups.values()) {
@@ -368,9 +589,20 @@ class VegetationSystem {
   }
 
   /**
-   * Remove vegetation at position (for harvesting, destruction)
+   * Remove vegetation at position (Wrapper with feature flag)
    */
   removeVegetationAt(position, radius = 2) {
+    if (this.useInstancing) {
+      return this.removeVegetationAtInstanced(position, radius);
+    } else {
+      return this.removeVegetationAtLegacy(position, radius);
+    }
+  }
+
+  /**
+   * Remove vegetation at position (LEGACY)
+   */
+  removeVegetationAtLegacy(position, radius = 2) {
     let removedCount = 0;
 
     for (const group of this.vegetationGroups.values()) {
@@ -397,9 +629,20 @@ class VegetationSystem {
   }
 
   /**
-   * Spawn vegetation at position (for replanting, growth)
+   * Spawn vegetation at position (Wrapper with feature flag)
    */
   spawnVegetationAt(type, position) {
+    if (this.useInstancing) {
+      return this.spawnVegetationAtInstanced(type, position);
+    } else {
+      return this.spawnVegetationAtLegacy(type, position);
+    }
+  }
+
+  /**
+   * Spawn vegetation at position (LEGACY)
+   */
+  spawnVegetationAtLegacy(type, position) {
     // Find which region this position belongs to
     for (const [regionId, group] of this.vegetationGroups.entries()) {
       // Simple bounds check (TODO: proper region lookup)
@@ -434,6 +677,302 @@ class VegetationSystem {
       totalVegetation: totalVegetation,
       templatesLoaded: this.vegetationTemplates.size
     };
+  }
+
+  // ========================================================================
+  // INSTANCED MESH IMPLEMENTATION (New Performance-Optimized Methods)
+  // ========================================================================
+
+  /**
+   * Populate Region with INSTANCED vegetation (Performance-optimized)
+   */
+  populateRegionInstanced(regionId, regionData, biomeData) {
+    console.log(`🌿 Populating vegetation (INSTANCED): ${regionData.name}`);
+
+    const biome = biomeData.biomes[regionData.biome];
+    if (!biome || !biome.vegetation) {
+      console.warn(`  ⚠️ No vegetation config for ${regionData.biome}`);
+      return;
+    }
+
+    const { types, density } = biome.vegetation;
+    const { bounds } = regionData;
+
+    // Create instanced vegetation manager for region
+    const regionInstanced = new RegionInstancedVegetation(regionId);
+    this.instancedRegions.set(regionId, regionInstanced);
+
+    // Group vegetation by type DURING generation
+    const vegetationByType = new Map();
+
+    // Calculate and pre-generate positions
+    const width = bounds.maxX - bounds.minX;
+    const height = bounds.maxZ - bounds.minZ;
+    const area = width * height;
+    const vegetationCount = Math.floor(area * density);
+
+    for (let i = 0; i < vegetationCount; i++) {
+      const x = bounds.minX + Math.random() * width;
+      const z = bounds.minZ + Math.random() * height;
+      const y = this.terrainGenerator.getHeightAt(regionId, x, z);
+
+      if (y < 0.5 || this.isPositionTooSteep(regionId, x, z)) continue;
+
+      const type = types[Math.floor(Math.random() * types.length)];
+
+      if (!vegetationByType.has(type)) {
+        vegetationByType.set(type, []);
+      }
+
+      vegetationByType.get(type).push({
+        position: new THREE.Vector3(x, y, z),
+        rotation: Math.random() * Math.PI * 2,
+        scale: 0.8 + Math.random() * 0.4
+      });
+    }
+
+    // Create instanced mesh for each type
+    let totalPlaced = 0;
+    for (const [type, instances] of vegetationByType.entries()) {
+      this.createInstancedVegetationGroup(
+        regionId,
+        regionInstanced,
+        type,
+        instances
+      );
+      totalPlaced += instances.length;
+    }
+
+    console.log(`  ✅ Placed ${totalPlaced} vegetation items (${regionInstanced.instancedMeshes.size} instanced meshes)`);
+  }
+
+  /**
+   * Create instanced mesh group for one vegetation type
+   */
+  createInstancedVegetationGroup(regionId, regionInstanced, type, instances) {
+    const template = this.vegetationTemplates.get(type);
+    if (!template) {
+      console.warn(`  ⚠️ Template not found: ${type}`);
+      return;
+    }
+
+    // Calculate buffer size with overhead for dynamic spawning
+    const bufferSize = Math.ceil(instances.length * this.bufferOverhead);
+
+    // Extract geometry and material from template
+    let geometry, material;
+    template.traverse(obj => {
+      if (obj.isMesh && !geometry) {
+        geometry = obj.geometry;
+        material = obj.material.clone(); // Clone to avoid shared materials
+      }
+    });
+
+    if (!geometry || !material) {
+      console.warn(`  ⚠️ Cannot extract geometry/material from template: ${type}`);
+      return;
+    }
+
+    // Create instanced mesh data
+    const instancedMeshData = new InstancedMeshData(geometry, material, bufferSize);
+    const mesh = instancedMeshData.mesh;
+
+    // Populate instances
+    const matrix = new THREE.Matrix4();
+    for (let i = 0; i < instances.length; i++) {
+      const { position, rotation, scale } = instances[i];
+
+      // Allocate instance
+      const instanceId = `${regionId}_${regionInstanced.nextInstanceId++}`;
+      const index = instancedMeshData.allocateInstance(instanceId);
+
+      // Set transform
+      matrix.compose(
+        position,
+        new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotation, 0)),
+        new THREE.Vector3(scale, scale, scale)
+      );
+      mesh.setMatrixAt(index, matrix);
+
+      // Store metadata
+      const metadata = new InstanceMetadata(instanceId, type, position, rotation, scale);
+      regionInstanced.instanceMetadata.set(instanceId, metadata);
+
+      // Add to spatial grid
+      regionInstanced.spatialGrid.insert(instanceId, position);
+    }
+
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    // Add to scene
+    this.scene.add(mesh);
+
+    // Store in region
+    regionInstanced.instancedMeshes.set(type, instancedMeshData);
+  }
+
+  /**
+   * Remove instanced vegetation for a region
+   */
+  removeRegionVegetationInstanced(regionId) {
+    const regionInstanced = this.instancedRegions.get(regionId);
+    if (!regionInstanced) return;
+
+    // Remove all instanced meshes from scene
+    for (const instancedMeshData of regionInstanced.instancedMeshes.values()) {
+      this.scene.remove(instancedMeshData.mesh);
+      instancedMeshData.dispose();
+    }
+
+    // Clean up data structures
+    regionInstanced.dispose();
+    this.instancedRegions.delete(regionId);
+
+    console.log(`🌿 Removed instanced vegetation: ${regionId}`);
+  }
+
+  /**
+   * Get vegetation near position (INSTANCED)
+   */
+  getVegetationNearInstanced(position, radius = 5) {
+    const nearby = [];
+    const radiusSq = radius * radius;
+
+    // Query all loaded regions
+    for (const regionInstanced of this.instancedRegions.values()) {
+      // Use spatial grid for fast broad-phase
+      const candidateIds = regionInstanced.spatialGrid.queryRadius(position, radius);
+
+      // Narrow-phase: check exact distance
+      for (const instanceId of candidateIds) {
+        const metadata = regionInstanced.instanceMetadata.get(instanceId);
+        if (metadata && metadata.visible) {
+          const distSq = metadata.position.distanceToSquared(position);
+          if (distSq <= radiusSq) {
+            nearby.push({
+              instanceId: instanceId,
+              type: metadata.type,
+              position: metadata.position,
+              distance: Math.sqrt(distSq)
+            });
+          }
+        }
+      }
+    }
+
+    return nearby;
+  }
+
+  /**
+   * Remove vegetation at position (INSTANCED)
+   */
+  removeVegetationAtInstanced(position, radius = 2) {
+    let removedCount = 0;
+
+    for (const regionInstanced of this.instancedRegions.values()) {
+      const candidateIds = regionInstanced.spatialGrid.queryRadius(position, radius);
+
+      for (const instanceId of candidateIds) {
+        const metadata = regionInstanced.instanceMetadata.get(instanceId);
+        if (metadata && metadata.visible) {
+          const dist = metadata.position.distanceTo(position);
+          if (dist <= radius) {
+            // Hide instance
+            const instancedMeshData = regionInstanced.instancedMeshes.get(metadata.type);
+            if (instancedMeshData) {
+              // Get index BEFORE freeing
+              const index = instancedMeshData.idToIndex.get(instanceId);
+
+              if (index !== undefined && instancedMeshData.freeInstance(instanceId)) {
+                metadata.visible = false;
+
+                // Scale to zero for GPU culling
+                const matrix = new THREE.Matrix4();
+                matrix.makeScale(0, 0, 0);
+                instancedMeshData.mesh.setMatrixAt(index, matrix);
+                instancedMeshData.mesh.instanceMatrix.needsUpdate = true;
+
+                // Remove from spatial grid
+                regionInstanced.spatialGrid.remove(instanceId, metadata.position);
+
+                removedCount++;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (removedCount > 0) {
+      console.log(`🌿 Removed ${removedCount} vegetation items (instanced)`);
+    }
+
+    return removedCount;
+  }
+
+  /**
+   * Spawn vegetation at position (INSTANCED)
+   */
+  spawnVegetationAtInstanced(type, position) {
+    // Find which region this position belongs to (simple heuristic)
+    let targetRegion = null;
+    for (const regionInstanced of this.instancedRegions.values()) {
+      // If region has any instances, assume it covers this area
+      // TODO: proper region bounds check
+      targetRegion = regionInstanced;
+      break;
+    }
+
+    if (!targetRegion) {
+      console.warn('Cannot find region for position');
+      return null;
+    }
+
+    let instancedMeshData = targetRegion.instancedMeshes.get(type);
+
+    // Create instanced mesh for this type if it doesn't exist
+    if (!instancedMeshData) {
+      this.createInstancedVegetationGroup(
+        targetRegion.regionId,
+        targetRegion,
+        type,
+        [] // Empty, will add below
+      );
+      instancedMeshData = targetRegion.instancedMeshes.get(type);
+    }
+
+    // Allocate instance
+    const instanceId = `${targetRegion.regionId}_${targetRegion.nextInstanceId++}`;
+    const instanceIndex = instancedMeshData.allocateInstance(instanceId);
+
+    if (instanceIndex === null) {
+      console.warn(`  ⚠️ Buffer full for type ${type}`);
+      return null;
+    }
+
+    // Set transform
+    const matrix = new THREE.Matrix4();
+    const rotation = Math.random() * Math.PI * 2;
+    const scale = 0.8 + Math.random() * 0.4;
+    matrix.compose(
+      position,
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotation, 0)),
+      new THREE.Vector3(scale, scale, scale)
+    );
+    instancedMeshData.mesh.setMatrixAt(instanceIndex, matrix);
+    instancedMeshData.mesh.instanceMatrix.needsUpdate = true;
+
+    // Store metadata
+    const metadata = new InstanceMetadata(instanceId, type, position, rotation, scale);
+    targetRegion.instanceMetadata.set(instanceId, metadata);
+
+    // Add to spatial grid
+    targetRegion.spatialGrid.insert(instanceId, position);
+
+    console.log(`🌿 Spawned ${type} at (${position.x.toFixed(0)}, ${position.z.toFixed(0)})`);
+    return instanceId;
   }
 }
 

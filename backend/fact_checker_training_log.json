@@ -9,5 +9,104 @@
       "facts_verified": 5,
       "arguments_constructed": 3
     }
+  },
+  {
+    "session_start": "2026-01-23T02:05:13.615532",
+    "session_end": "2026-01-23T02:05:56.706349",
+    "duration_minutes": 0.7181802833333334,
+    "stats": {
+      "errors_detected": 0,
+      "corrections_made": 0,
+      "facts_verified": 0,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-01-24T02:08:54.862047",
+    "session_end": "2026-01-24T02:10:13.679529",
+    "duration_minutes": 1.3136246999999999,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-01-25T02:08:52.286332",
+    "session_end": "2026-01-25T02:10:24.488563",
+    "duration_minutes": 1.5367038499999999,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-01-26T02:07:14.901886",
+    "session_end": "2026-01-26T02:08:36.994621",
+    "duration_minutes": 1.36821225,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-01-27T02:05:13.842218",
+    "session_end": "2026-01-27T02:05:56.844153",
+    "duration_minutes": 0.7166989166666667,
+    "stats": {
+      "errors_detected": 0,
+      "corrections_made": 0,
+      "facts_verified": 0,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-01-28T03:27:07.341924",
+    "session_end": "2026-01-28T03:47:18.826354",
+    "duration_minutes": 20.191407166666668,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 3,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-02-02T03:22:51.775660",
+    "session_end": "2026-02-02T03:37:42.609289",
+    "duration_minutes": 14.84722715,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-02-06T01:08:07.775142",
+    "session_end": "2026-02-06T01:21:39.733055",
+    "duration_minutes": 13.532631883333332,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
+  },
+  {
+    "session_start": "2026-02-07T00:06:42.587011",
+    "session_end": "2026-02-07T00:07:43.029398",
+    "duration_minutes": 1.0073731166666666,
+    "stats": {
+      "errors_detected": 6,
+      "corrections_made": 4,
+      "facts_verified": 5,
+      "arguments_constructed": 0
+    }
   }
 ]

@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 
 AVAILABLE_TASKS = {
     '1': {

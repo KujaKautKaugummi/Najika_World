@@ -609,5 +609,1204 @@
       "errors": 4,
       "success_rate": 80.0
     }
+  },
+  {
+    "session_start": "2026-01-21T00:00:01.349035",
+    "session_end": "2026-01-21T02:37:18.610925",
+    "total_hours": 2.621461357777778,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 1.2993884642918905,
+        "status": "success",
+        "timestamp": "2026-01-21T02:01:22.370358"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.42383830149968466,
+        "status": "success",
+        "timestamp": "2026-01-21T02:01:47.802277"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.8435906847318013,
+        "status": "success",
+        "timestamp": "2026-01-21T02:02:38.417718"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.4168863296508789,
+        "status": "success",
+        "timestamp": "2026-01-21T02:03:03.431898"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.9081661979357402,
+        "status": "success",
+        "timestamp": "2026-01-21T02:03:57.922869"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.47533243099848427,
+        "status": "success",
+        "timestamp": "2026-01-21T02:04:26.447814"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.9932977517445882,
+        "status": "success",
+        "timestamp": "2026-01-21T02:05:26.046678"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.44672428369522094,
+        "status": "success",
+        "timestamp": "2026-01-21T02:05:52.850135"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.07205406427383423,
+        "status": "success",
+        "timestamp": "2026-01-21T02:06:10.066028"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.05401848554611206,
+        "status": "success",
+        "timestamp": "2026-01-21T02:06:13.307137"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.0404827872912089,
+        "status": "success",
+        "timestamp": "2026-01-21T02:06:15.737106"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.0370687206586202,
+        "status": "success",
+        "timestamp": "2026-01-21T02:06:17.961230"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 8.41323082447052,
+        "status": "success",
+        "timestamp": "2026-01-21T02:14:42.755079"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 7.815176300207773,
+        "status": "success",
+        "timestamp": "2026-01-21T02:22:31.667658"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 7.662353348731995,
+        "status": "success",
+        "timestamp": "2026-01-21T02:30:11.408859"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 7.119984328746796,
+        "status": "success",
+        "timestamp": "2026-01-21T02:37:18.608921"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_advisor_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 300, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 281, in run\n    self.train_decision_support()\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 93, in train_decision_support\n    log(f\"    \\u2705 Entscheidungshilfe: {len(response)} Zeichen\")\n  File \"C:\\Najika_World\\backend\\najika_advisor_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2026-01-21T02:06:00.003228"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 324, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 306, in run\n    self.train_chaos_to_structure()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 53, in train_chaos_to_structure\n    log(\"\\n[TRAINING 1/4] Chaos \\u2192 Structure...\")\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2192' in position 34: character maps to <undefined>\n",
+        "timestamp": "2026-01-21T02:06:00.175760"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 371, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 352, in run\n    self.train_error_detection()\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 90, in train_error_detection\n    log(f\"    \\u2705 Fehler erkannt: {len(response)} Zeichen\")\n  File \"C:\\Najika_World\\backend\\najika_fact_checker_training.py\", line 25, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2026-01-21T02:06:02.645766"
+      },
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 454, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 431, in run\n    self.train_emotion_recognition()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 103, in train_emotion_recognition\n    log(f\"    \\u2705 Emotion erkannt\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 27, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2705' in position 15: character maps to <undefined>\n",
+        "timestamp": "2026-01-21T02:06:05.742784"
+      }
+    ],
+    "stats": {
+      "success": 16,
+      "errors": 4,
+      "success_rate": 80.0
+    }
+  },
+  {
+    "session_start": "2026-01-23T00:00:01.386421",
+    "session_end": "2026-01-23T02:10:10.551951",
+    "total_hours": 2.1692126472222224,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.7683502793312073,
+        "status": "success",
+        "timestamp": "2026-01-23T02:00:50.197249"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.3077561299006144,
+        "status": "success",
+        "timestamp": "2026-01-23T02:01:08.664618"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.7641897122065227,
+        "status": "success",
+        "timestamp": "2026-01-23T02:01:54.516000"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.30774998664855957,
+        "status": "success",
+        "timestamp": "2026-01-23T02:02:12.983001"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.7657282590866089,
+        "status": "success",
+        "timestamp": "2026-01-23T02:02:58.927701"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.30825002988179523,
+        "status": "success",
+        "timestamp": "2026-01-23T02:03:17.423702"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.7653543631235759,
+        "status": "success",
+        "timestamp": "2026-01-23T02:04:03.345964"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.3073484261830648,
+        "status": "success",
+        "timestamp": "2026-01-23T02:04:21.787870"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 0.721704379717509,
+        "status": "success",
+        "timestamp": "2026-01-23T02:05:05.091135"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 0.7209487517674764,
+        "status": "success",
+        "timestamp": "2026-01-23T02:05:56.725348"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.04656680425008138,
+        "status": "success",
+        "timestamp": "2026-01-23T02:06:55.009885"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.035100364685058595,
+        "status": "success",
+        "timestamp": "2026-01-23T02:06:57.115906"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.03493966658910116,
+        "status": "success",
+        "timestamp": "2026-01-23T02:06:59.212286"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.03433107137680054,
+        "status": "success",
+        "timestamp": "2026-01-23T02:07:01.272151"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 0.7894778370857238,
+        "status": "success",
+        "timestamp": "2026-01-23T02:07:48.640821"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 0.7877448280652364,
+        "status": "success",
+        "timestamp": "2026-01-23T02:08:35.906512"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 0.7884516795476277,
+        "status": "success",
+        "timestamp": "2026-01-23T02:09:23.214614"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 0.7889389594395956,
+        "status": "success",
+        "timestamp": "2026-01-23T02:10:10.550951"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_thought_organizer_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 326, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 309, in run\n    self.train_mindmap_creation()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 154, in train_mindmap_creation\n    if response and \"ZENTRUM\" in response or \"```\" in response:\n                                             ^^^^^^^^^^^^^^^^^\nTypeError: argument of type 'NoneType' is not iterable\n",
+        "timestamp": "2026-01-23T02:05:13.468423"
+      },
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-23T02:06:52.214876"
+      }
+    ],
+    "stats": {
+      "success": 18,
+      "errors": 2,
+      "success_rate": 90.0
+    }
+  },
+  {
+    "session_start": "2026-01-24T00:00:01.370637",
+    "session_end": "2026-01-24T02:32:43.084869",
+    "total_hours": 2.5449203422222224,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.7218299825986226,
+        "status": "success",
+        "timestamp": "2026-01-24T02:00:48.643984"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.36507540543874106,
+        "status": "success",
+        "timestamp": "2026-01-24T02:01:10.548508"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.6521012743314107,
+        "status": "success",
+        "timestamp": "2026-01-24T02:01:49.675585"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.3597750782966614,
+        "status": "success",
+        "timestamp": "2026-01-24T02:02:11.263090"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.7088976661364238,
+        "status": "success",
+        "timestamp": "2026-01-24T02:02:53.797951"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.350050163269043,
+        "status": "success",
+        "timestamp": "2026-01-24T02:03:14.800961"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 1.6454967141151429,
+        "status": "success",
+        "timestamp": "2026-01-24T02:04:53.530764"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.315155831972758,
+        "status": "success",
+        "timestamp": "2026-01-24T02:05:12.441117"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 2.5041954080263773,
+        "status": "success",
+        "timestamp": "2026-01-24T02:07:42.693842"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "description": "Thought Organization (Mind-Maps)",
+        "duration_minutes": 1.2002676010131836,
+        "status": "success",
+        "timestamp": "2026-01-24T02:08:54.709898"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 1.3164095520973205,
+        "status": "success",
+        "timestamp": "2026-01-24T02:10:13.695473"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.04411059617996216,
+        "status": "success",
+        "timestamp": "2026-01-24T02:11:12.104190"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.036018896102905276,
+        "status": "success",
+        "timestamp": "2026-01-24T02:11:14.265323"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.035899806022644046,
+        "status": "success",
+        "timestamp": "2026-01-24T02:11:16.419312"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.03596128225326538,
+        "status": "success",
+        "timestamp": "2026-01-24T02:11:18.576989"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 5.319901053110758,
+        "status": "success",
+        "timestamp": "2026-01-24T02:16:37.771052"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 5.937368321418762,
+        "status": "success",
+        "timestamp": "2026-01-24T02:22:34.014149"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 4.2895737012227375,
+        "status": "success",
+        "timestamp": "2026-01-24T02:26:51.389569"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 5.861538322766622,
+        "status": "success",
+        "timestamp": "2026-01-24T02:32:43.082869"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-24T02:11:09.457554"
+      }
+    ],
+    "stats": {
+      "success": 19,
+      "errors": 1,
+      "success_rate": 95.0
+    }
+  },
+  {
+    "session_start": "2026-01-25T00:00:01.409495",
+    "session_end": "2026-01-25T02:38:35.544400",
+    "total_hours": 2.6428149741666664,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.7917503476142883,
+        "status": "success",
+        "timestamp": "2026-01-25T02:00:52.117382"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.3108126759529114,
+        "status": "success",
+        "timestamp": "2026-01-25T02:01:10.767150"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.8501580595970154,
+        "status": "success",
+        "timestamp": "2026-01-25T02:02:01.778637"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.3968679944674174,
+        "status": "success",
+        "timestamp": "2026-01-25T02:02:25.590717"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 1.134220270315806,
+        "status": "success",
+        "timestamp": "2026-01-25T02:03:33.644930"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.35223512252171835,
+        "status": "success",
+        "timestamp": "2026-01-25T02:03:54.780038"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.9675228158632915,
+        "status": "success",
+        "timestamp": "2026-01-25T02:04:52.832408"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.51190292040507,
+        "status": "success",
+        "timestamp": "2026-01-25T02:05:23.547088"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 2.060973568757375,
+        "status": "success",
+        "timestamp": "2026-01-25T02:07:27.206508"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "description": "Thought Organization (Mind-Maps)",
+        "duration_minutes": 1.4149070382118225,
+        "status": "success",
+        "timestamp": "2026-01-25T02:08:52.102928"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 1.540311578909556,
+        "status": "success",
+        "timestamp": "2026-01-25T02:10:24.522622"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.06394918362299601,
+        "status": "success",
+        "timestamp": "2026-01-25T02:12:31.267460"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.0427322785059611,
+        "status": "success",
+        "timestamp": "2026-01-25T02:12:33.831397"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.04269723892211914,
+        "status": "success",
+        "timestamp": "2026-01-25T02:12:36.393231"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.04288727045059204,
+        "status": "success",
+        "timestamp": "2026-01-25T02:12:38.966468"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 5.88134548664093,
+        "status": "success",
+        "timestamp": "2026-01-25T02:18:31.848198"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 6.176261532306671,
+        "status": "success",
+        "timestamp": "2026-01-25T02:24:42.425891"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 6.873025560379029,
+        "status": "success",
+        "timestamp": "2026-01-25T02:31:34.809932"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 7.01220782995224,
+        "status": "success",
+        "timestamp": "2026-01-25T02:38:35.542401"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-25T02:12:27.430509"
+      }
+    ],
+    "stats": {
+      "success": 19,
+      "errors": 1,
+      "success_rate": 95.0
+    }
+  },
+  {
+    "session_start": "2026-01-26T00:00:01.291942",
+    "session_end": "2026-01-26T02:34:38.805600",
+    "total_hours": 2.5770868491666663,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.874005651473999,
+        "status": "success",
+        "timestamp": "2026-01-26T02:00:56.693871"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.26804062525431316,
+        "status": "success",
+        "timestamp": "2026-01-26T02:01:12.777313"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.821389393011729,
+        "status": "success",
+        "timestamp": "2026-01-26T02:02:02.061676"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.27515832185745237,
+        "status": "success",
+        "timestamp": "2026-01-26T02:02:18.572176"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.7884254415829977,
+        "status": "success",
+        "timestamp": "2026-01-26T02:03:05.878703"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.35941096146901447,
+        "status": "success",
+        "timestamp": "2026-01-26T02:03:27.443361"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.7343545238176982,
+        "status": "success",
+        "timestamp": "2026-01-26T02:04:11.505635"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.3269688606262207,
+        "status": "success",
+        "timestamp": "2026-01-26T02:04:31.124770"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 1.7120094418525695,
+        "status": "success",
+        "timestamp": "2026-01-26T02:06:13.847340"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "description": "Thought Organization (Mind-Maps)",
+        "duration_minutes": 1.0149503946304321,
+        "status": "success",
+        "timestamp": "2026-01-26T02:07:14.744364"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 1.3711212873458862,
+        "status": "success",
+        "timestamp": "2026-01-26T02:08:37.012640"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.05139379898707072,
+        "status": "success",
+        "timestamp": "2026-01-26T02:09:51.832728"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.04268750747044881,
+        "status": "success",
+        "timestamp": "2026-01-26T02:09:54.394977"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.04529351790746053,
+        "status": "success",
+        "timestamp": "2026-01-26T02:09:57.112588"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.044085864226023355,
+        "status": "success",
+        "timestamp": "2026-01-26T02:09:59.757740"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 6.582762332757314,
+        "status": "success",
+        "timestamp": "2026-01-26T02:16:34.724479"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 6.2348618348439535,
+        "status": "success",
+        "timestamp": "2026-01-26T02:22:48.816189"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 7.010094447930654,
+        "status": "success",
+        "timestamp": "2026-01-26T02:29:49.422857"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 4.8229956984519955,
+        "status": "success",
+        "timestamp": "2026-01-26T02:34:38.803599"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-26T02:09:48.749100"
+      }
+    ],
+    "stats": {
+      "success": 19,
+      "errors": 1,
+      "success_rate": 95.0
+    }
+  },
+  {
+    "session_start": "2026-01-27T00:00:01.797901",
+    "session_end": "2026-01-27T02:10:10.640891",
+    "total_hours": 2.1691222194444446,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.7678844014803569,
+        "status": "success",
+        "timestamp": "2026-01-27T02:00:50.781941"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.3078434387842814,
+        "status": "success",
+        "timestamp": "2026-01-27T02:01:09.254549"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.7642919619878134,
+        "status": "success",
+        "timestamp": "2026-01-27T02:01:55.113067"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.30700238545735675,
+        "status": "success",
+        "timestamp": "2026-01-27T02:02:13.537074"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.7644565383593241,
+        "status": "success",
+        "timestamp": "2026-01-27T02:02:59.405466"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.3070563515027364,
+        "status": "success",
+        "timestamp": "2026-01-27T02:03:17.830848"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.7648177107175191,
+        "status": "success",
+        "timestamp": "2026-01-27T02:04:03.719911"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.3076255281766256,
+        "status": "success",
+        "timestamp": "2026-01-27T02:04:22.178446"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 0.7194514433542888,
+        "status": "success",
+        "timestamp": "2026-01-27T02:05:05.347075"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 0.7193970084190369,
+        "status": "success",
+        "timestamp": "2026-01-27T02:05:56.862671"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.04342105786005656,
+        "status": "success",
+        "timestamp": "2026-01-27T02:06:54.929868"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.03513850371042888,
+        "status": "success",
+        "timestamp": "2026-01-27T02:06:57.038178"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.037238669395446775,
+        "status": "success",
+        "timestamp": "2026-01-27T02:06:59.272499"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.03482659260431926,
+        "status": "success",
+        "timestamp": "2026-01-27T02:07:01.362094"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 0.7892762581507365,
+        "status": "success",
+        "timestamp": "2026-01-27T02:07:48.718670"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 0.7889924883842468,
+        "status": "success",
+        "timestamp": "2026-01-27T02:08:36.059218"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 0.7879178563753764,
+        "status": "success",
+        "timestamp": "2026-01-27T02:09:23.335291"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 0.7883433024088542,
+        "status": "success",
+        "timestamp": "2026-01-27T02:10:10.636890"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_thought_organizer_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 326, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 309, in run\n    self.train_mindmap_creation()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 154, in train_mindmap_creation\n    if response and \"ZENTRUM\" in response or \"```\" in response:\n                                             ^^^^^^^^^^^^^^^^^\nTypeError: argument of type 'NoneType' is not iterable\n",
+        "timestamp": "2026-01-27T02:05:13.698851"
+      },
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-27T02:06:52.323603"
+      }
+    ],
+    "stats": {
+      "success": 18,
+      "errors": 2,
+      "success_rate": 90.0
+    }
+  },
+  {
+    "session_start": "2026-01-28T00:00:01.398188",
+    "session_end": "2026-01-28T05:35:53.226944",
+    "total_hours": 5.5977296547222215,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 13.662302855650584,
+        "status": "success",
+        "timestamp": "2026-01-28T02:14:38.612767"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 4.717849202950796,
+        "status": "success",
+        "timestamp": "2026-01-28T02:19:21.688723"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 9.218871072928112,
+        "status": "success",
+        "timestamp": "2026-01-28T02:28:34.821987"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 5.206614430745443,
+        "status": "success",
+        "timestamp": "2026-01-28T02:33:47.219853"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 7.2216365496317545,
+        "status": "success",
+        "timestamp": "2026-01-28T02:41:00.518046"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 4.656578358014425,
+        "status": "success",
+        "timestamp": "2026-01-28T02:45:39.912747"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 9.027250854174296,
+        "status": "success",
+        "timestamp": "2026-01-28T02:54:41.548797"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 4.995292393366496,
+        "status": "success",
+        "timestamp": "2026-01-28T02:59:41.266340"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 19.750729854901632,
+        "status": "success",
+        "timestamp": "2026-01-28T03:19:26.314132"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "description": "Thought Organization (Mind-Maps)",
+        "duration_minutes": 7.680978163083394,
+        "status": "success",
+        "timestamp": "2026-01-28T03:27:07.174821"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 20.196042029062905,
+        "status": "success",
+        "timestamp": "2026-01-28T03:47:18.938344"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.07399625778198242,
+        "status": "success",
+        "timestamp": "2026-01-28T03:58:24.954275"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.040787943204243976,
+        "status": "success",
+        "timestamp": "2026-01-28T03:58:27.401551"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.040612971782684325,
+        "status": "success",
+        "timestamp": "2026-01-28T03:58:29.838330"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.04054412047068278,
+        "status": "success",
+        "timestamp": "2026-01-28T03:58:32.270977"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 23.80527058839798,
+        "status": "success",
+        "timestamp": "2026-01-28T04:22:20.607720"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 24.514512594540914,
+        "status": "success",
+        "timestamp": "2026-01-28T04:46:51.480475"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 24.51497467358907,
+        "status": "success",
+        "timestamp": "2026-01-28T05:11:22.378955"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 24.51408313115438,
+        "status": "success",
+        "timestamp": "2026-01-28T05:35:53.223943"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-01-28T03:58:20.514499"
+      }
+    ],
+    "stats": {
+      "success": 19,
+      "errors": 1,
+      "success_rate": 95.0
+    }
+  },
+  {
+    "session_start": "2026-02-02T00:00:01.800396",
+    "session_end": "2026-02-02T05:15:33.296914",
+    "total_hours": 5.2587484775,
+    "completed_tasks": [
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 6.082804640134175,
+        "status": "success",
+        "timestamp": "2026-02-02T02:21:47.909869"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 2.5983627359072368,
+        "status": "success",
+        "timestamp": "2026-02-02T02:24:23.812634"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 7.079655770460764,
+        "status": "success",
+        "timestamp": "2026-02-02T02:31:28.591980"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 5.195388448238373,
+        "status": "success",
+        "timestamp": "2026-02-02T02:36:40.315287"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 12.012333869934082,
+        "status": "success",
+        "timestamp": "2026-02-02T02:48:41.055319"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 2.9258601784706117,
+        "status": "success",
+        "timestamp": "2026-02-02T02:51:36.607933"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 6.249937113126119,
+        "status": "success",
+        "timestamp": "2026-02-02T02:57:51.605166"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 15.446795972188314,
+        "status": "success",
+        "timestamp": "2026-02-02T03:13:18.417925"
+      },
+      {
+        "script": "najika_thought_organizer_training.py",
+        "description": "Thought Organization (Mind-Maps)",
+        "duration_minutes": 9.545743803183237,
+        "status": "success",
+        "timestamp": "2026-02-02T03:22:51.165551"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 14.860104378064474,
+        "status": "success",
+        "timestamp": "2026-02-02T03:37:42.798321"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.10609069665273031,
+        "status": "success",
+        "timestamp": "2026-02-02T03:49:06.237505"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.07893918752670288,
+        "status": "success",
+        "timestamp": "2026-02-02T03:49:10.974860"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.06791163285573323,
+        "status": "success",
+        "timestamp": "2026-02-02T03:49:15.049558"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.05174601872762044,
+        "status": "success",
+        "timestamp": "2026-02-02T03:49:18.154319"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 21.90112303495407,
+        "status": "success",
+        "timestamp": "2026-02-02T04:11:12.249701"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 21.318672633171083,
+        "status": "success",
+        "timestamp": "2026-02-02T04:32:31.387062"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 22.041420523325602,
+        "status": "success",
+        "timestamp": "2026-02-02T04:54:33.905400"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 20.989375166098277,
+        "status": "success",
+        "timestamp": "2026-02-02T05:15:33.290914"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 456, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 451, in run\n    log(\"\\U0001f3ad Najika ist jetzt emotional intelligenter! \\U0001f49c\")\n  File \"C:\\Najika_World\\backend\\najika_emotional_intelligence_training.py\", line 29, in log\n    print(f\"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}\")\n  File \"C:\\Program Files\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f3ad' in position 11: character maps to <undefined>\n",
+        "timestamp": "2026-02-02T03:48:59.852056"
+      }
+    ],
+    "stats": {
+      "success": 18,
+      "errors": 1,
+      "success_rate": 94.73684210526315
+    }
   }
 ]

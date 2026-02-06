@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 SESSIONS_DIR = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
-REPORT_FILE = Path('C:/NajikaCore/ALLE_SESSIONS_KEYWORD_FUNDE.md')
+REPORT_FILE = Path('C:/Najika_World/ALLE_SESSIONS_KEYWORD_FUNDE.md')
 OUTPUT_FILE = Path('C:/Users/0KKK0/Desktop/NAJIKA_ALLE_ZUSAMMENFASSUNGEN.txt')
 
 # Keywords für relevante Inhalte

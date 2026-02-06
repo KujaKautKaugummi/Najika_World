@@ -76,7 +76,7 @@
               "outcome": {
                 "success": true,
                 "consequence": "Du entfernst die Wurzeln erfolgreich, aber es dauert 3 Stunden.",
-                "reputation": +15,
+                "reputation": 15,
                 "rewards": {
                   "gold": 200,
                   "items": ["lebendiges_holz x2"]
@@ -94,7 +94,7 @@
               "outcome": {
                 "success": true,
                 "consequence": "Die Magie löst die Wurzeln sanft. Der Baum erholt sich sofort!",
-                "reputation": +25,
+                "reputation": 25,
                 "rewards": {
                   "gold": 300,
                   "items": ["druiden_stab", "lebendiges_holz x3"],
@@ -112,7 +112,7 @@
               "outcome": {
                 "success": true,
                 "consequence": "Die Druiden kommen und helfen dir. Es dauert 2 Tage.",
-                "reputation": +10,
+                "reputation": 10,
                 "rewards": {
                   "gold": 150,
                   "items": ["heiltrank_gross x5"]
@@ -179,7 +179,7 @@
               "outcome": {
                 "success": true,
                 "consequence": "Du überzeugst die Holzfäller. Der Baum ist sicher!",
-                "reputation": +20,
+                "reputation": 20,
                 "rewards": {
                   "items": ["traenen_kristall x10", "druiden_segen"]
                 },
@@ -235,7 +235,7 @@
                   "items": ["traenen_kristall x15", "lebendiges_holz x2", "dryaden_freundschaft"],
                   "gold": 200
                 },
-                "reputation": +30,
+                "reputation": 30,
                 "relationship": {"dryade": 100, "holzfaeller": 25}
               }
             }
@@ -368,7 +368,7 @@
                   "gold": 500,
                   "items": ["druiden_segen", "lebendiges_holz x3"]
                 },
-                "reputation": +40,
+                "reputation": 40,
                 "relationship": {"natur_geister": 100}
               }
             },
@@ -387,7 +387,7 @@
                   "gold": 600,
                   "items": ["waldgeist_freundschaft", "hartholz x20"]
                 },
-                "reputation": +25,
+                "reputation": 25,
                 "relationship": {"holzfaeller": 50, "natur_geister": 75}
               }
             },
@@ -489,7 +489,7 @@
                 "success": true,
                 "consequence": "Die Druiden heilen den Wolf. Er wird freigelassen.",
                 "rewards": {
-                  "reputation": +15,
+                  "reputation": 15,
                   "relationship": {"druiden": 25}
                 },
                 "time_passed": 120
@@ -576,7 +576,7 @@
                   "gold": 600,
                   "items": ["quelle_kristall x10", "magisches_wasser x50", "alter_runen_stein"]
                 },
-                "reputation": +35,
+                "reputation": 35,
                 "time_passed": 300
               }
             },
@@ -595,7 +595,7 @@
                   "gold": 500,
                   "items": ["quelle_kristall x8", "magischer_staub x30", "runen_fragment x5"]
                 },
-                "reputation": +25,
+                "reputation": 25,
                 "skill_exp": {"dispel_magic": 300}
               }
             }
@@ -755,7 +755,7 @@
                 "rewards": {
                   "companion": "hirschkoenig_eldaron",
                   "items": ["koenig_des_waldes_segen", "naturmagie_affinitaet"],
-                  "reputation": +100,
+                  "reputation": 100,
                   "title": "Freund der Bestien"
                 },
                 "najika_aftermath": {

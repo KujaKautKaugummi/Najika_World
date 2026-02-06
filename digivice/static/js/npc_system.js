@@ -41,16 +41,24 @@ class NPC {
     }
 
     createMesh(THREE, scene) {
-        // NPC Body (Fallback: Cylinder statt CapsuleGeometry - r128 kompatibel!)
-        const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 8);
+        // NPC Body - Three.js r128 hat KEIN CapsuleGeometry!
+        // Verwende stattdessen Cylinder + Sphere Kombination
+        let bodyGeometry;
+        if (THREE.CapsuleGeometry) {
+            // Neuere Three.js Version
+            bodyGeometry = new THREE.CapsuleGeometry(0.5, 1.5, 8, 16);
+        } else {
+            // Fallback für r128: Cylinder als Ersatz
+            bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 16);
+        }
         const bodyMaterial = new THREE.MeshStandardMaterial({
             color: this.color,
             roughness: 0.7,
             metalness: 0.2
         });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.castShadow = true;
-        body.receiveShadow = true;
+        body.castShadow = false;  // PERFORMANCE: Deaktiviert
+        body.receiveShadow = false;
 
         // Position
         body.position.set(this.position.x, this.position.y + 1, this.position.z);

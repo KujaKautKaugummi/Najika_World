@@ -8,7 +8,7 @@ SCHRITT 3: Alle Schnipsel/Ideen zu Stichwörtern
 """
 from pathlib import Path
 
-DIRS = [Path('C:/NajikaCore'), Path('C:/Users/0KKK0/Desktop/zip'), Path('C:/Users/0KKK0/Desktop')]
+DIRS = [Path('C:/Najika_World'), Path('C:/Users/0KKK0/Desktop/zip'), Path('C:/Users/0KKK0/Desktop')]
 
 SUMMARY_KW = ['zusammenfassung', 'summary', 'ubersicht', 'overview', 'roadmap', 'projekt', 'project', 'complete', 'final', 'game design']
 

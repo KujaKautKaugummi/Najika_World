@@ -46,8 +46,8 @@ class NajikaLoRATrainer:
     def __init__(
         self,
         base_model="unsloth/Meta-Llama-3.1-8B-Instruct",
-        output_dir="C:/NajikaCore/lora_checkpoints",
-        logs_dir="C:/NajikaCore/training_logs"
+        output_dir="C:/Najika_World/lora_checkpoints",
+        logs_dir="C:/Najika_World/training_logs"
     ):
         self.base_model = base_model
         self.output_dir = output_dir
@@ -148,7 +148,7 @@ Verstanden! Ich integriere diesen {source}-Stil in meine Persönlichkeit.<|eot_i
             # 3. Core Instructions laden (CLAUDE.md-Stil)
             print("  → Core Instructions (Fehler-Prävention)...")
             try:
-                instructions_file = "C:/NajikaCore/NAJIKA_CORE_INSTRUCTIONS.txt"
+                instructions_file = "C:/Najika_World/NAJIKA_CORE_INSTRUCTIONS.txt"
                 if os.path.exists(instructions_file):
                     with open(instructions_file, 'r', encoding='utf-8') as f:
                         content = f.read()

@@ -25,7 +25,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 # ===== KONFIGURATION =====
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 TRAINING_DIR = NAJIKA_DIR / 'training'
 SCHEDULE_FILE = TRAINING_DIR / 'schedule.json'
 HEARTBEAT_FILE = NAJIKA_DIR / 'NAJIKA_TRAINING_HEARTBEAT.json'

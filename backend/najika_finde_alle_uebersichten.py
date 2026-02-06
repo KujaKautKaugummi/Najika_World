@@ -6,7 +6,7 @@ Durchsuche ALLES (NajikaCore, Desktop, ZIP, JETZT, Claude-Ordner)
 from pathlib import Path
 
 SEARCH_DIRS = [
-    Path('C:/NajikaCore'),
+    Path('C:/Najika_World'),
     Path('C:/Users/0KKK0/Desktop'),
     Path('C:/Users/0KKK0/Desktop/zip'),
     Path('C:/Users/0KKK0/Desktop/jetzt'),

@@ -13,7 +13,7 @@ Quellen:
 from pathlib import Path
 import json
 
-NAJIKACORE = Path('C:/NajikaCore')
+NAJIKACORE = Path('C:/Najika_World')
 OUTPUT = NAJIKACORE / 'NAJIKA_MASTER_ZUSAMMENFASSUNG.md'
 
 print('='*80)

@@ -33,8 +33,8 @@ from collections import defaultdict
 
 # ===== CONFIG =====
 
-INTELLIGENT_GRUNDSTEIN = Path("C:/NajikaCore/grundstein_output/NAJIKA_INTELLIGENT_GRUNDSTEIN.json")
-OUTPUT_DIR = Path("C:/NajikaCore")
+INTELLIGENT_GRUNDSTEIN = Path("C:/Najika_World/grundstein_output/NAJIKA_INTELLIGENT_GRUNDSTEIN.json")
+OUTPUT_DIR = Path("C:/Najika_World")
 
 # ALLE Game-Keywords (umfassend!)
 GAME_KEYWORDS = {

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 SESSIONS_DIR = Path('C:/Users/0KKK0/.claude/projects/C--NajikaCore')
 IST_OVERVIEW = Path('C:/Users/0KKK0/Desktop/NAJIKA_LESBARE_UEBERSICHT.txt')
 OUTPUT_FILE = Path('C:/Users/0KKK0/Desktop/NAJIKA_VERBESSERUNGS_IDEEN.txt')

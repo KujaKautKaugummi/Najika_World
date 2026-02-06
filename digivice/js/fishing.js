@@ -431,6 +431,14 @@
 
     function setupKeyboardHandler() {
         document.addEventListener('keydown', (e) => {
+            // Ignorieren wenn Chat-Input oder andere Input-Felder fokussiert sind
+            if (window.chatInputFocused ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.isContentEditable) {
+                return;
+            }
+
             // E-Taste: NUR wenn am Angelspot UND kein Gebäude in der Nähe
             if (e.code === 'KeyE' && currentSpot && !isFishing) {
                 // Check if near building (Building hat Priorität!)

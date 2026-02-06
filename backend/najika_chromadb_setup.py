@@ -34,7 +34,7 @@ def setup_chromadb():
     print()
 
     # Erstelle Datenbank
-    db_path = Path("C:/NajikaCore/chroma_db")
+    db_path = Path("C:/Najika_World/chroma_db")
     db_path.mkdir(exist_ok=True)
 
     print(f"📂 Erstelle Datenbank in: {db_path}")
@@ -178,7 +178,7 @@ def import_video_transcripts(personalities_collection):
     print("=" * 60)
     print()
 
-    transcripts_dir = Path("C:/NajikaCore/training_data/transcripts")
+    transcripts_dir = Path("C:/Najika_World/training_data/transcripts")
 
     if not transcripts_dir.exists():
         print(f"❌ Transkript-Ordner nicht gefunden: {transcripts_dir}")
@@ -253,7 +253,7 @@ def import_code_training(knowledge_collection):
     print()
 
     # Suche nach Code-Training Files
-    code_files = list(Path("C:/NajikaCore").glob("*CODING*.md"))
+    code_files = list(Path("C:/Najika_World").glob("*CODING*.md"))
 
     if not code_files:
         print("⚠️  Keine Code-Training Files gefunden (noch nicht erstellt)")

@@ -32,7 +32,7 @@ except ImportError:
 
 # ===== KONFIGURATION =====
 
-DATA_DIR = Path("C:/NajikaCore/thought_organizer")
+DATA_DIR = Path("C:/Najika_World/thought_organizer")
 DATA_DIR.mkdir(exist_ok=True)
 
 BAUSTEIN_DB = DATA_DIR / "bausteine.json"

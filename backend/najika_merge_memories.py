@@ -21,10 +21,10 @@ def merge_memories():
     print()
 
     # Load altes System (memory_db)
-    old_client = chromadb.PersistentClient(path="C:/NajikaCore/memory_db")
+    old_client = chromadb.PersistentClient(path="C:/Najika_World/memory_db")
 
     # Load neues System (chroma_db)
-    new_client = chromadb.PersistentClient(path="C:/NajikaCore/chroma_db")
+    new_client = chromadb.PersistentClient(path="C:/Najika_World/chroma_db")
 
     # Get Collections aus neuem System
     personalities_new = new_client.get_collection("najika_personalities")

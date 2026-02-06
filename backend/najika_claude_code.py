@@ -180,47 +180,79 @@ class NajikaClaudeCode:
         }
 
 
+def is_complex_task(prompt):
+    """Erkennt ob eine Aufgabe zu komplex fuer lokale Models ist"""
+    complex_indicators = [
+        # Code-Generation
+        "schreibe eine komplette", "implementiere", "erstelle ein programm",
+        "refactor", "debugge", "optimiere den code",
+        # Analyse
+        "analysiere die gesamte", "vergleiche", "bewerte",
+        # Kreativ-komplex
+        "schreibe eine geschichte", "erfinde", "plane",
+        # Multi-Step
+        "schritt fuer schritt", "step by step", "erklaere ausfuehrlich",
+        # Lange Antworten
+        "ausfuehrlich", "detailliert", "umfassend"
+    ]
+    prompt_lower = prompt.lower()
+    return any(ind in prompt_lower for ind in complex_indicators)
+
+
 def call_ai_with_hierarchy(prompt, use_wizard=False, context=None, ollama_callback=None):
     """
-    INTELLIGENZ-HIERARCHIE
+    NEUE INTELLIGENZ-HIERARCHIE (2026-01-20)
 
-    1. Versuche Claude Code (unlimited!)
-    2. Falls nicht verfügbar/Fehler → Ollama
-    3. Cloud APIs nur mit PIN (separates System)
+    1. LM Studio (2 Models: dolphin + qwen2.5) - SCHNELL, GPU
+    2. Claude Code (nur bei komplexen Aufgaben) - FALLBACK
 
     Args:
         prompt: Die Frage/Aufgabe
-        use_wizard: NSFW Mode für Ollama
+        use_wizard: NSFW Mode
         context: Chat-Historie
-        ollama_callback: Funktion die Ollama aufruft
+        ollama_callback: Funktion die LM Studio aufruft (legacy name)
 
     Returns:
-        tuple: (response, provider) - z.B. ("EXPLOSION!!!", "claude_code")
+        tuple: (response, provider) - z.B. ("EXPLOSION!!!", "lm_studio")
     """
 
-    # Globale Claude Code Instanz (wird beim Import erstellt)
     global CLAUDE_CODE_INSTANCE
 
-    # 1. PRIORITAET: CLAUDE CODE
+    # 1. PRIORITAET: LM STUDIO (schnell, lokal, GPU)
+    if ollama_callback:
+        print("[AI HIERARCHY] [TRY] Versuche LM Studio...")
+        try:
+            response = ollama_callback(prompt, use_wizard)
+            print(f"[AI HIERARCHY] [DEBUG] LM Studio response type: {type(response)}, value: {repr(response)[:100] if response else 'None'}")
+            if response and isinstance(response, str) and len(response.strip()) > 0:
+                print("[AI HIERARCHY] [OK] LM Studio erfolgreich!")
+                return (response, "lm_studio")
+            else:
+                print(f"[AI HIERARCHY] [WARNING] LM Studio Antwort leer oder ungueltig: {repr(response)[:50]}")
+        except Exception as e:
+            import traceback
+            print(f"[AI HIERARCHY] [ERROR] LM Studio Fehler: {e}")
+            print(f"[AI HIERARCHY] [TRACEBACK] {traceback.format_exc()}")
+
+    # 2. PRIORITAET: CLAUDE CODE (nur bei komplexen Aufgaben ODER wenn LM Studio failed)
     if CLAUDE_CODE_INSTANCE and CLAUDE_CODE_INSTANCE.available:
-        print("[AI HIERARCHY] [TRY] Versuche Claude Code...")
+        # Pruefen ob komplex genug fuer Claude Code
+        if is_complex_task(prompt):
+            print("[AI HIERARCHY] [COMPLEX] Komplexe Aufgabe erkannt - nutze Claude Code...")
+        else:
+            print("[AI HIERARCHY] [FALLBACK] LM Studio failed - versuche Claude Code...")
+
         response = CLAUDE_CODE_INSTANCE.ask_claude_code(prompt, context)
 
         if response:
             print("[AI HIERARCHY] [OK] Claude Code erfolgreich!")
             return (response, "claude_code")
         else:
-            print("[AI HIERARCHY] [WARNING] Claude Code fehlgeschlagen - fallback zu Ollama")
+            print("[AI HIERARCHY] [WARNING] Claude Code auch fehlgeschlagen")
             CLAUDE_CODE_INSTANCE.stats["fallback_to_ollama"] += 1
 
-    # 2. PRIORITAET: OLLAMA (FALLBACK)
-    if ollama_callback:
-        print("[AI HIERARCHY] [FALLBACK] Nutze Ollama...")
-        response = ollama_callback(prompt, use_wizard)
-        return (response, "ollama")
-
-    # Sollte nicht passieren
-    return ("ERROR: Keine AI verfügbar!", "none")
+    # Wenn alles fehlschlaegt
+    return ("Kuja! Alle AI-Systeme offline... Bitte starte LM Studio!", "none")
 
 
 # Erstelle globale Instanz beim Import

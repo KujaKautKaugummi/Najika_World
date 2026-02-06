@@ -22,7 +22,9 @@ OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
 MODEL = "najika-local"
 
 def log(msg):
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+    # Windows-safe: Emojis durch ASCII ersetzen
+    safe_msg = str(msg).replace('\u2705', '[OK]').replace('\u2192', '->').replace('\u274c', '[X]')
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {safe_msg}")
 
 class NajikaFactCheckerTrainer:
     def __init__(self):

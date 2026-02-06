@@ -9,5 +9,104 @@
       "advice_given": 5,
       "pro_contra_created": 4
     }
+  },
+  {
+    "session_start": "2026-01-23T02:04:21.934358",
+    "session_end": "2026-01-23T02:05:05.076133",
+    "duration_minutes": 0.7190295833333333,
+    "stats": {
+      "decisions_helped": 0,
+      "problems_solved": 0,
+      "advice_given": 0,
+      "pro_contra_created": 0
+    }
+  },
+  {
+    "session_start": "2026-01-24T02:05:12.588818",
+    "session_end": "2026-01-24T02:07:42.672444",
+    "duration_minutes": 2.501393766666667,
+    "stats": {
+      "decisions_helped": 3,
+      "problems_solved": 5,
+      "advice_given": 4,
+      "pro_contra_created": 4
+    }
+  },
+  {
+    "session_start": "2026-01-25T02:05:23.731134",
+    "session_end": "2026-01-25T02:07:27.177844",
+    "duration_minutes": 2.0574451666666667,
+    "stats": {
+      "decisions_helped": 3,
+      "problems_solved": 5,
+      "advice_given": 5,
+      "pro_contra_created": 4
+    }
+  },
+  {
+    "session_start": "2026-01-26T02:04:31.279315",
+    "session_end": "2026-01-26T02:06:13.827827",
+    "duration_minutes": 1.7091418666666667,
+    "stats": {
+      "decisions_helped": 3,
+      "problems_solved": 5,
+      "advice_given": 5,
+      "pro_contra_created": 3
+    }
+  },
+  {
+    "session_start": "2026-01-27T02:04:22.322538",
+    "session_end": "2026-01-27T02:05:05.328074",
+    "duration_minutes": 0.7167589333333333,
+    "stats": {
+      "decisions_helped": 0,
+      "problems_solved": 0,
+      "advice_given": 0,
+      "pro_contra_created": 0
+    }
+  },
+  {
+    "session_start": "2026-01-28T02:59:41.448474",
+    "session_end": "2026-01-28T03:19:26.260565",
+    "duration_minutes": 19.746868183333333,
+    "stats": {
+      "decisions_helped": 0,
+      "problems_solved": 0,
+      "advice_given": 1,
+      "pro_contra_created": 1
+    }
+  },
+  {
+    "session_start": "2026-02-02T02:57:51.777682",
+    "session_end": "2026-02-02T03:13:18.387413",
+    "duration_minutes": 15.443495516666667,
+    "stats": {
+      "decisions_helped": 2,
+      "problems_solved": 5,
+      "advice_given": 2,
+      "pro_contra_created": 4
+    }
+  },
+  {
+    "session_start": "2026-02-06T00:48:17.234550",
+    "session_end": "2026-02-06T01:01:36.868209",
+    "duration_minutes": 13.32722765,
+    "stats": {
+      "decisions_helped": 1,
+      "problems_solved": 5,
+      "advice_given": 4,
+      "pro_contra_created": 3
+    }
+  },
+  {
+    "session_start": "2026-02-07T00:05:03.217073",
+    "session_end": "2026-02-07T00:06:13.362730",
+    "duration_minutes": 1.1690942833333333,
+    "stats": {
+      "decisions_helped": 3,
+      "problems_solved": 5,
+      "advice_given": 5,
+      "pro_contra_created": 3
+    }
   }
 ]

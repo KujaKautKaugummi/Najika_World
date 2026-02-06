@@ -29,7 +29,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 # Directories
 NAJIKA_DIR = Path('C:/Najika_World')
 BACKEND_DIR = NAJIKA_DIR / 'backend'
-CORE_DIR = Path('C:/NajikaCore')
+CORE_DIR = Path('C:/Najika_World')
 TRAINING_DIR = CORE_DIR / 'training'
 LOG_FILE = TRAINING_DIR / 'master_launcher.log'
 STATE_FILE = TRAINING_DIR / 'launcher_state.json'

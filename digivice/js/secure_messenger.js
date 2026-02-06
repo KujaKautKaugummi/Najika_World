@@ -3,6 +3,9 @@
  * Chat mit Najika mit verschlüsselter Verbindung
  */
 
+// API Base URL - Backend auf Port 8000
+const MSG_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
+
 const SecureMessenger = {
     isOpen: false,
     overlay: null,
@@ -203,7 +206,7 @@ const SecureMessenger = {
 
         // Send to Najika
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${MSG_API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

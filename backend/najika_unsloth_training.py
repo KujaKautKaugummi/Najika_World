@@ -45,7 +45,7 @@ except ImportError as e:
 
 # ===== CONFIGURATION =====
 
-NAJIKA_DIR = Path('C:/NajikaCore')
+NAJIKA_DIR = Path('C:/Najika_World')
 TRAINING_DIR = NAJIKA_DIR / 'training'
 TRAINING_LOG = TRAINING_DIR / 'unsloth_training.log'
 TRAINING_STATE = TRAINING_DIR / 'unsloth_state.json'
