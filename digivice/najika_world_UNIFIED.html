@@ -24,15 +24,58 @@
             position: relative;
         }
 
+        /* UI Top Bar */
+        #ui-top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        #ui-top-bar button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        #ui-top-bar button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        #ui-top-bar button.active {
+            background: #FFD700;
+            color: #000;
+        }
+
         #ui {
             position: absolute;
-            top: 10px;
+            top: 70px;
             left: 10px;
             background: rgba(0, 0, 0, 0.85);
             padding: 20px;
             border-radius: 10px;
             max-width: 350px;
             z-index: 100;
+            display: none;
+        }
+
+        #ui.visible {
+            display: block;
         }
 
         #ui h1 {
@@ -90,10 +133,14 @@
             padding: 15px;
             border-radius: 10px;
             z-index: 100;
-            display: flex;
+            display: none;
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        #controls.visible {
+            display: flex;
         }
 
         #controls button {
@@ -124,7 +171,7 @@
 
         #minimap {
             position: absolute;
-            top: 10px;
+            top: 70px;
             right: 10px;
             width: 200px;
             height: 200px;
@@ -132,11 +179,16 @@
             border: 2px solid #4CAF50;
             border-radius: 10px;
             z-index: 100;
+            display: none;
+        }
+
+        #minimap.visible {
+            display: block;
         }
 
         #najika-stats {
             position: absolute;
-            bottom: 80px;
+            top: 70px;
             left: 10px;
             background: rgba(0, 0, 0, 0.85);
             padding: 15px;
@@ -144,6 +196,40 @@
             max-width: 300px;
             z-index: 100;
             border: 2px solid #667eea;
+            display: none;
+        }
+
+        #najika-stats.visible {
+            display: block;
+        }
+
+        /* Activities Panel */
+        #activities {
+            display: none;
+        }
+
+        #activities.visible {
+            display: block !important;
+        }
+
+        .activity-btn {
+            width: 100%;
+            padding: 10px 12px;
+            margin: 4px 0;
+            background: linear-gradient(135deg, #3a3a5c, #2a2a4a);
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #4a4a7c, #3a3a6a);
+            border-color: #9b59b6;
+            transform: translateX(3px);
         }
 
         #najika-stats h2 {
@@ -177,6 +263,54 @@
             justify-content: space-between;
             font-size: 12px;
             margin: 5px 0;
+        }
+
+        .skill-btn {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            border: 2px solid #9632ff;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .skill-btn:hover {
+            background: linear-gradient(135deg, #2d2d44, #3d3d5c);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #9632ff;
+        }
+        .skill-btn:active {
+            transform: scale(0.95);
+        }
+        .skill-btn.on-cooldown {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        /* Aktivitäten-Menü Buttons */
+        .activity-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #2d2d44, #3d3d5c);
+            border-color: #9b59b6;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+        }
+        .activity-btn:active {
+            transform: translateX(2px) scale(0.98);
         }
 
         #backend-status {
@@ -285,10 +419,93 @@
                 font-size: 12px;
             }
         }
+
+        /* Notification Animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
     </style>
+
+    <!-- Chaos Events CSS -->
+    <link rel="stylesheet" href="static/css/chaos_events.css">
 </head>
 <body>
+    <!-- UI Top Bar -->
+    <div id="ui-top-bar">
+        <button onclick="togglePanel('ui')" id="btn-info">ℹ️ Info</button>
+        <button onclick="togglePanel('najika-stats')" id="btn-najika">🎀 Najika</button>
+        <button onclick="togglePanel('minimap')" id="btn-minimap">🗺️ Karte</button>
+        <button onclick="window.chatUI?.toggleChat()" id="btn-chat">💬 Chat</button>
+        <button onclick="togglePanel('controls')" id="btn-controls">🎮 Controls</button>
+        <button onclick="togglePraise(true)" id="btn-praise">👍 Lob</button>
+        <button onclick="togglePraise(false)" id="btn-criticize">👎 Tadel</button>
+        <!-- Einzelne Spiele-Buttons (direkt aufrufbar) -->
+        <button onclick="window.openTripleTriad?.()" id="btn-triad" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);">🃏 Triad</button>
+        <button onclick="window.openDungeonDice?.()" id="btn-dice" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">🎲 Dice</button>
+        <button onclick="window.openGardenSystem?.()" id="btn-garden" style="background: linear-gradient(135deg, #8BC34A, #558B2F);">🌱 Garten</button>
+        <button onclick="window.openFishingSystem?.()" id="btn-fishing" style="background: linear-gradient(135deg, #03A9F4, #0288D1);">🎣 Angeln</button>
+        <button onclick="window.openHousingSystem?.()" id="btn-housing" style="background: linear-gradient(135deg, #FF9800, #F57C00);">🏰 Housing</button>
+        <button onclick="togglePanel('activities')" id="btn-activities" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">⚙️ Mehr</button>
+    </div>
+
+    <!-- AKTIVITÄTEN-MENÜ -->
+    <div id="activities" class="panel" style="position: fixed; top: 60px; right: 20px; width: 280px; background: rgba(20, 20, 40, 0.95); border: 2px solid #9b59b6; border-radius: 12px; padding: 15px; z-index: 1000;">
+        <h3 style="margin: 0 0 15px 0; color: #9b59b6; text-align: center;">🎮 AKTIVITÄTEN</h3>
+
+        <!-- Leben & Wohnen -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #e91e63; font-size: 12px; margin-bottom: 8px; font-weight: bold;">🏠 LEBEN & WOHNEN</div>
+            <button onclick="openHousingSystem()" class="activity-btn">🏰 Housing (Schwarze Mühle)</button>
+            <button onclick="openGardenSystem()" class="activity-btn">🌱 Garten & Farming</button>
+            <button onclick="openRegionSelector()" class="activity-btn">🌍 Anbaugebiete (9 Regionen)</button>
+            <button onclick="openFishingSystem()" class="activity-btn">🎣 Angeln</button>
+            <button onclick="openFishingShop()" class="activity-btn">🏪 Angel-Shop & Aquarium</button>
+        </div>
+
+        <!-- Kampf & Abenteuer -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #f39c12; font-size: 12px; margin-bottom: 8px; font-weight: bold;">⚔️ KAMPF & ABENTEUER</div>
+            <button onclick="enterDungeon()" class="activity-btn">🗡️ Dungeon betreten</button>
+            <button onclick="openTripleTriad()" class="activity-btn">🃏 Triple Triad</button>
+            <button onclick="openDungeonDice()" class="activity-btn">🎲 Dungeon Dice</button>
+        </div>
+
+        <!-- Minigames & Musik -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #3498db; font-size: 12px; margin-bottom: 8px; font-weight: bold;">🎯 MINIGAMES & MUSIK</div>
+            <button onclick="openMinigames()" class="activity-btn">🎮 Minigame-Auswahl</button>
+            <button onclick="openInstrument()" class="activity-btn">🎵 Instrumente spielen</button>
+        </div>
+
+        <!-- Terminal & Tools -->
+        <div>
+            <div style="color: #2ecc71; font-size: 12px; margin-bottom: 8px; font-weight: bold;">💻 TERMINAL & TOOLS</div>
+            <button onclick="openTerminal()" class="activity-btn">💻 Terminal</button>
+            <button onclick="openSecureMessenger()" class="activity-btn">🔐 Secure Messenger</button>
+            <button onclick="openFileManager()" class="activity-btn">📁 Datei-Manager</button>
+        </div>
+    </div>
+
     <div id="canvas-container"></div>
+
+    <!-- Dummy #scene für 3d_scene.js (wird nicht verwendet) -->
+    <div id="scene" style="display: none;"></div>
 
     <div id="loading">
         <h2>🌍 Lade Najika World...</h2>
@@ -337,6 +554,22 @@
                 <div class="stat-bar-fill" id="happiness-fill" style="background: linear-gradient(90deg, #e91e63, #c2185b); width: 0%;"></div>
             </div>
         </div>
+        <div class="stat-bar">
+            <span>💧 Trinken: <span id="najika-thirst">--</span>%</span>
+            <div class="stat-bar-fill-container">
+                <div class="stat-bar-fill" id="thirst-fill" style="background: linear-gradient(90deg, #00bcd4, #0097a7); width: 0%;"></div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <span>🚿 Sauberkeit: <span id="najika-hygiene">--</span>%</span>
+            <div class="stat-bar-fill-container">
+                <div class="stat-bar-fill" id="hygiene-fill" style="background: linear-gradient(90deg, #4caf50, #388e3c); width: 0%;"></div>
+            </div>
+        </div>
+        <div class="stat-bar" style="margin-top: 10px; padding: 8px; background: rgba(255, 215, 0, 0.1); border-radius: 5px; border: 1px solid #FFD700;">
+            <div style="font-size: 11px; color: #FFD700; margin-bottom: 4px; font-weight: bold;">🎀 Aktuelle Aktivität:</div>
+            <div id="najika-activity" style="font-size: 12px; color: #fff; font-style: italic;">Idle...</div>
+        </div>
         <hr style="margin: 10px 0; border-color: #333;">
         <div class="stat-inline">
             <span>💪 STR: <span id="najika-str">--</span></span>
@@ -349,6 +582,37 @@
         <div class="stat-inline">
             <span>📊 Level: <span id="najika-level">--</span></span>
             <span>⭐ XP: <span id="najika-xp">--</span></span>
+        </div>
+
+        <!-- TEMPERATUR SYSTEM -->
+        <hr style="margin: 10px 0; border-color: #333;">
+        <div style="background: rgba(255, 100, 50, 0.1); padding: 8px; border-radius: 5px; border: 1px solid #ff6432;">
+            <div style="font-size: 11px; color: #ff6432; margin-bottom: 4px; font-weight: bold;">🌡️ TEMPERATUR</div>
+            <div class="stat-bar">
+                <span>Körper: <span id="body-temp">22</span>°C</span>
+                <div class="stat-bar-fill-container">
+                    <div class="stat-bar-fill" id="temp-fill" style="background: linear-gradient(90deg, #3498db, #e74c3c); width: 50%;"></div>
+                </div>
+            </div>
+            <div style="font-size: 10px; color: #aaa; margin-top: 4px;">
+                <span>🏔️ Region: <span id="current-region">Samtmoos-Tiefwald</span></span><br>
+                <span>🌤️ Umgebung: <span id="env-temp">22</span>°C</span>
+            </div>
+        </div>
+
+        <!-- SKILLS SCHNELLZUGRIFF -->
+        <hr style="margin: 10px 0; border-color: #333;">
+        <div style="background: rgba(150, 50, 255, 0.1); padding: 8px; border-radius: 5px; border: 1px solid #9632ff;">
+            <div style="font-size: 11px; color: #9632ff; margin-bottom: 6px; font-weight: bold;">✨ SKILLS (1-4)</div>
+            <div id="skill-quickbar" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <button onclick="useSkill('fireball')" class="skill-btn" title="Fireball">🔥</button>
+                <button onclick="useSkill('ice_shard')" class="skill-btn" title="Ice Shard">❄️</button>
+                <button onclick="useSkill('lightning_bolt')" class="skill-btn" title="Lightning">⚡</button>
+                <button onclick="useSkill('heal')" class="skill-btn" title="Heal">💚</button>
+            </div>
+            <div style="font-size: 10px; color: #aaa; margin-top: 4px;">
+                <span>💎 Mana: <span id="current-mana">50</span>/100</span>
+            </div>
         </div>
     </div>
 
@@ -383,12 +647,18 @@
         <span id="e-prompt-text">Schwarze Windmühle betreten</span>
     </div>
 
+    <div id="q-prompt" style="display: none;">
+        <span class="e-key" style="background: #FF6B6B;">Q</span>
+        <span>Gebäude verlassen</span>
+    </div>
+
     <div id="mobile-joystick">
         <div id="mobile-joystick-thumb"></div>
     </div>
 
     <div id="controls">
         <button onclick="switchCameraMode()">📷 Kamera</button>
+        <button onclick="teleportToMuehle()" style="background: #8b00ff; color: white;">🏠 Schwarze Mühle</button>
         <button onclick="teleportTo('ice')">❄️ Ice</button>
         <button onclick="teleportTo('highland')">⛰️ Highland</button>
         <button onclick="teleportTo('desert')">🏜️ Desert</button>
@@ -420,8 +690,343 @@
     <script src="static/js/sound_system.js"></script>
     <script src="static/js/tutorial_system.js"></script>
     <script src="static/js/realtime_combat.js"></script>
+    <script src="static/js/game_data_loader.js"></script>
+
+    <!-- ========================================== -->
+    <!-- PHASE 2: World Manager System (OPTIONAL)   -->
+    <!-- ========================================== -->
+    <!-- Toggle USE_PHASE_2 um Phase 2 zu aktivieren -->
+    <script>
+        // 🎮 PHASE 2 TOGGLE - Setze auf true für Terrain Variation!
+        // false = Phase 1 (Flat Terrain, stabil, getestet)
+        // true  = Phase 2 (Terrain Variation, Vegetation, FINALE VERSION!)
+        const USE_PHASE_2 = true;
+
+        if (USE_PHASE_2) {
+            console.log('🌍 Phase 2 enabled: Terrain Variation, Vegetation, LOD');
+        } else {
+            console.log('🌍 Phase 1 enabled: Flat Terrain (stable)');
+        }
+    </script>
+
+    <!-- Phase 2 Module (in Reihenfolge laden!) -->
+    <script src="js/world/terrain_generator.js"></script>
+    <script src="js/world/biome_system.js"></script>
+    <script src="js/world/vegetation_system.js"></script>
+    <script src="js/world/city_builder.js"></script>
+    <script src="js/world/region_streaming_v2.js"></script>
+    <script src="js/world/lod_manager.js"></script>
+    <script src="js/world/asset_loader.js"></script>
+    <script src="js/world/asset_discovery.js"></script>
+    <script src="js/world/world_manager.js"></script>
+    <!-- ========================================== -->
+
+    <!-- ========================================== -->
+    <!-- ROOM SYSTEM & BUILDING INTERIORS           -->
+    <!-- ========================================== -->
+    <script src="js/kaykit_loader.js"></script>
+    <script src="js/command_system.js"></script>
+    <script src="js/battle_api.js"></script>
+    <script src="js/dungeon_generator.js"></script>
+    <script src="js/dungeon_enemies.js"></script>
+    <script src="js/dungeon_combat.js"></script>
+    <script src="js/minigames.js"></script>
+    <script src="js/chat_ui.js"></script>
+    <script src="js/touch_controls.js"></script>
+    <script src="js/private_mode.js"></script>
+    <script src="js/code_editor.js"></script>
+    <script src="js/file_manager.js"></script>
+    <script src="js/system_monitor.js"></script>
+    <script src="js/secure_messenger.js"></script>
+    <script src="js/terminal_modules.js"></script>
+    <script src="static/js/api_client.js"></script>
+    <script src="static/js/world_mode_manager.js"></script>
+    <script src="js/fishing.js"></script>
+    <script src="js/garden.js"></script>
+    <script src="js/buildings_custom.js"></script>
+    <script src="js/character_animations.js"></script>
+    <script src="js/3d_scene.js"></script>
+    <script src="js/voice_call.js"></script>
+    <!-- Phase 1 Systems -->
+    <script src="js/equipment_combat.js"></script>
+    <script src="js/touch_combat.js"></script>
+    <script src="js/triple_triad.js"></script>
+    <script src="js/dungeon_dice_shop.js"></script>
+    <script src="js/dungeon_dice_game.js"></script>
+    <script src="js/housing_system.js"></script>
+    <script src="js/instrument_system.js"></script>
+    <!-- ========================================== -->
 
     <script>
+        // ===== KEYBOARD INPUT GUARD (CRITICAL FIX!) =====
+        // Blockiert Game-Shortcuts wenn der User im Chat oder anderen Input-Feldern tippt
+        function isTypingInInput() {
+            const activeEl = document.activeElement;
+            if (!activeEl) return false;
+            const tag = activeEl.tagName.toUpperCase();
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return true;
+            if (activeEl.contentEditable === 'true') return true;
+            // Prüfe ob Chat-Container fokussiert ist
+            if (activeEl.closest && activeEl.closest('#chat-container')) return true;
+            return false;
+        }
+
+        // ===== UI TOGGLE SYSTEM =====
+        function togglePanel(panelId) {
+            console.log('[UI] togglePanel:', panelId);
+            const panel = document.getElementById(panelId);
+            const button = document.getElementById(`btn-${panelId === 'najika-stats' ? 'najika' : panelId}`);
+
+            if (panel) {
+                panel.classList.toggle('visible');
+                console.log('[UI] Panel visible:', panel.classList.contains('visible'));
+                if (button) {
+                    button.classList.toggle('active');
+                }
+            } else {
+                console.warn('[UI] Panel nicht gefunden:', panelId);
+            }
+        }
+        // Global export
+        window.togglePanel = togglePanel;
+
+        async function togglePraise(isPositive) {
+            const action = isPositive ? 'praise' : 'criticize';
+            const emoji = isPositive ? '👍' : '👎';
+            const text = isPositive ? 'Lob' : 'Tadel';
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/najika/${action}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                });
+
+                const result = await response.json();
+
+                if (result.ok) {
+                    showNotification(`${emoji} ${text} gegeben! Najika: "${result.message}"`, 3000);
+                    console.log(`[Najika] ${text}:`, result);
+                } else {
+                    showNotification(`❌ ${text} fehlgeschlagen`, 2000);
+                }
+            } catch (error) {
+                console.error(`[Najika] ${text} error:`, error);
+                showNotification('❌ Verbindungsfehler', 2000);
+            }
+        }
+
+        // ===== AKTIVITÄTEN FUNKTIONEN =====
+
+        // Housing System (Schwarze Mühle)
+        function openHousingSystem() {
+            if (window.HousingSystem) {
+                window.HousingSystem.enter(); // enter = enterEditMode
+                togglePanel('activities'); // Menü schließen
+                showNotification('🏰 Housing Modus aktiviert!', 2000);
+            } else {
+                showNotification('❌ Housing System nicht geladen', 2000);
+            }
+        }
+
+        // Garden System (Farming)
+        function openGardenSystem() {
+            if (window.GardenSystem) {
+                window.GardenSystem.showGardenUI();
+                togglePanel('activities');
+                showNotification('🌱 Garten geöffnet!', 2000);
+            } else {
+                showNotification('❌ Garden System nicht geladen', 2000);
+            }
+        }
+
+        // Region Selector (9 Anbaugebiete)
+        function openRegionSelector() {
+            if (window.GardenSystem && window.GardenSystem.showRegionSelector) {
+                window.GardenSystem.showRegionSelector();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Region System nicht geladen', 2000);
+            }
+        }
+
+        // Fishing System
+        function openFishingSystem() {
+            if (window.FishingSystem) {
+                window.FishingSystem.startFishing();
+                togglePanel('activities');
+                showNotification('🎣 Angel ausgeworfen!', 2000);
+            } else {
+                showNotification('❌ Fishing System nicht geladen', 2000);
+            }
+        }
+
+        // Fishing Shop
+        function openFishingShop() {
+            if (window.FishingSystem && window.FishingSystem.openFishingShop) {
+                window.FishingSystem.openFishingShop();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Angel-Shop nicht verfügbar', 2000);
+            }
+        }
+
+        // Dungeon Combat
+        function enterDungeon() {
+            if (window.DungeonCombat) {
+                // Starte Kampf mit Dummy-Enemy zum Testen
+                window.DungeonCombat.startDungeonCombat({
+                    name: 'Dungeon-Gegner',
+                    health: 100,
+                    maxHealth: 100,
+                    attack: 10,
+                    defense: 5
+                });
+                togglePanel('activities');
+                showNotification('⚔️ Dungeon-Kampf gestartet!', 2000);
+            } else {
+                showNotification('❌ Dungeon System nicht geladen', 2000);
+            }
+        }
+
+        // Minigames - Auswahl-Dialog
+        function openMinigames() {
+            // Zeige Minigame-Auswahl Dialog
+            const overlay = document.createElement('div');
+            overlay.id = 'minigame-select-overlay';
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.9); display: flex;
+                align-items: center; justify-content: center; z-index: 10000;
+            `;
+            overlay.innerHTML = `
+                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); border: 2px solid #4CAF50;
+                            border-radius: 15px; padding: 25px; min-width: 350px; color: #fff; text-align: center;">
+                    <h2 style="margin: 0 0 20px 0; color: #4CAF50;">🎮 Minigames</h2>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button onclick="openTripleTriad()" style="padding: 15px; background: #4CAF50; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🃏 Triple Triad (Kartenspiel)
+                        </button>
+                        <button onclick="openDungeonDiceShop()" style="padding: 15px; background: #9C27B0; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🎲 Dungeon Dice Monsters
+                        </button>
+                        <button onclick="openOldMinigames()" style="padding: 15px; background: #2196F3; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🎯 Klassische Minigames
+                        </button>
+                        <button onclick="closeMinigameSelect()" style="padding: 10px; background: #666; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;">
+                            Abbrechen
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            togglePanel('activities');
+        }
+
+        function closeMinigameSelect() {
+            const overlay = document.getElementById('minigame-select-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function openTripleTriad() {
+            closeMinigameSelect();
+            if (window.TripleTriadUI) {
+                // Standard-NPC zum Spielen
+                window.TripleTriadUI.open('dampf_hain_haendler');
+            } else {
+                showNotification('❌ Triple Triad nicht geladen', 2000);
+            }
+        }
+
+        function openDungeonDiceShop() {
+            closeMinigameSelect();
+            if (window.DungeonDiceShop) {
+                // Öffne Shop basierend auf aktueller Region (default: dampf_hain)
+                const currentRegion = window.currentRegion || 'dampf_hain';
+                const shopMapping = {
+                    'heisse_duenen': 'handelsfestung',
+                    'samtmoos_tiefwald': 'dampf_hain',
+                    'salzwind_kueste': 'salzige_bucht',
+                    'blitzebene': 'runenheim',
+                    'magmastroeme': 'funken_siedlung'
+                };
+                const shopId = shopMapping[currentRegion] || 'dampf_hain';
+                window.DungeonDiceShop.openShop(shopId);
+            } else {
+                showNotification('❌ Dungeon Dice nicht geladen', 2000);
+            }
+        }
+
+        // Alias für alte Button-Handler
+        function openDungeonDice() {
+            openDungeonDiceShop();
+        }
+
+        function openOldMinigames() {
+            closeMinigameSelect();
+            if (window.MiniGames) {
+                window.MiniGames.open();
+            } else {
+                showNotification('❌ Minigames nicht geladen', 2000);
+            }
+        }
+
+        // Instrumente (Ocarina-Style)
+        function openInstrument() {
+            if (window.InstrumentSystem) {
+                window.InstrumentSystem.open();
+                togglePanel('activities');
+                showNotification('🎵 Instrument bereit! Tasten: A-S-D-F-G-H-J-K-L', 3000);
+            } else {
+                showNotification('❌ Instrument System nicht geladen', 2000);
+            }
+        }
+
+        // Terminal
+        function openTerminal() {
+            if (window.TerminalModules && window.TerminalModules.openSwitcher) {
+                window.TerminalModules.openSwitcher();
+                togglePanel('activities');
+            } else if (window.terminalSystem) {
+                window.terminalSystem.show();
+                togglePanel('activities');
+            } else {
+                // Fallback: Suche nach Terminal Panel
+                const terminalPanel = document.getElementById('terminal-panel') || document.querySelector('.terminal-container');
+                if (terminalPanel) {
+                    terminalPanel.style.display = 'flex';
+                    togglePanel('activities');
+                } else {
+                    showNotification('💻 Terminal wird geladen...', 2000);
+                }
+            }
+        }
+
+        // Secure Messenger
+        function openSecureMessenger() {
+            if (window.SecureMessenger) {
+                window.SecureMessenger.open();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Secure Messenger nicht geladen', 2000);
+            }
+        }
+
+        // File Manager
+        function openFileManager() {
+            if (window.FileManager) {
+                window.FileManager.open();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ File Manager nicht geladen', 2000);
+            }
+        }
+
+        // ===== MAIN SCRIPT =====
         const THREE = window.THREE;
 
         // Scene Setup (Phase 6: Optimiert für Performance)
@@ -519,6 +1124,7 @@
 
         // Combat Mode Toggle (F6 key)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (e.key === 'F6') {
                 e.preventDefault();
                 const currentMode = realtimeCombat.combatMode;
@@ -584,10 +1190,10 @@
         // Optimierte Shadow Map (2048 statt 4096 für Performance)
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
-        directionalLight.shadow.camera.left = -150;
-        directionalLight.shadow.camera.right = 150;
-        directionalLight.shadow.camera.top = 150;
-        directionalLight.shadow.camera.bottom = -150;
+        directionalLight.shadow.camera.left = -5000;
+        directionalLight.shadow.camera.right = 5000;
+        directionalLight.shadow.camera.top = 5000;
+        directionalLight.shadow.camera.bottom = -5000;
         directionalLight.shadow.camera.near = 0.5;
         directionalLight.shadow.camera.far = 500;
         directionalLight.shadow.bias = -0.0001;
@@ -597,22 +1203,58 @@
         const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x8B7355, 0.3);
         scene.add(hemiLight);
 
-        // 9 REGIONS (3x3 Grid, each ~133x133 - 4x größer!)
-        const regionSize = 133.32;
-        const regions = [
-            // Row 1 (top): z=133.32
-            { name: 'ice',      color: 0xf0f8ff, x: -133.32, z: 133.32,  y: 0 },
-            { name: 'highland', color: 0x8b7355, x: 0,       z: 133.32,  y: 0 },
-            { name: 'desert',   color: 0xe8d4a0, x: 133.32,  z: 133.32,  y: 0 },
-            // Row 2 (middle): z=0
-            { name: 'swamp',    color: 0x556b2f, x: -133.32, z: 0,       y: 0 },
-            { name: 'mountain', color: 0x808080, x: 0, z: 0,       y: 5 },  // Berg höher!
-            { name: 'coast',    color: 0xc2b280, x: 133.32,  z: 0,       y: 0 },
-            // Row 3 (bottom): z=-133.32
-            { name: 'caves',    color: 0x2f2f2f, x: -133.32, z: -133.32, y: 0 },
-            { name: 'forest',   color: 0x2d5016, x: 0,       z: -133.32, y: 0 },
-            { name: 'volcano',  color: 0x8b4513, x: 133.32,  z: -133.32, y: 0 }
+        // ========================================
+        // PHASE 2 WORLD MANAGER (OPTIONAL)
+        // ========================================
+        let worldManager = null;
+
+        if (USE_PHASE_2) {
+            console.log('🌍 Initializing Phase 2: World Manager System...');
+            // WorldManager wird nach DataLoader initialisiert (async)
+            // Siehe weiter unten bei initGame()
+        }
+
+        // ========================================
+        // PHASE 1: FLAT REGIONS (wenn nicht Phase 2)
+        // ========================================
+
+        // 9 REGIONS (3x3 Grid, each 3200×3200m) - MUSS GLOBAL sein für Minimap!
+        const regionSize = 3200;
+        let regions = [];
+        let gridHelper = null;
+
+        // =====================================================
+        // KORRIGIERTE KOORDINATEN: 0-9600 (Welt-Zentrum: 4800,4800)
+        // =====================================================
+        // Laut regions.json:
+        // - Reich der Drei (ice): x:0-2400, z:0-2400 → Zentrum bei 1200,1200
+        // - Samtmoos-Tiefwald (forest): x:3600-6000, z:0-2400 → Zentrum bei 4800,1200
+        // - Tiefenhöhlen (caves): unter forest → Zentrum bei 4800,1200
+        // - Salzwind-Küste (coast): x:0-2400, z:3600-6000 → Zentrum bei 1200,4800
+        // - Götterfels (mountain): x:3300-6300, z:3300-6300 → Zentrum bei 4800,4800
+        // - Blitzebene (highland): x:7200-9600, z:3600-6000 → Zentrum bei 8400,4800
+        // - Grünschlamm-Sumpf (swamp): x:0-2400, z:7200-9600 → Zentrum bei 1200,8400
+        // - Magmaströme (volcano): x:3600-6000, z:7200-9600 → Zentrum bei 4800,8400
+        // - Heiße Dünen (desert): x:7200-9600, z:7200-9600 → Zentrum bei 8400,8400
+
+        // IMMER Regionen definieren (für Enemy Spawning und Minimap)
+        regions = [
+            // Row 1 (Nord): z=0-3200, Zentrum bei z=1200
+            { name: 'ice',      color: 0x87CEEB, x: 1200, z: 1200, y: 0 },   // Reich der Drei (Nordwest)
+            { name: 'forest',   color: 0x228B22, x: 4800, z: 1200, y: 0 },   // Samtmoos-Tiefwald (Nord-Mitte)
+            { name: 'caves',    color: 0x4B0082, x: 8400, z: 1200, y: 0 },   // Caves placeholder (Nordost)
+            // Row 2 (Mitte): z=3200-6400, Zentrum bei z=4800
+            { name: 'coast',    color: 0x4169E1, x: 1200, z: 4800, y: 0 },   // Salzwind-Küste (West)
+            { name: 'mountain', color: 0x808080, x: 4800, z: 4800, y: 50 },  // Götterfels (Zentrum) - höher!
+            { name: 'highland', color: 0x9370DB, x: 8400, z: 4800, y: 20 },  // Blitzebene (Ost)
+            // Row 3 (Süd): z=6400-9600, Zentrum bei z=8400
+            { name: 'swamp',    color: 0x556B2F, x: 1200, z: 8400, y: 0 },   // Grünschlamm-Sumpf (Südwest)
+            { name: 'volcano',  color: 0xFF4500, x: 4800, z: 8400, y: 10 },  // Magmaströme (Süd-Mitte)
+            { name: 'desert',   color: 0xDAA520, x: 8400, z: 8400, y: 5 }    // Heiße Dünen (Südost)
         ];
+
+        if (!USE_PHASE_2) {
+            console.log('🌍 Creating Phase 1: Flat Regions (9×3200m) - KORRIGIERTE 0-9600 Koordinaten!');
 
         regions.forEach(region => {
             const geometry = new THREE.PlaneGeometry(regionSize, regionSize, 20, 20);
@@ -623,16 +1265,52 @@
             });
             const mesh = new THREE.Mesh(geometry, material);
             mesh.rotation.x = -Math.PI / 2;
+            // WICHTIG: Regionen werden an ihren Zentren platziert (x, z sind jetzt korrekt 0-9600)
             mesh.position.set(region.x, region.y, region.z);
             mesh.receiveShadow = true;
             mesh.name = `region_${region.name}`;
+            mesh.userData.isRegion = true; // Markierung für Terrain-Height
             scene.add(mesh);
+
+            console.log(`  ✅ Region ${region.name} bei X=${region.x}, Z=${region.z}`);
         });
 
-        // Grid (4x größer: 400x400)
-        const gridHelper = new THREE.GridHelper(400, 80, 0x000000, 0x444444);
+        // Grid zentriert bei 4800,4800 (Welt-Zentrum)
+        gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+        gridHelper.position.set(4800, 0.1, 4800); // Zentriere Grid auf Welt-Mitte!
         gridHelper.visible = true;
         scene.add(gridHelper);
+
+        } else {
+            console.log('🌍 Phase 2 aktiv - erstelle trotzdem Basis-Boden für Sichtbarkeit...');
+
+            // IMMER einen Basis-Boden erstellen (auch für Phase 2 als Fallback)
+            // Das WorldManager-Terrain wird darüber gerendert wenn es funktioniert
+            regions.forEach(region => {
+                const geometry = new THREE.PlaneGeometry(regionSize, regionSize, 4, 4);
+                const material = new THREE.MeshStandardMaterial({
+                    color: region.color,
+                    roughness: 0.9,
+                    metalness: 0.1
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.rotation.x = -Math.PI / 2;
+                mesh.position.set(region.x, region.y - 1, region.z); // 1m unter normalem Y
+                mesh.receiveShadow = true;
+                mesh.name = `region_fallback_${region.name}`;
+                mesh.userData.isRegion = true;
+                mesh.userData.isFallback = true;
+                scene.add(mesh);
+            });
+            console.log('  ✅ 9 Fallback-Regionen erstellt');
+
+            // Grid auch für Phase 2
+            gridHelper = new THREE.GridHelper(9600, 100, 0x333333, 0x222222);
+            gridHelper.position.set(4800, 0.1, 4800);
+            gridHelper.visible = true;
+            scene.add(gridHelper);
+        }
+        // ======================================== END PHASE 1 ========================================
 
         // Najika Character (KayKit Mage Model - Phase 6)
         let character = new THREE.Group();
@@ -645,7 +1323,7 @@
                 });
 
                 najikaModel = gltf.scene;
-                najikaModel.scale.set(2.5, 2.5, 2.5); // Größer für bessere Sichtbarkeit
+                najikaModel.scale.set(0.75, 0.75, 0.75); // Najika ist 1.35-1.40m groß (kleiner als Erwachsene)
 
                 najikaModel.traverse((child) => {
                     if (child.isMesh) {
@@ -658,8 +1336,8 @@
                 console.log('✅ Najika Character (Mage) geladen!');
             } catch (error) {
                 console.warn('⚠️  Najika Character konnte nicht geladen werden, verwende Fallback:', error);
-                // Fallback: Simple colored cube
-                const fallbackGeometry = new THREE.BoxGeometry(2, 4, 2);
+                // Fallback: Simple colored cube (Najika: 1.35m hoch)
+                const fallbackGeometry = new THREE.BoxGeometry(0.45, 1.35, 0.45);
                 const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
                 const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
                 fallback.castShadow = true;
@@ -668,12 +1346,15 @@
             }
         }
 
-        // Position: Mitte der Map (Berg-Region, leicht erhöht)
-        character.position.set(0, 8.5, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
+        // Position: Götterfels - Weltzentrum bei (4800, 4800)
+        // Initial spawn height - will be corrected by updateCharacterHeight() in animation loop
+        const initialGroundHeight = getGroundHeight(4800, 4800);
+        character.position.set(4800, initialGroundHeight + 3.5, 4800);  // Auf dem Berg bei Götterfels
+        console.log('🎮 Spieler spawnt bei Y=' + (initialGroundHeight + 3.5));
         scene.add(character);
 
         // Camera folgt Character (Third-Person Mode)
-        cameraController.setCharacter(character, 4.5); // Höher für Mage-Model
+        cameraController.setCharacter(character, 1.8); // Angepasst für Najika (1.35-1.40m)
         cameraController.setMode(cameraController.MODES.THIRD);
         document.getElementById('camera-mode').textContent = 'THIRD';
 
@@ -693,6 +1374,7 @@
 
         // Manual Save/Load (F5/F9)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // F5: Manual Save
             if (e.key === 'F5') {
                 e.preventDefault();
@@ -726,6 +1408,7 @@
         let slideDirection = 0;
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             switch(e.key.toLowerCase()) {
                 case 'w': keys.w = true; break;
                 case 'a': keys.a = true; break;
@@ -760,6 +1443,7 @@
         });
 
         window.addEventListener('keyup', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             switch(e.key.toLowerCase()) {
                 case 'w': keys.w = false; break;
                 case 'a': keys.a = false; break;
@@ -826,17 +1510,54 @@
 
         // E-Taste für Gebäude-Zugang
         let nearBuilding = null;
+        let lastInteriorToggle = 0;
+        const INTERIOR_TOGGLE_COOLDOWN = 1000; // 1 second cooldown
 
         window.addEventListener('keydown', (e) => {
-            // E-Taste: Gebäude betreten/verlassen
+            if (isTypingInInput()) return; // KEYBOARD GUARD
+            // E-Taste: Gebäude betreten/verlassen (PRIORITÄT über Combat!)
             if (e.key === 'e' || e.key === 'E') {
+                // Cooldown check to prevent rapid enter/exit
+                if (Date.now() - lastInteriorToggle < INTERIOR_TOGGLE_COOLDOWN) {
+                    return;
+                }
+
                 if (nearBuilding) {
-                    // Check if it's an Exit Portal
+                    // WICHTIG: Stoppe Event-Propagation damit Combat nicht auch feuert!
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+
+                    // Check if it's an Exit Portal (only works INSIDE interior)
                     if (nearBuilding.userData && nearBuilding.userData.isExitPortal) {
-                        unloadBuildingInterior();
+                        if (isInInterior) {
+                            lastInteriorToggle = Date.now();
+                            unloadBuildingInterior();
+                        }
                     } else {
-                        enterBuilding(nearBuilding);
+                        // Regular building entry (only works OUTSIDE)
+                        if (!isInInterior) {
+                            lastInteriorToggle = Date.now();
+                            enterBuilding(nearBuilding);
+                        }
                     }
+                }
+            }
+
+            // Q-Taste: Interior verlassen (Mühle/Stadt)
+            if (e.key === 'q' || e.key === 'Q') {
+                if (isInInterior) {
+                    unloadBuildingInterior();
+                }
+            }
+
+            // H-Taste: Housing System (nur in der Mühle)
+            if (e.key === 'h' || e.key === 'H') {
+                if (isInInterior && window.HousingSystem) {
+                    // Raum-Name aus aktuellem Floor holen
+                    const floor = muehleFloors[currentMuehleFloor];
+                    const roomName = floor && floor.rooms[0] ? floor.rooms[0].toLowerCase().replace(/[^a-z]/g, '') : 'wohnzimmer';
+                    window.HousingSystem.enter(roomName);
+                    console.log('🏠 Housing Edit Mode aktiviert für: ' + roomName);
                 }
             }
 
@@ -848,13 +1569,20 @@
             const ePrompt = document.getElementById('e-prompt');
             const ePromptText = document.getElementById('e-prompt-text');
 
+            // WICHTIG: Wenn im Interior, zeige KEINEN E-Prompt!
+            if (isInInterior) {
+                ePrompt.style.display = 'none';
+                nearBuilding = null;
+                return;
+            }
+
             let closestBuilding = null;
             let closestDistance = Infinity;
 
             // Check Schwarze Windmühle
             if (schwarzeMuehle) {
                 const distance = character.position.distanceTo(schwarzeMuehle.position);
-                const radius = schwarzeMuehle.userData.proximityRadius || 15;
+                const radius = schwarzeMuehle.userData.proximityRadius || 150; // Default 150m für 3200m Map
 
                 if (distance < radius && distance < closestDistance) {
                     closestBuilding = schwarzeMuehle;
@@ -865,7 +1593,7 @@
             // Check alle Städte & Besondere Orte
             for (const building of buildings) {
                 const distance = character.position.distanceTo(building.position);
-                const radius = building.userData.proximityRadius || 12;
+                const radius = building.userData.proximityRadius || 120; // Default 120m für 3200m Map
 
                 if (distance < radius && distance < closestDistance) {
                     closestBuilding = building;
@@ -877,39 +1605,56 @@
             if (closestBuilding) {
                 nearBuilding = closestBuilding;
                 const buildingName = closestBuilding.userData.buildingName || 'Gebäude';
+                const buildingType = closestBuilding.userData.buildingType || 'unknown';
                 ePromptText.textContent = buildingName + ' betreten';
                 ePrompt.style.display = 'block';
+                // console.log(`🏠 Nähe: ${buildingName} (Type: ${buildingType}, Distance: ${closestDistance.toFixed(1)}m)`);
             } else {
                 nearBuilding = null;
                 ePrompt.style.display = 'none';
             }
         }
 
-        // Gebäude betreten
+        // Gebäude betreten - ECHTE INTERIORS!
         function enterBuilding(building) {
             const buildingType = building.userData.buildingType;
             const buildingName = building.userData.buildingName;
             const buildingDescription = building.userData.buildingDescription;
 
-            console.log(`🏠 Betrete ${buildingName}...`);
+            console.log(`🏠 Betrete ${buildingName}... (Type: ${buildingType})`);
 
             if (buildingType === 'schwarze_muehle') {
-                // Öffne Schwarze Windmühle (vollständiges Digivice mit 12 Räumen)
-                window.open('/digivice/index.html', '_blank', 'width=1400,height=900');
+                console.log('🏰 Schwarze Mühle - Lade 4-Etagen Interior...');
+                loadMuehleInterior();
+                return;
             }
-            else if (buildingType === 'city') {
-                // Stadt betreten - Lade Stadt-Interior
-                const cityData = {
-                    name: buildingName,
-                    type: buildingType,
-                    description: buildingDescription
-                };
-                loadBuildingInterior(cityData);
-            }
-            else if (buildingType === 'special') {
-                // Besonderer Ort betreten
-                alert(`✨ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Interior wird noch implementiert)`);
-                console.log(`Besonderer Ort: ${buildingName} - ${buildingDescription}`);
+            else if (buildingType === 'city' || buildingType === 'special') {
+                // Stadt/Besonderer Ort betreten - ECHTES INTERIOR!
+                console.log(`🏘️ Lade Interior für ${buildingName}...`);
+
+                // Finde passende cityData aus cityLocations
+                const cityData = cityLocations.find(c => c.name === buildingName);
+                if (cityData) {
+                    // Nutze loadBuildingInterior für echtes Interior
+                    loadBuildingInterior({
+                        id: buildingName.toLowerCase().replace(/[\s-]/g, '_'),
+                        name: buildingName,
+                        region: cityData.region,
+                        description: buildingDescription,
+                        type: buildingType,
+                        buildings: { types: [] } // Placeholder für CityBuilder Integration
+                    });
+                } else {
+                    // Fallback: Einfaches Interior
+                    loadBuildingInterior({
+                        id: buildingName.toLowerCase().replace(/[\s-]/g, '_'),
+                        name: buildingName,
+                        region: 'unknown',
+                        description: buildingDescription,
+                        type: buildingType,
+                        buildings: { types: [] }
+                    });
+                }
             }
         }
 
@@ -941,7 +1686,12 @@
                     building.visible = false;
                 });
                 if (schwarzeMuehle) schwarzeMuehle.visible = false;
-                gridHelper.visible = false;
+                if (gridHelper) gridHelper.visible = false;
+
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
 
                 // 4. Generiere und lade Interior
                 const interior = interiorGenerator.generateCityInterior(cityData);
@@ -977,16 +1727,28 @@
 
             console.log('🚪 Verlasse Interior...');
 
+            // WICHTIG: Markiere SOFORT als "nicht in Interior" um weitere E-Taste Events zu blockieren
+            isInInterior = false;
+            const savedInteriorState = currentInteriorState;
+            currentInteriorState = null;
+
             // 1. Fade-Out
             document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
             document.getElementById('canvas-container').style.opacity = '0.3';
 
             setTimeout(() => {
-                // 2. Entferne Interior
-                interiorGenerator.unloadInterior();
+                // 2. Entferne Interior (City) und Mühle-Räume
+                if (typeof interiorGenerator !== 'undefined') {
+                    interiorGenerator.unloadInterior();
+                }
+                // Entferne Mühle-Räume
+                const muehleRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                muehleRooms.forEach(room => scene.remove(room));
 
                 // 2.5. Clear NPCs (Phase 6)
-                npcSystem.clearNPCs();
+                if (typeof npcSystem !== 'undefined') {
+                    npcSystem.clearNPCs();
+                }
 
                 // 3. Zeige Exterior-Objekte wieder
                 regions.forEach(region => {
@@ -1000,28 +1762,692 @@
                     building.visible = true;
                 });
                 if (schwarzeMuehle) schwarzeMuehle.visible = true;
-                gridHelper.visible = true;
+                if (gridHelper) gridHelper.visible = true;
+                // Zeige Region Marker wieder
+                scene.children.forEach(obj => {
+                    if (obj.userData.isRegionMarker) obj.visible = true;
+                });
+
+                // 3.5. Zeige WorldManager wieder (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(true);
+                }
+
+                // 3.6. Stelle Außenwelt-Fog/Background wieder her
+                scene.background = new THREE.Color(0x87CEEB); // Himmelblau
+                scene.fog = new THREE.Fog(0x87CEEB, 80, 250); // Weite Sicht
 
                 // 4. Stelle Character-Position wieder her
-                character.position.copy(currentInteriorState.position);
+                character.position.copy(savedInteriorState.position);
 
                 // 5. Stelle Kamera wieder her
-                cameraController.setMode(currentInteriorState.cameraMode);
+                cameraController.setMode(savedInteriorState.cameraMode);
                 cameraController.setTarget(
-                    currentInteriorState.position.x,
-                    getGroundHeight(currentInteriorState.position.x, currentInteriorState.position.z),
-                    currentInteriorState.position.z
+                    savedInteriorState.position.x,
+                    getGroundHeight(savedInteriorState.position.x, savedInteriorState.position.z),
+                    savedInteriorState.position.z
                 );
 
                 // 6. Fade-In
                 document.getElementById('canvas-container').style.opacity = '1';
 
-                // 7. Markiere als "nicht in Interior"
-                isInInterior = false;
-                currentInteriorState = null;
+                // 8. Verstecke Mühle-UI (falls vorhanden)
+                hideMuehleFloorUI();
+
+                // 9. Verstecke Q-Prompt
+                document.getElementById('q-prompt').style.display = 'none';
 
                 console.log('✅ Zurück in Exterior!');
             }, 300);
+        }
+
+        // ===== EINFACHE MÜHLE VERSION (1 Raum: Wohnzimmer) =====
+        function loadMuehleInteriorSimple() {
+            console.log('🏰 Lade Schwarze Mühle Interior (Simple)...');
+
+            // 1. Speichere Exterior-Position
+            currentInteriorState = {
+                position: character.position.clone(),
+                cameraMode: cameraController.getMode(),
+                worldObjects: []
+            };
+
+            // 2. Fade-Out
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(() => {
+                // 3. Verstecke Exterior
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = false;
+                });
+                loadedAssets.forEach(asset => {
+                    if (asset.model) asset.model.visible = false;
+                });
+                buildings.forEach(building => building.visible = false);
+                if (schwarzeMuehle) schwarzeMuehle.visible = false;
+                gridHelper.visible = false;
+
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
+
+                // 4. Erstelle EINFACHEN Raum (Wohnzimmer, 48x48m)
+                const roomSize = 48;
+                const wallHeight = 6;
+
+                // Entferne alte Raum-Objekte
+                const oldRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                oldRooms.forEach(room => scene.remove(room));
+
+                // Boden (grün für Test)
+                const floorGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+                const floorMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x8b7355, // Braun (Holz)
+                    roughness: 0.9
+                });
+                const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                floorMesh.rotation.x = -Math.PI / 2;
+                floorMesh.position.y = 0;
+                floorMesh.receiveShadow = true;
+                floorMesh.userData.isMuehleRoom = true;
+                scene.add(floorMesh);
+
+                // 4 Wände
+                const wallMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x5a4a3a // Dunkelbraun
+                });
+
+                // Nord-Wand
+                const wallNorth = new THREE.Mesh(
+                    new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                    wallMaterial
+                );
+                wallNorth.position.set(0, wallHeight / 2, -roomSize / 2);
+                wallNorth.userData.isMuehleRoom = true;
+                wallNorth.castShadow = true;
+                scene.add(wallNorth);
+
+                // Süd-Wand
+                const wallSouth = new THREE.Mesh(
+                    new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                    wallMaterial
+                );
+                wallSouth.position.set(0, wallHeight / 2, roomSize / 2);
+                wallSouth.userData.isMuehleRoom = true;
+                wallSouth.castShadow = true;
+                scene.add(wallSouth);
+
+                // West-Wand
+                const wallWest = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                    wallMaterial
+                );
+                wallWest.position.set(-roomSize / 2, wallHeight / 2, 0);
+                wallWest.userData.isMuehleRoom = true;
+                wallWest.castShadow = true;
+                scene.add(wallWest);
+
+                // Ost-Wand
+                const wallEast = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                    wallMaterial
+                );
+                wallEast.position.set(roomSize / 2, wallHeight / 2, 0);
+                wallEast.userData.isMuehleRoom = true;
+                wallEast.castShadow = true;
+                scene.add(wallEast);
+
+                // 5. Positioniere Character IM RAUM (Zentrum, auf dem Boden)
+                character.position.set(0, 3.5, 0);
+
+                // 6. Setze Kamera
+                cameraController.setTarget(0, 0, 0);
+                cameraController.setMode(cameraController.MODES.THIRD);
+
+                // 7. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 8. Markiere als "in Interior"
+                isInInterior = true;
+
+                console.log('✅ Wohnzimmer geladen! Drücke [Q] zum Verlassen.');
+            }, 300);
+        }
+
+        // Schwarze Mühle Interior laden (4 Etagen) - ALTE VERSION
+        let currentMuehleFloor = 0;
+        let muehleFloorUI = null;
+        const muehleFloors = [
+            {
+                name: 'Erdgeschoss',
+                rooms: ['Wohnzimmer', 'Küche', 'Badezimmer']
+            },
+            { name: 'Obergeschoss', rooms: ['Schlafzimmer'] },
+            { name: 'Turm', rooms: ['Terminal'] },
+            { name: 'Keller', rooms: ['Studieren & Crafting'] }
+        ];
+
+        async function loadMuehleInterior() {
+            console.log('🏰 Lade Schwarze Mühle Interior...');
+
+            // 1. Speichere Exterior-Position
+            currentInteriorState = {
+                position: character.position.clone(),
+                cameraMode: cameraController.getMode(),
+                worldObjects: []
+            };
+
+            // 2. Fade-Out
+            document.getElementById('canvas-container').style.transition = 'opacity 0.3s';
+            document.getElementById('canvas-container').style.opacity = '0.3';
+
+            setTimeout(async () => {
+                // 3. Verstecke Exterior
+                regions.forEach(region => {
+                    const mesh = scene.getObjectByName(`region_${region.name}`);
+                    if (mesh) mesh.visible = false;
+                });
+                if (typeof loadedAssets !== 'undefined') {
+                    loadedAssets.forEach(asset => {
+                        if (asset.model) asset.model.visible = false;
+                    });
+                }
+                if (typeof buildings !== 'undefined') {
+                    buildings.forEach(building => building.visible = false);
+                }
+                if (schwarzeMuehle) schwarzeMuehle.visible = false;
+                if (gridHelper) gridHelper.visible = false;
+                // Verstecke Region Marker
+                scene.children.forEach(obj => {
+                    if (obj.userData.isRegionMarker) obj.visible = false;
+                });
+
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
+
+                // 4. Lade Erdgeschoss (Floor 0)
+                currentMuehleFloor = 0;
+                await loadMuehleFloor(0);
+
+                // 5. Zeige Floor-Switch UI
+                showMuehleFloorUI();
+
+                // 6. Positioniere Character
+                character.position.set(0, 3.5, 0);
+
+                // 7. Setze Kamera (Third-Person über Character)
+                cameraController.setTarget(0, 3.5, 0);
+                cameraController.setMode(cameraController.MODES.THIRD);
+
+                // 8. Fade-In
+                document.getElementById('canvas-container').style.opacity = '1';
+
+                // 9. Markiere als "in Interior"
+                isInInterior = true;
+
+                // 10. Zeige Q-Prompt (Verlassen)
+                document.getElementById('q-prompt').style.display = 'block';
+
+                // 11. Housing System aktivieren (wenn verfügbar)
+                if (window.HousingSystem) {
+                    window.HousingSystem.loadState();
+                    console.log('🏠 Housing System geladen für Schwarze Mühle');
+                }
+
+                console.log('✅ Schwarze Mühle geladen! (Erdgeschoss)');
+            }, 300);
+        }
+
+        async function loadMuehleFloor(floorIndex) {
+            const floor = muehleFloors[floorIndex];
+            console.log(`🏠 Lade ${floor.name}...`);
+
+            // Lade room_config_detailed.json
+            try {
+                const response = await fetch('/static/assets/room_config_detailed.json');
+                const roomConfigs = await response.json();
+
+                // Entferne alte Raum-Objekte
+                const oldRooms = scene.children.filter(obj => obj.userData.isMuehleRoom);
+                oldRooms.forEach(room => scene.remove(room));
+
+                // Lade Räume für diese Etage
+                for (const roomName of floor.rooms) {
+                    const roomConfig = roomConfigs.rooms.find(r => r.name === roomName);
+                    if (!roomConfig) {
+                        console.warn(`⚠️ Room config not found: ${roomName}`);
+                        continue;
+                    }
+
+                    // Erstelle einfachen Raum (Boden)
+                    const roomSize = 48;
+                    const floorGeometry = new THREE.PlaneGeometry(roomSize, roomSize);
+                    const floorMaterial = new THREE.MeshStandardMaterial({
+                        color: roomConfig.palette?.floor || 0x8b7355,
+                        roughness: 0.9
+                    });
+                    const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                    floorMesh.rotation.x = -Math.PI / 2;
+                    floorMesh.position.y = 0;
+                    floorMesh.receiveShadow = true;
+                    floorMesh.userData.isMuehleRoom = true;
+                    scene.add(floorMesh);
+
+                    // Wände (4 Wände um den Raum)
+                    const wallHeight = 6;
+                    const wallMaterial = new THREE.MeshStandardMaterial({
+                        color: roomConfig.palette?.wall || 0x5a4a3a
+                    });
+
+                    // Nord-Wand
+                    const wallNorth = new THREE.Mesh(
+                        new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                        wallMaterial
+                    );
+                    wallNorth.position.set(0, wallHeight / 2, -roomSize / 2);
+                    wallNorth.userData.isMuehleRoom = true;
+                    wallNorth.castShadow = true;
+                    scene.add(wallNorth);
+
+                    // Süd-Wand
+                    const wallSouth = new THREE.Mesh(
+                        new THREE.BoxGeometry(roomSize, wallHeight, 0.5),
+                        wallMaterial
+                    );
+                    wallSouth.position.set(0, wallHeight / 2, roomSize / 2);
+                    wallSouth.userData.isMuehleRoom = true;
+                    wallSouth.castShadow = true;
+                    scene.add(wallSouth);
+
+                    // West-Wand
+                    const wallWest = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                        wallMaterial
+                    );
+                    wallWest.position.set(-roomSize / 2, wallHeight / 2, 0);
+                    wallWest.userData.isMuehleRoom = true;
+                    wallWest.castShadow = true;
+                    scene.add(wallWest);
+
+                    // Ost-Wand
+                    const wallEast = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, wallHeight, roomSize),
+                        wallMaterial
+                    );
+                    wallEast.position.set(roomSize / 2, wallHeight / 2, 0);
+                    wallEast.userData.isMuehleRoom = true;
+                    wallEast.castShadow = true;
+                    scene.add(wallEast);
+
+                    // Decke (Ceiling)
+                    const ceilingMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+                    ceilingMesh.rotation.x = Math.PI / 2;
+                    ceilingMesh.position.y = wallHeight;
+                    ceilingMesh.receiveShadow = true;
+                    ceilingMesh.userData.isMuehleRoom = true;
+                    scene.add(ceilingMesh);
+
+                    // Möbel/Geräte hinzufügen
+                    if (roomName === 'Küche') {
+                        // Herd (roter Würfel)
+                        const herd = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 1.5, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x8B0000 })
+                        );
+                        herd.position.set(-15, 0.75, 0);
+                        herd.userData.isMuehleRoom = true;
+                        herd.userData.interactable = { type: 'kochen', label: 'Kochen [F]' };
+                        scene.add(herd);
+
+                        // Kühlschrank (weißer Würfel)
+                        const kuehlschrank = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 3, 2),
+                            new THREE.MeshStandardMaterial({ color: 0xFFFFFF })
+                        );
+                        kuehlschrank.position.set(15, 1.5, 0);
+                        kuehlschrank.userData.isMuehleRoom = true;
+                        kuehlschrank.userData.interactable = { type: 'essen', label: 'Essen [F]' };
+                        scene.add(kuehlschrank);
+                    } else if (roomName === 'Badezimmer') {
+                        // Dusche (blauer Würfel)
+                        const dusche = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 3, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x0000FF })
+                        );
+                        dusche.position.set(-15, 1.5, 0);
+                        dusche.userData.isMuehleRoom = true;
+                        dusche.userData.interactable = { type: 'duschen', label: 'Duschen [F]' };
+                        scene.add(dusche);
+                    } else if (roomName === 'Wohnzimmer') {
+                        // Sofa (grüner Würfel)
+                        const sofa = new THREE.Mesh(
+                            new THREE.BoxGeometry(4, 1, 2),
+                            new THREE.MeshStandardMaterial({ color: 0x228B22 })
+                        );
+                        sofa.position.set(0, 0.5, -15);
+                        sofa.userData.isMuehleRoom = true;
+                        sofa.userData.interactable = { type: 'sitzen', label: 'Hinsetzen [F]' };
+                        scene.add(sofa);
+                    }
+                }
+
+                // Ändere Fog/Background für Interior
+                scene.background = new THREE.Color(0x222222); // Dunkler
+                scene.fog = new THREE.Fog(0x222222, 10, 60); // Kurze Sichtweite
+
+                // Update UI
+                updateMuehleFloorUI();
+
+                console.log(`✅ ${floor.name} geladen (${floor.rooms.length} Räume)`);
+            } catch (error) {
+                console.error('❌ Fehler beim Laden der Räume:', error);
+            }
+        }
+
+        function showMuehleFloorUI() {
+            if (muehleFloorUI) {
+                muehleFloorUI.style.display = 'block';
+                return;
+            }
+
+            muehleFloorUI = document.createElement('div');
+            muehleFloorUI.id = 'muehle-floor-ui';
+            muehleFloorUI.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.9);
+                border: 2px solid #ff9b71;
+                border-radius: 10px;
+                padding: 15px;
+                color: white;
+                font-family: monospace;
+                font-size: 14px;
+                z-index: 1000;
+                min-width: 200px;
+            `;
+            muehleFloorUI.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 10px; text-align: center; display: flex; justify-content: space-between; align-items: center;">
+                    <span>🏰 Schwarze Mühle</span>
+                    <button onclick="window.toggleMuehleCollapse()" style="background: transparent; border: none; color: white; font-size: 18px; cursor: pointer; padding: 0 5px;" id="muehle-collapse-btn">−</button>
+                </div>
+                <div id="muehle-floor-content">
+                <div id="muehle-floor-buttons" style="display: flex; flex-direction: column; gap: 8px;">
+                    ${muehleFloors.map((floor, index) => `
+                        <button
+                            id="muehle-floor-btn-${index}"
+                            onclick="window.switchMuehleFloor(${index})"
+                            style="
+                                padding: 8px;
+                                background: ${index === 0 ? '#ff9b71' : '#444'};
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-family: monospace;
+                                font-size: 13px;
+                            "
+                        >${floor.name}</button>
+                    `).join('')}
+                </div>
+
+                <!-- Najika Interaction Buttons -->
+                <div style="margin-top: 15px; border-top: 1px solid #555; padding-top: 10px;">
+                    <div style="font-weight: bold; margin-bottom: 8px; text-align: center; color: #FFD700; font-size: 12px;">
+                        🎀 Najika Pflege
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button onclick="window.najikaInteraction('feed')" style="
+                            padding: 6px;
+                            background: #4CAF50;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🍖 Füttern</button>
+
+                        <button onclick="window.najikaInteraction('drink')" style="
+                            padding: 6px;
+                            background: #2196F3;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">💧 Trinken</button>
+
+                        <button onclick="window.najikaInteraction('cook')" style="
+                            padding: 6px;
+                            background: #FF9800;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🔥 Herd</button>
+
+                        <button onclick="window.najikaInteraction('shower')" style="
+                            padding: 6px;
+                            background: #00BCD4;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🚿 Dusche</button>
+
+                        <button onclick="window.najikaInteraction('toilet')" style="
+                            padding: 6px;
+                            background: #9C27B0;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🚽 Toilette</button>
+
+                        <button onclick="window.najikaInteraction('sleep')" style="
+                            padding: 6px;
+                            background: #673AB7;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-family: monospace;
+                            font-size: 11px;
+                        ">🛏️ Bett</button>
+                    </div>
+                </div>
+
+                <!-- Housing Button -->
+                <div style="margin-top: 12px; border-top: 1px solid #555; padding-top: 10px;">
+                    <button onclick="window.openHousingMode()" style="
+                        width: 100%;
+                        padding: 10px;
+                        background: linear-gradient(90deg, #667eea, #764ba2);
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-family: monospace;
+                        font-size: 12px;
+                        font-weight: bold;
+                    ">🏠 Einrichtungs-Modus [H]</button>
+                </div>
+
+                <div style="margin-top: 10px; font-size: 11px; color: #aaa; text-align: center;">
+                    [1-4] Schnellwahl | [H] Housing | [Q] Verlassen
+                </div>
+                </div>
+            `;
+            document.body.appendChild(muehleFloorUI);
+
+            // Toggle collapse function
+            window.toggleMuehleCollapse = () => {
+                const content = document.getElementById('muehle-floor-content');
+                const btn = document.getElementById('muehle-collapse-btn');
+                if (content && btn) {
+                    if (content.style.display === 'none') {
+                        content.style.display = 'block';
+                        btn.textContent = '−';
+                    } else {
+                        content.style.display = 'none';
+                        btn.textContent = '+';
+                    }
+                }
+            };
+
+            // Global function for onclick
+            window.switchMuehleFloor = async (index) => {
+                currentMuehleFloor = index;
+                await loadMuehleFloor(currentMuehleFloor);
+            };
+
+            // Housing Mode opener
+            window.openHousingMode = () => {
+                if (!isInInterior || !window.HousingSystem) {
+                    console.warn('Housing nur in der Mühle verfügbar!');
+                    return;
+                }
+                const floor = muehleFloors[currentMuehleFloor];
+                const roomName = floor && floor.rooms[0] ? floor.rooms[0].toLowerCase().replace(/[^a-z]/g, '') : 'wohnzimmer';
+                window.HousingSystem.enter(roomName);
+                console.log('🏠 Housing Edit Mode aktiviert für: ' + roomName);
+            };
+
+            // Najika interaction handler
+            window.najikaInteraction = async (action) => {
+                if (!isInInterior) return;
+
+                let endpoint = '';
+                let message = '';
+
+                switch(action) {
+                    case 'feed':
+                        endpoint = '/api/najika/feed';
+                        message = '🍖 Najika wird gefüttert...';
+                        break;
+                    case 'drink':
+                        endpoint = '/api/najika/drink';
+                        message = '💧 Najika trinkt...';
+                        break;
+                    case 'cook':
+                        // Cook action - could combine with feed or be separate
+                        message = '🔥 Am Herd kochen...';
+                        console.log('[Najika] Cooking interaction - TODO: Add cooking system');
+                        return;
+                    case 'shower':
+                        endpoint = '/api/najika/wash';
+                        message = '🚿 Najika duscht...';
+                        break;
+                    case 'toilet':
+                        endpoint = '/api/najika/wash';
+                        message = '🚽 Najika geht zur Toilette...';
+                        break;
+                    case 'sleep':
+                        endpoint = '/api/najika/sleep';
+                        message = '🛏️ Najika schläft...';
+                        break;
+                }
+
+                if (endpoint) {
+                    try {
+                        console.log(`[Najika] ${message}`);
+
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({})
+                        });
+
+                        const result = await response.json();
+
+                        if (result.ok) {
+                            console.log(`[Najika] ✅ ${result.message || 'Success'}`);
+
+                            // Update UI if stat display exists
+                            if (window.commandSystem) {
+                                window.commandSystem.updateNajikaStats(result.najika);
+                            }
+
+                            // Visual feedback
+                            showNotification(message, 2000);
+                        } else {
+                            console.error(`[Najika] ❌ ${result.error || 'Failed'}`);
+                            showNotification(`❌ ${result.error || 'Fehler'}`, 2000);
+                        }
+                    } catch (error) {
+                        console.error(`[Najika] Interaction error:`, error);
+                        showNotification('❌ Verbindungsfehler', 2000);
+                    }
+                }
+            };
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (isInInterior && currentInteriorState) {
+                    if (e.code === 'Digit1' || e.code === 'Numpad1') window.switchMuehleFloor(0);
+                    if (e.code === 'Digit2' || e.code === 'Numpad2') window.switchMuehleFloor(1);
+                    if (e.code === 'Digit3' || e.code === 'Numpad3') window.switchMuehleFloor(2);
+                    if (e.code === 'Digit4' || e.code === 'Numpad4') window.switchMuehleFloor(3);
+                }
+            });
+        }
+
+        function updateMuehleFloorUI() {
+            if (!muehleFloorUI) return;
+            muehleFloors.forEach((floor, index) => {
+                const btn = document.getElementById(`muehle-floor-btn-${index}`);
+                if (btn) {
+                    btn.style.background = index === currentMuehleFloor ? '#ff9b71' : '#444';
+                }
+            });
+        }
+
+        function hideMuehleFloorUI() {
+            if (muehleFloorUI) {
+                muehleFloorUI.style.display = 'none';
+            }
+        }
+
+        // Notification System
+        function showNotification(message, duration = 3000) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.9);
+                color: #FFD700;
+                padding: 15px 30px;
+                border-radius: 10px;
+                border: 2px solid #FFD700;
+                font-family: monospace;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+                animation: slideInFromTop 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
         }
 
         // Exit-Portal Proximity Detection (Phase 2)
@@ -1034,7 +2460,7 @@
 
             // Distance zum Exit-Portal
             const distance = character.position.distanceTo(interior.exitPortal.position);
-            const radius = 10; // Proximity Radius
+            const radius = 50; // Proximity Radius (100m für 3200m Map, aber Interior ist kleiner)
 
             if (distance < radius) {
                 // Zeige E-Prompt
@@ -1197,22 +2623,30 @@
             `;
         }
 
-        // Get ground height at position (based on region)
+        // Get ground height at position (based on WorldManager terrain or fallback)
         function getGroundHeight(x, z) {
-            // Check which region character is in
-            // Region size is 133.32, center at (0,0)
-            // Mountain is at center (x: 0, z: 0) with Y=5
-            // All others at Y=0
-
-            const regionSize = 133.32;
-            const halfSize = regionSize / 2;
-
-            // Check if in mountain region (center)
-            if (x >= -halfSize && x <= halfSize && z >= -halfSize && z <= halfSize) {
-                return 5;  // Mountain height
+            // If WorldManager is initialized, use its terrain height
+            if (worldManager && worldManager.initialized) {
+                const terrainHeight = worldManager.getHeightAt(x, z);
+                if (terrainHeight !== undefined && !isNaN(terrainHeight)) {
+                    return terrainHeight;
+                }
             }
 
-            return 0;  // All other regions flat
+            // Fallback: Use region-based height (0-9600 coordinate system)
+            // World center is at 4800,4800 - Götterfels/Mountain region
+            const centerX = 4800;
+            const centerZ = 4800;
+            const regionSize = 3200;
+            const halfSize = regionSize / 2;
+
+            // Check if in mountain region (center around 4800,4800)
+            if (x >= centerX - halfSize && x <= centerX + halfSize &&
+                z >= centerZ - halfSize && z <= centerZ + halfSize) {
+                return 50;  // Mountain region has elevated terrain
+            }
+
+            return 5;  // Default ground level for other regions
         }
 
         // Update character height based on region
@@ -1228,6 +2662,7 @@
             const marker = new THREE.Mesh(markerGeometry, markerMaterial);
             marker.position.set(x, 5, z);
             marker.castShadow = true;
+            marker.userData.isRegionMarker = true; // Tag für Ausblenden
             scene.add(marker);
 
             // Text-Sprite (simuliert mit einer Plane)
@@ -1247,22 +2682,23 @@
             const sprite = new THREE.Sprite(spriteMaterial);
             sprite.position.set(x, 15, z);
             sprite.scale.set(20, 10, 1);
+            sprite.userData.isRegionMarker = true; // Tag für Ausblenden
             scene.add(sprite);
         }
 
-        // Regionen markieren (alle 9) - 4x größere Welt
-        // Row 1 (top): z=133.32
-        createRegionMarker(-133.32, 133.32, '#f0f8ff', 'ICE');       // Nordwest
-        createRegionMarker(0, 133.32, '#8b7355', 'HIGHLAND');        // Nord
-        createRegionMarker(133.32, 133.32, '#e8d4a0', 'DESERT');     // Nordost
+        // Regionen markieren (alle 9) - 9.6km x 9.6km Map (jede Region 3.2km x 3.2km)
+        // Row 1 (top): z=3200
+        createRegionMarker(-3200, 3200, '#f0f8ff', 'ICE');       // Nordwest
+        createRegionMarker(0, 3200, '#8b7355', 'HIGHLAND');        // Nord
+        createRegionMarker(3200, 3200, '#e8d4a0', 'DESERT');     // Nordost
         // Row 2 (middle): z=0
-        createRegionMarker(-133.32, 0, '#556b2f', 'SWAMP');          // West
-        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum
-        createRegionMarker(133.32, 0, '#c2b280', 'COAST');           // Ost
-        // Row 3 (bottom): z=-133.32
-        createRegionMarker(-133.32, -133.32, '#2f2f2f', 'CAVES');   // Südwest
-        createRegionMarker(0, -133.32, '#2d5016', 'FOREST');         // Süd
-        createRegionMarker(133.32, -133.32, '#8b4513', 'VOLCANO');   // Südost
+        createRegionMarker(-3200, 0, '#556b2f', 'SWAMP');          // West
+        createRegionMarker(0, 0, '#808080', 'MOUNTAIN');             // Zentrum (Götterfels - Schwarze Mühle hier!)
+        createRegionMarker(3200, 0, '#c2b280', 'COAST');           // Ost
+        // Row 3 (bottom): z=-3200
+        createRegionMarker(-3200, -3200, '#2f2f2f', 'CAVES');   // Südwest
+        createRegionMarker(0, -3200, '#2d5016', 'FOREST');         // Süd
+        createRegionMarker(3200, -3200, '#8b4513', 'VOLCANO');   // Südost
 
         // Asset Loading
         const gltfLoader = new THREE.GLTFLoader();
@@ -1480,7 +2916,62 @@
             document.getElementById('loading').style.display = 'none';
             console.log('🎉 Alle Assets geladen!');
 
-            // Spawn Enemies in allen 9 Regionen (Phase 3: Combat)
+            // WICHTIG: Lade Game Content JSON-Dateien (NPCs, Items, Quests, Enemies)
+            await gameDataLoader.loadAll();
+
+            // ========================================
+            // PHASE 2: Initialize World Manager (OPTIONAL)
+            // ========================================
+            if (USE_PHASE_2) {
+                console.log('🌍 Initializing World Manager...');
+
+                try {
+                    worldManager = new window.WorldManager(scene, camera);
+
+                    await worldManager.initialize({
+                        dataPath: 'data/',  // Relativ zum aktuellen Verzeichnis (digivice/)
+                        enableLOD: true,
+                        enableStreaming: false,  // Alle Regionen laden für einfacheres Testing
+                        enableVegetationBatching: false  // Erstmal deaktiviert
+                    });
+
+                    console.log('✅ Phase 2 World Manager initialized!');
+                    worldManager.logStats();
+                } catch (error) {
+                    console.error('❌ Phase 2 World Manager failed to initialize:', error);
+                    console.log('⚠️ Falling back to Phase 1 (Flat Terrain)');
+                    worldManager = null;
+
+                    // FALLBACK: Erstelle einfachen flachen Boden
+                    console.log('🏜️ Creating fallback ground plane...');
+                    const fallbackGroundGeometry = new THREE.PlaneGeometry(9600, 9600);
+                    const fallbackGroundMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x3a7d44,  // Grasgrün
+                        roughness: 0.9,
+                        metalness: 0.1
+                    });
+                    const fallbackGround = new THREE.Mesh(fallbackGroundGeometry, fallbackGroundMaterial);
+                    fallbackGround.rotation.x = -Math.PI / 2;
+                    fallbackGround.position.set(4800, 0, 4800);  // Zentrum der Welt
+                    fallbackGround.receiveShadow = true;
+                    fallbackGround.name = 'fallback_ground';
+                    scene.add(fallbackGround);
+
+                    // Grid-Helper für Orientierung
+                    const fallbackGrid = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+                    fallbackGrid.position.set(4800, 0.1, 4800);
+                    scene.add(fallbackGrid);
+                    console.log('✅ Fallback ground created!');
+                }
+            }
+            // ========================================
+
+            // ===== ENEMY SPAWNING (IMMER, unabhängig von Phase 2) =====
+            // Nutze die globale regions-Variable (hat jetzt korrekte 0-9600 Koordinaten)
+            console.log('🐉 Spawning enemies in allen 9 Regionen...');
+            console.log('  📍 Regions:', regions.map(r => `${r.name}(${r.x},${r.z})`).join(', '));
+
+            // IMMER Enemies spawnen (regions hat jetzt korrekte Koordinaten!)
             realtimeCombat.spawnEnemiesInAllRegions(regions);
             console.log('⚔️ Realtime Combat System bereit!');
         }
@@ -1498,8 +2989,9 @@
                 });
 
                 schwarzeMuehle = gltf.scene;
-                schwarzeMuehle.position.set(0, 5, 0); // Berg-Gipfel (Mountain Region)
-                schwarzeMuehle.scale.set(2.5, 2.5, 2.5); // Größer und imposanter
+                // Götterfels ist bei (4800, 4800) - Mühle auf dem Gipfel
+                schwarzeMuehle.position.set(4800, 150, 4800); // Berg-Gipfel bei Weltzentrum
+                schwarzeMuehle.scale.set(25, 25, 25); // VIEL größer für 3200m Map! (24x Skalierung)
 
                 // Färbe Windmühle SCHWARZ
                 schwarzeMuehle.traverse((child) => {
@@ -1520,12 +3012,12 @@
                 // UserData für E-Taste System
                 schwarzeMuehle.userData.buildingType = 'schwarze_muehle';
                 schwarzeMuehle.userData.buildingName = 'Schwarze Windmühle';
-                schwarzeMuehle.userData.proximityRadius = 15; // 15 Einheiten Radius
+                schwarzeMuehle.userData.proximityRadius = 150; // 150m Radius (war 15 für 133m Map)
 
                 scene.add(schwarzeMuehle);
 
                 // Leuchtender Marker über der Windmühle
-                const markerGeometry = new THREE.SphereGeometry(1, 16, 16);
+                const markerGeometry = new THREE.SphereGeometry(10, 16, 16); // Größerer Marker (10m statt 1m)
                 const markerMaterial = new THREE.MeshStandardMaterial({
                     color: 0x8b00ff,
                     emissive: 0x8b00ff,
@@ -1534,7 +3026,7 @@
                     opacity: 0.8
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                marker.position.set(0, 18, 0); // Über der Windmühle
+                marker.position.set(4800, 400, 4800); // HOCH über der Windmühle bei Götterfels (sichtbar von weit weg!)
                 scene.add(marker);
 
                 // Pulsing Animation für Marker
@@ -1550,58 +3042,69 @@
 
         loadSchwarzeMuehle();
 
-        // ===== STÄDTE & BESONDERE ORTE (Phase 5) - 4x größere Welt =====
+        // ===== STÄDTE & BESONDERE ORTE (Phase 5) - 9600x9600 Welt =====
+        // KOORDINATEN: Welt ist 0-9600, Zentrum bei 4800,4800
+        // Regionen laut regions.json:
+        // - heisse_duenen (Desert): x:7200-9600, z:7200-9600 → Stadt bei 8400,8200
+        // - samtmoos_tiefwald (Forest): x:3600-6000, z:0-2400 → Stadt bei 4800,1500
+        // - salzwind_kueste (Coast): x:0-2400, z:3600-6000 → Stadt bei 1500,4800
+        // - blitzebene (Highland): x:7200-9600, z:3600-6000 → Stadt bei 8400,4800
+        // - magmastroeme (Volcano): x:3600-6000, z:7200-9600 → Stadt bei 4800,8200
+        // - reich_der_drei (Ice): x:0-2400, z:0-2400 → Special bei 1200,1200
+        // - gruenschlamm_sumpf (Swamp): x:0-2400, z:7200-9600 → Special bei 1800,8200
+        // - tiefenhoehlen (Caves): unter samtmoos → Eingang bei 4800,1800
         const buildings = [];
+        // STÄDTE & ORTE - Y=50 garantiert über Terrain, Scale=15+ für Sichtbarkeit
         const cityLocations = [
             // 5 STÄDTE
             {
                 name: 'Handelsfestung',
                 type: 'city',
                 region: 'desert',
-                position: { x: 140, y: 0, z: 140 },
+                position: { x: 8400, y: 50, z: 8200 }, // Heiße Dünen (Südost)
                 model: 'static/assets/kaykit/medieval/building_castle_yellow.gltf',
-                scale: 2.0,
-                color: 0xffd700, // Gold
+                scale: 15.0, // GROSS!
+                color: 0xffd700,
                 description: 'PvP Arena & Player Shops'
             },
             {
                 name: 'Dampf-Hain',
                 type: 'city',
                 region: 'forest',
-                position: { x: 0, y: 0, z: -140 },
-                model: 'static/assets/jellysquish/oasis/house_large.glb',
-                scale: 1.8,
-                color: 0x2ecc71, // Grün
+                position: { x: 4800, y: 50, z: 1500 }, // Samtmoos-Tiefwald (Nord)
+                model: 'static/assets/kaykit/medieval/building_tavern_blue.gltf',
+                scale: 15.0,
+                color: 0x2ecc71,
                 description: 'Onsen & Restaurants'
             },
             {
                 name: 'Salzige Bucht',
                 type: 'city',
                 region: 'coast',
-                position: { x: 140, y: 0, z: 0 },
+                position: { x: 1500, y: 50, z: 4800 }, // Salzwind-Küste (West)
                 model: 'static/assets/kaykit/medieval/building_tower_A_blue.gltf',
-                scale: 2.2,
-                color: 0x3498db, // Blau
+                scale: 15.0,
+                color: 0x3498db,
                 description: 'Hafen & Leuchtturm'
             },
             {
                 name: 'Runenheim',
                 type: 'city',
                 region: 'highland',
-                position: { x: 0, y: 0, z: 140 },
+                position: { x: 8400, y: 80, z: 4800 }, // Blitzebene (Ost) - höher wegen Highland
                 model: 'static/assets/kaykit/medieval/building_tower_A_red.gltf',
-                scale: 2.0,
-                color: 0x9b59b6, // Lila
+                scale: 15.0,
+                color: 0x9b59b6,
                 description: 'Magie-Akademie'
             },
             {
                 name: 'Funken-Siedlung',
                 type: 'city',
                 region: 'volcano',
-                position: { x: 140, y: 0, z: -140 },
+                position: { x: 4800, y: 60, z: 8200 }, // Magmaströme (Süd)
                 model: 'static/assets/kaykit/medieval/building_blacksmith_red.gltf',
-                scale: 1.8,
-                color: 0xe74c3c, // Rot
+                scale: 15.0,
+                color: 0xe74c3c,
                 description: 'Schmieden'
             },
             // 3 BESONDERE ORTE
@@ -1609,35 +3112,37 @@
                 name: 'Reich der Drei',
                 type: 'special',
                 region: 'ice',
-                position: { x: -140, y: 0, z: 140 },
-                model: 'static/assets/kaykit/dungeon/column.gltf',
-                scale: 2.5,
-                color: 0x00ffff, // Cyan
+                position: { x: 1200, y: 50, z: 1200 }, // Reich der Drei (Nordwest)
+                model: 'static/assets/kaykit/medieval/building_tower_A_green.gltf',
+                scale: 20.0, // Extra groß - Nekromanten-Turm
+                color: 0x00ffff,
                 description: 'Untote & Nekromanten'
             },
             {
                 name: 'Funkelnest',
                 type: 'special',
                 region: 'swamp',
-                position: { x: -140, y: 0, z: 0 },
-                model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone.gltf',
-                scale: 2.0,
-                color: 0xff1493, // Pink
+                position: { x: 1800, y: 50, z: 8200 }, // Grünschlamm-Sumpf (Südwest)
+                model: 'static/assets/kaykit/medieval/building_house_red.gltf',
+                scale: 15.0,
+                color: 0xff1493,
                 description: 'Schatzhöhle & Hexen'
             },
             {
-                name: 'Tiefenhöhlen',
+                name: 'Tiefenhöhlen-Eingang',
                 type: 'special',
                 region: 'caves',
-                position: { x: -140, y: 0, z: -140 },
-                model: 'static/assets/kaykit/dungeon/wall.gltf',
-                scale: 2.2,
-                color: 0x8b4513, // Braun
+                position: { x: 4800, y: 50, z: 1800 }, // Unter Samtmoos-Tiefwald
+                model: 'static/assets/kaykit/medieval/building_mine_red.gltf',
+                scale: 15.0,
+                color: 0x8b4513,
                 description: 'Goblin-Siedlungen'
             }
         ];
 
         async function loadCitiesAndLocations() {
+            console.log('🏘️ Lade Städte mit Placeholder-Buildings...');
+
             for (const location of cityLocations) {
                 try {
                     const gltf = await new Promise((resolve, reject) => {
@@ -1648,41 +3153,131 @@
                     building.position.set(location.position.x, location.position.y, location.position.z);
                     building.scale.set(location.scale, location.scale, location.scale);
 
+                    // WICHTIG: Sichtbarkeit forcieren (gegen LOD-Culling)
+                    building.visible = true;
                     building.traverse((child) => {
                         if (child.isMesh) {
                             child.castShadow = true;
                             child.receiveShadow = true;
+                            child.visible = true;
+                            child.frustumCulled = false;  // Niemals cullen!
                         }
                     });
 
-                    // UserData für E-Taste System
+                    // UserData für E-Taste System & LOD-Schutz
                     building.userData.buildingType = location.type;
                     building.userData.buildingName = location.name;
                     building.userData.buildingDescription = location.description;
-                    building.userData.proximityRadius = 12;
+                    building.userData.proximityRadius = 120; // 120m Radius (war 12 für 133m Map)
+                    building.userData.isCity = true;  // Markiere als Stadt (für LOD-Manager)
+                    building.userData.neverCull = true;  // Niemals ausblenden!
 
                     scene.add(building);
                     buildings.push(building);
 
-                    // Leuchtender Marker über Gebäude
-                    const markerGeometry = new THREE.SphereGeometry(0.8, 16, 16);
-                    const markerMaterial = new THREE.MeshStandardMaterial({
+                    console.log(`🏙️ ${location.name} Position: X=${location.position.x}, Y=${location.position.y}, Z=${location.position.z}`);
+
+                    // ===== PLACEHOLDER-BUILDINGS UM DIE STADT =====
+                    // Erstelle 10-20 einfache Gebäude um das Hauptgebäude herum
+                    const buildingCount = location.type === 'city' ? 15 : 8; // Städte haben mehr
+                    const cityRadius = 150; // 150m Radius um Stadtzentrum
+
+                    for (let i = 0; i < buildingCount; i++) {
+                        // Zufällige Position im Kreis um das Zentrum
+                        const angle = (i / buildingCount) * Math.PI * 2 + Math.random() * 0.5;
+                        const distance = 40 + Math.random() * (cityRadius - 40); // 40-150m vom Zentrum
+                        const bx = location.position.x + Math.cos(angle) * distance;
+                        const bz = location.position.z + Math.sin(angle) * distance;
+                        const by = location.position.y;
+
+                        // Einfaches Placeholder-Gebäude (Box + Dach)
+                        const houseGroup = new THREE.Group();
+
+                        // Wände (verschiedene Größen)
+                        const width = 4 + Math.random() * 4;  // 4-8m breit
+                        const depth = 4 + Math.random() * 4;  // 4-8m tief
+                        const height = 3 + Math.random() * 3; // 3-6m hoch
+
+                        // Farbe basierend auf Region
+                        const regionColors = {
+                            desert: 0xDAA520,
+                            forest: 0x8B7355,
+                            coast: 0xC2B280,
+                            highland: 0x8B7355,
+                            volcano: 0x4A4A4A,
+                            ice: 0xB0C4DE,
+                            swamp: 0x556B2F,
+                            caves: 0x4A4A4A
+                        };
+                        const buildingColor = regionColors[location.region] || 0x8B7355;
+
+                        const wallsGeometry = new THREE.BoxGeometry(width, height, depth);
+                        const wallsMaterial = new THREE.MeshStandardMaterial({
+                            color: buildingColor,
+                            roughness: 0.8
+                        });
+                        const walls = new THREE.Mesh(wallsGeometry, wallsMaterial);
+                        walls.position.y = height / 2;
+                        walls.castShadow = true;
+                        walls.receiveShadow = true;
+                        houseGroup.add(walls);
+
+                        // Dach (Pyramide)
+                        const roofGeometry = new THREE.ConeGeometry(width * 0.7, height * 0.4, 4);
+                        const roofMaterial = new THREE.MeshStandardMaterial({
+                            color: 0x8B4513, // Braun
+                            roughness: 0.9
+                        });
+                        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+                        roof.position.y = height + height * 0.2;
+                        roof.rotation.y = Math.PI / 4;
+                        roof.castShadow = true;
+                        houseGroup.add(roof);
+
+                        // Positioniere das Haus
+                        houseGroup.position.set(bx, by, bz);
+                        houseGroup.rotation.y = Math.random() * Math.PI * 2; // Zufällige Rotation
+
+                        // Markiere als Stadt-Gebäude
+                        houseGroup.userData.isPlaceholderBuilding = true;
+                        houseGroup.userData.cityName = location.name;
+
+                        scene.add(houseGroup);
+                    }
+                    console.log(`  ✅ ${buildingCount} Placeholder-Buildings um ${location.name} erstellt`);
+
+                    // RIESIGER leuchtender Marker über Gebäude - von überall sichtbar!
+                    const markerGeometry = new THREE.SphereGeometry(25, 32, 32); // 25m Radius!
+                    const markerMaterial = new THREE.MeshBasicMaterial({
                         color: location.color,
-                        emissive: location.color,
-                        emissiveIntensity: 1.5,
                         transparent: true,
-                        opacity: 0.9
+                        opacity: 0.95
                     });
                     const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                    marker.position.set(location.position.x, location.position.y + 15, location.position.z);
+                    marker.position.set(location.position.x, location.position.y + 200, location.position.z);
+                    marker.frustumCulled = false; // Immer sichtbar!
                     scene.add(marker);
 
-                    // Pulsing Animation
+                    // Leuchtstrahl nach oben (wie Lichtsäule)
+                    const beamGeometry = new THREE.CylinderGeometry(5, 15, 300, 8);
+                    const beamMaterial = new THREE.MeshBasicMaterial({
+                        color: location.color,
+                        transparent: true,
+                        opacity: 0.4
+                    });
+                    const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+                    beam.position.set(location.position.x, location.position.y + 350, location.position.z);
+                    beam.frustumCulled = false;
+                    scene.add(beam);
+
+                    // Pulsing Animation für Marker UND Beam
                     marker.userData.offset = Math.random() * Math.PI * 2;
-                    marker.userData.animate = () => {
-                        marker.scale.setScalar(1 + Math.sin(Date.now() * 0.003 + marker.userData.offset) * 0.3);
+                    const animate = () => {
+                        const scale = 1 + Math.sin(Date.now() * 0.002 + marker.userData.offset) * 0.4;
+                        marker.scale.setScalar(scale);
+                        beam.material.opacity = 0.3 + Math.sin(Date.now() * 0.003) * 0.2;
                     };
-                    setInterval(marker.userData.animate, 16);
+                    setInterval(animate, 16);
 
                     console.log(`✅ ${location.name} (${location.region}) platziert!`);
                 } catch (error) {
@@ -1694,59 +3289,35 @@
 
         loadCitiesAndLocations();
 
-        // Teleport Funktionen (alle 9 Regionen) - 4x größere Welt
-        const regionPositions = {
-            // Row 1 (top): z=133.32
-            ice: { x: -133.32, z: 133.32 },
-            highland: { x: 0, z: 133.32 },
-            desert: { x: 133.32, z: 133.32 },
-            // Row 2 (middle): z=0
-            swamp: { x: -133.32, z: 0 },
-            mountain: { x: 0, z: 0 },
-            coast: { x: 133.32, z: 0 },
-            // Row 3 (bottom): z=-133.32
-            caves: { x: -133.32, z: -133.32 },
-            forest: { x: 0, z: -133.32 },
-            volcano: { x: 133.32, z: -133.32 }
-        };
-
-        window.teleportTo = (region) => {
-            const pos = regionPositions[region];
-            if (pos) {
-                // Teleportiere Character zur Region
-                const groundHeight = getGroundHeight(pos.x, pos.z);
-                character.position.set(pos.x, groundHeight + 3.5, pos.z);
-
-                // Setze Kamera-Target
-                cameraController.setTarget(pos.x, groundHeight, pos.z);
-                updateCurrentRegion();
-            }
-        };
-
-        // Aktuelles Gebiet ermitteln (3x3 Grid) - 4x größere Welt
+        // Aktuelles Gebiet ermitteln (3x3 Grid) - 9600x9600 Welt
+        // Laut regions.json:
+        // Nord (z: 0-2400):     Reich der Drei (x<2400) | Samtmoos-Tiefwald (x:3600-6000) | ??? (x>7200)
+        // Mitte (z: 3600-6000): Salzwind-Küste (x<2400) | Götterfels (x:3300-6300) | Blitzebene (x>7200)
+        // Süd (z: 7200-9600):   Grünschlamm-Sumpf (x<2400) | Magmaströme (x:3600-6000) | Heiße Dünen (x>7200)
         function updateCurrentRegion() {
             const x = camera.position.x;
             const z = camera.position.z;
 
             let region = 'Unbekannt';
 
-            // Row 1 (top): z >= 66.66
-            if (z >= 66.66) {
-                if (x < -66.66) region = '❄️ Ice';
-                else if (x >= -66.66 && x < 66.66) region = '⛰️ Highland';
-                else region = '🏜️ Desert';
+            // 9600x9600 Welt mit 3x3 Grid
+            // Row 1 (Nord): z < 2400
+            if (z < 2400) {
+                if (x < 2400) region = '❄️ Reich der Drei';
+                else if (x < 6000) region = '🌲 Samtmoos-Tiefwald';
+                else region = '⛰️ Blitzebene (Nord)';  // Keine spezifische Region hier
             }
-            // Row 2 (middle): -66.66 <= z < 66.66
-            else if (z >= -66.66 && z < 66.66) {
-                if (x < -66.66) region = '🧪 Swamp';
-                else if (x >= -66.66 && x < 66.66) region = '🗻 Mountain';
-                else region = '🌊 Coast';
+            // Row 2 (Mitte): 2400 <= z < 6000
+            else if (z < 6000) {
+                if (x < 2400) region = '🌊 Salzwind-Küste';
+                else if (x < 6300) region = '🗻 Götterfels';
+                else region = '⚡ Blitzebene';
             }
-            // Row 3 (bottom): z < -66.66
+            // Row 3 (Süd): z >= 6000
             else {
-                if (x < -66.66) region = '🕳️ Caves';
-                else if (x >= -66.66 && x < 66.66) region = '🌲 Forest';
-                else region = '🌋 Volcano';
+                if (x < 2400) region = '🧪 Grünschlamm-Sumpf';
+                else if (x < 6000) region = '🌋 Magmaströme';
+                else region = '🏜️ Heiße Dünen';
             }
 
             document.getElementById('current-region').textContent = region;
@@ -1769,53 +3340,147 @@
 
         // Grid Toggle
         window.toggleGrid = () => {
-            gridHelper.visible = !gridHelper.visible;
+            if (gridHelper) {
+                gridHelper.visible = !gridHelper.visible;
+            }
         };
 
-        // Minimap Setup - 4x größere Welt
+        // Teleport to Region - 9600x9600 Welt
+        // Fast Travel spawnt DIREKT IN der Stadt (bei der Stadt-Position!)
+        window.teleportTo = (regionName) => {
+            const regionPositions = {
+                // Exakt die Stadt-Positionen aus cityLocations!
+                'ice': { x: 1200, z: 1200, name: 'Reich der Drei (Nekromanten-Turm)' },
+                'highland': { x: 8400, z: 4800, name: 'Runenheim (Magie-Akademie)' },
+                'desert': { x: 8400, z: 8200, name: 'Handelsfestung (PvP Arena)' },
+                'swamp': { x: 1800, z: 8200, name: 'Funkelnest (Hexen-Höhle)' },
+                'mountain': { x: 4800, z: 4800, name: 'Götterfels (Schwarze Mühle)' },
+                'coast': { x: 1500, z: 4800, name: 'Salzige Bucht (Hafen)' },
+                'caves': { x: 4800, z: 1800, name: 'Tiefenhöhlen-Eingang' },
+                'forest': { x: 4800, z: 1500, name: 'Dampf-Hain (Onsen)' },
+                'volcano': { x: 4800, z: 8200, name: 'Funken-Siedlung (Schmieden)' }
+            };
+
+            const pos = regionPositions[regionName];
+            if (pos) {
+                // Verlasse Interior falls drin
+                if (isInInterior) {
+                    unloadBuildingInterior();
+                }
+                // Teleport - dynamische Höhe basierend auf Terrain
+                const teleportHeight = getGroundHeight(pos.x, pos.z);
+                character.position.set(pos.x, teleportHeight + 3.5, pos.z);
+                cameraController.setTarget(pos.x, teleportHeight + 5, pos.z);
+                console.log(`✈️ Teleportiert nach ${pos.name || regionName.toUpperCase()} (Y=${teleportHeight + 3.5})`);
+            }
+        };
+
+        // Teleport zur Schwarzen Mühle (direkt rein wie Soulframe!)
+        window.teleportToMuehle = () => {
+            console.log('🏠 Teleportiere zur Schwarzen Mühle...');
+            // Rufe direkt loadMuehleInterior auf
+            loadMuehleInterior();
+        };
+
+        // Minimap Setup - 9.6km x 9.6km Welt (9600x9600 units)
         const minimapCanvas = document.getElementById('minimap');
         const minimapCtx = minimapCanvas.getContext('2d');
         const minimapSize = 200;
-        const worldSize = 400; // -200 to 200 = 400 units (4x größer)
+        const worldSize = 9600; // 9.6km x 9.6km (9 Regionen × 3200m)
         const minimapScale = minimapSize / worldSize;
 
         function drawMinimap() {
             // Clear
             minimapCtx.clearRect(0, 0, minimapSize, minimapSize);
 
-            // Draw 9 regions (3x3 grid)
-            regions.forEach(region => {
-                // Convert world position to minimap position
-                // World: -200 to 200 -> Minimap: 0 to 200
-                const minimapX = (region.x + 200) * minimapScale - (regionSize * minimapScale / 2);
-                const minimapZ = (region.z + 200) * minimapScale - (regionSize * minimapScale / 2);
-                const minimapRegionSize = regionSize * minimapScale;
+            // NEUES KOORDINATENSYSTEM: 0-9600 (nicht mehr -4800 bis +4800!)
+            // Zeichne 9 Regionen direkt mit Biome-Farben
+            const regionColors = {
+                ice: '#87CEEB',      // Reich der Drei - Hellblau
+                forest: '#228B22',   // Samtmoos-Tiefwald - Grün
+                coast: '#4169E1',    // Salzwind-Küste - Blau
+                highland: '#9370DB', // Blitzebene - Lila
+                mountain: '#808080', // Götterfels - Grau
+                swamp: '#556B2F',    // Grünschlamm-Sumpf - Dunkelgrün
+                volcano: '#FF4500',  // Magmaströme - Rot/Orange
+                desert: '#DAA520',   // Heiße Dünen - Gold
+                caves: '#4B0082'     // Tiefenhöhlen - Dunkel
+            };
+
+            // 3x3 Grid: Jede Region ist 3200x3200
+            const regionLayout = [
+                // Row 1 (Nord, z=0-2400)
+                { x: 0, z: 0, biome: 'ice' },
+                { x: 3200, z: 0, biome: 'forest' },
+                { x: 6400, z: 0, biome: 'caves' },
+                // Row 2 (Mitte, z=2400-6000)
+                { x: 0, z: 3200, biome: 'coast' },
+                { x: 3200, z: 3200, biome: 'mountain' },
+                { x: 6400, z: 3200, biome: 'highland' },
+                // Row 3 (Süd, z=6400-9600)
+                { x: 0, z: 6400, biome: 'swamp' },
+                { x: 3200, z: 6400, biome: 'volcano' },
+                { x: 6400, z: 6400, biome: 'desert' }
+            ];
+
+            // Zeichne alle 9 Regionen
+            regionLayout.forEach(region => {
+                const minimapX = region.x * minimapScale;
+                const minimapZ = region.z * minimapScale;
+                const minimapRegionSize = 3200 * minimapScale;
 
                 // Draw region rectangle
-                minimapCtx.fillStyle = '#' + region.color.toString(16).padStart(6, '0');
+                minimapCtx.fillStyle = regionColors[region.biome] || '#444444';
                 minimapCtx.fillRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
 
                 // Draw border
-                minimapCtx.strokeStyle = '#ffffff';
+                minimapCtx.strokeStyle = 'rgba(255,255,255,0.3)';
                 minimapCtx.lineWidth = 1;
                 minimapCtx.strokeRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
             });
 
-            // Draw Najika (character position)
-            const najikaMinimapX = (character.position.x + 200) * minimapScale;
-            const najikaMinimapZ = (character.position.z + 200) * minimapScale;
+            // Zeichne Städte als gelbe Punkte
+            const cityPositions = [
+                { x: 8400, z: 8200, name: 'Handelsfestung' },
+                { x: 4800, z: 1500, name: 'Dampf-Hain' },
+                { x: 1500, z: 4800, name: 'Salzige Bucht' },
+                { x: 8400, z: 4800, name: 'Runenheim' },
+                { x: 4800, z: 8200, name: 'Funken-Siedlung' }
+            ];
+
+            cityPositions.forEach(city => {
+                const cityMinimapX = city.x * minimapScale;
+                const cityMinimapZ = city.z * minimapScale;
+
+                minimapCtx.fillStyle = '#FFD700';
+                minimapCtx.beginPath();
+                minimapCtx.arc(cityMinimapX, cityMinimapZ, 3, 0, Math.PI * 2);
+                minimapCtx.fill();
+            });
+
+            // Zeichne Schwarze Mühle (Weltzentrum)
+            const muehleX = 4800 * minimapScale;
+            const muehleZ = 4800 * minimapScale;
+            minimapCtx.fillStyle = '#8B00FF';
+            minimapCtx.beginPath();
+            minimapCtx.arc(muehleX, muehleZ, 4, 0, Math.PI * 2);
+            minimapCtx.fill();
+
+            // Draw Najika (character position) - NEUES Koordinatensystem 0-9600
+            const najikaMinimapX = character.position.x * minimapScale;
+            const najikaMinimapZ = character.position.z * minimapScale;
 
             // Draw character as green dot
             minimapCtx.fillStyle = '#4CAF50';
             minimapCtx.beginPath();
-            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 5, 0, Math.PI * 2);
             minimapCtx.fill();
 
             // Draw character outline
             minimapCtx.strokeStyle = '#ffffff';
             minimapCtx.lineWidth = 2;
             minimapCtx.beginPath();
-            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 5, 0, Math.PI * 2);
             minimapCtx.stroke();
         }
 
@@ -1838,6 +3503,15 @@
             // Update Kamera
             const delta = 0.016;
             cameraController.update(delta);
+
+            // ========================================
+            // PHASE 2: Update World Manager (OPTIONAL)
+            // ========================================
+            if (USE_PHASE_2 && worldManager && worldManager.initialized) {
+                worldManager.update(delta);
+                worldManager.setPlayerPosition(character.position);
+            }
+            // ========================================
 
             // First-Person: Character dreht sich mit der Kamera
             const currentCameraMode = cameraController.getMode();
@@ -1872,14 +3546,14 @@
                 isCrouching = false;
             }
 
-            // Movement Speed basierend auf State
-            let moveSpeed = 0.5;  // Base
+            // Movement Speed basierend auf State (Realistisch für 3200m Map!)
+            let moveSpeed = 0.1;  // Base walking speed (~6 m/s @ 60fps)
             if (isSliding) {
-                moveSpeed = slideVelocity;  // Sliding (wird weniger)
+                moveSpeed = slideVelocity * 0.2;  // Sliding (schneller aber kontrolliert)
             } else if (isSprinting) {
-                moveSpeed = 1.0;  // Sprint (2x base)
+                moveSpeed = 0.15;  // Sprint (~9 m/s @ 60fps, wie Fortnite)
             } else if (isCrouching) {
-                moveSpeed = 0.25;  // Crouch (0.5x base)
+                moveSpeed = 0.05;  // Crouch (langsam, ~3 m/s @ 60fps)
             }
 
             let dx = 0;
@@ -1888,10 +3562,10 @@
 
             // WASD Keyboard Input (relativ zur Kamera-Blickrichtung)
             if (!isSliding) {
-                if (keys.w) { dz += 1; hasMovementInput = true; }
-                if (keys.s) { dz -= 1; hasMovementInput = true; }
-                if (keys.a) { dx += 1; hasMovementInput = true; }
-                if (keys.d) { dx -= 1; hasMovementInput = true; }
+                if (keys.w) { dz -= 1; hasMovementInput = true; }  // W = vorwärts (negative Z)
+                if (keys.s) { dz += 1; hasMovementInput = true; }  // S = rückwärts (positive Z)
+                if (keys.a) { dx -= 1; hasMovementInput = true; }  // A = links (negative X)
+                if (keys.d) { dx += 1; hasMovementInput = true; }  // D = rechts (positive X)
 
                 // Normalize diagonal movement
                 if (dx !== 0 && dz !== 0) {
@@ -1975,13 +3649,14 @@
 
             // Keep character within map bounds
             if (isInInterior) {
-                // Interior Bounds: ±66 (133.32 / 2)
+                // Interior Bounds: ±66 (Raum-Größe)
                 character.position.x = Math.max(-66, Math.min(66, character.position.x));
                 character.position.z = Math.max(-66, Math.min(66, character.position.z));
             } else {
-                // Exterior Bounds: ±200 (400 / 2) - 4x größere Welt
-                character.position.x = Math.max(-200, Math.min(200, character.position.x));
-                character.position.z = Math.max(-200, Math.min(200, character.position.z));
+                // Exterior Bounds: 0 bis 9600 - 9.6km x 9.6km Welt!
+                // Zentrum ist bei (4800, 4800), Welt geht von 0 bis 9600
+                character.position.x = Math.max(100, Math.min(9500, character.position.x));
+                character.position.z = Math.max(100, Math.min(9500, character.position.z));
             }
 
             // Update character height based on region
@@ -2048,12 +3723,12 @@
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
         // Backend URL (localhost:8000)
-        const BACKEND_URL = 'http://localhost:8000';
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
             try {
-                const response = await fetch(`${BACKEND_URL}/api/najika/status`);
+                const response = await fetch(`${window.BACKEND_URL}/api/najika/status`);
                 if (!response.ok) throw new Error('Backend nicht erreichbar');
 
                 const data = await response.json();
@@ -2079,6 +3754,8 @@
             if (data.hunger !== undefined) updateBar('najika-hunger', 'hunger-fill', data.hunger);
             if (data.energy !== undefined) updateBar('najika-energy', 'energy-fill', data.energy);
             if (data.happiness !== undefined) updateBar('najika-happiness', 'happiness-fill', data.happiness);
+            if (data.thirst !== undefined) updateBar('najika-thirst', 'thirst-fill', data.thirst);
+            if (data.hygiene !== undefined) updateBar('najika-hygiene', 'hygiene-fill', data.hygiene);
 
             // Stats
             if (data.strength !== undefined) {
@@ -2118,8 +3795,10 @@
         }
 
         // Open Terminal (Digivice)
+        // TODO: Implement terminal module overlay
         window.openTerminal = () => {
-            window.open('/digivice/index.html', '_blank', 'width=1200,height=800');
+            console.log('💻 Terminal: Not yet implemented. Please visit Terminal room in Schwarze Mühle (Tower floor).');
+            alert('💻 Terminal System\n\nBitte besuche den Terminal-Raum im Turm der Schwarzen Mühle.\n\n(Drücke E beim Mühle-Eingang, dann nutze die Stockwerk-Buttons um zum Turm zu gelangen)');
         };
 
         // Auto-Update: Fetch Najika Status alle 5 Sekunden
@@ -2127,6 +3806,129 @@
         setInterval(fetchNajikaStatus, 5000); // Update alle 5s
 
         console.log('✅ Phase 3: Backend Integration aktiviert!');
+
+        // ===== TEMPERATUR SYSTEM INTEGRATION =====
+        window.currentTemperature = { body: 37, environment: 22, region: 'Samtmoos-Tiefwald' };
+
+        async function fetchTemperatureStatus() {
+            try {
+                const response = await fetch(`${window.BACKEND_URL}/api/temperature/status`);
+                if (!response.ok) return;
+                const data = await response.json();
+                updateTemperatureUI(data);
+            } catch (error) {
+                console.warn('Temperatur-Status nicht verfügbar:', error.message);
+            }
+        }
+
+        function updateTemperatureUI(data) {
+            const bodyTemp = document.getElementById('body-temp');
+            const envTemp = document.getElementById('env-temp');
+            const regionEl = document.getElementById('current-region');
+            const tempFill = document.getElementById('temp-fill');
+
+            if (data.body_temperature !== undefined && bodyTemp) {
+                bodyTemp.textContent = Math.round(data.body_temperature);
+                window.currentTemperature.body = data.body_temperature;
+            }
+            if (data.environment_temperature !== undefined && envTemp) {
+                envTemp.textContent = Math.round(data.environment_temperature);
+                window.currentTemperature.environment = data.environment_temperature;
+            }
+            if (data.region_name && regionEl) {
+                regionEl.textContent = data.region_name;
+                window.currentTemperature.region = data.region_name;
+            }
+            // Farbskala: 0°C = blau, 50°C = rot
+            if (tempFill && data.body_temperature !== undefined) {
+                const percent = Math.min(100, Math.max(0, ((data.body_temperature + 10) / 70) * 100));
+                tempFill.style.width = percent + '%';
+            }
+        }
+
+        // Fetch initial temperature
+        fetchTemperatureStatus();
+        setInterval(fetchTemperatureStatus, 3000); // Alle 3 Sekunden
+
+        console.log('🌡️ Temperatur-System aktiviert!');
+
+        // ===== SKILL SYSTEM INTEGRATION =====
+        window.playerMana = 100;
+        window.skillCooldowns = {};
+
+        async function useSkill(skillId) {
+            try {
+                // Prüfe Cooldown
+                if (window.skillCooldowns[skillId] && window.skillCooldowns[skillId] > Date.now()) {
+                    console.log(`⏳ ${skillId} ist noch auf Cooldown!`);
+                    return;
+                }
+
+                const response = await fetch(`${window.BACKEND_URL}/api/skill/use`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ skill_id: skillId })
+                });
+
+                if (!response.ok) throw new Error('Skill fehlgeschlagen');
+                const result = await response.json();
+
+                // Visuelles Feedback
+                console.log(`✨ Skill ${skillId}:`, result);
+
+                // Update Mana UI
+                if (result.mana_remaining !== undefined) {
+                    window.playerMana = result.mana_remaining;
+                    document.getElementById('current-mana').textContent = Math.round(window.playerMana);
+                }
+
+                // Setze Cooldown
+                if (result.cooldown) {
+                    window.skillCooldowns[skillId] = Date.now() + (result.cooldown * 1000);
+                    const btn = document.querySelector(`[onclick="useSkill('${skillId}')"]`);
+                    if (btn) {
+                        btn.classList.add('on-cooldown');
+                        setTimeout(() => btn.classList.remove('on-cooldown'), result.cooldown * 1000);
+                    }
+                }
+
+                // Zeige Effekt-Nachricht
+                if (result.message) {
+                    showNotification(result.message, 'skill');
+                }
+
+            } catch (error) {
+                console.warn('Skill konnte nicht verwendet werden:', error.message);
+            }
+        }
+
+        // Skill-Hotkeys (1-4)
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch(e.key) {
+                case '1': useSkill('fireball'); break;
+                case '2': useSkill('ice_shard'); break;
+                case '3': useSkill('lightning_bolt'); break;
+                case '4': useSkill('heal'); break;
+            }
+        });
+
+        // Notification Helper für Skills (nutzt die Haupt-showNotification)
+        function showSkillNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+                background: linear-gradient(135deg, #9632ff, #6b1fb8);
+                color: white; padding: 12px 24px; border-radius: 8px;
+                font-family: monospace; z-index: 10000; animation: fadeInOut 2s forwards;
+                border: 2px solid #9632ff;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        console.log('✨ Skill-System aktiviert! Hotkeys: 1-4');
     
         // ===== FOOD SYSTEM: STARTER ITEMS (Phase 4) =====
 
@@ -2496,6 +4298,7 @@
         // ===== KEYBOARD CONTROLS =====
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // I or TAB to open inventory
             if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
                 if (!isInInterior) { // Don't open inventory in interiors
@@ -2609,6 +4412,7 @@
         // Enter Special Location (E key)
         const originalEKeyHandler = window.addEventListener;
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'e' || e.key === 'E') && !isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const nearLocation = specialLocations.checkEntranceProximity(character.position);
                 if (nearLocation) {
@@ -2631,6 +4435,7 @@
         let nearLighthouse = null;
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (e.key === ' ' || e.key === 'Spacebar') {
                 if (isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                     isPressingClimb = true;
@@ -2907,15 +4712,6 @@
 
                 case 'train_magic':
                 case 'train_smithing':
-                    // Training (Trainer)
-                    console.log(`⚔️ Training started: ${action}`);
-                    alert(`Training "${action}" started!\n(Skill System coming later)`);
-                    endDialogue();
-                    break;
-
-
-                case 'train_magic':
-                case 'train_smithing':
                     // Skill Training (NPC Trainer)
                     const availableSkills = skillSystem.getSkillsFromTrainer(npc.id);
                     if (availableSkills.length > 0) {
@@ -2942,7 +4738,8 @@
                         document.getElementById('dialogue-text').innerHTML = skillsHTML;
                         document.getElementById('dialogue-options').innerHTML = '';
                     } else {
-                        alert('Dieser Trainer hat keine Skills mehr für dich!');
+                        // Stille In-Game Notification statt Alert
+                        showNotification('📚 Dieser Trainer hat keine Skills mehr für dich!');
                         endDialogue();
                     }
                     break;
@@ -2950,7 +4747,7 @@
                 case 'start_arena':
                     // Arena Battle
                     console.log('🏟️ Arena Battle starting...');
-                    alert('Arena Battle starting!\n(Arena System coming in Phase 8)');
+                    showNotification('🏟️ Arena Battle wird gestartet...');
                     endDialogue();
                     break;
 
@@ -3019,6 +4816,7 @@
 
         // NPC Interaction Keyboard Handler
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // E key to talk to NPC
             if ((e.key === 'e' || e.key === 'E') && nearestNPC && !dialogueOpen && isInInterior) {
                 e.preventDefault();
@@ -3043,7 +4841,7 @@
             for (const building of currentBuildings) {
                 if (building.userData.buildingType === 'arena') {
                     const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                    if (distance < 15) {
+                    if (distance < 150) { // 150m für 3200m Map (war 15)
                         // Show Arena prompt
                         const prompt = document.getElementById('building-prompt');
                         if (prompt) {
@@ -3057,7 +4855,7 @@
                 // Check Player Shop
                 if (building.userData.buildingType === 'player_shop') {
                     const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                    if (distance < 5) {
+                    if (distance < 50) { // 50m für 3200m Map (war 5)
                         const prompt = document.getElementById('building-prompt');
                         if (prompt) {
                             prompt.textContent = `🛒 Drücke E für ${building.userData.buildingName}`;
@@ -3121,6 +4919,7 @@
 
         // E key handler for buildings
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'e' || e.key === 'E') && isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
 
@@ -3128,7 +4927,7 @@
                 for (const building of currentBuildings) {
                     if (building.userData.buildingType === 'arena') {
                         const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                        if (distance < 15) {
+                        if (distance < 150) { // 150m für 3200m Map (war 15)
                             // Show Arena UI
                             const arenaUI = document.getElementById('arena-ui');
                             if (arenaUI) {
@@ -3142,7 +4941,7 @@
                     // Check Player Shop
                     if (building.userData.buildingType === 'player_shop') {
                         const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                        if (distance < 5) {
+                        if (distance < 50) { // 50m für 3200m Map (war 5)
                             alert(building.userData.buildingName + '\n\nComing Soon: Multiplayer Player Shops! 🛒');
                             return;
                         }
@@ -3559,6 +5358,7 @@
 
         // Quest Log Keyboard Handler
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // Q or J to open quest log
             if ((e.key === 'q' || e.key === 'Q' || e.key === 'j' || e.key === 'J') && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 e.preventDefault();
@@ -3655,6 +5455,7 @@
 
         // Learn Skill from NPC Keyboard (K for Skills)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'k' || e.key === 'K') && !dialogueOpen && !inventoryOpen && !questLogOpen && !isInInterior) {
                 e.preventDefault();
                 // Show Skills UI
@@ -3733,6 +5534,7 @@
 
         // HOTKEYS für Essen (F1-F5)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (isInInterior) return; // Kein Essen in Interiors
 
             let foodID = null;
@@ -3829,5 +5631,99 @@
         setInterval(updateBuffUI, 1000);
 
 </script>
+
+<!-- ============================================ -->
+<!-- CHAOS EVENT SYSTEM -->
+<!-- ============================================ -->
+<script src="js/chaos_event_ui.js"></script>
+
+<!-- ============================================ -->
+<!-- COMBAT INPUT SYSTEM -->
+<!-- ============================================ -->
+<script src="js/game_input.js"></script>
+
+<!-- ============================================ -->
+<!-- INIT NEW SYSTEMS -->
+<!-- ============================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[Najika] Initializing new systems...');
+
+    // Chaos Events
+    if (typeof ChaosEventUI !== 'undefined') {
+        window.chaosEventUI = new ChaosEventUI();
+        console.log('[Najika] ✓ Chaos Event UI');
+    }
+
+    // Combat Input (Desktop)
+    if (window.commandSystem && typeof CombatInputHandler !== 'undefined') {
+        window.combatInput = new CombatInputHandler(window.commandSystem);
+        console.log('[Najika] ✓ Combat Input Handler');
+    }
+
+    console.log('[Najika] New systems initialized!');
+
+    // ===== GLOBAL EXPORTS für onclick Handler =====
+    // (Muss am Ende des DOMContentLoaded stehen, nachdem alle Funktionen definiert sind)
+    window.openTripleTriad = openTripleTriad;
+    window.openDungeonDice = openDungeonDice;
+    window.openDungeonDiceShop = openDungeonDiceShop;
+    window.openGardenSystem = openGardenSystem;
+    window.openRegionSelector = openRegionSelector;
+    window.openFishingSystem = openFishingSystem;
+    window.openFishingShop = openFishingShop;
+    window.openHousingSystem = openHousingSystem;
+    window.enterDungeon = enterDungeon;
+    window.openMinigames = openMinigames;
+    window.openInstrument = openInstrument;
+    window.openTerminal = openTerminal;
+    window.openSecureMessenger = openSecureMessenger;
+    window.openFileManager = openFileManager;
+    window.togglePraise = togglePraise;
+    window.showNotification = showNotification;
+    window.closeMinigameSelect = closeMinigameSelect;
+    console.log('✅ Activity Functions global exportiert!');
+
+    // Start Najika Status Auto-Update (alle 5 Sekunden)
+    startNajikaStatusUpdates();
+});
+
+// Auto-Update Najika Stats from Backend
+function startNajikaStatusUpdates() {
+    async function fetchAndUpdateNajikaStatus() {
+        try {
+            const response = await fetch('http://localhost:8000/api/najika/status');
+            const data = await response.json();
+
+            if (data) {
+                updateNajikaStats(data);
+
+                // Update activity display
+                const activityEl = document.getElementById('najika-activity');
+                if (activityEl) {
+                    // Generate activity text based on stats
+                    let activity = 'Idle...';
+                    if (data.hunger < 30) activity = '🍖 Hungrig...';
+                    else if (data.thirst < 30) activity = '💧 Durstig...';
+                    else if (data.hygiene < 30) activity = '🚿 Braucht Dusche...';
+                    else if (data.energy < 30) activity = '💤 Müde...';
+                    else if (data.happiness > 80) activity = '✨ Glücklich!';
+
+                    activityEl.textContent = activity;
+                }
+            }
+        } catch (error) {
+            console.error('[NajikaStats] Update failed:', error);
+        }
+    }
+
+    // Initial update
+    fetchAndUpdateNajikaStatus();
+
+    // Update alle 5 Sekunden
+    setInterval(fetchAndUpdateNajikaStatus, 5000);
+}
+</script>
+
 </body>
 </html>

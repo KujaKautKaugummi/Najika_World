@@ -93,7 +93,12 @@ async function handleAction(room, action) {
             MiniGames.open('reflex');
             break;
         case 'Trainieren':
-            alert('🏋️ Training absolviert!');
+            // Stille Notification statt Alert
+            if (typeof showNotification === 'function') {
+                showNotification('🏋️ Training absolviert!');
+            } else {
+                console.log('🏋️ Training absolviert!');
+            }
             break;
         case 'Kampf starten':
             const kb = await api('/api/battle/start', 'POST', {room});
@@ -103,14 +108,19 @@ async function handleAction(room, action) {
                     panel.style.display = 'block';
                     updateBattleHUD({hp: 100, max_hp: 100, wave: 1, enemies: 3});
                 }
-                alert('⚔️ Kampf gestartet! Nutze den Angriff-Button!');
+                // Stille Notification statt Alert
+                if (typeof showNotification === 'function') {
+                    showNotification('⚔️ Kampf gestartet! Nutze den Angriff-Button!');
+                }
             }
             break;
         case 'Erkunden':
-            alert('🔎 Du erkundest den Keller der Schwarzen Mühle...');
+            if (typeof showNotification === 'function') {
+                showNotification('🔎 Du erkundest den Keller der Schwarzen Mühle...');
+            }
             break;
         default:
-            alert('Aktion: ' + action);
+            console.log('Aktion: ' + action);
     }
 }
 

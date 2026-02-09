@@ -1,0 +1,100 @@
+{
+  "region_id": "blitzebene",
+  "name": "Blitzebene",
+  "name_en": "Lightning Plains",
+  "description": "Ein Hochland mit ständigen Gewittern, Runen-Magie und der Magier-Akademie Runenheim.",
+
+  "environment": {
+    "biome": "highland",
+    "temperature_range": [10, 22],
+    "temperature_day": 18,
+    "temperature_night": 10,
+    "humidity": 45,
+    "weather_chances": {
+      "clear": 0.2,
+      "cloudy": 0.3,
+      "thunderstorm": 0.4,
+      "lightning": 0.1
+    },
+    "ambient_sounds": ["thunder_distant", "wind_howling", "electric_crackle"],
+    "music_day": "highland_adventure",
+    "music_night": "storm_brewing",
+    "music_combat": "thunder_battle"
+  },
+
+  "visual": {
+    "skybox": "storm_clouds",
+    "ground_color": "#8b7355",
+    "fog_color": "#9370db",
+    "fog_density": 0.03,
+    "ambient_light": "#b0c4de",
+    "sun_intensity": 0.6,
+    "special_effects": ["lightning_strikes", "static_sparks", "glowing_runes"]
+  },
+
+  "city": {
+    "name": "Runenheim",
+    "position": {"x": 8400, "y": 100, "z": 4800},
+    "size": "small",
+    "style": "magic_academy",
+    "features": ["rune_altar", "magic_academy", "weather_shrine"]
+  },
+
+  "areas": [
+    {
+      "id": "akademie_tor",
+      "name": "Akademie-Tor",
+      "type": "safe_zone",
+      "position": {"x": 8200, "y": 100, "z": 4800},
+      "connections": ["akademie_platz", "hochland_pfad"]
+    },
+    {
+      "id": "akademie_platz",
+      "name": "Akademie-Platz",
+      "type": "city_center",
+      "position": {"x": 8400, "y": 100, "z": 4800},
+      "services": ["fast_travel", "magic_shop", "rune_crafting"]
+    },
+    {
+      "id": "runen_altar",
+      "name": "Runen-Altar",
+      "type": "trainer",
+      "position": {"x": 8500, "y": 120, "z": 4700},
+      "teaches": ["rune_magic", "lightning_magic", "enchanting"]
+    },
+    {
+      "id": "blitz_totems",
+      "name": "Feld der Totems",
+      "type": "gathering",
+      "position": {"x": 8800, "y": 80, "z": 5200},
+      "resources": ["lightning_essence", "storm_crystals", "totem_wood"]
+    },
+    {
+      "id": "gewitterspitze",
+      "name": "Gewitterspitze",
+      "type": "dungeon",
+      "position": {"x": 9200, "y": 200, "z": 4500},
+      "level_range": [10, 15],
+      "boss": "storm_elemental",
+      "hazards": ["lightning_strikes"]
+    }
+  ],
+
+  "npcs": [
+    {"id": "magister_hexus", "name": "Magister Hexus", "type": "dice_shop", "shop": "runen_akademie_spielzimmer"},
+    {"id": "archmagier_volta", "name": "Archmagier Volta", "type": "trainer", "teaches": ["lightning_magic"]},
+    {"id": "runenmeisterin_sigil", "name": "Runenmeisterin Sigil", "type": "trainer", "teaches": ["rune_crafting"]},
+    {"id": "wetter_prophet", "name": "Wetter-Prophet Nimbus", "type": "quest_giver"}
+  ],
+
+  "monsters": [
+    {"id": "spark_sprite", "name": "Funkengeist", "level": [1, 4], "rarity": "common", "element": "lightning"},
+    {"id": "wind_wolf", "name": "Sturmwolf", "level": [3, 7], "rarity": "common"},
+    {"id": "lightning_elemental", "name": "Blitz-Elementar", "level": [6, 10], "rarity": "uncommon", "element": "lightning"},
+    {"id": "thunder_hawk", "name": "Donnerfalke", "level": [8, 12], "rarity": "rare"},
+    {"id": "storm_elemental", "name": "Sturm-Elementar", "level": [15], "rarity": "boss", "element": "lightning"}
+  ],
+
+  "slime_color": "lightning_purple",
+  "slime_bonus": "+10% Bewegung"
+}

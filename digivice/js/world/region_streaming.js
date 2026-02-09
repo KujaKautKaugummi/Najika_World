@@ -322,16 +322,26 @@ class RegionStreaming {
 
     console.log(`🌍 Unloading region: ${loadedRegion.region.name}`);
 
-    // Remove terrain mesh
+    // Remove terrain mesh with proper texture disposal
     this.scene.remove(loadedRegion.group);
     loadedRegion.group.traverse(obj => {
       if (obj.geometry) obj.geometry.dispose();
       if (obj.material) {
-        if (Array.isArray(obj.material)) {
-          obj.material.forEach(mat => mat.dispose());
-        } else {
-          obj.material.dispose();
-        }
+        const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+        materials.forEach(mat => {
+          // Dispose all texture maps to prevent memory leak
+          if (mat.map) mat.map.dispose();
+          if (mat.normalMap) mat.normalMap.dispose();
+          if (mat.roughnessMap) mat.roughnessMap.dispose();
+          if (mat.metalnessMap) mat.metalnessMap.dispose();
+          if (mat.aoMap) mat.aoMap.dispose();
+          if (mat.emissiveMap) mat.emissiveMap.dispose();
+          if (mat.bumpMap) mat.bumpMap.dispose();
+          if (mat.displacementMap) mat.displacementMap.dispose();
+          if (mat.alphaMap) mat.alphaMap.dispose();
+          if (mat.envMap) mat.envMap.dispose();
+          mat.dispose();
+        });
       }
     });
     loadedRegion.group.clear();

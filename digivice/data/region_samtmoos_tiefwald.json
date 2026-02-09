@@ -1,0 +1,603 @@
+{
+  "region_id": "samtmoos_tiefwald",
+  "name": "Samtmoos-Tiefwald",
+  "name_en": "Velvetmoss Deepwood",
+  "description": "Ein uralter mystischer Wald voller leuchtender Pilze, heißer Quellen und Druiden. Die Stadt Dampf-Hain liegt im Herzen des Waldes.",
+  "description_en": "An ancient mystical forest full of glowing mushrooms, hot springs and druids. The city Dampf-Hain lies in the heart of the forest.",
+
+  "environment": {
+    "biome": "forest",
+    "temperature_range": [15, 25],
+    "temperature_day": 22,
+    "temperature_night": 16,
+    "humidity": 75,
+    "weather_chances": {
+      "clear": 0.4,
+      "cloudy": 0.25,
+      "rain": 0.25,
+      "fog": 0.1
+    },
+    "ambient_sounds": ["birds", "wind_leaves", "hot_spring_bubbles", "frogs"],
+    "music_day": "forest_mystical",
+    "music_night": "forest_spirits",
+    "music_combat": "forest_battle"
+  },
+
+  "visual": {
+    "skybox": "forest_canopy_dense",
+    "ground_color": "#2d4a2d",
+    "fog_color": "#6b8e6b",
+    "fog_density": 0.035,
+    "ambient_light": "#98bf98",
+    "sun_intensity": 0.5,
+    "tree_density": "very_high",
+    "grass_color": "#3d6b3d",
+    "special_effects": ["floating_spores", "glowing_mushrooms", "steam_vents"]
+  },
+
+  "areas": [
+    {
+      "id": "forest_entrance",
+      "name": "Waldeingang",
+      "type": "safe_zone",
+      "position": {"x": 4500, "y": 0, "z": 2200},
+      "description": "Der Eingang zum Samtmoos-Tiefwald vom Götterfels aus.",
+      "connections": ["dampf_hain_outskirts", "pilzpfad"],
+      "npcs": ["waldwache_erik"],
+      "interactables": ["wegweiser", "campfire"]
+    },
+    {
+      "id": "dampf_hain_outskirts",
+      "name": "Dampf-Hain Außenbezirk",
+      "type": "town_area",
+      "position": {"x": 4800, "y": 0, "z": 1700},
+      "description": "Die Außenbezirke der Stadt Dampf-Hain. Dampf steigt aus dem Boden.",
+      "connections": ["forest_entrance", "dampf_hain_zentrum", "onsen_district"],
+      "npcs": ["haendler_bruno", "questgeber_mira"],
+      "buildings": ["allgemeiner_laden", "pension_zur_quelle"]
+    },
+    {
+      "id": "dampf_hain_zentrum",
+      "name": "Dampf-Hain Zentrum",
+      "type": "city_center",
+      "position": {"x": 4800, "y": 0, "z": 1500},
+      "description": "Das Herz von Dampf-Hain. Ein großer Platz mit dem Druiden-Zirkel.",
+      "connections": ["dampf_hain_outskirts", "onsen_district", "druidenzirkel"],
+      "npcs": ["buergermeister_olaf", "schmied_helena", "koechin_yuki"],
+      "buildings": ["rathaus", "schmiede", "restaurant_dampfende_schuessel"],
+      "services": ["fast_travel", "bank", "quest_board"]
+    },
+    {
+      "id": "onsen_district",
+      "name": "Onsen-Viertel",
+      "type": "special",
+      "position": {"x": 4950, "y": 0, "z": 1550},
+      "description": "Das berühmte Thermalquellen-Viertel. Heilt und entspannt.",
+      "connections": ["dampf_hain_zentrum", "dampf_hain_outskirts"],
+      "npcs": ["bademeister_ken", "masseurin_sakura"],
+      "buildings": ["grosses_onsen", "privates_bad", "massage_salon"],
+      "effects": {
+        "hp_regen": 5,
+        "stamina_regen": 10,
+        "stress_reduction": true
+      }
+    },
+    {
+      "id": "druidenzirkel",
+      "name": "Druiden-Zirkel",
+      "type": "trainer",
+      "position": {"x": 4700, "y": 0, "z": 1400},
+      "description": "Ein heiliger Steinkreis der Druiden. Hier lernt man Naturmagie.",
+      "connections": ["dampf_hain_zentrum", "tiefer_wald"],
+      "npcs": ["erzdruide_oakhart", "lehrling_fern", "druide_moss"],
+      "teaches": ["nature_magic", "healing", "transformation"]
+    },
+    {
+      "id": "pilzpfad",
+      "name": "Pilzpfad",
+      "type": "gathering",
+      "position": {"x": 4300, "y": 0, "z": 1900},
+      "description": "Ein Pfad gesäumt von leuchtenden Pilzen aller Art.",
+      "connections": ["forest_entrance", "tiefer_wald", "giftpilz_senke"],
+      "resources": ["leuchtpilz", "heilpilz", "samtpilz", "trueffel"],
+      "enemies_day": ["pilzling", "moos_schleim"],
+      "enemies_night": ["schattenspore", "giftpilz_wanderer"],
+      "spawn_rate": 0.35
+    },
+    {
+      "id": "tiefer_wald",
+      "name": "Tiefer Wald",
+      "type": "exploration",
+      "position": {"x": 4600, "y": 0, "z": 1200},
+      "description": "Der dunkle, dichte Teil des Waldes. Leicht sich zu verirren.",
+      "connections": ["pilzpfad", "druidenzirkel", "geisterquelle", "tiefenhoehlen_eingang"],
+      "hazard": {
+        "type": "confusion",
+        "effect": "random_teleport",
+        "prevention": "waldkarte"
+      },
+      "enemies_day": ["waldgeist", "riesenkaefer", "wilder_eber"],
+      "enemies_night": ["schattenwolf", "irrlicht", "nachtfee"],
+      "spawn_rate": 0.5
+    },
+    {
+      "id": "geisterquelle",
+      "name": "Geisterquelle",
+      "type": "quest_area",
+      "position": {"x": 4400, "y": 0, "z": 1000},
+      "description": "Eine mystische Quelle, an der Waldgeister erscheinen.",
+      "connections": ["tiefer_wald", "uralter_baum"],
+      "npcs": ["quellengeist_naiad"],
+      "spawn_time": {"start": 20, "end": 4},
+      "enemies_night": ["wassernymphe", "nebelfee"],
+      "spawn_rate": 0.3,
+      "special": "wish_granting"
+    },
+    {
+      "id": "giftpilz_senke",
+      "name": "Giftpilz-Senke",
+      "type": "hazard",
+      "position": {"x": 4100, "y": -5, "z": 1800},
+      "description": "Eine gefährliche Senke voller giftiger Pilze und Sporen.",
+      "connections": ["pilzpfad"],
+      "hazard": {
+        "type": "poison",
+        "damage_per_second": 3,
+        "resistance_needed": "gift_resist"
+      },
+      "enemies_day": ["giftpilz_riese", "sporenschleimer"],
+      "enemies_night": ["toxischer_horror", "miasma_geist"],
+      "spawn_rate": 0.6,
+      "resources": ["giftessenz", "seltener_giftpilz", "gegengift_kraut"]
+    },
+    {
+      "id": "uralter_baum",
+      "name": "Uralter Baum",
+      "type": "dungeon_entrance",
+      "position": {"x": 4500, "y": 0, "z": 800},
+      "description": "Der älteste Baum des Waldes. In seinen Wurzeln liegt ein Dungeon.",
+      "connections": ["geisterquelle", "tiefer_wald"],
+      "dungeon_id": "wurzelhallen",
+      "required_level": 8,
+      "boss": "Parasiten-Mutter Sporax"
+    },
+    {
+      "id": "tiefenhoehlen_eingang",
+      "name": "Höhleneingang",
+      "type": "region_connection",
+      "position": {"x": 4800, "y": -10, "z": 600},
+      "description": "Ein dunkler Eingang führt hinab in die Tiefenhöhlen.",
+      "connections": ["tiefer_wald"],
+      "connects_to": "tiefenhoehlen",
+      "required_item": "fackel",
+      "warning": "Gefährlich! Nur mit Lichtquelle betreten!"
+    }
+  ],
+
+  "city": {
+    "id": "dampf_hain",
+    "name": "Dampf-Hain",
+    "type": "medium",
+    "population": 450,
+    "services": [
+      {"type": "inn", "name": "Pension zur heißen Quelle", "price_modifier": 1.0},
+      {"type": "shop", "name": "Brunos Allerlei", "specialty": "general"},
+      {"type": "blacksmith", "name": "Helenas Schmiede", "specialty": "nature_weapons"},
+      {"type": "restaurant", "name": "Dampfende Schüssel", "specialty": "steamed_buns"},
+      {"type": "onsen", "name": "Großes Therme", "effects": ["full_heal", "buff_regen"]},
+      {"type": "trainer", "name": "Druiden-Zirkel", "teaches": ["nature_magic"]}
+    ],
+    "special_features": ["hot_springs", "glowing_mushroom_lights", "steam_vents"],
+    "food_specialty": {
+      "name": "Dampfbrötchen",
+      "name_en": "Steamed Buns",
+      "effect": {"hp_restore": 50, "stamina_restore": 30, "buff": "warm"}
+    }
+  },
+
+  "npcs": [
+    {
+      "id": "waldwache_erik",
+      "name": "Waldwache Erik",
+      "type": "guard",
+      "portrait": "npc_ranger_guard",
+      "position": {"x": 4500, "y": 0, "z": 2200},
+      "dialogue": {
+        "greeting": "Halt! Willkommen im Samtmoos-Tiefwald. Pass auf dich auf da drin.",
+        "tips": "Im tiefen Wald kann man sich leicht verirren. Kauf dir eine Karte bei Bruno in Dampf-Hain.",
+        "warning": "Nachts kommen die Schattenkreaturen raus. Sei vorsichtig!",
+        "idle": ["Der Nebel ist heute besonders dicht...", "Ich höre die Pilze wachsen.", "Die heißen Quellen sind herrlich!"]
+      }
+    },
+    {
+      "id": "haendler_bruno",
+      "name": "Händler Bruno",
+      "type": "merchant",
+      "portrait": "npc_merchant_jovial",
+      "position": {"x": 4750, "y": 0, "z": 1700},
+      "dialogue": {
+        "greeting": "Ah, ein Kunde! Brunos Allerlei hat alles was du brauchst!",
+        "shop_open": "Schau dich um, schau dich um! Frische Pilze, Heiltränke, Karten!",
+        "shop_close": "Komm bald wieder! Der Wald ist voller Überraschungen!",
+        "idle": ["Frische Leuchtpilze!", "Dampfbrötchen von nebenan, mhm!", "Waldkarten im Angebot!"]
+      },
+      "shop": {
+        "type": "general",
+        "items": [
+          {"id": "heiltrank_klein", "price": 30, "stock": 20},
+          {"id": "manatrank_klein", "price": 35, "stock": 15},
+          {"id": "gegengift", "price": 50, "stock": 10},
+          {"id": "waldkarte", "price": 150, "stock": 3},
+          {"id": "fackel", "price": 20, "stock": 30},
+          {"id": "leuchtpilz", "price": 40, "stock": 8},
+          {"id": "dampfbroetchen", "price": 25, "stock": 15}
+        ],
+        "buys": ["pilze", "kraeuter", "monster_drops"]
+      }
+    },
+    {
+      "id": "questgeber_mira",
+      "name": "Kräutersammlerin Mira",
+      "type": "quest_giver",
+      "portrait": "npc_herbalist",
+      "position": {"x": 4820, "y": 0, "z": 1720},
+      "dialogue": {
+        "greeting": "Oh, ein Abenteurer! Kannst du mir vielleicht helfen?",
+        "quest_available": "Ich brauche seltene Pilze für meine Medizin...",
+        "quest_complete": "Wunderbar! Das wird vielen helfen!",
+        "idle": ["Diese Pilze sind faszinierend...", "Der Wald gibt und nimmt.", "Vorsicht vor den giftigen!"]
+      },
+      "quests": ["q_pilz_sammlung", "q_gift_gegen_gift", "q_seltener_trueffel"]
+    },
+    {
+      "id": "erzdruide_oakhart",
+      "name": "Erzdruide Oakhart",
+      "type": "trainer",
+      "portrait": "npc_druid_elder",
+      "position": {"x": 4700, "y": 0, "z": 1400},
+      "dialogue": {
+        "greeting": "Der Wald hat dich hierher geführt. Das ist kein Zufall.",
+        "train_available": "Ich kann dich die Wege der Natur lehren. Bist du bereit?",
+        "train_complete": "Die Macht der Natur fließt nun durch dich.",
+        "lore": "Dieser Wald war hier lange bevor die ersten Menschen kamen. Wir Druiden hüten sein Geheimnis.",
+        "idle": ["Die Bäume flüstern...", "Ich spüre Störungen im Wald.", "Die Balance muss gewahrt werden."]
+      },
+      "teaches": ["nature_magic", "healing"],
+      "skills": [
+        {"id": "vine_whip", "cost": 400, "level_req": 3},
+        {"id": "bark_skin", "cost": 600, "level_req": 5},
+        {"id": "nature_heal", "cost": 300, "level_req": 2},
+        {"id": "spore_cloud", "cost": 500, "level_req": 4},
+        {"id": "forest_blessing", "cost": 1000, "level_req": 10}
+      ]
+    },
+    {
+      "id": "koechin_yuki",
+      "name": "Köchin Yuki",
+      "type": "chef",
+      "portrait": "npc_chef_asian",
+      "position": {"x": 4850, "y": 0, "z": 1480},
+      "dialogue": {
+        "greeting": "Willkommen in der Dampfenden Schüssel! Hungrig?",
+        "menu": "Unsere Spezialität: Dampfbrötchen mit Waldpilzfüllung!",
+        "full": "Du siehst satt aus. Komm später wieder!",
+        "idle": ["*knetet Teig*", "Das Geheimnis ist der Dampf!", "*summt ein Lied*"]
+      },
+      "shop": {
+        "type": "food",
+        "items": [
+          {"id": "dampfbroetchen", "price": 25, "effect": {"hp": 50, "stamina": 30}},
+          {"id": "pilzsuppe", "price": 40, "effect": {"hp": 80, "buff": "regen_small"}},
+          {"id": "waldgemuese", "price": 15, "effect": {"hp": 30}},
+          {"id": "thermalbier", "price": 35, "effect": {"stamina": 60, "buff": "warm"}},
+          {"id": "druiden_tee", "price": 50, "effect": {"mp": 100, "buff": "focus"}}
+        ]
+      }
+    },
+    {
+      "id": "quellengeist_naiad",
+      "name": "Quellengeist Naiad",
+      "type": "special",
+      "portrait": "npc_water_spirit",
+      "position": {"x": 4400, "y": 0, "z": 1000},
+      "spawn_time": {"start": 20, "end": 4},
+      "dialogue": {
+        "greeting": "*glucksendes Lachen* Ein Sterblicher... an meiner Quelle...",
+        "wish": "Wirf eine Münze hinein und wünsch dir etwas... vielleicht erhöre ich dich.",
+        "quest_available": "Der Wald leidet... Hilf mir, und ich helfe dir.",
+        "idle": ["*tanzt über dem Wasser*", "*singt leise*", "Die Sterne spiegeln sich so schön..."]
+      },
+      "special_interaction": "make_wish",
+      "quests": ["q_cleanse_spring", "q_naiad_blessing"]
+    },
+    {
+      "id": "bademeister_ken",
+      "name": "Bademeister Ken",
+      "type": "service",
+      "portrait": "npc_bathhouse_master",
+      "position": {"x": 4950, "y": 0, "z": 1550},
+      "dialogue": {
+        "greeting": "Willkommen im Onsen! Zeit zum Entspannen?",
+        "service": "Ein Bad kostet 50 Gold. Dafür volle Heilung und Erholung!",
+        "rules": "Bitte vorher waschen! Und keine Monster im Bad!",
+        "idle": ["Ahh, der Dampf tut gut...", "Nichts geht über heiße Quellen!", "*wischt sich Schweiß ab*"]
+      },
+      "service": {
+        "type": "onsen",
+        "price": 50,
+        "effects": ["full_heal", "stamina_full", "buff_regen_15min"]
+      }
+    }
+  ],
+
+  "enemies": [
+    {
+      "id": "pilzling",
+      "name": "Pilzling",
+      "type": "normal",
+      "level_range": [1, 4],
+      "stats": {"hp": 30, "atk": 8, "def": 5, "spd": 8, "element": "earth"},
+      "skills": ["headbutt", "spore_puff"],
+      "loot": [
+        {"item": "pilzkappe", "chance": 0.5},
+        {"item": "kleine_essenz", "chance": 0.2},
+        {"item": "gold", "amount": [3, 8]}
+      ],
+      "xp": 12,
+      "spawn_time": "day"
+    },
+    {
+      "id": "moos_schleim",
+      "name": "Moos-Schleim",
+      "type": "normal",
+      "level_range": [1, 5],
+      "stats": {"hp": 45, "atk": 6, "def": 10, "spd": 4, "element": "earth"},
+      "skills": ["slime_splash", "regenerate"],
+      "loot": [
+        {"item": "schleim_gel", "chance": 0.6},
+        {"item": "moos_bueschel", "chance": 0.3},
+        {"item": "gold", "amount": [2, 6]}
+      ],
+      "xp": 10,
+      "spawn_time": "any"
+    },
+    {
+      "id": "waldgeist",
+      "name": "Waldgeist",
+      "type": "normal",
+      "level_range": [3, 7],
+      "stats": {"hp": 40, "atk": 14, "def": 6, "spd": 16, "element": "wind"},
+      "skills": ["wind_blade", "phase_shift"],
+      "loot": [
+        {"item": "geist_essenz", "chance": 0.25},
+        {"item": "wind_fragment", "chance": 0.1},
+        {"item": "gold", "amount": [8, 18]}
+      ],
+      "xp": 28,
+      "spawn_time": "any"
+    },
+    {
+      "id": "riesenkaefer",
+      "name": "Riesenkäfer",
+      "type": "normal",
+      "level_range": [2, 6],
+      "stats": {"hp": 55, "atk": 12, "def": 18, "spd": 6, "element": "earth"},
+      "skills": ["shell_bash", "horn_charge"],
+      "loot": [
+        {"item": "kaefer_panzer", "chance": 0.4},
+        {"item": "kaefer_horn", "chance": 0.15},
+        {"item": "gold", "amount": [5, 12]}
+      ],
+      "xp": 22,
+      "spawn_time": "day"
+    },
+    {
+      "id": "schattenwolf",
+      "name": "Schattenwolf",
+      "type": "elite",
+      "level_range": [5, 9],
+      "stats": {"hp": 70, "atk": 20, "def": 8, "spd": 22, "element": "dark"},
+      "skills": ["shadow_bite", "howl", "pack_tactics"],
+      "loot": [
+        {"item": "schattenfell", "chance": 0.35},
+        {"item": "wolf_fang", "chance": 0.25},
+        {"item": "schatten_essenz", "chance": 0.1},
+        {"item": "gold", "amount": [15, 35]}
+      ],
+      "xp": 55,
+      "spawn_time": "night",
+      "pack_size": [2, 4]
+    },
+    {
+      "id": "irrlicht",
+      "name": "Irrlicht",
+      "type": "normal",
+      "level_range": [4, 8],
+      "stats": {"hp": 25, "atk": 16, "def": 3, "spd": 25, "element": "light"},
+      "skills": ["will_o_wisp", "confuse", "flash"],
+      "loot": [
+        {"item": "irrlicht_kern", "chance": 0.3},
+        {"item": "licht_fragment", "chance": 0.15},
+        {"item": "gold", "amount": [10, 25]}
+      ],
+      "xp": 35,
+      "spawn_time": "night",
+      "special": "lures_player"
+    },
+    {
+      "id": "giftpilz_riese",
+      "name": "Giftpilz-Riese",
+      "type": "elite",
+      "level_range": [6, 10],
+      "stats": {"hp": 120, "atk": 18, "def": 15, "spd": 5, "element": "poison"},
+      "skills": ["toxic_slam", "poison_cloud", "regenerate"],
+      "loot": [
+        {"item": "riesen_pilzkappe", "chance": 0.5},
+        {"item": "gift_essenz", "chance": 0.4},
+        {"item": "gegengift_rezept", "chance": 0.08},
+        {"item": "gold", "amount": [25, 50]}
+      ],
+      "xp": 75,
+      "spawn_time": "any"
+    },
+    {
+      "id": "schattenspore",
+      "name": "Schattenspore",
+      "type": "normal",
+      "level_range": [4, 7],
+      "stats": {"hp": 35, "atk": 14, "def": 8, "spd": 12, "element": "dark"},
+      "skills": ["dark_spore", "shadow_step"],
+      "loot": [
+        {"item": "schatten_spore", "chance": 0.45},
+        {"item": "dunkel_pilz", "chance": 0.2},
+        {"item": "gold", "amount": [8, 20]}
+      ],
+      "xp": 30,
+      "spawn_time": "night"
+    }
+  ],
+
+  "boss": {
+    "id": "sporax",
+    "name": "Parasiten-Mutter Sporax",
+    "title": "Hüterin der Wurzelhallen",
+    "level": 12,
+    "type": "area_boss",
+    "location": "uralter_baum",
+    "stats": {"hp": 1000, "atk": 28, "def": 20, "spd": 8, "element": "poison"},
+    "phases": [
+      {
+        "phase": 1,
+        "hp_threshold": 1.0,
+        "skills": ["spore_burst", "vine_trap", "summon_sporelings"],
+        "behavior": "defensive",
+        "summons": ["pilzling", "schattenspore"]
+      },
+      {
+        "phase": 2,
+        "hp_threshold": 0.6,
+        "skills": ["mega_poison_cloud", "root_eruption", "parasitic_link"],
+        "behavior": "aggressive"
+      },
+      {
+        "phase": 3,
+        "hp_threshold": 0.25,
+        "skills": ["sporax_rampage", "death_spore", "desperate_regeneration"],
+        "behavior": "enraged",
+        "buff": {"atk": 1.4, "def": 0.8}
+      }
+    ],
+    "loot": [
+      {"item": "sporax_kern", "chance": 1.0},
+      {"item": "parasiten_essenz", "chance": 0.7},
+      {"item": "sporax_robe", "chance": 0.25},
+      {"item": "giftresistenz_amulett", "chance": 0.2},
+      {"item": "uraltes_holz", "chance": 0.5},
+      {"item": "gold", "amount": [300, 500]}
+    ],
+    "xp": 650,
+    "respawn_time": 7200,
+    "dialogue": {
+      "intro": "Wer... wagt es... in mein Reich einzudringen...?",
+      "phase2": "Der Wald... gehört... MIR!",
+      "phase3": "NEIN! Ich werde NICHT sterben!",
+      "defeat": "Der... Kreislauf... geht... weiter..."
+    }
+  },
+
+  "quests": [
+    {
+      "id": "q_pilz_sammlung",
+      "name": "Pilzsammlung für Mira",
+      "giver": "questgeber_mira",
+      "type": "gather",
+      "description": "Sammle 10 Heilpilze und 5 Leuchtpilze für die Kräutersammlerin.",
+      "objectives": [
+        {"type": "collect", "item": "heilpilz", "count": 10},
+        {"type": "collect", "item": "leuchtpilz", "count": 5}
+      ],
+      "rewards": {"xp": 100, "gold": 75, "items": ["heiltrank_mittel", "heiltrank_mittel"]},
+      "required_level": 1
+    },
+    {
+      "id": "q_gift_gegen_gift",
+      "name": "Gift gegen Gift",
+      "giver": "questgeber_mira",
+      "type": "gather",
+      "description": "Besorge 3 Giftessenzen aus der Giftpilz-Senke für ein Gegengift.",
+      "prerequisites": ["q_pilz_sammlung"],
+      "objectives": [
+        {"type": "collect", "item": "gift_essenz", "count": 3}
+      ],
+      "rewards": {"xp": 180, "gold": 120, "items": ["gegengift", "gegengift", "gegengift", "gift_resist_ring"]},
+      "required_level": 4
+    },
+    {
+      "id": "q_schattenwolf_jagd",
+      "name": "Schattenwolf-Jagd",
+      "giver": "waldwache_erik",
+      "type": "combat",
+      "description": "Die Schattenwölfe werden zu zahlreich. Erlege 8 von ihnen.",
+      "objectives": [
+        {"type": "kill", "target": "schattenwolf", "count": 8}
+      ],
+      "rewards": {"xp": 250, "gold": 150, "items": ["wolf_umhang"]},
+      "required_level": 5
+    },
+    {
+      "id": "q_naiad_blessing",
+      "name": "Segen der Naiad",
+      "giver": "quellengeist_naiad",
+      "type": "chain",
+      "description": "Reinige die verschmutzten Quellen im Wald.",
+      "prerequisites": ["q_cleanse_spring"],
+      "objectives": [
+        {"type": "interact", "target": "polluted_spring_1", "action": "cleanse"},
+        {"type": "interact", "target": "polluted_spring_2", "action": "cleanse"},
+        {"type": "interact", "target": "polluted_spring_3", "action": "cleanse"}
+      ],
+      "rewards": {"xp": 400, "gold": 200, "items": ["naiad_segen"], "unlocks": ["naiad_wish"]},
+      "required_level": 6
+    },
+    {
+      "id": "q_sporax",
+      "name": "Die Wurzelhallen reinigen",
+      "giver": "erzdruide_oakhart",
+      "type": "boss",
+      "description": "Die Parasiten-Mutter Sporax vergiftet den Wald. Besiege sie!",
+      "objectives": [
+        {"type": "kill", "target": "sporax", "count": 1}
+      ],
+      "rewards": {"xp": 800, "gold": 400, "items": ["druiden_stab", "samtmoos_medaillon"], "unlocks": ["samtmoos_champion"]},
+      "required_level": 10
+    }
+  ],
+
+  "resources": [
+    {"id": "heilpilz", "name": "Heilpilz", "type": "herb", "spawn_areas": ["pilzpfad", "tiefer_wald"], "rarity": "common"},
+    {"id": "leuchtpilz", "name": "Leuchtpilz", "type": "herb", "spawn_areas": ["pilzpfad"], "rarity": "uncommon"},
+    {"id": "samtpilz", "name": "Samtpilz", "type": "herb", "spawn_areas": ["pilzpfad", "tiefer_wald"], "rarity": "common"},
+    {"id": "trueffel", "name": "Trüffel", "type": "rare_herb", "spawn_areas": ["tiefer_wald"], "rarity": "rare"},
+    {"id": "gift_essenz", "name": "Giftessenz", "type": "material", "spawn_areas": ["giftpilz_senke"], "rarity": "uncommon"},
+    {"id": "uraltes_holz", "name": "Uraltes Holz", "type": "material", "spawn_areas": ["uralter_baum"], "rarity": "epic"},
+    {"id": "thermalwasser", "name": "Thermalwasser", "type": "material", "spawn_areas": ["onsen_district"], "rarity": "uncommon"}
+  ],
+
+  "connections": {
+    "north": null,
+    "east": null,
+    "south": "goetterfels",
+    "west": null,
+    "underground": "tiefenhoehlen"
+  },
+
+  "unlock_requirements": null,
+
+  "achievements": [
+    {"id": "samtmoos_erkunder", "name": "Samtmoos-Erkunder", "description": "Entdecke alle Bereiche des Samtmoos-Tiefwalds", "xp": 100},
+    {"id": "pilzexperte", "name": "Pilzexperte", "description": "Sammle 100 Pilze im Tiefwald", "xp": 75},
+    {"id": "onsen_stammgast", "name": "Onsen-Stammgast", "description": "Besuche das Onsen 10 Mal", "xp": 50},
+    {"id": "druiden_schueler", "name": "Druiden-Schüler", "description": "Lerne alle Skills vom Erzdruiden", "xp": 150},
+    {"id": "sporax_bezwinger", "name": "Sporax-Bezwinger", "description": "Besiege die Parasiten-Mutter Sporax", "xp": 200}
+  ]
+}

@@ -186,7 +186,7 @@ class AssetDiscovery {
   /**
    * Lade Asset-Mapping JSON (Fallback)
    */
-  async loadAssetMapping(mappingPath = '/data/asset_mapping_v2_REAL.json') {
+  async loadAssetMapping(mappingPath = '/digivice/data/asset_mapping_v2_REAL.json') {
     try {
       const response = await fetch(mappingPath);
       const mapping = await response.json();

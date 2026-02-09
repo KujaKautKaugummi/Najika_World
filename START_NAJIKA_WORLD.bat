@@ -1,55 +1,66 @@
 @echo off
-title NAJIKA WORLD v1.1
-color 0A
-cd /d "%~dp0"
+chcp 65001 >nul 2>&1
+title NAJIKA WORLD - Komplett-Start
 
-cls
 echo.
-echo ========================================================================
-echo                      NAJIKA WORLD V1.1
-echo ========================================================================
-echo.
-echo [INFO] Starte Najika World Server...
+echo  ╔══════════════════════════════════════════════════════════════════╗
+echo  ║                                                                  ║
+echo  ║     ███╗   ██╗ █████╗      ██╗██╗██╗  ██╗ █████╗                 ║
+echo  ║     ████╗  ██║██╔══██╗     ██║██║██║ ██╔╝██╔══██╗                ║
+echo  ║     ██╔██╗ ██║███████║     ██║██║█████╔╝ ███████║                ║
+echo  ║     ██║╚██╗██║██╔══██║██   ██║██║██╔═██╗ ██╔══██║                ║
+echo  ║     ██║ ╚████║██║  ██║╚█████╔╝██║██║  ██╗██║  ██║                ║
+echo  ║     ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝                ║
+echo  ║                                                                  ║
+echo  ║                    WORLD - KOMPLETT START                        ║
+echo  ║                                                                  ║
+echo  ╚══════════════════════════════════════════════════════════════════╝
 echo.
 
-REM Pruefen ob Ollama laeuft
-echo [1/3] Pruefe Ollama...
-curl -s http://127.0.0.1:11434/api/tags >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo [WARNUNG] Ollama scheint nicht zu laufen!
-    echo           Bitte starte Ollama zuerst.
-    echo.
-    pause
-    exit /b 1
+set NAJIKA_DIR=%~dp0
+
+echo [1/4] Starte Ollama (falls nicht laeuft)...
+tasklist /FI "IMAGENAME eq ollama.exe" 2>NUL | find /I /N "ollama.exe">NUL
+if "%ERRORLEVEL%"=="1" (
+    start "" ollama serve
+    timeout /t 3 /nobreak >nul
+    echo     Ollama gestartet!
+) else (
+    echo     Ollama laeuft bereits!
 )
-echo       [OK] Ollama laeuft!
-
-REM Backend starten
-echo [2/3] Starte Backend Server (Port 8000)...
-cd backend
-start "Najika Backend" cmd /k "python najika_server.py"
-cd ..
-timeout /t 5 >nul
-
-REM Browser oeffnen
-echo [3/3] Oeffne Browser...
-timeout /t 2 >nul
-start http://localhost:8000/digivice/
 
 echo.
-echo ========================================================================
-echo                    NAJIKA WORLD ERFOLGREICH GESTARTET!
-echo ========================================================================
+echo [2/4] Starte Najika Backend Server (Port 8000)...
+cd /d "%NAJIKA_DIR%backend"
+start "Najika Server" cmd /k "python najika_server.py"
+timeout /t 3 /nobreak >nul
+echo     Backend Server gestartet!
+
 echo.
-echo   Digivice UI:  http://localhost:8000/digivice/
-echo   Backend API:  http://localhost:8000/api/
-echo   Chat:         http://localhost:8000/digivice/#chat
+echo [3/4] Starte Digivice Web-Server (Port 8080)...
+cd /d "%NAJIKA_DIR%digivice"
+start "Digivice Server" cmd /k "python -m http.server 8080"
+timeout /t 2 /nobreak >nul
+echo     Digivice Server gestartet!
+
 echo.
-echo   Optional React Frontend: http://localhost:3002/ (manual start)
+echo [4/4] Oeffne Najika World im Browser...
+timeout /t 2 /nobreak >nul
+start "" "http://localhost:8080/najika_world_UNIFIED.html"
+
 echo.
-echo ========================================================================
+echo ═══════════════════════════════════════════════════════════════════════
+echo  NAJIKA WORLD GESTARTET!
+echo ═══════════════════════════════════════════════════════════════════════
 echo.
-echo [HINWEIS] Backend-Fenster offen lassen!
-echo           Schliesse DIESES Fenster zum Beenden.
+echo  Browser:     http://localhost:8080/najika_world_UNIFIED.html
+echo  Backend API: http://localhost:8000/
+echo  Digivice:    http://localhost:8080/
 echo.
-pause >nul
+echo  CLI starten: najika.bat (im Projektordner)
+echo.
+echo  Zum Beenden: Schliesse dieses Fenster oder druecke STRG+C
+echo ═══════════════════════════════════════════════════════════════════════
+echo.
+
+pause
