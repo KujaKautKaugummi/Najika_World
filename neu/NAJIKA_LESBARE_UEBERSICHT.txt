@@ -1,0 +1,269 @@
+================================================================================
+NAJIKA - LESBARE PROJEKT-ÜBERSICHT
+================================================================================
+
+Erstellt: 2025-10-19 21:02:17
+
+Diese Übersicht zeigt was Najika JETZT kann - basierend auf
+vorhandenem Code, Konfiguration und Ressourcen.
+
+================================================================================
+
+## 1. SERVER (najika_server.py)
+================================================================================
+
+**RÄUME (12):**
+   1. Wohnzimmer
+   2. Schlafzimmer
+   3. Küche
+   4. Badezimmer
+   5. Garten
+   6. Musikraum
+   7. Medizin
+   8. Terminal
+   9. Studieren & Crafting
+  10. Trainingszimmer
+  11. Kampfarena
+  12. Schwarze Mühle – Keller
+
+**INTEGRIERTE SYSTEME:**
+  - Living System
+  - Memory System (ChromaDB)
+  - Web Search
+  - Tor Browser Integration
+  - Security Module
+  - Battle System
+  - Private Mode
+  - Ollama AI Integration
+
+**API-ENDPUNKTE (17):**
+  - GET /api/bond/status
+  - GET /api/cache/stats
+  - GET /api/chat/history
+  - GET /api/cloud/status
+  - GET /api/living/activity/check
+  - GET /api/living/proactive
+  - GET /api/living/state
+  - GET /api/memory/export
+  - GET /api/najika/status
+  - GET /api/rooms
+  - GET /api/save
+  - GET /api/security/status
+  - GET /api/security/vpn
+  - GET /api/state
+  - GET /api/status
+  - GET /api/status/stream
+  - GET /health
+
+**STATE-VARIABLEN:**
+  - history
+  - battle
+  - private_mode
+  - behavior_mode
+  - bond_strength
+  - personality_weights
+  - total_interactions
+  - sse_clients
+  - user
+  - level
+  - xp
+  - points
+  - inventory
+  - achievements
+
+## 2. FRONTEND (digivice/index.html)
+================================================================================
+
+**GELADENE SCRIPTS (13):**
+  - three.min.js
+  - GLTFLoader.js
+  - kaykit_loader.js
+  - dungeon_generator.js
+  - dungeon_enemies.js
+  - dungeon_combat.js
+  - minigames.js
+  - chat_ui.js
+  - touch_controls.js
+  - private_mode.js
+  - code_editor.js
+  - terminal_modules.js
+  - 3d_scene.js
+
+**FRONTEND-FEATURES:**
+  - KayKit Asset-Loader
+  - Minispiele
+  - Chat-Interface
+  - Touch-Steuerung
+  - Private Mode Indicator
+  - 3D-Szene (Three.js)
+
+## 3. RAUM-KONFIGURATION
+================================================================================
+
+**KONFIGURIERTE RÄUME (12):**
+
+### Wohnzimmer
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_large.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_window_open.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Schlafzimmer
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_small.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_archedwindow_open.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Küche
+  - Floor: KayKit_Restaurant_Bits_1.0_FREE/KayKit_Restaurant_Bits_1.0_FREE/Assets/gltf/floor_kitchen.gltf
+  - Walls: KayKit_Restaurant_Bits_1.0_FREE/KayKit_Restaurant_Bits_1.0_FREE/Assets/gltf/wall_decorated.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Badezimmer
+  - Floor: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Floor.gltf
+  - Walls: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Wall_Window_Open.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Garten
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_large.gltf
+  - Walls: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Wall.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Musikraum
+  - Floor: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Floor_Prototype.gltf
+  - Walls: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Wall_Decorated.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Medizin
+  - Floor: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Floor_Prototype.gltf
+  - Walls: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Wall.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Terminal
+  - Floor: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Floor_Prototype.gltf
+  - Walls: KayKit_Prototype_Bits_1.0_FREE/KayKit_Prototype_Bits_1.0_FREE/Assets/gltf/Primitive_Wall.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Studieren & Crafting
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_large.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_shelves.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Trainingszimmer
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_large.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_gated.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Kampfarena
+  - Floor: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_big_spikes.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_gated.gltf
+  - Props: 3
+  - Palette: Ja
+
+### Schwarze Mühle – Keller
+  - Floor: KayKit_HalloweenBits_1.0_FREE/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/floor_dirt.gltf
+  - Walls: KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/wall_cracked.gltf
+  - Props: 7
+  - Palette: Ja
+
+## 4. PYTHON-MODULE
+================================================================================
+
+**VORHANDENE MODULE (8):**
+
+**najika_server.py** (1744 Zeilen, 77.2 KB)
+  → Strukturiertes Logging mit Levels und Rotation
+
+**najika_living_system.py** (560 Zeilen, 19.4 KB)
+  → NAJIKA LIVING SYSTEM - Macht Najika lebendig und autonom
+
+**najika_memory.py** (329 Zeilen, 11.1 KB)
+  → NAJIKA MEMORY SYSTEM
+
+**najika_battle.py** (888 Zeilen, 27.6 KB)
+  → NAJIKA ENHANCED BATTLE SYSTEM
+
+**najika_search.py** (232 Zeilen, 7.6 KB)
+  → NAJIKA WEB SEARCH MODULE
+
+**najika_tor.py** (300 Zeilen, 9.5 KB)
+  → NAJIKA TOR BROWSER INTEGRATION
+
+**najika_security.py** (373 Zeilen, 11.8 KB)
+  → NAJIKA SECURITY MODULE - "ALCATRAZ"
+
+**najika_enhanced_personality.py** (165 Zeilen, 7.1 KB)
+  → NAJIKA ENHANCED PERSONALITY - KOMPAKTE VERSION FÜR ROLEPLAY
+
+## 5. TRAINING-SYSTEM
+================================================================================
+
+**Status:** Eingerichtet
+
+**RESSOURCEN (4):**
+  - CODE_KATAS_DAILY.md (2.3 KB)
+  - COMMON_PITFALLS.md (1.7 KB)
+  - PERFORMANCE_PATTERNS.md (1.8 KB)
+  - ARCHITECTURE_PATTERNS.md (2.0 KB)
+
+**Scheduler:** najika_training_scheduler.py vorhanden
+**Geplant:** Montag-Freitag, 09:00-14:00 Uhr
+
+## 6. KONFIGURATION (.env)
+================================================================================
+
+  AI_PROVIDER               = ollama
+  ANTHROPIC_API_KEY         = [CONFIGURED]
+  CLOUD_ENABLED             = true
+  CLOUD_PIN                 = [CONFIGURED]
+  DEBUG                     = [CONFIGURED]
+  GGUF_LLAMA                = [CONFIGURED]
+  GGUF_WIZARD               = [CONFIGURED]
+  NSFW_LOCAL                = true
+  OLLAMA_MODEL_ALIAS        = [CONFIGURED]
+  OPENAI_API_KEY            = [CONFIGURED]
+  PORT                      = 8000
+  SECRET_KEY                = [CONFIGURED]
+  ﻿HOST                     = [CONFIGURED]
+
+## 7. ZUSAMMENFASSUNG - WAS KANN NAJIKA?
+================================================================================
+
+### SERVER-SEITE:
+  - Python HTTP Server läuft auf Port 8000 (konfigurierbar)
+  - AI-Integration über Ollama (lokal)
+  - Cloud AI Provider aktiviert
+  - 12 navigierbare Räume
+  - 8 integrierte Systeme
+
+### FRONTEND-SEITE:
+  - 3D-Umgebung mit Three.js
+  - KayKit Asset-basierte Grafik
+  - Interaktive Minispiele
+  - Chat-Interface mit AI
+  - Touch-Steuerung für Mobile
+
+### BESONDERE FEATURES:
+  - Living System (autonome Aktivitäten)
+  - Persistentes Gedächtnis (ChromaDB)
+  - Turn-based Kampfsystem
+  - Private Mode (trigger: "kätzchen")
+  - Web-Suche Integration
+  - Security Module (Alcatraz)
+
+### VORBEREITET/IN ARBEIT:
+  - Training-System (Mo-Fr 09:00-14:00)
+  - Raum-Navigation mit 12 Räumen
+  - Asset-Loading System
+
+================================================================================
+ENDE ÜBERSICHT
+================================================================================
