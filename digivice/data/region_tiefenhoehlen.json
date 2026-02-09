@@ -1,0 +1,134 @@
+{
+  "region_id": "tiefenhoehlen",
+  "name": "Tiefenhöhlen",
+  "name_en": "Deep Caverns",
+  "description": "Ein riesiges unterirdisches Höhlensystem UNTER dem Samtmoos-Tiefwald. Leuchtende Kristalle, Goblins und Spinnen!",
+
+  "environment": {
+    "biome": "caves",
+    "temperature_range": [12, 18],
+    "temperature_day": 15,
+    "temperature_night": 15,
+    "humidity": 60,
+    "weather_chances": {
+      "clear": 0.6,
+      "crystal_glow": 0.25,
+      "cave_in_risk": 0.1,
+      "mushroom_spores": 0.05
+    },
+    "ambient_sounds": ["dripping_water", "cave_echoes", "goblin_chatter", "crystal_hum"],
+    "music_day": "underground_mystery",
+    "music_night": "deep_caverns",
+    "music_combat": "cave_battle"
+  },
+
+  "visual": {
+    "skybox": null,
+    "ground_color": "#2f2f2f",
+    "crystal_color": "#9370db",
+    "fog_color": "#1a1a2e",
+    "fog_density": 0.05,
+    "ambient_light": "#4a4a6a",
+    "sun_intensity": 0,
+    "special_effects": ["glowing_crystals", "bioluminescent_mushrooms", "floating_particles", "spider_webs"],
+    "requires_light": true
+  },
+
+  "underground": true,
+  "depth": -100,
+  "above_region": "samtmoos_tiefwald",
+
+  "city": null,
+
+  "goblin_settlements": [
+    {"name": "Funkel-Dorf", "position": {"x": 4600, "y": -100, "z": 1200}, "friendly": true},
+    {"name": "Kratz-Lager", "position": {"x": 5000, "y": -150, "z": 800}, "friendly": false}
+  ],
+
+  "areas": [
+    {
+      "id": "hoehlen_eingang",
+      "name": "Höhlen-Eingang",
+      "type": "entrance",
+      "position": {"x": 4800, "y": 0, "z": 1800},
+      "connects_to": "samtmoos_tiefwald",
+      "connections": ["pilzwald", "kristall_gang"]
+    },
+    {
+      "id": "pilzwald",
+      "name": "Unterirdischer Pilzwald",
+      "type": "gathering",
+      "position": {"x": 4400, "y": -80, "z": 1400},
+      "resources": ["glowing_mushrooms", "cave_moss", "phosphor_fungi"],
+      "light_level": "medium"
+    },
+    {
+      "id": "kristall_gang",
+      "name": "Kristall-Gang",
+      "type": "gathering",
+      "position": {"x": 5200, "y": -100, "z": 1600},
+      "resources": ["amethyst", "quartz", "deep_crystal", "mana_crystal"],
+      "light_level": "high"
+    },
+    {
+      "id": "funkel_dorf",
+      "name": "Funkel-Dorf",
+      "type": "village",
+      "position": {"x": 4600, "y": -100, "z": 1200},
+      "npcs": ["goblin_haendler", "goblin_schmied"],
+      "services": ["trade", "basic_forge", "rest"]
+    },
+    {
+      "id": "spinnen_nest",
+      "name": "Spinnen-Nest",
+      "type": "dungeon",
+      "position": {"x": 4200, "y": -120, "z": 900},
+      "level_range": [6, 12],
+      "boss": "broodmother",
+      "hazards": ["webs", "poison"]
+    },
+    {
+      "id": "unterirdischer_see",
+      "name": "Unterirdischer See",
+      "type": "fishing_spot",
+      "position": {"x": 5000, "y": -130, "z": 600},
+      "fish_types": ["blind_fish", "crystal_carp", "cave_eel"],
+      "light_level": "low"
+    },
+    {
+      "id": "kristall_katakomben",
+      "name": "Kristall-Katakomben",
+      "type": "endgame_area",
+      "position": {"x": 4800, "y": -200, "z": 400},
+      "level_range": [13, 15],
+      "boss": "crystal_guardian",
+      "loot": "legendary",
+      "connects_to": "goetterfels"
+    }
+  ],
+
+  "npcs": [
+    {"id": "goblin_haendler", "name": "Händler Grunk", "type": "merchant", "sells": ["torches", "cave_gear", "mushrooms"]},
+    {"id": "goblin_schmied", "name": "Schmied Klonk", "type": "blacksmith", "specialty": "crystal_weapons"},
+    {"id": "pilz_sammler", "name": "Pilz-Sammlerin Glim", "type": "quest_giver", "quests": ["rare_mushroom_hunt"]}
+  ],
+
+  "monsters": [
+    {"id": "cave_bat", "name": "Höhlenfledermaus", "level": [1, 4], "rarity": "common"},
+    {"id": "cave_spider", "name": "Höhlenspinne", "level": [2, 5], "rarity": "common"},
+    {"id": "goblin", "name": "Goblin", "level": [3, 7], "rarity": "common"},
+    {"id": "giant_spider", "name": "Riesenspinne", "level": [6, 10], "rarity": "uncommon"},
+    {"id": "crystal_golem", "name": "Kristall-Golem", "level": [8, 12], "rarity": "rare", "element": "earth"},
+    {"id": "broodmother", "name": "Brutmutter", "level": [12], "rarity": "boss"},
+    {"id": "crystal_guardian", "name": "Kristall-Wächter", "level": [15], "rarity": "boss", "element": "earth"}
+  ],
+
+  "structure": {
+    "level_1": "Tiefenhöhlen (1-15)",
+    "level_2": "Kristall-Katakomben (Endgame)",
+    "exit": "Direkter Ausgang zum Götterfels"
+  },
+
+  "slime_color": "deep_purple",
+  "slime_bonus": "+20% Nacht-Crit"
+}

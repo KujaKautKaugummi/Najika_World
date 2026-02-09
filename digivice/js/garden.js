@@ -1,7 +1,298 @@
-// 🌱 NAJIKA GARDEN SYSTEM (Stardew Valley + Harvest Moon Style)
+// 🌱 NAJIKA GARDEN SYSTEM (Stardew Valley + Harvest Moon + Rune Factory Style)
+// Verschiedene Anbaugebiete statt Jahreszeiten!
 (function() {
+
+    // ============================================
+    // ANBAUGEBIETE (Region-basiertes Farming)
+    // ============================================
+    const FARMING_REGIONS = {
+        schwarze_muehle: {
+            name: 'Schwarze Mühle (Garten)',
+            icon: '🏠',
+            climate: 'gemäßigt',
+            plotCount: 9,
+            growthMultiplier: 1.0,
+            waterNeeded: 1.0,
+            specialCrops: [],
+            description: 'Dein Heimatgarten - gut für Anfänger'
+        },
+        samtmoos_tiefwald: {
+            name: 'Samtmoos-Tiefwald',
+            icon: '🌲',
+            climate: 'feucht',
+            plotCount: 12,
+            growthMultiplier: 1.2,  // Feuchtes Klima = schnelleres Wachstum
+            waterNeeded: 0.5,       // Braucht weniger Gießen
+            specialCrops: ['pilz', 'moos_beere', 'schatten_wurzel', 'wald_knolle'],
+            description: 'Feuchter Waldboden - perfekt für Pilze und Wurzeln'
+        },
+        heisse_duenen: {
+            name: 'Heiße Dünen',
+            icon: '🏜️',
+            climate: 'heiß',
+            plotCount: 6,
+            growthMultiplier: 0.8,  // Langsamer wegen Hitze
+            waterNeeded: 2.0,       // Braucht mehr Wasser
+            specialCrops: ['kaktus_frucht', 'wuesten_rose', 'sonnen_korn', 'sand_melone'],
+            description: 'Heißer Wüstensand - nur spezielle Pflanzen überleben'
+        },
+        salzwind_kueste: {
+            name: 'Salzwind-Küste',
+            icon: '🌊',
+            climate: 'salzig',
+            plotCount: 8,
+            growthMultiplier: 1.0,
+            waterNeeded: 0.7,       // Meeresluft hilft
+            specialCrops: ['meeres_traube', 'salz_kraut', 'korallen_alge', 'strand_ruebe'],
+            description: 'Salzige Meeresluft - für maritime Pflanzen'
+        },
+        blitzebene: {
+            name: 'Blitzebene',
+            icon: '⚡',
+            climate: 'elektrisch',
+            plotCount: 10,
+            growthMultiplier: 1.5,  // Blitze laden auf!
+            waterNeeded: 1.2,
+            specialCrops: ['blitz_blume', 'donner_knolle', 'storm_kraut', 'energie_pilz'],
+            description: 'Elektrifizierter Boden - Pflanzen wachsen schneller'
+        },
+        magmastroeme: {
+            name: 'Magmaströme',
+            icon: '🌋',
+            climate: 'vulkanisch',
+            plotCount: 4,
+            growthMultiplier: 0.6,  // Sehr langsam
+            waterNeeded: 3.0,       // Verdampft schnell
+            specialCrops: ['feuer_pfeffer', 'lava_frucht', 'asche_pilz', 'vulkan_beere'],
+            description: 'Vulkanischer Boden - extrem selten aber wertvoll'
+        },
+        goetterfels: {
+            name: 'Götterfels (Höhenlage)',
+            icon: '⛰️',
+            climate: 'alpin',
+            plotCount: 6,
+            growthMultiplier: 0.9,
+            waterNeeded: 0.8,       // Tau/Nebel hilft
+            specialCrops: ['berg_edelweiss', 'hoehen_kraut', 'stein_moos', 'gipfel_blume'],
+            description: 'Hochgebirge - seltene alpine Pflanzen'
+        },
+        tiefenhoehlen: {
+            name: 'Tiefenhöhlen',
+            icon: '🕳️',
+            climate: 'unterirdisch',
+            plotCount: 8,
+            growthMultiplier: 0.7,
+            waterNeeded: 0.3,       // Feucht genug
+            specialCrops: ['leucht_pilz', 'kristall_moos', 'hoehlen_wurzel', 'dunkel_blume'],
+            description: 'Unterirdisch - braucht kein Sonnenlicht'
+        },
+        gruenschlamm_sumpf: {
+            name: 'Grünschlamm-Sumpf',
+            icon: '🐸',
+            climate: 'sumpfig',
+            plotCount: 10,
+            growthMultiplier: 1.3,
+            waterNeeded: 0.2,       // Immer nass
+            specialCrops: ['sumpf_lilie', 'moor_kraut', 'schlamm_knolle', 'gift_pilz'],
+            description: 'Sumpfgebiet - sehr fruchtbar aber auch gefährlich'
+        }
+    };
+
+    // ============================================
+    // ERWEITERTE PFLANZEN (Region-spezifisch)
+    // ============================================
+    const SPECIAL_PLANTS = {
+        // Samtmoos-Tiefwald
+        pilz: {
+            name: 'Waldpilz',
+            region: 'samtmoos_tiefwald',
+            stages: 4,
+            growTime: 40,
+            harvestYield: 5,
+            sellPrice: 25,
+            uses: ['kochen', 'crafting', 'heilen'],
+            icon: '🍄'
+        },
+        moos_beere: {
+            name: 'Moos-Beere',
+            region: 'samtmoos_tiefwald',
+            stages: 5,
+            growTime: 70,
+            harvestYield: 8,
+            sellPrice: 15,
+            uses: ['kochen', 'verkaufen'],
+            icon: '🫐'
+        },
+        schatten_wurzel: {
+            name: 'Schattenwurzel',
+            region: 'samtmoos_tiefwald',
+            stages: 6,
+            growTime: 150,
+            harvestYield: 2,
+            sellPrice: 80,
+            uses: ['magie', 'crafting'],
+            icon: '🌿'
+        },
+        // Heiße Dünen
+        kaktus_frucht: {
+            name: 'Kaktusfrucht',
+            region: 'heisse_duenen',
+            stages: 6,
+            growTime: 200,
+            harvestYield: 2,
+            sellPrice: 60,
+            uses: ['trinken', 'kochen'],
+            icon: '🌵'
+        },
+        wuesten_rose: {
+            name: 'Wüstenrose',
+            region: 'heisse_duenen',
+            stages: 7,
+            growTime: 300,
+            harvestYield: 1,
+            sellPrice: 150,
+            uses: ['dekoration', 'crafting', 'geschenk'],
+            icon: '🌹'
+        },
+        sonnen_korn: {
+            name: 'Sonnenkorn',
+            region: 'heisse_duenen',
+            stages: 5,
+            growTime: 100,
+            harvestYield: 6,
+            sellPrice: 20,
+            uses: ['kochen', 'tierfutter'],
+            icon: '🌻'
+        },
+        // Salzwind-Küste
+        meeres_traube: {
+            name: 'Meerestraube',
+            region: 'salzwind_kueste',
+            stages: 4,
+            growTime: 60,
+            harvestYield: 10,
+            sellPrice: 12,
+            uses: ['kochen', 'verkaufen'],
+            icon: '🍇'
+        },
+        salz_kraut: {
+            name: 'Salzkraut',
+            region: 'salzwind_kueste',
+            stages: 3,
+            growTime: 30,
+            harvestYield: 8,
+            sellPrice: 8,
+            uses: ['kochen', 'würzen'],
+            icon: '🌿'
+        },
+        // Blitzebene
+        blitz_blume: {
+            name: 'Blitzblume',
+            region: 'blitzebene',
+            stages: 5,
+            growTime: 80,
+            harvestYield: 3,
+            sellPrice: 70,
+            uses: ['magie', 'crafting'],
+            icon: '⚡'
+        },
+        energie_pilz: {
+            name: 'Energiepilz',
+            region: 'blitzebene',
+            stages: 4,
+            growTime: 50,
+            harvestYield: 4,
+            sellPrice: 45,
+            uses: ['heilen', 'energie'],
+            icon: '🍄'
+        },
+        // Magmaströme
+        feuer_pfeffer: {
+            name: 'Feuerpfeffer',
+            region: 'magmastroeme',
+            stages: 8,
+            growTime: 400,
+            harvestYield: 3,
+            sellPrice: 100,
+            uses: ['kochen', 'crafting', 'waffe'],
+            icon: '🌶️'
+        },
+        lava_frucht: {
+            name: 'Lavafrucht',
+            region: 'magmastroeme',
+            stages: 10,
+            growTime: 600,
+            harvestYield: 1,
+            sellPrice: 500,
+            uses: ['legendary', 'crafting'],
+            icon: '🔥'
+        },
+        // Götterfels
+        berg_edelweiss: {
+            name: 'Berg-Edelweiß',
+            region: 'goetterfels',
+            stages: 6,
+            growTime: 180,
+            harvestYield: 2,
+            sellPrice: 120,
+            uses: ['heilen', 'geschenk', 'dekoration'],
+            icon: '❄️'
+        },
+        // Tiefenhöhlen
+        leucht_pilz: {
+            name: 'Leuchtpilz',
+            region: 'tiefenhoehlen',
+            stages: 5,
+            growTime: 90,
+            harvestYield: 4,
+            sellPrice: 40,
+            uses: ['licht', 'crafting'],
+            icon: '💡'
+        },
+        kristall_moos: {
+            name: 'Kristallmoos',
+            region: 'tiefenhoehlen',
+            stages: 8,
+            growTime: 250,
+            harvestYield: 2,
+            sellPrice: 200,
+            uses: ['magie', 'crafting'],
+            icon: '💎'
+        },
+        // Grünschlamm-Sumpf
+        sumpf_lilie: {
+            name: 'Sumpflilie',
+            region: 'gruenschlamm_sumpf',
+            stages: 4,
+            growTime: 55,
+            harvestYield: 5,
+            sellPrice: 30,
+            uses: ['heilen', 'gift_gegenmittel'],
+            icon: '🪷'
+        },
+        gift_pilz: {
+            name: 'Giftpilz',
+            region: 'gruenschlamm_sumpf',
+            stages: 3,
+            growTime: 35,
+            harvestYield: 6,
+            sellPrice: 25,
+            uses: ['gift', 'crafting'],
+            icon: '☠️'
+        }
+    };
+
+    // Aktuelles Anbaugebiet
+    let currentRegion = 'schwarze_muehle';
+    let unlockedRegions = ['schwarze_muehle'];
+
+    // Region-spezifische Plot-States
+    const regionPlots = {
+        schwarze_muehle: {}
+    };
+
     const GARDEN_CONFIG = {
-        // 9 Beete im Garten (3x3 Grid)
+        // 9 Beete im Garten (3x3 Grid) - Basis für schwarze_muehle
         plots: [
             { id: 1, position: [550, 0, 550], size: 20 },
             { id: 2, position: [600, 0, 550], size: 20 },
@@ -675,6 +966,131 @@
         });
     }
 
+    // ============================================
+    // REGION FUNCTIONS
+    // ============================================
+
+    function unlockRegion(regionId) {
+        if (!FARMING_REGIONS[regionId]) return false;
+        if (unlockedRegions.includes(regionId)) return false;
+
+        unlockedRegions.push(regionId);
+        regionPlots[regionId] = {};
+
+        const region = FARMING_REGIONS[regionId];
+        if (typeof notify === 'function') {
+            notify(`${region.icon} Neues Anbaugebiet freigeschaltet: ${region.name}!`, 'success');
+        }
+        return true;
+    }
+
+    function switchRegion(regionId) {
+        if (!FARMING_REGIONS[regionId]) return false;
+        if (!unlockedRegions.includes(regionId)) {
+            if (typeof notify === 'function') {
+                notify(`❌ Dieses Gebiet ist noch nicht freigeschaltet!`, 'warning');
+            }
+            return false;
+        }
+
+        currentRegion = regionId;
+        const region = FARMING_REGIONS[regionId];
+        if (typeof notify === 'function') {
+            notify(`${region.icon} Wechsel zu: ${region.name}`, 'info');
+        }
+        return true;
+    }
+
+    function getAvailableCrops() {
+        const region = FARMING_REGIONS[currentRegion];
+        const baseCrops = Object.keys(GARDEN_CONFIG.seeds);
+
+        // Füge region-spezifische Pflanzen hinzu
+        const specialCrops = Object.entries(SPECIAL_PLANTS)
+            .filter(([id, plant]) => plant.region === currentRegion)
+            .map(([id]) => id);
+
+        return [...baseCrops, ...specialCrops];
+    }
+
+    function getRegionInfo(regionId) {
+        return FARMING_REGIONS[regionId] || null;
+    }
+
+    function getAllRegions() {
+        return Object.entries(FARMING_REGIONS).map(([id, region]) => ({
+            id,
+            ...region,
+            unlocked: unlockedRegions.includes(id)
+        }));
+    }
+
+    function getSpecialPlant(plantId) {
+        return SPECIAL_PLANTS[plantId] || null;
+    }
+
+    function showRegionSelector() {
+        const selectorHTML = `
+            <div id="region-selector" style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(20, 40, 20, 0.98);
+                border: 3px solid #4CAF50;
+                border-radius: 15px;
+                padding: 20px;
+                z-index: 2000;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+            ">
+                <h2 style="color: #4CAF50; text-align: center; margin-bottom: 15px;">🌍 Anbaugebiete</h2>
+                <p style="text-align: center; color: #888; font-size: 12px;">Aktuell: ${FARMING_REGIONS[currentRegion].icon} ${FARMING_REGIONS[currentRegion].name}</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    ${Object.entries(FARMING_REGIONS).map(([id, region]) => {
+                        const unlocked = unlockedRegions.includes(id);
+                        const isCurrent = id === currentRegion;
+                        return `
+                            <div style="
+                                padding: 12px;
+                                background: ${isCurrent ? 'rgba(76, 175, 80, 0.3)' : unlocked ? 'rgba(0,0,0,0.3)' : 'rgba(50,50,50,0.5)'};
+                                border: 2px solid ${isCurrent ? '#4CAF50' : unlocked ? '#666' : '#333'};
+                                border-radius: 8px;
+                                cursor: ${unlocked ? 'pointer' : 'not-allowed'};
+                                opacity: ${unlocked ? '1' : '0.6'};
+                            " onclick="${unlocked ? `window.GardenSystem.switchRegion('${id}'); document.getElementById('region-selector').remove();` : ''}">
+                                <div style="font-size: 24px; text-align: center;">${region.icon}</div>
+                                <div style="color: #fff; font-weight: bold; text-align: center;">${region.name}</div>
+                                <div style="color: #888; font-size: 10px; text-align: center;">${region.plotCount} Beete | ${region.climate}</div>
+                                <div style="color: #aaa; font-size: 9px; text-align: center; margin-top: 5px;">${region.description}</div>
+                                ${!unlocked ? '<div style="color: #f66; font-size: 10px; text-align: center; margin-top: 5px;">🔒 Noch nicht freigeschaltet</div>' : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <button onclick="document.getElementById('region-selector').remove()" style="
+                    display: block;
+                    width: 100%;
+                    margin-top: 15px;
+                    padding: 10px;
+                    background: #666;
+                    border: none;
+                    border-radius: 5px;
+                    color: white;
+                    cursor: pointer;
+                ">Schließen</button>
+            </div>
+        `;
+
+        const oldSelector = document.getElementById('region-selector');
+        if (oldSelector) oldSelector.remove();
+
+        document.body.insertAdjacentHTML('beforeend', selectorHTML);
+    }
+
     // === EXPORT ===
 
     window.GardenSystem = {
@@ -694,7 +1110,19 @@
         updateShopUI,
         setSelectedPlot(plot) { selectedPlot = plot; },
         getInventory() { return { ...inventory }; },
-        getPlotStates() { return { ...plotStates }; }
+        getPlotStates() { return { ...plotStates }; },
+        // Region System
+        unlockRegion,
+        switchRegion,
+        getAvailableCrops,
+        getRegionInfo,
+        getAllRegions,
+        getSpecialPlant,
+        showRegionSelector,
+        getCurrentRegion: () => currentRegion,
+        getUnlockedRegions: () => [...unlockedRegions],
+        getFarmingRegions: () => FARMING_REGIONS,
+        getSpecialPlants: () => SPECIAL_PLANTS
     };
 
     // Auto-init

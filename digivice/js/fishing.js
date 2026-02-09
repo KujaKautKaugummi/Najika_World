@@ -1,5 +1,137 @@
 // 🎣 NAJIKA FISHING SYSTEM (Zelda + Stardew Valley Style)
+// Erweitert mit: Köder, Angelruten-Upgrades, Aquarium
 (function() {
+    // ============================================
+    // ANGELRUTEN (Upgrades)
+    // ============================================
+    const FISHING_RODS = {
+        holz_angel: {
+            name: 'Holzangel',
+            icon: '🎣',
+            tier: 1,
+            castBonus: 0,
+            reelBonus: 0,
+            rarityBonus: 0,
+            description: 'Eine einfache Holzangel für Anfänger',
+            price: 0  // Starter
+        },
+        bambus_angel: {
+            name: 'Bambusangel',
+            icon: '🎋',
+            tier: 2,
+            castBonus: 20,
+            reelBonus: 0.1,
+            rarityBonus: 5,
+            description: 'Leichte Angel mit besserer Wurfweite',
+            price: 200
+        },
+        stahl_angel: {
+            name: 'Stahlangel',
+            icon: '⚙️',
+            tier: 3,
+            castBonus: 40,
+            reelBonus: 0.2,
+            rarityBonus: 10,
+            description: 'Robuste Angel für größere Fische',
+            price: 500
+        },
+        gold_angel: {
+            name: 'Goldangel',
+            icon: '✨',
+            tier: 4,
+            castBonus: 60,
+            reelBonus: 0.3,
+            rarityBonus: 15,
+            description: 'Meisterhafte Angel mit goldener Schnur',
+            price: 1500
+        },
+        najika_angel: {
+            name: 'Najikas Sternangel',
+            icon: '🌟',
+            tier: 5,
+            castBonus: 100,
+            reelBonus: 0.5,
+            rarityBonus: 25,
+            description: 'Legendäre Angel von Najika persönlich',
+            price: 5000
+        }
+    };
+
+    // ============================================
+    // KÖDER
+    // ============================================
+    const BAITS = {
+        wurm: {
+            name: 'Regenwurm',
+            icon: '🪱',
+            rarityBonus: 0,
+            targetFish: null,  // Alle Fische
+            uses: 10,
+            price: 5,
+            description: 'Standard-Köder für alle Fische'
+        },
+        mais: {
+            name: 'Maiskörner',
+            icon: '🌽',
+            rarityBonus: 5,
+            targetFish: ['Karpfen', 'Forelle'],
+            uses: 15,
+            price: 10,
+            description: 'Lockt besonders Karpfen und Forellen'
+        },
+        gluehwuermchen: {
+            name: 'Glühwürmchen',
+            icon: '✨',
+            rarityBonus: 15,
+            targetFish: ['Goldforelle', 'Najika-Fisch'],
+            uses: 5,
+            price: 50,
+            description: 'Lockt seltene leuchtende Fische'
+        },
+        fleisch: {
+            name: 'Fleischstück',
+            icon: '🥩',
+            rarityBonus: 10,
+            targetFish: ['Wels', 'Boss-Hecht', 'Aal'],
+            uses: 8,
+            price: 30,
+            description: 'Lockt Raubfische an'
+        },
+        magischer_koeder: {
+            name: 'Magischer Köder',
+            icon: '💫',
+            rarityBonus: 30,
+            targetFish: null,  // Alle, aber höhere Legendary-Chance
+            uses: 3,
+            price: 200,
+            description: 'Erhöht die Chance auf legendäre Fische drastisch'
+        },
+        kristall_koeder: {
+            name: 'Kristallköder',
+            icon: '💎',
+            rarityBonus: 20,
+            targetFish: ['Legendärer Kristallfisch'],
+            uses: 1,
+            price: 500,
+            description: 'Der einzige Köder für den Legendären Kristallfisch'
+        }
+    };
+
+    // ============================================
+    // AQUARIUM
+    // ============================================
+    const AQUARIUM = {
+        tanks: {
+            klein: { name: 'Kleines Aquarium', capacity: 5, price: 100 },
+            mittel: { name: 'Mittleres Aquarium', capacity: 15, price: 500 },
+            gross: { name: 'Großes Aquarium', capacity: 30, price: 2000 },
+            riesen: { name: 'Riesen-Aquarium', capacity: 50, price: 10000 }
+        },
+        displayedFish: [],  // Fische im Aquarium
+        currentTank: null,
+        location: 'schwarze_muehle'  // Wo das Aquarium steht
+    };
+
     const FISHING_CONFIG = {
         // Angelplätze in der Open World
         spots: [
@@ -48,6 +180,19 @@
     let currentSpot = null;
     let isFishing = false;
     let castPhase = null;  // 'aiming', 'casting', 'waiting', 'biting', 'reeling'
+
+    // Equipment State
+    let equippedRod = 'holz_angel';
+    let equippedBait = null;
+    let baitInventory = { wurm: 20 };  // Start mit 20 Würmern
+    let ownedRods = ['holz_angel'];
+
+    // Aquarium State
+    let aquariumFish = [];
+    let ownedTank = null;
+
+    // Fish Collection (Pokedex-Style)
+    let fishCollection = {};  // { 'Forelle': { caught: 5, maxWeight: 2.3 } }
     let castPower = 0;
     let castPowerIncreasing = true;
     let hookedFish = null;
@@ -452,6 +597,256 @@
         });
     }
 
+    // ============================================
+    // EQUIPMENT FUNCTIONS
+    // ============================================
+
+    function equipRod(rodId) {
+        if (!FISHING_RODS[rodId]) return false;
+        if (!ownedRods.includes(rodId)) {
+            if (typeof notify === 'function') {
+                notify(`❌ Du besitzt diese Angel nicht!`, 'warning');
+            }
+            return false;
+        }
+        equippedRod = rodId;
+        const rod = FISHING_RODS[rodId];
+        if (typeof notify === 'function') {
+            notify(`${rod.icon} ${rod.name} ausgerüstet!`, 'success');
+        }
+        return true;
+    }
+
+    function equipBait(baitId) {
+        if (!BAITS[baitId]) return false;
+        if (!baitInventory[baitId] || baitInventory[baitId] <= 0) {
+            if (typeof notify === 'function') {
+                notify(`❌ Kein ${BAITS[baitId].name} mehr!`, 'warning');
+            }
+            return false;
+        }
+        equippedBait = baitId;
+        const bait = BAITS[baitId];
+        if (typeof notify === 'function') {
+            notify(`${bait.icon} ${bait.name} ausgerüstet!`, 'success');
+        }
+        return true;
+    }
+
+    function buyRod(rodId) {
+        if (!FISHING_RODS[rodId]) return false;
+        if (ownedRods.includes(rodId)) {
+            if (typeof notify === 'function') {
+                notify(`Du hast diese Angel bereits!`, 'info');
+            }
+            return false;
+        }
+        const rod = FISHING_RODS[rodId];
+        if (inventory.totalValue < rod.price) {
+            if (typeof notify === 'function') {
+                notify(`❌ Nicht genug Gold! (${rod.price}G benötigt)`, 'warning');
+            }
+            return false;
+        }
+        inventory.totalValue -= rod.price;
+        ownedRods.push(rodId);
+        if (typeof notify === 'function') {
+            notify(`${rod.icon} ${rod.name} gekauft!`, 'success');
+        }
+        return true;
+    }
+
+    function buyBait(baitId, amount = 1) {
+        if (!BAITS[baitId]) return false;
+        const bait = BAITS[baitId];
+        const cost = bait.price * amount;
+        if (inventory.totalValue < cost) {
+            if (typeof notify === 'function') {
+                notify(`❌ Nicht genug Gold!`, 'warning');
+            }
+            return false;
+        }
+        inventory.totalValue -= cost;
+        baitInventory[baitId] = (baitInventory[baitId] || 0) + (bait.uses * amount);
+        if (typeof notify === 'function') {
+            notify(`${bait.icon} ${amount}x ${bait.name} gekauft!`, 'success');
+        }
+        return true;
+    }
+
+    // ============================================
+    // AQUARIUM FUNCTIONS
+    // ============================================
+
+    function buyAquarium(tankId) {
+        if (!AQUARIUM.tanks[tankId]) return false;
+        const tank = AQUARIUM.tanks[tankId];
+        if (inventory.totalValue < tank.price) {
+            if (typeof notify === 'function') {
+                notify(`❌ Nicht genug Gold! (${tank.price}G benötigt)`, 'warning');
+            }
+            return false;
+        }
+        inventory.totalValue -= tank.price;
+        ownedTank = tankId;
+        if (typeof notify === 'function') {
+            notify(`🐠 ${tank.name} gekauft!`, 'success');
+        }
+        return true;
+    }
+
+    function addToAquarium(fishName) {
+        if (!ownedTank) {
+            if (typeof notify === 'function') {
+                notify(`❌ Du brauchst erst ein Aquarium!`, 'warning');
+            }
+            return false;
+        }
+        const tank = AQUARIUM.tanks[ownedTank];
+        if (aquariumFish.length >= tank.capacity) {
+            if (typeof notify === 'function') {
+                notify(`❌ Aquarium ist voll!`, 'warning');
+            }
+            return false;
+        }
+        if (!inventory.fish[fishName] || inventory.fish[fishName] <= 0) {
+            if (typeof notify === 'function') {
+                notify(`❌ Du hast keinen ${fishName}!`, 'warning');
+            }
+            return false;
+        }
+        inventory.fish[fishName]--;
+        aquariumFish.push({ name: fishName, addedAt: Date.now() });
+        if (typeof notify === 'function') {
+            notify(`🐠 ${fishName} ins Aquarium gesetzt!`, 'success');
+        }
+        return true;
+    }
+
+    function removeFromAquarium(index) {
+        if (index < 0 || index >= aquariumFish.length) return false;
+        const fish = aquariumFish.splice(index, 1)[0];
+        inventory.fish[fish.name] = (inventory.fish[fish.name] || 0) + 1;
+        if (typeof notify === 'function') {
+            notify(`🐠 ${fish.name} aus Aquarium genommen!`, 'info');
+        }
+        return true;
+    }
+
+    function getAquariumInfo() {
+        return {
+            tank: ownedTank ? AQUARIUM.tanks[ownedTank] : null,
+            fish: [...aquariumFish],
+            capacity: ownedTank ? AQUARIUM.tanks[ownedTank].capacity : 0
+        };
+    }
+
+    // ============================================
+    // FISH COLLECTION (Pokedex)
+    // ============================================
+
+    function updateCollection(fishName, weight) {
+        if (!fishCollection[fishName]) {
+            fishCollection[fishName] = { caught: 0, maxWeight: 0 };
+            if (typeof notify === 'function') {
+                notify(`📖 Neue Fischart entdeckt: ${fishName}!`, 'success');
+            }
+        }
+        fishCollection[fishName].caught++;
+        if (parseFloat(weight) > fishCollection[fishName].maxWeight) {
+            fishCollection[fishName].maxWeight = parseFloat(weight);
+            if (typeof notify === 'function') {
+                notify(`🏆 Neuer Rekord: ${fishName} (${weight}kg)!`, 'success');
+            }
+        }
+    }
+
+    function getCollection() {
+        return { ...fishCollection };
+    }
+
+    function getCollectionProgress() {
+        // Zähle alle einzigartigen Fische im Spiel
+        const allFish = new Set();
+        FISHING_CONFIG.spots.forEach(spot => {
+            spot.fische.forEach(f => allFish.add(f.name));
+        });
+        const discovered = Object.keys(fishCollection).length;
+        return { discovered, total: allFish.size, percentage: Math.round((discovered / allFish.size) * 100) };
+    }
+
+    // ============================================
+    // SHOP UI
+    // ============================================
+
+    function openFishingShop() {
+        const shopHTML = `
+            <div id="fishing-shop" style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(20, 40, 60, 0.98);
+                border: 3px solid #4a9eff;
+                border-radius: 15px;
+                padding: 20px;
+                z-index: 2000;
+                max-width: 500px;
+                max-height: 80vh;
+                overflow-y: auto;
+            ">
+                <h2 style="color: #4a9eff; text-align: center; margin-bottom: 15px;">🎣 Angel-Shop</h2>
+                <p style="text-align: center; color: gold;">💰 ${inventory.totalValue}G</p>
+
+                <h3 style="color: #88ff88; margin: 15px 0 10px;">Angelruten:</h3>
+                ${Object.entries(FISHING_RODS).map(([id, rod]) => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0,0,0,0.3); margin: 5px 0; border-radius: 5px;">
+                        <span>${rod.icon} ${rod.name} ${ownedRods.includes(id) ? '✓' : ''}</span>
+                        <span style="color: ${ownedRods.includes(id) ? '#6f6' : '#ff6'};">${ownedRods.includes(id) ? 'Besitzt' : rod.price + 'G'}</span>
+                        ${!ownedRods.includes(id) ? `<button onclick="window.FishingSystem.buyRod('${id}')" style="padding: 5px 10px; cursor: pointer;">Kaufen</button>` : ''}
+                    </div>
+                `).join('')}
+
+                <h3 style="color: #ffaa00; margin: 15px 0 10px;">Köder:</h3>
+                ${Object.entries(BAITS).map(([id, bait]) => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0,0,0,0.3); margin: 5px 0; border-radius: 5px;">
+                        <span>${bait.icon} ${bait.name} (${baitInventory[id] || 0}x)</span>
+                        <span style="color: #ff6;">${bait.price}G</span>
+                        <button onclick="window.FishingSystem.buyBait('${id}', 1)" style="padding: 5px 10px; cursor: pointer;">+1</button>
+                        <button onclick="window.FishingSystem.buyBait('${id}', 5)" style="padding: 5px 10px; cursor: pointer;">+5</button>
+                    </div>
+                `).join('')}
+
+                <h3 style="color: #00bfff; margin: 15px 0 10px;">Aquarien:</h3>
+                ${Object.entries(AQUARIUM.tanks).map(([id, tank]) => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0,0,0,0.3); margin: 5px 0; border-radius: 5px;">
+                        <span>🐠 ${tank.name} (${tank.capacity} Fische)</span>
+                        <span style="color: ${ownedTank === id ? '#6f6' : '#ff6'};">${ownedTank === id ? 'Besitzt' : tank.price + 'G'}</span>
+                        ${ownedTank !== id ? `<button onclick="window.FishingSystem.buyAquarium('${id}')" style="padding: 5px 10px; cursor: pointer;">Kaufen</button>` : ''}
+                    </div>
+                `).join('')}
+
+                <button onclick="document.getElementById('fishing-shop').remove()" style="
+                    display: block;
+                    width: 100%;
+                    margin-top: 15px;
+                    padding: 10px;
+                    background: #666;
+                    border: none;
+                    border-radius: 5px;
+                    color: white;
+                    cursor: pointer;
+                ">Schließen</button>
+            </div>
+        `;
+
+        // Remove old shop if exists
+        const oldShop = document.getElementById('fishing-shop');
+        if (oldShop) oldShop.remove();
+
+        document.body.insertAdjacentHTML('beforeend', shopHTML);
+    }
+
     // === EXPORT ===
 
     window.FishingSystem = {
@@ -462,6 +857,28 @@
         reel,
         cancelFishing,
         getInventory,
+        // Equipment
+        equipRod,
+        equipBait,
+        buyRod,
+        buyBait,
+        getEquippedRod: () => equippedRod,
+        getEquippedBait: () => equippedBait,
+        getBaitInventory: () => ({ ...baitInventory }),
+        getOwnedRods: () => [...ownedRods],
+        getRodInfo: (id) => FISHING_RODS[id],
+        getBaitInfo: (id) => BAITS[id],
+        // Aquarium
+        buyAquarium,
+        addToAquarium,
+        removeFromAquarium,
+        getAquariumInfo,
+        // Collection
+        getCollection,
+        getCollectionProgress,
+        // Shop
+        openFishingShop,
+        // State
         get isFishing() { return isFishing; },
         get currentSpot() { return currentSpot; }
     };

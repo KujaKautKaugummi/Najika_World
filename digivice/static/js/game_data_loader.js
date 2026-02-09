@@ -2,7 +2,7 @@
  * GAME DATA LOADER - Lädt alle JSON Game-Content-Dateien
  * =====================================================
  *
- * Lädt 40 JSON-Dateien aus /data/:
+ * Lädt 40 JSON-Dateien aus /digivice/digivice/data/:
  * - NPCs (9× nach Stadt-Namen)
  * - Items (9× nach Stadt-Namen)
  * - Quests (9× nach Stadt-Namen)
@@ -30,30 +30,29 @@ class GameDataLoader {
 
     /**
      * Lädt ALLE Game-Content JSON-Dateien
+     * PERFORMANCE FIX: Parallel loading statt sequential
      */
     async loadAll() {
-        console.log('🎮 Starte Laden von Game Content...');
+        console.log('🎮 Starte Laden von Game Content (PARALLEL)...');
+        const startTime = performance.now();
 
         try {
-            // 1. Meta-Dateien laden
+            // 1. Meta-Dateien laden (klein, schnell)
             await this.loadMetaData();
 
-            // 2. NPCs laden (Stadt-Namen)
-            await this.loadNPCs();
-
-            // 3. Items laden (Stadt-Namen)
-            await this.loadItems();
-
-            // 4. Quests laden (Stadt-Namen)
-            await this.loadQuests();
-
-            // 5. Enemies laden (Regions-Namen)
-            await this.loadEnemies();
+            // 2. ALLE anderen Kategorien PARALLEL laden!
+            await Promise.all([
+                this.loadNPCs(),
+                this.loadItems(),
+                this.loadQuests(),
+                this.loadEnemies()
+            ]);
 
             this.loaded = true;
             this.logStats();
 
-            console.log('✅ Game Content vollständig geladen!');
+            const loadTime = (performance.now() - startTime).toFixed(0);
+            console.log(`✅ Game Content vollständig geladen in ${loadTime}ms!`);
             return true;
 
         } catch (error) {
@@ -67,16 +66,25 @@ class GameDataLoader {
      */
     async loadMetaData() {
         try {
-            // Regions
-            const regionsRes = await fetch('/data/regions.json');
+            // Regions - Try multiple paths
+            let regionsRes = await fetch('data/regions.json').catch(() => null);
+            if (!regionsRes || !regionsRes.ok) {
+                regionsRes = await fetch('/digivice/data/regions.json');
+            }
             this.regions = await regionsRes.json();
 
             // Cities
-            const citiesRes = await fetch('/data/cities.json');
+            let citiesRes = await fetch('data/cities.json').catch(() => null);
+            if (!citiesRes || !citiesRes.ok) {
+                citiesRes = await fetch('/digivice/data/cities.json');
+            }
             this.cities = await citiesRes.json();
 
             // Biomes
-            const biomesRes = await fetch('/data/biomes.json');
+            let biomesRes = await fetch('data/biomes.json').catch(() => null);
+            if (!biomesRes || !biomesRes.ok) {
+                biomesRes = await fetch('/digivice/data/biomes.json');
+            }
             this.biomes = await biomesRes.json();
 
             console.log('✅ Meta-Daten geladen:', {
@@ -91,7 +99,7 @@ class GameDataLoader {
     }
 
     /**
-     * Lädt alle NPC-Dateien (Stadt-Namen)
+     * Lädt alle NPC-Dateien (Stadt-Namen) - PARALLEL
      */
     async loadNPCs() {
         const stadtNamen = [
@@ -106,21 +114,24 @@ class GameDataLoader {
             'tiefenhoehlen'
         ];
 
-        for (const stadt of stadtNamen) {
+        // PERFORMANCE FIX: Load all cities in parallel
+        await Promise.all(stadtNamen.map(async stadt => {
             try {
-                const response = await fetch(`/data/npcs_${stadt}.json`);
+                let response = await fetch(`data/npcs_${stadt}.json`).catch(() => null);
+                if (!response || !response.ok) {
+                    response = await fetch(`/digivice/data/npcs_${stadt}.json`);
+                }
                 this.npcs[stadt] = await response.json();
             } catch (error) {
-                console.warn(`⚠️ NPCs für ${stadt} nicht gefunden`);
                 this.npcs[stadt] = [];
             }
-        }
+        }));
 
         console.log(`✅ NPCs geladen: ${Object.values(this.npcs).flat().length} total`);
     }
 
     /**
-     * Lädt alle Items-Dateien (Stadt-Namen)
+     * Lädt alle Items-Dateien (Stadt-Namen) - PARALLEL
      */
     async loadItems() {
         const stadtNamen = [
@@ -135,21 +146,24 @@ class GameDataLoader {
             'tiefenhoehlen'
         ];
 
-        for (const stadt of stadtNamen) {
+        // PERFORMANCE FIX: Load all cities in parallel
+        await Promise.all(stadtNamen.map(async stadt => {
             try {
-                const response = await fetch(`/data/items_${stadt}.json`);
+                let response = await fetch(`data/items_${stadt}.json`).catch(() => null);
+                if (!response || !response.ok) {
+                    response = await fetch(`/digivice/data/items_${stadt}.json`);
+                }
                 this.items[stadt] = await response.json();
             } catch (error) {
-                console.warn(`⚠️ Items für ${stadt} nicht gefunden`);
                 this.items[stadt] = [];
             }
-        }
+        }));
 
         console.log(`✅ Items geladen: ${Object.values(this.items).flat().length} total`);
     }
 
     /**
-     * Lädt alle Quest-Dateien (Stadt-Namen)
+     * Lädt alle Quest-Dateien (Stadt-Namen) - PARALLEL
      */
     async loadQuests() {
         const stadtNamen = [
@@ -164,21 +178,24 @@ class GameDataLoader {
             'tiefenhoehlen'
         ];
 
-        for (const stadt of stadtNamen) {
+        // PERFORMANCE FIX: Load all cities in parallel
+        await Promise.all(stadtNamen.map(async stadt => {
             try {
-                const response = await fetch(`/data/quests_${stadt}.json`);
+                let response = await fetch(`data/quests_${stadt}.json`).catch(() => null);
+                if (!response || !response.ok) {
+                    response = await fetch(`/digivice/data/quests_${stadt}.json`);
+                }
                 this.quests[stadt] = await response.json();
             } catch (error) {
-                console.warn(`⚠️ Quests für ${stadt} nicht gefunden`);
                 this.quests[stadt] = [];
             }
-        }
+        }));
 
         console.log(`✅ Quests geladen: ${Object.values(this.quests).flat().length} total`);
     }
 
     /**
-     * Lädt alle Enemy-Dateien (Regions-Namen)
+     * Lädt alle Enemy-Dateien (Regions-Namen) - PARALLEL
      */
     async loadEnemies() {
         const regionsNamen = [
@@ -193,15 +210,18 @@ class GameDataLoader {
             'tiefenhoehlen'
         ];
 
-        for (const region of regionsNamen) {
+        // PERFORMANCE FIX: Load all regions in parallel
+        await Promise.all(regionsNamen.map(async region => {
             try {
-                const response = await fetch(`/data/enemies_${region}.json`);
+                let response = await fetch(`data/enemies_${region}.json`).catch(() => null);
+                if (!response || !response.ok) {
+                    response = await fetch(`/digivice/data/enemies_${region}.json`);
+                }
                 this.enemies[region] = await response.json();
             } catch (error) {
-                console.warn(`⚠️ Enemies für ${region} nicht gefunden`);
                 this.enemies[region] = [];
             }
-        }
+        }));
 
         console.log(`✅ Enemies geladen: ${Object.values(this.enemies).flat().length} total`);
     }

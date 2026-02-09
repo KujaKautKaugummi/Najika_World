@@ -1,0 +1,112 @@
+{
+  "region_id": "reich_der_drei",
+  "name": "Reich der Drei",
+  "name_en": "Realm of Three",
+  "description": "Eine gefrorene Einöde mit allen drei Kälte-Elementen: Kälte, Frost, Eis. Heimat der Nekromanten und Untoten.",
+
+  "environment": {
+    "biome": "ice",
+    "temperature_range": [-30, -5],
+    "temperature_day": -15,
+    "temperature_night": -25,
+    "humidity": 30,
+    "weather_chances": {
+      "clear": 0.2,
+      "snow": 0.35,
+      "blizzard": 0.3,
+      "aurora": 0.15
+    },
+    "ambient_sounds": ["wind_howling", "ice_cracking", "distant_wolves", "eerie_silence"],
+    "music_day": "frozen_wasteland",
+    "music_night": "necromancer_theme",
+    "music_combat": "ice_battle"
+  },
+
+  "visual": {
+    "skybox": "arctic_aurora",
+    "ground_color": "#f0f8ff",
+    "ice_color": "#b0e0e6",
+    "fog_color": "#e0ffff",
+    "fog_density": 0.04,
+    "ambient_light": "#cce5ff",
+    "sun_intensity": 0.4,
+    "special_effects": ["snowfall", "breath_mist", "aurora_borealis", "ice_crystals"]
+  },
+
+  "city": null,
+
+  "areas": [
+    {
+      "id": "gefrorener_pass",
+      "name": "Gefrorener Pass",
+      "type": "entrance",
+      "position": {"x": 2200, "y": 50, "z": 400},
+      "connections": ["eisfeld", "gletscher_rand"],
+      "hazards": ["frostbite", "avalanche_risk"]
+    },
+    {
+      "id": "eisfeld",
+      "name": "Ewiges Eisfeld",
+      "type": "hazard",
+      "position": {"x": 1600, "y": 30, "z": 800},
+      "hazards": ["slippery", "frostbite"],
+      "traversal": "ice_skating"
+    },
+    {
+      "id": "nekromanten_turm",
+      "name": "Nekromanten-Turm",
+      "type": "trainer",
+      "position": {"x": 1200, "y": 80, "z": 1200},
+      "teaches": ["necromancy", "cold_magic", "frost_magic", "ice_magic"],
+      "npcs": ["lich_master"]
+    },
+    {
+      "id": "gefrorene_krypta",
+      "name": "Gefrorene Krypta",
+      "type": "dungeon",
+      "position": {"x": 800, "y": -20, "z": 1600},
+      "level_range": [10, 15],
+      "boss": "ice_lich",
+      "hazards": ["undead", "frostbite"]
+    },
+    {
+      "id": "gletscher_hoehle",
+      "name": "Gletscher-Höhle",
+      "type": "gathering",
+      "position": {"x": 600, "y": 0, "z": 1000},
+      "resources": ["ice_crystals", "frost_essence", "frozen_herbs"]
+    },
+    {
+      "id": "aurora_gipfel",
+      "name": "Aurora-Gipfel",
+      "type": "landmark",
+      "position": {"x": 400, "y": 200, "z": 600},
+      "special": "best_view_of_aurora",
+      "quests": ["aurora_blessing"]
+    }
+  ],
+
+  "npcs": [
+    {"id": "lich_master", "name": "Lich-Meister Mortis", "type": "trainer", "teaches": ["necromancy"]},
+    {"id": "frost_elementar", "name": "Frost-Elementar Echo", "type": "trainer", "teaches": ["frost_magic"]},
+    {"id": "ice_witch", "name": "Eis-Hexe Glacina", "type": "merchant", "sells": ["cold_gear", "frost_potions"]}
+  ],
+
+  "monsters": [
+    {"id": "frozen_skeleton", "name": "Gefrorenes Skelett", "level": [2, 5], "rarity": "common", "element": "ice"},
+    {"id": "frost_wolf", "name": "Frostwolf", "level": [3, 6], "rarity": "common"},
+    {"id": "ice_elemental", "name": "Eis-Elementar", "level": [5, 9], "rarity": "uncommon", "element": "ice"},
+    {"id": "frozen_undead", "name": "Gefrorener Untoter", "level": [7, 11], "rarity": "uncommon"},
+    {"id": "frost_wraith", "name": "Frost-Geist", "level": [10, 14], "rarity": "rare", "element": "ice"},
+    {"id": "ice_lich", "name": "Eis-Lich", "level": [15], "rarity": "boss", "element": "ice"}
+  ],
+
+  "elements": {
+    "cold": "Kälte - Verlangsamt Gegner",
+    "frost": "Frost - Einfrieren möglich",
+    "ice": "Eis - Massive Schaden-Spikes"
+  },
+
+  "slime_color": "crystal_white",
+  "slime_bonus": "+10% Eis-Defense"
+}

@@ -54,6 +54,29 @@ except ImportError:
 # Import Enhanced Battle System
 from najika_battle import BATTLE_SYSTEM, SKILL_DB, ITEM_DB
 
+# Import Skill System (10 Basis-Skills mit Element-Effectiveness)
+from najika_skill_system import SkillSystem, Element, SKILL_DATABASE
+
+# Import Temperature System (Regions-basierte Temperatur-Mechaniken)
+from najika_temperature_system import TemperatureSystem, REGIONS as TEMP_REGIONS
+
+# Import Minigames API (Card Game + Dice Monsters)
+try:
+    from najika_minigames_api import (
+        api_get_all_cards, api_get_card, api_add_card_to_collection,
+        api_get_player_collection, api_create_deck, api_get_player_decks,
+        api_start_card_match, api_end_card_match, api_get_card_leaderboard,
+        api_get_all_dice, api_get_dice, api_add_dice_to_collection,
+        api_get_dice_collection, api_start_dice_duel, api_end_dice_duel,
+        api_get_duel_history, api_give_starter_pack, roll_dice_face,
+        CARDS_DATABASE, DICE_MONSTERS_DATABASE
+    )
+    MINIGAMES_ENABLED = True
+    print("✅ Minigames API aktiviert (Card Game + Dice Monsters)")
+except ImportError as e:
+    MINIGAMES_ENABLED = False
+    print(f"⚠️  Minigames API nicht verfügbar: {e}")
+
 # Import Voice Call System (Whisper STT + Coqui TTS)
 try:
     from najika_voice_call import VOICE_CALL_SYSTEM
@@ -509,23 +532,70 @@ def _post_json(url, payload, timeout=90):
     except json.JSONDecodeError as e:
         raise RuntimeError(f"Invalid JSON from {url}: {text[:120]}") from e
 
-def call_ollama(prompt, use_wizard=False):
-    model = "najika-wizard" if use_wizard else OLLAMA_ALIAS
+def call_ollama(prompt, use_wizard=False, model_override=None):
+    """
+    Ruft Ollama mit dem passenden Model auf.
+
+    HIERARCHIE:
+    - use_wizard=True → najika-wizard (NSFW)
+    - model_override → Spezifisches Model (qwen2.5:7b, starcoder2:3b)
+    - Default → OLLAMA_ALIAS (najika-local)
+    """
+    if use_wizard:
+        model = "najika-wizard"
+    elif model_override:
+        model = model_override
+    else:
+        model = OLLAMA_ALIAS
+
     # Wizard model braucht längeres Timeout (erstes Laden: 3.8GB)
     timeout = 300 if use_wizard else 90
+
+    # Anpassungen je nach Model
+    if "starcoder" in model.lower():
+        # StarCoder2 für Code - mehr Output erlaubt
+        options = {
+            "num_ctx": 4096,
+            "temperature": 0.3,      # Niedriger für präzisen Code
+            "top_p": 0.85,
+            "repeat_penalty": 1.1,
+            "num_predict": 800       # Mehr Output für Code
+        }
+    elif "qwen" in model.lower():
+        # Qwen für Chat - ausgewogen
+        options = {
+            "num_ctx": 4096,
+            "temperature": 0.70,
+            "top_p": 0.88,
+            "repeat_penalty": 1.35,
+            "num_predict": 400
+        }
+    elif use_wizard:
+        # Wizard für NSFW - kreativer
+        options = {
+            "num_ctx": 4096,
+            "temperature": 0.75,
+            "top_p": 0.90,
+            "repeat_penalty": 1.30,
+            "num_predict": 500
+        }
+    else:
+        # Default
+        options = {
+            "num_ctx": 4096,
+            "temperature": 0.70,
+            "top_p": 0.88,
+            "repeat_penalty": 1.35,
+            "num_predict": 400
+        }
+
     response = _post_json(
         "http://127.0.0.1:11434/api/generate",
         {
             "model": model,
             "prompt": prompt,
             "stream": False,
-            "options": {
-                "num_ctx": 4096,
-                "temperature": 0.75 if use_wizard else 0.70,     # Niedriger = kohärenter
-                "top_p": 0.90 if use_wizard else 0.88,            # Niedriger = fokussierter
-                "repeat_penalty": 1.30 if use_wizard else 1.35,  # Höher = weniger Wiederholungen
-                "num_predict": 500 if use_wizard else 400         # Kürzer = schnellere Antworten
-            }
+            "options": options
         },
         timeout=timeout
     )
@@ -1240,6 +1310,19 @@ chaos_engine = ChaosEngine()
 print("✅ Chaos Engine initialisiert (5 Default Events)")
 
 class Handler(SimpleHTTPRequestHandler):
+    # Ensure JSON files get correct MIME type
+    extensions_map = {
+        **SimpleHTTPRequestHandler.extensions_map,
+        '.json': 'application/json',
+        '.js': 'application/javascript',
+        '.mjs': 'application/javascript',
+        '.css': 'text/css',
+        '.html': 'text/html',
+        '.gltf': 'model/gltf+json',
+        '.glb': 'model/gltf-binary',
+        '.fbx': 'application/octet-stream',
+    }
+
     def end_headers(self):
         self.send_header("Access-Control-Allow-Origin","*")
         self.send_header("Access-Control-Allow-Methods","GET, POST, OPTIONS")
@@ -1510,6 +1593,162 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode()); return
 
+        # ===== SKILL SYSTEM API =====
+        if self.path == "/api/skills":
+            try:
+                from najika_skill_system import get_all_skills
+                skills = get_all_skills()
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"skills": skills}).encode()); return
+            except Exception as e:
+                print(f"Skills API Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path.startswith("/api/skill/"):
+            try:
+                from najika_skill_system import get_skill_info
+                skill_id = self.path.split("/api/skill/")[1]
+                skill_info = get_skill_info(skill_id)
+                if skill_info:
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(skill_info).encode()); return
+                else:
+                    self.send_response(404); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": "Skill not found"}).encode()); return
+            except Exception as e:
+                print(f"Skill Info Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== TEMPERATURE SYSTEM API =====
+        if self.path == "/api/temperature/status":
+            try:
+                from najika_temperature_system import api_get_status
+                status = api_get_status()
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(status).encode()); return
+            except Exception as e:
+                print(f"Temperature Status Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path == "/api/temperature/regions":
+            try:
+                from najika_temperature_system import api_get_all_regions
+                regions = api_get_all_regions()
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(regions).encode()); return
+            except Exception as e:
+                print(f"Temperature Regions Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== CARD GAME API (GET) =====
+        if MINIGAMES_ENABLED:
+            if self.path == "/api/cards" or self.path.startswith("/api/cards?"):
+                try:
+                    # Parse query params
+                    from urllib.parse import urlparse, parse_qs
+                    parsed = urlparse(self.path)
+                    params = parse_qs(parsed.query)
+                    faction = params.get("faction", [None])[0]
+                    rarity = params.get("rarity", [None])[0]
+                    result = api_get_all_cards(faction=faction, rarity=rarity)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/cards/collection/"):
+                try:
+                    player_id = int(self.path.split("/")[-1])
+                    result = api_get_player_collection(player_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/cards/") and not self.path.startswith("/api/cards/collection"):
+                try:
+                    card_id = int(self.path.split("/")[-1])
+                    result = api_get_card(card_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/decks/"):
+                try:
+                    player_id = int(self.path.split("/")[-1])
+                    result = api_get_player_decks(player_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path == "/api/rankings/leaderboard" or self.path.startswith("/api/rankings/leaderboard?"):
+                try:
+                    from urllib.parse import urlparse, parse_qs
+                    parsed = urlparse(self.path)
+                    params = parse_qs(parsed.query)
+                    limit = int(params.get("limit", [100])[0])
+                    result = api_get_card_leaderboard(limit=limit)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            # ===== DICE MONSTERS API (GET) =====
+            if self.path == "/api/dice" or self.path.startswith("/api/dice?"):
+                try:
+                    from urllib.parse import urlparse, parse_qs
+                    parsed = urlparse(self.path)
+                    params = parse_qs(parsed.query)
+                    element = params.get("element", [None])[0]
+                    rarity = params.get("rarity", [None])[0]
+                    result = api_get_all_dice(element=element, rarity=rarity)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/dice/collection/"):
+                try:
+                    player_id = int(self.path.split("/")[-1])
+                    result = api_get_dice_collection(player_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/dice/") and not self.path.startswith("/api/dice/collection") and not self.path.startswith("/api/dice-duel"):
+                try:
+                    dice_id = int(self.path.split("/")[-1])
+                    result = api_get_dice(dice_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path.startswith("/api/dice-duel/history/"):
+                try:
+                    player_id = int(self.path.split("/")[-1])
+                    result = api_get_duel_history(player_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
         return super().do_GET()
     def do_POST(self):
         n=int(self.headers.get("Content-Length","0")); body=self.rfile.read(n) or b"{}"
@@ -1694,6 +1933,59 @@ class Handler(SimpleHTTPRequestHandler):
             globals()["CLOUD_ENABLED"]=False; globals()["AI_PROVIDER"]="ollama"
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok":True,"enabled":False}).encode()); return
+
+        # ===== CODE ENGINE ENDPOINTS (StarCoder2 + Claude API) =====
+        if self.path=="/api/code/generate":
+            # Code-Generierung mit intelligentem Routing
+            data=json.loads(body.decode("utf-8"))
+            prompt = data.get("prompt", "")
+            force_cloud = data.get("force_cloud", False)
+
+            if not prompt:
+                self.send_error(400, "prompt required")
+                return
+
+            try:
+                from najika_code_engine import get_code_assistant
+                assistant = get_code_assistant()
+                result = assistant.assist(prompt, force_cloud=force_cloud)
+
+                log("INFO", f"Code generiert - Model: {result['model']}, Complexity: {result['complexity']}", "CODE")
+
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                log("ERROR", f"Code Engine Fehler: {e}", "CODE")
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/code/stats":
+            # Code Engine Statistiken
+            try:
+                from najika_code_engine import get_code_engine
+                engine = get_code_engine()
+                stats = engine.get_stats()
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(stats).encode()); return
+            except Exception as e:
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/code/validate":
+            # Python-Code validieren
+            data=json.loads(body.decode("utf-8"))
+            code = data.get("code", "")
+
+            try:
+                from najika_code_engine import get_code_engine
+                engine = get_code_engine()
+                result = engine.validate_python(code)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"valid": False, "error": str(e)}).encode()); return
+
         if self.path=="/api/room/actions":
             data=json.loads(body.decode("utf-8")); room=(data.get("room") or "")
             ROOM_ACTIONS = {
@@ -1985,6 +2277,81 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode()); return
 
+        # ===== TEMPERATURE SYSTEM POST ENDPOINTS =====
+        if self.path=="/api/temperature/change_region":
+            try:
+                data=json.loads(body.decode("utf-8"))
+                region_id = data.get("region_id", "samtmoos_tiefwald")
+                from najika_temperature_system import api_change_region
+                result = api_change_region(region_id)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Temperature Change Region Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/temperature/consume_food":
+            try:
+                data=json.loads(body.decode("utf-8"))
+                food_id = data.get("food_id", "")
+                from najika_temperature_system import api_consume_food
+                result = api_consume_food(food_id)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Temperature Consume Food Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/temperature/equip_clothing":
+            try:
+                data=json.loads(body.decode("utf-8"))
+                item_id = data.get("item_id", "")
+                from najika_temperature_system import api_equip_clothing
+                result = api_equip_clothing(item_id)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Temperature Equip Clothing Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        if self.path=="/api/temperature/update":
+            try:
+                from najika_temperature_system import api_update_temperature
+                result = api_update_temperature()
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Temperature Update Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+        # ===== SKILL SYSTEM POST ENDPOINTS =====
+        if self.path=="/api/skill/use":
+            try:
+                data=json.loads(body.decode("utf-8"))
+                skill_id = data.get("skill_id", "")
+                target_id = data.get("target_id", None)
+                from najika_skill_system import SkillSystem
+                skill_system = SkillSystem()
+                # Hole User-Stats aus STATE
+                caster_stats = {
+                    "hp": STATE.get("najika", {}).get("stats", {}).get("hp", 100),
+                    "mp": STATE.get("najika", {}).get("stats", {}).get("mp", 50),
+                    "INT": STATE.get("najika", {}).get("stats", {}).get("intelligence", 10),
+                    "STR": STATE.get("najika", {}).get("stats", {}).get("strength", 10),
+                    "DEX": STATE.get("najika", {}).get("stats", {}).get("dexterity", 10)
+                }
+                result = skill_system.use_skill(skill_id, caster_stats, target_id)
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(result).encode()); return
+            except Exception as e:
+                print(f"Skill Use Error: {e}")
+                self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
         if self.path=="/api/minigame/rhythm":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(20,80)}}).encode()); return
@@ -1994,6 +2361,139 @@ class Handler(SimpleHTTPRequestHandler):
         if self.path=="/api/minigame/reflex":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok":True,"result":{"score":random.randint(10,50)}}).encode()); return
+
+        # ===== CARD GAME API (POST) =====
+        if MINIGAMES_ENABLED:
+            if self.path=="/api/cards/add-to-collection":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_add_card_to_collection(
+                        player_id=data.get("player_id", 1),
+                        card_id=data.get("card_id"),
+                        is_golden=data.get("is_golden", False)
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/decks/create":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_create_deck(
+                        player_id=data.get("player_id", 1),
+                        deck_name=data.get("deck_name", "New Deck"),
+                        faction=data.get("faction", "neutral"),
+                        cards=data.get("cards", {})
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/matches/start":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_start_card_match(
+                        player1_id=data.get("player1_id", 1),
+                        player2_id=data.get("player2_id"),
+                        is_vs_npc=data.get("is_vs_npc", False),
+                        npc_name=data.get("npc_name")
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/matches/end":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_end_card_match(
+                        match_id=data.get("match_id"),
+                        winner_id=data.get("winner_id"),
+                        turns_played=data.get("turns_played", 0),
+                        gold_earned=data.get("gold_earned", 0),
+                        xp_earned=data.get("xp_earned", 0)
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            # ===== DICE MONSTERS API (POST) =====
+            if self.path=="/api/dice/add-to-collection":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_add_dice_to_collection(
+                        player_id=data.get("player_id", 1),
+                        dice_id=data.get("dice_id"),
+                        is_golden=data.get("is_golden", False)
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/dice-duel/start":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_start_dice_duel(
+                        player1_id=data.get("player1_id", 1),
+                        player2_id=data.get("player2_id"),
+                        is_vs_npc=data.get("is_vs_npc", False),
+                        npc_name=data.get("npc_name"),
+                        player1_dice_pool=data.get("player1_dice_pool", [])
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/dice-duel/end":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    result = api_end_dice_duel(
+                        match_id=data.get("match_id"),
+                        winner_id=data.get("winner_id"),
+                        player1_hp=data.get("player1_hp", 0),
+                        player2_hp=data.get("player2_hp", 0),
+                        turns_played=data.get("turns_played", 0),
+                        gold_earned=data.get("gold_earned", 0),
+                        xp_earned=data.get("xp_earned", 0)
+                    )
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/dice/roll":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    dice_id = data.get("dice_id")
+                    result = roll_dice_face(dice_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
+
+            if self.path=="/api/minigames/starter-pack":
+                try:
+                    data=json.loads(body.decode("utf-8"))
+                    player_id = data.get("player_id", 1)
+                    result = api_give_starter_pack(player_id)
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps(result).encode()); return
+                except Exception as e:
+                    self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"error": str(e)}).encode()); return
         if self.path=="/api/crafting":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             self.wfile.write(json.dumps({"ok":True,"msg":"Crafting durchgeführt."}).encode()); return

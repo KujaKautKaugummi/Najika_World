@@ -19,7 +19,7 @@ class WorldManager {
     this.config = {
       worldSize: 9600,
       center: { x: 4800, z: 4800 },
-      dataPath: '/data/'
+      dataPath: '/data/'  // Relativ zum digivice-Ordner (Webserver root)
     };
 
     // Initialize subsystems
@@ -69,13 +69,18 @@ class WorldManager {
     if (options.enableStreaming !== undefined) this.enableStreaming = options.enableStreaming;
 
     try {
-      // Discover available assets
+      // Discover available assets (OPTIONAL - don't fail if assets missing)
       console.log('🔍 Discovering assets...');
-      await this.assetDiscovery.discover();
-      await this.assetDiscovery.loadAssetMapping(`${this.config.dataPath}asset_mapping_v2_REAL.json`);
-      this.assetDiscovery.logDiscovered();
+      try {
+        await this.assetDiscovery.discover();
+        await this.assetDiscovery.loadAssetMapping(`${this.config.dataPath}asset_mapping_v2_REAL.json`);
+        this.assetDiscovery.logDiscovered();
+      } catch (assetError) {
+        console.warn('⚠️ Asset discovery failed (continuing without assets):', assetError.message);
+      }
 
-      // Load world data
+      // Load world data (REQUIRED)
+      console.log('🌍 Loading world data...');
       const success = await this.regionStreaming.loadData(
         `${this.config.dataPath}regions.json`,
         `${this.config.dataPath}biomes.json`,
@@ -83,7 +88,7 @@ class WorldManager {
       );
 
       if (!success) {
-        throw new Error('Failed to load world data');
+        throw new Error('Failed to load world data (regions.json, biomes.json, cities.json)');
       }
 
       // Setup lighting
@@ -454,6 +459,43 @@ class WorldManager {
       if (region.underground) console.log('   🕳️ Underground');
     });
     console.log('===================================');
+  }
+
+  /**
+   * Set visibility of all world elements (for interior/exterior switching)
+   * @param {boolean} visible
+   */
+  setVisible(visible) {
+    console.log(`🌍 World visibility: ${visible ? 'ON' : 'OFF'}`);
+
+    // Hide/show terrain via regionStreaming
+    if (this.regionStreaming && this.regionStreaming.terrainMeshes) {
+      Object.values(this.regionStreaming.terrainMeshes).forEach(mesh => {
+        if (mesh) mesh.visible = visible;
+      });
+    }
+
+    // Hide/show vegetation
+    if (this.vegetationSystem && this.vegetationSystem.vegetationGroups) {
+      Object.values(this.vegetationSystem.vegetationGroups).forEach(group => {
+        if (group) group.visible = visible;
+      });
+    }
+
+    // Hide/show cities/buildings
+    if (this.cityBuilder && this.cityBuilder.cityGroups) {
+      Object.values(this.cityBuilder.cityGroups).forEach(group => {
+        if (group) group.visible = visible;
+      });
+    }
+
+    // Traverse all children added by world systems
+    this.scene.traverse(obj => {
+      if (obj.userData && (obj.userData.isWorldObject || obj.userData.isTerrain ||
+          obj.userData.isVegetation || obj.userData.isCity || obj.userData.isBuilding)) {
+        obj.visible = visible;
+      }
+    });
   }
 
   /**

@@ -77,14 +77,22 @@ class LODManager {
    * @returns {THREE.Mesh} Reduced mesh
    */
   createReducedMesh(originalMesh, factor) {
-    // Simple reduction: use less detailed geometry
-    const reducedMesh = originalMesh.clone();
+    // PERFORMANCE FIX: Actually reduce geometry instead of cloning
+    const reducedMesh = new THREE.Mesh();
+    reducedMesh.name = originalMesh.name + '_lod';
 
     if (originalMesh.geometry) {
-      // For now: just reuse geometry (later: implement real decimation)
-      // TODO: Implement SimplifyModifier for geometry reduction
-      reducedMesh.geometry = originalMesh.geometry.clone();
+      // Reduce geometry based on factor
+      reducedMesh.geometry = this.reduceGeometry(originalMesh.geometry, factor);
     }
+
+    // Share material reference instead of cloning (saves memory)
+    reducedMesh.material = originalMesh.material;
+
+    // Copy transform
+    reducedMesh.position.copy(originalMesh.position);
+    reducedMesh.rotation.copy(originalMesh.rotation);
+    reducedMesh.scale.copy(originalMesh.scale);
 
     // Reduce shadow quality for low-detail meshes
     if (factor < 0.5) {
@@ -93,6 +101,55 @@ class LODManager {
     }
 
     return reducedMesh;
+  }
+
+  /**
+   * Reduce geometry by keeping only every Nth vertex
+   * @param {THREE.BufferGeometry} geometry
+   * @param {number} factor - Keep ratio (0.0 - 1.0)
+   * @returns {THREE.BufferGeometry} Reduced geometry
+   */
+  reduceGeometry(geometry, factor) {
+    // For very low factors, use a simple box
+    if (factor < 0.2) {
+      const bbox = new THREE.Box3().setFromBufferAttribute(geometry.attributes.position);
+      const size = new THREE.Vector3();
+      bbox.getSize(size);
+      return new THREE.BoxGeometry(size.x, size.y, size.z);
+    }
+
+    // For medium reduction, decimate vertices
+    const posAttr = geometry.attributes.position;
+    if (!posAttr || posAttr.count < 100) {
+      // Too few vertices to reduce, return clone
+      return geometry.clone();
+    }
+
+    const step = Math.max(2, Math.floor(1 / factor));
+    const newCount = Math.floor(posAttr.count / step);
+
+    if (newCount < 3) {
+      // Not enough vertices, use bounding box
+      const bbox = new THREE.Box3().setFromBufferAttribute(posAttr);
+      const size = new THREE.Vector3();
+      bbox.getSize(size);
+      return new THREE.BoxGeometry(size.x || 1, size.y || 1, size.z || 1);
+    }
+
+    // Create reduced position array
+    const newPositions = new Float32Array(newCount * 3);
+    for (let i = 0; i < newCount; i++) {
+      const srcIdx = i * step;
+      newPositions[i * 3] = posAttr.getX(srcIdx);
+      newPositions[i * 3 + 1] = posAttr.getY(srcIdx);
+      newPositions[i * 3 + 2] = posAttr.getZ(srcIdx);
+    }
+
+    const reducedGeometry = new THREE.BufferGeometry();
+    reducedGeometry.setAttribute('position', new THREE.BufferAttribute(newPositions, 3));
+    reducedGeometry.computeBoundingSphere();
+
+    return reducedGeometry;
   }
 
   /**

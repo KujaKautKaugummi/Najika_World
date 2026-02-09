@@ -203,6 +203,35 @@
             display: block;
         }
 
+        /* Activities Panel */
+        #activities {
+            display: none;
+        }
+
+        #activities.visible {
+            display: block !important;
+        }
+
+        .activity-btn {
+            width: 100%;
+            padding: 10px 12px;
+            margin: 4px 0;
+            background: linear-gradient(135deg, #3a3a5c, #2a2a4a);
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #4a4a7c, #3a3a6a);
+            border-color: #9b59b6;
+            transform: translateX(3px);
+        }
+
         #najika-stats h2 {
             font-size: 16px;
             margin-bottom: 10px;
@@ -234,6 +263,54 @@
             justify-content: space-between;
             font-size: 12px;
             margin: 5px 0;
+        }
+
+        .skill-btn {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            border: 2px solid #9632ff;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .skill-btn:hover {
+            background: linear-gradient(135deg, #2d2d44, #3d3d5c);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #9632ff;
+        }
+        .skill-btn:active {
+            transform: scale(0.95);
+        }
+        .skill-btn.on-cooldown {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        /* Aktivitäten-Menü Buttons */
+        .activity-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #2d2d44, #3d3d5c);
+            border-color: #9b59b6;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+        }
+        .activity-btn:active {
+            transform: translateX(2px) scale(0.98);
         }
 
         #backend-status {
@@ -378,6 +455,51 @@
         <button onclick="togglePanel('controls')" id="btn-controls">🎮 Controls</button>
         <button onclick="togglePraise(true)" id="btn-praise">👍 Lob</button>
         <button onclick="togglePraise(false)" id="btn-criticize">👎 Tadel</button>
+        <!-- Einzelne Spiele-Buttons (direkt aufrufbar) -->
+        <button onclick="window.openTripleTriad?.()" id="btn-triad" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);">🃏 Triad</button>
+        <button onclick="window.openDungeonDice?.()" id="btn-dice" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">🎲 Dice</button>
+        <button onclick="window.openGardenSystem?.()" id="btn-garden" style="background: linear-gradient(135deg, #8BC34A, #558B2F);">🌱 Garten</button>
+        <button onclick="window.openFishingSystem?.()" id="btn-fishing" style="background: linear-gradient(135deg, #03A9F4, #0288D1);">🎣 Angeln</button>
+        <button onclick="window.openHousingSystem?.()" id="btn-housing" style="background: linear-gradient(135deg, #FF9800, #F57C00);">🏰 Housing</button>
+        <button onclick="togglePanel('activities')" id="btn-activities" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">⚙️ Mehr</button>
+    </div>
+
+    <!-- AKTIVITÄTEN-MENÜ -->
+    <div id="activities" class="panel" style="position: fixed; top: 60px; right: 20px; width: 280px; background: rgba(20, 20, 40, 0.95); border: 2px solid #9b59b6; border-radius: 12px; padding: 15px; z-index: 1000;">
+        <h3 style="margin: 0 0 15px 0; color: #9b59b6; text-align: center;">🎮 AKTIVITÄTEN</h3>
+
+        <!-- Leben & Wohnen -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #e91e63; font-size: 12px; margin-bottom: 8px; font-weight: bold;">🏠 LEBEN & WOHNEN</div>
+            <button onclick="openHousingSystem()" class="activity-btn">🏰 Housing (Schwarze Mühle)</button>
+            <button onclick="openGardenSystem()" class="activity-btn">🌱 Garten & Farming</button>
+            <button onclick="openRegionSelector()" class="activity-btn">🌍 Anbaugebiete (9 Regionen)</button>
+            <button onclick="openFishingSystem()" class="activity-btn">🎣 Angeln</button>
+            <button onclick="openFishingShop()" class="activity-btn">🏪 Angel-Shop & Aquarium</button>
+        </div>
+
+        <!-- Kampf & Abenteuer -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #f39c12; font-size: 12px; margin-bottom: 8px; font-weight: bold;">⚔️ KAMPF & ABENTEUER</div>
+            <button onclick="enterDungeon()" class="activity-btn">🗡️ Dungeon betreten</button>
+            <button onclick="openTripleTriad()" class="activity-btn">🃏 Triple Triad</button>
+            <button onclick="openDungeonDice()" class="activity-btn">🎲 Dungeon Dice</button>
+        </div>
+
+        <!-- Minigames & Musik -->
+        <div style="margin-bottom: 15px;">
+            <div style="color: #3498db; font-size: 12px; margin-bottom: 8px; font-weight: bold;">🎯 MINIGAMES & MUSIK</div>
+            <button onclick="openMinigames()" class="activity-btn">🎮 Minigame-Auswahl</button>
+            <button onclick="openInstrument()" class="activity-btn">🎵 Instrumente spielen</button>
+        </div>
+
+        <!-- Terminal & Tools -->
+        <div>
+            <div style="color: #2ecc71; font-size: 12px; margin-bottom: 8px; font-weight: bold;">💻 TERMINAL & TOOLS</div>
+            <button onclick="openTerminal()" class="activity-btn">💻 Terminal</button>
+            <button onclick="openSecureMessenger()" class="activity-btn">🔐 Secure Messenger</button>
+            <button onclick="openFileManager()" class="activity-btn">📁 Datei-Manager</button>
+        </div>
     </div>
 
     <div id="canvas-container"></div>
@@ -460,6 +582,37 @@
         <div class="stat-inline">
             <span>📊 Level: <span id="najika-level">--</span></span>
             <span>⭐ XP: <span id="najika-xp">--</span></span>
+        </div>
+
+        <!-- TEMPERATUR SYSTEM -->
+        <hr style="margin: 10px 0; border-color: #333;">
+        <div style="background: rgba(255, 100, 50, 0.1); padding: 8px; border-radius: 5px; border: 1px solid #ff6432;">
+            <div style="font-size: 11px; color: #ff6432; margin-bottom: 4px; font-weight: bold;">🌡️ TEMPERATUR</div>
+            <div class="stat-bar">
+                <span>Körper: <span id="body-temp">22</span>°C</span>
+                <div class="stat-bar-fill-container">
+                    <div class="stat-bar-fill" id="temp-fill" style="background: linear-gradient(90deg, #3498db, #e74c3c); width: 50%;"></div>
+                </div>
+            </div>
+            <div style="font-size: 10px; color: #aaa; margin-top: 4px;">
+                <span>🏔️ Region: <span id="current-region">Samtmoos-Tiefwald</span></span><br>
+                <span>🌤️ Umgebung: <span id="env-temp">22</span>°C</span>
+            </div>
+        </div>
+
+        <!-- SKILLS SCHNELLZUGRIFF -->
+        <hr style="margin: 10px 0; border-color: #333;">
+        <div style="background: rgba(150, 50, 255, 0.1); padding: 8px; border-radius: 5px; border: 1px solid #9632ff;">
+            <div style="font-size: 11px; color: #9632ff; margin-bottom: 6px; font-weight: bold;">✨ SKILLS (1-4)</div>
+            <div id="skill-quickbar" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <button onclick="useSkill('fireball')" class="skill-btn" title="Fireball">🔥</button>
+                <button onclick="useSkill('ice_shard')" class="skill-btn" title="Ice Shard">❄️</button>
+                <button onclick="useSkill('lightning_bolt')" class="skill-btn" title="Lightning">⚡</button>
+                <button onclick="useSkill('heal')" class="skill-btn" title="Heal">💚</button>
+            </div>
+            <div style="font-size: 10px; color: #aaa; margin-top: 4px;">
+                <span>💎 Mana: <span id="current-mana">50</span>/100</span>
+            </div>
         </div>
     </div>
 
@@ -594,21 +747,48 @@
     <script src="js/character_animations.js"></script>
     <script src="js/3d_scene.js"></script>
     <script src="js/voice_call.js"></script>
+    <!-- Phase 1 Systems -->
+    <script src="js/equipment_combat.js"></script>
+    <script src="js/touch_combat.js"></script>
+    <script src="js/triple_triad.js"></script>
+    <script src="js/dungeon_dice_shop.js"></script>
+    <script src="js/dungeon_dice_game.js"></script>
+    <script src="js/housing_system.js"></script>
+    <script src="js/instrument_system.js"></script>
     <!-- ========================================== -->
 
     <script>
+        // ===== KEYBOARD INPUT GUARD (CRITICAL FIX!) =====
+        // Blockiert Game-Shortcuts wenn der User im Chat oder anderen Input-Feldern tippt
+        function isTypingInInput() {
+            const activeEl = document.activeElement;
+            if (!activeEl) return false;
+            const tag = activeEl.tagName.toUpperCase();
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return true;
+            if (activeEl.contentEditable === 'true') return true;
+            // Prüfe ob Chat-Container fokussiert ist
+            if (activeEl.closest && activeEl.closest('#chat-container')) return true;
+            return false;
+        }
+
         // ===== UI TOGGLE SYSTEM =====
         function togglePanel(panelId) {
+            console.log('[UI] togglePanel:', panelId);
             const panel = document.getElementById(panelId);
             const button = document.getElementById(`btn-${panelId === 'najika-stats' ? 'najika' : panelId}`);
 
             if (panel) {
                 panel.classList.toggle('visible');
+                console.log('[UI] Panel visible:', panel.classList.contains('visible'));
                 if (button) {
                     button.classList.toggle('active');
                 }
+            } else {
+                console.warn('[UI] Panel nicht gefunden:', panelId);
             }
         }
+        // Global export
+        window.togglePanel = togglePanel;
 
         async function togglePraise(isPositive) {
             const action = isPositive ? 'praise' : 'criticize';
@@ -616,7 +796,7 @@
             const text = isPositive ? 'Lob' : 'Tadel';
 
             try {
-                const response = await fetch(`/api/najika/${action}`, {
+                const response = await fetch(`http://localhost:8000/api/najika/${action}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({})
@@ -633,6 +813,216 @@
             } catch (error) {
                 console.error(`[Najika] ${text} error:`, error);
                 showNotification('❌ Verbindungsfehler', 2000);
+            }
+        }
+
+        // ===== AKTIVITÄTEN FUNKTIONEN =====
+
+        // Housing System (Schwarze Mühle)
+        function openHousingSystem() {
+            if (window.HousingSystem) {
+                window.HousingSystem.enter(); // enter = enterEditMode
+                togglePanel('activities'); // Menü schließen
+                showNotification('🏰 Housing Modus aktiviert!', 2000);
+            } else {
+                showNotification('❌ Housing System nicht geladen', 2000);
+            }
+        }
+
+        // Garden System (Farming)
+        function openGardenSystem() {
+            if (window.GardenSystem) {
+                window.GardenSystem.showGardenUI();
+                togglePanel('activities');
+                showNotification('🌱 Garten geöffnet!', 2000);
+            } else {
+                showNotification('❌ Garden System nicht geladen', 2000);
+            }
+        }
+
+        // Region Selector (9 Anbaugebiete)
+        function openRegionSelector() {
+            if (window.GardenSystem && window.GardenSystem.showRegionSelector) {
+                window.GardenSystem.showRegionSelector();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Region System nicht geladen', 2000);
+            }
+        }
+
+        // Fishing System
+        function openFishingSystem() {
+            if (window.FishingSystem) {
+                window.FishingSystem.startFishing();
+                togglePanel('activities');
+                showNotification('🎣 Angel ausgeworfen!', 2000);
+            } else {
+                showNotification('❌ Fishing System nicht geladen', 2000);
+            }
+        }
+
+        // Fishing Shop
+        function openFishingShop() {
+            if (window.FishingSystem && window.FishingSystem.openFishingShop) {
+                window.FishingSystem.openFishingShop();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Angel-Shop nicht verfügbar', 2000);
+            }
+        }
+
+        // Dungeon Combat
+        function enterDungeon() {
+            if (window.DungeonCombat) {
+                // Starte Kampf mit Dummy-Enemy zum Testen
+                window.DungeonCombat.startDungeonCombat({
+                    name: 'Dungeon-Gegner',
+                    health: 100,
+                    maxHealth: 100,
+                    attack: 10,
+                    defense: 5
+                });
+                togglePanel('activities');
+                showNotification('⚔️ Dungeon-Kampf gestartet!', 2000);
+            } else {
+                showNotification('❌ Dungeon System nicht geladen', 2000);
+            }
+        }
+
+        // Minigames - Auswahl-Dialog
+        function openMinigames() {
+            // Zeige Minigame-Auswahl Dialog
+            const overlay = document.createElement('div');
+            overlay.id = 'minigame-select-overlay';
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.9); display: flex;
+                align-items: center; justify-content: center; z-index: 10000;
+            `;
+            overlay.innerHTML = `
+                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); border: 2px solid #4CAF50;
+                            border-radius: 15px; padding: 25px; min-width: 350px; color: #fff; text-align: center;">
+                    <h2 style="margin: 0 0 20px 0; color: #4CAF50;">🎮 Minigames</h2>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button onclick="openTripleTriad()" style="padding: 15px; background: #4CAF50; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🃏 Triple Triad (Kartenspiel)
+                        </button>
+                        <button onclick="openDungeonDiceShop()" style="padding: 15px; background: #9C27B0; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🎲 Dungeon Dice Monsters
+                        </button>
+                        <button onclick="openOldMinigames()" style="padding: 15px; background: #2196F3; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                            🎯 Klassische Minigames
+                        </button>
+                        <button onclick="closeMinigameSelect()" style="padding: 10px; background: #666; color: white;
+                                border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;">
+                            Abbrechen
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            togglePanel('activities');
+        }
+
+        function closeMinigameSelect() {
+            const overlay = document.getElementById('minigame-select-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function openTripleTriad() {
+            closeMinigameSelect();
+            if (window.TripleTriadUI) {
+                // Standard-NPC zum Spielen
+                window.TripleTriadUI.open('dampf_hain_haendler');
+            } else {
+                showNotification('❌ Triple Triad nicht geladen', 2000);
+            }
+        }
+
+        function openDungeonDiceShop() {
+            closeMinigameSelect();
+            if (window.DungeonDiceShop) {
+                // Öffne Shop basierend auf aktueller Region (default: dampf_hain)
+                const currentRegion = window.currentRegion || 'dampf_hain';
+                const shopMapping = {
+                    'heisse_duenen': 'handelsfestung',
+                    'samtmoos_tiefwald': 'dampf_hain',
+                    'salzwind_kueste': 'salzige_bucht',
+                    'blitzebene': 'runenheim',
+                    'magmastroeme': 'funken_siedlung'
+                };
+                const shopId = shopMapping[currentRegion] || 'dampf_hain';
+                window.DungeonDiceShop.openShop(shopId);
+            } else {
+                showNotification('❌ Dungeon Dice nicht geladen', 2000);
+            }
+        }
+
+        // Alias für alte Button-Handler
+        function openDungeonDice() {
+            openDungeonDiceShop();
+        }
+
+        function openOldMinigames() {
+            closeMinigameSelect();
+            if (window.MiniGames) {
+                window.MiniGames.open();
+            } else {
+                showNotification('❌ Minigames nicht geladen', 2000);
+            }
+        }
+
+        // Instrumente (Ocarina-Style)
+        function openInstrument() {
+            if (window.InstrumentSystem) {
+                window.InstrumentSystem.open();
+                togglePanel('activities');
+                showNotification('🎵 Instrument bereit! Tasten: A-S-D-F-G-H-J-K-L', 3000);
+            } else {
+                showNotification('❌ Instrument System nicht geladen', 2000);
+            }
+        }
+
+        // Terminal
+        function openTerminal() {
+            if (window.TerminalModules && window.TerminalModules.openSwitcher) {
+                window.TerminalModules.openSwitcher();
+                togglePanel('activities');
+            } else if (window.terminalSystem) {
+                window.terminalSystem.show();
+                togglePanel('activities');
+            } else {
+                // Fallback: Suche nach Terminal Panel
+                const terminalPanel = document.getElementById('terminal-panel') || document.querySelector('.terminal-container');
+                if (terminalPanel) {
+                    terminalPanel.style.display = 'flex';
+                    togglePanel('activities');
+                } else {
+                    showNotification('💻 Terminal wird geladen...', 2000);
+                }
+            }
+        }
+
+        // Secure Messenger
+        function openSecureMessenger() {
+            if (window.SecureMessenger) {
+                window.SecureMessenger.open();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ Secure Messenger nicht geladen', 2000);
+            }
+        }
+
+        // File Manager
+        function openFileManager() {
+            if (window.FileManager) {
+                window.FileManager.open();
+                togglePanel('activities');
+            } else {
+                showNotification('❌ File Manager nicht geladen', 2000);
             }
         }
 
@@ -734,6 +1124,7 @@
 
         // Combat Mode Toggle (F6 key)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (e.key === 'F6') {
                 e.preventDefault();
                 const currentMode = realtimeCombat.combatMode;
@@ -832,23 +1223,38 @@
         let regions = [];
         let gridHelper = null;
 
-        if (!USE_PHASE_2) {
-            console.log('🌍 Creating Phase 1: Flat Regions (9×3200m)...');
+        // =====================================================
+        // KORRIGIERTE KOORDINATEN: 0-9600 (Welt-Zentrum: 4800,4800)
+        // =====================================================
+        // Laut regions.json:
+        // - Reich der Drei (ice): x:0-2400, z:0-2400 → Zentrum bei 1200,1200
+        // - Samtmoos-Tiefwald (forest): x:3600-6000, z:0-2400 → Zentrum bei 4800,1200
+        // - Tiefenhöhlen (caves): unter forest → Zentrum bei 4800,1200
+        // - Salzwind-Küste (coast): x:0-2400, z:3600-6000 → Zentrum bei 1200,4800
+        // - Götterfels (mountain): x:3300-6300, z:3300-6300 → Zentrum bei 4800,4800
+        // - Blitzebene (highland): x:7200-9600, z:3600-6000 → Zentrum bei 8400,4800
+        // - Grünschlamm-Sumpf (swamp): x:0-2400, z:7200-9600 → Zentrum bei 1200,8400
+        // - Magmaströme (volcano): x:3600-6000, z:7200-9600 → Zentrum bei 4800,8400
+        // - Heiße Dünen (desert): x:7200-9600, z:7200-9600 → Zentrum bei 8400,8400
 
+        // IMMER Regionen definieren (für Enemy Spawning und Minimap)
         regions = [
-            // Row 1 (top): z=133.32
-            { name: 'ice',      color: 0xf0f8ff, x: -3200, z: 3200,  y: 0 },
-            { name: 'highland', color: 0x8b7355, x: 0,     z: 3200,  y: 0 },
-            { name: 'desert',   color: 0xe8d4a0, x: 3200,  z: 3200,  y: 0 },
-            // Row 2 (middle): z=0
-            { name: 'swamp',    color: 0x556b2f, x: -3200, z: 0,       y: 0 },
-            { name: 'mountain', color: 0x808080, x: 0, z: 0, y: 50 },  // Berg höher!
-            { name: 'coast',    color: 0xc2b280, x: 3200,  z: 0,       y: 0 },
-            // Row 3 (bottom): z=-133.32
-            { name: 'caves',    color: 0x2f2f2f, x: -3200, z: -3200, y: 0 },
-            { name: 'forest',   color: 0x2d5016, x: 0,     z: -3200, y: 0 },
-            { name: 'volcano',  color: 0x8b4513, x: 3200,  z: -3200, y: 0 }
+            // Row 1 (Nord): z=0-3200, Zentrum bei z=1200
+            { name: 'ice',      color: 0x87CEEB, x: 1200, z: 1200, y: 0 },   // Reich der Drei (Nordwest)
+            { name: 'forest',   color: 0x228B22, x: 4800, z: 1200, y: 0 },   // Samtmoos-Tiefwald (Nord-Mitte)
+            { name: 'caves',    color: 0x4B0082, x: 8400, z: 1200, y: 0 },   // Caves placeholder (Nordost)
+            // Row 2 (Mitte): z=3200-6400, Zentrum bei z=4800
+            { name: 'coast',    color: 0x4169E1, x: 1200, z: 4800, y: 0 },   // Salzwind-Küste (West)
+            { name: 'mountain', color: 0x808080, x: 4800, z: 4800, y: 50 },  // Götterfels (Zentrum) - höher!
+            { name: 'highland', color: 0x9370DB, x: 8400, z: 4800, y: 20 },  // Blitzebene (Ost)
+            // Row 3 (Süd): z=6400-9600, Zentrum bei z=8400
+            { name: 'swamp',    color: 0x556B2F, x: 1200, z: 8400, y: 0 },   // Grünschlamm-Sumpf (Südwest)
+            { name: 'volcano',  color: 0xFF4500, x: 4800, z: 8400, y: 10 },  // Magmaströme (Süd-Mitte)
+            { name: 'desert',   color: 0xDAA520, x: 8400, z: 8400, y: 5 }    // Heiße Dünen (Südost)
         ];
+
+        if (!USE_PHASE_2) {
+            console.log('🌍 Creating Phase 1: Flat Regions (9×3200m) - KORRIGIERTE 0-9600 Koordinaten!');
 
         regions.forEach(region => {
             const geometry = new THREE.PlaneGeometry(regionSize, regionSize, 20, 20);
@@ -859,31 +1265,50 @@
             });
             const mesh = new THREE.Mesh(geometry, material);
             mesh.rotation.x = -Math.PI / 2;
+            // WICHTIG: Regionen werden an ihren Zentren platziert (x, z sind jetzt korrekt 0-9600)
             mesh.position.set(region.x, region.y, region.z);
             mesh.receiveShadow = true;
             mesh.name = `region_${region.name}`;
+            mesh.userData.isRegion = true; // Markierung für Terrain-Height
             scene.add(mesh);
+
+            console.log(`  ✅ Region ${region.name} bei X=${region.x}, Z=${region.z}`);
         });
 
-        // Grid (4x größer: 400x400)
+        // Grid zentriert bei 4800,4800 (Welt-Zentrum)
         gridHelper = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+        gridHelper.position.set(4800, 0.1, 4800); // Zentriere Grid auf Welt-Mitte!
         gridHelper.visible = true;
         scene.add(gridHelper);
 
         } else {
-            console.log('🌍 Skipping flat regions (using Phase 2 Terrain System)');
-            // Dummy regions für Minimap und Enemy Spawning (Phase 2)
-            regions = [
-                { name: 'ice', color: 0xf0f8ff, x: -3200, z: 3200, y: 0 },
-                { name: 'highland', color: 0x8b7355, x: 0, z: 3200, y: 0 },
-                { name: 'desert', color: 0xe8d4a0, x: 3200, z: 3200, y: 0 },
-                { name: 'swamp', color: 0x556b2f, x: -3200, z: 0, y: 0 },
-                { name: 'mountain', color: 0x808080, x: 0, z: 0, y: 50 },
-                { name: 'coast', color: 0xc2b280, x: 3200, z: 0, y: 0 },
-                { name: 'caves', color: 0x2f2f2f, x: -3200, z: -3200, y: 0 },
-                { name: 'forest', color: 0x2d5016, x: 0, z: -3200, y: 0 },
-                { name: 'volcano', color: 0x8b4513, x: 3200, z: -3200, y: 0 }
-            ];
+            console.log('🌍 Phase 2 aktiv - erstelle trotzdem Basis-Boden für Sichtbarkeit...');
+
+            // IMMER einen Basis-Boden erstellen (auch für Phase 2 als Fallback)
+            // Das WorldManager-Terrain wird darüber gerendert wenn es funktioniert
+            regions.forEach(region => {
+                const geometry = new THREE.PlaneGeometry(regionSize, regionSize, 4, 4);
+                const material = new THREE.MeshStandardMaterial({
+                    color: region.color,
+                    roughness: 0.9,
+                    metalness: 0.1
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.rotation.x = -Math.PI / 2;
+                mesh.position.set(region.x, region.y - 1, region.z); // 1m unter normalem Y
+                mesh.receiveShadow = true;
+                mesh.name = `region_fallback_${region.name}`;
+                mesh.userData.isRegion = true;
+                mesh.userData.isFallback = true;
+                scene.add(mesh);
+            });
+            console.log('  ✅ 9 Fallback-Regionen erstellt');
+
+            // Grid auch für Phase 2
+            gridHelper = new THREE.GridHelper(9600, 100, 0x333333, 0x222222);
+            gridHelper.position.set(4800, 0.1, 4800);
+            gridHelper.visible = true;
+            scene.add(gridHelper);
         }
         // ======================================== END PHASE 1 ========================================
 
@@ -921,8 +1346,11 @@
             }
         }
 
-        // Position: Mitte der Map (Berg-Region, leicht erhöht)
-        character.position.set(0, 55, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
+        // Position: Götterfels - Weltzentrum bei (4800, 4800)
+        // Initial spawn height - will be corrected by updateCharacterHeight() in animation loop
+        const initialGroundHeight = getGroundHeight(4800, 4800);
+        character.position.set(4800, initialGroundHeight + 3.5, 4800);  // Auf dem Berg bei Götterfels
+        console.log('🎮 Spieler spawnt bei Y=' + (initialGroundHeight + 3.5));
         scene.add(character);
 
         // Camera folgt Character (Third-Person Mode)
@@ -946,6 +1374,7 @@
 
         // Manual Save/Load (F5/F9)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // F5: Manual Save
             if (e.key === 'F5') {
                 e.preventDefault();
@@ -979,6 +1408,7 @@
         let slideDirection = 0;
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             switch(e.key.toLowerCase()) {
                 case 'w': keys.w = true; break;
                 case 'a': keys.a = true; break;
@@ -1013,6 +1443,7 @@
         });
 
         window.addEventListener('keyup', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             switch(e.key.toLowerCase()) {
                 case 'w': keys.w = false; break;
                 case 'a': keys.a = false; break;
@@ -1083,7 +1514,8 @@
         const INTERIOR_TOGGLE_COOLDOWN = 1000; // 1 second cooldown
 
         window.addEventListener('keydown', (e) => {
-            // E-Taste: Gebäude betreten/verlassen
+            if (isTypingInInput()) return; // KEYBOARD GUARD
+            // E-Taste: Gebäude betreten/verlassen (PRIORITÄT über Combat!)
             if (e.key === 'e' || e.key === 'E') {
                 // Cooldown check to prevent rapid enter/exit
                 if (Date.now() - lastInteriorToggle < INTERIOR_TOGGLE_COOLDOWN) {
@@ -1091,6 +1523,10 @@
                 }
 
                 if (nearBuilding) {
+                    // WICHTIG: Stoppe Event-Propagation damit Combat nicht auch feuert!
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+
                     // Check if it's an Exit Portal (only works INSIDE interior)
                     if (nearBuilding.userData && nearBuilding.userData.isExitPortal) {
                         if (isInInterior) {
@@ -1111,6 +1547,17 @@
             if (e.key === 'q' || e.key === 'Q') {
                 if (isInInterior) {
                     unloadBuildingInterior();
+                }
+            }
+
+            // H-Taste: Housing System (nur in der Mühle)
+            if (e.key === 'h' || e.key === 'H') {
+                if (isInInterior && window.HousingSystem) {
+                    // Raum-Name aus aktuellem Floor holen
+                    const floor = muehleFloors[currentMuehleFloor];
+                    const roomName = floor && floor.rooms[0] ? floor.rooms[0].toLowerCase().replace(/[^a-z]/g, '') : 'wohnzimmer';
+                    window.HousingSystem.enter(roomName);
+                    console.log('🏠 Housing Edit Mode aktiviert für: ' + roomName);
                 }
             }
 
@@ -1168,7 +1615,7 @@
             }
         }
 
-        // Gebäude betreten
+        // Gebäude betreten - ECHTE INTERIORS!
         function enterBuilding(building) {
             const buildingType = building.userData.buildingType;
             const buildingName = building.userData.buildingName;
@@ -1181,15 +1628,33 @@
                 loadMuehleInterior();
                 return;
             }
-            else if (buildingType === 'city') {
-                // Stadt betreten - TODO: Implement city interiors like Mühle
-                alert(`🏘️ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Stadt-Interior wird noch implementiert - wird wie Schwarze Mühle mit begehbaren Räumen)`);
-                console.log(`Stadt: ${buildingName} - ${buildingDescription}`);
-            }
-            else if (buildingType === 'special') {
-                // Besonderer Ort betreten
-                alert(`✨ Du betrittst ${buildingName}!\n\n${buildingDescription}\n\n(Interior wird noch implementiert)`);
-                console.log(`Besonderer Ort: ${buildingName} - ${buildingDescription}`);
+            else if (buildingType === 'city' || buildingType === 'special') {
+                // Stadt/Besonderer Ort betreten - ECHTES INTERIOR!
+                console.log(`🏘️ Lade Interior für ${buildingName}...`);
+
+                // Finde passende cityData aus cityLocations
+                const cityData = cityLocations.find(c => c.name === buildingName);
+                if (cityData) {
+                    // Nutze loadBuildingInterior für echtes Interior
+                    loadBuildingInterior({
+                        id: buildingName.toLowerCase().replace(/[\s-]/g, '_'),
+                        name: buildingName,
+                        region: cityData.region,
+                        description: buildingDescription,
+                        type: buildingType,
+                        buildings: { types: [] } // Placeholder für CityBuilder Integration
+                    });
+                } else {
+                    // Fallback: Einfaches Interior
+                    loadBuildingInterior({
+                        id: buildingName.toLowerCase().replace(/[\s-]/g, '_'),
+                        name: buildingName,
+                        region: 'unknown',
+                        description: buildingDescription,
+                        type: buildingType,
+                        buildings: { types: [] }
+                    });
+                }
             }
         }
 
@@ -1222,6 +1687,11 @@
                 });
                 if (schwarzeMuehle) schwarzeMuehle.visible = false;
                 if (gridHelper) gridHelper.visible = false;
+
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
 
                 // 4. Generiere und lade Interior
                 const interior = interiorGenerator.generateCityInterior(cityData);
@@ -1298,7 +1768,12 @@
                     if (obj.userData.isRegionMarker) obj.visible = true;
                 });
 
-                // 3.5. Stelle Außenwelt-Fog/Background wieder her
+                // 3.5. Zeige WorldManager wieder (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(true);
+                }
+
+                // 3.6. Stelle Außenwelt-Fog/Background wieder her
                 scene.background = new THREE.Color(0x87CEEB); // Himmelblau
                 scene.fog = new THREE.Fog(0x87CEEB, 80, 250); // Weite Sicht
 
@@ -1353,6 +1828,11 @@
                 buildings.forEach(building => building.visible = false);
                 if (schwarzeMuehle) schwarzeMuehle.visible = false;
                 gridHelper.visible = false;
+
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
 
                 // 4. Erstelle EINFACHEN Raum (Wohnzimmer, 48x48m)
                 const roomSize = 48;
@@ -1485,6 +1965,11 @@
                     if (obj.userData.isRegionMarker) obj.visible = false;
                 });
 
+                // 3.5. Verstecke WorldManager (Phase 2 Terrain/Vegetation/Cities)
+                if (worldManager && worldManager.setVisible) {
+                    worldManager.setVisible(false);
+                }
+
                 // 4. Lade Erdgeschoss (Floor 0)
                 currentMuehleFloor = 0;
                 await loadMuehleFloor(0);
@@ -1508,6 +1993,12 @@
                 // 10. Zeige Q-Prompt (Verlassen)
                 document.getElementById('q-prompt').style.display = 'block';
 
+                // 11. Housing System aktivieren (wenn verfügbar)
+                if (window.HousingSystem) {
+                    window.HousingSystem.loadState();
+                    console.log('🏠 Housing System geladen für Schwarze Mühle');
+                }
+
                 console.log('✅ Schwarze Mühle geladen! (Erdgeschoss)');
             }, 300);
         }
@@ -1518,7 +2009,7 @@
 
             // Lade room_config_detailed.json
             try {
-                const response = await fetch('/digivice/static/assets/room_config_detailed.json');
+                const response = await fetch('/static/assets/room_config_detailed.json');
                 const roomConfigs = await response.json();
 
                 // Entferne alte Raum-Objekte
@@ -1779,8 +2270,24 @@
                     </div>
                 </div>
 
+                <!-- Housing Button -->
+                <div style="margin-top: 12px; border-top: 1px solid #555; padding-top: 10px;">
+                    <button onclick="window.openHousingMode()" style="
+                        width: 100%;
+                        padding: 10px;
+                        background: linear-gradient(90deg, #667eea, #764ba2);
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-family: monospace;
+                        font-size: 12px;
+                        font-weight: bold;
+                    ">🏠 Einrichtungs-Modus [H]</button>
+                </div>
+
                 <div style="margin-top: 10px; font-size: 11px; color: #aaa; text-align: center;">
-                    [1-4] Schnellwahl | [Q] Verlassen
+                    [1-4] Schnellwahl | [H] Housing | [Q] Verlassen
                 </div>
                 </div>
             `;
@@ -1805,6 +2312,18 @@
             window.switchMuehleFloor = async (index) => {
                 currentMuehleFloor = index;
                 await loadMuehleFloor(currentMuehleFloor);
+            };
+
+            // Housing Mode opener
+            window.openHousingMode = () => {
+                if (!isInInterior || !window.HousingSystem) {
+                    console.warn('Housing nur in der Mühle verfügbar!');
+                    return;
+                }
+                const floor = muehleFloors[currentMuehleFloor];
+                const roomName = floor && floor.rooms[0] ? floor.rooms[0].toLowerCase().replace(/[^a-z]/g, '') : 'wohnzimmer';
+                window.HousingSystem.enter(roomName);
+                console.log('🏠 Housing Edit Mode aktiviert für: ' + roomName);
             };
 
             // Najika interaction handler
@@ -2104,22 +2623,30 @@
             `;
         }
 
-        // Get ground height at position (based on region)
+        // Get ground height at position (based on WorldManager terrain or fallback)
         function getGroundHeight(x, z) {
-            // Check which region character is in
-            // Region size is 133.32, center at (0,0)
-            // Mountain is at center (x: 0, z: 0) with Y=5
-            // All others at Y=0
+            // If WorldManager is initialized, use its terrain height
+            if (worldManager && worldManager.initialized) {
+                const terrainHeight = worldManager.getHeightAt(x, z);
+                if (terrainHeight !== undefined && !isNaN(terrainHeight)) {
+                    return terrainHeight;
+                }
+            }
 
+            // Fallback: Use region-based height (0-9600 coordinate system)
+            // World center is at 4800,4800 - Götterfels/Mountain region
+            const centerX = 4800;
+            const centerZ = 4800;
             const regionSize = 3200;
             const halfSize = regionSize / 2;
 
-            // Check if in mountain region (center)
-            if (x >= -halfSize && x <= halfSize && z >= -halfSize && z <= halfSize) {
-                return 5;  // Mountain height
+            // Check if in mountain region (center around 4800,4800)
+            if (x >= centerX - halfSize && x <= centerX + halfSize &&
+                z >= centerZ - halfSize && z <= centerZ + halfSize) {
+                return 50;  // Mountain region has elevated terrain
             }
 
-            return 0;  // All other regions flat
+            return 5;  // Default ground level for other regions
         }
 
         // Update character height based on region
@@ -2402,10 +2929,10 @@
                     worldManager = new window.WorldManager(scene, camera);
 
                     await worldManager.initialize({
-                        dataPath: '/data/',
+                        dataPath: 'data/',  // Relativ zum aktuellen Verzeichnis (digivice/)
                         enableLOD: true,
-                        enableStreaming: true,
-                        enableVegetationBatching: true
+                        enableStreaming: false,  // Alle Regionen laden für einfacheres Testing
+                        enableVegetationBatching: false  // Erstmal deaktiviert
                     });
 
                     console.log('✅ Phase 2 World Manager initialized!');
@@ -2414,31 +2941,38 @@
                     console.error('❌ Phase 2 World Manager failed to initialize:', error);
                     console.log('⚠️ Falling back to Phase 1 (Flat Terrain)');
                     worldManager = null;
+
+                    // FALLBACK: Erstelle einfachen flachen Boden
+                    console.log('🏜️ Creating fallback ground plane...');
+                    const fallbackGroundGeometry = new THREE.PlaneGeometry(9600, 9600);
+                    const fallbackGroundMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x3a7d44,  // Grasgrün
+                        roughness: 0.9,
+                        metalness: 0.1
+                    });
+                    const fallbackGround = new THREE.Mesh(fallbackGroundGeometry, fallbackGroundMaterial);
+                    fallbackGround.rotation.x = -Math.PI / 2;
+                    fallbackGround.position.set(4800, 0, 4800);  // Zentrum der Welt
+                    fallbackGround.receiveShadow = true;
+                    fallbackGround.name = 'fallback_ground';
+                    scene.add(fallbackGround);
+
+                    // Grid-Helper für Orientierung
+                    const fallbackGrid = new THREE.GridHelper(9600, 200, 0x000000, 0x444444);
+                    fallbackGrid.position.set(4800, 0.1, 4800);
+                    scene.add(fallbackGrid);
+                    console.log('✅ Fallback ground created!');
                 }
             }
             // ========================================
 
-            // Spawn Enemies aus JSON-Daten statt hardcoded (Phase 3: Combat)
-            if (!USE_PHASE_2) {
-                realtimeCombat.spawnEnemiesInAllRegions(regions);
-            } else if (worldManager && worldManager.initialized) {
-                // Phase 2: Spawn enemies über WorldManager
-                console.log('🐉 Spawning enemies (Phase 2)...');
-                // TODO: Implement enemy spawning for Phase 2
-                // For now: fallback to basic spawning
-                const dummyRegions = [
-                    { name: 'ice', x: -3200, z: 3200 },
-                    { name: 'highland', x: 0, z: 3200 },
-                    { name: 'desert', x: 3200, z: 3200 },
-                    { name: 'swamp', x: -3200, z: 0 },
-                    { name: 'mountain', x: 0, z: 0 },
-                    { name: 'coast', x: 3200, z: 0 },
-                    { name: 'caves', x: -3200, z: -3200 },
-                    { name: 'forest', x: 0, z: -3200 },
-                    { name: 'volcano', x: 3200, z: -3200 }
-                ];
-                realtimeCombat.spawnEnemiesInAllRegions(dummyRegions);
-            }
+            // ===== ENEMY SPAWNING (IMMER, unabhängig von Phase 2) =====
+            // Nutze die globale regions-Variable (hat jetzt korrekte 0-9600 Koordinaten)
+            console.log('🐉 Spawning enemies in allen 9 Regionen...');
+            console.log('  📍 Regions:', regions.map(r => `${r.name}(${r.x},${r.z})`).join(', '));
+
+            // IMMER Enemies spawnen (regions hat jetzt korrekte Koordinaten!)
+            realtimeCombat.spawnEnemiesInAllRegions(regions);
             console.log('⚔️ Realtime Combat System bereit!');
         }
 
@@ -2455,7 +2989,8 @@
                 });
 
                 schwarzeMuehle = gltf.scene;
-                schwarzeMuehle.position.set(0, 50, 0); // Berg-Gipfel (Mountain ist jetzt bei y=50!)
+                // Götterfels ist bei (4800, 4800) - Mühle auf dem Gipfel
+                schwarzeMuehle.position.set(4800, 150, 4800); // Berg-Gipfel bei Weltzentrum
                 schwarzeMuehle.scale.set(25, 25, 25); // VIEL größer für 3200m Map! (24x Skalierung)
 
                 // Färbe Windmühle SCHWARZ
@@ -2491,7 +3026,7 @@
                     opacity: 0.8
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                marker.position.set(0, 300, 0); // HOCH über der Windmühle (sichtbar von weit weg!)
+                marker.position.set(4800, 400, 4800); // HOCH über der Windmühle bei Götterfels (sichtbar von weit weg!)
                 scene.add(marker);
 
                 // Pulsing Animation für Marker
@@ -2507,58 +3042,69 @@
 
         loadSchwarzeMuehle();
 
-        // ===== STÄDTE & BESONDERE ORTE (Phase 5) - 4x größere Welt =====
+        // ===== STÄDTE & BESONDERE ORTE (Phase 5) - 9600x9600 Welt =====
+        // KOORDINATEN: Welt ist 0-9600, Zentrum bei 4800,4800
+        // Regionen laut regions.json:
+        // - heisse_duenen (Desert): x:7200-9600, z:7200-9600 → Stadt bei 8400,8200
+        // - samtmoos_tiefwald (Forest): x:3600-6000, z:0-2400 → Stadt bei 4800,1500
+        // - salzwind_kueste (Coast): x:0-2400, z:3600-6000 → Stadt bei 1500,4800
+        // - blitzebene (Highland): x:7200-9600, z:3600-6000 → Stadt bei 8400,4800
+        // - magmastroeme (Volcano): x:3600-6000, z:7200-9600 → Stadt bei 4800,8200
+        // - reich_der_drei (Ice): x:0-2400, z:0-2400 → Special bei 1200,1200
+        // - gruenschlamm_sumpf (Swamp): x:0-2400, z:7200-9600 → Special bei 1800,8200
+        // - tiefenhoehlen (Caves): unter samtmoos → Eingang bei 4800,1800
         const buildings = [];
+        // STÄDTE & ORTE - Y=50 garantiert über Terrain, Scale=15+ für Sichtbarkeit
         const cityLocations = [
-            // 5 STÄDTE (Positionen für 3200m Regionen!)
+            // 5 STÄDTE
             {
                 name: 'Handelsfestung',
                 type: 'city',
                 region: 'desert',
-                position: { x: 3200, y: 0, z: 3200 }, // Desert Region (top-right)
+                position: { x: 8400, y: 50, z: 8200 }, // Heiße Dünen (Südost)
                 model: 'static/assets/kaykit/medieval/building_castle_yellow.gltf',
-                scale: 4.0, // Größer für 3200m Map
-                color: 0xffd700, // Gold
+                scale: 15.0, // GROSS!
+                color: 0xffd700,
                 description: 'PvP Arena & Player Shops'
             },
             {
                 name: 'Dampf-Hain',
                 type: 'city',
                 region: 'forest',
-                position: { x: 0, y: 0, z: -3200 }, // Forest Region (bottom-center)
-                model: 'static/assets/jellysquish/oasis/house_large.glb',
-                scale: 3.5, // Größer für 3200m Map
-                color: 0x2ecc71, // Grün
+                position: { x: 4800, y: 50, z: 1500 }, // Samtmoos-Tiefwald (Nord)
+                model: 'static/assets/kaykit/medieval/building_tavern_blue.gltf',
+                scale: 15.0,
+                color: 0x2ecc71,
                 description: 'Onsen & Restaurants'
             },
             {
                 name: 'Salzige Bucht',
                 type: 'city',
                 region: 'coast',
-                position: { x: 3200, y: 0, z: 0 }, // Coast Region (middle-right)
+                position: { x: 1500, y: 50, z: 4800 }, // Salzwind-Küste (West)
                 model: 'static/assets/kaykit/medieval/building_tower_A_blue.gltf',
-                scale: 4.2, // Größer für 3200m Map
-                color: 0x3498db, // Blau
+                scale: 15.0,
+                color: 0x3498db,
                 description: 'Hafen & Leuchtturm'
             },
             {
                 name: 'Runenheim',
                 type: 'city',
                 region: 'highland',
-                position: { x: 0, y: 0, z: 3200 }, // Highland Region (top-center)
+                position: { x: 8400, y: 80, z: 4800 }, // Blitzebene (Ost) - höher wegen Highland
                 model: 'static/assets/kaykit/medieval/building_tower_A_red.gltf',
-                scale: 4.0, // Größer für 3200m Map
-                color: 0x9b59b6, // Lila
+                scale: 15.0,
+                color: 0x9b59b6,
                 description: 'Magie-Akademie'
             },
             {
                 name: 'Funken-Siedlung',
                 type: 'city',
                 region: 'volcano',
-                position: { x: 3200, y: 0, z: -3200 }, // Volcano Region (bottom-right)
+                position: { x: 4800, y: 60, z: 8200 }, // Magmaströme (Süd)
                 model: 'static/assets/kaykit/medieval/building_blacksmith_red.gltf',
-                scale: 3.5, // Größer für 3200m Map
-                color: 0xe74c3c, // Rot
+                scale: 15.0,
+                color: 0xe74c3c,
                 description: 'Schmieden'
             },
             // 3 BESONDERE ORTE
@@ -2566,35 +3112,37 @@
                 name: 'Reich der Drei',
                 type: 'special',
                 region: 'ice',
-                position: { x: -3200, y: 0, z: 3200 }, // Ice Region (top-left)
-                model: 'static/assets/kaykit/dungeon/column.gltf',
-                scale: 5.0, // Größer für 3200m Map
-                color: 0x00ffff, // Cyan
+                position: { x: 1200, y: 50, z: 1200 }, // Reich der Drei (Nordwest)
+                model: 'static/assets/kaykit/medieval/building_tower_A_green.gltf',
+                scale: 20.0, // Extra groß - Nekromanten-Turm
+                color: 0x00ffff,
                 description: 'Untote & Nekromanten'
             },
             {
                 name: 'Funkelnest',
                 type: 'special',
                 region: 'swamp',
-                position: { x: -3200, y: 0, z: 0 }, // Swamp Region (middle-left)
-                model: 'static/assets/KayKit_HalloweenBits_1.0_FREE/Assets/gltf/gravestone.gltf',
-                scale: 4.0, // Größer für 3200m Map
-                color: 0xff1493, // Pink
+                position: { x: 1800, y: 50, z: 8200 }, // Grünschlamm-Sumpf (Südwest)
+                model: 'static/assets/kaykit/medieval/building_house_red.gltf',
+                scale: 15.0,
+                color: 0xff1493,
                 description: 'Schatzhöhle & Hexen'
             },
             {
-                name: 'Tiefenhöhlen',
+                name: 'Tiefenhöhlen-Eingang',
                 type: 'special',
                 region: 'caves',
-                position: { x: -3200, y: 0, z: -3200 }, // Caves Region (bottom-left)
-                model: 'static/assets/kaykit/dungeon/wall.gltf',
-                scale: 4.2, // Größer für 3200m Map
-                color: 0x8b4513, // Braun
+                position: { x: 4800, y: 50, z: 1800 }, // Unter Samtmoos-Tiefwald
+                model: 'static/assets/kaykit/medieval/building_mine_red.gltf',
+                scale: 15.0,
+                color: 0x8b4513,
                 description: 'Goblin-Siedlungen'
             }
         ];
 
         async function loadCitiesAndLocations() {
+            console.log('🏘️ Lade Städte mit Placeholder-Buildings...');
+
             for (const location of cityLocations) {
                 try {
                     const gltf = await new Promise((resolve, reject) => {
@@ -2605,41 +3153,131 @@
                     building.position.set(location.position.x, location.position.y, location.position.z);
                     building.scale.set(location.scale, location.scale, location.scale);
 
+                    // WICHTIG: Sichtbarkeit forcieren (gegen LOD-Culling)
+                    building.visible = true;
                     building.traverse((child) => {
                         if (child.isMesh) {
                             child.castShadow = true;
                             child.receiveShadow = true;
+                            child.visible = true;
+                            child.frustumCulled = false;  // Niemals cullen!
                         }
                     });
 
-                    // UserData für E-Taste System
+                    // UserData für E-Taste System & LOD-Schutz
                     building.userData.buildingType = location.type;
                     building.userData.buildingName = location.name;
                     building.userData.buildingDescription = location.description;
                     building.userData.proximityRadius = 120; // 120m Radius (war 12 für 133m Map)
+                    building.userData.isCity = true;  // Markiere als Stadt (für LOD-Manager)
+                    building.userData.neverCull = true;  // Niemals ausblenden!
 
                     scene.add(building);
                     buildings.push(building);
 
-                    // Leuchtender Marker über Gebäude
-                    const markerGeometry = new THREE.SphereGeometry(8, 16, 16); // 8m statt 0.8m
-                    const markerMaterial = new THREE.MeshStandardMaterial({
+                    console.log(`🏙️ ${location.name} Position: X=${location.position.x}, Y=${location.position.y}, Z=${location.position.z}`);
+
+                    // ===== PLACEHOLDER-BUILDINGS UM DIE STADT =====
+                    // Erstelle 10-20 einfache Gebäude um das Hauptgebäude herum
+                    const buildingCount = location.type === 'city' ? 15 : 8; // Städte haben mehr
+                    const cityRadius = 150; // 150m Radius um Stadtzentrum
+
+                    for (let i = 0; i < buildingCount; i++) {
+                        // Zufällige Position im Kreis um das Zentrum
+                        const angle = (i / buildingCount) * Math.PI * 2 + Math.random() * 0.5;
+                        const distance = 40 + Math.random() * (cityRadius - 40); // 40-150m vom Zentrum
+                        const bx = location.position.x + Math.cos(angle) * distance;
+                        const bz = location.position.z + Math.sin(angle) * distance;
+                        const by = location.position.y;
+
+                        // Einfaches Placeholder-Gebäude (Box + Dach)
+                        const houseGroup = new THREE.Group();
+
+                        // Wände (verschiedene Größen)
+                        const width = 4 + Math.random() * 4;  // 4-8m breit
+                        const depth = 4 + Math.random() * 4;  // 4-8m tief
+                        const height = 3 + Math.random() * 3; // 3-6m hoch
+
+                        // Farbe basierend auf Region
+                        const regionColors = {
+                            desert: 0xDAA520,
+                            forest: 0x8B7355,
+                            coast: 0xC2B280,
+                            highland: 0x8B7355,
+                            volcano: 0x4A4A4A,
+                            ice: 0xB0C4DE,
+                            swamp: 0x556B2F,
+                            caves: 0x4A4A4A
+                        };
+                        const buildingColor = regionColors[location.region] || 0x8B7355;
+
+                        const wallsGeometry = new THREE.BoxGeometry(width, height, depth);
+                        const wallsMaterial = new THREE.MeshStandardMaterial({
+                            color: buildingColor,
+                            roughness: 0.8
+                        });
+                        const walls = new THREE.Mesh(wallsGeometry, wallsMaterial);
+                        walls.position.y = height / 2;
+                        walls.castShadow = true;
+                        walls.receiveShadow = true;
+                        houseGroup.add(walls);
+
+                        // Dach (Pyramide)
+                        const roofGeometry = new THREE.ConeGeometry(width * 0.7, height * 0.4, 4);
+                        const roofMaterial = new THREE.MeshStandardMaterial({
+                            color: 0x8B4513, // Braun
+                            roughness: 0.9
+                        });
+                        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+                        roof.position.y = height + height * 0.2;
+                        roof.rotation.y = Math.PI / 4;
+                        roof.castShadow = true;
+                        houseGroup.add(roof);
+
+                        // Positioniere das Haus
+                        houseGroup.position.set(bx, by, bz);
+                        houseGroup.rotation.y = Math.random() * Math.PI * 2; // Zufällige Rotation
+
+                        // Markiere als Stadt-Gebäude
+                        houseGroup.userData.isPlaceholderBuilding = true;
+                        houseGroup.userData.cityName = location.name;
+
+                        scene.add(houseGroup);
+                    }
+                    console.log(`  ✅ ${buildingCount} Placeholder-Buildings um ${location.name} erstellt`);
+
+                    // RIESIGER leuchtender Marker über Gebäude - von überall sichtbar!
+                    const markerGeometry = new THREE.SphereGeometry(25, 32, 32); // 25m Radius!
+                    const markerMaterial = new THREE.MeshBasicMaterial({
                         color: location.color,
-                        emissive: location.color,
-                        emissiveIntensity: 1.5,
                         transparent: true,
-                        opacity: 0.9
+                        opacity: 0.95
                     });
                     const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                    marker.position.set(location.position.x, location.position.y + 150, location.position.z); // +150m hoch (war +15)
+                    marker.position.set(location.position.x, location.position.y + 200, location.position.z);
+                    marker.frustumCulled = false; // Immer sichtbar!
                     scene.add(marker);
 
-                    // Pulsing Animation
+                    // Leuchtstrahl nach oben (wie Lichtsäule)
+                    const beamGeometry = new THREE.CylinderGeometry(5, 15, 300, 8);
+                    const beamMaterial = new THREE.MeshBasicMaterial({
+                        color: location.color,
+                        transparent: true,
+                        opacity: 0.4
+                    });
+                    const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+                    beam.position.set(location.position.x, location.position.y + 350, location.position.z);
+                    beam.frustumCulled = false;
+                    scene.add(beam);
+
+                    // Pulsing Animation für Marker UND Beam
                     marker.userData.offset = Math.random() * Math.PI * 2;
-                    marker.userData.animate = () => {
-                        marker.scale.setScalar(1 + Math.sin(Date.now() * 0.003 + marker.userData.offset) * 0.3);
+                    const animate = () => {
+                        const scale = 1 + Math.sin(Date.now() * 0.002 + marker.userData.offset) * 0.4;
+                        marker.scale.setScalar(scale);
+                        beam.material.opacity = 0.3 + Math.sin(Date.now() * 0.003) * 0.2;
                     };
-                    setInterval(marker.userData.animate, 16);
+                    setInterval(animate, 16);
 
                     console.log(`✅ ${location.name} (${location.region}) platziert!`);
                 } catch (error) {
@@ -2651,59 +3289,35 @@
 
         loadCitiesAndLocations();
 
-        // Teleport Funktionen (alle 9 Regionen) - 4x größere Welt
-        const regionPositions = {
-            // Row 1 (top): z=133.32
-            ice: { x: -133.32, z: 133.32 },
-            highland: { x: 0, z: 133.32 },
-            desert: { x: 133.32, z: 133.32 },
-            // Row 2 (middle): z=0
-            swamp: { x: -133.32, z: 0 },
-            mountain: { x: 0, z: 0 },
-            coast: { x: 133.32, z: 0 },
-            // Row 3 (bottom): z=-133.32
-            caves: { x: -133.32, z: -133.32 },
-            forest: { x: 0, z: -133.32 },
-            volcano: { x: 133.32, z: -133.32 }
-        };
-
-        window.teleportTo = (region) => {
-            const pos = regionPositions[region];
-            if (pos) {
-                // Teleportiere Character zur Region
-                const groundHeight = getGroundHeight(pos.x, pos.z);
-                character.position.set(pos.x, groundHeight + 3.5, pos.z);
-
-                // Setze Kamera-Target
-                cameraController.setTarget(pos.x, groundHeight, pos.z);
-                updateCurrentRegion();
-            }
-        };
-
-        // Aktuelles Gebiet ermitteln (3x3 Grid) - 4x größere Welt
+        // Aktuelles Gebiet ermitteln (3x3 Grid) - 9600x9600 Welt
+        // Laut regions.json:
+        // Nord (z: 0-2400):     Reich der Drei (x<2400) | Samtmoos-Tiefwald (x:3600-6000) | ??? (x>7200)
+        // Mitte (z: 3600-6000): Salzwind-Küste (x<2400) | Götterfels (x:3300-6300) | Blitzebene (x>7200)
+        // Süd (z: 7200-9600):   Grünschlamm-Sumpf (x<2400) | Magmaströme (x:3600-6000) | Heiße Dünen (x>7200)
         function updateCurrentRegion() {
             const x = camera.position.x;
             const z = camera.position.z;
 
             let region = 'Unbekannt';
 
-            // Row 1 (top): z >= 66.66
-            if (z >= 66.66) {
-                if (x < -66.66) region = '❄️ Ice';
-                else if (x >= -66.66 && x < 66.66) region = '⛰️ Highland';
-                else region = '🏜️ Desert';
+            // 9600x9600 Welt mit 3x3 Grid
+            // Row 1 (Nord): z < 2400
+            if (z < 2400) {
+                if (x < 2400) region = '❄️ Reich der Drei';
+                else if (x < 6000) region = '🌲 Samtmoos-Tiefwald';
+                else region = '⛰️ Blitzebene (Nord)';  // Keine spezifische Region hier
             }
-            // Row 2 (middle): -66.66 <= z < 66.66
-            else if (z >= -66.66 && z < 66.66) {
-                if (x < -66.66) region = '🧪 Swamp';
-                else if (x >= -66.66 && x < 66.66) region = '🗻 Mountain';
-                else region = '🌊 Coast';
+            // Row 2 (Mitte): 2400 <= z < 6000
+            else if (z < 6000) {
+                if (x < 2400) region = '🌊 Salzwind-Küste';
+                else if (x < 6300) region = '🗻 Götterfels';
+                else region = '⚡ Blitzebene';
             }
-            // Row 3 (bottom): z < -66.66
+            // Row 3 (Süd): z >= 6000
             else {
-                if (x < -66.66) region = '🕳️ Caves';
-                else if (x >= -66.66 && x < 66.66) region = '🌲 Forest';
-                else region = '🌋 Volcano';
+                if (x < 2400) region = '🧪 Grünschlamm-Sumpf';
+                else if (x < 6000) region = '🌋 Magmaströme';
+                else region = '🏜️ Heiße Dünen';
             }
 
             document.getElementById('current-region').textContent = region;
@@ -2731,18 +3345,20 @@
             }
         };
 
-        // Teleport to Region
+        // Teleport to Region - 9600x9600 Welt
+        // Fast Travel spawnt DIREKT IN der Stadt (bei der Stadt-Position!)
         window.teleportTo = (regionName) => {
             const regionPositions = {
-                'ice': { x: -3200, z: 3200 },
-                'highland': { x: 0, z: 3200 },
-                'desert': { x: 3200, z: 3200 },
-                'swamp': { x: -3200, z: 0 },
-                'mountain': { x: 0, z: 0 },
-                'coast': { x: 3200, z: 0 },
-                'caves': { x: -3200, z: -3200 },
-                'forest': { x: 0, z: -3200 },
-                'volcano': { x: 3200, z: -3200 }
+                // Exakt die Stadt-Positionen aus cityLocations!
+                'ice': { x: 1200, z: 1200, name: 'Reich der Drei (Nekromanten-Turm)' },
+                'highland': { x: 8400, z: 4800, name: 'Runenheim (Magie-Akademie)' },
+                'desert': { x: 8400, z: 8200, name: 'Handelsfestung (PvP Arena)' },
+                'swamp': { x: 1800, z: 8200, name: 'Funkelnest (Hexen-Höhle)' },
+                'mountain': { x: 4800, z: 4800, name: 'Götterfels (Schwarze Mühle)' },
+                'coast': { x: 1500, z: 4800, name: 'Salzige Bucht (Hafen)' },
+                'caves': { x: 4800, z: 1800, name: 'Tiefenhöhlen-Eingang' },
+                'forest': { x: 4800, z: 1500, name: 'Dampf-Hain (Onsen)' },
+                'volcano': { x: 4800, z: 8200, name: 'Funken-Siedlung (Schmieden)' }
             };
 
             const pos = regionPositions[regionName];
@@ -2751,10 +3367,11 @@
                 if (isInInterior) {
                     unloadBuildingInterior();
                 }
-                // Teleport
-                character.position.set(pos.x, 55, pos.z);
-                cameraController.setTarget(pos.x, 50, pos.z);
-                console.log(`✈️ Teleportiert nach ${regionName.toUpperCase()}`);
+                // Teleport - dynamische Höhe basierend auf Terrain
+                const teleportHeight = getGroundHeight(pos.x, pos.z);
+                character.position.set(pos.x, teleportHeight + 3.5, pos.z);
+                cameraController.setTarget(pos.x, teleportHeight + 5, pos.z);
+                console.log(`✈️ Teleportiert nach ${pos.name || regionName.toUpperCase()} (Y=${teleportHeight + 3.5})`);
             }
         };
 
@@ -2776,41 +3393,94 @@
             // Clear
             minimapCtx.clearRect(0, 0, minimapSize, minimapSize);
 
-            // Draw 9 regions (3x3 grid) - only if regions exist
-            if (!regions || regions.length === 0) return;
+            // NEUES KOORDINATENSYSTEM: 0-9600 (nicht mehr -4800 bis +4800!)
+            // Zeichne 9 Regionen direkt mit Biome-Farben
+            const regionColors = {
+                ice: '#87CEEB',      // Reich der Drei - Hellblau
+                forest: '#228B22',   // Samtmoos-Tiefwald - Grün
+                coast: '#4169E1',    // Salzwind-Küste - Blau
+                highland: '#9370DB', // Blitzebene - Lila
+                mountain: '#808080', // Götterfels - Grau
+                swamp: '#556B2F',    // Grünschlamm-Sumpf - Dunkelgrün
+                volcano: '#FF4500',  // Magmaströme - Rot/Orange
+                desert: '#DAA520',   // Heiße Dünen - Gold
+                caves: '#4B0082'     // Tiefenhöhlen - Dunkel
+            };
 
-            regions.forEach(region => {
-                // Convert world position to minimap position
-                // World: -4800 to 4800 -> Minimap: 0 to 200
-                const minimapX = (region.x + 4800) * minimapScale;
-                const minimapZ = (region.z + 4800) * minimapScale;
-                const minimapRegionSize = regionSize * minimapScale;
+            // 3x3 Grid: Jede Region ist 3200x3200
+            const regionLayout = [
+                // Row 1 (Nord, z=0-2400)
+                { x: 0, z: 0, biome: 'ice' },
+                { x: 3200, z: 0, biome: 'forest' },
+                { x: 6400, z: 0, biome: 'caves' },
+                // Row 2 (Mitte, z=2400-6000)
+                { x: 0, z: 3200, biome: 'coast' },
+                { x: 3200, z: 3200, biome: 'mountain' },
+                { x: 6400, z: 3200, biome: 'highland' },
+                // Row 3 (Süd, z=6400-9600)
+                { x: 0, z: 6400, biome: 'swamp' },
+                { x: 3200, z: 6400, biome: 'volcano' },
+                { x: 6400, z: 6400, biome: 'desert' }
+            ];
+
+            // Zeichne alle 9 Regionen
+            regionLayout.forEach(region => {
+                const minimapX = region.x * minimapScale;
+                const minimapZ = region.z * minimapScale;
+                const minimapRegionSize = 3200 * minimapScale;
 
                 // Draw region rectangle
-                minimapCtx.fillStyle = '#' + region.color.toString(16).padStart(6, '0');
+                minimapCtx.fillStyle = regionColors[region.biome] || '#444444';
                 minimapCtx.fillRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
 
                 // Draw border
-                minimapCtx.strokeStyle = '#ffffff';
+                minimapCtx.strokeStyle = 'rgba(255,255,255,0.3)';
                 minimapCtx.lineWidth = 1;
                 minimapCtx.strokeRect(minimapX, minimapZ, minimapRegionSize, minimapRegionSize);
             });
 
-            // Draw Najika (character position)
-            const najikaMinimapX = (character.position.x + 4800) * minimapScale;
-            const najikaMinimapZ = (character.position.z + 4800) * minimapScale;
+            // Zeichne Städte als gelbe Punkte
+            const cityPositions = [
+                { x: 8400, z: 8200, name: 'Handelsfestung' },
+                { x: 4800, z: 1500, name: 'Dampf-Hain' },
+                { x: 1500, z: 4800, name: 'Salzige Bucht' },
+                { x: 8400, z: 4800, name: 'Runenheim' },
+                { x: 4800, z: 8200, name: 'Funken-Siedlung' }
+            ];
+
+            cityPositions.forEach(city => {
+                const cityMinimapX = city.x * minimapScale;
+                const cityMinimapZ = city.z * minimapScale;
+
+                minimapCtx.fillStyle = '#FFD700';
+                minimapCtx.beginPath();
+                minimapCtx.arc(cityMinimapX, cityMinimapZ, 3, 0, Math.PI * 2);
+                minimapCtx.fill();
+            });
+
+            // Zeichne Schwarze Mühle (Weltzentrum)
+            const muehleX = 4800 * minimapScale;
+            const muehleZ = 4800 * minimapScale;
+            minimapCtx.fillStyle = '#8B00FF';
+            minimapCtx.beginPath();
+            minimapCtx.arc(muehleX, muehleZ, 4, 0, Math.PI * 2);
+            minimapCtx.fill();
+
+            // Draw Najika (character position) - NEUES Koordinatensystem 0-9600
+            const najikaMinimapX = character.position.x * minimapScale;
+            const najikaMinimapZ = character.position.z * minimapScale;
 
             // Draw character as green dot
             minimapCtx.fillStyle = '#4CAF50';
             minimapCtx.beginPath();
-            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 5, 0, Math.PI * 2);
             minimapCtx.fill();
 
             // Draw character outline
             minimapCtx.strokeStyle = '#ffffff';
             minimapCtx.lineWidth = 2;
             minimapCtx.beginPath();
-            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 4, 0, Math.PI * 2);
+            minimapCtx.arc(najikaMinimapX, najikaMinimapZ, 5, 0, Math.PI * 2);
             minimapCtx.stroke();
         }
 
@@ -2983,9 +3653,10 @@
                 character.position.x = Math.max(-66, Math.min(66, character.position.x));
                 character.position.z = Math.max(-66, Math.min(66, character.position.z));
             } else {
-                // Exterior Bounds: ±4800 (9600 / 2) - 9.6km x 9.6km Welt!
-                character.position.x = Math.max(-4800, Math.min(4800, character.position.x));
-                character.position.z = Math.max(-4800, Math.min(4800, character.position.z));
+                // Exterior Bounds: 0 bis 9600 - 9.6km x 9.6km Welt!
+                // Zentrum ist bei (4800, 4800), Welt geht von 0 bis 9600
+                character.position.x = Math.max(100, Math.min(9500, character.position.x));
+                character.position.z = Math.max(100, Math.min(9500, character.position.z));
             }
 
             // Update character height based on region
@@ -3135,6 +3806,129 @@
         setInterval(fetchNajikaStatus, 5000); // Update alle 5s
 
         console.log('✅ Phase 3: Backend Integration aktiviert!');
+
+        // ===== TEMPERATUR SYSTEM INTEGRATION =====
+        window.currentTemperature = { body: 37, environment: 22, region: 'Samtmoos-Tiefwald' };
+
+        async function fetchTemperatureStatus() {
+            try {
+                const response = await fetch(`${window.BACKEND_URL}/api/temperature/status`);
+                if (!response.ok) return;
+                const data = await response.json();
+                updateTemperatureUI(data);
+            } catch (error) {
+                console.warn('Temperatur-Status nicht verfügbar:', error.message);
+            }
+        }
+
+        function updateTemperatureUI(data) {
+            const bodyTemp = document.getElementById('body-temp');
+            const envTemp = document.getElementById('env-temp');
+            const regionEl = document.getElementById('current-region');
+            const tempFill = document.getElementById('temp-fill');
+
+            if (data.body_temperature !== undefined && bodyTemp) {
+                bodyTemp.textContent = Math.round(data.body_temperature);
+                window.currentTemperature.body = data.body_temperature;
+            }
+            if (data.environment_temperature !== undefined && envTemp) {
+                envTemp.textContent = Math.round(data.environment_temperature);
+                window.currentTemperature.environment = data.environment_temperature;
+            }
+            if (data.region_name && regionEl) {
+                regionEl.textContent = data.region_name;
+                window.currentTemperature.region = data.region_name;
+            }
+            // Farbskala: 0°C = blau, 50°C = rot
+            if (tempFill && data.body_temperature !== undefined) {
+                const percent = Math.min(100, Math.max(0, ((data.body_temperature + 10) / 70) * 100));
+                tempFill.style.width = percent + '%';
+            }
+        }
+
+        // Fetch initial temperature
+        fetchTemperatureStatus();
+        setInterval(fetchTemperatureStatus, 3000); // Alle 3 Sekunden
+
+        console.log('🌡️ Temperatur-System aktiviert!');
+
+        // ===== SKILL SYSTEM INTEGRATION =====
+        window.playerMana = 100;
+        window.skillCooldowns = {};
+
+        async function useSkill(skillId) {
+            try {
+                // Prüfe Cooldown
+                if (window.skillCooldowns[skillId] && window.skillCooldowns[skillId] > Date.now()) {
+                    console.log(`⏳ ${skillId} ist noch auf Cooldown!`);
+                    return;
+                }
+
+                const response = await fetch(`${window.BACKEND_URL}/api/skill/use`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ skill_id: skillId })
+                });
+
+                if (!response.ok) throw new Error('Skill fehlgeschlagen');
+                const result = await response.json();
+
+                // Visuelles Feedback
+                console.log(`✨ Skill ${skillId}:`, result);
+
+                // Update Mana UI
+                if (result.mana_remaining !== undefined) {
+                    window.playerMana = result.mana_remaining;
+                    document.getElementById('current-mana').textContent = Math.round(window.playerMana);
+                }
+
+                // Setze Cooldown
+                if (result.cooldown) {
+                    window.skillCooldowns[skillId] = Date.now() + (result.cooldown * 1000);
+                    const btn = document.querySelector(`[onclick="useSkill('${skillId}')"]`);
+                    if (btn) {
+                        btn.classList.add('on-cooldown');
+                        setTimeout(() => btn.classList.remove('on-cooldown'), result.cooldown * 1000);
+                    }
+                }
+
+                // Zeige Effekt-Nachricht
+                if (result.message) {
+                    showNotification(result.message, 'skill');
+                }
+
+            } catch (error) {
+                console.warn('Skill konnte nicht verwendet werden:', error.message);
+            }
+        }
+
+        // Skill-Hotkeys (1-4)
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            switch(e.key) {
+                case '1': useSkill('fireball'); break;
+                case '2': useSkill('ice_shard'); break;
+                case '3': useSkill('lightning_bolt'); break;
+                case '4': useSkill('heal'); break;
+            }
+        });
+
+        // Notification Helper für Skills (nutzt die Haupt-showNotification)
+        function showSkillNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+                background: linear-gradient(135deg, #9632ff, #6b1fb8);
+                color: white; padding: 12px 24px; border-radius: 8px;
+                font-family: monospace; z-index: 10000; animation: fadeInOut 2s forwards;
+                border: 2px solid #9632ff;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        console.log('✨ Skill-System aktiviert! Hotkeys: 1-4');
     
         // ===== FOOD SYSTEM: STARTER ITEMS (Phase 4) =====
 
@@ -3504,6 +4298,7 @@
         // ===== KEYBOARD CONTROLS =====
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // I or TAB to open inventory
             if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
                 if (!isInInterior) { // Don't open inventory in interiors
@@ -3617,6 +4412,7 @@
         // Enter Special Location (E key)
         const originalEKeyHandler = window.addEventListener;
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'e' || e.key === 'E') && !isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const nearLocation = specialLocations.checkEntranceProximity(character.position);
                 if (nearLocation) {
@@ -3639,6 +4435,7 @@
         let nearLighthouse = null;
 
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (e.key === ' ' || e.key === 'Spacebar') {
                 if (isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                     isPressingClimb = true;
@@ -3915,15 +4712,6 @@
 
                 case 'train_magic':
                 case 'train_smithing':
-                    // Training (Trainer)
-                    console.log(`⚔️ Training started: ${action}`);
-                    alert(`Training "${action}" started!\n(Skill System coming later)`);
-                    endDialogue();
-                    break;
-
-
-                case 'train_magic':
-                case 'train_smithing':
                     // Skill Training (NPC Trainer)
                     const availableSkills = skillSystem.getSkillsFromTrainer(npc.id);
                     if (availableSkills.length > 0) {
@@ -3950,7 +4738,8 @@
                         document.getElementById('dialogue-text').innerHTML = skillsHTML;
                         document.getElementById('dialogue-options').innerHTML = '';
                     } else {
-                        alert('Dieser Trainer hat keine Skills mehr für dich!');
+                        // Stille In-Game Notification statt Alert
+                        showNotification('📚 Dieser Trainer hat keine Skills mehr für dich!');
                         endDialogue();
                     }
                     break;
@@ -3958,7 +4747,7 @@
                 case 'start_arena':
                     // Arena Battle
                     console.log('🏟️ Arena Battle starting...');
-                    alert('Arena Battle starting!\n(Arena System coming in Phase 8)');
+                    showNotification('🏟️ Arena Battle wird gestartet...');
                     endDialogue();
                     break;
 
@@ -4027,6 +4816,7 @@
 
         // NPC Interaction Keyboard Handler
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // E key to talk to NPC
             if ((e.key === 'e' || e.key === 'E') && nearestNPC && !dialogueOpen && isInInterior) {
                 e.preventDefault();
@@ -4129,6 +4919,7 @@
 
         // E key handler for buildings
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'e' || e.key === 'E') && isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
 
@@ -4567,6 +5358,7 @@
 
         // Quest Log Keyboard Handler
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             // Q or J to open quest log
             if ((e.key === 'q' || e.key === 'Q' || e.key === 'j' || e.key === 'J') && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 e.preventDefault();
@@ -4663,6 +5455,7 @@
 
         // Learn Skill from NPC Keyboard (K for Skills)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if ((e.key === 'k' || e.key === 'K') && !dialogueOpen && !inventoryOpen && !questLogOpen && !isInInterior) {
                 e.preventDefault();
                 // Show Skills UI
@@ -4741,6 +5534,7 @@
 
         // HOTKEYS für Essen (F1-F5)
         window.addEventListener('keydown', (e) => {
+            if (isTypingInInput()) return; // KEYBOARD GUARD
             if (isInInterior) return; // Kein Essen in Interiors
 
             let foodID = null;
@@ -4869,6 +5663,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('[Najika] New systems initialized!');
 
+    // ===== GLOBAL EXPORTS für onclick Handler =====
+    // (Muss am Ende des DOMContentLoaded stehen, nachdem alle Funktionen definiert sind)
+    window.openTripleTriad = openTripleTriad;
+    window.openDungeonDice = openDungeonDice;
+    window.openDungeonDiceShop = openDungeonDiceShop;
+    window.openGardenSystem = openGardenSystem;
+    window.openRegionSelector = openRegionSelector;
+    window.openFishingSystem = openFishingSystem;
+    window.openFishingShop = openFishingShop;
+    window.openHousingSystem = openHousingSystem;
+    window.enterDungeon = enterDungeon;
+    window.openMinigames = openMinigames;
+    window.openInstrument = openInstrument;
+    window.openTerminal = openTerminal;
+    window.openSecureMessenger = openSecureMessenger;
+    window.openFileManager = openFileManager;
+    window.togglePraise = togglePraise;
+    window.showNotification = showNotification;
+    window.closeMinigameSelect = closeMinigameSelect;
+    console.log('✅ Activity Functions global exportiert!');
+
     // Start Najika Status Auto-Update (alle 5 Sekunden)
     startNajikaStatusUpdates();
 });
@@ -4877,7 +5692,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startNajikaStatusUpdates() {
     async function fetchAndUpdateNajikaStatus() {
         try {
-            const response = await fetch('/api/najika/status');
+            const response = await fetch('http://localhost:8000/api/najika/status');
             const data = await response.json();
 
             if (data) {

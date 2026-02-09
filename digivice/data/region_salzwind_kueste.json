@@ -1,0 +1,131 @@
+{
+  "region_id": "salzwind_kueste",
+  "name": "Salzwind-Küste",
+  "name_en": "Saltwind Coast",
+  "description": "Eine Piratenbucht mit Häfen, Schiffen und dem besten Fisch der Welt. Heimat des Fishing-Systems!",
+
+  "environment": {
+    "biome": "coast",
+    "temperature_range": [18, 28],
+    "temperature_day": 25,
+    "temperature_night": 18,
+    "humidity": 70,
+    "weather_chances": {
+      "clear": 0.4,
+      "cloudy": 0.25,
+      "rain": 0.2,
+      "storm": 0.15
+    },
+    "ambient_sounds": ["waves", "seagulls", "ship_bells", "harbour_bustle"],
+    "music_day": "pirate_adventure",
+    "music_night": "ocean_calm",
+    "music_combat": "pirate_battle"
+  },
+
+  "visual": {
+    "skybox": "ocean_bright",
+    "ground_color": "#c2b280",
+    "water_color": "#1e90ff",
+    "fog_color": "#87ceeb",
+    "fog_density": 0.02,
+    "ambient_light": "#e0f7fa",
+    "sun_intensity": 0.9,
+    "special_effects": ["sea_spray", "flying_fish", "boat_wakes"]
+  },
+
+  "city": {
+    "name": "Salzige Bucht",
+    "position": {"x": 1500, "y": 0, "z": 4800},
+    "size": "medium",
+    "style": "pirate_harbor",
+    "features": ["fish_market", "shipyard", "lighthouse", "tavern"]
+  },
+
+  "areas": [
+    {
+      "id": "haupthafen",
+      "name": "Haupthafen",
+      "type": "city_center",
+      "position": {"x": 1500, "y": 0, "z": 4800},
+      "services": ["fast_travel", "ship_rental", "fish_market"]
+    },
+    {
+      "id": "fischmarkt",
+      "name": "Fischmarkt",
+      "type": "market",
+      "position": {"x": 1400, "y": 0, "z": 4700},
+      "sells": ["fish", "fishing_gear", "bait", "nets"]
+    },
+    {
+      "id": "leuchtturm",
+      "name": "Alter Leuchtturm",
+      "type": "landmark",
+      "position": {"x": 1200, "y": 50, "z": 4500},
+      "quests": ["leuchtturm_reparatur", "geheime_kammer"]
+    },
+    {
+      "id": "piraten_bucht",
+      "name": "Versteckte Piratenbucht",
+      "type": "hidden",
+      "position": {"x": 800, "y": 0, "z": 5200},
+      "requires": "treasure_map",
+      "loot": "legendary"
+    },
+    {
+      "id": "korallenriff",
+      "name": "Korallenriff",
+      "type": "fishing_spot",
+      "position": {"x": 1000, "y": -10, "z": 4600},
+      "fish_types": ["rare", "epic"],
+      "underwater": true
+    },
+    {
+      "id": "unterwasser_ruinen",
+      "name": "Unterwasser-Ruinen",
+      "type": "dungeon",
+      "position": {"x": 600, "y": -50, "z": 5000},
+      "level_range": [8, 15],
+      "boss": "kraken_spawn",
+      "underwater": true
+    }
+  ],
+
+  "npcs": [
+    {"id": "kapitaen_wurfbein", "name": "Käpt'n Wurfbein", "type": "dice_shop", "shop": "piraten_wuerfelkajuete"},
+    {"id": "fischer_ole", "name": "Fischer Ole", "type": "trainer", "teaches": ["fishing"]},
+    {"id": "haendlerin_marina", "name": "Händlerin Marina", "type": "merchant", "sells": ["fishing_gear", "boats"]},
+    {"id": "koch_neptun", "name": "Koch Neptun", "type": "food", "specialty": "salzfisch"}
+  ],
+
+  "monsters": [
+    {"id": "crab", "name": "Riesenkrabbe", "level": [1, 4], "rarity": "common"},
+    {"id": "jellyfish", "name": "Giftqualle", "level": [3, 6], "rarity": "common"},
+    {"id": "pirate", "name": "Pirat", "level": [5, 9], "rarity": "uncommon"},
+    {"id": "sea_serpent", "name": "Seeschlange", "level": [8, 12], "rarity": "rare"},
+    {"id": "kraken_spawn", "name": "Kraken-Brut", "level": [15], "rarity": "boss"}
+  ],
+
+  "fishing": {
+    "enabled": true,
+    "priority": 1,
+    "spots": 12,
+    "fish_types": [
+      {"id": "sardine", "name": "Sardine", "rarity": "common", "value": 5},
+      {"id": "mackerel", "name": "Makrele", "rarity": "common", "value": 10},
+      {"id": "salmon", "name": "Lachs", "rarity": "uncommon", "value": 25},
+      {"id": "tuna", "name": "Thunfisch", "rarity": "rare", "value": 50},
+      {"id": "swordfish", "name": "Schwertfisch", "rarity": "epic", "value": 150},
+      {"id": "golden_fish", "name": "Goldener Fisch", "rarity": "legendary", "value": 500}
+    ]
+  },
+
+  "food_specialty": {
+    "name": "Salzfisch",
+    "description": "Überall hängt Fisch zum Trocknen. Die Spezialität der Küste!",
+    "buffs": ["+20% Swimming", "+15% Water Resistance"],
+    "items": ["getrockneter_lachs", "salzige_sardinen", "fischsuppe", "meeresfrüchte_platte"]
+  },
+
+  "slime_color": "ocean_blue",
+  "slime_bonus": "+20% Angeln-Erfolg"
+}

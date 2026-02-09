@@ -311,3 +311,213 @@
         width: 100px;
     }
 }
+
+/* =============================================================================
+   OREGON TRAIL EXTENDED STYLES
+   ============================================================================= */
+
+/* Personality Indicator */
+.personality-indicator {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+/* Category Colors */
+.event-category.reise {
+    background: rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+}
+
+.event-category.kampf {
+    background: rgba(255, 68, 68, 0.3);
+    color: #FF4444;
+}
+
+.event-category.stadt {
+    background: rgba(33, 150, 243, 0.3);
+    color: #2196F3;
+}
+
+/* Chaos Level Notification */
+.chaos-level-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #FF4444, #FF8800);
+    padding: 15px 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10000;
+    animation: slideInRight 0.5s ease;
+    box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+    border: 2px solid #FFD700;
+}
+
+.chaos-level-notification.fade-out {
+    animation: slideOutRight 0.5s ease forwards;
+}
+
+.chaos-level-icon {
+    font-size: 30px;
+    animation: pulse 0.5s ease infinite alternate;
+}
+
+.chaos-level-text strong {
+    color: #fff;
+    display: block;
+    font-size: 16px;
+}
+
+.chaos-level-text p {
+    color: #FFD700;
+    font-style: italic;
+    margin: 5px 0 0;
+    font-size: 13px;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+}
+
+/* Chaos Impact Display */
+.chaos-impact {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Personality Avatars - Color Variants */
+.najika-avatar.megumin { background: linear-gradient(135deg, #FF4444, #FFD700) !important; }
+.najika-avatar.harley { background: linear-gradient(135deg, #FF69B4, #FFD700) !important; }
+.najika-avatar.shiro { background: linear-gradient(135deg, #87CEEB, #FFD700) !important; }
+.najika-avatar.melissa { background: linear-gradient(135deg, #9B59B6, #FFD700) !important; }
+
+/* Najika Speech with Personality Color */
+.najika-speech small {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Enhanced Option Hover for Najika Decides */
+.event-option:has(.najika-badge):hover {
+    border-color: #FFD700 !important;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* Konosuba Style Event Border */
+.event-container.konosuba-style {
+    border-color: #FF4444;
+    box-shadow:
+        0 0 30px rgba(255, 68, 68, 0.5),
+        inset 0 0 20px rgba(255, 68, 68, 0.1);
+}
+
+/* High Chaos Warning */
+.event-container.high-chaos {
+    animation: chaosGlow 1s ease infinite alternate;
+}
+
+@keyframes chaosGlow {
+    from { box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+    to { box-shadow: 0 0 50px rgba(255, 68, 68, 0.8), 0 0 100px rgba(255, 0, 0, 0.3); }
+}
+
+/* =============================================================================
+   MOBILE RESPONSIVE - Additional UI Components
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    /* Slime Companion Widget */
+    #slime-widget {
+        bottom: 10px !important;
+        left: 10px !important;
+        transform: scale(0.85) !important;
+        transform-origin: bottom left !important;
+    }
+
+    /* Slime Companion Panel */
+    #slime-panel {
+        width: 95vw !important;
+        height: 85vh !important;
+        max-width: 100% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    /* Echoharp UI */
+    #echoharp-panel {
+        width: 95vw !important;
+        height: 85vh !important;
+        max-width: 100% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    /* Dungeon UI */
+    #dungeon-ui {
+        width: 95vw !important;
+        height: 90vh !important;
+        max-width: 100% !important;
+    }
+
+    /* Oregon Trail Event */
+    #oregon-trail-overlay .event-container {
+        width: 95vw !important;
+        max-height: 90vh !important;
+        padding: 15px !important;
+    }
+
+    /* Chaos Notification */
+    .chaos-notification {
+        right: 10px !important;
+        max-width: 200px !important;
+        font-size: 12px !important;
+    }
+
+    /* Quest Tracker (top-right) */
+    #quest-tracker {
+        width: 180px !important;
+        right: 10px !important;
+        top: 150px !important;
+        font-size: 10px !important;
+    }
+
+    /* Buffs Container */
+    #buffs-container {
+        right: 10px !important;
+        top: 60px !important;
+    }
+
+    #buffs-container > div {
+        min-width: 140px !important;
+        font-size: 10px !important;
+        padding: 5px 8px !important;
+    }
+}

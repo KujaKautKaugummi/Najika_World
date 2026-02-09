@@ -138,11 +138,31 @@
     /**
      * Enemy killed (called from enemy system)
      */
-    window.onEnemyKilled = function(xp, loot, position) {
+    window.onEnemyKilled = function(xp, loot, position, enemyId) {
         console.log(`💀 Enemy defeated! +${xp} XP, Loot:`, loot);
 
         if (typeof notify === 'function') {
             notify(`+${xp} XP | Loot: ${loot.join(', ')}`, 'success');
+        }
+
+        // ===== TRIPLE TRIAD KARTEN-FANG (FF8 Style!) =====
+        // Sehr geringe Chance eine Monster-Karte zu bekommen
+        if (window.TripleTriad && enemyId) {
+            const capture = TripleTriad.tryCapture(enemyId);
+            if (capture) {
+                if (capture.isNew) {
+                    // NEUE KARTE!
+                    if (typeof showNotification === 'function') {
+                        showNotification(`🃏 NEUE KARTE: ${capture.card.name}!`);
+                    }
+                    console.log(`🃏 NEUE KARTE gefangen: ${capture.card.name}`);
+                } else {
+                    // Duplikat
+                    if (typeof showNotification === 'function') {
+                        showNotification(`🃏 Karte: ${capture.card.name} (Duplikat)`);
+                    }
+                }
+            }
         }
 
         // Add XP to player (TODO: Connect to backend)

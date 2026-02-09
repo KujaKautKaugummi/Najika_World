@@ -298,73 +298,229 @@ class QuestManager {
                 }
             },
 
+            // ===== REICH DER DREI QUESTS (Eis/Nekromantie) =====
+            {
+                id: 'frozen_secrets',
+                name: 'Geheimnisse des Eises',
+                description: 'Ein mysteriöser Geist bittet dich, die drei Eiskristalle der alten Nekromanten zu finden.',
+                type: 'collect',
+                giver: 'reich_der_drei_ghost',
+                objectives: [
+                    {
+                        type: 'collect',
+                        target: 'ice_crystal',
+                        required: 3,
+                        description: 'Finde 3 uralte Eiskristalle'
+                    },
+                    {
+                        type: 'kill',
+                        target: 'frozen_undead',
+                        required: 5,
+                        description: 'Besiege 5 gefrorene Untote'
+                    }
+                ],
+                rewards: {
+                    gold: 400,
+                    items: ['ice_dagger', 'frost_cloak'],
+                    xp: 700
+                }
+            },
+            {
+                id: 'lich_hunter',
+                name: 'Lich-Jäger',
+                description: 'Die Eis-Liches terrorisieren das Reich. Bezwinge sie!',
+                type: 'kill',
+                giver: 'reich_der_drei_survivor',
+                objectives: [
+                    {
+                        type: 'kill',
+                        target: 'ice_lich',
+                        required: 3,
+                        description: 'Besiege 3 Eis-Liches'
+                    }
+                ],
+                rewards: {
+                    gold: 600,
+                    items: ['necromancer_staff'],
+                    xp: 1000
+                }
+            },
+
+            // ===== GRÜNSCHLAMM-SUMPF QUESTS (Hexen/Gift) =====
+            {
+                id: 'witch_apprentice',
+                name: 'Hexen-Lehrling',
+                description: 'Die alte Hexe Morgana sucht seltene Zutaten für ihre Tränke.',
+                type: 'collect',
+                giver: 'gruenschlamm_witch',
+                objectives: [
+                    {
+                        type: 'collect',
+                        target: 'poison_mushroom',
+                        required: 10,
+                        description: 'Sammle 10 Giftpilze'
+                    },
+                    {
+                        type: 'collect',
+                        target: 'swamp_herb',
+                        required: 5,
+                        description: 'Sammle 5 Sumpfkräuter'
+                    }
+                ],
+                rewards: {
+                    gold: 250,
+                    items: ['poison_dagger', 'antidote_potion'],
+                    xp: 450
+                }
+            },
+            {
+                id: 'funkelnest_treasure',
+                name: 'Schatz des Funkelnests',
+                description: 'Gerüchte sprechen von einer versteckten Schatzhöhle im tiefsten Sumpf...',
+                type: 'explore',
+                giver: 'gruenschlamm_treasure_hunter',
+                objectives: [
+                    {
+                        type: 'explore',
+                        target: 'funkelnest',
+                        required: 1,
+                        description: 'Finde das versteckte Funkelnest'
+                    },
+                    {
+                        type: 'collect',
+                        target: 'ancient_treasure',
+                        required: 1,
+                        description: 'Birg den uralten Schatz'
+                    }
+                ],
+                rewards: {
+                    gold: 1000,
+                    items: ['legendary_gem', 'treasure_map'],
+                    xp: 800
+                }
+            },
+
+            // ===== TIEFENHÖHLEN QUESTS (Goblins/Dungeon) =====
+            {
+                id: 'goblin_problem',
+                name: 'Goblin-Problem',
+                description: 'Die Goblins werden immer frecher! Zeig ihnen, wer der Boss ist.',
+                type: 'kill',
+                giver: 'tiefenhoehlen_miner',
+                objectives: [
+                    {
+                        type: 'kill',
+                        target: 'goblin',
+                        required: 15,
+                        description: 'Besiege 15 Goblins'
+                    },
+                    {
+                        type: 'kill',
+                        target: 'goblin_chief',
+                        required: 1,
+                        description: 'Besiege den Goblin-Häuptling'
+                    }
+                ],
+                rewards: {
+                    gold: 350,
+                    items: ['goblin_sword', 'mining_pickaxe'],
+                    xp: 600
+                }
+            },
+            {
+                id: 'crystal_catacombs',
+                name: 'Kristall-Katakomben',
+                description: 'Tief unter der Erde liegt ein Labyrinth voller seltener Kristalle.',
+                type: 'explore',
+                giver: 'tiefenhoehlen_crystal_mage',
+                objectives: [
+                    {
+                        type: 'explore',
+                        target: 'crystal_catacombs',
+                        required: 1,
+                        description: 'Finde die Kristall-Katakomben'
+                    },
+                    {
+                        type: 'collect',
+                        target: 'rare_crystal',
+                        required: 5,
+                        description: 'Sammle 5 seltene Kristalle'
+                    },
+                    {
+                        type: 'kill',
+                        target: 'giant_spider',
+                        required: 3,
+                        description: 'Besiege 3 Riesenspinnen'
+                    }
+                ],
+                rewards: {
+                    gold: 500,
+                    items: ['crystal_staff', 'spider_silk_armor'],
+                    xp: 900
+                }
+            },
+
             // ===== WORLD EXPLORATION QUEST =====
             {
                 id: 'world_explorer',
                 name: 'Welt-Entdecker',
-                description: 'Erkunde alle 9 Regionen der Welt!',
+                description: 'Erkunde alle 8 Regionen der Welt und besuche den Götterfels!',
                 type: 'explore',
                 giver: null, // Auto-available
                 objectives: [
                     {
                         type: 'explore',
-                        target: 'ice',
+                        target: 'samtmoos_tiefwald',
                         required: 1,
-                        description: 'Erkunde die Eisregion'
+                        description: 'Erkunde den Samtmoos-Tiefwald'
                     },
                     {
                         type: 'explore',
-                        target: 'highland',
+                        target: 'reich_der_drei',
                         required: 1,
-                        description: 'Erkunde das Hochland'
+                        description: 'Erkunde das Reich der Drei'
                     },
                     {
                         type: 'explore',
-                        target: 'desert',
+                        target: 'salzwind_kueste',
                         required: 1,
-                        description: 'Erkunde die Wüste'
+                        description: 'Erkunde die Salzwind-Küste'
                     },
                     {
                         type: 'explore',
-                        target: 'forest',
+                        target: 'blitzebene',
                         required: 1,
-                        description: 'Erkunde den Wald'
+                        description: 'Erkunde die Blitzebene'
                     },
                     {
                         type: 'explore',
-                        target: 'coast',
+                        target: 'gruenschlamm_sumpf',
                         required: 1,
-                        description: 'Erkunde die Küste'
+                        description: 'Erkunde den Grünschlamm-Sumpf'
                     },
                     {
                         type: 'explore',
-                        target: 'volcano',
+                        target: 'magmastroeme',
                         required: 1,
-                        description: 'Erkunde den Vulkan'
+                        description: 'Erkunde die Magmaströme'
                     },
                     {
                         type: 'explore',
-                        target: 'swamp',
+                        target: 'heisse_duenen',
                         required: 1,
-                        description: 'Erkunde den Sumpf'
+                        description: 'Erkunde die Heißen Dünen'
                     },
                     {
                         type: 'explore',
-                        target: 'mountain',
+                        target: 'tiefenhoehlen',
                         required: 1,
-                        description: 'Erkunde die Berge'
-                    },
-                    {
-                        type: 'explore',
-                        target: 'plains',
-                        required: 1,
-                        description: 'Erkunde die Ebene'
+                        description: 'Erkunde die Tiefenhöhlen'
                     }
                 ],
                 rewards: {
-                    gold: 1000,
-                    items: ['champion_keule'],
-                    xp: 2000
+                    gold: 1500,
+                    items: ['champion_keule', 'world_map'],
+                    xp: 2500
                 }
             }
         ];

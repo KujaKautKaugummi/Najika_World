@@ -1,0 +1,145 @@
+{
+  "region_id": "goetterfels",
+  "name": "Götterfels",
+  "name_en": "God's Rock",
+  "description": "Der unverrückbare, unzerstörbare Berg im Zentrum der Welt. Heimat der Schwarzen Mühle und Najikas Zuhause!",
+
+  "environment": {
+    "biome": "mountain",
+    "temperature_range": [15, 25],
+    "temperature_day": 20,
+    "temperature_night": 15,
+    "humidity": 40,
+    "weather_chances": {
+      "clear": 0.5,
+      "cloudy": 0.3,
+      "light_rain": 0.15,
+      "special": 0.05
+    },
+    "ambient_sounds": ["wind_soft", "birds", "mill_creaking", "river_flowing"],
+    "music_day": "home_sweet_home",
+    "music_night": "peaceful_night",
+    "music_combat": null
+  },
+
+  "visual": {
+    "skybox": "mountain_clear",
+    "ground_color": "#808080",
+    "fog_color": "#d3d3d3",
+    "fog_density": 0.01,
+    "ambient_light": "#f0f0f0",
+    "sun_intensity": 1.0,
+    "special_effects": ["windmill_turning", "smoke_from_chimney", "fireflies_night"]
+  },
+
+  "safe_zone": true,
+  "indestructible": true,
+
+  "legend": "Niemand kann auch nur ein Körnchen vom Götterfels abbauen. Er ist unverrückbar, unzerstörbar, ewig. Götter haben ihn erschaffen, und Götter allein können ihn zerstören. ...Najika: 'Hold my Explosion Spell!'",
+
+  "schwarze_muehle": {
+    "name": "Schwarze Windmühle",
+    "position": {"x": 4800, "y": 300, "z": 4200},
+    "rooms": 12,
+    "floors": {
+      "erdgeschoss": ["wohnzimmer", "kueche", "badezimmer"],
+      "obergeschoss": ["schlafzimmer", "lager", "training"],
+      "turm": ["terminal", "observatory"],
+      "keller": ["studieren", "crafting", "enchanting", "alchemy"]
+    },
+    "resident": "Najika",
+    "safe_zone": true
+  },
+
+  "areas": [
+    {
+      "id": "berg_basis",
+      "name": "Berg-Basis",
+      "type": "hub",
+      "position": {"x": 4800, "y": 0, "z": 4800},
+      "connections_to": ["samtmoos_tiefwald", "heisse_duenen", "salzwind_kueste", "blitzebene", "gruenschlamm_sumpf", "reich_der_drei", "magmastroeme"],
+      "services": ["fast_travel_hub"]
+    },
+    {
+      "id": "aufstieg_pfad",
+      "name": "Aufstieg-Pfad",
+      "type": "path",
+      "position": {"x": 4700, "y": 150, "z": 4500},
+      "description": "Der Weg hinauf zur Schwarzen Mühle"
+    },
+    {
+      "id": "muehlen_dorf",
+      "name": "Mühlen-Dorf",
+      "type": "village",
+      "position": {"x": 4800, "y": 280, "z": 4300},
+      "description": "Ein kleines Dorf nahe der Mühle",
+      "npcs": ["dorfbewohner_1", "dorfbewohner_2"],
+      "buildings": ["kleine_hauser", "brunnen"]
+    },
+    {
+      "id": "schwarze_muehle",
+      "name": "Schwarze Mühle",
+      "type": "home",
+      "position": {"x": 4800, "y": 300, "z": 4200},
+      "safe_zone": true,
+      "resident": "Najika",
+      "interactables": ["bett", "herd", "crafting_table", "terminal"]
+    },
+    {
+      "id": "fluss",
+      "name": "Berg-Fluss",
+      "type": "fishing_spot",
+      "position": {"x": 4600, "y": 250, "z": 4100},
+      "fish_types": ["mountain_trout", "crystal_fish"],
+      "peaceful": true
+    },
+    {
+      "id": "garten",
+      "name": "Najikas Garten",
+      "type": "farming",
+      "position": {"x": 4900, "y": 290, "z": 4150},
+      "farming_plots": 12,
+      "special_crops": true
+    }
+  ],
+
+  "inner_world": {
+    "name": "Schmelz-Welt",
+    "description": "Riesige Lava-Welt im Inneren des Berges!",
+    "level": "MAX",
+    "unlocks_after": "najika_explosion_event",
+    "position": {"x": 4800, "y": -500, "z": 4800},
+    "enemies": "mega_bosses",
+    "loot": "best_in_game"
+  },
+
+  "future": {
+    "digivice_now": "Schwarze Mühle + Dorf",
+    "handyspiel_later": "Zeit Stadt + Uhrenturm (ersetzt Mühle)"
+  },
+
+  "turm_der_100": {
+    "name": "Turm der 100 Prüfungen",
+    "floors": 100,
+    "unlocks_after": "najika_explosion_destroys_goetterfels",
+    "description": "Ultimate Challenge! Erst verfügbar NACHDEM Najika den Götterfels gesprengt hat!",
+    "rewards": "legendary_per_10_floors"
+  },
+
+  "npcs": [
+    {"id": "najika", "name": "Najika", "type": "companion", "location": "schwarze_muehle"},
+    {"id": "mueller", "name": "Müller Heinrich", "type": "quest_giver"},
+    {"id": "dorf_aeltester", "name": "Dorf-Ältester", "type": "lore"}
+  ],
+
+  "monsters": [],
+
+  "fast_travel": {
+    "is_hub": true,
+    "connects_to_all_regions": true,
+    "cost": "free_from_muehle"
+  },
+
+  "slime_color": null,
+  "slime_bonus": null
+}

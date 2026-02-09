@@ -121,8 +121,28 @@ class ChatUI {
         // Event Listeners
         document.getElementById('chat-close-btn').addEventListener('click', () => this.closeChat());
         document.getElementById('chat-send-btn').addEventListener('click', () => this.sendMessage());
-        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+
+        const chatInput = document.getElementById('chat-input');
+
+        // Enter to send
+        chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.sendMessage();
+        });
+
+        // ===== KRITISCH: Verhindere dass Game-Shortcuts beim Tippen im Chat auslösen! =====
+        // Stoppt Event-Propagation für ALLE Tasten während Chat-Input fokussiert ist
+        chatInput.addEventListener('keydown', (e) => {
+            // Erlaube nur Escape (zum Schließen des Chats)
+            if (e.key === 'Escape') return;
+
+            // STOPPE alle anderen Tasten-Events von der Spielwelt!
+            // Das verhindert: M=Map, I=Inventar, T=Chat-Toggle, etc.
+            e.stopPropagation();
+        });
+
+        chatInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Escape') return;
+            e.stopPropagation();
         });
     }
 

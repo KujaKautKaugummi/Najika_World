@@ -119,6 +119,20 @@
                 currentGameLabel = title.textContent;
                 startCookingGame(content);
                 break;
+            case 'tripletriad':
+            case 'triple_triad':
+            case 'triad':
+                title.textContent = '🃏 Triple Triad';
+                currentGameLabel = title.textContent;
+                startTripleTriadGame(content);
+                break;
+            case 'dice':
+            case 'wuerfel':
+            case 'gambling':
+                title.textContent = '🎲 Dungeon Dice';
+                currentGameLabel = title.textContent;
+                startDiceGame(content);
+                break;
             default:
                 title.textContent = '🎮 Minigame';
                 currentGameLabel = title.textContent;
@@ -913,6 +927,476 @@
         gameInterval = setInterval(spawnItem, 900);
         updateHud();
     }
+
+    /* === TRIPLE TRIAD (FF8 Style Kartenspiel) === */
+    function startTripleTriadGame(content) {
+        // Najika-Karten mit Werten (oben, rechts, unten, links)
+        const CARDS = [
+            { name: 'Najika', values: [8, 5, 6, 7], emoji: '🧙‍♀️', color: '#ff69b4' },
+            { name: 'Kuja', values: [7, 7, 7, 7], emoji: '⚔️', color: '#4169e1' },
+            { name: 'Slime', values: [2, 3, 2, 1], emoji: '🟢', color: '#32cd32' },
+            { name: 'Goblin', values: [3, 2, 4, 3], emoji: '👺', color: '#8b4513' },
+            { name: 'Skeleton', values: [4, 3, 3, 5], emoji: '💀', color: '#dcdcdc' },
+            { name: 'Wolf', values: [5, 4, 3, 4], emoji: '🐺', color: '#696969' },
+            { name: 'Dragon', values: [9, 6, 7, 8], emoji: '🐉', color: '#ff4500' },
+            { name: 'Phoenix', values: [6, 8, 5, 6], emoji: '🔥', color: '#ff8c00' },
+            { name: 'Golem', values: [4, 5, 7, 6], emoji: '🗿', color: '#a0522d' },
+            { name: 'Spirit', values: [5, 6, 4, 5], emoji: '👻', color: '#9370db' },
+            { name: 'Megumin', values: [9, 9, 1, 1], emoji: '💥', color: '#ff0000' },
+            { name: 'Harley', values: [6, 6, 6, 6], emoji: '🃏', color: '#ff1493' }
+        ];
+
+        let playerHand = [];
+        let aiHand = [];
+        let board = Array(9).fill(null); // 3x3 Board
+        let playerTurn = true;
+        let selectedCard = null;
+        let playerScore = 5;
+        let aiScore = 5;
+
+        // Zufällige Karten für beide Spieler
+        function dealCards() {
+            const shuffled = [...CARDS].sort(() => Math.random() - 0.5);
+            playerHand = shuffled.slice(0, 5).map(c => ({...c, owner: 'player'}));
+            aiHand = shuffled.slice(5, 10).map(c => ({...c, owner: 'ai'}));
+        }
+
+        function renderGame() {
+            content.innerHTML = `
+                <div class="triad-game">
+                    <div class="triad-score">
+                        <span class="player-score">Du: <strong>${playerScore}</strong></span>
+                        <span class="ai-score">Najika: <strong>${aiScore}</strong></span>
+                    </div>
+                    <div class="triad-main">
+                        <div class="triad-hand player-hand" id="playerHand"></div>
+                        <div class="triad-board" id="triadBoard"></div>
+                        <div class="triad-hand ai-hand" id="aiHand"></div>
+                    </div>
+                    <div class="triad-status" id="triadStatus">${playerTurn ? '🎯 Dein Zug! Wähle eine Karte.' : '⏳ Najika denkt nach...'}</div>
+                </div>
+            `;
+
+            // Render Player Hand
+            const playerHandEl = document.getElementById('playerHand');
+            playerHand.forEach((card, i) => {
+                const cardEl = createCardElement(card, i, 'player');
+                if (selectedCard === i) cardEl.classList.add('selected');
+                cardEl.onclick = () => selectCard(i);
+                playerHandEl.appendChild(cardEl);
+            });
+
+            // Render AI Hand (verdeckt)
+            const aiHandEl = document.getElementById('aiHand');
+            aiHand.forEach((card, i) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'triad-card back';
+                cardEl.innerHTML = '🃏';
+                aiHandEl.appendChild(cardEl);
+            });
+
+            // Render Board
+            const boardEl = document.getElementById('triadBoard');
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'triad-cell';
+                if (board[i]) {
+                    const cardEl = createCardElement(board[i], i, board[i].owner, true);
+                    cell.appendChild(cardEl);
+                } else if (playerTurn && selectedCard !== null) {
+                    cell.classList.add('playable');
+                    cell.onclick = () => playCard(i);
+                }
+                boardEl.appendChild(cell);
+            }
+        }
+
+        function createCardElement(card, index, owner, onBoard = false) {
+            const el = document.createElement('div');
+            el.className = `triad-card ${owner}`;
+            el.style.borderColor = card.color;
+            if (onBoard) el.style.background = owner === 'player' ? 'rgba(65,105,225,0.3)' : 'rgba(255,105,180,0.3)';
+            el.innerHTML = `
+                <div class="card-top">${card.values[0]}</div>
+                <div class="card-middle">
+                    <span class="card-left">${card.values[3]}</span>
+                    <span class="card-emoji">${card.emoji}</span>
+                    <span class="card-right">${card.values[1]}</span>
+                </div>
+                <div class="card-bottom">${card.values[2]}</div>
+                <div class="card-name">${card.name}</div>
+            `;
+            return el;
+        }
+
+        function selectCard(index) {
+            if (!playerTurn) return;
+            selectedCard = selectedCard === index ? null : index;
+            renderGame();
+        }
+
+        function playCard(cellIndex) {
+            if (!playerTurn || selectedCard === null || board[cellIndex]) return;
+
+            const card = playerHand.splice(selectedCard, 1)[0];
+            board[cellIndex] = card;
+            selectedCard = null;
+
+            // Capture Logik
+            captureCards(cellIndex, card);
+            updateScores();
+
+            playerTurn = false;
+            renderGame();
+
+            // Check Game End
+            if (checkGameEnd()) return;
+
+            // AI Turn
+            scheduleTimeout(() => {
+                aiTurn();
+            }, 1000);
+        }
+
+        function captureCards(cellIndex, card) {
+            const neighbors = [
+                { dir: 0, offset: -3, oppDir: 2 }, // oben
+                { dir: 1, offset: 1, oppDir: 3 },  // rechts
+                { dir: 2, offset: 3, oppDir: 0 },  // unten
+                { dir: 3, offset: -1, oppDir: 1 }  // links
+            ];
+
+            const row = Math.floor(cellIndex / 3);
+            const col = cellIndex % 3;
+
+            neighbors.forEach(n => {
+                const targetIdx = cellIndex + n.offset;
+                const targetRow = Math.floor(targetIdx / 3);
+                const targetCol = targetIdx % 3;
+
+                // Boundary Check
+                if (n.offset === 1 && col === 2) return;
+                if (n.offset === -1 && col === 0) return;
+                if (targetIdx < 0 || targetIdx > 8) return;
+
+                const target = board[targetIdx];
+                if (target && target.owner !== card.owner) {
+                    if (card.values[n.dir] > target.values[n.oppDir]) {
+                        target.owner = card.owner;
+                    }
+                }
+            });
+        }
+
+        function updateScores() {
+            playerScore = board.filter(c => c && c.owner === 'player').length + playerHand.length;
+            aiScore = board.filter(c => c && c.owner === 'ai').length + aiHand.length;
+        }
+
+        function aiTurn() {
+            if (aiHand.length === 0) return;
+
+            // Einfache AI: Finde beste Position
+            let bestMove = null;
+            let bestScore = -1;
+
+            aiHand.forEach((card, cardIdx) => {
+                for (let cellIdx = 0; cellIdx < 9; cellIdx++) {
+                    if (board[cellIdx]) continue;
+
+                    let score = 0;
+                    const neighbors = [
+                        { dir: 0, offset: -3, oppDir: 2 },
+                        { dir: 1, offset: 1, oppDir: 3 },
+                        { dir: 2, offset: 3, oppDir: 0 },
+                        { dir: 3, offset: -1, oppDir: 1 }
+                    ];
+
+                    neighbors.forEach(n => {
+                        const targetIdx = cellIdx + n.offset;
+                        if (targetIdx < 0 || targetIdx > 8) return;
+                        const col = cellIdx % 3;
+                        if (n.offset === 1 && col === 2) return;
+                        if (n.offset === -1 && col === 0) return;
+
+                        const target = board[targetIdx];
+                        if (target && target.owner === 'player') {
+                            if (card.values[n.dir] > target.values[n.oppDir]) {
+                                score += 10;
+                            }
+                        }
+                    });
+
+                    score += Math.random() * 2;
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = { cardIdx, cellIdx };
+                    }
+                }
+            });
+
+            if (bestMove) {
+                const card = aiHand.splice(bestMove.cardIdx, 1)[0];
+                board[bestMove.cellIdx] = card;
+                captureCards(bestMove.cellIdx, card);
+                updateScores();
+            }
+
+            playerTurn = true;
+            renderGame();
+            checkGameEnd();
+        }
+
+        function checkGameEnd() {
+            if (board.filter(c => c).length === 9) {
+                const status = document.getElementById('triadStatus');
+                if (playerScore > aiScore) {
+                    status.innerHTML = '🎉 GEWONNEN! Du hast Najika geschlagen!';
+                    updateScore(100);
+                } else if (playerScore < aiScore) {
+                    status.innerHTML = '😈 VERLOREN! Najika lacht: "Besser trainieren, Puddin\'!"';
+                    updateScore(20);
+                } else {
+                    status.innerHTML = '🤝 UNENTSCHIEDEN!';
+                    updateScore(50);
+                }
+                scheduleTimeout(() => close(), 3000);
+                return true;
+            }
+            return false;
+        }
+
+        // Styles hinzufügen
+        if (!document.getElementById('triad-styles')) {
+            const style = document.createElement('style');
+            style.id = 'triad-styles';
+            style.textContent = `
+                .triad-game { display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 10px; }
+                .triad-score { display: flex; gap: 40px; font-size: 18px; }
+                .player-score { color: #4169e1; }
+                .ai-score { color: #ff69b4; }
+                .triad-main { display: flex; gap: 20px; align-items: center; }
+                .triad-hand { display: flex; flex-direction: column; gap: 8px; }
+                .triad-board { display: grid; grid-template-columns: repeat(3, 90px); gap: 5px; background: #2a2a2a; padding: 10px; border-radius: 8px; }
+                .triad-cell { width: 90px; height: 110px; background: #1a1a1a; border: 2px solid #444; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+                .triad-cell.playable { cursor: pointer; border-color: #4CAF50; background: rgba(76,175,80,0.2); }
+                .triad-cell.playable:hover { background: rgba(76,175,80,0.4); }
+                .triad-card { width: 80px; height: 100px; background: #333; border: 3px solid #666; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; font-size: 14px; }
+                .triad-card:hover { transform: scale(1.05); }
+                .triad-card.selected { transform: scale(1.1); box-shadow: 0 0 15px gold; }
+                .triad-card.back { background: linear-gradient(135deg, #4a0e4e, #1a1a2e); font-size: 30px; }
+                .triad-card.player { background: rgba(65,105,225,0.2); }
+                .triad-card.ai { background: rgba(255,105,180,0.2); }
+                .card-top, .card-bottom { font-weight: bold; }
+                .card-middle { display: flex; align-items: center; gap: 5px; }
+                .card-emoji { font-size: 24px; }
+                .card-left, .card-right { font-weight: bold; }
+                .card-name { font-size: 10px; color: #aaa; margin-top: 2px; }
+                .triad-status { font-size: 16px; color: #fff; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        dealCards();
+        renderGame();
+    }
+
+    /* === DUNGEON DICE (Gambling Minigame) === */
+    function startDiceGame(content) {
+        let playerGold = 100;
+        let betAmount = 10;
+        let playerDice = [0, 0];
+        let npcDice = [0, 0];
+        let gamePhase = 'betting'; // 'betting', 'rolling', 'result'
+        let streak = 0;
+
+        function renderGame() {
+            content.innerHTML = `
+                <div class="dice-game">
+                    <div class="dice-gold">💰 Dein Gold: <strong>${playerGold}</strong></div>
+                    <div class="dice-streak">${streak > 0 ? `🔥 Streak: ${streak}` : ''}</div>
+
+                    <div class="dice-arena">
+                        <div class="dice-player">
+                            <h4>Du</h4>
+                            <div class="dice-container">
+                                <div class="die" id="playerDie1">${playerDice[0] || '?'}</div>
+                                <div class="die" id="playerDie2">${playerDice[1] || '?'}</div>
+                            </div>
+                            <div class="dice-total">${playerDice[0] && playerDice[1] ? playerDice[0] + playerDice[1] : '-'}</div>
+                        </div>
+
+                        <div class="dice-vs">VS</div>
+
+                        <div class="dice-npc">
+                            <h4>🧙‍♀️ Najika</h4>
+                            <div class="dice-container">
+                                <div class="die npc" id="npcDie1">${gamePhase === 'result' ? npcDice[0] : '?'}</div>
+                                <div class="die npc" id="npcDie2">${gamePhase === 'result' ? npcDice[1] : '?'}</div>
+                            </div>
+                            <div class="dice-total">${gamePhase === 'result' ? npcDice[0] + npcDice[1] : '-'}</div>
+                        </div>
+                    </div>
+
+                    ${gamePhase === 'betting' ? `
+                        <div class="dice-betting">
+                            <label>Einsatz:</label>
+                            <div class="bet-controls">
+                                <button onclick="window.diceAdjustBet(-10)">-10</button>
+                                <span class="bet-amount">${betAmount}</span>
+                                <button onclick="window.diceAdjustBet(10)">+10</button>
+                            </div>
+                            <button class="roll-btn" onclick="window.diceRoll()">🎲 WÜRFELN!</button>
+                        </div>
+                    ` : gamePhase === 'rolling' ? `
+                        <div class="dice-rolling">
+                            <div class="rolling-text">🎲 Würfel rollen... 🎲</div>
+                        </div>
+                    ` : `
+                        <div class="dice-result">
+                            <div class="result-text" id="diceResult"></div>
+                            <button class="roll-btn" onclick="window.diceNextRound()">Nächste Runde</button>
+                        </div>
+                    `}
+
+                    <div class="dice-status" id="diceStatus">${getStatusText()}</div>
+                </div>
+            `;
+
+            if (gamePhase === 'result') {
+                showResult();
+            }
+        }
+
+        function getStatusText() {
+            if (playerGold <= 0) return '💀 Pleite! Najika lacht...';
+            if (gamePhase === 'betting') return 'Setze deinen Einsatz!';
+            if (gamePhase === 'rolling') return '...';
+            return '';
+        }
+
+        function adjustBet(amount) {
+            betAmount = Math.max(10, Math.min(playerGold, betAmount + amount));
+            renderGame();
+        }
+
+        function roll() {
+            if (betAmount > playerGold) {
+                alert('Nicht genug Gold!');
+                return;
+            }
+
+            gamePhase = 'rolling';
+            renderGame();
+
+            // Würfel-Animation
+            let rollCount = 0;
+            const rollInterval = setInterval(() => {
+                playerDice = [Math.ceil(Math.random() * 6), Math.ceil(Math.random() * 6)];
+                const d1 = document.getElementById('playerDie1');
+                const d2 = document.getElementById('playerDie2');
+                if (d1) d1.textContent = playerDice[0];
+                if (d2) d2.textContent = playerDice[1];
+
+                rollCount++;
+                if (rollCount >= 15) {
+                    clearInterval(rollInterval);
+                    // Finale Werte
+                    playerDice = [Math.ceil(Math.random() * 6), Math.ceil(Math.random() * 6)];
+                    npcDice = [Math.ceil(Math.random() * 6), Math.ceil(Math.random() * 6)];
+                    gamePhase = 'result';
+                    renderGame();
+                }
+            }, 100);
+        }
+
+        function showResult() {
+            const playerTotal = playerDice[0] + playerDice[1];
+            const npcTotal = npcDice[0] + npcDice[1];
+            const resultEl = document.getElementById('diceResult');
+
+            if (playerTotal > npcTotal) {
+                const winnings = betAmount * (streak >= 3 ? 3 : streak >= 1 ? 2 : 1.5);
+                playerGold += Math.floor(winnings);
+                streak++;
+                updateScore(Math.floor(winnings));
+                if (resultEl) resultEl.innerHTML = `🎉 GEWONNEN! +${Math.floor(winnings)} Gold`;
+            } else if (playerTotal < npcTotal) {
+                playerGold -= betAmount;
+                streak = 0;
+                if (resultEl) resultEl.innerHTML = `😈 VERLOREN! -${betAmount} Gold<br>Najika: "Pech gehabt, Puddin'~"`;
+            } else {
+                if (resultEl) resultEl.innerHTML = '🤝 UNENTSCHIEDEN! Einsatz zurück.';
+            }
+
+            if (playerGold <= 0) {
+                scheduleTimeout(() => {
+                    alert('💀 Du bist pleite!\nNajika: "Tja, vielleicht beim nächsten Mal~"');
+                    close();
+                }, 1500);
+            }
+        }
+
+        function nextRound() {
+            if (playerGold <= 0) {
+                close();
+                return;
+            }
+            playerDice = [0, 0];
+            npcDice = [0, 0];
+            gamePhase = 'betting';
+            betAmount = Math.min(betAmount, playerGold);
+            renderGame();
+        }
+
+        // Global functions for onclick
+        window.diceAdjustBet = adjustBet;
+        window.diceRoll = roll;
+        window.diceNextRound = nextRound;
+
+        // Styles
+        if (!document.getElementById('dice-styles')) {
+            const style = document.createElement('style');
+            style.id = 'dice-styles';
+            style.textContent = `
+                .dice-game { display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 15px; }
+                .dice-gold { font-size: 20px; color: #FFD700; }
+                .dice-streak { color: #ff6b35; font-size: 16px; height: 20px; }
+                .dice-arena { display: flex; align-items: center; gap: 30px; margin: 20px 0; }
+                .dice-player, .dice-npc { text-align: center; }
+                .dice-player h4 { color: #4169e1; }
+                .dice-npc h4 { color: #ff69b4; }
+                .dice-container { display: flex; gap: 10px; margin: 10px 0; }
+                .die { width: 60px; height: 60px; background: #fff; color: #333; font-size: 32px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+                .die.npc { background: #ffb6c1; }
+                .dice-total { font-size: 24px; font-weight: bold; }
+                .dice-vs { font-size: 28px; color: #fff; font-weight: bold; }
+                .dice-betting { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+                .bet-controls { display: flex; align-items: center; gap: 15px; }
+                .bet-controls button { padding: 8px 15px; font-size: 16px; cursor: pointer; background: #444; color: #fff; border: none; border-radius: 5px; }
+                .bet-controls button:hover { background: #666; }
+                .bet-amount { font-size: 24px; color: #FFD700; min-width: 60px; text-align: center; }
+                .roll-btn { padding: 15px 40px; font-size: 20px; background: linear-gradient(135deg, #ff6b35, #ff9500); color: #fff; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+                .roll-btn:hover { transform: scale(1.05); }
+                .dice-rolling { font-size: 24px; animation: pulse 0.5s infinite; }
+                @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+                .dice-result { text-align: center; }
+                .result-text { font-size: 20px; margin-bottom: 15px; }
+                .dice-status { color: #aaa; font-size: 14px; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        renderGame();
+
+        setCleanup(() => {
+            delete window.diceAdjustBet;
+            delete window.diceRoll;
+            delete window.diceNextRound;
+        });
+    }
+
     window.MiniGames = {
         open,
         close: () => close(true)

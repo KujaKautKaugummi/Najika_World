@@ -1,0 +1,113 @@
+{
+  "region_id": "gruenschlamm_sumpf",
+  "name": "Grünschlamm-Sumpf",
+  "name_en": "Greenslime Swamp",
+  "description": "Ein dunkler Sumpf voller Hexen, Gift und Geheimnisse. Keine Stadt - nur das versteckte Funkelnest.",
+
+  "environment": {
+    "biome": "swamp",
+    "temperature_range": [22, 35],
+    "temperature_day": 30,
+    "temperature_night": 24,
+    "humidity": 95,
+    "weather_chances": {
+      "fog": 0.4,
+      "cloudy": 0.3,
+      "rain": 0.2,
+      "poison_mist": 0.1
+    },
+    "ambient_sounds": ["frogs", "insects", "bubbling_mud", "eerie_whispers"],
+    "music_day": "swamp_mystery",
+    "music_night": "witch_territory",
+    "music_combat": "swamp_battle"
+  },
+
+  "visual": {
+    "skybox": "swamp_murky",
+    "ground_color": "#556b2f",
+    "water_color": "#2f4f4f",
+    "fog_color": "#708090",
+    "fog_density": 0.06,
+    "ambient_light": "#6b8e6b",
+    "sun_intensity": 0.3,
+    "special_effects": ["will_o_wisps", "bubbling_mud", "poison_clouds", "hanging_moss"]
+  },
+
+  "city": null,
+
+  "special_location": {
+    "name": "Funkelnest",
+    "type": "hidden_treasure_cave",
+    "position": {"x": 1800, "y": -20, "z": 8200},
+    "requires": "witch_map",
+    "description": "Eine versteckte Schatzhöhle der Hexen"
+  },
+
+  "areas": [
+    {
+      "id": "sumpfrand",
+      "name": "Sumpfrand",
+      "type": "entrance",
+      "position": {"x": 2200, "y": 0, "z": 7400},
+      "connections": ["moor_pfad", "hexen_huetten"]
+    },
+    {
+      "id": "moor_pfad",
+      "name": "Moor-Pfad",
+      "type": "hazard",
+      "position": {"x": 1800, "y": 0, "z": 7800},
+      "hazards": ["quicksand", "poison_plants"],
+      "resources": ["poison_herbs", "moor_berries"]
+    },
+    {
+      "id": "hexen_huetten",
+      "name": "Hexen-Hütten",
+      "type": "village",
+      "position": {"x": 1400, "y": 0, "z": 8200},
+      "npcs": ["hexe_morgana", "kraeuter_mutter"],
+      "services": ["alchemy", "curses", "potions"]
+    },
+    {
+      "id": "giftiger_teich",
+      "name": "Giftiger Teich",
+      "type": "gathering",
+      "position": {"x": 1000, "y": -5, "z": 8600},
+      "resources": ["poison_essence", "toxic_mushrooms", "swamp_fish"],
+      "hazards": ["poison_damage"]
+    },
+    {
+      "id": "hexenzirkel",
+      "name": "Hexenzirkel",
+      "type": "trainer",
+      "position": {"x": 1200, "y": 0, "z": 9000},
+      "teaches": ["dark_magic", "poison_magic", "curse_magic"]
+    },
+    {
+      "id": "knochengrube",
+      "name": "Knochengrube",
+      "type": "dungeon",
+      "position": {"x": 800, "y": -30, "z": 9400},
+      "level_range": [8, 15],
+      "boss": "bone_witch",
+      "hazards": ["undead", "curses"]
+    }
+  ],
+
+  "npcs": [
+    {"id": "hexe_morgana", "name": "Hexe Morgana", "type": "trainer", "teaches": ["dark_magic", "potions"]},
+    {"id": "kraeuter_mutter", "name": "Kräuter-Mutter", "type": "merchant", "sells": ["herbs", "poisons", "antidotes"]},
+    {"id": "irrlichter_hans", "name": "Irrlichter-Hans", "type": "quest_giver", "quests": ["find_funkelnest"]}
+  ],
+
+  "monsters": [
+    {"id": "swamp_rat", "name": "Sumpfratte", "level": [1, 4], "rarity": "common"},
+    {"id": "poison_frog", "name": "Giftfrosch", "level": [2, 5], "rarity": "common", "element": "poison"},
+    {"id": "bog_creature", "name": "Moor-Kreatur", "level": [5, 9], "rarity": "uncommon"},
+    {"id": "will_o_wisp", "name": "Irrlicht", "level": [6, 10], "rarity": "uncommon", "element": "dark"},
+    {"id": "swamp_hag", "name": "Sumpfhexe", "level": [9, 13], "rarity": "rare"},
+    {"id": "bone_witch", "name": "Knochenhexe", "level": [15], "rarity": "boss", "element": "dark"}
+  ],
+
+  "slime_color": "midnight_black",
+  "slime_bonus": "+15% Gift-Schaden"
+}

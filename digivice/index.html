@@ -203,6 +203,35 @@
             display: block;
         }
 
+        /* Activities Panel */
+        #activities {
+            display: none;
+        }
+
+        #activities.visible {
+            display: block !important;
+        }
+
+        .activity-btn {
+            width: 100%;
+            padding: 10px 12px;
+            margin: 4px 0;
+            background: linear-gradient(135deg, #3a3a5c, #2a2a4a);
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #4a4a7c, #3a3a6a);
+            border-color: #9b59b6;
+            transform: translateX(3px);
+        }
+
         #najika-stats h2 {
             font-size: 16px;
             margin-bottom: 10px;
@@ -340,6 +369,40 @@
             #controls button {
                 padding: 10px 15px;
                 font-size: 12px;
+            }
+            /* Mobile: Inventory UI */
+            #inventory-ui {
+                width: 95vw !important;
+                height: 90vh !important;
+                max-width: 100% !important;
+                padding: 10px !important;
+            }
+            /* Mobile: Quest Log */
+            #quest-log-ui {
+                width: 95vw !important;
+                height: 90vh !important;
+                max-width: 100% !important;
+                padding: 10px !important;
+            }
+            /* Mobile: Dialogue UI */
+            #dialogue-ui {
+                width: 95vw !important;
+                max-width: 100% !important;
+                padding: 15px !important;
+            }
+            /* Mobile: Najika Stats (smaller) */
+            #najika-stats {
+                width: 150px !important;
+                font-size: 11px !important;
+            }
+            /* Mobile: Top Bar buttons */
+            #ui-top-bar button {
+                padding: 8px 10px !important;
+                font-size: 11px !important;
+            }
+            /* Mobile: Stats Grid */
+            #stats-grid {
+                font-size: 10px !important;
             }
         }
 
@@ -594,6 +657,10 @@
     <script src="js/character_animations.js"></script>
     <script src="js/3d_scene.js"></script>
     <script src="js/voice_call.js"></script>
+    <!-- Minigames -->
+    <script src="js/triple_triad.js"></script>
+    <script src="js/dungeon_dice_shop.js"></script>
+    <script src="js/dungeon_dice_game.js"></script>
     <!-- ========================================== -->
 
     <script>
@@ -922,7 +989,10 @@
         }
 
         // Position: Mitte der Map (Berg-Region, leicht erhöht)
-        character.position.set(0, 55, 0);  // Y=8.5 (Berg ist bei Y=5, Charakter 3.5 drüber)
+        // Initial spawn height - will be corrected by updateCharacterHeight() in animation loop
+        const initialGroundHeight = getGroundHeight(0, 0);
+        character.position.set(0, initialGroundHeight + 3.5, 0);
+        console.log('🎮 Spieler spawnt bei Y=' + (initialGroundHeight + 3.5));
         scene.add(character);
 
         // Camera folgt Character (Third-Person Mode)
@@ -2104,22 +2174,27 @@
             `;
         }
 
-        // Get ground height at position (based on region)
+        // Get ground height at position (based on WorldManager terrain or fallback)
         function getGroundHeight(x, z) {
-            // Check which region character is in
-            // Region size is 133.32, center at (0,0)
-            // Mountain is at center (x: 0, z: 0) with Y=5
-            // All others at Y=0
+            // If WorldManager is initialized, use its terrain height
+            if (worldManager && worldManager.initialized) {
+                const terrainHeight = worldManager.getHeightAt(x, z);
+                if (terrainHeight !== undefined && !isNaN(terrainHeight)) {
+                    return terrainHeight;
+                }
+            }
 
+            // Fallback: Use region-based height (old -4800 to +4800 coordinate system)
+            // Mountain is at center (x: 0, z: 0) with elevated terrain
             const regionSize = 3200;
             const halfSize = regionSize / 2;
 
-            // Check if in mountain region (center)
+            // Check if in mountain region (center around 0,0)
             if (x >= -halfSize && x <= halfSize && z >= -halfSize && z <= halfSize) {
-                return 5;  // Mountain height
+                return 50;  // Mountain region has elevated terrain
             }
 
-            return 0;  // All other regions flat
+            return 5;  // Default ground level for other regions
         }
 
         // Update character height based on region
@@ -2402,7 +2477,7 @@
                     worldManager = new window.WorldManager(scene, camera);
 
                     await worldManager.initialize({
-                        dataPath: '/data/',
+                        dataPath: '/digivice/data/',
                         enableLOD: true,
                         enableStreaming: true,
                         enableVegetationBatching: true
@@ -4842,6 +4917,22 @@
 <!-- CHAOS EVENT SYSTEM -->
 <!-- ============================================ -->
 <script src="js/chaos_event_ui.js"></script>
+<script src="js/oregon_trail_ui.js"></script>
+
+<!-- ============================================ -->
+<!-- DUNGEON SYSTEM (Keller-Testbed) -->
+<!-- ============================================ -->
+<script src="js/dungeon_ui.js"></script>
+
+<!-- ============================================ -->
+<!-- SLIME COMPANION SYSTEM (V-Pet Style) -->
+<!-- ============================================ -->
+<script src="js/slime_companion_ui.js"></script>
+
+<!-- ============================================ -->
+<!-- ECHOHARP SYSTEM (Wandernde Bardin) -->
+<!-- ============================================ -->
+<script src="js/echoharp_ui.js"></script>
 
 <!-- ============================================ -->
 <!-- COMBAT INPUT SYSTEM -->

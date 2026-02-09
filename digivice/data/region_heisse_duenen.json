@@ -1,0 +1,106 @@
+{
+  "region_id": "heisse_duenen",
+  "name": "Heiße Dünen",
+  "name_en": "Hot Dunes",
+  "description": "Eine weite Wüste mit Sanddünen, Oasen und der Hauptstadt Handelsfestung. Western-Vibes mit PvP-Arena.",
+
+  "environment": {
+    "biome": "desert",
+    "temperature_range": [30, 50],
+    "temperature_day": 45,
+    "temperature_night": 20,
+    "humidity": 10,
+    "weather_chances": {
+      "clear": 0.6,
+      "sandstorm": 0.25,
+      "cloudy": 0.1,
+      "mirage": 0.05
+    },
+    "ambient_sounds": ["wind_sand", "desert_birds", "distant_bells"],
+    "music_day": "desert_adventure",
+    "music_night": "desert_mystery",
+    "music_combat": "arena_battle"
+  },
+
+  "visual": {
+    "skybox": "desert_bright",
+    "ground_color": "#e8d4a0",
+    "fog_color": "#ffd700",
+    "fog_density": 0.01,
+    "ambient_light": "#fff8dc",
+    "sun_intensity": 1.2,
+    "special_effects": ["heat_shimmer", "sand_particles", "tumbleweeds"]
+  },
+
+  "city": {
+    "name": "Handelsfestung",
+    "is_capital": true,
+    "position": {"x": 8400, "y": 0, "z": 8200},
+    "size": "large",
+    "style": "western",
+    "features": ["pvp_arena", "player_shops", "trading_hub", "auction_house"]
+  },
+
+  "areas": [
+    {
+      "id": "stadt_tor",
+      "name": "Stadttor",
+      "type": "safe_zone",
+      "position": {"x": 8200, "y": 0, "z": 8400},
+      "connections": ["marktplatz", "duenen_rand"]
+    },
+    {
+      "id": "marktplatz",
+      "name": "Großer Marktplatz",
+      "type": "city_center",
+      "position": {"x": 8400, "y": 0, "z": 8200},
+      "services": ["fast_travel", "bank", "auction_house", "player_shops"]
+    },
+    {
+      "id": "pvp_arena",
+      "name": "Arena der Kämpfer",
+      "type": "pvp",
+      "position": {"x": 8600, "y": 0, "z": 8200},
+      "features": ["duels", "tournaments", "betting"]
+    },
+    {
+      "id": "oase_paradies",
+      "name": "Oase Paradies",
+      "type": "gathering",
+      "position": {"x": 8000, "y": 0, "z": 8800},
+      "resources": ["palm_fruit", "oasis_water", "desert_fish"]
+    },
+    {
+      "id": "goldstaub_oede",
+      "name": "Goldstaub-Öde",
+      "type": "dungeon",
+      "position": {"x": 9000, "y": 0, "z": 9200},
+      "level_range": [10, 15],
+      "boss": "sand_wyrm"
+    }
+  ],
+
+  "npcs": [
+    {"id": "arena_meister", "name": "Arena-Meister Brutus", "type": "trainer", "teaches": ["combat", "pvp"]},
+    {"id": "karawanen_chef", "name": "Karawanen-Chef Hassan", "type": "merchant", "sells": ["desert_gear", "water", "maps"]},
+    {"id": "grillmeister", "name": "Grillmeister Rico", "type": "food", "specialty": "champion_keule"}
+  ],
+
+  "monsters": [
+    {"id": "scorpion", "name": "Wüstenskorpion", "level": [1, 5], "rarity": "common"},
+    {"id": "sand_beetle", "name": "Sandkäfer", "level": [2, 6], "rarity": "common"},
+    {"id": "bandit", "name": "Wüstenbandit", "level": [4, 8], "rarity": "uncommon"},
+    {"id": "sand_golem", "name": "Sandgolem", "level": [8, 12], "rarity": "rare"},
+    {"id": "sand_wyrm", "name": "Sandwyrm", "level": [15], "rarity": "boss"}
+  ],
+
+  "food_specialty": {
+    "name": "Champion-Keule",
+    "description": "Die legendäre riesige Fleischkeule - wie in jedem guten Anime!",
+    "buffs": ["+15% Strength", "+10% Stamina", "+5% Combat Power"],
+    "items": ["arena_happen", "gold_staebchen", "gluht_steak", "rauch_rippchen"]
+  },
+
+  "slime_color": "dusty_gold",
+  "slime_bonus": "+10% Wüsten-Schaden"
+}

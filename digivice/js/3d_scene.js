@@ -1375,6 +1375,9 @@
 
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
+                // ===== KEYBOARD GUARD =====
+                const activeEl = document.activeElement;
+                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return;
                 if (currentInterior === 'Schwarze Mühle') {
                     if (e.code === 'Digit1' || e.code === 'Numpad1') window.switchToFloor(0);
                     if (e.code === 'Digit2' || e.code === 'Numpad2') window.switchToFloor(1);
@@ -1558,6 +1561,12 @@
     }
 
     function onKeyDown(event) {
+        // ===== KEYBOARD GUARD: Ignoriere wenn User im Chat/Input tippt =====
+        const activeEl = document.activeElement;
+        if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' ||
+            activeEl.contentEditable === 'true' || (activeEl.closest && activeEl.closest('#chat-container')))) {
+            return;
+        }
         activeKeys.add(event.code);
         // F-Taste: Najika dreht sich zum Spieler
         if (event.code === 'KeyF') {
@@ -1632,6 +1641,9 @@
     }
 
     function onKeyUp(event) {
+        // ===== KEYBOARD GUARD =====
+        const activeEl = document.activeElement;
+        if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return;
         activeKeys.delete(event.code);
     }
 

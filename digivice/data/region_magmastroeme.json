@@ -1,0 +1,118 @@
+{
+  "region_id": "magmastroeme",
+  "name": "Magmaströme",
+  "name_en": "Magma Streams",
+  "description": "Eine vulkanische Region mit fließenden Lavaströmen. Die beste Schmiede der Welt liegt in Funken-Siedlung!",
+
+  "environment": {
+    "biome": "volcano",
+    "temperature_range": [40, 65],
+    "temperature_day": 50,
+    "temperature_night": 42,
+    "humidity": 15,
+    "weather_chances": {
+      "clear": 0.3,
+      "ashfall": 0.4,
+      "heat_wave": 0.2,
+      "eruption": 0.1
+    },
+    "ambient_sounds": ["lava_bubbling", "distant_rumble", "fire_crackling", "steam_vents"],
+    "music_day": "volcanic_adventure",
+    "music_night": "forge_of_fire",
+    "music_combat": "inferno_battle"
+  },
+
+  "visual": {
+    "skybox": "volcanic_red",
+    "ground_color": "#8b4513",
+    "lava_color": "#ff4500",
+    "fog_color": "#ff6347",
+    "fog_density": 0.03,
+    "ambient_light": "#ff8c00",
+    "sun_intensity": 0.7,
+    "special_effects": ["lava_flows", "ash_particles", "ember_rain", "heat_distortion"]
+  },
+
+  "city": {
+    "name": "Funken-Siedlung",
+    "position": {"x": 4800, "y": 0, "z": 8200},
+    "size": "small",
+    "style": "dwarven_forge",
+    "features": ["master_forge", "ore_refinery", "fire_temple"]
+  },
+
+  "areas": [
+    {
+      "id": "siedlung_eingang",
+      "name": "Siedlung Eingang",
+      "type": "safe_zone",
+      "position": {"x": 4600, "y": 0, "z": 8000},
+      "connections": ["schmiede_viertel", "lava_bruecke"]
+    },
+    {
+      "id": "schmiede_viertel",
+      "name": "Schmiede-Viertel",
+      "type": "city_center",
+      "position": {"x": 4800, "y": 0, "z": 8200},
+      "services": ["fast_travel", "master_forge", "ore_shop", "weapon_shop"]
+    },
+    {
+      "id": "meister_schmiede",
+      "name": "Meister-Schmiede",
+      "type": "crafting",
+      "position": {"x": 4900, "y": 0, "z": 8300},
+      "crafting_bonus": "+25% Quality",
+      "unique_recipes": true
+    },
+    {
+      "id": "lava_bruecke",
+      "name": "Lava-Brücke",
+      "type": "hazard",
+      "position": {"x": 5200, "y": 20, "z": 8600},
+      "hazards": ["lava_splash", "heat_damage"],
+      "platforming": true
+    },
+    {
+      "id": "erzader_mine",
+      "name": "Erzader-Mine",
+      "type": "gathering",
+      "position": {"x": 5400, "y": -30, "z": 9000},
+      "resources": ["iron_ore", "gold_ore", "fire_crystal", "volcanic_glass"]
+    },
+    {
+      "id": "vulkan_kern",
+      "name": "Vulkan-Kern",
+      "type": "dungeon",
+      "position": {"x": 5800, "y": -100, "z": 9400},
+      "level_range": [12, 15],
+      "boss": "lava_titan",
+      "hazards": ["extreme_heat", "lava_pools"]
+    }
+  ],
+
+  "npcs": [
+    {"id": "schmied_ignis", "name": "Schmied Ignis", "type": "dice_shop", "shop": "glut_und_wuerfel"},
+    {"id": "meisterschmied_vulkan", "name": "Meisterschmied Vulkan", "type": "trainer", "teaches": ["blacksmithing"]},
+    {"id": "erz_haendler", "name": "Erz-Händler Pyros", "type": "merchant", "sells": ["ores", "ingots", "fire_gear"]},
+    {"id": "feuermagier_flamma", "name": "Feuermagierin Flamma", "type": "trainer", "teaches": ["fire_magic"]}
+  ],
+
+  "monsters": [
+    {"id": "fire_beetle", "name": "Feuerkäfer", "level": [2, 5], "rarity": "common", "element": "fire"},
+    {"id": "magma_slime", "name": "Magma-Schleim", "level": [3, 6], "rarity": "common", "element": "fire"},
+    {"id": "fire_elemental", "name": "Feuer-Elementar", "level": [5, 9], "rarity": "uncommon", "element": "fire"},
+    {"id": "lava_golem", "name": "Lava-Golem", "level": [8, 12], "rarity": "rare", "element": "fire"},
+    {"id": "volcanic_dragon", "name": "Vulkan-Drache", "level": [11, 14], "rarity": "rare", "element": "fire"},
+    {"id": "lava_titan", "name": "Lava-Titan", "level": [15], "rarity": "boss", "element": "fire"}
+  ],
+
+  "crafting": {
+    "best_in_world": true,
+    "specialty": "weapons_and_armor",
+    "unique_materials": ["volcanic_steel", "fire_crystal", "dragon_scale"],
+    "master_recipes": ["inferno_blade", "magma_plate", "phoenix_bow"]
+  },
+
+  "slime_color": "molten_red",
+  "slime_bonus": "+15% Feuer-Magie"
+}

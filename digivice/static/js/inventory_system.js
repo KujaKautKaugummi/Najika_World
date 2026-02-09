@@ -31,13 +31,351 @@ class InventorySystem {
             accessory_2: null
         };
 
+        // ===== HOTBAR SYSTEM (8 Quick-Slots) =====
+        this.hotbar = [null, null, null, null, null, null, null, null]; // 8 slots (Tasten 1-8)
+        this.hotbarCooldowns = [0, 0, 0, 0, 0, 0, 0, 0]; // Cooldowns pro Slot
+        this.selectedHotbarSlot = 0; // Aktuell ausgewählter Slot
+
         // Player Stats (Gold, etc.)
         this.gold = 100; // Starting gold
 
         // Item Database
         this.itemDatabase = this.loadItemDatabase();
 
+        // Initialize Hotbar UI + Keyboard Events
+        this.initHotbarUI();
+        this.initHotbarKeyboard();
+
         console.log('📦 Inventar-System initialisiert');
+        console.log('🎮 Hotbar-System aktiviert (Tasten 1-8)');
+    }
+
+    // ===== HOTBAR UI INITIALIZATION =====
+    initHotbarUI() {
+        // Create Hotbar Container if it doesn't exist
+        if (!document.getElementById('hotbar-container')) {
+            const hotbarHTML = `
+                <div id="hotbar-container">
+                    <div id="hotbar">
+                        ${[1,2,3,4,5,6,7,8].map(i => `
+                            <div class="hotbar-slot" id="hotbar-slot-${i-1}" data-slot="${i-1}">
+                                <div class="hotbar-icon"></div>
+                                <div class="hotbar-quantity"></div>
+                                <div class="hotbar-cooldown"></div>
+                                <div class="hotbar-key">${i}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            const hotbarStyle = `
+                <style id="hotbar-styles">
+                    #hotbar-container {
+                        position: fixed;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        z-index: 500;
+                        pointer-events: auto;
+                    }
+                    #hotbar {
+                        display: flex;
+                        gap: 4px;
+                        background: rgba(0, 0, 0, 0.85);
+                        padding: 8px;
+                        border-radius: 12px;
+                        border: 2px solid #4CAF50;
+                        box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+                    }
+                    .hotbar-slot {
+                        width: 56px;
+                        height: 56px;
+                        background: rgba(40, 40, 60, 0.9);
+                        border: 2px solid #555;
+                        border-radius: 8px;
+                        position: relative;
+                        cursor: pointer;
+                        transition: all 0.15s ease;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .hotbar-slot:hover {
+                        border-color: #4CAF50;
+                        transform: translateY(-3px);
+                        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+                    }
+                    .hotbar-slot.selected {
+                        border-color: #FFD700;
+                        box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+                        background: rgba(60, 60, 80, 0.9);
+                    }
+                    .hotbar-slot.on-cooldown {
+                        opacity: 0.6;
+                    }
+                    .hotbar-icon {
+                        font-size: 28px;
+                        text-align: center;
+                        line-height: 1;
+                    }
+                    .hotbar-quantity {
+                        position: absolute;
+                        bottom: 2px;
+                        right: 4px;
+                        font-size: 11px;
+                        font-weight: bold;
+                        color: #fff;
+                        text-shadow: 1px 1px 2px #000;
+                    }
+                    .hotbar-cooldown {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 0%;
+                        background: rgba(0, 0, 0, 0.7);
+                        border-radius: 6px;
+                        transition: height 0.1s linear;
+                        pointer-events: none;
+                    }
+                    .hotbar-key {
+                        position: absolute;
+                        top: 2px;
+                        left: 4px;
+                        font-size: 10px;
+                        color: #888;
+                        font-weight: bold;
+                    }
+                    .hotbar-slot.empty .hotbar-icon {
+                        color: #444;
+                    }
+                    /* Rarity colors */
+                    .hotbar-slot.rarity-common { border-color: #888; }
+                    .hotbar-slot.rarity-uncommon { border-color: #2ecc71; }
+                    .hotbar-slot.rarity-rare { border-color: #3498db; }
+                    .hotbar-slot.rarity-epic { border-color: #9b59b6; }
+                    .hotbar-slot.rarity-legendary { border-color: #f39c12; }
+                    .hotbar-slot.rarity-quest { border-color: #e74c3c; }
+                </style>
+            `;
+
+            // Insert styles
+            document.head.insertAdjacentHTML('beforeend', hotbarStyle);
+            // Insert hotbar
+            document.body.insertAdjacentHTML('beforeend', hotbarHTML);
+
+            // Add click handlers
+            document.querySelectorAll('.hotbar-slot').forEach(slot => {
+                slot.addEventListener('click', (e) => {
+                    const slotIndex = parseInt(slot.dataset.slot);
+                    this.useHotbarSlot(slotIndex);
+                });
+                slot.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    const slotIndex = parseInt(slot.dataset.slot);
+                    this.clearHotbarSlot(slotIndex);
+                });
+            });
+        }
+    }
+
+    // ===== HOTBAR KEYBOARD EVENTS =====
+    initHotbarKeyboard() {
+        window.addEventListener('keydown', (e) => {
+            // Skip if typing in input/textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            // Number keys 1-8 for hotbar
+            const key = parseInt(e.key);
+            if (key >= 1 && key <= 8) {
+                e.preventDefault();
+                this.useHotbarSlot(key - 1);
+            }
+        });
+    }
+
+    // ===== HOTBAR SLOT MANAGEMENT =====
+    assignToHotbar(slotIndex, itemId) {
+        if (slotIndex < 0 || slotIndex >= 8) {
+            console.error('❌ Ungültiger Hotbar-Slot:', slotIndex);
+            return false;
+        }
+
+        const item = this.items.find(i => i.id === itemId);
+        if (!item) {
+            console.error('❌ Item nicht im Inventar:', itemId);
+            return false;
+        }
+
+        this.hotbar[slotIndex] = {
+            id: itemId,
+            data: item.data
+        };
+
+        console.log(`🎮 Hotbar Slot ${slotIndex + 1}: ${item.data.icon} ${item.data.name}`);
+        this.updateHotbarUI();
+        return true;
+    }
+
+    clearHotbarSlot(slotIndex) {
+        if (slotIndex < 0 || slotIndex >= 8) return false;
+
+        if (this.hotbar[slotIndex]) {
+            console.log(`🎮 Hotbar Slot ${slotIndex + 1} geleert`);
+            this.hotbar[slotIndex] = null;
+            this.updateHotbarUI();
+        }
+        return true;
+    }
+
+    useHotbarSlot(slotIndex) {
+        if (slotIndex < 0 || slotIndex >= 8) return false;
+
+        // Update selected slot
+        this.selectedHotbarSlot = slotIndex;
+        this.updateHotbarUI();
+
+        const hotbarItem = this.hotbar[slotIndex];
+        if (!hotbarItem) {
+            console.log(`🎮 Hotbar Slot ${slotIndex + 1} ist leer`);
+            return false;
+        }
+
+        // Check cooldown
+        if (this.hotbarCooldowns[slotIndex] > 0) {
+            console.log(`⏳ Cooldown: ${(this.hotbarCooldowns[slotIndex] / 1000).toFixed(1)}s`);
+            return false;
+        }
+
+        // Check if item still in inventory
+        const inventoryItem = this.items.find(i => i.id === hotbarItem.id);
+        if (!inventoryItem && hotbarItem.data.type !== 'skill') {
+            console.log(`❌ ${hotbarItem.data.name} nicht mehr im Inventar!`);
+            this.clearHotbarSlot(slotIndex);
+            return false;
+        }
+
+        console.log(`🎮 Benutze Hotbar Slot ${slotIndex + 1}: ${hotbarItem.data.icon} ${hotbarItem.data.name}`);
+
+        // Use the item
+        const success = this.useItem(hotbarItem.id);
+
+        if (success) {
+            // Apply cooldown based on item type
+            let cooldownTime = 0;
+            if (hotbarItem.data.type === 'food') {
+                cooldownTime = 1000; // 1 second for food
+            } else if (hotbarItem.data.type === 'skill') {
+                cooldownTime = hotbarItem.data.cooldown || 3000;
+            }
+
+            if (cooldownTime > 0) {
+                this.startHotbarCooldown(slotIndex, cooldownTime);
+            }
+
+            // Update UI after use
+            this.updateHotbarUI();
+        }
+
+        return success;
+    }
+
+    startHotbarCooldown(slotIndex, duration) {
+        this.hotbarCooldowns[slotIndex] = duration;
+        const startTime = Date.now();
+
+        const updateCooldown = () => {
+            const elapsed = Date.now() - startTime;
+            const remaining = duration - elapsed;
+
+            if (remaining <= 0) {
+                this.hotbarCooldowns[slotIndex] = 0;
+                this.updateHotbarSlotCooldown(slotIndex, 0);
+            } else {
+                this.hotbarCooldowns[slotIndex] = remaining;
+                this.updateHotbarSlotCooldown(slotIndex, remaining / duration);
+                requestAnimationFrame(updateCooldown);
+            }
+        };
+
+        requestAnimationFrame(updateCooldown);
+    }
+
+    updateHotbarSlotCooldown(slotIndex, percentage) {
+        const slot = document.getElementById(`hotbar-slot-${slotIndex}`);
+        if (!slot) return;
+
+        const cooldownOverlay = slot.querySelector('.hotbar-cooldown');
+        if (cooldownOverlay) {
+            cooldownOverlay.style.height = `${percentage * 100}%`;
+        }
+
+        slot.classList.toggle('on-cooldown', percentage > 0);
+    }
+
+    updateHotbarUI() {
+        for (let i = 0; i < 8; i++) {
+            const slot = document.getElementById(`hotbar-slot-${i}`);
+            if (!slot) continue;
+
+            const hotbarItem = this.hotbar[i];
+            const iconEl = slot.querySelector('.hotbar-icon');
+            const quantityEl = slot.querySelector('.hotbar-quantity');
+
+            // Clear old rarity classes
+            slot.classList.remove('rarity-common', 'rarity-uncommon', 'rarity-rare', 'rarity-epic', 'rarity-legendary', 'rarity-quest', 'empty');
+
+            if (hotbarItem) {
+                // Check inventory for quantity
+                const inventoryItem = this.items.find(item => item.id === hotbarItem.id);
+                const quantity = inventoryItem ? inventoryItem.quantity : 0;
+
+                iconEl.textContent = hotbarItem.data.icon || '?';
+                quantityEl.textContent = quantity > 1 ? quantity : '';
+
+                // Add rarity class
+                if (hotbarItem.data.rarity) {
+                    slot.classList.add(`rarity-${hotbarItem.data.rarity}`);
+                }
+
+                // Gray out if no quantity
+                if (quantity <= 0 && hotbarItem.data.type !== 'skill') {
+                    slot.style.opacity = '0.4';
+                } else {
+                    slot.style.opacity = '1';
+                }
+            } else {
+                iconEl.textContent = '';
+                quantityEl.textContent = '';
+                slot.classList.add('empty');
+                slot.style.opacity = '1';
+            }
+
+            // Update selected state
+            slot.classList.toggle('selected', i === this.selectedHotbarSlot);
+        }
+    }
+
+    // Get hotbar for save/load
+    getHotbarData() {
+        return this.hotbar.map(item => item ? item.id : null);
+    }
+
+    // Load hotbar from saved data
+    loadHotbarData(savedHotbar) {
+        if (!savedHotbar || !Array.isArray(savedHotbar)) return;
+
+        for (let i = 0; i < Math.min(savedHotbar.length, 8); i++) {
+            const itemId = savedHotbar[i];
+            if (itemId) {
+                const itemData = this.itemDatabase[itemId];
+                if (itemData) {
+                    this.hotbar[i] = { id: itemId, data: itemData };
+                }
+            }
+        }
+        this.updateHotbarUI();
     }
 
     // ===== ITEM DATABASE =====
@@ -656,11 +994,12 @@ class InventorySystem {
         const saveData = {
             items: this.items,
             equipment: this.equipment,
-            gold: this.gold
+            gold: this.gold,
+            hotbar: this.getHotbarData() // Save hotbar assignments
         };
 
         localStorage.setItem('najika_inventory', JSON.stringify(saveData));
-        console.log('💾 Inventar gespeichert');
+        console.log('💾 Inventar + Hotbar gespeichert');
     }
 
     loadFromLocalStorage() {
@@ -670,7 +1009,13 @@ class InventorySystem {
             this.items = data.items || [];
             this.equipment = data.equipment || {};
             this.gold = data.gold || 0;
-            console.log('💾 Inventar geladen');
+
+            // Load hotbar after items are loaded
+            if (data.hotbar) {
+                this.loadHotbarData(data.hotbar);
+            }
+
+            console.log('💾 Inventar + Hotbar geladen');
             return true;
         }
         return false;

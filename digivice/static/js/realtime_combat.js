@@ -718,6 +718,55 @@ class RealtimeCombat {
         animate();
     }
 
+    // ===== TERRAIN HEIGHT HELPER =====
+
+    /**
+     * Berechne Terrain-Höhe an Position (x, z)
+     * Nutzt Raycast von oben nach unten
+     */
+    getTerrainHeight(x, z, fallbackY = 10) {
+        const raycaster = new this.THREE.Raycaster();
+        const origin = new this.THREE.Vector3(x, 500, z); // Von hoch oben
+        const direction = new this.THREE.Vector3(0, -1, 0); // Nach unten
+
+        raycaster.set(origin, direction);
+
+        // Sammle alle Meshes die Terrain/Boden sein könnten
+        const meshes = [];
+        this.scene.traverse((obj) => {
+            if (obj.isMesh) {
+                // Suche nach allen möglichen Boden-Namen
+                const name = obj.name.toLowerCase();
+                if (name.includes('terrain') ||
+                    name.includes('ground') ||
+                    name.includes('fallback') ||
+                    name.includes('region') ||  // Unsere Region-Planes
+                    obj.userData.isRegion ||    // userData Markierung
+                    obj.userData.isTerrain) {   // Explizite Terrain-Markierung
+                    meshes.push(obj);
+                }
+            }
+        });
+
+        if (meshes.length === 0) {
+            // Kein Terrain gefunden - nutze Fallback-Höhe basierend auf Position
+            // Götterfels (Zentrum 4800,4800) ist höher
+            const distToCenter = Math.sqrt((x - 4800) ** 2 + (z - 4800) ** 2);
+            if (distToCenter < 1600) {  // Innerhalb Götterfels
+                return 50;  // Berg-Höhe
+            }
+            return fallbackY;
+        }
+
+        const intersects = raycaster.intersectObjects(meshes, false);
+
+        if (intersects.length > 0) {
+            return intersects[0].point.y;
+        }
+
+        return fallbackY;
+    }
+
     // ===== ENEMY SPAWNING =====
 
     spawnEnemiesInAllRegions(regions) {
@@ -736,47 +785,63 @@ class RealtimeCombat {
             volcano: ['volcano_elemental', 'volcano_lavamonster']
         };
 
+        // KayKit-Modell-Pfade
+        const KAYKIT_MODELS = {
+            skeleton_warrior: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_warrior.gltf',
+            skeleton_archer: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_archer.gltf',
+            skeleton_mage: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_mage.gltf',
+            skeleton_minion: 'static/assets/KayKit Character Pack - Skeletons 1.0/Models/characters/gltf/character_skeleton_minion.gltf',
+            witch: 'static/assets/KayKit Spooktober Seasonal Pack 1.1/Models/Characters/Witch/gltf/character_witch.gltf',
+            jack: 'static/assets/KayKit Spooktober Seasonal Pack 1.1/Models/Characters/Jack/gltf/character_jack.gltf',
+            barbarian: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_barbarian.gltf',
+            knight: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_knight.gltf',
+            rogue: 'static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_rogue.gltf',
+            bear: 'static/assets/KayKit Mini-Game Variety Pack 1.2/Models/Characters/Bear/gltf/character_bear.gltf',
+            dog: 'static/assets/KayKit Mini-Game Variety Pack 1.2/Models/Characters/Dog/gltf/character_dog.gltf',
+            duck: 'static/assets/KayKit Mini-Game Variety Pack 1.2/Models/Characters/Duck/gltf/character_duck.gltf'
+        };
+
         const enemyDatabase = {
-            // ICE
-            ice_undead: { name: 'Eis-Untoter', hp: 40, damage: 8, speed: 1.0, color: 0x00ffff },
-            ice_elemental: { name: 'Eis-Elemental', hp: 50, damage: 10, speed: 0.8, color: 0xaaffff },
+            // ICE - Untote (Nekromanten-Reich)
+            ice_undead: { name: 'Eis-Untoter', hp: 40, damage: 8, speed: 1.0, color: 0x00ffff, model: KAYKIT_MODELS.skeleton_warrior, scale: 1.5 },
+            ice_elemental: { name: 'Eis-Elemental', hp: 50, damage: 10, speed: 0.8, color: 0xaaffff, model: KAYKIT_MODELS.skeleton_mage, scale: 1.5 },
 
-            // HIGHLAND
-            highland_guardian: { name: 'Hochland-Wächter', hp: 60, damage: 12, speed: 0.9, color: 0x8b7355 },
+            // HIGHLAND - Wächter
+            highland_guardian: { name: 'Hochland-Wächter', hp: 60, damage: 12, speed: 0.9, color: 0x8b7355, model: KAYKIT_MODELS.knight, scale: 1.8 },
 
-            // DESERT
-            desert_bandit: { name: 'Wüsten-Bandit', hp: 45, damage: 10, speed: 1.2, color: 0xe8d4a0 },
-            desert_sandworm: { name: 'Sandwurm', hp: 80, damage: 15, speed: 0.5, color: 0xc4a000 },
+            // DESERT - Banditen & Monster
+            desert_bandit: { name: 'Wüsten-Bandit', hp: 45, damage: 10, speed: 1.2, color: 0xe8d4a0, model: KAYKIT_MODELS.rogue, scale: 1.5 },
+            desert_sandworm: { name: 'Sandwurm', hp: 80, damage: 15, speed: 0.5, color: 0xc4a000, model: KAYKIT_MODELS.bear, scale: 2.5 },
 
-            // SWAMP
-            swamp_witch: { name: 'Sumpf-Hexe', hp: 55, damage: 14, speed: 0.7, color: 0x556b2f },
-            swamp_monster: { name: 'Giftmonster', hp: 70, damage: 12, speed: 0.6, color: 0x3d5c1f },
+            // SWAMP - Hexen
+            swamp_witch: { name: 'Sumpf-Hexe', hp: 55, damage: 14, speed: 0.7, color: 0x556b2f, model: KAYKIT_MODELS.witch, scale: 1.5 },
+            swamp_monster: { name: 'Giftmonster', hp: 70, damage: 12, speed: 0.6, color: 0x3d5c1f, model: KAYKIT_MODELS.jack, scale: 2.0 },
 
-            // MOUNTAIN
-            mountain_giant: { name: 'Bergriese', hp: 100, damage: 20, speed: 0.4, color: 0x808080 },
+            // MOUNTAIN - Riesen
+            mountain_giant: { name: 'Bergriese', hp: 100, damage: 20, speed: 0.4, color: 0x808080, model: KAYKIT_MODELS.barbarian, scale: 3.0 },
 
-            // COAST
-            coast_pirate: { name: 'Pirat', hp: 50, damage: 11, speed: 1.1, color: 0xc2b280 },
-            coast_seamonster: { name: 'Seemonster', hp: 90, damage: 18, speed: 0.8, color: 0x0066cc },
+            // COAST - Piraten
+            coast_pirate: { name: 'Pirat', hp: 50, damage: 11, speed: 1.1, color: 0xc2b280, model: KAYKIT_MODELS.rogue, scale: 1.5 },
+            coast_seamonster: { name: 'Seemonster', hp: 90, damage: 18, speed: 0.8, color: 0x0066cc, model: KAYKIT_MODELS.bear, scale: 2.5 },
 
-            // CAVES
-            caves_goblin: { name: 'Höhlen-Goblin', hp: 35, damage: 7, speed: 1.3, color: 0x2f2f2f },
+            // CAVES - Goblins
+            caves_goblin: { name: 'Höhlen-Goblin', hp: 35, damage: 7, speed: 1.3, color: 0x2f2f2f, model: KAYKIT_MODELS.skeleton_minion, scale: 1.0 },
 
-            // FOREST
-            forest_druid: { name: 'Feindlicher Druide', hp: 65, damage: 13, speed: 0.8, color: 0x2d5016 },
-            forest_spirit: { name: 'Waldgeist', hp: 45, damage: 9, speed: 1.0, color: 0x4CAF50 },
+            // FOREST - Druiden & Geister
+            forest_druid: { name: 'Feindlicher Druide', hp: 65, damage: 13, speed: 0.8, color: 0x2d5016, model: KAYKIT_MODELS.skeleton_mage, scale: 1.5 },
+            forest_spirit: { name: 'Waldgeist', hp: 45, damage: 9, speed: 1.0, color: 0x4CAF50, model: KAYKIT_MODELS.jack, scale: 1.2 },
 
-            // VOLCANO
-            volcano_elemental: { name: 'Feuer-Elemental', hp: 85, damage: 22, speed: 0.7, color: 0xff4500 },
-            volcano_lavamonster: { name: 'Lava-Kreatur', hp: 95, damage: 25, speed: 0.5, color: 0x8b0000 }
+            // VOLCANO - Feuer-Kreaturen
+            volcano_elemental: { name: 'Feuer-Elemental', hp: 85, damage: 22, speed: 0.7, color: 0xff4500, model: KAYKIT_MODELS.skeleton_warrior, scale: 2.0 },
+            volcano_lavamonster: { name: 'Lava-Kreatur', hp: 95, damage: 25, speed: 0.5, color: 0x8b0000, model: KAYKIT_MODELS.barbarian, scale: 2.5 }
         };
 
         regions.forEach(region => {
             const enemyTypes = regionEnemyTypes[region.name];
             if (!enemyTypes) return;
 
-            // Spawn 3-5 Enemies pro Region
-            const enemyCount = 3 + Math.floor(Math.random() * 3);
+            // Spawn 20 Enemies pro Region (für 3200x3200m Regionen)
+            const enemyCount = 20;
 
             for (let i = 0; i < enemyCount; i++) {
                 // Random Enemy Type für diese Region
@@ -785,15 +850,20 @@ class RealtimeCombat {
 
                 if (!enemyData) continue;
 
-                // Random Position innerhalb der Region (3200m!)
-                const offsetX = (Math.random() - 0.5) * 3000; // ±1500m für 3200m Region
-                const offsetZ = (Math.random() - 0.5) * 3000;
+                // Random Position innerhalb der Region (3200m pro Region = ±1400m vom Zentrum)
+                const offsetX = (Math.random() - 0.5) * 2800; // ±1400m
+                const offsetZ = (Math.random() - 0.5) * 2800;
+
+                // Berechne Y-Position basierend auf Terrain oder Fallback
+                const enemyX = region.x + offsetX;
+                const enemyZ = region.z + offsetZ;
+                const enemyY = this.getTerrainHeight(enemyX, enemyZ, 10) + 2; // +2 über Terrain
 
                 this.spawnEnemy(
                     randomType,
-                    region.x + offsetX,
-                    region.y + 2,
-                    region.z + offsetZ,
+                    enemyX,
+                    enemyY,
+                    enemyZ,
                     enemyData
                 );
             }
