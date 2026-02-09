@@ -246,7 +246,21 @@ class NemesisArenaUI {
             });
 
         } catch (error) {
-            console.error('Monster-Liste konnte nicht geladen werden:', error);
+            console.error('Monster-Liste konnte nicht geladen werden (Offline-Modus):', error);
+            // Offline-Fallback: Zeige Mock-Monster
+            const listElement = document.getElementById('monster-list');
+            if (listElement) {
+                const mockMonsters = [
+                    { id: 'mock_1', name: 'Schattenwolf', rank: 'Gladiator', level: 5, type: 'Bestie', has_grudge: false, stats: { hp: 80, attack: 14, defense: 8 } },
+                    { id: 'mock_2', name: 'Frostgolem', rank: 'Champion', level: 8, type: 'Elementar', has_grudge: false, stats: { hp: 120, attack: 18, defense: 15 } },
+                    { id: 'mock_3', name: 'Schattenritter', rank: 'Gebietsherrscher', level: 12, type: 'Untot', has_grudge: true, stats: { hp: 150, attack: 22, defense: 12 } }
+                ];
+                listElement.innerHTML = '<h3>🎭 Arena-Gegner (Offline)</h3>';
+                mockMonsters.forEach(monster => {
+                    const card = this.createMonsterCard(monster);
+                    listElement.appendChild(card);
+                });
+            }
         }
     }
 
@@ -385,6 +399,22 @@ class NemesisArenaUI {
                     location: 'Nemesis Arena',
                     isHardcore: false
                 });
+
+                // Callbacks auch im Offline-Modus setzen
+                window.onCombatVictory = (result) => {
+                    if (result.type === 'arena') {
+                        this.playerStats.wins++;
+                        document.getElementById('player-wins').textContent = this.playerStats.wins;
+                        this.arenaPanel.style.display = 'flex';
+                    }
+                };
+                window.onCombatDefeat = (result) => {
+                    if (result.type === 'arena') {
+                        this.playerStats.losses++;
+                        document.getElementById('player-losses').textContent = this.playerStats.losses;
+                        this.arenaPanel.style.display = 'flex';
+                    }
+                };
             }
         }
     }

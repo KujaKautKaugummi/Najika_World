@@ -173,10 +173,116 @@
         },
 
         executeCombo(combo) {
-            // Combo-Effekt (später mit Animation & Partikel)
+            // Combo-Effekt mit Schaden an nächstem Enemy
             if (typeof notify === 'function') {
                 notify(`💥 ${combo.name}!`, 'success');
             }
+            // Schaden an nächstem Enemy in Reichweite
+            this.dealDamageToNearestEnemy(combo.damage);
+        },
+
+        // Schaden an nächsten Enemy in Kampfreichweite (5 Units)
+        dealDamageToNearestEnemy(damage) {
+            if (!window.OverworldEnemies) return;
+
+            const playerPos = characterGroup ? {
+                x: characterGroup.position.x,
+                y: characterGroup.position.y,
+                z: characterGroup.position.z
+            } : null;
+            if (!playerPos) return;
+
+            const enemies = window.OverworldEnemies.getActiveEnemies();
+            let closest = null;
+            let closestDist = 8; // Kampfreichweite: 8 Units
+
+            enemies.forEach(enemy => {
+                const dx = playerPos.x - enemy.position.x;
+                const dz = playerPos.z - enemy.position.z;
+                const dist = Math.sqrt(dx * dx + dz * dz);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = enemy;
+                }
+            });
+
+            if (closest) {
+                const defense = closest.data.defense || 0;
+                const actualDamage = Math.max(1, damage - Math.floor(defense * 0.5));
+                closest.data.hp -= actualDamage;
+
+                console.log(`⚔️ ${closest.data.name} -${actualDamage}HP (${closest.data.hp}/${closest.data.maxHp})`);
+
+                // Damage-Popup
+                this.showDamagePopup(closest, actualDamage);
+
+                // HP-Bar updaten
+                this.updateEnemyHPBar(closest);
+
+                // Enemy tot?
+                if (closest.data.hp <= 0) {
+                    console.log(`💀 ${closest.data.name} besiegt!`);
+                    // Loot & Events
+                    if (window.OverworldEnemies.onEnemyDefeated) {
+                        // Nutze die neue onEnemyDefeated Funktion
+                    }
+                    if (window.GameEvents) {
+                        const loot = closest.data.loot || [];
+                        loot.forEach(itemId => {
+                            if (window.inventorySystem) window.inventorySystem.addItem(itemId, 1);
+                            window.GameEvents.emit('itemCollected', { itemId, quantity: 1, source: 'combat_loot' });
+                        });
+                        window.GameEvents.emit('enemyKilled', {
+                            enemyId: closest.data.id, enemyType: closest.data.id,
+                            biome: window.OverworldEnemies.getCurrentBiome(), rarity: closest.rarity
+                        });
+                        const goldDrop = Math.floor((closest.data.tier || 1) * 10 * (0.8 + Math.random() * 0.4));
+                        if (goldDrop > 0 && window.inventorySystem && window.inventorySystem.addGold) {
+                            window.inventorySystem.addGold(goldDrop);
+                        }
+                    }
+                    window.OverworldEnemies.removeEnemy(closest.id);
+
+                    // Victory Notification
+                    if (typeof notify === 'function') {
+                        notify(`💀 ${closest.data.name} besiegt! +${closest.data.xp}XP`, 'success');
+                    }
+                }
+            }
+        },
+
+        showDamagePopup(enemy, damage) {
+            if (!enemy.mesh || !window.THREE) return;
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 48;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ff3333';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`-${damage}`, 64, 36);
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+            const sprite = new THREE.Sprite(mat);
+            const height = (enemy.data.modelScale || 3) * 2 + 4;
+            sprite.position.set(0, height, 0);
+            sprite.scale.set(3, 1, 1);
+            enemy.mesh.add(sprite);
+            // Float up + fade out
+            let t = 0;
+            const anim = () => {
+                t += 0.03;
+                sprite.position.y += 0.05;
+                mat.opacity = Math.max(0, 1 - t);
+                if (t < 1) requestAnimationFrame(anim);
+                else { enemy.mesh.remove(sprite); tex.dispose(); mat.dispose(); }
+            };
+            anim();
+        },
+
+        updateEnemyHPBar(enemy) {
+            // Update Name-Label mit HP-Bar
+            if (!enemy.nameSprite || !enemy.nameSprite.material || !enemy.nameSprite.material.map) return;
+            // Re-render HP portion on canvas would be complex, skip for now
         },
 
         takeDamage(amount) {
@@ -599,6 +705,36 @@
             return;
         }
 
+        // 🆕 Check crafted dungeons (Lego Fortnite Style)
+        if (window._craftedDungeons && window._craftedDungeons[buildingName]) {
+            const crafted = window._craftedDungeons[buildingName];
+            console.log(`🏰 Crafted Dungeon: ${buildingName} (Typ: ${crafted.type}, Lv${crafted.level})`);
+
+            if (crafted.type === 'crawler') {
+                // First-Person Crawler Dungeon (Hexen/Daggerfall Style)
+                if (window.DungeonCrawler && typeof window.DungeonCrawler.enterCrawlerDungeon === 'function') {
+                    window.DungeonCrawler.enterCrawlerDungeon(crafted.level, scene, camera, characterGroup);
+                    if (typeof notify === 'function') {
+                        notify(`🗺️ Labyrinth Lv${crafted.level} betreten!`, 'warning');
+                    }
+                } else {
+                    console.error('❌ DungeonCrawler system not available');
+                    if (typeof notify === 'function') notify('❌ Crawler nicht geladen!', 'error');
+                }
+            } else {
+                // Room-based Dungeon (Raum-Kampf)
+                if (window.DungeonCombat && typeof window.DungeonCombat.startDungeonCombat === 'function') {
+                    window.DungeonCombat.startDungeonCombat(crafted.level, scene, buildingName);
+                    if (typeof notify === 'function') {
+                        notify(`⚔️ ${buildingName} Lv${crafted.level} gestartet!`, 'warning');
+                    }
+                } else {
+                    console.error('❌ DungeonCombat system not available');
+                }
+            }
+            return;
+        }
+
         // Mapping: Gebäude → Raum (für nicht-Dungeons)
         const buildingToRoom = {
             'Kampfarena': 'Kampfarena',
@@ -740,9 +876,16 @@
 
         console.log(`🚪 Verlasse Gebäude: ${currentInterior}`);
 
-        // Entferne Interior
+        // 🆕 Crawler-Dungeon beenden falls aktiv
+        if (window.DungeonCrawler && window.DungeonCrawler.isActive()) {
+            window.DungeonCrawler.exitCrawlerDungeon();
+        }
+
+        // Entferne Interior (roomGroup wird von buildRoom() neu erstellt)
         if (roomGroup) {
             scene.remove(roomGroup);
+            disposeHierarchy(roomGroup);
+            roomGroup = null; // Wichtig: null setzen damit buildRoom() sauber startet
         }
 
         // Hide Floor UI if in Mühle
@@ -756,26 +899,25 @@
         // Merke welches Gebäude verlassen wurde
         const wasInMuehle = (currentInterior === 'Schwarze Mühle');
 
+        // Speichere Position BEVOR buildRoom aufgerufen wird
+        const savedPos = exteriorPosition ? { ...exteriorPosition } : null;
+
         currentInterior = null;
         window.currentInterior = null; // Sync to window
         currentFloor = 0;
 
-        // Lade Open World zurück
+        // 🌍 NEUE WELT generieren! (mit frischen zufälligen Props)
         buildRoom();
 
-        // Restore Position draußen
-        if (exteriorPosition) {
-            characterGroup.position.set(
-                exteriorPosition.x,
-                exteriorPosition.y,
-                exteriorPosition.z
-            );
+        // Restore Position draußen (NACH buildRoom!)
+        if (savedPos) {
+            characterGroup.position.set(savedPos.x, savedPos.y, savedPos.z);
         } else if (wasInMuehle) {
-            // Wenn wir von der Mühle kommen (Start-Spawn), spawne draußen vor der Mühle
-            resetCharacterPosition([0, 0, 100]);  // 100m südlich der Mühle
+            resetCharacterPosition([0, 0, 100]);
         }
 
         hideExitBuildingPrompt();
+        console.log('🌍 Neue Außenwelt generiert!');
     }
 
     // === BUILD ROOM FROM CONFIG ===
@@ -1590,17 +1732,22 @@
             }
         }
 
-        // ⚔️ KAMPF-TASTEN
-        // Linke Maustaste / J: Linke Hand (Zauber)
+        // ⚔️ KAMPF-TASTEN (Tastatur-Combat wie Skyrim/Dark Souls)
+        // J: Linke Hand (Zauber/Zweitwaffe)
         if (event.code === 'KeyJ') {
             if (COMBAT_SYSTEM.attackLeft()) {
                 console.log('🔮 Linke Hand: Zauber!');
+                // Direkter Schaden wenn kein Combo
+                const leftDmg = COMBAT_SYSTEM.equipment.leftHand.damage || 20;
+                COMBAT_SYSTEM.dealDamageToNearestEnemy(leftDmg);
             }
         }
-        // Rechte Maustaste / K: Rechte Hand (Schwert)
+        // K: Rechte Hand (Schwert/Hauptwaffe)
         if (event.code === 'KeyK') {
             if (COMBAT_SYSTEM.attackRight()) {
                 console.log('⚔️ Rechte Hand: Schwert!');
+                const rightDmg = COMBAT_SYSTEM.equipment.rightHand.damage || 30;
+                COMBAT_SYSTEM.dealDamageToNearestEnemy(rightDmg);
             }
         }
         // Q: Exit Building ODER Parry
@@ -1754,17 +1901,16 @@
         const OPEN_WORLD_SIZE = 9600;  // 9.6km x 9.6km (war vorher 2400)
         currentRoomSpan = OPEN_WORLD_SIZE;  // IMMER setzen!
 
-        // Wenn Open World schon gebaut wurde, NUR currentRoomSpan updaten
-        if (openWorldBuilt) {
-            console.log('✅ Open World bereits gebaut, nur Span aktualisiert');
-            return;
-        }
-
-        // Baue Open World das erste Mal
+        // 🌍 LEBENDIGE WELT: Immer neu bauen bei jedem Aufruf!
+        // Alte Welt entfernen
         if (roomGroup) {
             scene.remove(roomGroup);
             disposeHierarchy(roomGroup);
             roomGroup = null;
+        }
+        // Prop-Cache leeren für frische Welt
+        if (window.OverworldProps) {
+            OverworldProps.clearCache();
         }
 
         usingFallbackRoom = false;
@@ -1907,18 +2053,29 @@
             group.add(reflection);
         });
 
+        // 🌍 LEBENDIGE WELT: Zufällige Props generieren!
+        if (window.OverworldProps) {
+            const propCount = OverworldProps.generateOverworldProps(group, OPEN_WORLD_SIZE);
+            console.log(`🏕️ ${propCount} Overworld-Props platziert`);
+        }
+
         roomGroup = group;
         scene.add(roomGroup);
 
         // Palette für Open World (blauer Himmel)
         applyPalette({ background: 0x87CEEB, fog: 0xb5d8e0, ambient: 0.6 });
 
-        // Character spawnt NEBEN der Mühle (100m südlich)
-        resetCharacterPosition([0, 0, 100]);
+        // Character spawnt NEBEN der Mühle (nur beim ersten Mal)
+        if (!openWorldBuilt) {
+            resetCharacterPosition([0, 0, 100]);
+        }
 
-        // Markiere Open World als gebaut
+        // 🏰 Gecraftete Dungeon-Eingänge wiederherstellen
+        restoreCraftedDungeons();
+
+        // Markiere Open World als gebaut (mindestens einmal)
         openWorldBuilt = true;
-        console.log('✅ Open World gebaut (9.6km x 9.6km) - Spawn bei Mühle');
+        console.log('✅ Open World gebaut (9.6km x 9.6km) - Neue Welt generiert!');
     }
 
 
@@ -2538,6 +2695,114 @@
         return Math.min(max, Math.max(min, value));
     }
 
+    // 🆕 CRAFTED DUNGEON ENTRANCE - Lego Fortnite Style
+    // Spieler craftet Dungeon an Werkbank → platziert Eingang in der Welt
+    function placeDungeonEntrance(dungeonType, dungeonLevel, worldX, worldZ) {
+        if (!roomGroup) {
+            console.error('❌ placeDungeonEntrance: No roomGroup (not in open world?)');
+            return false;
+        }
+
+        // Registry für gecraftete Dungeons
+        if (!window._craftedDungeons) window._craftedDungeons = {};
+
+        const dungeonName = `Crafted_${dungeonType}_Lv${dungeonLevel}_${Date.now()}`;
+        const displayName = dungeonType === 'crawler'
+            ? `🗺️ Labyrinth Lv${dungeonLevel}`
+            : `⚔️ Kampf-Dungeon Lv${dungeonLevel}`;
+
+        // Registriere Dungeon-Daten
+        window._craftedDungeons[dungeonName] = {
+            type: dungeonType, // 'crawler' oder 'room'
+            level: dungeonLevel,
+            name: displayName,
+            position: { x: worldX, z: worldZ }
+        };
+
+        // 3D Eingang bauen (Portal aus KayKit Dungeon Pack oder Fallback)
+        const entranceGroup = new THREE.Group();
+        entranceGroup.position.set(worldX, 0, worldZ);
+
+        // Steinbogen-Portal (Fallback ohne GLTF)
+        const archMat = new THREE.MeshStandardMaterial({
+            color: dungeonType === 'crawler' ? 0x4a0080 : 0x800000,
+            roughness: 0.8
+        });
+
+        // Linke Säule
+        const pillarGeo = new THREE.BoxGeometry(1.5, 8, 1.5);
+        const leftPillar = new THREE.Mesh(pillarGeo, archMat);
+        leftPillar.position.set(-3, 4, 0);
+        entranceGroup.add(leftPillar);
+
+        // Rechte Säule
+        const rightPillar = new THREE.Mesh(pillarGeo, archMat);
+        rightPillar.position.set(3, 4, 0);
+        entranceGroup.add(rightPillar);
+
+        // Querbalken
+        const topGeo = new THREE.BoxGeometry(7.5, 1.5, 1.5);
+        const topBar = new THREE.Mesh(topGeo, archMat);
+        topBar.position.set(0, 8.5, 0);
+        entranceGroup.add(topBar);
+
+        // Magisches Portal-Glow
+        const portalGeo = new THREE.PlaneGeometry(6, 7.5);
+        const portalMat = new THREE.MeshBasicMaterial({
+            color: dungeonType === 'crawler' ? 0x8800ff : 0xff2200,
+            transparent: true,
+            opacity: 0.4,
+            side: THREE.DoubleSide
+        });
+        const portal = new THREE.Mesh(portalGeo, portalMat);
+        portal.position.set(0, 4.5, 0);
+        entranceGroup.add(portal);
+
+        // Licht
+        const portalLight = new THREE.PointLight(
+            dungeonType === 'crawler' ? 0x8800ff : 0xff4400,
+            2, 20
+        );
+        portalLight.position.set(0, 5, 2);
+        entranceGroup.add(portalLight);
+
+        // Als interaktives Objekt registrieren
+        entranceGroup.userData = {
+            type: 'building',
+            name: dungeonName,
+            displayName: displayName,
+            isCraftedDungeon: true,
+            dungeonType: dungeonType,
+            dungeonLevel: dungeonLevel
+        };
+
+        roomGroup.add(entranceGroup);
+        interactiveObjects.push(entranceGroup);
+
+        console.log(`🏰 Dungeon-Eingang platziert: ${displayName} bei (${worldX}, ${worldZ})`);
+        if (typeof notify === 'function') {
+            notify(`${displayName} platziert!`, 'success');
+        }
+
+        // Speichere in localStorage für Persistenz
+        const saved = JSON.parse(localStorage.getItem('najika_crafted_dungeons') || '[]');
+        saved.push({ name: dungeonName, type: dungeonType, level: dungeonLevel, x: worldX, z: worldZ });
+        localStorage.setItem('najika_crafted_dungeons', JSON.stringify(saved));
+
+        return dungeonName;
+    }
+
+    // Lade gespeicherte Dungeon-Eingänge beim Welt-Aufbau
+    function restoreCraftedDungeons() {
+        const saved = JSON.parse(localStorage.getItem('najika_crafted_dungeons') || '[]');
+        if (saved.length === 0) return;
+
+        console.log(`🏰 Stelle ${saved.length} gecraftete Dungeons wieder her...`);
+        saved.forEach(d => {
+            placeDungeonEntrance(d.type, d.level, d.x, d.z);
+        });
+    }
+
     function bootWhenReady() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
@@ -2581,7 +2846,10 @@
         exitBuilding,
         loadMuehleFloor,
         muehleFloors,
-        get currentFloor() { return currentFloor; }
+        get currentFloor() { return currentFloor; },
+        // 🆕 Crafted Dungeon System
+        placeDungeonEntrance,
+        restoreCraftedDungeons
     };
 
     // ⚠️ WICHTIG: bootWhenReady() ist für UNIFIED.html DEAKTIVIERT!

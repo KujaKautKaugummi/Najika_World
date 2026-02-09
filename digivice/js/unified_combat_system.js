@@ -504,14 +504,11 @@ const UnifiedCombat = (function() {
         }
 
         state.log = [];
+        state.mode = 'manual';  // Immer im manuellen Modus starten
         addLog(`Kampf beginnt! ${state.context.isHardcore ? '⚠️ HARDCORE!' : ''}`);
 
         showCombatUI();
         updateUI();
-
-        if (state.mode === 'auto') {
-            startAutoMode();
-        }
 
         startEnemyAI();
         return true;
@@ -547,6 +544,11 @@ const UnifiedCombat = (function() {
 
         setCooldown('lightAttack');
 
+        // Player Animation
+        if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+            window.CharacterAnimations.playAttack('light');
+        }
+
         let damage = calculatePhysicalDamage('light', hand);
         incrementCombo();
         applyDamageToEnemy(damage);
@@ -562,6 +564,11 @@ const UnifiedCombat = (function() {
         if (!useStamina(COSTS.heavyAttack.stamina * (hand === 'both' ? 1.5 : 1))) return false;
 
         setCooldown('heavyAttack');
+
+        // Player Animation
+        if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+            window.CharacterAnimations.playAttack('heavy');
+        }
 
         let damage = calculatePhysicalDamage('heavy', hand);
 
@@ -588,6 +595,11 @@ const UnifiedCombat = (function() {
         setCooldown('dodge');
         state.player.buffs.invincible = Date.now() + 300;
 
+        // Player Animation
+        if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+            window.CharacterAnimations.playDodge();
+        }
+
         addLog('🏃 Ausgewichen!');
         updateUI();
         return true;
@@ -599,6 +611,11 @@ const UnifiedCombat = (function() {
 
         setCooldown('parry');
         state.player.buffs.parrying = Date.now() + 200;
+
+        // Player Animation
+        if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+            window.CharacterAnimations.playBlock();
+        }
 
         addLog('🛡️ Parieren!');
         updateUI();
@@ -666,6 +683,15 @@ const UnifiedCombat = (function() {
         // Casting Animation (für Explosion länger!)
         const castTime = spell.cast || 0.5;
         addLog(`🔮 Wirke ${spell.name}... (${castTime}s)`);
+
+        // Player Animation
+        if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+            window.CharacterAnimations.playCast();
+        }
+        // Companion Animation (Najika feuert mit)
+        if (window.Companion3D) {
+            window.Companion3D.playCast();
+        }
 
         // Explosion spezielle Behandlung
         if (spell.school === 'explosion') {
@@ -1202,10 +1228,6 @@ const UnifiedCombat = (function() {
         state.cheerBuffs[effect.buff] = effect.rounds;
         addLog(effect.msg);
 
-        setTimeout(() => {
-            if (state.mode === 'cheer' && state.active) lightAttack('right');
-        }, 500);
-
         updateUI();
         return true;
     }
@@ -1271,6 +1293,7 @@ const UnifiedCombat = (function() {
         state.active = false;
         state.enemy = null;
         state.enemies = [];
+        state.mode = 'manual'; // Modus immer zurücksetzen
 
         if (autoModeInterval) {
             clearInterval(autoModeInterval);
@@ -1558,7 +1581,30 @@ const UnifiedCombat = (function() {
     }
 
     function showCombatUI() {
-        if (state.uiContainer) state.uiContainer.classList.remove('hidden');
+        if (state.uiContainer) {
+            state.uiContainer.classList.remove('hidden');
+            // UI-Modus mit state.mode synchronisieren (verhindert Anfeuern-Persistenz)
+            resetCombatUIMode();
+        }
+    }
+
+    function resetCombatUIMode() {
+        if (!state.uiContainer) return;
+        const ui = state.uiContainer;
+
+        // Button active-Klasse zurücksetzen
+        ui.querySelectorAll('.mode-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === state.mode);
+        });
+
+        // Aktionsbereiche synchronisieren
+        const manual = ui.querySelector('#manual-actions');
+        const cheer = ui.querySelector('#cheer-actions');
+        const auto = ui.querySelector('#auto-info');
+
+        if (manual) manual.classList.toggle('hidden', state.mode !== 'manual');
+        if (cheer) cheer.classList.toggle('hidden', state.mode !== 'cheer');
+        if (auto) auto.classList.toggle('hidden', state.mode !== 'auto');
     }
 
     function hideCombatUI() {

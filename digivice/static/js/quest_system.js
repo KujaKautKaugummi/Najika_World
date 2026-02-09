@@ -298,6 +298,65 @@ class QuestManager {
                 }
             },
 
+            // ===== STARTER QUESTS (Götterfels / Overworld) =====
+            {
+                id: 'wolfsjagd',
+                name: 'Wolfsjagd',
+                description: 'Die Wölfe im Samtmoos-Wald greifen Reisende an. Besiege 3 Wölfe!',
+                type: 'kill',
+                giver: 'wanderer_krieger',
+                objectives: [
+                    { type: 'kill', target: 'wolf', required: 3, description: 'Besiege 3 Wölfe' }
+                ],
+                rewards: { gold: 50, items: ['wolf_pelt'], xp: 100 }
+            },
+            {
+                id: 'sammler',
+                name: 'Kristall-Sammler',
+                description: 'Sammle Kristallscherben von besiegten Gegnern oder in Dungeons.',
+                type: 'collect',
+                giver: 'wanderer_schatzjaeger',
+                objectives: [
+                    { type: 'collect', target: 'crystal_shard', required: 5, description: 'Sammle 5 Kristallscherben' }
+                ],
+                rewards: { gold: 100, items: ['health_potion', 'mana_potion'], xp: 150 }
+            },
+            {
+                id: 'erste_schritte',
+                name: 'Erste Schritte',
+                description: 'Sprich mit dem Händler am Götterfels um die Welt kennenzulernen.',
+                type: 'talk',
+                giver: 'goetterfels_questgeber',
+                objectives: [
+                    { type: 'talk', target: 'goetterfels_haendler', required: 1, description: 'Sprich mit dem Reisenden Händler' }
+                ],
+                rewards: { gold: 25, items: ['bread'], xp: 50 }
+            },
+            {
+                id: 'erkunder',
+                name: 'Erkunder der Welt',
+                description: 'Erkunde 3 verschiedene Regionen der Welt.',
+                type: 'explore',
+                giver: 'goetterfels_questgeber',
+                objectives: [
+                    { type: 'explore', target: 'samtmoos', required: 1, description: 'Besuche den Samtmoos-Tiefwald' },
+                    { type: 'explore', target: 'heisse_duenen', required: 1, description: 'Besuche die Heißen Dünen' },
+                    { type: 'explore', target: 'salzwind', required: 1, description: 'Besuche die Salzwind-Küste' }
+                ],
+                rewards: { gold: 150, items: [], xp: 300 }
+            },
+            {
+                id: 'monster_jaeger',
+                name: 'Monster-Jäger',
+                description: 'Besiege 10 beliebige Gegner um deine Kampffähigkeiten zu beweisen.',
+                type: 'kill',
+                giver: null,
+                objectives: [
+                    { type: 'kill', target: 'any', required: 10, description: 'Besiege 10 Gegner' }
+                ],
+                rewards: { gold: 200, items: ['steel_sword'], xp: 500 }
+            },
+
             // ===== WORLD EXPLORATION QUEST =====
             {
                 id: 'world_explorer',
@@ -439,7 +498,7 @@ class QuestManager {
         return updated;
     }
 
-    // Complete a quest
+    // Complete a quest + REWARDS VERGEBEN
     completeQuest(questId) {
         const quest = this.quests[questId];
         if (!quest) return false;
@@ -458,10 +517,108 @@ class QuestManager {
             this.trackedQuest = null;
         }
 
-        console.log(`🎉 Quest abgeschlossen: "${quest.name}"`);
-        console.log(`💰 Rewards: ${quest.rewards.gold}g, ${quest.rewards.items.join(', ')}, ${quest.rewards.xp}xp`);
+        // ===== REWARDS VERGEBEN =====
+        const rewards = quest.rewards || {};
 
+        // Gold
+        if (rewards.gold > 0 && window.inventorySystem && window.inventorySystem.addGold) {
+            window.inventorySystem.addGold(rewards.gold);
+            console.log(`💰 +${rewards.gold} Gold`);
+        }
+
+        // Items
+        if (rewards.items && rewards.items.length > 0 && window.inventorySystem) {
+            rewards.items.forEach(itemId => {
+                window.inventorySystem.addItem(itemId, 1);
+                console.log(`📦 +1 ${itemId}`);
+            });
+        }
+
+        // XP (via GameEvents)
+        if (rewards.xp > 0 && window.GameEvents) {
+            window.GameEvents.emit('xpGained', { amount: rewards.xp, source: 'quest', questId });
+        }
+
+        // Quest-Complete Event
+        if (window.GameEvents) {
+            window.GameEvents.emit('questCompleted', { questId, questName: quest.name, rewards });
+        }
+
+        // Notification
+        this.showQuestRewardNotification(quest);
+
+        console.log(`🎉 Quest abgeschlossen: "${quest.name}"`);
         return true;
+    }
+
+    showQuestRewardNotification(quest) {
+        const rewards = quest.rewards || {};
+        let rewardText = [];
+        if (rewards.gold) rewardText.push(`💰 ${rewards.gold} Gold`);
+        if (rewards.xp) rewardText.push(`⭐ ${rewards.xp} XP`);
+        if (rewards.items?.length) rewardText.push(`📦 ${rewards.items.length} Items`);
+
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(0,100,0,0.95), rgba(0,60,0,0.95));
+            color: #fff; padding: 15px 30px; border-radius: 12px; z-index: 5000;
+            border: 2px solid #FFD700; font-family: Arial; text-align: center;
+            animation: fadeInDown 0.5s ease;
+        `;
+        notif.innerHTML = `
+            <div style="font-size:18px; font-weight:bold; color:#FFD700;">🎉 Quest Abgeschlossen!</div>
+            <div style="font-size:14px; margin:5px 0;">${quest.name}</div>
+            <div style="font-size:13px; color:#aaffaa;">${rewardText.join(' | ')}</div>
+        `;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 4000);
+    }
+
+    // ===== GAME EVENT LISTENERS =====
+    // Verbindet Quest-System mit dem globalen Event-Bus
+
+    connectToGameEvents() {
+        if (!window.GameEvents) {
+            console.warn('⚠️ GameEvents nicht verfügbar, Quest-Events deaktiviert');
+            return;
+        }
+
+        // Kill-Events → Quest-Progress
+        window.GameEvents.on('enemyKilled', (data) => {
+            const updated = this.updateQuestsByTrigger('kill', data.enemyType || data.enemyId, 1);
+            if (updated) this.autoCompleteQuests();
+        });
+
+        // Item-Collect → Quest-Progress
+        window.GameEvents.on('itemCollected', (data) => {
+            const updated = this.updateQuestsByTrigger('collect', data.itemId, data.quantity || 1);
+            if (updated) this.autoCompleteQuests();
+        });
+
+        // NPC-Talk → Quest-Progress
+        window.GameEvents.on('npcTalked', (data) => {
+            const updated = this.updateQuestsByTrigger('talk', data.npcId, 1);
+            if (updated) this.autoCompleteQuests();
+        });
+
+        // Region-Enter → Quest-Progress
+        window.GameEvents.on('regionEntered', (data) => {
+            const updated = this.updateQuestsByTrigger('explore', data.biome || data.regionId, 1);
+            if (updated) this.autoCompleteQuests();
+        });
+
+        console.log('🔗 Quest-System mit GameEvents verbunden');
+    }
+
+    autoCompleteQuests() {
+        // Prüfe ob aktive Quests fertig sind und schließe sie automatisch ab
+        [...this.activeQuests].forEach(questId => {
+            const quest = this.quests[questId];
+            if (quest && quest.isComplete()) {
+                this.completeQuest(questId);
+            }
+        });
     }
 
     // Track a quest (show in tracker)

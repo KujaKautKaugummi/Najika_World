@@ -199,7 +199,31 @@ class ChatUI {
             const data = await response.json();
 
             if (data.response) {
-                this.addMessage('Najika', data.response, 'assistant');
+                this.addMessage('Najika', data.response, 'assistant', data.mood);
+
+                // ===== MIND HOOKS: Animationen/Gestik auslösen =====
+                if (data.hooks && Array.isArray(data.hooks)) {
+                    data.hooks.forEach(hook => {
+                        if (hook.type === 'ANIMATION' && window.Companion3D) {
+                            Companion3D.playAnimation(hook.content || hook.trigger);
+                        }
+                        if (hook.type === 'GESTURE' && window.Companion3D) {
+                            Companion3D.playAnimation(hook.content || 'wave');
+                        }
+                    });
+                }
+
+                // Mind-Mood für Companion-Expression
+                if (data.mood && window.Companion3D) {
+                    const moodAnims = {
+                        'happy': 'cheer', 'needy': 'wave', 'playful': 'dance',
+                        'dominant': 'idle', 'possessive': 'idle'
+                    };
+                    const anim = moodAnims[data.mood];
+                    if (anim && anim !== 'idle') {
+                        Companion3D.playAnimation(anim);
+                    }
+                }
             } else if (data.error) {
                 this.addMessage('System', 'Fehler: ' + data.error, 'system');
             } else {
@@ -232,16 +256,29 @@ class ChatUI {
         return { mood: 'default', emote: '', avatar: '🎀' };
     }
 
-    addMessage(sender, text, type = 'user') {
+    addMessage(sender, text, type = 'user', serverMood = null) {
         const container = document.getElementById('chat-messages');
 
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${type}`;
 
-        // Detect mood for Najika messages
+        // Detect mood for Najika messages (Server-Mood hat Priorität)
         let mood = null;
         if (type === 'assistant') {
-            mood = this.detectMood(text);
+            if (serverMood) {
+                // Server liefert echten Mood aus NajikaMind
+                const moodMap = {
+                    'happy': { mood: 'happy', emote: '😊', avatar: '✨' },
+                    'needy': { mood: 'love', emote: '💕', avatar: '💗' },
+                    'possessive': { mood: 'love', emote: '💕', avatar: '💗' },
+                    'playful': { mood: 'happy', emote: '😊', avatar: '✨' },
+                    'dominant': { mood: 'explosion', emote: '💥', avatar: '🔥' },
+                    'tsundere': { mood: 'thinking', emote: '🤔', avatar: '💭' },
+                };
+                mood = moodMap[serverMood] || this.detectMood(text);
+            } else {
+                mood = this.detectMood(text);
+            }
             messageDiv.classList.add(`mood-${mood.mood}`);
         }
 

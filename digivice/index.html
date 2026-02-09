@@ -31,9 +31,10 @@
             left: 0;
             right: 0;
             background: rgba(0, 0, 0, 0.9);
-            padding: 10px 20px;
+            padding: 6px 10px;
             display: flex;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 4px;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -44,12 +45,13 @@
             background: #4CAF50;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
             font-family: monospace;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         #ui-top-bar button:hover {
@@ -577,6 +579,19 @@
         <button onclick="window.openGardenSystem?.()" id="btn-garden" style="background: linear-gradient(135deg, #8BC34A, #558B2F);">🌱 Garten</button>
         <button onclick="window.openFishingSystem?.()" id="btn-fishing" style="background: linear-gradient(135deg, #03A9F4, #0288D1);">🎣 Angeln</button>
         <button onclick="window.openHousingSystem?.()" id="btn-housing" style="background: linear-gradient(135deg, #FF9800, #F57C00);">🏰 Housing</button>
+        <!-- RPG System Buttons -->
+        <button onclick="window.characterStatsUI?.toggle()" id="btn-charstats" style="background: linear-gradient(135deg, #FFD700, #FF8F00);">📊 Stats</button>
+        <button onclick="window.statTrainingUI?.toggle()" id="btn-training" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">🏋️ Training</button>
+        <button onclick="window.skillTreeUI?.open()" id="btn-skilltree" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">🌳 Skills</button>
+        <button onclick="window.questUI?.toggleQuestLog()" id="btn-quests" style="background: linear-gradient(135deg, #F57F17, #E65100);">📜 Quests</button>
+        <button onclick="window.affinityUI?.open()" id="btn-affinity" style="background: linear-gradient(135deg, #E91E63, #AD1457);">💕 Affinity</button>
+        <button onclick="window.bestiaryUI?.toggle()" id="btn-bestiary" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">📖 Bestiary</button>
+        <button onclick="window.factionUI?.toggle()" id="btn-factions" style="background: linear-gradient(135deg, #8E24AA, #6A1B9A);">⚔️ Fraktionen</button>
+        <button onclick="window.careerUI?.toggle()" id="btn-careers" style="background: linear-gradient(135deg, #EF6C00, #E65100);">🏛️ Berufe</button>
+        <button onclick="window.tradeUI?.toggle()" id="btn-trade" style="background: linear-gradient(135deg, #FFD700, #FFA000);">💰 Handel</button>
+        <button onclick="window.creatureUI?.toggle()" id="btn-creatures" style="background: linear-gradient(135deg, #4DB6AC, #00897B);">🐾 Kreaturen</button>
+        <button onclick="window.slimeCompanion?.toggleUI()" id="btn-slime" style="background: linear-gradient(135deg, #00E676, #00C853);">🐾 Slime</button>
+        <button onclick="toggleInventory()" id="btn-inventory" style="background: linear-gradient(135deg, #795548, #5D4037);">🎒 Inventar</button>
         <button onclick="togglePanel('activities')" id="btn-activities" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">⚙️ Mehr</button>
         <button onclick="togglePanel('settings-panel')" id="btn-settings" style="background: linear-gradient(135deg, #607D8B, #455A64);">🔧 Settings</button>
     </div>
@@ -600,6 +615,7 @@
             <div style="color: #f39c12; font-size: 12px; margin-bottom: 8px; font-weight: bold;">⚔️ KAMPF & ABENTEUER</div>
             <button onclick="enterDungeon()" class="activity-btn">🗡️ Dungeon betreten</button>
             <button onclick="openNemesisArena()" class="activity-btn">🏟️ Nemesis Arena</button>
+            <button onclick="window.slimeArenaUI?.open()" class="activity-btn">🍺 Slime Arena</button>
             <button onclick="startOverworldCombat()" class="activity-btn">⚔️ Overworld Kampf</button>
             <button onclick="openTripleTriad()" class="activity-btn">🃏 Triple Triad</button>
             <button onclick="openDungeonDice()" class="activity-btn">🎲 Dungeon Dice</button>
@@ -943,8 +959,12 @@
     <script src="js/unified_combat_system.js"></script>
     <!-- NEUES Real 3D Combat System mit echten KayKit Gegnern! -->
     <script src="js/combat/real_3d_combat.js"></script>
-    <!-- Overworld Enemies -->
+    <!-- Game Event Bus (muss VOR allen Systemen laden) -->
+    <script src="js/game_events.js"></script>
+    <!-- Overworld Enemies + NPCs -->
     <script src="js/overworld_enemies.js"></script>
+    <script src="js/overworld_npcs.js"></script>
+    <script src="js/radio_najika.js"></script>
     <script src="js/minigames.js"></script>
     <script src="js/chat_ui.js"></script>
     <script src="js/quest_ui.js"></script>
@@ -961,7 +981,21 @@
     <script src="js/garden.js"></script>
     <script src="js/buildings_custom.js"></script>
     <script src="js/character_animations.js"></script>
+    <script src="js/monster_registry.js"></script>
+    <script src="js/overworld_props.js"></script>
+    <script src="js/dungeon_crawler.js"></script>
+    <script src="js/postman_system.js"></script>
+    <script src="js/career_system.js"></script>
+    <script src="js/world_event_generator.js"></script>
+    <script src="js/faction_system.js"></script>
+    <script src="js/economy_system.js"></script>
+    <script src="js/survival_system.js"></script>
+    <script src="js/companion_swap_system.js"></script>
+    <script src="js/creature_taming.js"></script>
+    <script src="js/creature_recruit.js"></script>
     <script src="js/3d_scene.js"></script>
+    <script src="js/companion_3d.js"></script>
+    <script src="js/companion_approval.js"></script>
     <script src="js/voice_call.js"></script>
     <!-- Phase 1 Systems -->
     <script src="js/equipment_combat.js"></script>
@@ -981,6 +1015,18 @@
     <script src="js/nemesis_arena_frontend.js"></script>
     <!-- Combat Special UI (Grab, TIDS, Infuse) -->
     <script src="js/ui/combat_special_ui.js"></script>
+    <!-- RPG UI Systems -->
+    <script src="js/ui/skill_tree_ui.js"></script>
+    <script src="js/ui/affinity_ui.js"></script>
+    <script src="js/ui/character_stats_ui.js"></script>
+    <script src="js/ui/bestiary_ui.js"></script>
+    <script src="js/ui/stat_training_ui.js"></script>
+    <script src="js/ui/survival_hud.js"></script>
+    <script src="js/ui/faction_ui.js"></script>
+    <script src="js/ui/career_ui.js"></script>
+    <script src="js/ui/creature_ui.js"></script>
+    <script src="js/ui/trade_ui.js"></script>
+    <script src="js/ui/law_notification.js"></script>
     <!-- ========================================== -->
 
     <script>
@@ -1173,11 +1219,11 @@
         // Nemesis Arena - Shadow of Mordor Style!
         function openNemesisArena() {
             if (window.NemesisArena) {
-                window.NemesisArena.showPanel();
+                window.NemesisArena.showArenaPanel();
                 togglePanel('activities');
                 showNotification('🏟️ Nemesis Arena geöffnet!', 2000);
             } else if (window.NemesisArenaUI) {
-                window.NemesisArenaUI.show();
+                window.NemesisArenaUI.showArenaPanel();
                 togglePanel('activities');
                 showNotification('🏟️ Nemesis Arena geöffnet!', 2000);
             } else {
@@ -1400,11 +1446,13 @@
 
         // Inventory System (Phase 5: Inventar + Equipment)
         const inventorySystem = new InventorySystem(foodSystem, realtimeCombat);
+        window.inventorySystem = inventorySystem;
 
         // NPC System (Phase 6: NPCs + Dialogue)
         const npcSystem = new NPCSystem(scene, THREE);
         // Quest System (Phase 7: Quests + Tracking)
         const questManager = new QuestManager();
+        window.questManager = questManager;
 
 
         // Special Features System (Phase 8: Arena, Onsen, Leuchtturm, Player Shops)
@@ -1645,31 +1693,49 @@
         }
         // ======================================== END PHASE 1 ========================================
 
-        // Najika Character (KayKit Mage Model - Phase 6)
+        // Kuja Character (KayKit Skeleton Mage - Phase 6)
         let character = new THREE.Group();
-        let najikaModel = null;
+        let kujaModel = null;
 
         async function loadNajikaCharacter() {
             try {
+                // KayKit AnimatedCharacter - hat Skeleton + alle Animationen!
                 const gltf = await new Promise((resolve, reject) => {
-                    gltfLoader.load('static/assets/KayKit Dungeon Pack 1.0/Models/Characters/gltf/character_mage.gltf', resolve, undefined, reject);
+                    gltfLoader.load('static/assets/KayKit Character Animations 1.2/Animations/gltf/KayKit_AnimatedCharacter_v1.2.glb', resolve, undefined, reject);
                 });
 
-                najikaModel = gltf.scene;
-                najikaModel.scale.set(0.75, 0.75, 0.75); // Najika ist 1.35-1.40m groß (kleiner als Erwachsene)
+                kujaModel = gltf.scene;
+                kujaModel.scale.set(0.75, 0.75, 0.75);
 
-                najikaModel.traverse((child) => {
+                // Kuja-Look: Dunkle Skelett-Magier Farben
+                kujaModel.traverse((child) => {
                     if (child.isMesh) {
                         child.castShadow = true;
                         child.receiveShadow = true;
+                        if (child.material) {
+                            child.material = child.material.clone();
+                            child.material.color.set(0x6a4c93);      // Dunkles Lila
+                            child.material.emissive = new THREE.Color(0x1a0a2e);
+                            child.material.emissiveIntensity = 0.3;
+                        }
                     }
                 });
 
-                character.add(najikaModel);
-                console.log('✅ Najika Character (Mage) geladen!');
+                character.add(kujaModel);
+
+                // Animations-System initialisieren!
+                if (window.CharacterAnimations) {
+                    window.CharacterAnimations.init(kujaModel, gltf);
+                    console.log('🎬 Kuja Animationen aktiviert!');
+                }
+
+                // Animations-Daten exportieren für Companion
+                window.kujaAnimationClips = gltf.animations;
+
+                console.log('💀 Kuja Character (Animated + Skeleton-Look) geladen!');
             } catch (error) {
-                console.warn('⚠️  Najika Character konnte nicht geladen werden, verwende Fallback:', error);
-                // Fallback: Simple colored cube (Najika: 1.35m hoch)
+                console.warn('⚠️  Kuja Character konnte nicht geladen werden, verwende Fallback:', error);
+                // Fallback: Simple colored cube
                 const fallbackGeometry = new THREE.BoxGeometry(0.45, 1.35, 0.45);
                 const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
                 const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
@@ -1685,6 +1751,9 @@
         character.position.set(4800, initialGroundHeight + 3.5, 4800);  // Auf dem Berg bei Götterfels
         console.log('🎮 Spieler spawnt bei Y=' + (initialGroundHeight + 3.5));
         scene.add(character);
+
+        // Export character for companion and other systems
+        window.gameCharacter = character;
 
         // Camera folgt Character (Third-Person Mode)
         cameraController.setCharacter(character, 1.8); // Angepasst für Najika (1.35-1.40m)
@@ -3323,7 +3392,9 @@
 
                 schwarzeMuehle = gltf.scene;
                 // Götterfels ist bei (4800, 4800) - Mühle auf dem Gipfel
-                schwarzeMuehle.position.set(4800, 150, 4800); // Berg-Gipfel bei Weltzentrum
+                // Dynamische Y-Höhe: nutze getGroundHeight statt hardcoded Y
+                const muehleGroundY = getGroundHeight(4800, 4800);
+                schwarzeMuehle.position.set(4800, muehleGroundY, 4800); // Berg-Gipfel bei Weltzentrum
                 schwarzeMuehle.scale.set(25, 25, 25); // VIEL größer für 3200m Map! (24x Skalierung)
 
                 // Färbe Windmühle SCHWARZ
@@ -3359,7 +3430,7 @@
                     opacity: 0.8
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                marker.position.set(4800, 400, 4800); // HOCH über der Windmühle bei Götterfels (sichtbar von weit weg!)
+                marker.position.set(4800, muehleGroundY + 250, 4800); // HOCH über der Windmühle bei Götterfels (sichtbar von weit weg!)
                 scene.add(marker);
 
                 // Pulsing Animation für Marker
@@ -3483,7 +3554,9 @@
                     });
 
                     const building = gltf.scene;
-                    building.position.set(location.position.x, location.position.y, location.position.z);
+                    // Dynamische Y-Höhe: nutze getGroundHeight statt hardcoded Y
+                    const buildingGroundY = getGroundHeight(location.position.x, location.position.z);
+                    building.position.set(location.position.x, buildingGroundY, location.position.z);
                     building.scale.set(location.scale, location.scale, location.scale);
 
                     // WICHTIG: Sichtbarkeit forcieren (gegen LOD-Culling)
@@ -3508,7 +3581,7 @@
                     scene.add(building);
                     buildings.push(building);
 
-                    console.log(`🏙️ ${location.name} Position: X=${location.position.x}, Y=${location.position.y}, Z=${location.position.z}`);
+                    console.log(`🏙️ ${location.name} Position: X=${location.position.x}, Y=${buildingGroundY}, Z=${location.position.z}`);
 
                     // ===== PLACEHOLDER-BUILDINGS UM DIE STADT =====
                     // Erstelle 10-20 einfache Gebäude um das Hauptgebäude herum
@@ -3521,7 +3594,7 @@
                         const distance = 40 + Math.random() * (cityRadius - 40); // 40-150m vom Zentrum
                         const bx = location.position.x + Math.cos(angle) * distance;
                         const bz = location.position.z + Math.sin(angle) * distance;
-                        const by = location.position.y;
+                        const by = getGroundHeight(bx, bz);
 
                         // Einfaches Placeholder-Gebäude (Box + Dach)
                         const houseGroup = new THREE.Group();
@@ -3587,7 +3660,7 @@
                         opacity: 0.95
                     });
                     const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                    marker.position.set(location.position.x, location.position.y + 200, location.position.z);
+                    marker.position.set(location.position.x, buildingGroundY + 200, location.position.z);
                     marker.frustumCulled = false; // Immer sichtbar!
                     scene.add(marker);
 
@@ -3599,7 +3672,7 @@
                         opacity: 0.4
                     });
                     const beam = new THREE.Mesh(beamGeometry, beamMaterial);
-                    beam.position.set(location.position.x, location.position.y + 350, location.position.z);
+                    beam.position.set(location.position.x, buildingGroundY + 350, location.position.z);
                     beam.frustumCulled = false;
                     scene.add(beam);
 
@@ -3984,6 +4057,14 @@
             cameraController.update(delta);
 
             // ========================================
+            // CHARACTER ANIMATIONS UPDATE
+            // ========================================
+            if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+                window.CharacterAnimations.update(delta);
+            }
+            // ========================================
+
+            // ========================================
             // PHASE 2: Update World Manager (OPTIONAL)
             // ========================================
             if (USE_PHASE_2 && worldManager && worldManager.initialized) {
@@ -4138,6 +4219,11 @@
                 movementStateEl.style.color = '#4CAF50';
             }
 
+            // Character Animation Update (Bewegung)
+            if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+                window.CharacterAnimations.updateMovement(hasMovementInput, isSprinting, isSliding);
+            }
+
             // Keep character within map bounds
             if (isInInterior) {
                 // Interior Bounds: ±66 (Raum-Größe)
@@ -4207,6 +4293,29 @@
         if (window.OverworldEnemies) {
             window.OverworldEnemies.init(scene);
             console.log('🐺 Overworld Enemies initialized with scene');
+        }
+
+        // OVERWORLD NPCs INITIALISIEREN
+        if (window.OverworldNPCs) {
+            window.OverworldNPCs.init(scene);
+            console.log('🧑 Overworld NPCs initialized with scene');
+        }
+
+        // QUEST-SYSTEM MIT GAME EVENTS VERBINDEN
+        if (window.questManager && window.questManager.connectToGameEvents) {
+            window.questManager.connectToGameEvents();
+        }
+
+        // REGION-CHANGE EVENT bei Biome-Wechsel
+        if (window.OverworldEnemies && window.GameEvents) {
+            let lastBiome = '';
+            setInterval(function() {
+                const currentBiome = window.OverworldEnemies.getCurrentBiome();
+                if (currentBiome && currentBiome !== lastBiome) {
+                    lastBiome = currentBiome;
+                    window.GameEvents.emit('regionEntered', { biome: currentBiome, regionId: currentBiome });
+                }
+            }, 2000);
         }
         // ========================================
 
@@ -5920,11 +6029,28 @@
         window.craftItemFromNPC = function(recipeId) {
             if (craftingSystem.craftItem(recipeId)) {
                 const recipe = craftingSystem.recipes[recipeId];
-                alert('🔨 Crafting erfolgreich!\n\n' + recipe.icon + ' ' + recipe.name + ' erstellt!');
+
+                // Schöne Notification statt alert()
+                const notif = document.createElement('div');
+                notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,rgba(80,40,0,0.95),rgba(40,20,0,0.95));color:#fff;padding:15px 30px;border-radius:12px;z-index:5000;border:2px solid #FFD700;font-family:Arial;text-align:center;';
+                notif.innerHTML = '<div style="font-size:24px;">' + recipe.icon + '</div><div style="font-size:16px;font-weight:bold;color:#FFD700;">Crafting Erfolgreich!</div><div>' + recipe.name + ' erstellt!</div>';
+                document.body.appendChild(notif);
+                setTimeout(function() { notif.remove(); }, 3000);
+
+                // GameEvent
+                if (window.GameEvents) {
+                    window.GameEvents.emit('itemCrafted', { recipeId: recipeId, resultItem: recipe.result });
+                    window.GameEvents.emit('itemCollected', { itemId: recipe.result, quantity: 1, source: 'crafting' });
+                }
+
                 endDialogue();
                 if (inventoryOpen) updateInventoryUI();
             } else {
-                alert('❌ Crafting fehlgeschlagen!');
+                const notif = document.createElement('div');
+                notif.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(150,0,0,0.9);color:#fff;padding:12px 25px;border-radius:10px;z-index:5000;border:2px solid #ff4444;font-family:Arial;';
+                notif.textContent = '❌ Crafting fehlgeschlagen! (Materialien fehlen)';
+                document.body.appendChild(notif);
+                setTimeout(function() { notif.remove(); }, 3000);
             }
         };
 

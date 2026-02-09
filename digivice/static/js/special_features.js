@@ -97,7 +97,39 @@ class SpecialFeatures {
             softy: 'Softy'
         };
 
-        alert(`Arena Modus: ${modeNames[mode]}\n\nDas Arena-System wird in einer späteren Phase mit Multiplayer vollständig implementiert.\n\nBereit für den Kampf! ⚔️`);
+        // Starte echte Arena mit NemesisArena System!
+        if (window.NemesisArena) {
+            window.NemesisArena.arenaMode = mode;
+            window.NemesisArena.showArenaPanel();
+            console.log(`🏟️ Nemesis Arena gestartet im ${modeNames[mode]} Modus!`);
+        } else if (window.UnifiedCombat) {
+            // Fallback: Starte direkt einen Arena-Kampf via UnifiedCombat
+            const enemies = mode === 'hardcore'
+                ? [{ name: 'Arena-Champion', hp: 150, attack: 25, defense: 15, speed: 1.2, xp: 100 }]
+                : mode === 'normal'
+                ? [{ name: 'Arena-Gladiator', hp: 100, attack: 18, defense: 10, speed: 1.0, xp: 60 }]
+                : [{ name: 'Arena-Novize', hp: 60, attack: 10, defense: 5, speed: 0.8, xp: 30 }];
+
+            window.UnifiedCombat.startCombat({
+                type: 'arena',
+                enemy: enemies[0],
+                location: 'Arena - ' + modeNames[mode],
+                isHardcore: mode === 'hardcore'
+            });
+            console.log(`🏟️ Arena-Kampf gestartet: ${modeNames[mode]}!`);
+        } else if (window.Real3DCombat && window.scene) {
+            // Fallback 2: Real3DCombat
+            const playerPos = window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 };
+            const arenaEnemies = mode === 'hardcore'
+                ? ['corrupted_knight', 'skeleton_mage', 'witch']
+                : mode === 'normal'
+                ? ['skeleton_warrior', 'goblin_chief']
+                : ['slime'];
+            window.Real3DCombat.startCombat(arenaEnemies, window.scene, playerPos);
+            console.log(`🏟️ 3D Arena-Kampf: ${arenaEnemies.length} Gegner!`);
+        } else {
+            alert(`Arena Modus: ${modeNames[mode]}\n\n⚔️ Kampf wird vorbereitet...`);
+        }
     }
 
     // ===== ONSEN SYSTEM (Dampf-Hain - Healing Zones) =====

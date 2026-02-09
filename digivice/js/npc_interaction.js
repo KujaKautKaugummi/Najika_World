@@ -270,29 +270,50 @@ class NPCInteractionSystem {
     buyItem(itemName, price) {
         console.log(`[Shop] Kaufe ${itemName} für ${price}g`);
 
-        // TODO: Backend API call
         fetch('http://localhost:8000/api/shop/buy', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 player_id: 'kuja',
-                item_name: itemName,
+                item_id: itemName,
                 price: price
             })
         })
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                alert(`✅ ${itemName} gekauft!`);
+                this.showNotification(`✅ ${itemName} gekauft! -${price}g`, 'success');
                 this.loadPlayerGold();
+                // Frontend-Inventar sync
+                if (window.inventorySystem) window.inventorySystem.addItem(itemName, 1);
+                // GameEvents
+                if (window.GameEvents) {
+                    window.GameEvents.emit('itemPurchased', { itemId: itemName, price });
+                    window.GameEvents.emit('itemCollected', { itemId: itemName, quantity: 1, source: 'shop' });
+                }
             } else {
-                alert(`❌ Fehler: ${data.error || 'Nicht genug Gold'}`);
+                this.showNotification(`❌ ${data.error || 'Nicht genug Gold'}`, 'error');
             }
         })
         .catch(err => {
             console.warn('[Shop] Backend nicht erreichbar, Offline-Kauf:', err);
-            alert(`✅ ${itemName} gekauft! (Offline-Modus)`);
+            this.showNotification(`✅ ${itemName} gekauft! (Offline)`, 'success');
+            if (window.inventorySystem) window.inventorySystem.addItem(itemName, 1);
         });
+    }
+
+    showNotification(text, type) {
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position:fixed; top:20px; right:20px; z-index:5000;
+            background:${type === 'success' ? 'rgba(0,100,0,0.9)' : 'rgba(150,0,0,0.9)'};
+            color:#fff; padding:12px 20px; border-radius:10px;
+            border:2px solid ${type === 'success' ? '#00ff00' : '#ff4444'};
+            font-family:Arial; font-size:14px;
+        `;
+        notif.textContent = text;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
     }
 
     loadPlayerGold() {

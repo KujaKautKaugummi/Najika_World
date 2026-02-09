@@ -992,14 +992,50 @@ class NPCDialogueSystem {
                 // Najika Reaction
                 this.showBuyReaction(itemId);
                 this.loadPlayerGold();
+                this.showPurchaseNotification(itemId, price, true);
+
+                // GameEvent
+                if (window.GameEvents) {
+                    window.GameEvents.emit('itemPurchased', { itemId, price, npcId: this.currentNPC?.id });
+                    window.GameEvents.emit('itemCollected', { itemId, quantity: 1, source: 'shop' });
+                }
+
+                // Frontend-Inventar synchronisieren
+                if (window.inventorySystem) {
+                    window.inventorySystem.addItem(itemId, 1);
+                }
             } else {
-                alert(`Fehler: ${data.error || 'Nicht genug Gold!'}`);
+                this.showPurchaseNotification(itemId, price, false, data.error || 'Nicht genug Gold!');
             }
         } catch (err) {
             // Offline Mode
             this.showBuyReaction(itemId);
-            alert(`${this.formatItemName(itemId)} gekauft! (Offline-Modus)`);
+            this.showPurchaseNotification(itemId, price, true, 'Offline-Modus');
+
+            if (window.inventorySystem) {
+                window.inventorySystem.addItem(itemId, 1);
+            }
+            if (window.GameEvents) {
+                window.GameEvents.emit('itemCollected', { itemId, quantity: 1, source: 'shop_offline' });
+            }
         }
+    }
+
+    showPurchaseNotification(itemId, price, success, extraMsg) {
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position: fixed; top: 20px; right: 20px;
+            background: ${success ? 'rgba(0,100,0,0.9)' : 'rgba(150,0,0,0.9)'};
+            color: #fff; padding: 12px 20px; border-radius: 10px; z-index: 5000;
+            border: 2px solid ${success ? '#00ff00' : '#ff4444'}; font-family: Arial;
+            animation: fadeInDown 0.3s ease; min-width: 200px;
+        `;
+        const itemName = this.formatItemName ? this.formatItemName(itemId) : itemId;
+        notif.innerHTML = success
+            ? `<div style="font-weight:bold;">✅ ${itemName} gekauft!</div><div style="font-size:12px; color:#aaffaa;">-${price} Gold ${extraMsg ? '(' + extraMsg + ')' : ''}</div>`
+            : `<div style="font-weight:bold;">❌ Kauf fehlgeschlagen</div><div style="font-size:12px; color:#ffaaaa;">${extraMsg || ''}</div>`;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
     }
 
     showBuyReaction(itemId) {

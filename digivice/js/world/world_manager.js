@@ -286,7 +286,14 @@ class WorldManager {
    * @returns {number} Height
    */
   getHeightAt(x, z) {
-    return this.terrainGenerator.getHeightAt(x, z);
+    // Determine regionId from world coordinates, then get terrain height
+    const pos = { x, z };
+    const region = this.regionStreaming.getCurrentRegion(pos);
+    if (region) {
+      return this.terrainGenerator.getHeightAt(region.id, x, z);
+    }
+    // No region found at these coordinates - return undefined so caller uses fallback
+    return undefined;
   }
 
   /**

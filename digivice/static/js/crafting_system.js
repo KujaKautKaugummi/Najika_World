@@ -13,7 +13,7 @@ class Recipe {
     constructor(data) {
         this.id = data.id;
         this.name = data.name;
-        this.type = data.type; // 'weapon', 'armor', 'accessory'
+        this.type = data.type; // 'weapon', 'armor', 'accessory', 'dungeon'
         this.description = data.description;
         this.icon = data.icon || '⚔️';
 
@@ -29,6 +29,10 @@ class Recipe {
 
         // Rarity
         this.rarity = data.rarity || 'common'; // 'common', 'uncommon', 'rare', 'legendary'
+
+        // Dungeon-spezifisch (Lego Fortnite Style)
+        this.dungeonType = data.dungeonType || null; // 'room' oder 'crawler'
+        this.dungeonLevel = data.dungeonLevel || 0;
     }
 
     canCraft(inventorySystem) {
@@ -214,6 +218,115 @@ class CraftingSystem {
                 requiredGold: 500,
                 requiredLevel: 8,
                 rarity: 'rare'
+            },
+
+            // ===== DUNGEONS (Lego Fortnite Style - An Werkbank craften!) =====
+            {
+                id: 'dungeon_room_lv1',
+                name: 'Schatten-Kammer Lv1',
+                type: 'dungeon',
+                description: 'Ein Raum-Dungeon voller Schatten-Kreaturen. Platzierbar in der Welt!',
+                icon: '⚔️🏰',
+                materials: [
+                    { item: 'crystal_shard', count: 3 },
+                    { item: 'iron_helmet', count: 1 }
+                ],
+                result: 'dungeon_room_lv1',
+                requiredGold: 100,
+                requiredLevel: 3,
+                rarity: 'common',
+                dungeonType: 'room',
+                dungeonLevel: 1
+            },
+            {
+                id: 'dungeon_room_lv5',
+                name: 'Explosions-Kammer Lv5',
+                type: 'dungeon',
+                description: 'Ein gefährlicher Raum-Dungeon. Explosion ist NICHT Weave!',
+                icon: '💥🏰',
+                materials: [
+                    { item: 'crystal_shard', count: 8 },
+                    { item: 'fire_sword', count: 1 },
+                    { item: 'iron_helmet', count: 2 }
+                ],
+                result: 'dungeon_room_lv5',
+                requiredGold: 350,
+                requiredLevel: 5,
+                rarity: 'uncommon',
+                dungeonType: 'room',
+                dungeonLevel: 5
+            },
+            {
+                id: 'dungeon_room_lv10',
+                name: 'Chaos-Kammer Lv10',
+                type: 'dungeon',
+                description: 'Der härteste Raum-Dungeon. Nur für Meister!',
+                icon: '☠️🏰',
+                materials: [
+                    { item: 'crystal_shard', count: 20 },
+                    { item: 'champion_keule', count: 1 },
+                    { item: 'steel_chestplate', count: 1 }
+                ],
+                result: 'dungeon_room_lv10',
+                requiredGold: 800,
+                requiredLevel: 10,
+                rarity: 'rare',
+                dungeonType: 'room',
+                dungeonLevel: 10
+            },
+            {
+                id: 'dungeon_crawler_lv1',
+                name: 'Labyrinth des Nebels Lv1',
+                type: 'dungeon',
+                description: 'Ein First-Person Labyrinth im Stil von Hexen. Finde den Ausgang!',
+                icon: '🗺️🌀',
+                materials: [
+                    { item: 'crystal_shard', count: 5 },
+                    { item: 'leather_armor', count: 1 }
+                ],
+                result: 'dungeon_crawler_lv1',
+                requiredGold: 150,
+                requiredLevel: 3,
+                rarity: 'common',
+                dungeonType: 'crawler',
+                dungeonLevel: 1
+            },
+            {
+                id: 'dungeon_crawler_lv5',
+                name: 'Labyrinth der Flammen Lv5',
+                type: 'dungeon',
+                description: 'Ein größeres Labyrinth mit gefährlicheren Gegnern.',
+                icon: '🗺️🔥',
+                materials: [
+                    { item: 'crystal_shard', count: 12 },
+                    { item: 'fire_sword', count: 1 },
+                    { item: 'leather_armor', count: 2 }
+                ],
+                result: 'dungeon_crawler_lv5',
+                requiredGold: 400,
+                requiredLevel: 6,
+                rarity: 'uncommon',
+                dungeonType: 'crawler',
+                dungeonLevel: 5
+            },
+            {
+                id: 'dungeon_crawler_lv10',
+                name: 'Labyrinth des Wahnsinns Lv10',
+                type: 'dungeon',
+                description: 'Das ultimative Labyrinth. Riesig, tödlich, legendär!',
+                icon: '🗺️💀',
+                materials: [
+                    { item: 'crystal_shard', count: 25 },
+                    { item: 'lightning_staff', count: 1 },
+                    { item: 'steel_chestplate', count: 1 },
+                    { item: 'vitality_amulet', count: 1 }
+                ],
+                result: 'dungeon_crawler_lv10',
+                requiredGold: 1000,
+                requiredLevel: 12,
+                rarity: 'rare',
+                dungeonType: 'crawler',
+                dungeonLevel: 10
             }
         ];
 
@@ -255,7 +368,28 @@ class CraftingSystem {
             this.inventorySystem.removeGold(recipe.requiredGold);
         }
 
-        // Add result item
+        // 🆕 Dungeon-Crafting: Platziere Eingang in der Welt!
+        if (recipe.type === 'dungeon' && recipe.dungeonType) {
+            console.log(`🏰 Dungeon gecraftet: ${recipe.name} (${recipe.dungeonType} Lv${recipe.dungeonLevel})`);
+
+            // Platziere Eingang nahe Spielerposition
+            if (window.Scene3D && typeof Scene3D.placeDungeonEntrance === 'function') {
+                const charGroup = Scene3D.characterGroup;
+                const px = charGroup ? charGroup.position.x + 30 : 50;
+                const pz = charGroup ? charGroup.position.z + 30 : 50;
+                const dungeonName = Scene3D.placeDungeonEntrance(recipe.dungeonType, recipe.dungeonLevel, px, pz);
+                console.log(`🔨 Dungeon platziert: ${dungeonName}`);
+            } else {
+                // Fallback: Als Item ins Inventar (zum späteren Platzieren)
+                this.inventorySystem.addItem(recipe.result, 1);
+                console.log(`🔨 Dungeon-Schlüssel ins Inventar: ${recipe.result}`);
+            }
+
+            console.log(`🔨 Crafting erfolgreich: ${recipe.icon} ${recipe.name} erstellt!`);
+            return true;
+        }
+
+        // Add result item (Normal-Crafting)
         this.inventorySystem.addItem(recipe.result, 1);
 
         console.log(`🔨 Crafting erfolgreich: ${recipe.icon} ${recipe.name} erstellt!`);

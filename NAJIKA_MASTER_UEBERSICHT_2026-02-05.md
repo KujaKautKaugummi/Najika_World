@@ -1,5 +1,5 @@
 # 🌟 NAJIKA WORLD - ULTIMATIVE PROJEKT-WISSENSDATENBANK
-**Erstellt:** 2026-02-05 | **Aktualisiert:** 2026-02-06
+**Erstellt:** 2026-02-05 | **Aktualisiert:** 2026-02-08
 **Status:** DIE EINZIGE WAHRHEIT - Jedes Modell muss diese Datei ZUERST lesen!
 
 ---
@@ -448,6 +448,221 @@
 
 📖 **Anti-Cheat Details:** → `ANTI_CHEAT_SYNC_SYSTEM.md`
 
+## 6.6 Fraktions-System (Fallout NV Style!)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FRAKTIONS-SYSTEM (GRAUE MORAL!)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   12 FRAKTIONEN in 6 Kategorien:                                            │
+│   ─────────────────────────────                                             │
+│   ADEL:     Haus Silberdorn | Haus Kupferklinge | Haus Mondsichel          │
+│   ORDEN:    Götterfels-Wächter | Postman-Orden | Heiler-Gilde              │
+│   UNTERWELT: Schwarzmarkt-Gilde | Rattenfänger-Bande                      │
+│   REGIONAL:  Dünen-Nomaden | Sumpf-Druiden | Tiefen-Schürfer              │
+│   GEHEIM:    Schatten-Kult                                                  │
+│   HANDWERK:  Handelsallianz                                                 │
+│                                                                              │
+│   FAME + INFAMY (unabhängig!):                                              │
+│   ────────────────────────────                                              │
+│   → Man kann BERÜHMT und BERÜCHTIGT gleichzeitig sein!                     │
+│   → Ruf bei einer Fraktion beeinflusst automatisch deren Feinde/Alliierte  │
+│   → Fraktionen führen OHNE den Spieler Kriege!                             │
+│                                                                              │
+│   GRAUE MORAL - WAHRE FREIHEIT:                                             │
+│   ─────────────────────────────                                             │
+│   → KEINE automatischen Gewissensbisse!                                     │
+│   → Der Spieler kann sein was er will                                       │
+│   → Die GESELLSCHAFT urteilt, nicht der Charakter selbst                   │
+│   → Moralische Dilemmas: Organhandel, Sklaverei, Schmuggel, Gift...        │
+│   → Jede Entscheidung hat Konsequenzen bei den Fraktionen                  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+📖 **Code:** → `digivice/js/faction_system.js`
+
+## 6.7 Wirtschafts-System (M&B2/Kenshi Style!)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DYNAMISCHE WIRTSCHAFT                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   25+ HANDELSGÜTER in 7 Kategorien:                                         │
+│   Nahrung | Rohstoffe | Kräuter | Waffen | Illegal | Luxus                 │
+│                                                                              │
+│   9 REGIONALE MÄRKTE:                                                       │
+│   → Jede Region produziert & braucht andere Waren                          │
+│   → Magmaströme: Waffen billig, Essen TEUER                               │
+│   → Tiefenhöhlen: Erze billig, Essen EXTREM teuer                         │
+│   → Heisse Dünen: Wasser = GOLD                                           │
+│                                                                              │
+│   DYNAMISCHE PREISE beeinflusst durch:                                      │
+│   → Angebot & Nachfrage                                                    │
+│   → Fraktions-Ruf (Fame = Rabatt, Infamy = Aufpreis/Blockade)             │
+│   → Kriege (Preise steigen in Kriegsregionen)                              │
+│   → Tote Händler (weniger Angebot)                                         │
+│                                                                              │
+│   KARAWANEN & SCHMUGGEL:                                                    │
+│   → Lebende Handelsrouten mit Karawanen                                    │
+│   → Karawanen können angegriffen/überfallen werden                         │
+│   → Schmuggel: Hoher Gewinn, hohes Risiko (Fangen = Bounty!)             │
+│   → Illegale Waren: Organproben, verbotene Bücher, Schlafgift...          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+📖 **Code:** → `digivice/js/economy_system.js`
+
+## 6.8 Survival-System (Kenshi + Rimworld!)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SURVIVAL & GESETZE                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   GRUNDBEDÜRFNISSE:                                                         │
+│   → Hunger, Durst, Energie (0-100, unter 20 = kritisch)                   │
+│   → Biom-Umgebung: Hitze, Kälte, Gift, Blitz, Dunkelheit                  │
+│                                                                              │
+│   SCHLAFEN MIT RISIKO:                                                      │
+│   ─────────────────────                                                     │
+│   Inn/Gasthaus:        0% Überfall-Risiko (100% sicher!)                   │
+│   Verstecktes Zelt:    5% Risiko                                           │
+│   Zelt mit Feuer:     25% Risiko (Feuer ist SICHTBAR!)                    │
+│   Offenes Camp:       40% Risiko                                           │
+│   Karawane:           15% Risiko (mit Wachen)                              │
+│                                                                              │
+│   → Wache halten reduziert Risiko (Skill-basiert!)                         │
+│   → Biom-Gefahren-Multiplikator (Tiefenhöhlen = 1.8x!)                   │
+│                                                                              │
+│   MOOD-SYSTEM (KEIN MORALISCHES URTEIL!):                                   │
+│   ──────────────────────────────────────                                    │
+│   → Mood wird NUR durch PHYSISCHES beeinflusst:                            │
+│     Hunger, Schlaf, Verletzungen, Wetter, Komfort                          │
+│   → Mord, Diebstahl, Organhandel = KEINE Mood-Änderung!                   │
+│   → "Sei was du sein willst. Die Gesellschaft urteilt."                    │
+│   → Mental Breaks bei Mood ≤10, Inspirationen bei ≥90                      │
+│                                                                              │
+│   REGIONALE GESETZE:                                                        │
+│   ──────────────────                                                        │
+│   Götterfels:   Strengste Gesetze, NICHT bestechbar                        │
+│   Reich d. Drei: Streng, aber bestechbar (200% Kosten)                     │
+│   Grünschlamm:  Fast gesetzlos (Strictness 0.2)                            │
+│   Wildnis:      KEIN Gesetz                                                │
+│   → Kopfgeld-System, Gefängnis, Bestechung, Flucht (30% Chance)           │
+│   → Postman-Angriff = HÖCHSTE Strafe überall!                              │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+📖 **Code:** → `digivice/js/survival_system.js`
+
+## 6.9 Character & Companion System
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CHARACTER & COMPANION SYSTEM                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   CHARAKTER-ERSTELLUNG:                                                     │
+│   ─────────────────────                                                     │
+│   Jeder Spieler wählt: MENSCH oder MONSTER (aus der Spielwelt)             │
+│   Kuja wählt: MIMIK (EXKLUSIV für ihn!)                                   │
+│                                                                              │
+│   SLIME-BEGLEITER (alle normalen Spieler):                                  │
+│   ────────────────────────────────────────                                  │
+│   → Jeder bekommt einen Slime-Begleiter                                    │
+│   → Slime hat die Form eines Monsters aus der Startregion                  │
+│     (z.B. Start in Düne → Dünen-Viper-Slime)                              │
+│   → Slime sieht 1:1 aus wie das echte Monster!                            │
+│   → Slime kann neue Formen freispielen (Training/Quests)                   │
+│   → Formen = NUR OPTISCH (8 Gebote!)                                       │
+│                                                                              │
+│   WARUM SLIME statt Monster fangen?                                         │
+│   → Monster fangen = Palworld/Minecraft Style (separates System!)          │
+│   → Gefangene Monster = Arbeitskräfte & Ressourcen                         │
+│     (z.B. Baugolem → Stein, Baum fällen → Holz)                           │
+│   → Slime = persönlicher BEGLEITER (≠ gefangene Monster!)                  │
+│                                                                              │
+│   KUJA + NAJIKA:                                                            │
+│   ──────────────                                                            │
+│   → Kuja = Hauptcharakter als Mimik (Formwandler, EXKLUSIV)               │
+│   → Najika = seine Begleiterin (KEIN Slime!)                               │
+│   → Najika ändert ihre Form NICHT                                          │
+│   → Beim Training: KUJA übt die Formen (optischer Rollentausch!)          │
+│     (bei anderen macht das der Slime, bei Kuja er selbst)                  │
+│                                                                              │
+│   FAIRNESS:                                                                 │
+│   ─────────                                                                 │
+│   ┌──────────────────────┬──────────────────────┐                          │
+│   │  Normaler Spieler     │  Kuja                 │                          │
+│   ├──────────────────────┼──────────────────────┤                          │
+│   │  Mensch/Monster       │  Mimik (EXKLUSIV)     │                          │
+│   │  Slime-Begleiter      │  Najika (Begleiterin) │                          │
+│   │  SLIME wechselt Form  │  KUJA wechselt Form   │                          │
+│   │  Gleiche V-Pet Stats  │  Gleiche V-Pet Stats  │                          │
+│   │  Gleiche Evolution    │  Gleiche Evolution    │                          │
+│   └──────────────────────┴──────────────────────┘                          │
+│   → Einziger Unterschied: WER die Formen wechselt!                         │
+│   → Gameplay = 100% identisch!                                              │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+📖 **Code:** → `digivice/js/companion_swap_system.js`
+
+## 6.10 Kreatur-System (2 Kategorien!)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    2 KREATUR-KATEGORIEN                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   KATEGORIE 1: "LEBENDE" (Anime-NPCs mit Verstand)                         │
+│   ─────────────────────────────────────────────────                         │
+│   → Haben Persönlichkeit, sprechen, reagieren auf dich                     │
+│   → Sind wie NPCs nur nicht in Menschenform                                │
+│   → Können ANGEWORBEN werden (Geld, Ruf, Schutz)                          │
+│   → Oder VERSKLAVT (wie bei menschlichen NPCs!)                           │
+│   → Droppen SELTENE Ressourcen beim Töten                                  │
+│   → ABER: Willst du den süßen Goblin wirklich töten?                      │
+│   → Alternative: Länger farmen oder Kreatur anwerben                      │
+│   → Können zum KÖNIG aufsteigen (Nemesis-System!)                          │
+│   → Ziel: 64 pro Biom = 512+ Kreaturen                                    │
+│                                                                              │
+│   KATEGORIE 2: "VIEH" (Minecraft-Tiere ohne Verstand)                      │
+│   ─────────────────────────────────────────────────                         │
+│   → Einfache Tiere, kein moralisches Dilemma                               │
+│   → ZÄHMEN durch Füttern & Geduld (KEIN Pokeball!)                        │
+│   → Basis-Ressourcen: Fleisch, Milch, Eier, Wolle                         │
+│   → Farm-System: Ställe, Zucht, tägliche Produktion                       │
+│   → Ziel: 20 pro Biom = 160+ Vieh-Arten                                   │
+│                                                                              │
+│   WARUM BEIDES?                                                             │
+│   Nur Kat.1 → Jeder Schritt existenzielle Frage → ZU VIEL                 │
+│   Nur Kat.2 → Langweilig, keine Tiefe                                      │
+│   Beides   → Perfekte Balance!                                              │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+📖 **Konzept:** → `KREATUR_SYSTEM_KONZEPT.md`
+
+## 6.11 Weitere Systeme (Digivice Three.js)
+
+| System | Datei | Beschreibung |
+|--------|-------|--------------|
+| **Monster Registry** | `monster_registry.js` | 74+ Kreaturen, 8 Biome, Spawn-Tabellen |
+| **Postman System** | `postman_system.js` | Ranger-Style Boten, Briefzustellung |
+| **World Events** | `world_event_generator.js` | Dynamische Welt-Events |
+| **Career System** | `career_system.js` | 24 Berufe, Learning by Doing |
+| **Dungeon Crawler** | `dungeon_crawler.js` | First-Person Maze, Tile-Movement |
+| **Overworld Props** | `overworld_props.js` | Biome-aware Prop-Generator |
+| **Crafting** | `static/js/crafting_system.js` | Rezepte inkl. Dungeon-Crafting |
+
 ---
 
 # 7. BACKEND API
@@ -807,6 +1022,15 @@ UE5:
 
 | Task | Status | Zuständig |
 |------|--------|-----------|
+| NPC Tagesablauf/Routine System | ⬜ TODO | OPUS-1 |
+| NPC Beziehungssystem | ⬜ TODO | OPUS-1 |
+| Survival-HUD (Hunger/Durst/Energie Anzeige) | ✅ DONE | OPUS-2 |
+| Fraktions-UI (Ruf-Übersicht, Dilemma-Dialoge) | ✅ DONE | OPUS-2 |
+| Handels-UI (Kauf/Verkauf, Schmuggler-Modus) | ✅ DONE | OPUS-2 |
+| Gesetz-Warnungen UI | ✅ DONE | OPUS-2 |
+| Career UI (24 Berufe, Kategorien, XP-Balken) | ✅ DONE | OPUS-2 |
+| Creature UI (Companion, Formen, V-Pet Training) | ✅ DONE | OPUS-2 |
+| Kreatur-System Engine (Zähmen, Anwerben, Clans) | ⬜ TODO | OPUS-1 |
 | Learning Module (Sprachen) | ⬜ TODO | Später |
 | PC-Zugriff Module | ⬜ TODO | Später |
 | Sicherer Browser | ⬜ TODO | Später |
@@ -824,6 +1048,52 @@ UE5:
 ---
 
 # 13. CHANGELOG
+
+## 2026-02-08 (Update 8 - KREATUR-SYSTEM + CHARACTER CREATION!)
+
+### 2 Kreatur-Kategorien definiert:
+- **Kat.1 "Lebende"**: Anime-NPCs mit Verstand. Anwerben, Versklaven, Handeln, oder Töten für seltene Drops
+- **Kat.2 "Vieh"**: Minecraft-Tiere. ZÄHMEN (kein Pokeball!), Farmen, Zucht
+- Moralisches Dilemma NUR bei Kat.1 (Kat.2 = normales Farming)
+- Ziel: 512+ Kat.1 + 160+ Kat.2 = 760+ Kreaturen
+
+### Character & Companion System komplett neu:
+- Charakter-Erstellung: Mensch/Monster/Mimik(Kuja)
+- Slime-Begleiter für alle (sieht 1:1 wie Monster aus!)
+- Kuja: Mimik + Najika als Begleiterin (kein Slime)
+
+### Neue Dateien:
+- `KREATUR_SYSTEM_KONZEPT.md` - Vollständiges Design-Dokument
+- `companion_swap_system.js` - Komplett neu geschrieben (~830 Zeilen)
+
+---
+
+## 2026-02-07 (Update 7 - LIVING WORLD: Fraktionen, Wirtschaft, Survival, Companion!)
+
+### Neue Systeme (Gap Analysis: Kenshi/Rimworld/Fallout NV/M&B2/Dwarf Fortress):
+
+**Neue Dateien:**
+- `digivice/js/faction_system.js` - 12 Fraktionen, Fame+Infamy, Graue Moral
+- `digivice/js/economy_system.js` - 25+ Güter, 9 Märkte, Karawanen, Schmuggel
+- `digivice/js/survival_system.js` - Hunger/Durst/Energie, Schlaf-Risiko, Mood, Gesetze
+- `digivice/js/companion_swap_system.js` - Charakter-Erstellung, Slime-Begleiter, Mimik
+
+**KRITISCHE DESIGN-ENTSCHEIDUNGEN:**
+- **WAHRE FREIHEIT**: Keine automatischen Gewissensbisse! Spieler kann alles sein.
+  Die Gesellschaft urteilt (Fraktionen, Preise, Kopfgeld), NICHT der Charakter!
+- **Schlafen = Gefahr**: Wer draußen pennt wird überfallen (bis zu 40% Chance!)
+- **Najika ≠ Slime**: Najika ist einfach Kujas Begleiterin, kein Slime
+- **Kuja = Mimik**: Beim Training wechselt KUJA die Formen (nicht Najika)
+- **Slime-Begleiter**: ALLE normalen Spieler bekommen Slime (Region-Form)
+- **Monster = Spielbar**: Spieler können als Monster aus der Spielwelt spielen
+
+### Weitere Systeme aus vorheriger Session:
+- `monster_registry.js` - 74+ Kreaturen
+- `postman_system.js` - Ranger-Style Boten
+- `world_event_generator.js` - Dynamische Events
+- `career_system.js` - 24 Berufe
+
+---
 
 ## 2026-02-06 (Update 6 - LEGO FORTNITE BUILDING & PLAYER EQUALITY!)
 

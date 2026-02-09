@@ -503,11 +503,21 @@ const NajikaFullscreen = (function() {
             if (data.response) {
                 addMessage('Najika', data.response, 'najika');
 
-                // Update mood based on response
-                if (data.response.includes('💜') || data.response.includes('liebe')) {
+                // Update mood: Server-Mood hat Priorität, sonst Text-Erkennung
+                if (data.mood) {
+                    updateMood(data.mood);
+                } else if (data.response.includes('💜') || data.response.includes('liebe')) {
                     updateMood('loving');
                 } else if (data.response.includes('😳') || data.response.includes('peinlich')) {
                     updateMood('embarrassed');
+                }
+
+                // Mind Hooks: Companion-Animationen
+                if (data.hooks && window.Companion3D) {
+                    data.hooks.forEach(hook => {
+                        if (hook.type === 'ANIMATION') Companion3D.playAnimation(hook.content || hook.trigger);
+                        if (hook.type === 'GESTURE') Companion3D.playAnimation(hook.content || 'wave');
+                    });
                 }
             }
         } catch (error) {

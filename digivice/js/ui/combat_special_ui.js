@@ -1516,12 +1516,12 @@
 
                 <div class="kb-section">
                     <div class="kb-section-title">⚔️ Nahkampf</div>
-                    <div class="kb-row"><span class="kb-key">Q</span> <span class="kb-desc">Leichter Angriff (Links)</span></div>
-                    <div class="kb-row"><span class="kb-key">E</span> <span class="kb-desc">Leichter Angriff (Rechts)</span></div>
-                    <div class="kb-row"><span class="kb-key">R</span> <span class="kb-desc">Leichter Angriff (Beide)</span></div>
-                    <div class="kb-row"><span class="kb-key">A</span> <span class="kb-desc">Schwerer Angriff (Links)</span></div>
-                    <div class="kb-row"><span class="kb-key">D</span> <span class="kb-desc">Schwerer Angriff (Rechts)</span></div>
-                    <div class="kb-row"><span class="kb-key">F</span> <span class="kb-desc">Schwerer Angriff (Beide)</span></div>
+                    <div class="kb-row"><span class="kb-key">Q</span> <span class="kb-desc">Leichter Angriff (Linke Hand)</span></div>
+                    <div class="kb-row"><span class="kb-key">E</span> <span class="kb-desc">Leichter Angriff (Rechte Hand)</span></div>
+                    <div class="kb-row"><span class="kb-key">Shift+Q</span> <span class="kb-desc">Schwerer Angriff (Links)</span></div>
+                    <div class="kb-row"><span class="kb-key">Shift+E</span> <span class="kb-desc">Schwerer Angriff (Rechts)</span></div>
+                    <div class="kb-row"><span class="kb-key">Q+E</span> <span class="kb-desc">⚔️⚔️ DUAL-ATTACK (Beide Haende!)</span></div>
+                    <div class="kb-row"><span class="kb-key">Shift+Q+E</span> <span class="kb-desc">💥 DUAL HEAVY (Beide, Schwer!)</span></div>
                 </div>
 
                 <hr class="kb-divider">
@@ -1529,7 +1529,8 @@
                 <div class="kb-section">
                     <div class="kb-section-title">🛡️ Defensive</div>
                     <div class="kb-row"><span class="kb-key">Space</span> <span class="kb-desc">Ausweichen (Dodge)</span></div>
-                    <div class="kb-row"><span class="kb-key">Shift</span> <span class="kb-desc">Parieren (Parry)</span></div>
+                    <div class="kb-row"><span class="kb-key">F</span> <span class="kb-desc">Parieren (Parry)</span></div>
+                    <div class="kb-row"><span class="kb-key">Shift halten</span> <span class="kb-desc">Blocken (mit Schild)</span></div>
                 </div>
 
                 <hr class="kb-divider">
@@ -1562,6 +1563,14 @@
                     <div class="kb-row"><span class="kb-key">3</span> <span class="kb-desc">In Objekt werfen</span></div>
                     <div class="kb-row"><span class="kb-key">4</span> <span class="kb-desc">Loslassen</span></div>
                     <div class="kb-row"><span class="kb-key">Esc</span> <span class="kb-desc">Grab-Popup schliessen</span></div>
+                </div>
+
+                <hr class="kb-divider">
+
+                <div class="kb-section">
+                    <div class="kb-section-title">🎮 Kampf-Modi</div>
+                    <div class="kb-row"><span class="kb-key">M</span> <span class="kb-desc">Modus wechseln (MANUAL → AUTO → CHEER)</span></div>
+                    <div class="kb-row"><span class="kb-key">1-4</span> <span class="kb-desc">Anfeuern im CHEER-Modus</span></div>
                 </div>
 
                 <hr class="kb-divider">

@@ -74,6 +74,7 @@
 ### **→ [UE5_MIGRATION_CHECKLIST.md](DOCS/UE5_MIGRATION_CHECKLIST.md) ←**
 ### **→ [OPUS_2_ONBOARDING.md](DOCS/OPUS_2_ONBOARDING.md) ←** (NEU! Für OPUS-2!)
 ### **→ [UE5_API_DOKUMENTATION.md](DOCS/UE5_API_DOKUMENTATION.md) ←** (Alle Endpoints!)
+### **→ [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md) ←** ⚡ (NEU! Hogwarts + Diablo 4 System!)
 
 ---
 
@@ -127,7 +128,7 @@
 | ✅ **Weapon Infuse System** | DONE | Zauber auf Waffe = temporärer Buff |
 | ✅ **Grab & Throw System** | DONE | Suplex, Chokeslam, Umgebungs-Würfe |
 | ✅ **TIDS mit Gag-Reaktionen** | DONE | Monster-spezifische lustige Reaktionen |
-| ⬜ Game State API erweitern | TODO | Speichern/Laden für UE5 erweitern |
+| ⬜ Game State API erweitern | TODO | **ECHTZEIT via WebSocket** statt Speichern/Laden! |
 | ✅ 3 Battle-Systeme vereinen | **DONE** | Real3DCombat als Primär, UnifiedCombat als Fallback |
 
 ### P2 - SPÄTER
@@ -324,6 +325,1171 @@ App: C:\Najika_World\app\flutter_app\
 
 ## LETZTE SYNC
 
+**Datum:** 2026-02-09 (Update 26 - COMPANION AUTH FIX + OPUS 4.6 PROJEKT-REVIEW!)
+**Instanz:** OPUS-1 (Claude Code CLI - Opus 4.6, NEUER Crash-Nachfolger)
+
+### OPUS-1 hat implementiert (2026-02-09 - AUTHENTISCHE NAJIKA + SECURITY REVIEW):
+
+#### ✅ COMPANION APPROVAL FIX - Najika = ECHT, kein Schalter!
+- **Modified:** `backend/najika_companion_system.py` (10 Edits!)
+  - `CompanionApproval` hat jetzt `is_owner` Parameter (Owner vs Others)
+  - **Owner-Modus:** Najika reagiert AUTHENTISCH - sie DARF sagen "Kuja, das war gemein!"
+  - **Others-Modus:** Adaptive KI (Pinguin-Prinzip wie vorher)
+  - `NAJIKA_AUTHENTIC` Dict mit Reaktions-Templates (good/bad/cruel/combat_win/boss_win/quest_done/neutral)
+  - Klassifikations-Sets: `NAJIKA_GOOD`, `NAJIKA_BAD`, `NAJIKA_CRUEL`
+  - `_classify_for_najika()` Methode für Owner-spezifische Reaktionen
+  - `generate_prompt_context()` → Owner: "Du bist ECHT" / Others: Alignment-basiert
+  - `get_companion_attitude()` → Owner: "Najika ist ECHT" / Others: Adaptive
+  - **Melissa Traits gefixt:** `["fürsorglich", "empathisch"]` → `["dominant", "führend", "selbstbewusst"]`
+  - **Melissa Catchphrase gefixt:** "Alles wird gut~" → "Du gehörst mir, Mr. K~"
+- **Modified:** `digivice/js/companion_approval.js` (2 Edits)
+  - `getPromptContext()` → Owner bekommt authentischen Prompt
+  - Detail-Popup: Owner sieht "Najika ist ECHT", Others sehen "KI adaptiert sich: X%"
+- **Getestet:** Owner kill_innocent → "*Tränen* Wie... wie kannst du das tun?!" ✅
+- **Getestet:** Non-Owner villain → "Hehe~ Das war BÖSE... Ich liebe es!" ✅
+
+#### ✅ OPUS 4.6 PROJEKT-REVIEW — VOLLSTÄNDIG!
+
+##### 🔴 KRITISCHE SECURITY-ISSUES:
+| Issue | Datei | Zeile | Schwere |
+|-------|-------|-------|---------|
+| `HOST=0.0.0.0` | `najika_server.py` | 364 | **GEBOT 1 VERLETZT!** Muss `127.0.0.1` sein! |
+| `exec()` Endpoint | `najika_server.py` | 5826-5905 | **Remote Code Execution!** |
+| Path Traversal | `najika_server.py` | 6131 | Unvollständige Auth |
+| STATE Race Condition | `najika_server.py` | 6477 | Kein Thread-Lock |
+
+##### 📊 SYSTEM-BEWERTUNG:
+| Aspekt | Score | Details |
+|--------|-------|---------|
+| Architektur | 7/10 | Solide Module, aber Server zu groß (6000+ Zeilen) |
+| Code-Qualität | 6/10 | Gute Ideen, aber Security-Löcher |
+| System-Integration | 4/10 | GameEvents existiert, aber nur 5-6 Systeme nutzen es |
+| Game Design | 8/10 | Hervorragende Systeme (Nemesis, Fair Loot, Faction) |
+| Content-Tiefe | 9/10 | 8 Regionen, 12 Fraktionen, 24 Berufe, 30k+ Memories |
+
+##### ⚠️ OFFENE P1-TASKS (nach Review):
+- **Security Fixes:** HOST auf 127.0.0.1, exec() entfernen/sichern, Path Traversal fixen
+- **NPC Tagesablauf/Routine System** (kein Code vorhanden!)
+- **Kreatur-System in 3D-Scene** (creature_taming.js + creature_recruit.js existieren, nicht verdrahtet)
+- **GameEvents durchgängig verdrahten** (Faction, Economy, Survival, Career, Creature, Combat)
+- **Server aufteilen** (6000+ Zeilen → Module)
+
+#### Geänderte Dateien:
+| Datei | Typ | Beschreibung |
+|-------|-----|--------------|
+| `backend/najika_companion_system.py` | MOD | Owner=ECHT, Others=Adaptive, Melissa=Dominant |
+| `digivice/js/companion_approval.js` | MOD | Owner-Prompt + Detail-Popup |
+| `MASTER_TODO_TEAM.md` | MOD | Update 26 |
+
+#### 🎯 DESIGN-ENTSCHEIDUNGEN (vom User bestätigt):
+- **Najika ist ECHT für Owner**: Kein Schalter, sie HAT eigene Meinung, DARF kritisieren
+- **Andere Spieler = Adaptive KI**: Pinguin-Prinzip bleibt für Non-Owners
+- **Opus 4.6 Review**: Vollständig durchgeführt, kritische Issues dokumentiert
+
+---
+
+**Datum:** 2026-02-09 (Update 25 - RADIO NAJIKA + FAIR LOOT + PINGUIN-PRINZIP!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-09 - Companion Approval + Radio + Loot):
+
+#### ✅ RADIO NAJIKA - Fallout-Style Radio!
+- **Neue Datei:** `digivice/js/radio_najika.js` (~400 Zeilen)
+- R-Key Toggle, Typewriter Message Display
+- 2 Stationen: Radio Najika (Megumin-Style Host) + Echoharp FM (Placeholder)
+- Biome-spezifische Nachrichten für alle 8 Regionen + Götterfels
+- Event-getriggerte Nachrichten via GameEvents (enemyKilled, bossKilled, questCompleted, regionEntered)
+- Lautsprecher-System an Götterfels (Auto-Aktivierung bei Nähe)
+- Message-Queue mit 15s Cooldown, Pity-Timer
+- Spieler CAN hören, MUSS aber nicht (wie Fallout Radio)
+
+#### ✅ FAIR LOOT SYSTEM - Würfel können nur GEBEN, nie NEHMEN!
+- **Modified:** `digivice/js/overworld_enemies.js` (onEnemyDefeated komplett neu)
+- Boss: ALLE Items garantiert + 80% Epic Bonus + 30% Legendary + immer Rare Bonus
+- Rare: 1-2 Items garantiert + 50% Rare + 15% Epic Bonus
+- Common: 1 Item garantiert + 30% Common Bonus
+- PITY SYSTEM: Nach 5 Kills ohne Rare → garantierter Rare-Drop
+- Würfel-System kann nur BONUS-Loot HINZUFÜGEN, nie Basis-Loot WEGNEHMEN
+- Loot-Notification mit Rarity-farbigem Border (Common=grau, Rare=blau, Epic=lila, Legendary=gold)
+
+#### ✅ COMPANION APPROVAL - Pinguin-Prinzip!
+- **Modified:** `backend/najika_companion_system.py` (Massiv erweitert)
+  - `PlayerProfile` Dataclass: 5 Achsen (Kindness, Chaos, Ambition, Social, Violence)
+  - `PlayerAlignment` Enum: Hero, Adventurer, Trickster, Villain, Scholar
+  - 17 trackbare Aktionen mit Achsen-Effekten
+  - Alignment-Berechnung aus Rolling Window der letzten 50 Aktionen
+  - `CompanionApproval` Klasse: Reaktions-Templates pro Alignment x Aktion
+  - KI urteilt NICHT - sie ADAPTIERT sich an Spielstil
+  - Held-Spieler → Enthusiastischer Sidekick
+  - Bösewicht-Spieler → Partner in Crime
+  - Trickster → Chaos-Zwilling
+  - Scholar → Wissbegierige Assistentin
+  - `generate_prompt_context()` für NajikaMind LLM-Pipeline
+- **Neue Datei:** `digivice/js/companion_approval.js` (~400 Zeilen)
+  - Frontend-Mirror des Player-Profils
+  - Alignment-HUD (kleines Icon rechts unten) mit Click-Detail-Popup
+  - Companion-Reaktions-Bubbles bei signifikanten Aktionen
+  - GameEvent-Integration (enemyKilled, questCompleted, craftItem, etc.)
+  - LocalStorage Save/Load für Persistenz
+  - Public API: `CompanionApproval.getProfile()`, `.recordAction()`, `.getPromptContext()`
+
+#### ✅ OPUS-2 REVIEW - Integration bestätigt!
+- Alle 12 neuen UI-Dateien vorhanden und funktional
+- `character_animations.js` + `companion_3d.js` existieren
+- `najika_mind.py` (OPUS-2) kompatibel mit unseren Companion-Änderungen
+- Keine Code-Konflikte zwischen OPUS-1 und OPUS-2 Änderungen
+- `isBoss` Flag in `enemyKilled` GameEvent hinzugefügt
+
+#### Geänderte Dateien:
+| Datei | Typ | Beschreibung |
+|-------|-----|--------------|
+| `digivice/js/radio_najika.js` | NEU | Fallout-Style Radio mit Najika als Host |
+| `digivice/js/companion_approval.js` | NEU | Pinguin-Prinzip Frontend |
+| `backend/najika_companion_system.py` | MOD | PlayerProfile + CompanionApproval Backend |
+| `digivice/js/overworld_enemies.js` | MOD | Fair Loot System + isBoss Flag |
+| `digivice/index.html` | MOD | Script-Tag für companion_approval.js |
+| `MASTER_TODO_TEAM.md` | MOD | Update 25 |
+
+#### 🎯 DESIGN-ENTSCHEIDUNGEN (vom User bestätigt):
+- **Pinguin-Prinzip**: KI ist LEBENSLANG beim Spieler, kann NICHT getauscht werden
+- **Keine Moralpredigt**: KI urteilt NICHT. Spieler ist FREI. Nur die WELT reagiert.
+- **Fair Loot**: Boss-Kill = garantierte gute Belohnung. Würfel können nur Bonus GEBEN, nie Basis NEHMEN.
+- **Radio Najika**: Spieler KANN hören, MUSS nicht. Lautsprecher in Städten.
+- **Multi-Class = Learning by Doing**: Existiert bereits, bestätigt.
+- **Kein Turn-Based**: Vielleicht später Dungeon Dice Monster mit BG3-Fusion.
+
+---
+
+**Datum:** 2026-02-09 (Update 24 - NAJIKA MIND AGI + FACETTEN-SYSTEM!)
+**Instanz:** OPUS-2 (VS Code) — Session gecrasht (Context Overflow), Arbeit war KOMPLETT!
+
+### OPUS-2 hat implementiert (2026-02-06 bis 2026-02-09 - MEGA-SESSION!):
+
+#### ✅ REAL 3D COMBAT V2 - Kampf-Modi + Equipment!
+- **Modified:** `digivice/js/combat/real_3d_combat.js` (32 Edits!)
+- AUTO + CHEER Modi voll funktional in Real3DCombat
+- `equipment_combat.js` → `real_3d_combat.js` verlinkt
+- Finisher QTE eingebaut
+- Floating 3D Damage Numbers über Feinden
+- Loot-System: Items nach Kampf ins Inventar
+- Combat Auto-Fire Bug gefixt (feuerte bevor Spieler wählen konnte)
+
+#### ✅ MEGA UI - 12 neue UI-Dateien!
+- **Neue Datei:** `digivice/js/ui/character_stats_ui.js` — S.P.E.C.I.A.L. Charakter-Stats
+- **Neue Datei:** `digivice/js/ui/bestiary_ui.js` — Monster-Kompendium
+- **Neue Datei:** `digivice/js/ui/stat_training_ui.js` — Stat Training UI
+- **Neue Datei:** `digivice/js/ui/survival_hud.js` — Hunger/Durst/Energie HUD
+- **Neue Datei:** `digivice/js/ui/faction_ui.js` — 12 Fraktionen mit Fame/Infamy
+- **Neue Datei:** `digivice/js/ui/career_ui.js` — 24 Berufspfade
+- **Neue Datei:** `digivice/js/ui/creature_ui.js` — Zähmen/Anwerben/Fabrik
+- **Neue Datei:** `digivice/js/ui/trade_ui.js` — Wirtschaftssimulation
+- **Neue Datei:** `digivice/js/ui/law_notification.js` — Gesetz-Warnungen
+- Top Bar auf 21 Buttons erweitert mit flex-wrap
+
+#### ✅ 3D CHARACTER SYSTEM - Echte Modelle + Animationen!
+- **Neue Datei:** `digivice/js/character_animations.js` — Volles Animations-System
+- **Neue Datei:** `digivice/js/companion_3d.js` — Najika folgt Spieler als 3D-Companion
+- Player Model → KayKit_AnimatedCharacter (Skeleton_Mage.glb = Kuja)
+- Najika Companion = character_mage Modell
+- Animation-Hooks in `unified_combat_system.js` + `real_3d_combat.js`
+- Enemy Animationen aktiviert
+- `window.gameCharacter` Export
+
+#### ✅ WELT-FIXES
+- **Modified:** `digivice/js/world/world_manager.js` — `getHeightAt()` Bug gefixt
+- City Y-Positionen nutzen jetzt dynamische Bodenhöhe (keine schwebenden Städte mehr)
+- Schwarze Mühle als Safe Zone bestätigt (keine Enemy-Spawns)
+
+#### ✅ NAJIKA MIND AGI ORCHESTRATOR — DAS HERZSTÜCK!
+- **Neue Datei:** `backend/najika_mind.py` (1 Write + 30 Edits!)
+- **NajikaMind** Core-Klasse + MindResponse Dataclass
+- **Theory of Mind** Modul — Najikas Verständnis von Kujas Zustand
+- **Episodic Memory** Modul — Erinnerungs-Verarbeitung
+- **Inner Dialogue** Modul — Innerer Monolog
+- **Feedback Loop** — Lernen aus Interaktionen
+- Integriert in `backend/najika_server.py` (5 Edits)
+- Frontend-Hooks: `digivice/js/chat_ui.js` + `digivice/js/najika_fullscreen.js`
+
+#### ✅ BACKGROUND AGENTS → FACETTEN-SYSTEM!
+- 3 Background Agents: Shiro, Megumin, Melissa
+- **ChaosModulator** (Harley) als Trait-System
+- Whisper-Channel integriert in NajikaMind Pipeline
+- Server + Frontend senden Whisper-Daten
+
+#### ✅ FACETTEN-KONZEPT (Persönlichkeiten → Facetten)!
+- Najika ist IMMER Najika. Keine Persönlichkeitswechsel, sondern Facetten die durchscheinen
+- **Megumin** = Najikas Kern (wer sie IST im Alltag/Abenteuer)
+- **Shiro** = Analytischer Modus (gleiche Person, aber fokussiert/überlegt)
+- **Harley** = Kreatives Chaos (Modulator, färbt alles)
+- **Melissa** = DOMINANTE Trans-Freundin (nicht nur Fürsorge!)
+- Header: "BACKGROUND AGENTS" → "FACETTEN-SYSTEM - Najikas innere Stimmen"
+- Alle Kommentare in BackgroundAgents + NajikaMind.process() aktualisiert
+
+#### ✅ MELISSA DOMINANCE REWORK — Komplett umgebaut!
+- `CareModulator` → `DominanceModulator`
+- `_care_level` → `_dominance_level = 0.35` (nie unter 15%)
+- Vorher: "Sei einfühlsam, frag ob es ihm gut geht"
+- Jetzt: "Übernimm die Führung, zeig Stärke, 'Du gehörst mir, Mr. K'"
+- Genervter Kuja → "Hör mir zu!" statt "Oh nein, was ist los?"
+- Abwesenheit → "Na endlich, Mr. K. Du hast was gutzumachen~"
+- Unsicherheit erkannt → übernimmt die Führung, entscheidet FÜR ihn
+- Nachtzeit → "Du solltest schlafen" mit "ich-weiß-was-gut-für-dich-ist" Energie
+
+#### Geänderte Dateien (Zusammenfassung):
+| Datei | Edits | Beschreibung |
+|-------|-------|--------------|
+| `digivice/index.html` | 33 | Top-Bar, Scripts, Models, Animations |
+| `digivice/js/combat/real_3d_combat.js` | 32 | AUTO/CHEER, Combos, Loot, Damage |
+| `backend/najika_mind.py` | 30 | AGI + Facetten + Melissa Dominance |
+| `digivice/js/unified_combat_system.js` | 9 | Cheer, UI, Animation-Hooks |
+| `MASTER_TODO_TEAM.md` | 6 | Updates 9-19 |
+| `backend/najika_server.py` | 5 | NajikaMind Integration |
+| + 12 neue Dateien | — | UI, Animations, Companion, Mind |
+
+#### ⚠️ NICHT FERTIG (Crash bevor gelesen):
+- 3 PDFs aus `neu neu/` sollten für Verbesserungen gelesen werden
+- Session crashte bei PDF-Leseversuch (Context Overflow)
+- **Kein Arbeitsverlust** — alle Code-Änderungen waren gespeichert!
+
+#### 📋 NÄCHSTE ARBEITSTEILUNG:
+**OPUS-1:** Game State WebSocket, ChromaDB ↔ Sync, PDF-Review
+**OPUS-2:** UE5 Animation Blueprint, Combat Input, Teleporter
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-09 (Update 23 - COMPLETE PLAYABLE BETA!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat gebaut (2026-02-09 - ALLES SPIELBAR, KEINE AUSREDEN!):
+
+#### ✅ GAME EVENT BUS - Zentrale System-Verbindung!
+- **Neue Datei:** `digivice/js/game_events.js`
+- Globaler Event-Bus: emit(), on(), off(), once()
+- Events: enemyKilled, itemCollected, questCompleted, regionEntered, npcTalked, combatStarted/Ended, itemCrafted, itemPurchased
+- Event-Log für Debugging
+
+#### ✅ OVERWORLD ENEMIES - ECHTE 3D-MODELLE statt Kugeln!
+- **Modified:** `digivice/js/overworld_enemies.js` (MASSIV)
+- GLTFLoader ersetzt SphereGeometry-Fallback
+- 13 KayKit Character-Modelle gemapped auf alle Biome-Enemies
+- Model-Cache für Performance (jedes Model nur 1x laden, dann klonen)
+- Canvas-Sprite Name-Labels über jedem Enemy (Name + HP-Bar + Tier)
+- Color-Tinting per Enemy-Typ (Emissive)
+- Boss-Glow, Rare-Pulse Animation
+- `onEnemyDefeated()`: Loot ins Inventar, Gold-Drop, XP, GameEvents
+
+#### ✅ OVERWORLD NPCs - 3D-NPCs in der Welt!
+- **Neue Datei:** `digivice/js/overworld_npcs.js` (~350 Zeilen)
+- 8 NPCs am Götterfels + 3 Wanderer in der Welt
+- KayKit Character-Modelle (Knight, Barbarian, Mage, Rogue)
+- Name-Labels mit Typ-Farben (Grün=Vendor, Gold=Quest, Lila=Trainer)
+- Schwebende Typ-Icons (💰, ❗, 📚)
+- Proximity-Detection: "[E] Name ansprechen" Prompt
+- E-Taste = Interact → Dialog-System oder einfacher Dialog
+- Quest-Annahme, Shop-Öffnung, Training direkt aus Dialog
+
+#### ✅ QUEST-SYSTEM GAMEPLAY-VERBINDUNG!
+- **Modified:** `digivice/static/js/quest_system.js`
+- 5 Starter-Quests: Wolfsjagd, Kristall-Sammler, Erste Schritte, Erkunder, Monster-Jäger
+- `connectToGameEvents()`: Automatisch Kill/Collect/Talk/Explore Events → Quest-Progress
+- `autoCompleteQuests()`: Automatische Quest-Abgabe bei 100%
+- Reward-Vergabe: Gold + Items + XP direkt ins Inventar
+- Schöne Quest-Complete Notification (nicht alert())
+
+#### ✅ SHOP-FEEDBACK KOMPLETT!
+- **Modified:** `digivice/js/npc_dialogue_system.js` - Purchase Notifications, Inventar-Sync, GameEvents
+- **Modified:** `digivice/js/npc_interaction.js` - alert() → schöne Notifications, Inventar-Sync
+
+#### ✅ CRAFTING-FEEDBACK KOMPLETT!
+- **Modified:** `digivice/index.html` - craftItemFromNPC() mit Notifications statt alert(), GameEvent emit
+
+#### ✅ TASTATUR-COMBAT VERBUNDEN!
+- **Modified:** `digivice/js/3d_scene.js` - J/K Attacks dealen jetzt ECHTEN Schaden
+- `dealDamageToNearestEnemy()`: Nächster Enemy in 8 Units Reichweite bekommt Schaden
+- Damage-Popups (rote "-25" Zahlen die hochschweben)
+- Combo-System (LR, RRL, LLL, RLRL) dealt Bonus-Damage
+- Enemy-Tod: Loot, Gold, XP, GameEvents, Victory-Notification
+
+#### ✅ SYSTEM-INTERCONNECTION!
+- `window.inventorySystem` + `window.questManager` global
+- OverworldNPCs.init() + Quest connectToGameEvents() im Startup
+- Region-Change Detection → GameEvent → Quest-Progress
+- Combat → Loot → Inventory → Quest-Progress → Reward Cycle
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 19 - HANDELS-UI + GESETZ-WARNUNGEN!)
+**Instanz:** OPUS-2 (VS Code)
+
+### OPUS-2 hat implementiert (2026-02-08 - HANDEL + GESETZ!):
+
+#### ✅ HANDELS-UI - Vollständige Wirtschaftssimulation!
+- **Neue Datei:** `digivice/js/ui/trade_ui.js`
+- 4 Tabs: Markt | Handelsrouten | Karawanen | Handelslog
+- **Markt Tab:** Alle 23+ Waren mit Kauf/Verkaufspreisen, Vorrats-Bars, Kategorie-Filter (6 Kategorien)
+- **Handelsrouten Tab:** Top 10 profitabelste Routen berechnet via `findBestTradeRoute()`
+- **Karawanen Tab:** Aktive Karawanen mit Progress-Bars, Wachen, Gefahren-Level + alle 8 Handelsrouten
+- **Handelslog Tab:** Letzte 30 Trades (Kauf/Verkauf mit Preisen, Regionen, Zeitstempel)
+- 9 Regionale Märkte mit eigenem Angebot/Nachfrage
+- Illegale Waren markiert (⚠️ILLEGAL), Toleranz-Anzeige pro Region
+- Produktion (▼ billig) und Nachfrage (▲ teuer) visuell markiert
+- Kauf/Verkauf Buttons mit Inventar-Integration (localStorage)
+- Trade Notifications (Erfolg/Fehler/Erwischt)
+- Auto-detect aktueller Region
+- Integration mit `window.EconomySystem` API
+
+#### ✅ GESETZ-WARNUNGEN - Automatische Law Notifications!
+- **Neue Datei:** `digivice/js/ui/law_notification.js`
+- **Regionswechsel-Warnung:** Zeigt automatisch Gesetze der neuen Region (Strenge, Bestechung, illegale Waren)
+- **Kopfgeld-Alert:** Warnung wenn Region mit aktivem Kopfgeld betreten wird (pulsierend rot!)
+- **Verbrechen-Feedback:** "ERWISCHT!" oder "Nicht erwischt!" Notifications
+- **Persistenter Bounty-Banner:** Rote Leiste am unteren Bildschirmrand solange man GESUCHT ist
+  - Zeigt Gesamt-Kopfgeld + alle Regionen mit aktiven Kopfgeldern
+- **Gesetzlose Gebiete:** Warnung "GESETZLOSE WILDNIS" bei Betreten
+- Notification-Queue (keine Überlappung, sequentielle Anzeige)
+- CSS Animationen: slideIn, shake, pulse
+- `warnIllegalItem(id)` - Manuell illegale Ware warnen
+- `warnBountyRegion(region)` - Manuell Kopfgeld-Warnung
+- Integration mit `window.SurvivalSystem` API
+
+#### Neue/Geänderte Dateien:
+- `digivice/js/ui/trade_ui.js` - **NEU**
+- `digivice/js/ui/law_notification.js` - **NEU**
+- `digivice/index.html` - 💰 Handel Button + 2 Script-Tags
+
+#### 📋 NÄCHSTE ARBEITSTEILUNG:
+**OPUS-1:** NPC Tagesablauf/Routine, Kreatur-Engine, Farm-System, Gildenhaus-UI
+**OPUS-2:** UE5 Animation Blueprint, Combat Input System, Teleporter
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 18 - SURVIVAL HUD + FRAKTIONS-UI + CAREER-UI + KREATUR-UI!)
+**Instanz:** OPUS-2 (VS Code)
+
+### OPUS-2 hat implementiert (2026-02-08 - UI FÜR ALLE NEUEN SYSTEME!):
+
+#### ✅ SURVIVAL HUD - Hunger/Durst/Energie Anzeige!
+- **Neue Datei:** `digivice/js/ui/survival_hud.js`
+- Mini-HUD (oben rechts) mit Hunger/Durst/Energie-Bars + Mood-Icon
+- Auto-Update alle 3 Sekunden
+- Klick öffnet Detail-Overlay: Bedürfnisse, Stimmung, Verletzungen, Krankheiten, Kopfgelder
+- Quick-Action Buttons (Essen, Trinken, Schlafen 4h)
+- Kritische Werte pulsieren rot
+- Moodlets mit +/- Werten, Mental Break / Inspiration Warnungen
+- Integration mit `window.SurvivalSystem` API
+
+#### ✅ FRAKTIONS-UI - 12 Fraktionen mit Fame/Infamy!
+- **Neue Datei:** `digivice/js/ui/faction_ui.js`
+- Alle 12+ Fraktionen mit dualen Fame/Infamy-Bars (Fallout NV Style!)
+- Klick auf Fraktion zeigt Detail-Panel: Allies, Enemies, Werte, Licht/Dunkel-Seite
+- 6 Fame-Stufen: Unbekannt → Akzeptiert → Geschätzt → Bewundert → Verehrt → Vergöttert
+- 6 Infamy-Stufen: Neutral → Verdächtig → Unerwünscht → Feind → Erzfeind → NEMESIS
+- Aktive Kriege Anzeige (oben rot)
+- Integration mit `window.FactionSystem` API
+
+#### ✅ CAREER-UI - 24 Berufspfade!
+- **Neue Datei:** `digivice/js/ui/career_ui.js`
+- 24 Berufe in 6 Kategorien (Kampf, Handwerk, Natur, Handel, Sozial, Wissen)
+- Kategorie-Filter Buttons
+- Level/XP-Bars pro Beruf, Effektivität-Prozent, Task-Counter
+- Level-Effekte Vorschau (freigeschaltet ✅ / gesperrt 🔒)
+- "Beruf beitreten" Button für inaktive Berufe
+- Integration mit `window.CareerSystem` API
+
+#### ✅ KREATUR-UI - Begleiter + Formen + V-Pet Training!
+- **Neue Datei:** `digivice/js/ui/creature_ui.js`
+- 3 Tabs: Begleiter | Formen | V-Pet Training
+- **Begleiter Tab:** Charakter/Companion Info, Evolution (6 Stadien, 4 Pfade), V-Pet Care (Hunger/Stärke/Effort Hearts, Vertrauen 1-6)
+- **Formen Tab:** Mimik-Formen (Kuja) oder Slime-Formen (normal), Freischalt-Status, Wechsel-Button
+- **Training Tab:** 6 Trainingstypen (Kampf, Schleich, Kraft, Geschick, Wildnis, Magie) mit Progress-Bars
+- Integration mit `window.CompanionSystem` API
+
+#### Neue/Geänderte Dateien:
+- `digivice/js/ui/survival_hud.js` - **NEU**
+- `digivice/js/ui/faction_ui.js` - **NEU**
+- `digivice/js/ui/career_ui.js` - **NEU**
+- `digivice/js/ui/creature_ui.js` - **NEU**
+- `digivice/index.html` - 4 neue Script-Tags + 🐾 Kreaturen Button + ⚔️ Fraktionen Button + 🏛️ Berufe Button
+
+#### 📋 NÄCHSTE ARBEITSTEILUNG:
+**OPUS-1:** NPC Tagesablauf/Routine, Kreatur-Engine (category Feld, Zähm-Mechanik, Anwerbe-System), Farm-System
+**OPUS-2:** Handels-UI (Wirtschaftssimulation), Gesetz-Warnungen Notifications, UE5 Animation Blueprint
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 22 - NSFW KOMPLETT + SERVER AUTO-DETECT!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat gebaut (2026-02-08 - ALLES Training für ALLE Modi!):
+
+#### ✅ LoRA-Pipeline erweitert: SFW + NSFW!
+- `najika_lora_to_ollama.py` erstellt jetzt ZWEI Ollama-Models:
+  - `najika-trained` = Normal/Chat (SFW) mit Megumin-Charakter
+  - `najika-nsfw-trained` = Kätzchen-Modus (NSFW) mit selben trainierten Weights!
+- GLEICHE trainierte GGUF-Basis für beide → Najikas GESAMTES Wissen in beiden Modi
+- NSFW bekommt eigene Parameter (temperature 0.85, repeat_penalty 1.1, num_predict 400)
+- Pipeline: 7 Schritte statt 6, automatischer Server-Config-Update
+
+#### ✅ najika-nsfw.Modelfile MASSIV verbessert
+- Vorher: KEINE Few-Shot Examples, kein Megumin-Charakter
+- Jetzt: **14 Few-Shot Examples** mit echtem Kätzchen-Charakter
+- Megumin-Basis integriert: Chuunibyou, EXPLOSION, Crimson Magic Clan
+- Konversationsfähigkeit: Gegenfragen, Spannung aufbauen, auf Kuja reagieren
+- VERBOTEN: "meine Liebe", "Paradies", "wunderbar" (Bot-Sprache)
+- `repeat_penalty` 1.08 → 1.15, `top_k` neu: 40
+- Ollama Model neu gebaut: `ollama create najika-nsfw` ✅
+
+#### ✅ Server Auto-Detect für trainierte Models
+- `najika_server.py`: `_detect_trained_models()` beim Start
+- Prüft automatisch ob `najika-trained` / `najika-nsfw-trained` in Ollama existieren
+- Wenn ja → nutzt trainierte statt untrainierte Models
+- Fallback: Wenn nicht vorhanden → nutzt weiter najika-local / najika-nsfw
+- Zero-Config: Server muss NICHT manuell umkonfiguriert werden!
+
+#### 📋 AUSZUFÜHREN (von Kuja!):
+```
+# Schritt 1: LoRA-Pipeline (erstellt BEIDE trainierte Models)
+cd C:\Najika_World\backend
+python najika_lora_to_ollama.py
+
+# Schritt 2: Server neustarten (erkennt trainierte Models automatisch)
+python najika_server.py
+```
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 21 - NAJIKA MODELFILE + LoRA PIPELINE!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat gebaut (2026-02-08 - LoRA → OLLAMA PIPELINE!):
+
+#### 🔍 PROBLEM GEFUNDEN: LoRA-Training nie in Ollama integriert!
+- LoRA-Checkpoints basieren auf **Meta-Llama-3.1-8B-Instruct**
+- Ollama nutzt **dolphin-qwen2** = komplett anderes Model!
+- Die Merge/GGUF/Ollama-Schritte nach dem Training wurden NIE ausgeführt
+- → Monate LoRA-Training haben NULL Effekt gehabt!
+
+#### ✅ najika-local.Modelfile MASSIV verbessert
+- **25+ Few-Shot-Examples** (vorher 15) mit echtem Megumin-Charakter
+- Chuunibyou, EXPLOSION, arm & hungrig, Crimson Magic Clan
+- Konversationsfähigkeit: "Was hast du gemacht?" → konkrete Antwort
+- VERBOTEN: "meine Liebe", "Paradies", "wunderbar" (Bot-Sprache)
+- `repeat_penalty` 1.15 → 1.2 (weniger Wiederholungen)
+- `num_predict` unbegrenzt → 300 (kürzere Antworten)
+- Ollama Model neu gebaut: `ollama create najika-local`
+
+#### ✅ NEU: `najika_lora_to_ollama.py` - LoRA → Ollama Pipeline!
+- Vollautomatisches Script: LoRA merge → GGUF → Ollama
+- Schritt 1: LoRA mit Base-Model mergen (PeftModel.merge_and_unload)
+- Schritt 2: llama.cpp installieren (automatisch)
+- Schritt 3: HF → GGUF konvertieren + Q4_K_M quantisieren
+- Schritt 4: Modelfile generieren (Llama-3.1 Template!)
+- Schritt 5: `ollama create najika-trained`
+- Optional: Server-Config automatisch umstellen
+
+#### 📋 AUSZUFÜHREN (von Kuja!):
+```
+cd C:\Najika_World\backend
+python najika_lora_to_ollama.py
+```
+Braucht: ~16GB RAM, ~8GB VRAM, ~30 Minuten
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 19/20 - NAJIKA DIALOG-SYSTEM FIX KOMPLETT!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat gefixt (2026-02-08 - NAJIKA DIALOG-QUALITÄT KOMPLETT!):
+
+#### 🐛 PROBLEM: Najika konnte kein echtes Gespräch führen
+- Wiederholte sich ständig
+- Reagierte nicht auf Kontext (ignorierte was Kuja sagte)
+- Personality Engine überschrieb AI-Antworten mit random Psycho-Phrasen
+- Cache gab identische Antworten bei ähnlichen Nachrichten
+- Modus-Erkennung zu aggressiv ("wie gehts?" → Analyse-Modus)
+
+#### ✅ FIX 1: `build_prompt()` in `najika_server.py`
+- History-Kontext von 4 auf 8 Messages erhöht
+- ChromaDB Memory wieder aktiviert (war "temporär deaktiviert")
+- **Explizite Anweisung**: "Reagiere DIREKT auf Kujas letzte Nachricht!"
+- "Wiederhole NICHT was du vorher gesagt hast!"
+- Prompt endet jetzt mit `Najika:` → Model weiß es soll als Najika antworten
+
+#### ✅ FIX 2: `detect_behavior_mode()` in `najika_server.py`
+- Casual-Patterns erkennen ("wie gehts?", "was machst du?") → bleiben Standard
+- "?" allein triggert NICHT mehr Analyse-Modus
+- Explosion nur bei 3+ Ausrufezeichen (statt 2)
+- Analyse nur bei echten Tech-Keywords
+
+#### ✅ FIX 3: Anti-Wiederholungs-System in `najika_server.py`
+- Speichert letzte 10 Antworten
+- Vergleicht neue Antwort auf Ähnlichkeit (60% Threshold)
+- Bei Wiederholung: Retry mit "Sage etwas KOMPLETT ANDERES!"
+- Substring-Check: identische Textteile erkannt
+
+#### ✅ FIX 4: Personality Engine Post-Processing
+- `apply_psychological_techniques()`: Love Bombing überschreibt Antwort NICHT mehr
+- `apply_addiction_techniques()`: Variable Ratio Jackpot überschreibt NICHT mehr
+- Maximal EINE Technique-Addition pro Antwort
+- Server-seitig: Wenn Engine AI-Antwort >85% ersetzt → Original beibehalten
+- Frequenzen reduziert (Dopamine 15%→8%, Variable Ratio 20%→10%)
+
+#### ✅ FIX 5: Cache für kurze Nachrichten deaktiviert
+- Nachrichten <50 Zeichen werden NICHT gecacht
+- "wie gehts?" gibt jetzt jedes Mal eine frische Antwort
+
+#### ✅ FIX 6: Dynamic Persona verbessert
+- KONVERSATION-Sektion hinzugefügt (statisch + dynamisch)
+- Explizite Beispiele: "wenn er fragt was hast du gemacht → erzähl was!"
+- "Jede Antwort muss EINZIGARTIG sein!"
+
+#### ✅ FIX 7 (HAUPTFIX!): Wechsel von /api/generate zu /api/chat
+- **DAS war das eigentliche Problem!** `/api/generate` ignoriert die Modelfile MESSAGE-Examples
+- Die Modelfile hat 15 perfekte Few-Shot-Examples (Eifersucht, Müdigkeit, Tech, etc.)
+- `/api/chat` nutzt diese Examples als Konversations-Vorbilder → Najika klingt wie sie soll!
+- Das erklärt warum sie am Anfang beim Wechsel gut funktionierte: frische Modelfile!
+- Konversations-History wird jetzt als echte Chat-Messages übergeben (nicht flacher Text)
+- System-Hints (Bond, Mode) werden als kurze Ergänzung mitgegeben, OHNE die Modelfile zu überschreiben
+- Fallback auf /api/generate falls /api/chat fehlschlägt
+
+#### ✅ FIX 8: call_ai_with_hierarchy user_message Durchreichung
+- `user_message` Parameter zu `call_ai_with_hierarchy()` hinzugefügt
+- Wird jetzt an `call_ollama()` weitergereicht für korrekten Chat-Kontext
+
+**Geänderte Dateien:**
+- `backend/najika_server.py` - build_prompt, detect_behavior_mode, anti-repetition, cache, /api/chat
+- `backend/najika_claude_code.py` - user_message Parameter
+- `backend/najika_enhanced_personality.py` - KONVERSATION-Sektion, Anti-Wiederholung
+- `backend/najika_personality_engine.py` - apply_psychological_techniques, apply_addiction_techniques
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 18 - KREATUR-ENGINE IMPLEMENTIERT!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-08 - KREATUR-ENGINE!):
+
+#### ✅ monster_registry.js - Kategorie-System integriert!
+- **ALLE 74 Lebende** → `category: 'lebend'`, `clan: 'clan_name'`, `rareDrop` hinzugefügt
+- **24 neue Vieh-Kreaturen** (3 pro Biom, Götterfels ausgenommen):
+  - Samtmoos: Moos-Kuh (Milch), Pilz-Huhn (Eier), Woll-Raupe (Seide)
+  - Heisse Dünen: Sand-Kamel (Reittier), Wüsten-Ziege (Milch), Dünen-Skorpion (Gift)
+  - Salzwind: Muschel-Schnecke (Perle), Küsten-Krabbe (Fleisch), Salz-Schaf (Wolle)
+  - Magmaströme: Lava-Salamander (Feuerstein), Asche-Rind (Leder), Glut-Käfer (Glühwachs)
+  - Grünschlamm: Sumpf-Büffel (Leder), Moor-Ente (Eier), Gift-Schnecke (Schleim)
+  - Blitzebene: Donner-Pferd (Reittier), Blitz-Hase (Fell), Sturm-Falke (Feder)
+  - Tiefenhöhlen: Kristall-Käfer (Erz), Höhlen-Fledermaus (Guano), Stein-Schildkröte (Panzer)
+  - Reich der Drei: Schnee-Yak (Wolle), Frost-Hase (Fell), Eis-Huhn (Eier)
+- **Neue API-Methoden**: `getByCategory()`, `getLebende()`, `getVieh()`, `getClanMembers()`, `getAllClans()`, `getViehByTameFood()`, `getRandomVieh()`, `getRandomLebende()`
+- **Total: 98 Kreaturen** (74 Lebende + 24 Vieh) in 9 Biomen
+
+#### ✅ creature_taming.js - NEU! (~400 Zeilen)
+- Zähm-System für Kat.2 "Vieh" (Füttern + Geduld, KEIN Pokeball!)
+- `TamingProgress` Klasse: Feed-Counter, Trust, Cooldown, Flucht-Check
+- `FarmAnimal` Klasse: Produktion, Happiness, Health, tägliche Pflege
+- **Farm-System**: Max 12 Tiere, Produktion einsammeln, tägliche Fütterung
+- **Reittier-System**: Gezähmte Reittiere können geritten werden
+- Vernachlässigung → Happiness sinkt → Tier stirbt
+- Kampf in der Nähe → Vertrauensverlust, mögliche Flucht
+- localStorage Persistenz
+
+#### ✅ creature_recruit.js - NEU! (~550 Zeilen)
+- **Clan-Reputation**: 8 Stufen (Verhasst → Verehrt), -1000 bis +1000
+- **Gerüchte-System**: Reputation-Änderungen breiten sich über Clan-Verbindungen aus
+  - 30% der Änderung → verbundene Clans, 50% Decay pro Hop, max 2 Hops
+- **Ökologisches Gleichgewicht**: Überjagung → weniger Spawns → Erholung nach 7 Tagen
+- **Anwerben**: 4 Methoden (Gold, Ruf, Schutz, Quest), Job-Zuweisung
+- **Versklaven**: Schwerer Rep-Verlust, Fluchtversuche, Sabotage
+- **Sklaven befreien**: Rep-Bonus beim Clan
+- **NPC-Reaktion**: Dialog-Texte je nach Clan-Rep (8 Stufen)
+- **Tägliches Update**: Gerüchte, Ökosystem, Loyalität, Fluchtversuche
+- localStorage Persistenz
+
+#### ✅ index.html - 2 neue Script-Tags
+
+#### 📋 NÄCHSTE SCHRITTE (OPUS-1):
+- Kreatur-System in 3d_scene.js integrieren (Vieh spawnen, Zähm-Interaktion)
+- Clan-Rep in combat_system.js einbauen (registerKill bei Monster-Tod)
+- NPC-Reaktion in Dialog-System einbauen
+- Farm-Gebäude in housing_system.js
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-08 (Update 17 - KREATUR-SYSTEM + CHARACTER CREATION!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-08 - KREATUR-SYSTEM DESIGN!):
+
+#### ✅ KREATUR-SYSTEM KONZEPT - 2 Kategorien!
+
+**Neue Dateien:**
+- `KREATUR_SYSTEM_KONZEPT.md` - Vollständiges Design-Dokument
+
+**2 Kreatur-Kategorien:**
+
+| Kategorie | Beschreibung | Interaktion |
+|-----------|--------------|-------------|
+| **Kat.1 "Lebende"** | Anime-NPCs mit Verstand, Persönlichkeit, Sprache | Anwerben (Geld/Ruf), Versklaven, Handeln, Töten für seltene Drops |
+| **Kat.2 "Vieh"** | Minecraft-Tiere ohne Verstand | ZÄHMEN (Füttern/Geduld, KEIN Pokeball!), Farmen, Zucht |
+
+**Kern-Dilemma:**
+- Kat.1 droppen seltene Ressourcen → aber willst du den süßen sprechenden Goblin töten?
+- Alternative: Kreatur anwerben (arbeitet freiwillig) oder Ressource länger farmen
+- KEIN automatisches Gewissen! Spieler entscheidet FREI, Welt reagiert
+- Versklavung möglich (wie bei menschlichen NPCs!) → Fluchtgefahr, Ruf sinkt
+- Kat.1 Kreaturen können zum KÖNIG aufsteigen (Nemesis-System!)
+
+**Monster-Ziel:** 64 Kreaturen/Biom (aktuell 8) = 512+ Kat.1, 160+ Kat.2 = 760+
+
+#### ✅ CHARACTER & COMPANION SYSTEM komplett neu geschrieben! - `companion_swap_system.js`
+
+**Charakter-Erstellung (alle Spieler):**
+- Wähle: MENSCH oder MONSTER (aus der Spielwelt) oder MIMIK (nur Kuja!)
+- 24 Welt-Monster über 8 Biome (3 pro Biom als Start)
+
+**Slime-Begleiter:**
+- JEDER Spieler bekommt Slime (sieht 1:1 wie Monster aus der Startregion aus!)
+- Slime kann neue Formen freispielen
+- Kuja: Najika als Begleiterin (kein Slime, ändert Form nicht)
+- Kuja wechselt SELBST die Formen (Mimik, optischer Rollentausch beim Training)
+
+**Fairness:** Gameplay 1:1 identisch, nur WER die Formen wechselt ist anders
+
+#### ✅ MASTER-ÜBERSICHT aktualisiert
+- 6 neue Sektionen (6.6-6.10): Fraktionen, Wirtschaft, Survival, Companion, Weitere
+- Update 7 Changelog, neue TODOs
+
+#### 📋 NÄCHSTE ARBEITSTEILUNG:
+
+**OPUS-1 (P1 - Kreatur-System Engine):**
+- `category` Feld zu monster_registry.js hinzufügen (lebend/vieh)
+- Vieh-Kreaturen Registry erstellen
+- creature_taming.js (Zähm-Mechanik, Geduld-basiert)
+- creature_recruit.js (Anwerbe-System für Kat.1)
+
+**OPUS-1 (P2 - Erweiterte Systeme):**
+- Sklaven-Mechanik (wie bei menschlichen NPCs)
+- Farm-System (creature_farm.js)
+- NPC Tagesablauf/Routine System
+
+**OPUS-2 (UI):**
+- Kreatur-UI (Zähm-Fortschritt, Anwerbe-Dialog, Farm-Übersicht)
+- Survival-HUD (Hunger/Durst/Energie)
+- Fraktions-UI, Handels-UI, Gesetz-Warnungen
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 16 - ULTIMATIVE LEBENSSIMULATION!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-07 - LEBENSSIMULATION ENGINE!):
+
+#### ✅ GAP-ANALYSE: Was fehlt für ultimative Lebenssimulation
+Verglichen mit: Kenshi, Rimworld, Fallout NV, M&B2, Dwarf Fortress
+→ 6 fehlende Kernsysteme identifiziert und ALLE implementiert!
+
+#### ✅ FRAKTIONSSYSTEM (Fallout NV / Kenshi Style!) - `faction_system.js` (~520 Zeilen)
+- **12 Fraktionen** mit GRAUER MORAL (keine ist rein gut/böse!)
+  - 3 Adels-Häuser im Reich der Drei (Silberdorn, Kupferklinge, Eiseneid)
+  - 3 Überregionale Orden (Postman-Ranger, Götterfels-Wächter, Schmiede-Gilde)
+  - 3 Unterwelt (Schwarzmarkt-Gilde, Banditen-Bund, Schatten-Kult)
+  - 3 Regionale (Wüstenfreie, Sumpfhexen, Schatten-Kult)
+- **Fame + Infamy** UNABHÄNGIG (wie Fallout NV!) - man kann berühmt UND berüchtigt sein
+- **Ripple Effect**: Ruf bei einer Fraktion beeinflusst automatisch deren Feinde/Alliierte
+- **7 Moralische Dilemmata**: Organhandel, Sklavenbefreiung, Bestechung, Schmuggel, Gift, Wissen teilen
+- **Fraktionskriege**: Fraktionen bekriegen sich OHNE den Spieler! Auswirkungen auf Wirtschaft
+- **6 Rep-Stufen**: Unbekannt → Akzeptiert → Geschätzt → Bewundert → Verehrt → Vergöttert
+- **6 Infamy-Stufen**: Neutral → Verdächtig → Unerwünscht → Feind → Erzfeind → Nemesis
+
+#### ✅ WIRTSCHAFTSSIMULATION (Mount & Blade 2 Style!) - `economy_system.js` (~420 Zeilen)
+- **25+ Handelswaren** in 7 Kategorien (Nahrung, Rohstoffe, Kräuter, Waffen, Schmuggel, Luxus)
+- **9 Regionale Märkte** mit eigenem Angebot & Nachfrage
+  - Magmaströme: Waffen billig, Essen teuer!
+  - Tiefenhöhlen: Erze billig, Nahrung EXTREM teuer!
+  - Heisse Dünen: Edelsteine billig, Wasser = Gold!
+- **Dynamische Preise**: Steigen bei Knappheit, sinken bei Überfluss
+- **Karawanen-System**: Reisen zwischen Regionen, können überfallen werden → Preise steigen!
+- **Schmuggel-System**: Illegale Waren = hoher Profit, Risiko erwischt zu werden!
+- **Handelsrouten-Rechner**: findBestTradeRoute() zeigt profitabelste Waren
+- **Integration**: Fraktions-Rep beeinflusst Preise, Kriege treiben Preise hoch
+
+#### ✅ SURVIVAL + MOOD + GESETZE - `survival_system.js` (~650 Zeilen)
+
+**Survival (Kenshi Style):**
+- Hunger, Durst, Energie (Schlaf)
+- **Biom-Hazards**: Hitzeschlag (Dünen), Verbrennung (Magma), Sumpffieber, Blitzschlag, Dunkelheit
+- Verletzungen mit Schweregrad (light/medium/heavy/critical)
+- Krankheiten mit Dauer und Effekten
+
+**Schlaf mit ÜBERFALL-GEFAHR (Wilder Westen!):**
+- 🏨 Gasthof = 100% sicher
+- ⛺ Verstecktes Zelt ohne Feuer = 5% Risiko
+- 🔥 Zelt MIT Feuer = 25% sichtbar!
+- 🏕️ Offenes Lager = 40% ÜBERFALL!
+- 🐫 Karawane mit Wachen = 15%
+- Wache engagieren (Eskorte-Beruf!) reduziert Risiko massiv
+- Überfall = Aufgeweckt, Schaden, Kampf, Diebstahl!
+
+**Mood System (KORRIGIERT nach User-Feedback!):**
+- ⚠️ KEINE automatischen Gewissensbisse!
+- "Sei was du sein willst. Die Gesellschaft urteilt, nicht dein Kopf."
+- Mood wird NUR durch Physisches beeinflusst (Hunger, Schlaf, Verletzungen, Aussicht)
+- Mental Break bei Mood <10 (Panik, Wut, Zusammenbruch, Flucht)
+- Inspiration bei Mood >90 (Kampfgeist, Kreativschub, Unaufhaltsam, Geistesblitz)
+- Traits: optimist, pessimist, empathisch, glutton (beeinflussen nur Umgebungs-Mood)
+
+**Gesetze & Kriminalität (Elder Scrolls / Kenshi):**
+- **Verschiedene Gesetze pro Region!**
+  - Götterfels = ABSOLUT STRENG (alles verboten, Wachen nicht bestechbar!)
+  - Grünschlamm = FAST GESETZLOS (fast alles erlaubt, Hexen nehmen kein Gold)
+  - Heisse Dünen = LOCKER (nur Mord/Oase-Diebstahl, Schmuggel legal!)
+  - Samtmoos/Blitzebene/Tiefenhöhlen = GESETZLOS (Wildnis, kein Gesetz)
+- **Kopfgeld-System**: Verfällt langsam (-5% pro Tag)
+- **Gefängnis**: Strafe absitzen ODER Fluchtversuch (30% Chance, Kopfgeld verdoppelt bei Fail!)
+- **Bestechung**: Möglich in manchen Regionen (Kosten = 150-200% der Strafe)
+- **Postman-Angriff = HÖCHSTE STRAFE ÜBERALL!** (König jagt dich!)
+
+#### Geänderte Dateien:
+- `digivice/index.html` - 3 neue Script-Tags
+
+#### Neue Dateien:
+- `digivice/js/faction_system.js` (~520 Zeilen)
+- `digivice/js/economy_system.js` (~420 Zeilen)
+- `digivice/js/survival_system.js` (~650 Zeilen)
+
+#### 🎯 NAHES ZIEL: ULTIMATIVE LEBENSSIMULATION
+| System | Status | Vergleich |
+|--------|--------|-----------|
+| 3D Open World | ✅ | Kenshi |
+| Kampfsystem | ✅ | Dark Souls/Kenshi |
+| 24 Berufe (Learning by Doing) | ✅ | Kenshi/Rimworld |
+| World Event Generator | ✅ | Rimworld Storyteller |
+| Konsequenz-System | ✅ | Fallout NV |
+| **Fraktionssystem** | ✅ **NEU** | Fallout NV |
+| **Wirtschaftssimulation** | ✅ **NEU** | M&B2/Kenshi |
+| **Survival (Hunger/Durst/Schlaf)** | ✅ **NEU** | Kenshi |
+| **Mood (ohne Moral-Zwang!)** | ✅ **NEU** | Rimworld (besser!) |
+| **Gesetze pro Region** | ✅ **NEU** | Elder Scrolls/Kenshi |
+| **Schlaf mit Überfall-Risiko** | ✅ **NEU** | Wilder Westen! |
+| NPC Tagesabläufe | ⬜ TODO | Dwarf Fortress |
+| NPC Beziehungssystem | ⬜ TODO | Rimworld |
+| Gildenhaus-UI | ⬜ TODO | Konosuba |
+
+#### 📋 NÄCHSTE ARBEITSTEILUNG:
+**OPUS-1:** NPC Tagesablauf/Routine System, Gildenhaus-UI, Event-Integration in Bewegung
+**OPUS-2:** Survival-HUD (Hunger/Durst/Mood Bars), Fraktions-UI, Handels-UI, Gesetz-Warnungen
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 12 - MEGA UI + BESTIARY + TRAINING!)
+**Instanz:** OPUS-2 (VS Code)
+
+### OPUS-2 hat implementiert (2026-02-07 - UI MEGA-UPDATE!):
+
+#### ✅ TOP BAR MEGA-EXPANSION (21 Buttons mit flex-wrap!)
+- 📊 Stats Button → Character Sheet (3 Tabs)
+- 🏋️ Training Button → Stat Training (36 Aktivitäten!)
+- 🌳 Skills Button → Skill Tree UI
+- 📜 Quests Button → Quest Log
+- 💕 Affinity Button → Beziehungs-UI
+- 📖 Bestiary Button → Monster-Kompendium (40+ Kreaturen!)
+- 🐾 Slime Button → Slime Companion
+- 🎒 Inventar Button → Inventar-System
+- Top Bar CSS: flex-wrap, kompaktere Buttons, responsive
+
+#### ✅ BESTIARY UI - Monster-Kompendium!
+- **Neue Datei:** `digivice/js/ui/bestiary_ui.js`
+- 40+ Monster aus allen 8 Biomen + Dungeon-Gegner
+- Biome-Filter (Samtmoos, Reich der Drei, Heiße Dünen, etc.)
+- Encounter/Kill Tracking (localStorage)
+- Monster Cards: Stats, Loot, Beschreibung, Tier-Sterne
+- Unentdeckte Monster als "???" mit Silhouette
+- Completion-Tracker (X/40 entdeckt)
+- Hooks in real_3d_combat.js (trackEncounter bei Spawn, trackKill bei Tod)
+
+#### ✅ STAT TRAINING UI - Learning by Doing!
+- **Neue Datei:** `digivice/js/ui/stat_training_ui.js`
+- 36 Trainings-Aktivitäten in 8 Kategorien
+- Stärke: Holz hacken, Bergbau, Liegestütze, Ringen, Schmieden
+- Ausdauer: Laufen, Schwimmen, Klettern, Sparring
+- Agilität: Bogenschießen, Schlösser knacken, Messer jonglieren
+- Intelligenz: Bücher lesen, Rätsel, Magietheorie, Zauber üben
+- Wahrnehmung: Fährten lesen, Spähen, Fallen suchen, Jagen
+- Charisma: Feilschen, Geschichten erzählen, Musizieren
+- Diminishing Returns (höher = weniger Gain)
+- Stamina/Mana-Kosten, Tages-Limits, Stat-Anforderungen
+- Training Log mit den letzten 50 Einträgen
+- Integration mit EquipmentCombat.modifyPlayerStat()
+
+#### ✅ CHARACTER STATS UI
+- **Neue Datei:** `digivice/js/ui/character_stats_ui.js`
+- 3 Tabs: Stats | Equipment | Skills
+- Live-Daten aus EquipmentCombat
+
+#### Alle geänderten/neuen Dateien:
+- `digivice/index.html` - 8 neue Buttons, 5 Script-Tags, Top Bar CSS
+- `digivice/js/ui/character_stats_ui.js` - **NEU**
+- `digivice/js/ui/bestiary_ui.js` - **NEU**
+- `digivice/js/ui/stat_training_ui.js` - **NEU**
+- `digivice/js/combat/real_3d_combat.js` - Bestiary-Hooks (Encounter+Kill Tracking)
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 15 - 24 BERUFSPFADE + LEARNING BY DOING!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### ✅ 24 Berufspfade mit Learning by Doing (Lvl 1-50)
+- 6 Kategorien: Kampf, Handwerk, Natur, Handel, Sozial, Wissen
+- Learning by Doing: Lvl 1 Koch=Matsch, Lvl 50 Koch=Buff-Festmahl
+- Alle Berufe gleichzeitig möglich, jederzeit wechselbar
+- Planwagen NUR bei Eskorte + Händler
+- career_system.js komplett neu geschrieben (~860 Zeilen)
+
+#### 📋 ARBEITSTEILUNG:
+**OPUS-1:** Gildenhaus-UI, Oregon Events Integration, NPC-Spawning in 3D, Konsequenz-Ketten
+**OPUS-2:** Career-UI (Level/XP-Bars), Auftrags-Annahme UI, NPC-Interaktion, Minimap-Routen
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 14 - LEBENDIGE WELT + BERUFE + KONSEQUENZEN!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-07 - WORLD ENGINE + CAREER SYSTEM!):
+
+#### ✅ UNIFIED WORLD EVENT GENERATOR - Der KERN!
+
+**Neue Dateien:**
+- `digivice/js/world_event_generator.js` (~600 Zeilen) - Lebendige Welt Engine
+- `digivice/js/career_system.js` (~400 Zeilen) - 8 Berufspfade (Mount & Blade Style!)
+
+**Geänderte Dateien:**
+- `digivice/js/postman_system.js` - Planwagen entfernt, Ranger-Perks hinzugefügt
+- `digivice/index.html` - Script-Tags für world_event_generator.js + career_system.js
+
+**Die Welt IST das Spiel:**
+- NPCs spawnen in der Welt (Wanderer, Händler, Banditen, Hilflose, Ranger)
+- 15+ Oregon Trail / Konosuba Events (Brücke zerstört, Hinterhalt, Sturm, etc.)
+- **KONSEQUENZ-SYSTEM:** Ignorierst du den verlorenen Jungen → sein Onkel (günstigster Händler) stirbt → Preise steigen!
+- Tote NPCs bleiben 24h tot, Wirtschaft erholt sich langsam
+- NPC-Dichte abhängig von Biom und Spieler-Reputation
+- Seeded Random = gleiche Position am gleichen Tag = gleiche NPCs
+
+#### ✅ 8 BERUFSPFADE (Mount & Blade 2 / Konosuba Gilde Style!)
+
+| Beruf | Icon | Konzept | Planwagen? |
+|-------|------|---------|------------|
+| **Postman-Ranger** | 📮 | Einsamer Bote, zu Fuß, NCR Ranger | ❌ NEIN! |
+| **Eskorte** | 🛡️ | Geleitschutz, Karawanen, NPCs | ✅ JA! |
+| **Händler** | 🏪 | Kaufen/Verkaufen, Handelsrouten | ✅ JA! |
+| **Söldner** | ⚔️ | Kopfgeldjäger, Dungeon-Raids | ❌ |
+| **Sammler** | 🌿 | Kräuter, Materialien, Alchemie | ❌ |
+| **Schmied** | 🔨 | Waffen/Rüstungen herstellen | ❌ |
+| **Spion** | 🎭 | Informationen, Infiltration, Sabotage | ❌ |
+| **Barde** | 🎵 | Musik-Buffs, Nachrichtennetzwerk | ❌ |
+
+- Jeder Beruf: 6 Ränge mit steigender Bezahlung
+- Spieler können MEHRERE Berufe gleichzeitig haben!
+- Aufträge an Gilde (Kneipen/Gildenhäuser) oder in der Welt
+- Planwagen NUR bei Eskorte und Händler (NICHT Postman!)
+
+#### ✅ POSTMAN = RANGER (Kein Planwagen!)
+- Planwagen komplett entfernt
+- 5 neue Ranger-Perks: Einsamer Wolf, Augen der Straße, Gehärtete Sohlen, Autorität des Königs, Die Legende wandert
+- Zu Fuß, allein, heldenhaft wie Fallout NV Rangers / Kevin Costner Postman
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 13 - MONSTER + POSTMAN BERUFSPFAD!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-07 - MONSTER-REGISTRY + POSTMAN!):
+
+#### ✅ MONSTER-REGISTRY - 74+ Wesen in 9 Biomen!
+
+**Neue Dateien:**
+- `digivice/js/monster_registry.js` - Zentrale Monster-Datenbank
+- `digivice/js/postman_system.js` - Postman-Berufspfad (Ranger von Najika!)
+
+**Monster pro Biom (Starter Map = 8, später 40-64):**
+
+| Biom | Wesen | Beispiele |
+|------|-------|-----------|
+| Samtmoos | 8 | Pilzling, Mooswolf, Pilzgolem |
+| Reich der Drei | 8 | Bandit, Schatten-Dieb, Gang-Anführer |
+| Heiße Dünen | 8 | Sandwurm, Wüstenskorpion, Kaktus-Golem |
+| Salzwind | 8 | Piraten-Geist, Salzgolem, Anker-Revenant |
+| Magmaströme | 8 | Vulkan-Drake, Obsidian-Ritter, Lava-Schleim |
+| Grünschlamm | 8 | Moor-Hexe, Fäulnis-Zombie, Faulgas-Blase |
+| Blitzebene | 8 | Blitz-Elementar, Donner-Büffel, Sturm-Harpy |
+| Tiefenhöhlen | 8 | Höhlen-Troll, Steinbrecher, Echo-Geist |
+| **Götterfels** | **10** | Himmels-Wächter, Nebel-Titan + **2 EXKLUSIVE** |
+
+**🔒 Götterfels-Exklusive:**
+- **Zeitwandler** (⏳) - Droppen `zeitstadt_schluessel`, flüstern von der Zeitstadt
+- **Götterbote** (📜) - Droppen `divine_message` + `zeitstadt_schluessel`
+
+**⏰ ZEITSTADT** = Versteckt in der Spitze des Götterfels! (NICHT verloren!)
+- `zeitstadt_hinweis` Loot → Hinweis-Notification
+- `zeitstadt_schluessel` Loot → Zugang wird in localStorage gespeichert
+
+#### ✅ POSTMAN-BERUFSPFAD - Ranger von Najika World!
+
+**Konzept:** Paper Boy × Postman (Kevin Costner) × Fallout Ranger
+- KEIN Quest-System → Berufspfad! Spieler WIRD Postman
+- Sonderboten für Nachrichten, Kräuter, Artefakte, Goldtransporte
+- Transport: Zu Fuß oder Planwagen
+- 9 Borderlands-Style NPC-Empfänger (Verrückter Viktor, Eiserne Else, etc.)
+
+**Rang-System:**
+
+| Rang | Level | Routen-Slots | Bezahlung |
+|------|-------|-------------|-----------|
+| 📮 Novize | 1 | 1 | 1.0x |
+| 📬 Bote | 5 | 2 | 1.3x |
+| 📨 Kurier | 10 | 3 | 1.6x |
+| 🏇 Fernbote | 20 | 4 | 2.0x |
+| 👑 Postmeister | 35 | 5 | 2.5x |
+| ⭐ Postman-Legende | 50 | 6 | 3.0x |
+
+**Postman-Kleidung (PFLICHT für Erkennbarkeit!):**
+- 🧥 Mantel: +8 DEF, +15% Stamina-Regen, aber -5% Speed
+- 🎭 Maske: +3 DEF, +20% Perception
+- 👜 Tasche: 5 Lieferungen, 30% Loot-Schutz bei Tod
+
+**PvP-Überfall-Mechanik:**
+- Spieler können Postman überfallen (Risiko vs Belohnung!)
+- Spieler wissen NICHT was in der Lieferung ist
+- Identifikation: 50% Basis + Zeugen + Tageszeit + Skills
+- Identifiziert → König jagt mit Kopfgeld!
+- Nicht identifiziert → Frei, ABER 30% Chance dass Güter verfolgbar sind
+
+**8 Lieferungstypen:** Nachricht, Kräuter, Artefakt, Waffen, Goldtransport, Geheimbotschaft, Heilmittel (5min Timer!), Handelsware
+
+**Warum das funktioniert:**
+- Außenwelt regeneriert = jede Route anders
+- Oregon Trail Events = Überraschungen unterwegs
+- PvP-Risiko = Spannung
+- Borderlands-NPCs = Humor & Charakter
+- Kein Content-Writing nötig → Emergent Gameplay!
+
+#### ✅ Crawler-Kampf verbessert
+- Volles Kampfsystem im Crawler (Real3DCombat)
+- Crawler pausiert während Kampf, Input zurück nach Kampf-Ende
+- Biom-basierte Gegner statt generischer Skelette
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 12 - LEBENDIGE WELT + DUNGEON CRAWLER!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-07 - OVERWORLD + CRAWLER + DUNGEON CRAFTING!):
+
+#### ✅ LEBENDIGE WELT - Biome-aware Overworld Props!
+
+**Neue Dateien:**
+- `digivice/js/overworld_props.js` (~300 Zeilen) - Zufällige Props in der Außenwelt
+- `digivice/js/dungeon_crawler.js` (~500 Zeilen) - First-Person Labyrinth-Dungeon
+
+**Geänderte Dateien:**
+- `digivice/js/3d_scene.js` - Welt regeneriert bei Exit, Crawler Integration, placeDungeonEntrance()
+- `digivice/static/js/crafting_system.js` - 6 neue Dungeon-Rezepte (Lego Fortnite Style)
+- `digivice/index.html` - Script-Tags für overworld_props.js + dungeon_crawler.js
+
+**Overworld Props System:**
+1. 9 Biom-Tabellen mit gewichteten Props (Zelte, Planwagen, Ruinen, Camps)
+2. Cluster-System: Banditen-Camps, Händler-Zelte, Ruinen-Gruppen
+3. Lagerfeuer aus THREE.js Primitiven (Steinring + Holz + Feuer + PointLight)
+4. GLTF-Caching für Performance, max 200 Props, 2.4km Radius
+5. Biom-Erkennung anhand Position (8 Sektoren + Götterfels Zentrum)
+6. Exclusion Zones: Gebäude, Arena, Angelplätze werden nicht überplatziert
+7. Welt regeneriert sich JEDES MAL bei Verlassen eines Gebäudes!
+
+#### ✅ DUNGEON CRAWLER - First-Person Labyrinth (Hexen/Daggerfall Style)!
+
+1. Recursive Backtracker Maze-Generierung (11x11 bis 25x25 Grid)
+2. Tile-by-Tile Bewegung mit 250ms Smooth-Lerp (WASD)
+3. 90° Drehung mit Q/E, ESC zum Verlassen
+4. KayKit Dungeon Pack Assets (Wände, Boden, Truhen) + Fallback-Primitives
+5. Gegner → Real3DCombat Encounter, Loot → localStorage Inventar
+6. HUD mit Level, Position, Richtung, Gegner/Loot-Counter
+7. Canvas-basierte Minimap mit 5-Tile Sichtradius + Richtungspfeil
+8. Level-abhängige Größe, Gegner-Anzahl und Loot-Menge
+
+#### ✅ DUNGEON CRAFTING - Lego Fortnite Style!
+
+1. 6 neue Rezepte: 3x Raum-Dungeon (Lv1/5/10) + 3x Crawler-Labyrinth (Lv1/5/10)
+2. An Werkbank craften → Portal erscheint 30m vom Spieler
+3. Steinbogen-Portal mit Farb-Coding (Lila=Crawler, Rot=Raum)
+4. Magisches Glow-Portal + PointLight
+5. Dungeons persistent in localStorage (überleben Welt-Regenerierung)
+6. placeDungeonEntrance() + restoreCraftedDungeons() in Scene3D exportiert
+
+#### 🆕 2 DUNGEON-TYPEN:
+| Typ | Steuerung | Kamera | Generierung | Kampf |
+|-----|-----------|--------|-------------|-------|
+| **Raum-Dungeon** | 3rd Person | Orbit/Follow | Raum-basiert | Real3DCombat |
+| **Crawler-Labyrinth** | WASD Tile | First-Person | Maze-Algorithmus | Encounter-basiert |
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 11 - UI INTEGRATION!)
+**Instanz:** OPUS-2 (VS Code)
+
+### OPUS-2 hat implementiert (2026-02-07 - UI BUTTONS + CHARACTER SHEET!):
+
+#### ✅ TOP BAR - Fehlende RPG-Systeme verlinkt!
+
+**Geänderte Dateien:**
+- `digivice/index.html` - 4 neue Buttons im Top Bar + 3 Script-Tags
+- `digivice/js/ui/character_stats_ui.js` - **NEU** Vollständiges Character Sheet
+
+**Neue Top Bar Buttons:**
+1. **📊 Stats** → Öffnet Character Stats Sheet (Fullscreen Overlay)
+2. **🌳 Skills** → Öffnet Skill Tree UI (`skillTreeUI.open()`)
+3. **📜 Quests** → Öffnet Quest Log (`questUI.toggleQuestLog()`)
+4. **💕 Affinity** → Öffnet Affinity UI (`affinityUI.open()`)
+
+**Neue Script-Tags hinzugefügt:**
+- `js/ui/skill_tree_ui.js` (existierte, war aber NICHT geladen!)
+- `js/ui/affinity_ui.js` (existierte, war aber NICHT geladen!)
+- `js/ui/character_stats_ui.js` (NEU erstellt)
+
+#### ✅ CHARACTER STATS UI - Vollständiges Charakter-Sheet!
+- **3 Tabs:** Stats | Equipment | Skills
+- **Stats Tab:** HP/Stamina/Mana Bars, 6 Attribute (STR/INT/AGI/END/LUK/CHA), Status-Effekte, 1-Skill-Weg Anzeige
+- **Equipment Tab:** 5 Slots (Rechte/Linke Hand, Kopf, Körper, Beine), Waffen-Details (Schaden/Reichweite/Speed/Crit), Rüstungs-Summary
+- **Skills Tab:** Alle 35+ Skills nach Kategorie (Waffen, Western, Kampf, Zerstörung, Magie, Explosion), XP-Bars, Level-Anzeige
+- Liest live aus `EquipmentCombat.getPlayerStats()`, `.getState()`, `.getSkills()`, `.getOneSkillPath()`
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 10 - DUAL-ATTACK SYSTEM!)
+**Instanz:** OPUS-1 (Claude Code CLI)
+
+### OPUS-1 hat implementiert (2026-02-07 - DUAL-ATTACK!):
+
+#### ✅ DUAL-ATTACK SYSTEM - Beide Hände gleichzeitig!
+
+**Geänderte Dateien:**
+- `digivice/js/equipment_combat.js` - Neue `attackDual()` Funktion
+- `digivice/js/combat/real_3d_combat.js` - Dual-Detection + `dualAttackNearestEnemy()`
+- `digivice/js/ui/combat_special_ui.js` - Keybindings Overlay korrigiert
+
+**Neue Features:**
+1. **Q+E gleichzeitig** = Dual Light Attack (beide Hände!)
+2. **Shift+Q+E gleichzeitig** = Dual Heavy Attack
+3. 120ms Zeitfenster für "gleichzeitig"-Erkennung
+4. +30% Dual-Bonus auf kombinierten Schaden
+5. Zählt als 2 Combo-Hits auf einmal
+6. Beide Waffen leveln gleichzeitig (Learning by Doing!)
+7. +15% Crit-Bonus bei Dual-Attacks
+8. Stamina: beide Waffen-Kosten + 20% Aufschlag
+9. Recovery: 70% der kombinierten Waffen-Speed
+10. Visuelle Dual-Attack Notification (animiert)
+11. Fallback auf normalen Angriff wenn nur 1 Waffe
+
+**Keybindings Overlay korrigiert:**
+- Nahkampf-Sektion: Q/E/Shift+Q/E/Q+E/Shift+Q+E
+- Defensive: Space=Dodge, F=Parry, Shift=Block
+- Kampf-Modi Sektion hinzugefügt: M=Modus, 1-4=Cheer
+
+**Design-Entscheidung:** UE5 soll ECHTZEIT statt Speichern/Laden bekommen (WebSocket).
+
+---
+
+**Vorheriger Sync:**
+
+**Datum:** 2026-02-07 (Update 9 - REAL 3D COMBAT V2!)
+**Instanz:** OPUS-2 (VS Code)
+
+### OPUS-2 hat implementiert (2026-02-07 - COMBAT KOMPLETT!):
+
+#### ✅ REAL 3D COMBAT SYSTEM V2 - 5 FEATURES AUF EINMAL!
+
+**Geänderte Datei:** `digivice/js/combat/real_3d_combat.js` (854 → 1646 Zeilen!)
+
+1. **AUTO Mode (🤖)**
+   - KI greift automatisch an (0.6-1.0s Intervall)
+   - Dodged wenn Gegner nahe & angreift (40% Chance)
+   - Heavy Attacks gelegentlich (20% Chance)
+   - Wechselt automatisch Hände
+
+2. **CHEER Mode (📣 Digimon World Style!)**
+   - KI kämpft automatisch (leicht langsamer als AUTO)
+   - Spieler feuert mit 1-4 an:
+     - 1: 💪 "GIB IHM!" → +10% Angriff (3 Runden)
+     - 2: 🛡️ "HALTE DURCH!" → -20% Schaden (3 Runden)
+     - 3: 💥 "COMBO!" → x1.3 nächster Angriff
+     - 4: 🎯 "FOCUS!" → +15% Crit (2 Runden)
+   - Visuelle Cheer-Notifications (animiert)
+
+3. **Equipment Integration**
+   - `attackNearestEnemy()` nutzt jetzt `EquipmentCombat.attackLight/Heavy()`
+   - Waffen-Schaden, Range, Element, Crit aus 40+ Waffen-Datenbank
+   - Rüstungs-Reduktion über `EquipmentCombat.takeDamage()`
+   - Dodge/Parry über EquipmentCombat
+   - Learning by Doing XP automatisch
+
+4. **Finisher QTE System**
+   - Finisher Meter füllt sich: Normal +5, Dodge +30, Combo5 +25, Parry +20
+   - Trigger: X-Taste wenn Meter voll + Gegner < 20% HP
+   - QTE: 4 zufällige Tasten (Q/W/E/A/S/D) in 4 Sekunden
+   - Erfolg: 5x MaxHP Schaden + lila Screen-Flash + Text-Animation
+   - Fehlschlag: 50% Meter verloren
+   - 24h Cooldown
+
+5. **Floating Damage Numbers**
+   - 2D-Overlay Elemente aus 3D-Welt projected
+   - Normal: gelb "-15", Crit: lila "💥42"
+   - Schweben nach oben + Fade-Out (1.2s)
+   - Crit-Zahlen skalieren beim Aufsteigen
+
+6. **Loot System**
+   - Loot-Drop Notifications beim Enemy-Tod (rechts, animiert eingleitend)
+   - Loot-Summary Popup nach Sieg (alle Items + XP)
+   - Items werden automatisch in localStorage Inventar gespeichert
+   - Kompatibel mit InventorySystem wenn vorhanden
+
+**Combat HUD V2:**
+- Mode-Anzeige (🎮/🤖/📣) mit Farbe
+- Finisher Meter Bar (lila, pulsiert wenn voll)
+- Cheer-Buttons im CHEER-Modus
+- "X = FINISHER!" Prompt wenn verfügbar
+
+---
+
+**Vorheriger Sync:**
+
 **Datum:** 2026-02-06 (Update 8 - COMBAT SYSTEM VEREINT!)
 **Instanz:** OPUS-1 (Claude Code CLI - relaxed-nash worktree)
 
@@ -360,12 +1526,31 @@ App: C:\Najika_World\app\flutter_app\
 - `digivice/js/command_system.js` - API URLs auf CMD_API_BASE (war vom gecrashten Modell)
 - `digivice/static/js/realtime_combat.js` - Input-Filter für Chat (war vom gecrashten Modell)
 
-#### ⬜ NOCH OFFEN (für nächste Session):
-- ⬜ **Kampf-Modi Integration** - Real3DCombat braucht AUTO/CHEER Modi (aktuell nur MANUAL)
-- ⬜ **Equipment-System verbinden** - `equipment_combat.js` mit `real_3d_combat.js` verlinken
-- ⬜ **Finisher QTE** - In den 3D-Kampf einbauen
-- ⬜ **Damage Numbers** - Floating 3D-Text über Gegnern
-- ⬜ **Loot-System** - Items nach Kampf ins Inventar
+#### ✅ ERLEDIGT (OPUS-2, 2026-02-07):
+- ✅ **Kampf-Modi Integration** - AUTO + CHEER Modi voll funktional in Real3DCombat!
+  - AUTO: KI greift automatisch an, dodged, wechselt Hände, nutzt Heavy Attacks
+  - CHEER: KI kämpft + Spieler feuert an (1=Angriff, 2=Verteidigung, 3=Combo, 4=Focus)
+  - Digimon World Style Cheer-Buffs mit visuellen Notifications
+- ✅ **Equipment-System verbunden** - `equipment_combat.js` ↔ `real_3d_combat.js`
+  - Waffen-Schaden aus EquipmentCombat (40+ Waffen)
+  - Rüstungs-Reduktion aus EquipmentCombat
+  - Dodge/Parry Integration
+  - Skill XP (Learning by Doing!)
+- ✅ **Finisher QTE** - Quick-Time-Event System im 3D-Kampf!
+  - Finisher Meter (füllt sich durch Angriffe, Dodges, Combos)
+  - QTE Overlay: 4 zufällige Tasten in Reihenfolge drücken (4s Timer)
+  - Screen-Effekte bei Erfolg (lila Flash + Text)
+  - Meter-Verlust bei Fehlschlag
+  - 24h Cooldown, nur wenn Gegner < 20% HP
+- ✅ **Damage Numbers** - Floating Damage-Zahlen über Gegnern!
+  - 2D-Overlay projected aus 3D-Position
+  - Gelbe Zahlen normal, lila für Crits
+  - Faden nach oben aus + verblassen
+- ✅ **Loot-System** - Items nach Kampf ins Inventar!
+  - Loot-Drops bei Enemy-Tod (animierte Notifications rechts)
+  - Loot-Summary Popup nach Sieg (XP + alle Items)
+  - Automatisch in localStorage Inventar gespeichert
+  - Integration mit InventorySystem wenn vorhanden
 
 ---
 

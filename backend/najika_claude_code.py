@@ -199,7 +199,7 @@ def is_complex_task(prompt):
     return any(ind in prompt_lower for ind in complex_indicators)
 
 
-def call_ai_with_hierarchy(prompt, use_wizard=False, context=None, ollama_callback=None):
+def call_ai_with_hierarchy(prompt, use_wizard=False, context=None, ollama_callback=None, user_message=None):
     """
     NEUE INTELLIGENZ-HIERARCHIE (2026-01-20)
 
@@ -211,6 +211,7 @@ def call_ai_with_hierarchy(prompt, use_wizard=False, context=None, ollama_callba
         use_wizard: NSFW Mode
         context: Chat-Historie
         ollama_callback: Funktion die LM Studio aufruft (legacy name)
+        user_message: Die reine User-Nachricht (für /api/chat Kontext)
 
     Returns:
         tuple: (response, provider) - z.B. ("EXPLOSION!!!", "lm_studio")
@@ -222,7 +223,7 @@ def call_ai_with_hierarchy(prompt, use_wizard=False, context=None, ollama_callba
     if ollama_callback:
         print("[AI HIERARCHY] [TRY] Versuche LM Studio...")
         try:
-            response = ollama_callback(prompt, use_wizard)
+            response = ollama_callback(prompt, use_wizard, user_message=user_message)
             print(f"[AI HIERARCHY] [DEBUG] LM Studio response type: {type(response)}, value: {repr(response)[:100] if response else 'None'}")
             if response and isinstance(response, str) and len(response.strip()) > 0:
                 print("[AI HIERARCHY] [OK] LM Studio erfolgreich!")

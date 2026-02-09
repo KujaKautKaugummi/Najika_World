@@ -780,6 +780,9 @@ class RealtimeCombat {
         };
 
         regions.forEach(region => {
+            // Götterfels/Mountain = Safe Zone (Schwarze Mühle) - KEINE Gegner!
+            if (region.name === 'mountain') return;
+
             const enemyTypes = regionEnemyTypes[region.name];
             if (!enemyTypes) return;
 

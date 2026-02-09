@@ -481,6 +481,111 @@
         };
     }
 
+    // ===== DUAL ATTACK (BEIDE HÄNDE GLEICHZEITIG!) =====
+
+    function attackDual(isHeavy = false) {
+        const rightWeapon = WEAPONS[state.rightHand];
+        const leftWeapon = WEAPONS[state.leftHand];
+
+        if (!rightWeapon || !leftWeapon) {
+            console.log('⚠️ Brauche Waffen in BEIDEN Händen für Dual-Attack!');
+            return null;
+        }
+        if (state.isAttacking || state.isDodging) return null;
+
+        // Dual-Attack kostet Stamina von BEIDEN Waffen + 20% Aufschlag
+        const attackType = isHeavy ? 'heavy' : 'light';
+        const staminaCost = Math.floor(
+            (rightWeapon.staminaCost[attackType] + leftWeapon.staminaCost[attackType]) * 1.2
+        );
+
+        if (state.stamina < staminaCost) {
+            console.log('⚠️ Nicht genug Stamina für Dual-Attack!');
+            return null;
+        }
+
+        // Mana-Check für magische Waffen
+        const manaCost = ((rightWeapon.manaCost?.[attackType]) || 0) + ((leftWeapon.manaCost?.[attackType]) || 0);
+        if (manaCost > 0 && state.mana < manaCost) {
+            console.log('⚠️ Nicht genug Mana für Dual-Attack!');
+            return null;
+        }
+
+        // EXPLOSION Check - beide Hände!
+        if (rightWeapon.special === 'EXPLOSION' || leftWeapon.special === 'EXPLOSION') {
+            if (state.explosionUsedToday) {
+                console.log('💥 EXPLOSION bereits heute verwendet!');
+                return null;
+            }
+            state.explosionUsedToday = true;
+            console.log('💥💥💥 DOPPEL-EXPLOSION!!! 💥💥💥');
+        }
+
+        state.isAttacking = true;
+        state.stamina -= staminaCost;
+        if (manaCost > 0) state.mana -= manaCost;
+
+        // Combo Check - Dual-Attacks zählen als 2 Hits!
+        const now = Date.now();
+        if (now - state.lastAttackTime < state.comboWindow) {
+            state.comboCount += 2;
+        } else {
+            state.comboCount = 2;
+        }
+        state.lastAttackTime = now;
+
+        // Schaden = Beide Waffen addiert + 30% Dual-Bonus
+        let rightDmg = rightWeapon.damage[attackType];
+        let leftDmg = leftWeapon.damage[attackType];
+
+        // Crit Check - höhere Crit-Chance der beiden Waffen zählt
+        const maxCrit = Math.max(rightWeapon.critChance || 0, leftWeapon.critChance || 0);
+        let isCrit = false;
+        if (maxCrit > 0 && Math.random() < maxCrit * 1.15) { // +15% Crit-Bonus bei Dual
+            isCrit = true;
+            console.log('💥💥 DOPPEL-KRIT!!!');
+        }
+
+        let totalDamage = Math.floor((rightDmg + leftDmg) * 1.3); // +30% Dual-Bonus
+        if (isCrit) totalDamage *= 2;
+        if (isHeavy) state.comboCount = 0; // Heavy Dual resets combo
+
+        // Combo-Bonus
+        totalDamage = Math.floor(totalDamage * (1 + state.comboCount * 0.1));
+
+        // Skill XP - Learning by Doing! Beide Waffen leveln!
+        gainSkillXP(rightWeapon.type, isHeavy ? 3 : 2);
+        gainSkillXP(leftWeapon.type, isHeavy ? 3 : 2);
+
+        // Langsamere Recovery - beide Waffen Speed addiert × 0.7
+        const recoveryTime = (rightWeapon.speed[attackType] + leftWeapon.speed[attackType]) * 0.7 * 1000;
+        setTimeout(() => {
+            state.isAttacking = false;
+        }, recoveryTime);
+
+        updateUI();
+
+        // Elemente sammeln (für Multi-Element Hits)
+        const elements = [];
+        if (rightWeapon.element) elements.push(rightWeapon.element);
+        if (leftWeapon.element) elements.push(leftWeapon.element);
+
+        console.log(`⚔️⚔️ DUAL ${isHeavy ? 'HEAVY' : 'LIGHT'}! ${totalDamage} Schaden! (R:${rightWeapon.name} + L:${leftWeapon.name})`);
+
+        return {
+            damage: totalDamage,
+            element: elements.length > 0 ? elements[0] : null,
+            elements: elements,
+            special: rightWeapon.special || leftWeapon.special,
+            range: Math.max(rightWeapon.range, leftWeapon.range),
+            hand: 'both',
+            type: isHeavy ? 'dual_heavy' : 'dual_light',
+            combo: state.comboCount,
+            isCrit,
+            isDual: true
+        };
+    }
+
     // ===== DEFENSE FUNCTIONS =====
 
     function block() {
@@ -1376,6 +1481,7 @@
         init,
         attackLight,
         attackHeavy,
+        attackDual,
         block,
         releaseBlock,
         parry,
@@ -1457,7 +1563,7 @@
     }
 
     console.log('✅ Equipment Combat System loaded (ERWEITERT)');
-    console.log('⌨️ Controls: Q/E=Attack, Shift+Q/E=Heavy, F=Parry/Grab, Space=Dodge, Shift(hold)=Block');
+    console.log('⌨️ Controls: Q/E=Attack, Shift+Q/E=Heavy, Q+E=Dual, Shift+Q+E=Dual Heavy, F=Parry/Grab, Space=Dodge, Shift(hold)=Block');
     console.log('🤼 Wrestling: G=Grab, 1-4=Grab-Moves');
     console.log('🦵 TIDS: T (1x/24h, nur Humanoide)');
     console.log('🧱 Umgebung: V=Wand-Abstoß, B=Objekt werfen');
