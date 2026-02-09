@@ -34,7 +34,9 @@ class NightTrainingSession:
                 ["python", str(BACKEND_DIR / script_name)],
                 capture_output=True,
                 text=True,
-                timeout=duration_minutes * 60
+                timeout=duration_minutes * 60,
+                encoding='utf-8',
+                errors='replace'
             )
 
             elapsed = (time.time() - start) / 60
