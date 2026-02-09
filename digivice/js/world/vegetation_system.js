@@ -543,14 +543,205 @@ class VegetationSystem {
    * Update vegetation (for LOD, culling, etc.)
    */
   update(cameraPosition) {
-    // TODO: Implement LOD switching based on distance
-    // TODO: Implement frustum culling for performance
-
-    // For now: Simple distance-based visibility
+    // Implement LOD switching based on distance
     for (const [regionId, group] of this.vegetationGroups.entries()) {
       const distance = group.position.distanceTo(cameraPosition);
-      group.visible = distance < 3000;  // Hide if > 3000 units away
+
+      // LOD levels:
+      // < 500: High detail (original meshes)
+      // 500-1500: Medium detail (simplified meshes)
+      // 1500-3000: Low detail (billboards/impostors)
+      // > 3000: Hidden
+
+      if (distance > 3000) {
+        group.visible = false;
+      } else {
+        group.visible = true;
+
+        // Apply LOD to each vegetation item
+        group.children.forEach(vegetation => {
+          if (distance < 500) {
+            // High detail - show all geometry
+            vegetation.traverse(child => {
+              if (child.isMesh) {
+                child.visible = true;
+              }
+            });
+            vegetation.userData.currentLOD = 'high';
+          } else if (distance < 1500) {
+            // Medium detail - simplify some geometry
+            vegetation.traverse(child => {
+              if (child.isMesh) {
+                // Hide smaller details but keep main structure
+                child.visible = child.geometry.parameters?.radius > 0.3 ||
+                               child.geometry.parameters?.height > 0.5;
+              }
+            });
+            vegetation.userData.currentLOD = 'medium';
+          } else {
+            // Low detail - show only as simple billboard
+            this.convertToBillboard(vegetation);
+            vegetation.userData.currentLOD = 'low';
+          }
+        });
+      }
     }
+
+    // Implement frustum culling for performance
+    this.performFrustumCulling(cameraPosition);
+  }
+
+  /**
+   * Convert vegetation to billboard for distant LOD
+   */
+  convertToBillboard(vegetation) {
+    if (vegetation.userData.billboard) {
+      // Already converted, just make sure billboard is visible
+      vegetation.userData.billboard.visible = true;
+      vegetation.children.forEach(child => {
+        if (!child.isSprite) child.visible = false;
+      });
+      return;
+    }
+
+    // Create billboard texture from vegetation
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+
+    // Simple colored square as billboard
+    ctx.fillStyle = '#228b22'; // Green color for vegetation
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const spriteMaterial = new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true
+    });
+    const billboard = new THREE.Sprite(spriteMaterial);
+    billboard.scale.set(2, 2, 1);
+
+    vegetation.add(billboard);
+    vegetation.userData.billboard = billboard;
+
+    // Hide original meshes
+    vegetation.children.forEach(child => {
+      if (!child.isSprite) child.visible = false;
+    });
+  }
+
+  /**
+   * Perform frustum culling
+   */
+  performFrustumCulling(cameraPosition) {
+    // Get camera frustum
+    const frustum = new THREE.Frustum();
+    const matrix = new THREE.Matrix4();
+
+    if (window.camera) {
+      matrix.multiplyMatrices(
+        window.camera.projectionMatrix,
+        window.camera.matrixWorldInverse
+      );
+      frustum.setFromProjectionMatrix(matrix);
+
+      // Check each vegetation group
+      for (const group of this.vegetationGroups.values()) {
+        if (!group.visible) continue;
+
+        // Check if group bounding box intersects frustum
+        const boundingBox = new THREE.Box3().setFromObject(group);
+        const inFrustum = frustum.intersectsBox(boundingBox);
+
+        // Hide if outside frustum
+        if (!inFrustum) {
+          group.visible = false;
+        }
+      }
+    }
+  }
+
+  /**
+   * Batch vegetation using InstancedMesh for performance
+   */
+  batchVegetation() {
+    console.log('🌿 Batching vegetation with InstancedMesh...');
+
+    let batchedCount = 0;
+
+    // Group vegetation by type
+    const vegetationByType = new Map();
+
+    for (const [regionId, group] of this.vegetationGroups.entries()) {
+      group.children.forEach(vegetation => {
+        const type = vegetation.userData?.type || 'unknown';
+
+        if (!vegetationByType.has(type)) {
+          vegetationByType.set(type, []);
+        }
+
+        vegetationByType.get(type).push({
+          regionId,
+          vegetation,
+          position: vegetation.position.clone(),
+          rotation: vegetation.rotation.clone(),
+          scale: vegetation.scale.clone()
+        });
+      });
+    }
+
+    // Create InstancedMesh for each type
+    for (const [type, instances] of vegetationByType.entries()) {
+      if (instances.length < 10) continue; // Only batch if enough instances
+
+      const template = this.vegetationTemplates.get(type);
+      if (!template || !template.children[0]) continue;
+
+      const geometry = template.children[0].geometry;
+      const material = template.children[0].material;
+
+      // Create InstancedMesh
+      const instancedMesh = new THREE.InstancedMesh(
+        geometry,
+        material,
+        instances.length
+      );
+
+      const matrix = new THREE.Matrix4();
+      const dummy = new THREE.Object3D();
+
+      // Set transform for each instance
+      instances.forEach((instance, i) => {
+        dummy.position.copy(instance.position);
+        dummy.rotation.copy(instance.rotation);
+        dummy.scale.copy(instance.scale);
+        dummy.updateMatrix();
+        instancedMesh.setMatrixAt(i, dummy.matrix);
+
+        // Remove original mesh
+        const regionGroup = this.vegetationGroups.get(instance.regionId);
+        if (regionGroup) {
+          regionGroup.remove(instance.vegetation);
+        }
+      });
+
+      instancedMesh.instanceMatrix.needsUpdate = true;
+      instancedMesh.castShadow = true;
+      instancedMesh.receiveShadow = true;
+      instancedMesh.name = `instanced_${type}`;
+
+      // Add to first region group (or create new batched group)
+      if (this.vegetationGroups.size > 0) {
+        const firstGroup = this.vegetationGroups.values().next().value;
+        firstGroup.add(instancedMesh);
+      }
+
+      this.instancedMeshes.set(type, instancedMesh);
+      batchedCount += instances.length;
+    }
+
+    console.log(`  ✅ Batched ${batchedCount} vegetation items into ${this.instancedMeshes.size} InstancedMeshes`);
   }
 
   /**

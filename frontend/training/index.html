@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika World - Training Dashboard</title>
+    <link rel="stylesheet" href="training.css">
+</head>
+<body>
+    <div class="training-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🤖 Training Hub</h2>
+                <p>AI Training Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="icon">📊</span> Overview
+                </a>
+                <a href="#active" class="nav-item" data-section="active">
+                    <span class="icon">⚡</span> Active Jobs
+                </a>
+                <a href="#queue" class="nav-item" data-section="queue">
+                    <span class="icon">⏳</span> Queue
+                </a>
+                <a href="#history" class="nav-item" data-section="history">
+                    <span class="icon">📜</span> History
+                </a>
+                <a href="#models" class="nav-item" data-section="models">
+                    <span class="icon">🧠</span> Models
+                </a>
+                <a href="#datasets" class="nav-item" data-section="datasets">
+                    <span class="icon">📁</span> Datasets
+                </a>
+                <a href="#create" class="nav-item" data-section="create">
+                    <span class="icon">➕</span> Create Job
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="back-btn" class="btn btn-secondary">← Back to Admin</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Training Overview</h1>
+                <div class="header-actions">
+                    <span id="gpu-status" class="gpu-status">GPU: Unknown</span>
+                    <button id="refresh-btn" class="btn btn-secondary">🔄 Refresh</button>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Running Jobs</h3>
+                        <p class="stat-value" id="stat-running-jobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Queued Jobs</h3>
+                        <p class="stat-value" id="stat-queued-jobs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completed Today</h3>
+                        <p class="stat-value" id="stat-completed-today">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Models</h3>
+                        <p class="stat-value" id="stat-total-models">0</p>
+                    </div>
+                </div>
+
+                <div class="overview-grid">
+                    <div class="card">
+                        <h3>GPU Utilization</h3>
+                        <div class="gpu-metrics">
+                            <div class="metric">
+                                <label>GPU 0 Usage</label>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="gpu-0-usage" style="width: 0%"></div>
+                                </div>
+                                <span id="gpu-0-percentage">0%</span>
+                            </div>
+                            <div class="metric">
+                                <label>GPU Memory</label>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="gpu-0-memory" style="width: 0%"></div>
+                                </div>
+                                <span id="gpu-0-memory-text">0 GB / 0 GB</span>
+                            </div>
+                            <div class="metric">
+                                <label>Temperature</label>
+                                <span id="gpu-0-temp" class="temp-indicator">--°C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Recent Activity</h3>
+                        <div id="recent-activity" class="activity-list">
+                            <!-- Activity items will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Active Jobs Section -->
+            <section id="active-section" class="content-section">
+                <h2>Active Training Jobs</h2>
+                <div id="active-jobs-container" class="jobs-container">
+                    <!-- Active jobs will be populated here -->
+                </div>
+            </section>
+
+            <!-- Queue Section -->
+            <section id="queue-section" class="content-section">
+                <h2>Queued Jobs</h2>
+                <div class="table-container">
+                    <table class="data-table" id="queue-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Job Name</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Queued At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="queue-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history-section" class="content-section">
+                <h2>Training History</h2>
+                <div class="filters">
+                    <select id="history-filter-status" class="select">
+                        <option value="">All Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <select id="history-filter-type" class="select">
+                        <option value="">All Types</option>
+                        <option value="text">Text</option>
+                        <option value="image">Image</option>
+                        <option value="voice">Voice</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <button id="history-clear-filters" class="btn btn-secondary">Clear Filters</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Job Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Completed At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Models Section -->
+            <section id="models-section" class="content-section">
+                <div class="section-header">
+                    <h2>Trained Models</h2>
+                    <button id="upload-model-btn" class="btn btn-primary">📤 Upload Model</button>
+                </div>
+                <div class="models-grid" id="models-grid">
+                    <!-- Model cards will be populated here -->
+                </div>
+            </section>
+
+            <!-- Datasets Section -->
+            <section id="datasets-section" class="content-section">
+                <div class="section-header">
+                    <h2>Datasets</h2>
+                    <button id="upload-dataset-btn" class="btn btn-primary">📤 Upload Dataset</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="datasets-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Samples</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datasets-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Create Job Section -->
+            <section id="create-section" class="content-section">
+                <h2>Create Training Job</h2>
+                <form id="create-job-form" class="training-form">
+                    <div class="form-group">
+                        <label for="job-name">Job Name *</label>
+                        <input type="text" id="job-name" name="job_name" required placeholder="My Training Job">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="training-type">Training Type *</label>
+                        <select id="training-type" name="training_type" required>
+                            <option value="">Select Type</option>
+                            <option value="text">Text Generation</option>
+                            <option value="image">Image Generation</option>
+                            <option value="voice">Voice Clone</option>
+                            <option value="custom">Custom Model</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataset">Dataset *</label>
+                        <select id="dataset" name="dataset_id" required>
+                            <option value="">Select Dataset</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="base-model">Base Model</label>
+                        <select id="base-model" name="base_model">
+                            <option value="">None (Train from scratch)</option>
+                            <option value="gpt2">GPT-2</option>
+                            <option value="stable-diffusion">Stable Diffusion</option>
+                            <option value="whisper">Whisper</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epochs">Epochs</label>
+                            <input type="number" id="epochs" name="epochs" min="1" max="1000" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="batch-size">Batch Size</label>
+                            <input type="number" id="batch-size" name="batch_size" min="1" max="128" value="8">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="learning-rate">Learning Rate</label>
+                            <input type="number" id="learning-rate" name="learning_rate" step="0.0001" value="0.001">
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select id="priority" name="priority">
+                                <option value="low">Low</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Optional description..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="auto-save" name="auto_save" checked>
+                            Auto-save checkpoints
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="notify-complete" name="notify_complete" checked>
+                            Notify on completion
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">🚀 Start Training</button>
+                        <button type="button" id="save-draft-btn" class="btn btn-secondary">💾 Save as Draft</button>
+                        <button type="reset" class="btn btn-secondary">🔄 Reset</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Job Details Modal -->
+    <div id="job-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Job Details</h2>
+                <button class="modal-close" onclick="trainingDashboard.closeJobDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="job-details-body">
+                <!-- Job details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="trainingDashboard.closeJobDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="training.js"></script>
+</body>
+</html>

@@ -715,6 +715,62 @@ class CityBuilder {
   }
 
   /**
+   * Build special building (e.g., Schwarze Mühle on Götterfels)
+   * @param {string} type - Building type from templates
+   * @param {number} x - World X position
+   * @param {number} z - World Z position
+   * @param {string} regionId - Region for terrain height
+   * @param {string} name - Building name (optional override)
+   */
+  buildSpecialBuilding(type, x, z, regionId, name = null) {
+    console.log(`🏰 Building special structure: ${name || type} at (${x}, ${z})`);
+
+    const template = this.buildingTemplates.get(type);
+    if (!template) {
+      console.warn(`  ⚠️ Building template not found: ${type}`);
+      return null;
+    }
+
+    const building = template.geometry.clone();
+    const y = this.terrainGenerator.getHeightAt(regionId, x, z);
+    building.position.set(x, y, z);
+
+    // Override name if provided
+    if (name) {
+      building.userData.buildingName = name;
+    }
+
+    // Mark as interactable
+    building.userData.isInteractable = true;
+
+    this.scene.add(building);
+    console.log(`  ✅ Special building placed: ${building.userData.buildingName}`);
+
+    return building;
+  }
+
+  /**
+   * Get all interactable buildings in the world
+   * Returns array of {name, position, radius}
+   */
+  getInteractableBuildings() {
+    const buildings = [];
+
+    // Traverse scene to find buildings with isInteractable flag
+    this.scene.traverse((obj) => {
+      if (obj.userData && obj.userData.isInteractable && obj.userData.buildingName) {
+        buildings.push({
+          name: obj.userData.buildingName,
+          position: obj.position,
+          radius: obj.userData.buildingRadius || 50
+        });
+      }
+    });
+
+    return buildings;
+  }
+
+  /**
    * Get stats
    */
   getStats() {

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika World - Admin Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🎮 Najika World</h2>
+                <p>Admin Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="icon">📊</span> Overview
+                </a>
+                <a href="#users" class="nav-item" data-section="users">
+                    <span class="icon">👥</span> Users
+                </a>
+                <a href="#training" class="nav-item" data-section="training">
+                    <span class="icon">🤖</span> Training Jobs
+                </a>
+                <a href="#system" class="nav-item" data-section="system">
+                    <span class="icon">⚙️</span> System Health
+                </a>
+                <a href="#logs" class="nav-item" data-section="logs">
+                    <span class="icon">📝</span> Logs
+                </a>
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <span class="icon">🔧</span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Overview</h1>
+                <div class="header-actions">
+                    <span id="current-user">Admin</span>
+                    <button id="refresh-btn" class="btn btn-secondary">🔄 Refresh</button>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p class="stat-value" id="stat-total-users">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Users</h3>
+                        <p class="stat-value" id="stat-active-users">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Training Jobs</h3>
+                        <p class="stat-value" id="stat-training-jobs">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>System Health</h3>
+                        <p class="stat-value" id="stat-system-health">-</p>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Recent Activity</h3>
+                        <div id="activity-chart" class="chart-placeholder"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" class="content-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <button id="add-user-btn" class="btn btn-primary">+ Add User</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Admin</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Training Section -->
+            <section id="training-section" class="content-section">
+                <div class="section-header">
+                    <h2>Training Jobs</h2>
+                    <button id="create-training-btn" class="btn btn-primary">+ New Training</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="training-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Job Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="training-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- System Health Section -->
+            <section id="system-section" class="content-section">
+                <h2>System Health</h2>
+                <div class="system-metrics">
+                    <div class="metric-card">
+                        <h4>CPU Usage</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="cpu-usage" style="width: 0%"></div>
+                        </div>
+                        <span id="cpu-percentage">0%</span>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Memory Usage</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="memory-usage" style="width: 0%"></div>
+                        </div>
+                        <span id="memory-percentage">0%</span>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Disk Usage</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="disk-usage" style="width: 0%"></div>
+                        </div>
+                        <span id="disk-percentage">0%</span>
+                    </div>
+                </div>
+                <div class="system-info">
+                    <h3>System Information</h3>
+                    <p><strong>API Version:</strong> <span id="api-version">-</span></p>
+                    <p><strong>Database:</strong> <span id="database-status">-</span></p>
+                    <p><strong>Uptime:</strong> <span id="uptime">-</span></p>
+                </div>
+            </section>
+
+            <!-- Logs Section -->
+            <section id="logs-section" class="content-section">
+                <div class="section-header">
+                    <h2>System Logs</h2>
+                    <select id="log-level-filter" class="select">
+                        <option value="">All Levels</option>
+                        <option value="INFO">INFO</option>
+                        <option value="WARNING">WARNING</option>
+                        <option value="ERROR">ERROR</option>
+                        <option value="CRITICAL">CRITICAL</option>
+                    </select>
+                </div>
+                <div class="logs-container" id="logs-container"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <h2>Settings</h2>
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label>Enable Registration</label>
+                        <input type="checkbox" id="enable-registration">
+                    </div>
+                    <div class="form-group">
+                        <label>Enable Voice Chat</label>
+                        <input type="checkbox" id="enable-voice">
+                    </div>
+                    <div class="form-group">
+                        <label>Enable Training</label>
+                        <input type="checkbox" id="enable-training">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Training Jobs</label>
+                        <input type="number" id="max-training-jobs" min="1" max="10">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

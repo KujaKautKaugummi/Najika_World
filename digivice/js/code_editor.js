@@ -3,9 +3,6 @@
  * Inspiriert von Claude Code Interface
  */
 
-// API Base URL - Backend auf Port 8000
-const EDITOR_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
-
 const CodeEditor = {
     isOpen: false,
     overlay: null,
@@ -169,7 +166,7 @@ def najika_greeting():
         notify(`📄 Lade ${filename}...`, 'info');
 
         try {
-            const response = await fetch(`${EDITOR_API_BASE}/api/file/read`, {
+            const response = await fetch('http://localhost:8000/api/file/read', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path: filename})
@@ -208,7 +205,7 @@ def najika_greeting():
         this.addTerminalOutput('Executing code...');
 
         try {
-            const response = await fetch(`${EDITOR_API_BASE}/api/code/execute`, {
+            const response = await fetch('http://localhost:8000/api/code/execute', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({code})
@@ -236,7 +233,7 @@ def najika_greeting():
         if (!filename) return;
 
         try {
-            const response = await fetch(`${EDITOR_API_BASE}/api/file/write`, {
+            const response = await fetch('http://localhost:8000/api/file/write', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -259,7 +256,7 @@ def najika_greeting():
 
     async listFiles() {
         try {
-            const response = await fetch(`${EDITOR_API_BASE}/api/file/list`, {
+            const response = await fetch('http://localhost:8000/api/file/list', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path: '.'})
@@ -306,7 +303,7 @@ def najika_greeting():
 
         // Najika Antwort holen
         try {
-            const response = await fetch(`${EDITOR_API_BASE}/api/chat`, {
+            const response = await fetch('http://localhost:8000/api/chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({message})

@@ -3,9 +3,6 @@
  * Zeigt Najika Status, Server Status, Training Progress etc.
  */
 
-// API Base URL - Backend auf Port 8000
-const MONITOR_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
-
 const SystemMonitor = {
     isOpen: false,
     overlay: null,
@@ -123,7 +120,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch(`${MONITOR_API_BASE}/api/najika/status`);
+            const response = await fetch('http://localhost:8000/api/najika/status');
             const data = await response.json();
 
             if (data.najika) {
@@ -190,7 +187,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch(`${MONITOR_API_BASE}/api/status`);
+            const response = await fetch('http://localhost:8000/api/status');
             const data = await response.json();
 
             panel.innerHTML = `
@@ -230,7 +227,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch(`${MONITOR_API_BASE}/api/training/status`);
+            const response = await fetch('http://localhost:8000/api/training/status');
             const data = await response.json();
 
             const training = data.training || {};
@@ -274,8 +271,8 @@ const SystemMonitor = {
 
         try {
             const [securityResp, memoryResp] = await Promise.all([
-                fetch(`${MONITOR_API_BASE}/api/security/status`),
-                fetch(`${MONITOR_API_BASE}/api/memory/export`)
+                fetch('http://localhost:8000/api/security/status'),
+                fetch('http://localhost:8000/api/memory/export')
             ]);
 
             const security = await securityResp.json();

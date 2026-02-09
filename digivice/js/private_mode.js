@@ -2,14 +2,13 @@
 (function() {
     let eventSource = null;
     const indicator = document.getElementById('privateIndicator');
-    const API_BASE = window.API_BASE_URL || 'http://localhost:8000';
 
     function connect() {
         if (eventSource) {
             eventSource.close();
         }
 
-        eventSource = new EventSource(`${API_BASE}/api/status/stream`);
+        eventSource = new EventSource('http://localhost:8000/api/status/stream');
 
         eventSource.onmessage = (event) => {
             try {

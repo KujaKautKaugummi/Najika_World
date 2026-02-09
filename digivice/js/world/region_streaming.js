@@ -19,6 +19,12 @@ class RegionStreaming {
     this.loadRadius = 2;  // Load regions within this distance (in region units)
     this.playerPosition = new THREE.Vector3(4800, 0, 4800);  // Start at Götterfels
 
+    // GLTFLoader for special locations
+    this.gltfLoader = new THREE.GLTFLoader();
+
+    // Special location meshes
+    this.specialMeshes = new Map();
+
     // Performance stats
     this.stats = {
       loadedRegions: 0,
@@ -286,7 +292,7 @@ class RegionStreaming {
     // Tiefenhöhlen entrance
     if (region.id === 'tiefenhoehlen') {
       console.log(`  🕳️ Adding cave entrance at (${region.entrance.x}, ${region.entrance.z})`);
-      // TODO: Add cave entrance mesh
+      this.loadCaveEntrance(region, regionGroup);
     }
   }
 
@@ -300,16 +306,317 @@ class RegionStreaming {
     if (region.specialLocations && region.specialLocations.peak) {
       const peak = region.specialLocations.peak;
       console.log(`    🏠 ${peak.name} - ${peak.rooms} rooms (Safe Zone)`);
-      // TODO: Load Schwarze Mühle model
+      this.loadSchwarzeMuehle(peak, regionGroup);
     }
 
     // Fluss (river)
     console.log('    🌊 River flowing down the mountain');
-    // TODO: Add river mesh
+    this.loadRiver(region, regionGroup);
 
     // Kleines Dorf (small village)
     console.log('    🏘️ Small village');
-    // TODO: Add village buildings
+    this.loadVillage(region, regionGroup);
+  }
+
+  /**
+   * Load Schwarze Mühle (Najika's Home)
+   */
+  async loadSchwarzeMuehle(peakData, regionGroup) {
+    try {
+      const gltf = await new Promise((resolve, reject) => {
+        this.gltfLoader.load('static/assets/kaykit/medieval/building_windmill_red.gltf', resolve, undefined, reject);
+      });
+
+      const schwarzeMuehle = gltf.scene;
+      schwarzeMuehle.position.set(peakData.position.x, 5, peakData.position.z);
+      schwarzeMuehle.scale.set(2.5, 2.5, 2.5);
+
+      // Make it BLACK (Schwarze Mühle)
+      schwarzeMuehle.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            roughness: 0.6,
+            metalness: 0.3,
+            emissive: 0x0a0a0a,
+            emissiveIntensity: 0.2
+          });
+        }
+      });
+
+      // UserData for interaction system
+      schwarzeMuehle.userData.buildingType = 'schwarze_muehle';
+      schwarzeMuehle.userData.buildingName = 'Schwarze Windmühle';
+      schwarzeMuehle.userData.proximityRadius = 15;
+      schwarzeMuehle.userData.safeZone = peakData.safeZone;
+      schwarzeMuehle.userData.rooms = peakData.rooms;
+
+      regionGroup.add(schwarzeMuehle);
+      this.specialMeshes.set('schwarze_muehle', schwarzeMuehle);
+
+      // Add glowing marker above
+      const markerGeometry = new THREE.SphereGeometry(1, 16, 16);
+      const markerMaterial = new THREE.MeshStandardMaterial({
+        color: 0x8b00ff,
+        emissive: 0x8b00ff,
+        emissiveIntensity: 1,
+        transparent: true,
+        opacity: 0.8
+      });
+      const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+      marker.position.set(peakData.position.x, 18, peakData.position.z);
+      regionGroup.add(marker);
+
+      // Pulsing animation
+      marker.userData.animateMarker = (time) => {
+        marker.scale.setScalar(1 + Math.sin(time * 0.003) * 0.3);
+      };
+
+      this.specialMeshes.set('schwarze_muehle_marker', marker);
+
+      console.log('    ✅ Schwarze Mühle loaded successfully!');
+    } catch (error) {
+      console.error('    ❌ Failed to load Schwarze Mühle:', error);
+    }
+  }
+
+  /**
+   * Load River mesh flowing down the mountain
+   */
+  loadRiver(region, regionGroup) {
+    // Create simple river using planes
+    const riverGeometry = new THREE.PlaneGeometry(20, 300);
+    const riverMaterial = new THREE.MeshStandardMaterial({
+      color: 0x2a5f9e,
+      transparent: true,
+      opacity: 0.7,
+      roughness: 0.1,
+      metalness: 0.3,
+      emissive: 0x1a3f6e,
+      emissiveIntensity: 0.2
+    });
+
+    const river = new THREE.Mesh(riverGeometry, riverMaterial);
+    river.rotation.x = -Math.PI / 2;
+    river.position.set(4800, 0.1, 4650);
+    river.userData.type = 'river';
+
+    regionGroup.add(river);
+    this.specialMeshes.set('goetterfels_river', river);
+
+    console.log('    ✅ River mesh added');
+  }
+
+  /**
+   * Load cave entrance mesh
+   */
+  loadCaveEntrance(region, regionGroup) {
+    if (!region.entrance) return;
+
+    const entranceX = region.entrance.x;
+    const entranceZ = region.entrance.z;
+
+    // Create cave entrance structure
+    const entranceGroup = new THREE.Group();
+
+    // Cave opening (dark tunnel)
+    const tunnelGeometry = new THREE.CylinderGeometry(8, 10, 15, 16);
+    const tunnelMaterial = new THREE.MeshStandardMaterial({
+      color: 0x1a1a1a,
+      roughness: 0.9,
+      metalness: 0.1,
+      emissive: 0x000000
+    });
+    const tunnel = new THREE.Mesh(tunnelGeometry, tunnelMaterial);
+    tunnel.rotation.z = Math.PI / 2; // Horizontal tunnel
+    tunnel.position.set(entranceX, 5, entranceZ);
+    tunnel.castShadow = true;
+    tunnel.receiveShadow = true;
+    entranceGroup.add(tunnel);
+
+    // Rocky arch around entrance
+    const rockGeometry = new THREE.DodecahedronGeometry(6, 1);
+    const rockMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4a4a4a,
+      roughness: 0.95,
+      metalness: 0.05
+    });
+
+    // Left rock
+    const leftRock = new THREE.Mesh(rockGeometry, rockMaterial);
+    leftRock.position.set(entranceX - 8, 6, entranceZ);
+    leftRock.scale.set(1.2, 1.5, 0.8);
+    leftRock.rotation.set(0.2, 0.5, 0.1);
+    leftRock.castShadow = true;
+    leftRock.receiveShadow = true;
+    entranceGroup.add(leftRock);
+
+    // Right rock
+    const rightRock = new THREE.Mesh(rockGeometry.clone(), rockMaterial.clone());
+    rightRock.position.set(entranceX + 8, 6, entranceZ);
+    rightRock.scale.set(1.2, 1.5, 0.8);
+    rightRock.rotation.set(-0.2, -0.5, -0.1);
+    rightRock.castShadow = true;
+    rightRock.receiveShadow = true;
+    entranceGroup.add(rightRock);
+
+    // Top rock
+    const topRock = new THREE.Mesh(rockGeometry.clone(), rockMaterial.clone());
+    topRock.position.set(entranceX, 12, entranceZ);
+    topRock.scale.set(2, 0.8, 1);
+    topRock.rotation.set(0, 0.3, 0);
+    topRock.castShadow = true;
+    topRock.receiveShadow = true;
+    entranceGroup.add(topRock);
+
+    // Glowing crystals at entrance
+    const crystalGeometry = new THREE.ConeGeometry(0.5, 2, 6);
+    const crystalMaterial = new THREE.MeshStandardMaterial({
+      color: 0x9370db,
+      roughness: 0.2,
+      metalness: 0.3,
+      emissive: 0x9370db,
+      emissiveIntensity: 0.5,
+      transparent: true,
+      opacity: 0.8
+    });
+
+    // Place crystals around entrance
+    const crystalPositions = [
+      { x: entranceX - 6, y: 2, z: entranceZ + 3 },
+      { x: entranceX + 6, y: 2, z: entranceZ - 3 },
+      { x: entranceX - 4, y: 3, z: entranceZ - 5 },
+      { x: entranceX + 5, y: 2, z: entranceZ + 4 }
+    ];
+
+    crystalPositions.forEach(pos => {
+      const crystal = new THREE.Mesh(crystalGeometry.clone(), crystalMaterial.clone());
+      crystal.position.set(pos.x, pos.y, pos.z);
+      crystal.rotation.set(
+        Math.random() * 0.5,
+        Math.random() * Math.PI * 2,
+        Math.random() * 0.5
+      );
+      crystal.castShadow = true;
+      entranceGroup.add(crystal);
+    });
+
+    // Point light inside cave (spooky glow)
+    const caveLight = new THREE.PointLight(0x9370db, 2, 30);
+    caveLight.position.set(entranceX, 5, entranceZ);
+    caveLight.castShadow = true;
+    entranceGroup.add(caveLight);
+
+    // Fog/mist effect at entrance
+    const mistGeometry = new THREE.SphereGeometry(8, 16, 16);
+    const mistMaterial = new THREE.MeshBasicMaterial({
+      color: 0x444444,
+      transparent: true,
+      opacity: 0.3,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const mist = new THREE.Mesh(mistGeometry, mistMaterial);
+    mist.position.set(entranceX, 5, entranceZ);
+    entranceGroup.add(mist);
+
+    // Animate mist (pulsing effect)
+    mist.userData.animateMist = (time) => {
+      mist.scale.setScalar(1 + Math.sin(time * 0.001) * 0.2);
+      mist.material.opacity = 0.2 + Math.sin(time * 0.002) * 0.1;
+    };
+
+    // Sign: "Tiefenhöhlen - Level 15+"
+    const signCanvas = document.createElement('canvas');
+    signCanvas.width = 512;
+    signCanvas.height = 128;
+    const ctx = signCanvas.getContext('2d');
+
+    // Sign background
+    ctx.fillStyle = 'rgba(80, 50, 30, 0.9)';
+    ctx.fillRect(0, 0, signCanvas.width, signCanvas.height);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(0, 0, signCanvas.width, signCanvas.height);
+
+    // Sign text
+    ctx.fillStyle = '#ffcc00';
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('⚠️ TIEFENHÖHLEN ⚠️', signCanvas.width / 2, 40);
+    ctx.font = 'bold 32px Arial';
+    ctx.fillStyle = '#ff4444';
+    ctx.fillText('LEVEL 15+ REQUIRED', signCanvas.width / 2, 90);
+
+    const signTexture = new THREE.CanvasTexture(signCanvas);
+    const signSpriteMaterial = new THREE.SpriteMaterial({
+      map: signTexture,
+      transparent: true
+    });
+    const sign = new THREE.Sprite(signSpriteMaterial);
+    sign.scale.set(10, 2.5, 1);
+    sign.position.set(entranceX, 15, entranceZ - 12);
+    entranceGroup.add(sign);
+
+    // UserData for interaction system
+    entranceGroup.userData.buildingType = 'cave_entrance';
+    entranceGroup.userData.buildingName = 'Tiefenhöhlen Eingang';
+    entranceGroup.userData.proximityRadius = 20;
+    entranceGroup.userData.minLevel = 15;
+    entranceGroup.userData.teleportTo = {
+      region: 'tiefenhoehlen',
+      x: region.entrance.x,
+      y: -20, // Underground
+      z: region.entrance.z
+    };
+
+    regionGroup.add(entranceGroup);
+    this.specialMeshes.set('cave_entrance', entranceGroup);
+
+    console.log('    ✅ Cave entrance mesh created');
+  }
+
+  /**
+   * Load Village buildings
+   */
+  async loadVillage(region, regionGroup) {
+    const villagePositions = [
+      { x: 4750, z: 4750 },
+      { x: 4770, z: 4760 },
+      { x: 4730, z: 4770 }
+    ];
+
+    for (let i = 0; i < villagePositions.length; i++) {
+      try {
+        const gltf = await new Promise((resolve, reject) => {
+          this.gltfLoader.load('static/assets/kaykit/medieval/building_home_A_red.gltf', resolve, undefined, reject);
+        });
+
+        const house = gltf.scene.clone();
+        house.position.set(villagePositions[i].x, 0, villagePositions[i].z);
+        house.scale.set(1.5, 1.5, 1.5);
+
+        house.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+
+        house.userData.buildingType = 'village_house';
+        house.userData.buildingName = `Village House ${i + 1}`;
+
+        regionGroup.add(house);
+        this.specialMeshes.set(`village_house_${i}`, house);
+      } catch (error) {
+        console.error(`    ❌ Failed to load village house ${i}:`, error);
+      }
+    }
+
+    console.log('    ✅ Village buildings loaded');
   }
 
   /**

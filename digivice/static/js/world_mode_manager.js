@@ -397,7 +397,12 @@ class WorldModeManager {
 
         // Map
         document.getElementById('owMapBtn')?.addEventListener('click', () => {
-            console.log('🗺️ Map öffnen (TODO)');
+            if (window.openWorldSystems?.specialLocations) {
+                window.openWorldSystems.specialLocations.showMapUI();
+            } else {
+                console.log('🗺️ Map: Zeige 9-Regionen Übersicht');
+                alert('🗺️ Open World Map:\n\n- Handelsfestung (0, 0)\n- Salzige Bucht (-133, 0)\n- Dampf-Hain (133, 0)\n- Ewiger Winterforst (0, 133)\n- Goldene Wüste (133, 133)\n- Plains (-133, 133)\n- Forest (0, -133)\n- Swamp (133, -133)\n- Mountains (-133, -133)');
+            }
         });
     }
 

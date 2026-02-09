@@ -1,9 +1,6 @@
 // Najika Command System - Digimon World 1 Style
 // Rookie → Champion → Ultimate → Mega Evolution
 
-// API Base URL - Backend auf Port 8000
-const CMD_API_BASE = window.API_BASE_URL || 'http://localhost:8000';
-
 class CommandSystem {
   constructor() {
     // Battle XP for evolution
@@ -39,38 +36,6 @@ class CommandSystem {
       defend: 0,
       tech: 0,
       distance: 0
-    };
-
-    // Equipment-based Combat System
-    this.equipment = {
-      leftHand: null,   // Item-Objekt oder null
-      rightHand: null,  // Item-Objekt oder null
-      twoHanded: null   // Wenn Zweihänder ausgerüstet
-    };
-    this.lastAttackTime = { left: 0, right: 0 };
-
-    // Equipment Types
-    this.WEAPON_TYPES = {
-      // Nahkampf
-      sword: { type: 'melee', element: null, lightDmg: 20, heavyDmg: 50, lightCD: 300, heavyCD: 800 },
-      axe: { type: 'melee', element: null, lightDmg: 25, heavyDmg: 70, lightCD: 400, heavyCD: 1000 },
-      dagger: { type: 'melee', element: null, lightDmg: 12, heavyDmg: 30, lightCD: 150, heavyCD: 400 },
-
-      // Zweihänder
-      greatsword: { type: 'twohanded', element: null, lightDmg: 40, heavyDmg: 100, lightCD: 600, heavyCD: 1500 },
-      staff: { type: 'twohanded', element: 'magic', lightDmg: 30, heavyDmg: 80, lightCD: 500, heavyCD: 1200 },
-
-      // Zauber (auf Hand ausrüstbar)
-      fireball: { type: 'spell', element: 'fire', lightDmg: 25, heavyDmg: 60, lightCD: 400, heavyCD: 1000, manaCost: 10 },
-      icebolt: { type: 'spell', element: 'ice', lightDmg: 20, heavyDmg: 50, lightCD: 350, heavyCD: 900, manaCost: 8 },
-      lightning: { type: 'spell', element: 'lightning', lightDmg: 30, heavyDmg: 70, lightCD: 500, heavyCD: 1100, manaCost: 15 },
-      heal: { type: 'spell', element: 'light', lightDmg: -20, heavyDmg: -50, lightCD: 600, heavyCD: 1500, manaCost: 20 },
-
-      // Schild (nur rechte Hand, nur Block)
-      shield: { type: 'shield', element: null, blockValue: 50, parryWindow: 150 },
-
-      // Faust (wenn nichts ausgerüstet)
-      fist: { type: 'melee', element: null, lightDmg: 5, heavyDmg: 15, lightCD: 200, heavyCD: 500 }
     };
   }
 
@@ -282,7 +247,7 @@ class CommandSystem {
   async praise(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch(`${CMD_API_BASE}/api/najika/praise`, {
+      const response = await fetch('http://localhost:8000/api/najika/praise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -347,7 +312,7 @@ class CommandSystem {
   async scold(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch(`${CMD_API_BASE}/api/najika/scold`, {
+      const response = await fetch('http://localhost:8000/api/najika/scold', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -455,7 +420,7 @@ class CommandSystem {
   // Sync happiness/discipline from server
   async syncFromServer() {
     try {
-      const response = await fetch(`${CMD_API_BASE}/api/status`);
+      const response = await fetch('http://localhost:8000/api/status');
       const data = await response.json();
       if (data.najika) {
         this.happiness = data.najika.happiness || 50;
@@ -508,197 +473,5 @@ class CommandSystem {
       case 'mega': return null; // Max level
       default: return 100;
     }
-  }
-
-  // ========== EQUIPMENT-BASED COMBAT SYSTEM ==========
-
-  // Equipment ausrüsten
-  equipItem(hand, itemName) {
-    const weapon = this.WEAPON_TYPES[itemName];
-    if (!weapon) {
-      return { success: false, reason: 'unknown_item' };
-    }
-
-    // Zweihänder nimmt beide Hände
-    if (weapon.type === 'twohanded') {
-      this.equipment.leftHand = null;
-      this.equipment.rightHand = null;
-      this.equipment.twoHanded = { name: itemName, ...weapon };
-      return { success: true, message: `${itemName} ausgerüstet (Zweihänder)` };
-    }
-
-    // Schild nur rechte Hand
-    if (weapon.type === 'shield' && hand === 'left') {
-      return { success: false, reason: 'shield_right_hand_only' };
-    }
-
-    // Normales Item ausrüsten
-    if (this.equipment.twoHanded) {
-      this.equipment.twoHanded = null; // Zweihänder ablegen
-    }
-
-    if (hand === 'left') {
-      this.equipment.leftHand = { name: itemName, ...weapon };
-    } else {
-      this.equipment.rightHand = { name: itemName, ...weapon };
-    }
-
-    return { success: true, message: `${itemName} in ${hand === 'left' ? 'linker' : 'rechter'} Hand` };
-  }
-
-  // Angriff ausführen (Light oder Heavy)
-  executeAttack(hand, attackType) {
-    const now = Date.now();
-
-    // Hole aktives Weapon
-    let weapon;
-    if (this.equipment.twoHanded) {
-      weapon = this.equipment.twoHanded;
-      hand = 'both'; // Zweihänder nutzt beide Hände
-    } else {
-      weapon = hand === 'left' ? this.equipment.leftHand : this.equipment.rightHand;
-    }
-
-    // Fallback auf Faust
-    if (!weapon) {
-      weapon = { name: 'fist', ...this.WEAPON_TYPES.fist };
-    }
-
-    // Schild kann nicht angreifen
-    if (weapon.type === 'shield') {
-      return { success: false, reason: 'shield_cannot_attack' };
-    }
-
-    // Cooldown Check
-    const cooldown = attackType === 'light' ? weapon.lightCD : weapon.heavyCD;
-    const lastAttack = this.lastAttackTime[hand === 'both' ? 'left' : hand];
-
-    if (now - lastAttack < cooldown) {
-      return { success: false, reason: 'cooldown', remaining: cooldown - (now - lastAttack) };
-    }
-
-    // Update last attack time
-    if (hand === 'both') {
-      this.lastAttackTime.left = now;
-      this.lastAttackTime.right = now;
-    } else {
-      this.lastAttackTime[hand] = now;
-    }
-
-    // Berechne Schaden
-    const baseDamage = attackType === 'light' ? weapon.lightDmg : weapon.heavyDmg;
-    const staminaCost = attackType === 'light' ? 5 : 20;
-    const manaCost = weapon.manaCost ? (attackType === 'light' ? weapon.manaCost : weapon.manaCost * 2) : 0;
-
-    return {
-      success: true,
-      weapon: weapon.name,
-      hand: hand,
-      attackType: attackType,
-      damage: baseDamage,
-      element: weapon.element,
-      staminaCost: staminaCost,
-      manaCost: manaCost,
-      isTwoHanded: hand === 'both'
-    };
-  }
-
-  // Weave ausführen (beide Hände mit Zauber gleichzeitig)
-  executeWeave() {
-    const left = this.equipment.leftHand;
-    const right = this.equipment.rightHand;
-
-    // Braucht beide Hände mit Zauber
-    if (!left || !right) {
-      return { success: false, reason: 'need_both_hands' };
-    }
-
-    if (left.type !== 'spell' || right.type !== 'spell') {
-      return { success: false, reason: 'need_spells_both_hands', message: 'Weave braucht Zauber in beiden Händen!' };
-    }
-
-    // Element-Kombination
-    const combo = [left.element, right.element].sort().join('+');
-
-    const weaves = {
-      'fire+ice': { name: 'Thermoschock', damage: 80, effect: 'stun', duration: 2000 },
-      'fire+lightning': { name: 'Plasmasturm', damage: 100, effect: 'burn_chain', duration: 3000 },
-      'fire+wind': { name: 'Feuersturm', damage: 90, effect: 'burn_aoe', radius: 5 },
-      'ice+lightning': { name: 'Frostschock', damage: 85, effect: 'slow_paralysis', duration: 2500 },
-      'ice+wind': { name: 'Blizzard', damage: 70, effect: 'slow_aoe', radius: 8 },
-      'lightning+wind': { name: 'Sturmblitz', damage: 95, effect: 'knockback', force: 10 },
-      'ice+water': { name: 'Gefrierwelle', damage: 65, effect: 'freeze', duration: 3000 },
-      'fire+earth': { name: 'Lava-Eruption', damage: 110, effect: 'terrain_fire', duration: 5000 },
-      'earth+lightning': { name: 'Erdbeben', damage: 100, effect: 'stun_aoe', radius: 6 }
-    };
-
-    const weave = weaves[combo] || { name: 'Magie-Fusion', damage: 60, effect: 'none' };
-    const totalManaCost = (left.manaCost || 10) + (right.manaCost || 10);
-
-    return {
-      success: true,
-      weave: weave,
-      elements: [left.element, right.element],
-      staminaCost: 30,
-      manaCost: totalManaCost
-    };
-  }
-
-  // Block (nur mit Schild oder Waffe)
-  executeBlock() {
-    const right = this.equipment.rightHand;
-
-    if (right && right.type === 'shield') {
-      return { success: true, blockValue: right.blockValue, type: 'shield_block' };
-    }
-
-    // Waffen-Block (weniger effektiv)
-    if (right && right.type === 'melee') {
-      return { success: true, blockValue: 20, type: 'weapon_block' };
-    }
-
-    // Zweihänder-Block
-    if (this.equipment.twoHanded) {
-      return { success: true, blockValue: 30, type: 'twohanded_block' };
-    }
-
-    return { success: false, reason: 'nothing_to_block_with' };
-  }
-
-  // Parry (Timing-basiert)
-  executeParry() {
-    const right = this.equipment.rightHand;
-    const parryWindow = right && right.type === 'shield' ? right.parryWindow : 100; // ms
-
-    return {
-      success: true,
-      parryWindow: parryWindow, // 100-150ms Fenster
-      perfectWindow: 50, // Perfektes Parry in den ersten 50ms
-      type: right && right.type === 'shield' ? 'shield_parry' : 'weapon_parry'
-    };
-  }
-
-  // Combo System
-  executeCombo(sequence) {
-    const combos = {
-      'light,light,light': { name: 'Triple Strike', multiplier: 1.5, finisher: false },
-      'light,heavy': { name: 'Smash', multiplier: 1.3, finisher: false },
-      'heavy,light,light': { name: 'Crusher', multiplier: 1.4, finisher: false },
-      'light,light,heavy': { name: 'Finisher', multiplier: 1.8, finisher: true },
-      'heavy,heavy': { name: 'Power Slam', multiplier: 2.0, finisher: true, staminaCost: 40 }
-    };
-
-    const key = sequence.join(',');
-    return combos[key] || null;
-  }
-
-  // Aktuellen Equipment-Status holen
-  getEquipmentStatus() {
-    return {
-      leftHand: this.equipment.leftHand ? this.equipment.leftHand.name : 'Faust',
-      rightHand: this.equipment.rightHand ? this.equipment.rightHand.name : 'Faust',
-      twoHanded: this.equipment.twoHanded ? this.equipment.twoHanded.name : null,
-      canWeave: this.equipment.leftHand?.type === 'spell' && this.equipment.rightHand?.type === 'spell'
-    };
   }
 }

@@ -15,7 +15,7 @@ from backend.api.auth import get_current_user
 from backend.services.nemesis_arena_system import nemesis_arena, RulerRank, MonsterType
 from backend.services.finisher_system import finisher_generator, FinisherStyle
 
-router = APIRouter(prefix="/api/arena", tags=["Arena"])
+router = APIRouter(prefix="/game/arena", tags=["Arena"])
 
 
 # ============================================================================
@@ -50,59 +50,6 @@ class MonsterCreateRequest(BaseModel):
 # ============================================================================
 # ARENA ENDPOINTS
 # ============================================================================
-
-@router.get("/status")
-async def get_arena_status():
-    """
-    Get arena status (no auth required for frontend compatibility)
-
-    Returns current arena state and available monsters
-    """
-    hierarchy = nemesis_arena.get_arena_hierarchy() or {}
-
-    # Safe hierarchy summary - handle None values
-    hierarchy_summary = {}
-    for rank, monsters in hierarchy.items():
-        if monsters is not None:
-            hierarchy_summary[rank] = len(monsters)
-        else:
-            hierarchy_summary[rank] = 0
-
-    return {
-        "success": True,
-        "status": "online",
-        "total_monsters": len(nemesis_arena.monsters) if nemesis_arena.monsters else 0,
-        "hierarchy_summary": hierarchy_summary
-    }
-
-
-@router.get("/monsters")
-async def get_all_monsters():
-    """
-    Get all arena monsters (no auth required for frontend compatibility)
-
-    Returns list of all monsters in the arena
-    """
-    monsters = []
-    if nemesis_arena.monsters:
-        for monster_id, monster in nemesis_arena.monsters.items():
-            monsters.append({
-                "id": monster_id,
-                "name": getattr(monster, 'name', 'Unknown'),
-                "rank": monster.rank.value if hasattr(monster.rank, 'value') else str(getattr(monster, 'rank', 'NOBODY')),
-                "monster_type": monster.monster_type.value if hasattr(monster.monster_type, 'value') else str(getattr(monster, 'monster_type', 'SLIME')),
-                "level": getattr(monster, 'level', 1),
-                "health": getattr(monster, 'health', 100),
-                "max_health": getattr(monster, 'max_health', 100),
-                "region": getattr(monster, 'region', 'unknown')
-            })
-
-    return {
-        "success": True,
-        "monsters": monsters,
-        "count": len(monsters)
-    }
-
 
 @router.get("/hierarchy")
 async def get_arena_hierarchy(

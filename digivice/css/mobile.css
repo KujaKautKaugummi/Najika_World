@@ -1,0 +1,402 @@
+/**
+ * Mobile-specific styles for Digivice Web Game
+ * Optimized layout and UI for mobile devices
+ */
+
+/* ===== Mobile Detection ===== */
+@media only screen and (max-width: 768px) {
+    /* Hide desktop-only elements */
+    .desktop-only {
+        display: none !important;
+    }
+
+    /* Full screen game */
+    body {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Game canvas */
+    canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+        touch-action: none;
+    }
+
+    /* UI Container */
+    #ui-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 900;
+    }
+
+    /* Allow pointer events for interactive UI elements */
+    #ui-container > * {
+        pointer-events: auto;
+    }
+
+    /* ===== Top HUD ===== */
+    #top-hud {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        z-index: 950;
+    }
+
+    /* Player Stats (HP, MP, etc.) */
+    #player-stats {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+    }
+
+    #player-stats .stat-bar {
+        width: 120px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 4px 0;
+    }
+
+    #player-stats .stat-bar-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+
+    #player-stats .hp-bar {
+        background: #ff3333;
+    }
+
+    #player-stats .mp-bar {
+        background: #3333ff;
+    }
+
+    /* Menu Button */
+    #menu-button {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: white;
+        font-size: 24px;
+        z-index: 950;
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: none;
+    }
+
+    #menu-button:active {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* ===== Virtual Joystick ===== */
+    #joystick-container {
+        /* Positioned via JavaScript */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #joystick-stick {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== Action Buttons ===== */
+    button[id^="btn-"] {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        font-weight: bold;
+        transition: all 0.1s ease;
+    }
+
+    button[id^="btn-"]:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== Chat/Notification Area ===== */
+    #chat-container {
+        position: fixed;
+        bottom: 220px;
+        left: 10px;
+        right: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 940;
+        pointer-events: none;
+    }
+
+    .chat-message {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 6px 10px;
+        margin: 4px 0;
+        border-radius: 6px;
+        color: white;
+        font-size: 13px;
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-message.notification {
+        background: rgba(255, 165, 0, 0.7);
+    }
+
+    .chat-message .username {
+        font-weight: bold;
+        margin-right: 6px;
+    }
+
+    /* ===== Inventory/Menu Modal ===== */
+    #modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+
+    #modal-overlay.active {
+        display: flex;
+    }
+
+    #modal-content {
+        background: rgba(20, 20, 20, 0.95);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow-y: auto;
+        color: white;
+    }
+
+    #modal-content h2 {
+        margin-top: 0;
+        font-size: 20px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 10px;
+    }
+
+    #modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 0, 0, 0.7);
+        border: none;
+        border-radius: 20px;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* ===== Performance Indicator ===== */
+    #fps-counter {
+        position: fixed;
+        top: 70px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 6px 10px;
+        border-radius: 6px;
+        color: #00ff00;
+        font-size: 12px;
+        font-family: monospace;
+        z-index: 950;
+        backdrop-filter: blur(5px);
+    }
+
+    #fps-counter.warning {
+        color: #ffaa00;
+    }
+
+    #fps-counter.critical {
+        color: #ff0000;
+    }
+
+    /* ===== Loading Screen ===== */
+    #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: white;
+    }
+
+    #loading-screen.hidden {
+        display: none;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    .loading-progress {
+        width: 80%;
+        max-width: 300px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .loading-progress-bar {
+        height: 100%;
+        background: white;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    /* ===== Landscape Mode Optimization ===== */
+    @media only screen and (orientation: landscape) {
+        #joystick-container {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        button[id^="btn-"] {
+            /* Adjust button positions for landscape */
+        }
+
+        #chat-container {
+            bottom: 20px;
+            left: 160px;
+            right: 160px;
+            max-width: 400px;
+        }
+    }
+
+    /* ===== Tablet Optimization (768px - 1024px) ===== */
+    @media only screen and (min-width: 769px) and (max-width: 1024px) {
+        #joystick-container {
+            width: 140px;
+            height: 140px;
+        }
+
+        button[id^="btn-"] {
+            width: 80px;
+            height: 80px;
+            font-size: 28px;
+        }
+
+        #player-stats {
+            font-size: 16px;
+        }
+
+        #player-stats .stat-bar {
+            width: 150px;
+            height: 10px;
+        }
+    }
+
+    /* ===== Accessibility ===== */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* ===== Scrollbar Hiding ===== */
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    /* ===== Safe Area for Notch Devices ===== */
+    @supports (padding: max(0px)) {
+        body {
+            padding-left: max(0px, env(safe-area-inset-left));
+            padding-right: max(0px, env(safe-area-inset-right));
+            padding-top: max(0px, env(safe-area-inset-top));
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+        }
+    }
+
+    /* ===== No-Select for Game Elements ===== */
+    .no-select {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+
+    /* ===== High Contrast Mode ===== */
+    @media (prefers-contrast: high) {
+        #joystick-container,
+        button[id^="btn-"] {
+            border-width: 3px;
+        }
+
+        .chat-message {
+            background: rgba(0, 0, 0, 0.9);
+        }
+    }
+}
+
+/* ===== Desktop Fallback Message ===== */
+@media only screen and (min-width: 1025px) {
+    .mobile-only {
+        display: none !important;
+    }
+}

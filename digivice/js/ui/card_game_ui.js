@@ -11,13 +11,11 @@
 
 class CardGameUI {
     constructor() {
-        // FastAPI Server auf Port 8001 (Card Game APIs)
-        const FASTAPI_BASE = 'http://127.0.0.1:8001';
         this.apiBase = {
-            cards: `${FASTAPI_BASE}/api/cards`,
-            decks: `${FASTAPI_BASE}/api/decks`,
-            matches: `${FASTAPI_BASE}/api/matches`,
-            rankings: `${FASTAPI_BASE}/api/rankings`
+            cards: 'http://localhost:8000/api/cards',
+            decks: 'http://localhost:8000/api/decks',
+            matches: 'http://localhost:8000/api/matches',
+            rankings: 'http://localhost:8000/api/rankings'
         };
 
         this.playerId = 1; // TODO: Get from session
@@ -115,18 +113,8 @@ class CardGameUI {
         await this.showTab('collection');
     }
 
-    // Alias für Konsistenz mit anderen UIs
-    async open() {
-        return this.show();
-    }
-
     hide() {
         this.modal.style.display = 'none';
-    }
-
-    // Alias für Konsistenz mit anderen UIs
-    close() {
-        this.hide();
     }
 
     async showTab(tabName) {
