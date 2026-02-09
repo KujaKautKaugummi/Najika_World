@@ -1,0 +1,34 @@
+{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.0",
+    "FriendlyName": "Najika Backend Integration",
+    "Description": "HTTP/WebSocket client for Najika Python Backend communication",
+    "Category": "Gameplay",
+    "CreatedBy": "Kuja & Claude Team",
+    "CreatedByURL": "",
+    "DocsURL": "",
+    "MarketplaceURL": "",
+    "SupportURL": "",
+    "CanContainContent": false,
+    "IsBetaVersion": false,
+    "IsExperimentalVersion": false,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "NajikaBackend",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
+            "PlatformAllowList": [
+                "Win64",
+                "Android"
+            ]
+        }
+    ],
+    "Plugins": [
+        {
+            "Name": "WebSockets",
+            "Enabled": true
+        }
+    ]
+}

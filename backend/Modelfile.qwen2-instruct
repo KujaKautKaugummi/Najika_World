@@ -1,0 +1,19 @@
+# Qwen2.5 7B Instruct Uncensored - Basis-Modell für Tasks/Code
+# Importiert von LM Studio GGUF
+
+FROM C:/Users/0KKK0/.lmstudio/models/yemiao2745/Qwen2.5-7B-Instruct-Uncensored-Q4_K_M-GGUF/qwen2.5-7b-instruct-uncensored-q4_k_m.gguf
+
+# Qwen2.5 Chat Template
+TEMPLATE """<|im_start|>system
+{{ .System }}<|im_end|}
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+{{ .Response }}<|im_end|>"""
+
+# Parameters - etwas niedriger für präzise Tasks
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.1
+PARAMETER stop "<|im_end|>"

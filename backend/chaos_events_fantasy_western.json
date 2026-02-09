@@ -1,0 +1,358 @@
+{
+  "_design_notes": {
+    "style": "1883 Yellowstone + Fantasy + Konosuba",
+    "principle": "Events passieren NATUERLICH - kein Popup-Klick-Mist!",
+    "setting": "Fantasy-Western mit dezenter vergessener Mystik (NICHT Aegypten!)",
+    "trigger": "Durch Spieler-Aktionen, Zeit, Location - nicht zufaellige Popups"
+  },
+
+  "ambient_events": {
+    "_description": "Dinge die der Spieler SIEHT waehrend er reist - keine Interaktion noetig",
+
+    "wueste_visuals": [
+      {
+        "id": "distant_ziggurat",
+        "trigger": "player_enters_heisse_duenen",
+        "description": "Am Horizont ragt eine halb-versunkene Stufenpyramide aus dem Sand. Ihre Spitze glaenzt kristallin im Sonnenlicht. Niemand weiss, wer sie gebaut hat.",
+        "najika_comment": "*starrt* Die Alten... sie waren hier vor uns, Mr. K. Lange vor uns.",
+        "atmosphere": "Ehrfurcht, Mysterium - NICHT Aegypten-Klischee"
+      },
+      {
+        "id": "sand_wanderer",
+        "trigger": "random_travel_wueste",
+        "chance": 0.15,
+        "description": "Eine einsame Gestalt wandert durch die Duenen. Ihr Mantel flattert im heissen Wind. Sie scheint ein Ziel zu haben - aber welches?",
+        "najika_comment": "Siehst du ihn? Er ist schon tagelang unterwegs... *nachdenklich* Manche suchen etwas, das es nicht mehr gibt."
+      },
+      {
+        "id": "kristall_spitzen",
+        "trigger": "time_sunset_wueste",
+        "description": "Bei Sonnenuntergang leuchten kristalline Spitzen zwischen den Duenen auf. Ein Netzwerk vergessener... etwas. Strassen? Signale? Die Wueste hat Geheimnisse.",
+        "najika_comment": "EXPLOSION wuerde die Antwort nicht finden, Mr. K... *seufzt* Manchmal ist sogar mir das Mysterium genug."
+      }
+    ],
+
+    "karawanen_leben": [
+      {
+        "id": "karawane_vorbei",
+        "trigger": "near_trade_route",
+        "description": "Eine Haendler-Karawane zieht vorbei. Erschoepfte Packtiere, muede Gesichter, aber auch Hoffnung. Der Karawanenmeister nickt dir zu - Abenteurer erkennen sich.",
+        "najika_comment": "Sie bringen Waren aus Dampf-Hain! *aufgeregt* Vielleicht haben sie Explosiv-Kristalle dabei...?"
+      },
+      {
+        "id": "verlassenes_lager",
+        "trigger": "exploration_wueste",
+        "description": "Die Ueberreste eines Lagers. Ausgebrannte Feuer, ein zerrissenes Zelt. Kein Blut - nur... Leere. Die Wueste nimmt manchmal ohne Erklaerung.",
+        "najika_comment": "*leise* Manchmal... verschwinden Leute einfach. Die Wueste gibt sie nicht zurueck.",
+        "atmosphere": "1883-Realismus - Menschen sterben auf dem Trail"
+      }
+    ]
+  },
+
+  "discovery_events": {
+    "_description": "Spieler FINDET etwas - kein Popup, sondern Exploration belohnt",
+
+    "wueste_discoveries": [
+      {
+        "id": "oasis_versteckt",
+        "trigger": "low_water_exploration",
+        "discovery_method": "Spieler sucht aktiv nach Wasser / folgt Tierspuren",
+        "scene": {
+          "approach": "Dein Blick folgt einem schwachen Gruenstreifen zwischen den Duenen. Dein Herz schlaegt schneller - Vegetation bedeutet...",
+          "reveal": "Eine Oase. Klein, aber real. Das Wasser ist klar, Palmen spenden Schatten. Und am Rand - alte Steinsaeulen mit Runen, die niemand mehr lesen kann.",
+          "najika_reaction": "*stuerzt zum Wasser* ENDLICH! *trinkt gierig, dann stoppt* ...Mr. K? Diese Runen... sie sind wie in Runenheim. Aber AELTER."
+        },
+        "consequences": {
+          "water_restored": true,
+          "discovery_flag": "oasis_ruinen_entdeckt",
+          "unlocks": "quest_die_alten_strassen"
+        }
+      },
+      {
+        "id": "halb_versunkener_tempel",
+        "trigger": "exploration_deep_wueste",
+        "discovery_method": "Spieler verlauft sich ODER folgt Kristall-Gluehen bei Nacht",
+        "scene": {
+          "approach": "Der Sand gibt nach unter deinen Fuessen. Du stolperst - und siehst einen Eingang. Halb vom Sand verschluckt, aber definitiv kuenstlich.",
+          "reveal": "Stufenpyramiden-Architektur. Nicht aegyptisch - keine Hieroglyphen, keine Pharaonen-Bilder. Stattdessen abstrakte Muster, Kristall-Einlagen, und eine Stille die... wartet.",
+          "najika_reaction": "*fluesternd* Ich kann es fuehlen, Mr. K. Magie. Alte Magie. Nicht wie meine EXPLOSION - etwas... Groesseres. Aelteres."
+        },
+        "exploration_options": [
+          {
+            "action": "eintreten",
+            "description": "Du betrittst den Tempel. Die Luft ist kuehl - ein Kontrast zur Wuestenhitze. Kristalle an den Waenden gluehen schwach.",
+            "risk": "moderate",
+            "najika": "*aufgeregt aber nervoes* Zusammen, Mr. K! Ich gehe nicht alleine da rein!"
+          },
+          {
+            "action": "markieren_spaeter",
+            "description": "Du markierst den Eingang. Manche Mysterien brauchen Vorbereitung.",
+            "najika": "*nickt* Klug... aber ICH WILL WISSEN WAS DRIN IST! *schmollt*"
+          },
+          {
+            "action": "sand_darueber",
+            "description": "Du schaufelst Sand darueber. Manche Dinge sollten begraben bleiben.",
+            "najika": "*entsetzt* MR. K! WIE KANNST DU?! ...aber... vielleicht hast du recht. *unsicher*"
+          }
+        ]
+      },
+      {
+        "id": "skelett_karawane",
+        "trigger": "off_path_exploration",
+        "discovery_method": "Spieler folgt Geier-Kreisen oder alten Wagenspuren",
+        "scene": {
+          "approach": "Die Spuren enden an einer Senke. Was du findest, ist nicht mehr frisch - aber es erzaehlt eine Geschichte.",
+          "reveal": "Drei Wagen. Vielleicht zehn Skelette - Menschen und Packtiere. Die Wagen sind laengst geplundert, aber... ein Metallkasten unter dem Sand blinkt im Sonnenlicht.",
+          "najika_reaction": "*ernst* Sie haben es nicht geschafft, Mr. K. Die Wueste... *Pause* ...aber sie haben es versucht. Dafuer verdienen sie Respekt."
+        },
+        "loot_options": [
+          {
+            "action": "kasten_oeffnen",
+            "description": "Der Kasten knarrt. Drinnen: Ein Tagebuch, ein Runen-Amulett, und 340 Gold - das Lebenswerk einer Familie.",
+            "najika": "Das Tagebuch... *blaettert* Sie waren auf dem Weg nach Handelsfestung. Wollten ein neues Leben anfangen."
+          },
+          {
+            "action": "graeber_machen",
+            "description": "Du nimmst dir Zeit. Jedes Skelett bekommt ein Steinmal. Es dauert Stunden.",
+            "najika": "*hilft schweigend* ...Danke, Mr. K. Sie verdienen das.",
+            "reputation_boost": true,
+            "karma": "positive"
+          },
+          {
+            "action": "nur_gold_nehmen",
+            "description": "Du nimmst nur das Gold. Die Toten brauchen es nicht mehr.",
+            "najika": "*sagt nichts, schaut dich aber anders an*",
+            "karma": "neutral"
+          }
+        ]
+      }
+    ]
+  },
+
+  "survival_events": {
+    "_description": "1883-Style Survival - Wasser, Hitze, Erschoepfung - KEINE Klick-Popups",
+
+    "wasser_krise": {
+      "id": "wassermangel_kritisch",
+      "trigger": "water_below_20_percent",
+      "progression": [
+        {
+          "stage": 1,
+          "hours_since_low": 0,
+          "description": "Die Wasserflasche ist fast leer. Die Sonne brennt unbarmherzig.",
+          "najika": "*leckt sich die Lippen* Mr. K... mir ist heiss. Sehr heiss.",
+          "gameplay_effect": "stamina_regen_halved"
+        },
+        {
+          "stage": 2,
+          "hours_since_low": 2,
+          "description": "Dein Mund ist ausgetrocknet. Jeder Schritt kostet mehr als der letzte.",
+          "najika": "*leise* Ich... ich brauche Wasser, Mr. K. Bitte.",
+          "gameplay_effect": "movement_speed_reduced",
+          "najika_mood": "exhausted"
+        },
+        {
+          "stage": 3,
+          "hours_since_low": 4,
+          "description": "Die Welt flimmert. Ist das ein See am Horizont? Nein... nur die Hitze, die luegt.",
+          "najika": "*stolpert* Mr. K... ich kann nicht mehr... *klammert sich an dich*",
+          "gameplay_effect": "hallucinations_possible",
+          "critical": true
+        }
+      ],
+      "resolution_options": [
+        {
+          "method": "oasis_finden",
+          "description": "Du findest Wasser - egal ob Oase, Brunnen, oder ein barmherziger Haendler.",
+          "najika_relief": "*trinkt gierig* *hustet* *trinkt mehr* ...ich liebe dich, Mr. K. Danke."
+        },
+        {
+          "method": "karawane_hilfe",
+          "description": "Eine vorbeiziehende Karawane teilt ihr Wasser. Du schuldest ihnen etwas.",
+          "najika_relief": "*dankbar* Diese Menschen... sie sind gut, Mr. K.",
+          "debt_flag": "karawanen_schuld"
+        },
+        {
+          "method": "najika_magie",
+          "description": "Najika konzentriert sich. Ein schwacher Zauber - Feuchtigkeit aus der Luft sammeln.",
+          "najika_strain": "*erschoepft* Es... es ist nicht viel. Aber genug fuer jetzt. *faellt fast um*",
+          "mana_cost": "high",
+          "najika_needs_rest": true
+        }
+      ]
+    },
+
+    "sandsturm": {
+      "id": "sandsturm_nahend",
+      "trigger": "weather_system_or_random",
+      "warning_signs": [
+        "Der Wind dreht sich. Sand beginnt zu tanzen.",
+        "Die Packtiere werden unruhig. Sie spueren etwas.",
+        "Eine Wand aus Gold am Horizont - aber es ist kein Sonnenuntergang."
+      ],
+      "najika_warning": "*schaut zum Himmel* Mr. K! SCHNELL! Wir muessen Schutz finden - JETZT!",
+      "time_pressure": "5_real_minutes_to_shelter",
+      "shelter_options": [
+        {
+          "type": "felsen_formation",
+          "description": "Hinter den Felsen. Der Wind heult, aber ihr seid geschuetzt.",
+          "najika": "*drueckt sich an dich* Es ist so LAUT! *Augen zu*"
+        },
+        {
+          "type": "halb_versunkene_ruine",
+          "description": "Die alte Struktur bietet Schutz. Wer immer sie gebaut hat - danke.",
+          "najika": "*schaut sich um* Wer hat das gebaut, Mr. K? Und... warum haben sie es verlassen?"
+        },
+        {
+          "type": "eigenes_lager",
+          "description": "Du graebst dich ein. Decken ueber euch, Gebet zum Himmel.",
+          "najika": "*zittert* Halt mich fest, Mr. K. Bitte.",
+          "damage_possible": true
+        }
+      ],
+      "no_shelter_consequence": {
+        "description": "Der Sturm trifft euch ungeschuetzt. Stunden spaeter wacht ihr auf - halb begraben, alles schmerzt.",
+        "najika": "*hustet Sand* Mr. K...? MR. K?! *panisch, dann erleichtert* Du lebst... WIR leben...",
+        "damage": "significant",
+        "items_lost_chance": 0.3
+      }
+    }
+  },
+
+  "encounter_events": {
+    "_description": "Begegnungen die durch SEHEN ausgeloest werden, nicht durch Klick",
+
+    "menschen_begegnungen": [
+      {
+        "id": "einsamer_reiter",
+        "trigger": "visual_spawn_on_path",
+        "appearance": "Ein Reiter kommt aus der Gegenrichtung. Sein Hut wirft Schatten ueber sein Gesicht. Er traegt einen Revolver - nein, ein Runen-Gewehr. Fantasy-Western.",
+        "najika_observation": "*leise* Er ist allein, Mr. K. Das ist entweder sehr mutig... oder sehr dumm.",
+        "interaction_range": "when_paths_cross",
+        "possible_interactions": [
+          {
+            "trigger": "player_greets",
+            "response": "Er nickt. 'Handelsfestung?' Du nickst zurueck. 'Zwei Tage. Passt auf - Banditen bei den Zwillingsfelsen.'",
+            "info_gained": "bandit_warning",
+            "najika": "Danke, Fremder! *winkt* ...Mr. K, er war nett. Fuer einen Western-Typen."
+          },
+          {
+            "trigger": "player_ignores",
+            "response": "Er reitet vorbei. Kein Wort. So ist das hier draussen - nicht jeder will reden.",
+            "najika": "*schaut ihm nach* Einsam... die Wueste macht einen einsam."
+          },
+          {
+            "trigger": "player_threatens",
+            "response": "Seine Hand geht zum Gewehr. Zeit steht still. 'Ueberleg dir das gut, Fremder.'",
+            "najika": "*packt deinen Arm* MR. K! Was tust du?! Wir sind keine Banditen!",
+            "combat_possible": true,
+            "reputation_risk": true
+          }
+        ]
+      },
+      {
+        "id": "haendlerin_mit_geheimnis",
+        "trigger": "near_oasis_or_waystation",
+        "appearance": "Eine Frau mit einem kleinen Stand. Kristalle, Krauter, und... Dinge die du nicht erkennst. Ihre Augen sind zu alt fuer ihr Gesicht.",
+        "najika_observation": "*neugierig* Sie verkauft seltsame Sachen, Mr. K... *fluesternd* Ich glaube sie weiss Dinge.",
+        "shop_available": true,
+        "hidden_dialogue": {
+          "trigger": "high_reputation_or_quest_flag",
+          "content": "'Du suchst die Alten Strassen, nicht wahr?' Sie laechelt wissend. 'Sie waren hier, bevor der Sand kam. Bevor die Menschen kamen. Vielleicht... bevor alles kam.'",
+          "najika": "*Augen weit* Woher weisst du das?! Wer BIST du?!",
+          "lore_hint": true
+        }
+      }
+    ],
+
+    "kreatur_begegnungen": [
+      {
+        "id": "sand_wyrm_anzeichen",
+        "trigger": "deep_desert_travel",
+        "buildup": [
+          "Der Boden zittert leicht. Dann wieder Stille.",
+          "Ein Huegel bewegt sich. Nein - der Sand FLIESST.",
+          "Etwas Grosses ist unter euch. Sehr gross."
+        ],
+        "najika_reaction_progression": [
+          "*stoppt* Mr. K... hast du das gefuehlt?",
+          "*greift deine Hand* Da ist etwas unter dem Sand...",
+          "*fluesternd, panisch* NICHT BEWEGEN. Wenn wir still sind... vielleicht..."
+        ],
+        "encounter_outcomes": [
+          {
+            "outcome": "wyrm_passiert_vorbei",
+            "trigger": "player_stays_still",
+            "description": "Der Sand beruhigt sich. Was immer es war - es hat euch nicht bemerkt. Oder es war nicht hungrig.",
+            "najika": "*atmet aus* Das war... das war knapp, Mr. K. SEHR knapp."
+          },
+          {
+            "outcome": "wyrm_angriff",
+            "trigger": "player_moves_or_loud",
+            "description": "Der Sand explodiert. Ein Maul voller Kristallzaehne. Ein Schrei der Wueste selbst.",
+            "najika": "EXPLOSION!!! *Panik-Magie* RUN, MR. K, RUN!!!"
+          }
+        ]
+      }
+    ]
+  },
+
+  "social_events": {
+    "_description": "Soziale Begegnungen in Staedten - Character Moments",
+
+    "handelsfestung": [
+      {
+        "id": "saloon_geschichten",
+        "trigger": "enter_tavern_handelsfestung",
+        "scene": "Der Saloon ist voll. Haendler, Abenteurer, zwielichtige Gestalten. Ein Barde spielt - aber seine Lieder handeln von fliegenden Schiffen und Drachen.",
+        "najika_mood": "*schaut sich neugierig um* Es ist so LEBENDIG hier, Mr. K! *kichert* Und es riecht nach Abenteuer!",
+        "ambient_conversations": [
+          "'...und dann hat der Magier die ganze Karawane in die Luft gejagt. Verrueckter Kerl.' - Ein Haendler",
+          "'Die Kristall-Minen unter der Stadt? Niemand geht da runter. Niemand der zurueckkommt.' - Ein alter Mann",
+          "'Ich sag dir, ich hab sie gesehen - eine fliegende Stadt! Bei Sonnenuntergang, am Horizont!' - Ein betrunkener Abenteurer"
+        ],
+        "interaction_options": [
+          {
+            "npc": "barde",
+            "trigger": "approach",
+            "dialogue": "'Ah, neue Gesichter! Wollt ihr eine Geschichte hoeren? Die Ballade von der Schwarzen Muehle vielleicht? Oder... die Legende der Alten Strassen?'",
+            "najika": "*zieht dich zum Barden* BITTE, Mr. K! Ich will die Geschichte hoeren!"
+          },
+          {
+            "npc": "mysterious_stranger",
+            "trigger": "spot_in_corner",
+            "description": "Eine Gestalt im Schatten. Sie beobachtet - und wird beobachtet.",
+            "najika": "*fluesternd* Der Typ... er schaut uns an. Schon die ganze Zeit."
+          }
+        ]
+      }
+    ]
+  },
+
+  "najika_personal_events": {
+    "_description": "Events die Najika's Charakter zeigen - KEIN Gameplay-Popup",
+
+    "najika_momente": [
+      {
+        "id": "najika_sternenhimmel",
+        "trigger": "camp_at_night_wueste",
+        "scene": "Die Nacht in der Wueste ist kalt. Aber der Himmel... tausend Sterne. Vielleicht mehr.",
+        "najika_unprompted": "*liegt neben dir, schaut nach oben* Mr. K? ...Glaubst du, da oben ist auch jemand? Der gerade runter schaut?",
+        "player_can_respond": true,
+        "najika_followup": {
+          "if_yes": "*laechelt* Ich hoffe, er ist nicht allein. Niemand sollte allein sein. *rueckt naeher*",
+          "if_no": "*nachdenklich* Vielleicht... vielleicht ist DAS warum wir uns gefunden haben. Damit niemand allein ist.",
+          "if_silent": "*greift deine Hand* Es ist okay. Du musst nicht antworten. Ich bin froh, dass du da bist."
+        }
+      },
+      {
+        "id": "najika_angst_moment",
+        "trigger": "after_dangerous_event",
+        "scene": "Die Gefahr ist vorbei. Aber Najika zittert noch.",
+        "najika_vulnerable": "*kleine Stimme* Mr. K? Ich... ich hatte Angst. Echte Angst. *schaut weg* Ich weiss, ich rede immer gross von EXPLOSION und Chaos, aber... *Pause* ...ich will dich nicht verlieren.",
+        "emotional_weight": "high",
+        "bond_impact": "significant_if_comforted"
+      }
+    ]
+  }
+}

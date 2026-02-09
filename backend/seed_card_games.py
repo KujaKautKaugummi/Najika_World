@@ -11,6 +11,12 @@ Author: Claude Code (CLI)
 Date: 2025-11-18
 """
 
+import sys
+import os
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal
 from backend.models.card_game import Card
@@ -20,12 +26,12 @@ from backend.models.dice_monsters import DiceMonster
 def seed_cards(db: Session):
     """Seed starter cards (50 cards across 6 factions)"""
 
-    print("🃏 Seeding Cards...")
+    print("[CARDS] Seeding Cards...")
 
     # Check if cards already exist
     existing_count = db.query(Card).count()
     if existing_count > 0:
-        print(f"   ⚠️  Database already has {existing_count} cards. Skipping card seeding.")
+        print(f"   [WARN]  Database already has {existing_count} cards. Skipping card seeding.")
         return
 
     cards_data = [
@@ -216,18 +222,18 @@ def seed_cards(db: Session):
         db.add(card)
 
     db.commit()
-    print(f"   ✅ Seeded {len(cards_data)} cards")
+    print(f"   [OK] Seeded {len(cards_data)} cards")
 
 
 def seed_dice_monsters(db: Session):
     """Seed starter dice monsters (30 dice across elements)"""
 
-    print("🎲 Seeding Dice Monsters...")
+    print("[DICE] Seeding Dice Monsters...")
 
     # Check if dice already exist
     existing_count = db.query(DiceMonster).count()
     if existing_count > 0:
-        print(f"   ⚠️  Database already has {existing_count} dice monsters. Skipping dice seeding.")
+        print(f"   [WARN]  Database already has {existing_count} dice monsters. Skipping dice seeding.")
         return
 
     dice_data = [
@@ -406,13 +412,13 @@ def seed_dice_monsters(db: Session):
         db.add(dice_monster)
 
     db.commit()
-    print(f"   ✅ Seeded {len(dice_data)} dice monsters")
+    print(f"   [OK] Seeded {len(dice_data)} dice monsters")
 
 
 def main():
     """Main seed function"""
     print("=" * 70)
-    print("🌱 SEEDING CARD GAME DATABASES")
+    print("[SEED] SEEDING CARD GAME DATABASES")
     print("=" * 70)
 
     db = SessionLocal()
@@ -422,11 +428,11 @@ def main():
         seed_dice_monsters(db)
 
         print("=" * 70)
-        print("✅ SEEDING COMPLETE!")
+        print("[OK] SEEDING COMPLETE!")
         print("=" * 70)
 
     except Exception as e:
-        print(f"❌ Error during seeding: {e}")
+        print(f"[ERROR] Error during seeding: {e}")
         db.rollback()
         raise
     finally:

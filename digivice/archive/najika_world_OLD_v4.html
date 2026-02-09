@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najika World - 8 Regionen + Götterfels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            z-index: 100;
+            border: 2px solid #4CAF50;
+        }
+
+        #ui h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #4CAF50;
+            text-shadow: 0 0 15px #4CAF50;
+        }
+
+        #ui p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 50px 70px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 200;
+            border: 3px solid #4CAF50;
+        }
+
+        #loading h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        #progress-bar {
+            width: 400px;
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 2px solid #4CAF50;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90vw;
+            border: 2px solid #4CAF50;
+        }
+
+        #controls button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        #controls button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #4CAF50;
+        }
+
+        #controls button:active {
+            transform: scale(0.95);
+        }
+
+        .region-label {
+            color: #FFC107;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #8BC34A;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="loading">
+        <h2>🌍 Lade Najika World...</h2>
+        <p style="color: #FFC107; margin-bottom: 10px;">8 Regionen + Götterfels</p>
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+        <p id="progress-text">Initialisiere...</p>
+    </div>
+
+    <div id="ui">
+        <h1>🌍 NAJIKA WORLD</h1>
+        <p><strong>Kamera:</strong> <span id="camera-mode" class="region-label">ORBIT</span></p>
+        <p><strong>Position:</strong> <span id="position" class="stat-value">0, 0</span></p>
+        <p><strong>Region:</strong> <span id="current-region" class="region-label">Zentrum</span></p>
+        <p><strong>Assets:</strong> <span id="asset-count" class="stat-value">0</span> / <span id="total-assets">0</span></p>
+        <p><strong>FPS:</strong> <span id="fps" class="stat-value">60</span></p>
+        <hr style="margin: 15px 0; border-color: #333;">
+        <p style="font-size: 11px; opacity: 0.9; line-height: 1.4;">
+            <strong>Steuerung:</strong><br>
+            <span class="stat-value">WASD</span> - Bewegen | <span class="stat-value">Shift</span> - Rennen<br>
+            <span class="stat-value">Maus</span> - Kamera drehen<br>
+            <span class="stat-value">Mausrad</span> - Zoom<br>
+            <span class="stat-value">📷-Button</span> - Kamera-Modus wechseln
+        </p>
+        <hr style="margin: 15px 0; border-color: #333;">
+        <p style="font-size: 11px; opacity: 0.9; line-height: 1.4;">
+            <strong>8 Regionen (Level 1-15):</strong><br>
+            🏜️ Heiße Dünen (N)<br>
+            🌲 Samtmoos-Tiefwald (NW)<br>
+            🌊 Salzwind-Küste (E)<br>
+            ⚡ Blitzebene (NE)<br>
+            🌿 Grünschlamm-Sumpf (SW)<br>
+            ❄️ Reich der Drei (W)<br>
+            🌋 Magmaströme (SE)<br>
+            🕳️ Tiefenhöhlen (S)<br>
+            <span class="region-label">⛰️ Götterfels (Mitte)</span>
+        </p>
+    </div>
+
+    <div id="controls">
+        <button onclick="switchCameraMode()">📷 Kamera</button>
+        <button onclick="teleportTo('desert')">🏜️ Wüste</button>
+        <button onclick="teleportTo('forest')">🌲 Wald</button>
+        <button onclick="teleportTo('coast')">🌊 Küste</button>
+        <button onclick="teleportTo('highland')">⚡ Hochland</button>
+        <button onclick="teleportTo('swamp')">🌿 Sumpf</button>
+        <button onclick="teleportTo('ice')">❄️ Eis</button>
+        <button onclick="teleportTo('volcano')">🌋 Vulkan</button>
+        <button onclick="teleportTo('caves')">🕳️ Höhlen</button>
+        <button onclick="teleportTo('mountain')">⛰️ Berg</button>
+        <button onclick="toggleGrid()">📐 Grid</button>
+    </div>
+
+    <!-- Three.js und Skripte -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="static/js/camera_controller.js"></script>
+
+    <script>
+        const THREE = window.THREE;
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+        scene.fog = new THREE.Fog(0x87CEEB, 200, 600);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 200, 400);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Kamera-Controller
+        const cameraController = new CameraController(camera, scene, renderer);
+        cameraController.setTarget(0, 10, 0);
+        cameraController.orbitDistance = 200;
+        cameraController.ORBIT_MAX_DIST = 500;
+
+        // WASD-Steuerung
+        const keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            shift: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = true; break;
+                case 'a': keys.a = true; break;
+                case 's': keys.s = true; break;
+                case 'd': keys.d = true; break;
+                case 'shift': keys.shift = true; break;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = false; break;
+                case 'a': keys.a = false; break;
+                case 's': keys.s = false; break;
+                case 'd': keys.d = false; break;
+                case 'shift': keys.shift = false; break;
+            }
+        });
+
+        // Charakter erstellen (Avatar)
+        const characterGeometry = new THREE.CapsuleGeometry(2, 3, 8, 16);
+        const characterMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4CAF50,
+            roughness: 0.7,
+            metalness: 0.3
+        });
+        const character = new THREE.Mesh(characterGeometry, characterMaterial);
+        character.position.set(0, 3.5, 0);
+        character.castShadow = true;
+        character.receiveShadow = true;
+        scene.add(character);
+
+        // Kamera an Charakter binden
+        cameraController.setCharacter(character, 7);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        directionalLight.position.set(200, 300, 200);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 4096;
+        directionalLight.shadow.mapSize.height = 4096;
+        directionalLight.shadow.camera.left = -500;
+        directionalLight.shadow.camera.right = 500;
+        directionalLight.shadow.camera.top = 500;
+        directionalLight.shadow.camera.bottom = -500;
+        scene.add(directionalLight);
+
+        // Ground (900x900 Map)
+        const groundGeometry = new THREE.PlaneGeometry(900, 900, 90, 90);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4A7C3B,
+            roughness: 0.9,
+            metalness: 0.1
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Grid
+        const gridHelper = new THREE.GridHelper(900, 60, 0x000000, 0x444444);
+        gridHelper.visible = true;
+        scene.add(gridHelper);
+
+        // GÖTTERFELS - Zentraler Berg (Endgame!)
+        function createMountain() {
+            const geometry = new THREE.ConeGeometry(80, 150, 8);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x3C3C3C,
+                roughness: 0.9,
+                flatShading: true
+            });
+            const mountain = new THREE.Mesh(geometry, material);
+            mountain.position.set(0, 75, 0);
+            mountain.castShadow = true;
+            mountain.receiveShadow = true;
+            scene.add(mountain);
+
+            // Spitze
+            const peakGeometry = new THREE.ConeGeometry(20, 40, 8);
+            const peakMaterial = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF,
+                roughness: 0.3,
+                emissive: 0xAAAAAA,
+                emissiveIntensity: 0.2
+            });
+            const peak = new THREE.Mesh(peakGeometry, peakMaterial);
+            peak.position.set(0, 160, 0);
+            peak.castShadow = true;
+            scene.add(peak);
+
+            // Label
+            createRegionLabel(0, 180, 0, '#FFD700', 'GÖTTERFELS', 1.5);
+        }
+
+        createMountain();
+
+        // Regionen-Marker erstellen
+        function createRegionLabel(x, y, z, color, label, scale = 1) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, 512, 256);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 50px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, 256, 140);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.position.set(x, y, z);
+            sprite.scale.set(30 * scale, 15 * scale, 1);
+            scene.add(sprite);
+        }
+
+        // 8 Regionen im Kreis
+        const regionRadius = 280;
+        const regions = [
+            { name: 'Heiße Dünen', label: 'WÜSTE', color: '#FFA500', angle: 0, emoji: '🏜️' },
+            { name: 'Blitzebene', label: 'HOCHLAND', color: '#9370DB', angle: Math.PI / 4, emoji: '⚡' },
+            { name: 'Salzwind-Küste', label: 'KÜSTE', color: '#1E90FF', angle: Math.PI / 2, emoji: '🌊' },
+            { name: 'Magmaströme', label: 'VULKAN', color: '#FF4500', angle: 3 * Math.PI / 4, emoji: '🌋' },
+            { name: 'Tiefenhöhlen', label: 'HÖHLEN', color: '#4B0082', angle: Math.PI, emoji: '🕳️' },
+            { name: 'Grünschlamm-Sumpf', label: 'SUMPF', color: '#556B2F', angle: 5 * Math.PI / 4, emoji: '🌿' },
+            { name: 'Reich der Drei', label: 'EIS', color: '#B0E0E6', angle: 3 * Math.PI / 2, emoji: '❄️' },
+            { name: 'Samtmoos-Tiefwald', label: 'WALD', color: '#228B22', angle: 7 * Math.PI / 4, emoji: '🌲' }
+        ];
+
+        regions.forEach(region => {
+            const x = Math.cos(region.angle) * regionRadius;
+            const z = Math.sin(region.angle) * regionRadius;
+            createRegionLabel(x, 30, z, region.color, region.label);
+        });
+
+        // Asset Loading
+        const gltfLoader = new THREE.GLTFLoader();
+        const loadedAssets = [];
+        let totalAssets = 0;
+        let loadedCount = 0;
+
+        // Assets für Regionen
+        const regionAssets = {
+            // 1. WÜSTE (Norden: y=280)
+            desert: [
+                { path: 'static/assets/jellysquish/oasis/palm_l.glb', position: [0, 0, 280], scale: 2 },
+                { path: 'static/assets/jellysquish/oasis/palm_m.glb', position: [30, 0, 300], scale: 1.5 },
+                { path: 'static/assets/jellysquish/oasis/palm_s.glb', position: [-30, 0, 300], scale: 1.2 },
+                { path: 'static/assets/jellysquish/oasis/cactus_large.glb', position: [50, 0, 280], scale: 1.5 },
+                { path: 'static/assets/jellysquish/oasis/cactus_small.glb', position: [-50, 0, 280], scale: 1.2 },
+                { path: 'static/assets/jellysquish/oasis/house_large.glb', position: [20, 0, 320], scale: 1.3 },
+                { path: 'static/assets/jellysquish/oasis/house_small.glb', position: [-40, 0, 320], scale: 1 },
+                { path: 'static/assets/jellysquish/oasis/rocks_1.glb', position: [70, 0, 300], scale: 1.2 },
+                { path: 'static/assets/jellysquish/oasis/rocks_2.glb', position: [-70, 0, 290], scale: 1.3 },
+                { path: 'static/assets/jellysquish/oasis/chest.glb', position: [10, 0, 260], scale: 1.2 },
+            ],
+
+            // 2. HOCHLAND (Nordost: ~200, ~200)
+            highland: [
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [200, 0, 200], scale: 2 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', position: [180, 0, 180], scale: 1.8 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', position: [220, 0, 220], scale: 1.5 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', position: [190, 0, 210], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', position: [210, 0, 190], scale: 1.2 },
+            ],
+
+            // 3. KÜSTE (Osten: x=280)
+            coast: [
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [280, 0, 0], scale: 1.5 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', position: [300, 0, 30], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_1_B_Color1.gltf', position: [290, 0, -30], scale: 1.2 },
+                { path: 'static/assets/kaykit/nature/Bush_3_A_Color1.gltf', position: [310, 0, 20], scale: 1 },
+            ],
+
+            // 4. VULKAN (Südost: ~200, ~-200)
+            volcano: [
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [200, 0, -200], scale: 2 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', position: [220, 0, -180], scale: 1.8 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', position: [180, 0, -220], scale: 1.5 },
+            ],
+
+            // 5. HÖHLEN (Süden: y=-280)
+            caves: [
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [0, 0, -280], scale: 2 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', position: [30, 0, -300], scale: 1.8 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', position: [-30, 0, -300], scale: 1.6 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', position: [50, 0, -290], scale: 1.2 },
+            ],
+
+            // 6. SUMPF (Südwest: ~-200, ~-200)
+            swamp: [
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', position: [-200, 0, -200], scale: 1.5 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', position: [-220, 0, -180], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_3_A_Color1.gltf', position: [-180, 0, -220], scale: 1.4 },
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [-210, 0, -210], scale: 1.2 },
+            ],
+
+            // 7. EIS (Westen: x=-280)
+            ice: [
+                { path: 'static/assets/kaykit/nature/Rock_2_C_Color1.gltf', position: [-280, 0, 0], scale: 1.8 },
+                { path: 'static/assets/kaykit/nature/Rock_1_A_Color1.gltf', position: [-300, 0, 30], scale: 1.5 },
+                { path: 'static/assets/kaykit/nature/Rock_3_A_Color1.gltf', position: [-300, 0, -30], scale: 1.6 },
+            ],
+
+            // 8. WALD (Nordwest: ~-200, ~200)
+            forest: [
+                { path: 'static/assets/kaykit/nature/Tree_4_B_Color1.gltf', position: [-200, 0, 200], scale: 2 },
+                { path: 'static/assets/kaykit/nature/Tree_3_A_Color1.gltf', position: [-180, 0, 220], scale: 1.8 },
+                { path: 'static/assets/kaykit/nature/Tree_2_B_Color1.gltf', position: [-220, 0, 180], scale: 1.7 },
+                { path: 'static/assets/kaykit/nature/Bush_1_A_Color1.gltf', position: [-190, 0, 190], scale: 1.3 },
+                { path: 'static/assets/kaykit/nature/Bush_2_A_Color1.gltf', position: [-210, 0, 210], scale: 1.2 },
+            ],
+        };
+
+        // Zähle Assets
+        for (const region in regionAssets) {
+            totalAssets += regionAssets[region].length;
+        }
+        document.getElementById('total-assets').textContent = totalAssets;
+
+        // Progress Update
+        function updateProgress() {
+            const percent = (loadedCount / totalAssets * 100).toFixed(0);
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = `${loadedCount} / ${totalAssets} Assets (${percent}%)`;
+            document.getElementById('asset-count').textContent = loadedCount;
+        }
+
+        // Asset Loading
+        async function loadAsset(asset) {
+            try {
+                const gltf = await new Promise((resolve, reject) => {
+                    gltfLoader.load(asset.path, resolve, undefined, reject);
+                });
+
+                const model = gltf.scene;
+                model.position.set(...asset.position);
+                model.scale.set(asset.scale, asset.scale, asset.scale);
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+                scene.add(model);
+
+                loadedAssets.push(model);
+                loadedCount++;
+                updateProgress();
+            } catch (error) {
+                console.error(`❌ Failed to load asset:`, error);
+                loadedCount++;
+                updateProgress();
+            }
+        }
+
+        // Alle Assets laden
+        async function loadAllAssets() {
+            updateProgress();
+
+            for (const region in regionAssets) {
+                for (const asset of regionAssets[region]) {
+                    await loadAsset(asset);
+                }
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            console.log('🎉 Najika World geladen!');
+        }
+
+        loadAllAssets();
+
+        // Teleport
+        const teleportPositions = {
+            desert: { x: 0, z: 280 },
+            forest: { x: -200, z: 200 },
+            coast: { x: 280, z: 0 },
+            highland: { x: 200, z: 200 },
+            swamp: { x: -200, z: -200 },
+            ice: { x: -280, z: 0 },
+            volcano: { x: 200, z: -200 },
+            caves: { x: 0, z: -280 },
+            mountain: { x: 0, z: 0 }
+        };
+
+        window.teleportTo = (region) => {
+            const pos = teleportPositions[region];
+            if (pos) {
+                character.position.set(pos.x, 3.5, pos.z);
+                cameraController.setTarget(pos.x, 3.5, pos.z);
+            }
+        };
+
+        // Region ermitteln
+        function updateCurrentRegion() {
+            const x = character.position.x;
+            const z = character.position.z;
+            const dist = Math.sqrt(x * x + z * z);
+
+            if (dist < 100) {
+                document.getElementById('current-region').textContent = '⛰️ Götterfels';
+            } else {
+                const angle = Math.atan2(z, x);
+                const normalizedAngle = (angle + Math.PI * 2) % (Math.PI * 2);
+
+                if (normalizedAngle >= 0 && normalizedAngle < Math.PI / 4) {
+                    document.getElementById('current-region').textContent = '🌊 Salzwind-Küste';
+                } else if (normalizedAngle >= Math.PI / 4 && normalizedAngle < Math.PI / 2) {
+                    document.getElementById('current-region').textContent = '🌋 Magmaströme';
+                } else if (normalizedAngle >= Math.PI / 2 && normalizedAngle < 3 * Math.PI / 4) {
+                    document.getElementById('current-region').textContent = '🕳️ Tiefenhöhlen';
+                } else if (normalizedAngle >= 3 * Math.PI / 4 && normalizedAngle < Math.PI) {
+                    document.getElementById('current-region').textContent = '🌿 Grünschlamm-Sumpf';
+                } else if (normalizedAngle >= Math.PI && normalizedAngle < 5 * Math.PI / 4) {
+                    document.getElementById('current-region').textContent = '❄️ Reich der Drei';
+                } else if (normalizedAngle >= 5 * Math.PI / 4 && normalizedAngle < 3 * Math.PI / 2) {
+                    document.getElementById('current-region').textContent = '🌲 Samtmoos-Tiefwald';
+                } else if (normalizedAngle >= 3 * Math.PI / 2 && normalizedAngle < 7 * Math.PI / 4) {
+                    document.getElementById('current-region').textContent = '⚡ Blitzebene';
+                } else {
+                    document.getElementById('current-region').textContent = '🏜️ Heiße Dünen';
+                }
+            }
+        }
+
+        // Kamera Modus
+        window.switchCameraMode = () => {
+            const modes = [
+                cameraController.MODES.ORBIT,
+                cameraController.MODES.THIRD,
+                cameraController.MODES.FIRST
+            ];
+            const currentIndex = modes.indexOf(cameraController.getMode());
+            const nextIndex = (currentIndex + 1) % modes.length;
+            cameraController.setMode(modes[nextIndex]);
+            document.getElementById('camera-mode').textContent = modes[nextIndex].toUpperCase();
+        };
+
+        // Grid Toggle
+        window.toggleGrid = () => {
+            gridHelper.visible = !gridHelper.visible;
+        };
+
+        // Animation
+        let lastTime = performance.now();
+        let frameCount = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // FPS
+            frameCount++;
+            const currentTime = performance.now();
+            const delta = (currentTime - lastTime) / 1000;
+            if (currentTime - lastTime >= 1000) {
+                document.getElementById('fps').textContent = frameCount;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+
+            // WASD-Bewegung
+            let forward = 0;
+            let right = 0;
+
+            if (keys.w) forward += 1;
+            if (keys.s) forward -= 1;
+            if (keys.a) right -= 1;
+            if (keys.d) right += 1;
+
+            // Bewegung relativ zur Kamera
+            if (forward !== 0 || right !== 0) {
+                const speed = keys.shift ? 80 : 40;
+                const angle = Math.atan2(right, forward);
+                const worldAngle = cameraController.orbitYaw + angle;
+
+                const moveX = Math.sin(worldAngle) * speed * delta;
+                const moveZ = Math.cos(worldAngle) * speed * delta;
+
+                character.position.x += moveX;
+                character.position.z += moveZ;
+
+                // Charakter-Rotation
+                character.rotation.y = worldAngle + Math.PI;
+
+                // Kamera-Target nachführen
+                cameraController.setTarget(
+                    character.position.x,
+                    character.position.y,
+                    character.position.z
+                );
+
+                // Boundary Check (900x900 Map)
+                character.position.x = Math.max(-450, Math.min(450, character.position.x));
+                character.position.z = Math.max(-450, Math.min(450, character.position.z));
+            }
+
+            // Update
+            cameraController.update(0.016);
+
+            // UI
+            const x = character.position.x.toFixed(0);
+            const z = character.position.z.toFixed(0);
+            document.getElementById('position').textContent = `${x}, ${z}`;
+            updateCurrentRegion();
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start am Berg
+        teleportTo('mountain');
+    </script>
+</body>
+</html>

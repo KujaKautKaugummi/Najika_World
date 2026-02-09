@@ -41,6 +41,11 @@ class WebSocketManager:
             'arena': set(),
             'evolution': set(),
             'admin': set(),
+            # Lebensraum channels (for building/gathering sync)
+            'lebensraum': set(),
+            'building': set(),
+            'gathering': set(),
+            'crafting': set(),
             # Region channels for Boss broadcasts
             'region:samtmoos_tiefwald': set(),
             'region:reich_der_drei': set(),
@@ -352,6 +357,115 @@ class WebSocketManager:
             'finisher': finisher_data,
             'timestamp': datetime.utcnow().isoformat()
         })
+
+    # =========================================================================
+    # LEBENSRAUM / BUILDING NOTIFICATIONS
+    # =========================================================================
+
+    async def notify_gather_complete(
+        self,
+        user_id: int,
+        action: str,
+        resources: Dict[str, int],
+        duration: int
+    ):
+        """
+        Notify about completed gathering session
+        """
+        await self.broadcast_to_channel('gathering', {
+            'type': 'gather_complete',
+            'user_id': user_id,
+            'action': action,
+            'resources': resources,
+            'duration_seconds': duration,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+
+    async def notify_craft_complete(
+        self,
+        user_id: int,
+        recipe_id: str,
+        quantity: int,
+        outputs: Dict[str, int]
+    ):
+        """
+        Notify about completed crafting
+        """
+        await self.broadcast_to_channel('crafting', {
+            'type': 'craft_complete',
+            'user_id': user_id,
+            'recipe_id': recipe_id,
+            'quantity': quantity,
+            'outputs': outputs,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+
+    async def notify_building_placed(
+        self,
+        user_id: int,
+        building_type: str,
+        position: Dict[str, float],
+        rotation: float = 0
+    ):
+        """
+        Notify about placed building (for multiplayer sync)
+        """
+        await self.broadcast_to_channel('building', {
+            'type': 'building_placed',
+            'user_id': user_id,
+            'building_type': building_type,
+            'position': position,
+            'rotation': rotation,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+
+    async def notify_building_removed(
+        self,
+        user_id: int,
+        building_type: str,
+        position: Dict[str, float]
+    ):
+        """
+        Notify about removed building
+        """
+        await self.broadcast_to_channel('building', {
+            'type': 'building_removed',
+            'user_id': user_id,
+            'building_type': building_type,
+            'position': position,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+
+    async def notify_inventory_update(self, user_id: int, inventory: Dict[str, int]):
+        """
+        Notify user about inventory update
+        """
+        await self.send_to_user(user_id, {
+            'type': 'inventory_update',
+            'inventory': inventory,
+            'timestamp': datetime.utcnow().isoformat()
+        })
+
+    async def notify_world_event(
+        self,
+        event_type: str,
+        data: Dict[str, Any],
+        region: Optional[str] = None
+    ):
+        """
+        Notify about world events (weather, boss spawn, etc.)
+        """
+        message = {
+            'type': 'world_event',
+            'event_type': event_type,
+            'data': data,
+            'timestamp': datetime.utcnow().isoformat()
+        }
+
+        if region:
+            await self.broadcast_to_region(region, message)
+        else:
+            await self.broadcast_to_channel('lebensraum', message)
 
     async def send_notification(
         self,

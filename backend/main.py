@@ -19,7 +19,7 @@ from backend.api import (
     slime, pvp, oregon_events, region_boss, magic_schools,
     instrument, world, multiplayer, card_game, dice_monsters,
     housing, farming, world_map, najika_compat,
-    najika_game_actions_router
+    najika_game_actions_router, chat
 )
 
 
@@ -109,12 +109,12 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix=settings.API_PREFIX)
 app.include_router(game.router, prefix=settings.API_PREFIX)
-app.include_router(arena.router, prefix=settings.API_PREFIX)
 app.include_router(training.router, prefix=settings.API_PREFIX)
 app.include_router(voice.router, prefix=settings.API_PREFIX)
 app.include_router(admin.router, prefix=settings.API_PREFIX)
 
 # Game Systems (FastAPI converted from Flask)
+app.include_router(arena.router)  # Already has /api/arena prefix
 app.include_router(slime.router)  # Already has /api/slime prefix
 app.include_router(pvp.router)  # Already has /api/pvp prefix
 app.include_router(oregon_events.router)  # Already has /api/oregon prefix
@@ -146,6 +146,9 @@ app.include_router(najika_compat.router)
 
 # Najika Game Actions System (Autonomous Living)
 app.include_router(najika_game_actions_router.router)
+
+# Chat System (LM Studio + Personality)
+app.include_router(chat.router)  # Already has /api/chat prefix
 
 
 # ============================================================================
