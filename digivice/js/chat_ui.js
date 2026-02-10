@@ -9,10 +9,12 @@ class ChatUI {
         this.messages = [];
         this.isOpen = false;
         this.isTyping = false;
+        this.chatMode = 'public'; // 'public' oder 'private' (Kätzchen)
+        this.sessionId = localStorage.getItem('najika_chat_session') || null;
         this.createChatUI();
         this.loadChatHistory();
         this.setupKeyboardShortcuts();
-        console.log('[ChatUI] V2 Initialized with CSS classes');
+        console.log('[ChatUI] V2 Initialized with CSS classes, session:', this.sessionId);
     }
 
     createChatUI() {
@@ -24,7 +26,14 @@ class ChatUI {
             <div class="chat-window">
                 <div class="chat-header">
                     <h2>💬 Chat mit Najika</h2>
-                    <button class="chat-close" id="chat-close-btn">×</button>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button id="chat-mode-btn" title="Modus wechseln" style="
+                            background:transparent;border:1px solid #555;color:#aaa;
+                            padding:4px 10px;border-radius:12px;cursor:pointer;
+                            font-size:12px;transition:all 0.3s;font-family:inherit;
+                        ">SFW</button>
+                        <button class="chat-close" id="chat-close-btn">&times;</button>
+                    </div>
                 </div>
 
                 <div class="chat-messages" id="chat-messages">
@@ -79,6 +88,7 @@ class ChatUI {
         // Event Listeners
         document.getElementById('chat-close-btn').addEventListener('click', () => this.closeChat());
         document.getElementById('chat-send-btn').addEventListener('click', () => this.sendMessage());
+        document.getElementById('chat-mode-btn').addEventListener('click', () => this.toggleChatMode());
 
         // Click outside to close
         overlay.addEventListener('click', (e) => {
@@ -113,6 +123,33 @@ class ChatUI {
                 this.closeChat();
             }
         });
+    }
+
+    toggleChatMode() {
+        if (this.chatMode === 'public') {
+            this.chatMode = 'private';
+        } else {
+            this.chatMode = 'public';
+        }
+        this.updateModeButton();
+        const label = this.chatMode === 'private' ? 'Kaetzchen-Modus' : 'Normaler Modus';
+        this.addMessage('System', `Modus gewechselt: ${label}`, 'system');
+    }
+
+    updateModeButton() {
+        const btn = document.getElementById('chat-mode-btn');
+        if (!btn) return;
+        if (this.chatMode === 'private') {
+            btn.textContent = 'NSFW';
+            btn.style.background = 'rgba(220,20,60,0.3)';
+            btn.style.borderColor = '#dc143c';
+            btn.style.color = '#ff6b8a';
+        } else {
+            btn.textContent = 'SFW';
+            btn.style.background = 'transparent';
+            btn.style.borderColor = '#555';
+            btn.style.color = '#aaa';
+        }
     }
 
     toggleChat() {
@@ -174,6 +211,21 @@ class ChatUI {
         // Clear input
         input.value = '';
 
+        // Codewort "kätzchen" / "kaetzchen" erkennen → Mode umschalten
+        const msgLower = message.toLowerCase();
+        if (msgLower === 'kätzchen' || msgLower === 'kaetzchen') {
+            this.chatMode = 'private';
+            this.updateModeButton();
+            this.addMessage('System', 'Kaetzchen-Modus aktiviert... *schnurr*', 'system');
+            return;
+        }
+        if (msgLower === 'normal' || msgLower === 'sfw') {
+            this.chatMode = 'public';
+            this.updateModeButton();
+            this.addMessage('System', 'Normaler Modus aktiviert.', 'system');
+            return;
+        }
+
         // Add user message
         this.addMessage('Mr.K', message, 'user');
 
@@ -184,7 +236,7 @@ class ChatUI {
             const response = await fetch(`${API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: message})
+                body: JSON.stringify({message: message, mode: this.chatMode, session_id: this.sessionId})
             });
 
             this.hideTyping();
@@ -197,6 +249,12 @@ class ChatUI {
             }
 
             const data = await response.json();
+
+            // Session-ID speichern für Gesprächs-Kontinuität
+            if (data.session_id) {
+                this.sessionId = data.session_id;
+                localStorage.setItem('najika_chat_session', data.session_id);
+            }
 
             if (data.response) {
                 this.addMessage('Najika', data.response, 'assistant', data.mood);
@@ -266,14 +324,19 @@ class ChatUI {
         let mood = null;
         if (type === 'assistant') {
             if (serverMood) {
-                // Server liefert echten Mood aus NajikaMind
+                // Server liefert echten Mood aus NajikaMind / Chat-Backend
                 const moodMap = {
                     'happy': { mood: 'happy', emote: '😊', avatar: '✨' },
+                    'excited': { mood: 'happy', emote: '😊', avatar: '✨' },
                     'needy': { mood: 'love', emote: '💕', avatar: '💗' },
                     'possessive': { mood: 'love', emote: '💕', avatar: '💗' },
                     'playful': { mood: 'happy', emote: '😊', avatar: '✨' },
                     'dominant': { mood: 'explosion', emote: '💥', avatar: '🔥' },
+                    'explosive': { mood: 'explosion', emote: '💥', avatar: '🔥' },
+                    'angry': { mood: 'explosion', emote: '💥', avatar: '🔥' },
                     'tsundere': { mood: 'thinking', emote: '🤔', avatar: '💭' },
+                    'sad': { mood: 'love', emote: '😢', avatar: '💧' },
+                    'tired': { mood: 'thinking', emote: '😴', avatar: '💤' },
                 };
                 mood = moodMap[serverMood] || this.detectMood(text);
             } else {
@@ -331,7 +394,10 @@ class ChatUI {
 
     async loadChatHistory() {
         try {
-            const response = await fetch(`${API_BASE}/api/chat/history`);
+            const url = this.sessionId
+                ? `${API_BASE}/api/chat/history?session_id=${this.sessionId}`
+                : `${API_BASE}/api/chat/history`;
+            const response = await fetch(url);
 
             if (!response.ok) {
                 console.log('[ChatUI] History endpoint returned:', response.status);

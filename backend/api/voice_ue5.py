@@ -78,7 +78,7 @@ async def najika_speak(request: NajikaSpeakRequest):
                 "duration_ms": len(request.text) * 80,  # Rough estimate
             }
 
-        except ImportError:
+        except Exception:
             # Fallback to pyttsx3 (offline)
             import pyttsx3
             import tempfile
@@ -151,7 +151,7 @@ async def player_speech(request: PlayerSpeechRequest):
                         "confidence": result.get("confidence", 0.9),
                     }
 
-        except ImportError:
+        except Exception:
             pass
 
         # Fallback to speech_recognition
@@ -210,12 +210,12 @@ async def voice_status():
         from backend.services.voice_service import voice_service
         status["tts_available"] = True
         status["tts_engine"] = "edge_tts"
-    except ImportError:
+    except Exception:
         try:
             import pyttsx3
             status["tts_available"] = True
             status["tts_engine"] = "pyttsx3"
-        except ImportError:
+        except Exception:
             pass
 
     # Check STT
@@ -225,12 +225,12 @@ async def voice_status():
         if whisper.is_available():
             status["stt_available"] = True
             status["stt_engine"] = "whisper"
-    except ImportError:
+    except Exception:
         try:
             import speech_recognition
             status["stt_available"] = True
             status["stt_engine"] = "speech_recognition"
-        except ImportError:
+        except Exception:
             pass
 
     return status
