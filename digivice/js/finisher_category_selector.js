@@ -16,7 +16,7 @@ export class FinisherCategorySelector {
      */
     async loadCategories() {
         try {
-            const response = await this.apiClient.get('http://localhost:8000/api/game/arena/finisher/categories');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/finisher/categories');
             this.categories = response.data.categories;
             return this.categories;
         } catch (error) {
@@ -123,7 +123,7 @@ export class FinisherCategorySelector {
      */
     async showIngredientDialog() {
         // Get random ingredient suggestions
-        const response = await this.apiClient.get('http://localhost:8000/api/game/arena/finisher/random-ingredients');
+        const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/finisher/random-ingredients');
         const suggestions = response.data.ingredients;
 
         const overlay = document.createElement('div');
@@ -184,7 +184,7 @@ export class FinisherCategorySelector {
         const ingredientsText = input.value.trim();
 
         if (!ingredientsText) {
-            alert('⚠️ Bitte gib mindestens ein Stichwort ein!');
+            if (typeof notify === 'function') notify('⚠️ Bitte gib mindestens ein Stichwort ein!', 'warning');
             return;
         }
 
@@ -195,7 +195,7 @@ export class FinisherCategorySelector {
             .filter(i => i.length > 0);
 
         if (ingredients.length === 0) {
-            alert('⚠️ Bitte gib mindestens ein Stichwort ein!');
+            if (typeof notify === 'function') notify('⚠️ Bitte gib mindestens ein Stichwort ein!', 'warning');
             return;
         }
 
@@ -206,7 +206,7 @@ export class FinisherCategorySelector {
 
         try {
             // Create finisher via API
-            const response = await this.apiClient.post('http://localhost:8000/api/game/arena/finisher/create', {
+            const response = await this.apiClient.post('http://localhost:8000/api/v1/game/arena/finisher/create', {
                 category: this.selectedCategory,
                 ingredients: ingredients,
                 defeated_monster_id: this.defeatedMonsterId
@@ -234,7 +234,7 @@ export class FinisherCategorySelector {
 
         } catch (error) {
             console.error('Failed to create finisher:', error);
-            alert('❌ Fehler beim Erstellen des Finishers!');
+            if (typeof notify === 'function') notify('❌ Fehler beim Erstellen des Finishers!', 'error');
             createBtn.disabled = false;
             createBtn.textContent = '🔥 FINISHER ERSTELLEN!';
         }

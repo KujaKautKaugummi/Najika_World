@@ -20,7 +20,7 @@ class EchoharpUI {
         this.stories = [];
         this.playerDeeds = [];
         this.isOpen = false;
-        this.spielerId = 'player_default'; // TODO: From game state
+        this.spielerId = (typeof getPlayerId === 'function') ? getPlayerId() : (window.player?.id || 'player_default');
 
         // Stimmungs-Emojis
         this.moodEmojis = {

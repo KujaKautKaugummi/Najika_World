@@ -379,6 +379,10 @@
                 // Add to player inventory
                 this._addToInventory(goodId, 1);
                 this._showTradeNotification(`✅ ${result.good} gekauft für ${result.totalCost}g`, '#2ecc71');
+                // GameEvent emittieren
+                if (window.GameEvents) {
+                    window.GameEvents.emit('itemPurchased', { itemId: goodId, price: result.totalCost, region: this.selectedRegion });
+                }
             } else {
                 this._showTradeNotification(`❌ ${result.reason}${result.caught ? ' Strafe: ' + result.penalty + 'g' : ''}`, '#e74c3c');
                 if (result.caught && window.SurvivalSystem?.commitCrime) {
@@ -400,6 +404,10 @@
             if (result.success) {
                 this._removeFromInventory(goodId, 1);
                 this._showTradeNotification(`💰 ${result.good} verkauft für ${result.totalEarned}g`, '#2ecc71');
+                // GameEvent emittieren
+                if (window.GameEvents) {
+                    window.GameEvents.emit('itemSold', { itemId: goodId, earned: result.totalEarned, region: this.selectedRegion });
+                }
             } else {
                 this._showTradeNotification(`❌ ${result.reason}${result.caught ? ' Strafe: ' + result.penalty + 'g' : ''}`, '#e74c3c');
                 if (result.caught && window.SurvivalSystem?.commitCrime) {

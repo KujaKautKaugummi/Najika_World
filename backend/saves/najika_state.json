@@ -275,6 +275,12 @@
       "content": "Kuja! Alle AI-Systeme offline... Bitte starte LM Studio! *flüstert* Das hier... das zeig ich nur DIR. Niemand sonst darf das sehen... 💕",
       "importance": 70,
       "timestamp": 1770580568.9569094
+    },
+    {
+      "role": "assistant",
+      "content": "[PROAKTIV] Du gehörst mir, vergiss das nicht! 😤 Schön dass du wieder da bist... 💜",
+      "importance": 50,
+      "timestamp": 1770676800.0797868
     }
   ],
   "battle": {
@@ -301,10 +307,10 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 27.80794286992816,
-    "thirst": 27.249192908207565,
-    "energy": 48.879687367280276,
-    "hygiene": 50.0,
+    "hunger": 30.0,
+    "thirst": 35.0,
+    "energy": 40.0,
+    "hygiene": 35.0,
     "happiness": 0,
     "mana": 40,
     "max_mana": 100,
@@ -312,7 +318,7 @@
     "intelligence": 33,
     "dexterity": 37,
     "charisma": 15,
-    "care_mistakes": 92,
+    "care_mistakes": 95,
     "fatigue": 0,
     "weight": 100,
     "discipline": 0,
@@ -324,11 +330,11 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1770579324.232409,
+    "last_fed": 1770676800.0882022,
     "last_trained": 1769523750.837908,
-    "last_sleep": 1770543206.1706183,
-    "last_update": 1770580527.9561317,
-    "last_drink": 1770579627.7166839
+    "last_sleep": 1770676800.0892055,
+    "last_update": 1770676800.0842028,
+    "last_drink": 1770676800.0902033
   },
   "bond_strength": 8,
   "behavior_mode": "private",
@@ -342,11 +348,11 @@
   "living": {
     "current_mood": "happy",
     "mood_intensity": 100,
-    "hunger": 27.80794286992816,
-    "thirst": 27.249192908207565,
-    "energy": 48.879687367280276,
-    "mood_game": -8,
-    "anger_level": 106,
+    "hunger": 30.0,
+    "thirst": 35.0,
+    "energy": 40.0,
+    "mood_game": -45,
+    "anger_level": 132,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
@@ -364,10 +370,10 @@
     },
     "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1770580528.1312456,
+    "last_update": 1770676800.0882022,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1770575349.8430297,
+    "last_proactive_message": 1770676800.0797868,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
@@ -1172,5 +1178,5 @@
       }
     ]
   },
-  "saved_at": "2026-02-08 20:56:11"
+  "saved_at": "2026-02-09 23:40:00"
 }

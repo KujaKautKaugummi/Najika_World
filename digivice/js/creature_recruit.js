@@ -144,6 +144,9 @@
     // Gerüchte-Queue: [ { from, to, amount, day } ]
     let rumorQueue = [];
 
+    // Combat-Help-Log: { clanName: timestamp } - wann zuletzt im Kampf geholfen
+    let combatHelpLog = {};
+
     // Spieltag (wird extern gesetzt)
     let currentDay = 1;
 
@@ -478,16 +481,43 @@
                 cost = {};
                 successChance = 0.6;
                 break;
-            case 'protection':
+            case 'protection': {
+                // Erfordert: Clan kürzlich im Kampf geholfen (letzte 30 Minuten Echtzeit)
+                const lastHelp = combatHelpLog[monster.clan] || 0;
+                const helpAge = Date.now() - lastHelp;
+                const HELP_WINDOW = 30 * 60 * 1000; // 30 Minuten
+                if (lastHelp === 0 || helpAge > HELP_WINDOW) {
+                    return {
+                        success: false,
+                        error: `Du musst dem ${monster.clan} zuerst im Kampf helfen! Verteidige ihre Mitglieder gegen Angreifer.`
+                    };
+                }
                 cost = {};
-                successChance = 0.4;
-                // TODO: Erfordert dass man Clan kürzlich im Kampf geholfen hat
+                successChance = 0.4 + Math.min(0.3, getReputation(monster.clan) / 1000);
                 break;
-            case 'quest':
+            }
+            case 'quest': {
+                // Erfordert: Quest für diesen Clan abgeschlossen
+                const questId = offer?.questId;
+                const guildState = window.GildenhausUI?.getState?.();
+                const completedIds = guildState?.completedQuestIds || [];
+                if (questId && !completedIds.includes(questId)) {
+                    return {
+                        success: false,
+                        error: `Schließe zuerst die Quest ab, bevor du ${monster.name} anwerben kannst.`
+                    };
+                }
+                // Auch ohne spezifische Quest-ID: Rep-Check als Fallback
+                if (!questId && getReputation(monster.clan) < CLAN_CONFIG.thresholds.liked) {
+                    return {
+                        success: false,
+                        error: `Erledige Quests für den ${monster.clan} um genug Vertrauen aufzubauen.`
+                    };
+                }
                 cost = {};
                 successChance = 0.9;
-                // TODO: Quest muss abgeschlossen sein
                 break;
+            }
             default:
                 return { success: false, error: `Unbekannte Methode: ${method}` };
         }
@@ -851,6 +881,7 @@
             const data = {
                 clanReputation,
                 killTracking,
+                combatHelpLog,
                 currentDay,
                 recruitedCreatures: recruitedCreatures.map(r => ({
                     id: r.id, monsterId: r.monsterId, name: r.name,
@@ -879,6 +910,7 @@
 
             if (data.clanReputation) clanReputation = data.clanReputation;
             if (data.killTracking) killTracking = data.killTracking;
+            if (data.combatHelpLog) combatHelpLog = data.combatHelpLog;
             if (data.currentDay) currentDay = data.currentDay;
             if (data.rumorQueue) rumorQueue = data.rumorQueue;
 
@@ -919,8 +951,27 @@
     // INIT
     // ==========================================
 
+    /**
+     * Kampfhilfe für Clan registrieren (für 'protection' Rekrutierungsmethode)
+     */
+    function logCombatHelp(clanName) {
+        combatHelpLog[clanName] = Date.now();
+        changeReputation(clanName, CLAN_CONFIG.repChanges.helpInCombat, `Im Kampf geholfen`);
+        _save();
+    }
+
     function init() {
         _load();
+
+        // GameEvents: Kampf-Hilfe für Clans verknüpfen
+        if (window.GameEvents) {
+            window.GameEvents.on('combatEnded', (data) => {
+                if ((data.won || data.result === 'victory') && data.allyClan) {
+                    logCombatHelp(data.allyClan);
+                }
+            });
+        }
+
         const clans = window.MonsterRegistry ? window.MonsterRegistry.getAllClans() : [];
         console.log(`🏰 Creature Recruit & Clan System bereit (${clans.length} Clans)`);
     }
@@ -961,6 +1012,7 @@
         // Interaktion
         giftToClan,
         tradeWithClan,
+        logCombatHelp,
 
         // Daily Updates
         setDay,

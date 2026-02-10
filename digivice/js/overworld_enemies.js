@@ -735,25 +735,52 @@ const OverworldEnemies = (function() {
             });
         }
 
-        // Use Unified Combat System
-        if (window.UnifiedCombat) {
+        // Use REAL 3D Combat (Tastatur-Controls: Q/E/Space)
+        if (window.Real3DCombat && window.Real3DCombat.startCombat) {
+            const scene = window.getScene ? window.getScene() : null;
+            const playerPos = window.getPlayerPosition ? window.getPlayerPosition() : { x: 0, y: 0, z: 0 };
+
+            if (scene) {
+                // Setup Callbacks BEFORE starting combat
+                window.onCombatVictory = (result) => {
+                    if (result.type === 'real3d') {
+                        console.log('✅ Combat Victory! XP:', result.xp, 'Loot:', result.loot);
+                        onEnemyDefeated(enemy);
+                        if (window.GameEvents) {
+                            window.GameEvents.emit('combatEnded', { won: true, enemyData: enemy.data });
+                        }
+                    }
+                };
+
+                window.onCombatDefeat = (result) => {
+                    if (result.type === 'real3d') {
+                        console.log('💀 Combat Defeat!');
+                        if (window.GameEvents) {
+                            window.GameEvents.emit('combatEnded', { won: false, enemyData: enemy.data });
+                        }
+                    }
+                };
+
+                // Real3DCombat erwartet: (enemyList, scene, position)
+                // enemyList = Array von enemy type IDs
+                window.Real3DCombat.startCombat([enemy.data.id], scene, playerPos);
+                console.log(`⚔️ Real3D Combat gestartet: ${enemy.data.name}`);
+            } else {
+                console.error('Scene nicht verfügbar für Real3DCombat!');
+            }
+        } else if (window.UnifiedCombat) {
+            // Fallback: Unified Combat (UI-Buttons)
             window.UnifiedCombat.startCombat({
                 type: 'overworld',
                 enemy: enemy.data,
                 location: state.currentBiome,
                 isHardcore: false,
-                // Callback wenn Kampf gewonnen
                 onWin: () => onEnemyDefeated(enemy),
                 onLose: () => {
                     if (window.GameEvents) {
                         window.GameEvents.emit('combatEnded', { won: false, enemyData: enemy.data });
                     }
                 }
-            });
-        } else if (window.Real3DCombat) {
-            window.Real3DCombat.startCombat({
-                enemy: enemy.data,
-                location: state.currentBiome
             });
         } else {
             console.error('Kein Combat-System geladen!');

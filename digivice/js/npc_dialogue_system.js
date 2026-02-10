@@ -1113,7 +1113,7 @@ class NPCDialogueSystem {
             if (data.success) {
                 this.showServiceCompleteDialogue(serviceType);
             } else {
-                alert(`Fehler: ${data.error || 'Nicht genug Gold!'}`);
+                if (typeof notify === 'function') notify(`❌ ${data.error || 'Nicht genug Gold!'}`, 'error');
             }
         } catch (err) {
             // Offline mode

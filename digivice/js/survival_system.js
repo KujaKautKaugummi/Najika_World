@@ -128,6 +128,17 @@
         const hungerRestore = foodItem.hungerRestore || 20;
         const quality = foodItem.quality || 1.0; // Koch-Skill beeinflusst das!
         const buffValue = foodItem.buff || null;
+        const price = foodItem.price || 0;
+
+        // Gold abziehen wenn Preis gesetzt
+        if (price > 0 && window.player) {
+            if (window.player.gold < price) {
+                if (typeof notify === 'function') notify(`❌ Nicht genug Gold! (${price}G nötig)`, 'error');
+                return { error: 'not_enough_gold' };
+            }
+            window.player.gold -= price;
+            if (typeof notify === 'function') notify(`🍖 ${foodItem.name || 'Essen'} für ${price}G gekauft`, 'info');
+        }
 
         survivalState.hunger = Math.min(100, survivalState.hunger + hungerRestore * quality);
         survivalState.lastMeal = Date.now();
@@ -153,6 +164,18 @@
 
     function drink(waterItem) {
         const thirstRestore = waterItem.thirstRestore || 25;
+        const price = waterItem.price || 0;
+
+        // Gold abziehen wenn Preis gesetzt
+        if (price > 0 && window.player) {
+            if (window.player.gold < price) {
+                if (typeof notify === 'function') notify(`❌ Nicht genug Gold! (${price}G nötig)`, 'error');
+                return { error: 'not_enough_gold' };
+            }
+            window.player.gold -= price;
+            if (typeof notify === 'function') notify(`💧 ${waterItem.name || 'Trinken'} für ${price}G gekauft`, 'info');
+        }
+
         survivalState.thirst = Math.min(100, survivalState.thirst + thirstRestore);
         survivalState.lastDrink = Date.now();
         removeMoodlet('dehydrated');
@@ -174,6 +197,18 @@
         const location = options.location || 'camp_open';
         const hasGuard = options.hasGuard || false;
         const guardSkill = options.guardSkill || 0;
+
+        // Gasthof-Kosten: 15G pro Nacht (4-8h)
+        const INN_COST = { 'inn': 15, 'caravan': 8 };
+        const sleepCost = INN_COST[location] || 0;
+        if (sleepCost > 0 && window.player) {
+            if (window.player.gold < sleepCost) {
+                if (typeof notify === 'function') notify(`❌ Nicht genug Gold für ${location === 'inn' ? 'Gasthof' : 'Karawane'}! (${sleepCost}G nötig)`, 'error');
+                return { error: 'not_enough_gold' };
+            }
+            window.player.gold -= sleepCost;
+            if (typeof notify === 'function') notify(`🛏️ ${location === 'inn' ? 'Gasthof' : 'Karawane'}: ${sleepCost}G bezahlt`, 'info');
+        }
 
         // Überfall-Risiko basierend auf Schlafplatz
         const AMBUSH_RISK = {
@@ -376,10 +411,119 @@
     }
 
     function handleDeath(source) {
-        if (typeof notify === 'function') {
-            notify(`💀 Du bist gestorben! Ursache: ${source}`, 'error');
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('playerDied', { source });
         }
-        // TODO: Respawn-System, Loot-Drop, etc.
+
+        // Show death overlay
+        showDeathScreen(source);
+    }
+
+    function respawnPlayer() {
+        // Restore partial health
+        survivalState.hp = Math.floor(survivalState.maxHp * 0.5);
+        survivalState.hunger = Math.max(survivalState.hunger, 40);
+        survivalState.thirst = Math.max(survivalState.thirst, 40);
+        survivalState.energy = Math.max(survivalState.energy, 30);
+
+        // Clear injuries from death
+        survivalState.injuries = survivalState.injuries.filter(i => i.severity !== 'tödlich');
+
+        // Gold penalty (lose 10%)
+        if (window.player && window.player.gold > 0) {
+            const goldLost = Math.floor(window.player.gold * 0.1);
+            window.player.gold -= goldLost;
+            if (typeof notify === 'function') {
+                notify(`💰 ${goldLost} Gold verloren beim Tod`, 'warning');
+            }
+        }
+
+        // Add death mood penalty
+        addMoodlet('died_recently', '💀 Kürzlich gestorben', -15, 1800000);
+
+        saveSurvivalState();
+
+        // Teleport to safe zone (Schwarze Mühle)
+        if (window.GameEvents) {
+            window.GameEvents.emit('playerRespawned', { location: 'schwarze_muehle' });
+        }
+
+        // Attempt to use TeleporterSystem for respawn
+        if (window.TeleporterSystem?.teleportTo) {
+            window.TeleporterSystem.teleportTo('schwarze_muehle');
+        }
+
+        if (typeof notify === 'function') {
+            notify('🔄 Wiederbelebt in der Schwarzen Mühle (50% HP)', 'info');
+        }
+    }
+
+    function showDeathScreen(source) {
+        const sourceNames = {
+            hunger: '🍞 Verhungert',
+            thirst: '💧 Verdurstet',
+            cold: '❄️ Erfroren',
+            heat: '🌡️ Hitzschlag',
+            combat: '⚔️ Im Kampf gefallen',
+            poison: '☠️ Vergiftet',
+            fall: '🪨 Sturzschaden',
+            disease: '🤒 Krankheit',
+        };
+
+        const deathOverlay = document.createElement('div');
+        deathOverlay.id = 'death-screen';
+        deathOverlay.style.cssText = `
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10001; font-family: 'Courier New', monospace;
+            transition: background 2s;
+        `;
+
+        // Fade to black
+        requestAnimationFrame(() => {
+            deathOverlay.style.background = 'rgba(0, 0, 0, 0.95)';
+        });
+
+        deathOverlay.innerHTML = `
+            <div style="text-align: center; opacity: 0; transition: opacity 1.5s; transition-delay: 1s;" id="death-content">
+                <div style="font-size: 64px; margin-bottom: 20px;">💀</div>
+                <h1 style="color: #ff4444; font-size: 36px; margin-bottom: 10px;">DU BIST GESTORBEN</h1>
+                <p style="color: #cc8888; font-size: 18px; margin-bottom: 30px;">
+                    ${sourceNames[source] || source || 'Unbekannte Ursache'}
+                </p>
+                <p style="color: #888; font-size: 14px; margin-bottom: 30px;">
+                    10% Gold verloren • Wiederbelebung mit 50% HP
+                </p>
+                <button id="respawn-btn" style="
+                    padding: 15px 40px; font-size: 18px;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    border: none; border-radius: 10px; color: white;
+                    cursor: pointer; font-family: inherit; font-weight: bold;
+                    opacity: 0; transition: opacity 0.5s; transition-delay: 2.5s;
+                ">🔄 Wiederbelebt werden</button>
+            </div>
+        `;
+
+        document.body.appendChild(deathOverlay);
+
+        // Fade in content
+        requestAnimationFrame(() => {
+            const content = document.getElementById('death-content');
+            if (content) content.style.opacity = '1';
+            const btn = document.getElementById('respawn-btn');
+            if (btn) btn.style.opacity = '1';
+        });
+
+        document.getElementById('respawn-btn').onclick = () => {
+            deathOverlay.style.opacity = '0';
+            deathOverlay.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                if (deathOverlay.parentNode) deathOverlay.remove();
+                respawnPlayer();
+            }, 500);
+        };
     }
 
     // ==========================================
@@ -724,7 +868,15 @@
         const bounty = survivalState.bounties[region] || 0;
         if (bounty <= 0) return { success: true, reason: 'Kein Kopfgeld.' };
 
-        // TODO: Gold vom Spieler abziehen
+        // Gold vom Spieler abziehen
+        if (window.player) {
+            if (window.player.gold < bounty) {
+                return { success: false, reason: `Nicht genug Gold! (${bounty}G nötig, du hast ${window.player.gold}G)` };
+            }
+            window.player.gold -= bounty;
+            if (typeof notify === 'function') notify(`⚖️ Kopfgeld bezahlt: ${bounty}G`, 'info');
+        }
+
         survivalState.bounties[region] = 0;
 
         // Prüfe ob noch irgendwo Kopfgeld
@@ -853,8 +1005,15 @@
     }
 
     function hasItem(itemId) {
-        // TODO: Integration mit Inventar-System
-        return false;
+        // Prüfe alle verfügbaren Inventar-Systeme
+        if (window.InventorySystem?.hasItem) {
+            return window.InventorySystem.hasItem(itemId);
+        }
+        // Fallback: localStorage-basiertes Inventar
+        try {
+            const inv = JSON.parse(localStorage.getItem('najika_inventory') || '{}');
+            return (inv[itemId] || 0) > 0;
+        } catch { return false; }
     }
 
     // Haupt-Update (alle 60 Sekunden aufrufen)
@@ -886,11 +1045,23 @@
     // EXPORT
     // ==========================================
 
+    function setNeed(need, value) {
+        if (need in survivalState) {
+            survivalState[need] = Math.max(0, Math.min(100, value));
+            // Moodlets aufräumen bei Erholung
+            if (need === 'hunger' && value > 20) removeMoodlet('starving');
+            if (need === 'thirst' && value > 20) removeMoodlet('dehydrated');
+            if (need === 'energy' && value > 20) removeMoodlet('exhausted');
+            saveSurvivalState();
+        }
+    }
+
     window.SurvivalSystem = {
         // Needs
         eat,
         drink,
         sleep,
+        setNeed,
         getNeeds: () => ({
             hunger: survivalState.hunger,
             thirst: survivalState.thirst,
@@ -915,6 +1086,8 @@
         addInjury,
         addDisease,
         applyDamage,
+        respawnPlayer,
+        handleDeath,
         getInjuries: () => [...survivalState.injuries],
         getDiseases: () => [...survivalState.diseases],
 

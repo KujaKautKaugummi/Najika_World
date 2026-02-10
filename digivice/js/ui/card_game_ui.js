@@ -18,7 +18,7 @@ class CardGameUI {
             rankings: 'http://localhost:8000/api/rankings'
         };
 
-        this.playerId = 1; // TODO: Get from session
+        this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
         this.currentMatch = null;
         this.selectedDeck = null;
         this.board = Array(9).fill(null); // 3x3 Triple Triad board
@@ -369,7 +369,7 @@ class CardGameUI {
             this.showMatchBoard();
         } catch (error) {
             console.error('Failed to start match:', error);
-            alert('❌ Failed to start match');
+            if (typeof notify === 'function') notify('❌ Spiel konnte nicht gestartet werden', 'error');
         }
     }
 
@@ -873,12 +873,23 @@ class CardGameUI {
         document.getElementById('game-status').style.color = color;
         document.getElementById('turn-indicator').textContent = 'GAME OVER';
 
-        // Show play again button
+        // Show play again / back buttons
         setTimeout(() => {
-            if (confirm(message + '\n\nPlay again?')) {
-                this.startMatch(this.gameMode);
-            } else {
-                this.showTab('play');
+            const statusEl = document.getElementById('game-status');
+            if (statusEl) {
+                const btnWrap = document.createElement('div');
+                btnWrap.style.cssText = 'margin-top:10px;display:flex;gap:10px;justify-content:center;';
+                const replayBtn = document.createElement('button');
+                replayBtn.textContent = '🔄 Nochmal';
+                replayBtn.className = 'action-btn';
+                replayBtn.onclick = () => this.startMatch(this.gameMode);
+                const backBtn = document.createElement('button');
+                backBtn.textContent = '🔙 Zurück';
+                backBtn.className = 'action-btn';
+                backBtn.onclick = () => this.showTab('play');
+                btnWrap.appendChild(replayBtn);
+                btnWrap.appendChild(backBtn);
+                statusEl.parentNode.insertBefore(btnWrap, statusEl.nextSibling);
             }
         }, 1000);
     }

@@ -159,7 +159,7 @@ export class NemesisArenaUI {
         view.innerHTML = '<div class="loading">⏳ Lade Hierarchie...</div>';
 
         try {
-            const response = await this.apiClient.get('http://localhost:8000/api/game/arena/hierarchy');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/hierarchy');
             const hierarchy = response.data;
 
             view.innerHTML = this.renderHierarchy(hierarchy);
@@ -308,7 +308,7 @@ export class NemesisArenaUI {
         view.innerHTML = '<div class="loading">⏳ Lade Herausforderer...</div>';
 
         try {
-            const response = await this.apiClient.get('http://localhost:8000/api/game/arena/challengers');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/challengers');
             const challengers = response.data;
 
             let html = '<div class="challengers-list"><h3>Verfügbare Herausforderer</h3>';
@@ -333,7 +333,7 @@ export class NemesisArenaUI {
         view.innerHTML = '<div class="loading">⏳ Lade deine Nemesis...</div>';
 
         try {
-            const response = await this.apiClient.get('http://localhost:8000/api/game/arena/my-nemesis');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/my-nemesis');
             const nemeses = response.data;
 
             if (nemeses.length === 0) {
@@ -390,7 +390,7 @@ export class NemesisArenaUI {
         view.innerHTML = '<div class="loading">⏳ Lade Gebiete...</div>';
 
         try {
-            const response = await this.apiClient.get('http://localhost:8000/api/game/arena/regions');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/regions');
             const regions = response.data;
 
             let html = '<div class="regions-map"><h3>🗺️ Arena Gebiete 🗺️</h3>';
@@ -441,7 +441,7 @@ export class NemesisArenaUI {
         try {
             console.log(`⚔️ Challenging monster ${monsterId}...`);
 
-            const response = await this.apiClient.post('http://localhost:8000/api/game/arena/challenge', {
+            const response = await this.apiClient.post('http://localhost:8000/api/v1/game/arena/challenge', {
                 monster_id: monsterId
             });
 
@@ -463,7 +463,7 @@ export class NemesisArenaUI {
 
         } catch (error) {
             console.error('Failed to challenge monster:', error);
-            alert('❌ Fehler beim Herausfordern des Monsters');
+            if (typeof notify === 'function') notify('❌ Fehler beim Herausfordern des Monsters', 'error');
         }
     }
 
@@ -506,7 +506,7 @@ export class NemesisArenaUI {
      */
     async viewMonsterDetails(monsterId) {
         try {
-            const response = await this.apiClient.get(`/api/game/arena/monster/${monsterId}`);
+            const response = await this.apiClient.get(`/api/v1/game/arena/monster/${monsterId}`);
             const monster = response.data;
 
             this.showMonsterDetailsModal(monster);

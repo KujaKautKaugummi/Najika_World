@@ -1051,10 +1051,16 @@ const TripleTriadUI = (function() {
         }
     }
 
+    let _quitConfirmPending = false;
     function confirmQuit() {
-        if (confirm('Spiel wirklich beenden? Du verlierst das aktuelle Spiel!')) {
+        if (_quitConfirmPending) {
+            _quitConfirmPending = false;
             close();
+            return;
         }
+        _quitConfirmPending = true;
+        if (typeof notify === 'function') notify('⚠️ Nochmal klicken um das Spiel zu beenden!', 'warning');
+        setTimeout(() => { _quitConfirmPending = false; }, 3000);
     }
 
     function close() {

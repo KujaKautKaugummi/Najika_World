@@ -759,13 +759,17 @@ class NemesisArenaUI {
     }
 
     fleeBattle() {
-        if (confirm('Wirklich fliehen? Das zählt als Niederlage!')) {
-            document.getElementById('battle-screen').remove();
-            this.playerStats.losses++;
-            if (typeof notify !== 'undefined') {
-                notify('Du bist aus der Arena geflohen...', 'warning');
-            }
+        if (!this._fleeConfirmPending) {
+            this._fleeConfirmPending = true;
+            notify('⚠️ Wirklich fliehen? Klicke nochmal zum Bestätigen!', 'warning');
+            setTimeout(() => { this._fleeConfirmPending = false; }, 3000);
+            return;
         }
+        this._fleeConfirmPending = false;
+        const battleScreen = document.getElementById('battle-screen');
+        if (battleScreen) battleScreen.remove();
+        this.playerStats.losses++;
+        notify('Du bist aus der Arena geflohen...', 'warning');
     }
 
     setupEventListeners() {
@@ -912,24 +916,70 @@ class NemesisArenaUI {
 
         // Warnung vor Hardcore
         if (nextWave === 16 && !this.waveState.inHardcoreMode) {
-            const proceed = confirm(
-                '⚠️ ACHTUNG! ⚠️\n\n' +
-                'Ab jetzt beginnt der ECHTE MODUS!\n\n' +
-                '• Niederlagen haben echte Konsequenzen\n' +
-                '• Dein Digimon kann "sterben" (braucht Zeit zur Erholung)\n' +
-                '• Items gehen verloren\n\n' +
-                'Bist du bereit für den Hardcore-Modus?'
-            );
-            if (!proceed) return;
+            if (!this._hardcoreConfirmed) {
+                this._hardcoreConfirmed = true;
+                notify('⚠️ ACHTUNG! Ab Welle 16 = HARDCORE! Niederlagen haben echte Konsequenzen. Nochmal klicken zum Bestätigen!', 'warning');
+                setTimeout(() => { this._hardcoreConfirmed = false; }, 5000);
+                return;
+            }
+            this._hardcoreConfirmed = false;
             this.waveState.inHardcoreMode = true;
             this.saveWaveState();
+            notify('💀 HARDCORE-MODUS aktiviert!', 'error');
         }
 
         // Generiere Wellen-Gegner (skaliert mit Welle)
         const waveEnemies = this.generateWaveEnemies(nextWave);
 
-        // NUTZE UNIFIED COMBAT SYSTEM
-        if (window.UnifiedCombat) {
+        // NUTZE REAL 3D COMBAT (Tastatur: Q/E/Space)
+        if (window.Real3DCombat && window.Real3DCombat.startCombat) {
+            this.arenaPanel.style.display = 'none';
+
+            const scene = window.getScene ? window.getScene() : null;
+            const arenaCenter = { x: 0, y: 0, z: -10 };
+
+            if (scene) {
+                // Setup Callbacks BEFORE starting combat
+                const self = this;
+                window.onCombatVictory = (result) => {
+                    if (result.type === 'real3d') {
+                        console.log(`✅ Welle ${nextWave} geschafft!`);
+                        self.onWaveBattleEnd(true);
+                        self.arenaPanel.style.display = 'flex';
+                    }
+                };
+
+                window.onCombatDefeat = (result) => {
+                    if (result.type === 'real3d') {
+                        console.log(`💀 Welle ${nextWave} verloren!`);
+                        self.onWaveBattleEnd(false);
+                        self.arenaPanel.style.display = 'flex';
+                    }
+                };
+
+                // Konvertiere Enemy-Namen zu Types die Real3DCombat kennt
+                const enemyTypes = waveEnemies.map(e => {
+                    // Map zu bekannten Real3DCombat Types
+                    const nameToType = {
+                        'Skelett-Krieger': 'skeleton_warrior',
+                        'Goblin-Räuber': 'goblin',
+                        'Wolf': 'wolf',
+                        'Ork-Krieger': 'corrupted_knight',
+                        'Dunkel-Magier': 'skeleton_mage',
+                        'Elite-Ritter': 'corrupted_knight',
+                        'Drachen-Welpe': 'barbarian_boss'
+                    };
+                    return nameToType[e.name] || 'skeleton_warrior';
+                });
+
+                window.Real3DCombat.startCombat(enemyTypes, scene, arenaCenter);
+                console.log(`⚔️ Welle ${nextWave} Combat gestartet! ${enemyTypes.length} Gegner`);
+            } else {
+                console.error('Scene nicht verfügbar!');
+            }
+
+        } else if (window.UnifiedCombat) {
+            // Fallback: Unified Combat
             this.arenaPanel.style.display = 'none';
 
             window.UnifiedCombat.startCombat({
@@ -940,7 +990,6 @@ class NemesisArenaUI {
                 waveNumber: nextWave
             });
 
-            // Callback Setup
             const self = this;
             window.onCombatVictory = (result) => {
                 if (result.type === 'arena') {
@@ -1040,14 +1089,14 @@ class NemesisArenaUI {
             // Medaillen vergeben
             if (this.waveState.currentWave === 5 && !this.waveState.medals.includes('bronze')) {
                 this.waveState.medals.push('bronze');
-                alert('🥉 BRONZEMEDAILLE erhalten! Weiter so!');
+                notify('🥉 BRONZEMEDAILLE erhalten! Weiter so!', 'success');
             } else if (this.waveState.currentWave === 10 && !this.waveState.medals.includes('silver')) {
                 this.waveState.medals.push('silver');
-                alert('🥈 SILBERMEDAILLE erhalten! Fantastisch!');
+                notify('🥈 SILBERMEDAILLE erhalten! Fantastisch!', 'success');
             } else if (this.waveState.currentWave === 15 && !this.waveState.medals.includes('gold')) {
                 this.waveState.medals.push('gold');
                 this.waveState.hardcoreUnlocked = true;
-                alert('🥇 GOLDMEDAILLE erhalten!\n\n⚠️ ECHTER MODUS freigeschaltet!\nAb jetzt wird es ernst!');
+                notify('🥇 GOLDMEDAILLE! ECHTER MODUS freigeschaltet!', 'success');
             }
 
             if (this.waveState.currentWave > this.waveState.highestWave) {
@@ -1058,10 +1107,9 @@ class NemesisArenaUI {
 
             if (this.waveState.inHardcoreMode) {
                 // Echte Konsequenzen im Hardcore-Modus
-                alert('💀 NIEDERLAGE im Hardcore-Modus!\n\nDein Digimon braucht Zeit zur Erholung...');
-                // Hier könnten weitere Konsequenzen folgen
+                notify('💀 NIEDERLAGE im Hardcore-Modus! Dein Digimon braucht Erholung...', 'error');
             } else {
-                alert('Training-Niederlage! Keine Sorge - im Training verlierst du nichts.\nVersuche es erneut!');
+                notify('Training-Niederlage! Im Training verlierst du nichts. Versuch es nochmal!', 'warning');
             }
         }
 
@@ -1071,18 +1119,23 @@ class NemesisArenaUI {
 
     resetWaves() {
         if (this.waveState?.inHardcoreMode) {
-            alert('Im Hardcore-Modus kann nicht zurückgesetzt werden!');
+            notify('Im Hardcore-Modus kann nicht zurückgesetzt werden!', 'error');
             return;
         }
 
-        if (confirm('Training-Fortschritt zurücksetzen?\n\nDeine Medaillen bleiben erhalten.')) {
-            const medals = this.waveState?.medals || [];
-            this.waveState = this.getDefaultWaveState();
-            this.waveState.medals = medals; // Medaillen behalten
-            this.saveWaveState();
-            this.updateWaveUI();
-            alert('Training zurückgesetzt! Starte bei Welle 1.');
+        if (!this._resetConfirmPending) {
+            this._resetConfirmPending = true;
+            notify('⚠️ Training zurücksetzen? Medaillen bleiben. Nochmal klicken zum Bestätigen!', 'warning');
+            setTimeout(() => { this._resetConfirmPending = false; }, 3000);
+            return;
         }
+        this._resetConfirmPending = false;
+        const medals = this.waveState?.medals || [];
+        this.waveState = this.getDefaultWaveState();
+        this.waveState.medals = medals;
+        this.saveWaveState();
+        this.updateWaveUI();
+        notify('Training zurückgesetzt! Starte bei Welle 1.', 'info');
     }
 
     async loadHierarchy() {

@@ -84,10 +84,22 @@
 
             const moodIcon = mood > 80 ? '😄' : mood > 60 ? '😊' : mood > 40 ? '😐' : mood > 20 ? '😞' : '😡';
 
+            // Player Level & Gold
+            const p = window.player || {};
+            const xpInfo = window.getPlayerXPInfo ? window.getPlayerXPInfo() : { level: p.level || 1, percent: 0 };
+            const gold = p.gold ?? 0;
+
             this.panel.innerHTML = `
                 <div style="font-size: 10px; color: #888; margin-bottom: 4px; display: flex; justify-content: space-between;">
-                    <span>SURVIVAL</span>
-                    <span>${moodIcon} ${Math.floor(mood)}</span>
+                    <span>Lv.${xpInfo.level} ${moodIcon}${Math.floor(mood)}</span>
+                    <span style="color: #ffd700;">💰${gold}G</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 3px;">
+                    <span style="width: 16px; font-size: 10px;">⬆️</span>
+                    <div style="flex: 1; background: #1a1a2e; border-radius: 3px; height: 6px; overflow: hidden;">
+                        <div style="background: #9b59b6; height: 100%; width: ${xpInfo.percent}%; transition: width 0.5s;"></div>
+                    </div>
+                    <span style="width: 28px; text-align: right; color: #9b59b6; font-size: 9px;">${xpInfo.percent}%</span>
                 </div>
                 ${this.miniBar('Hunger', needs.hunger, '🍖')}
                 ${this.miniBar('Durst', needs.thirst, '💧')}
@@ -213,9 +225,10 @@
 
                     <!-- Quick Actions -->
                     <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="window.SurvivalSystem?.eat?.({name:'Brot',hunger:20}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #f39c12; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">🍖 Essen</button>
-                        <button onclick="window.SurvivalSystem?.drink?.({name:'Wasser',thirst:25}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #3498db; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">💧 Trinken</button>
-                        <button onclick="window.SurvivalSystem?.sleep?.(4,{location:'tent_hidden'}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #2c3e50; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">😴 Schlafen (4h)</button>
+                        <button onclick="window.SurvivalSystem?.eat?.({name:'Brot',hungerRestore:20,price:5}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #f39c12; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">🍖 Essen (5G)</button>
+                        <button onclick="window.SurvivalSystem?.drink?.({name:'Wasser',thirstRestore:25,price:3}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #3498db; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">💧 Trinken (3G)</button>
+                        <button onclick="window.SurvivalSystem?.sleep?.(4,{location:'tent_hidden'}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #2c3e50; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">😴 Schlafen (4h, gratis)</button>
+                        <button onclick="window.SurvivalSystem?.sleep?.(8,{location:'inn'}); window.survivalHUD.renderDetail();" style="padding: 8px 16px; background: #8e44ad; border: none; border-radius: 5px; color: white; cursor: pointer; font-family: inherit;">🛏️ Gasthof (15G)</button>
                     </div>
                 </div>
             `;

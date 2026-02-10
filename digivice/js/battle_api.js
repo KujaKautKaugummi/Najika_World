@@ -47,7 +47,7 @@ class BattleAPI {
   // Hole aktuellen Battle-Status
   async getBattleStatus() {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/battle/status`);
+      const response = await fetch(`${BACKEND_URL}/api/battle/status/player1`);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -78,7 +78,7 @@ class BattleAPI {
         item_name: options.itemName || null
       };
 
-      const response = await fetch(`${BACKEND_URL}/api/battle/action`, {
+      const response = await fetch(`${BACKEND_URL}/api/battle/player-action`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

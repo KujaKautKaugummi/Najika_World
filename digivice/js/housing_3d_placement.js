@@ -160,20 +160,41 @@ class Housing3DPlacement {
     checkPlacementValid() {
         if (!this.ghostObject) return false;
 
-        // TODO: Implement proper collision detection with existing furniture
-        // For now, always return true (simplified)
-
         // Check if inside house bounds
         const halfWidth = this.houseSize.width / 2;
         const halfDepth = this.houseSize.depth / 2;
+        const pos = this.placementPosition;
 
         const isInside =
-            this.placementPosition.x >= this.housePosition.x - halfWidth &&
-            this.placementPosition.x <= this.housePosition.x + halfWidth &&
-            this.placementPosition.z >= this.housePosition.z - halfDepth &&
-            this.placementPosition.z <= this.housePosition.z + halfDepth;
+            pos.x >= this.housePosition.x - halfWidth &&
+            pos.x <= this.housePosition.x + halfWidth &&
+            pos.z >= this.housePosition.z - halfDepth &&
+            pos.z <= this.housePosition.z + halfDepth;
 
-        return isInside;
+        if (!isInside) return false;
+
+        // Collision check mit existierenden Möbeln (AABB)
+        const mySize = this.currentFurniture?.size || { x: 1, y: 1, z: 1 };
+        const myHalfX = mySize.x / 2;
+        const myHalfZ = mySize.z / 2;
+
+        if (this.scene) {
+            const placed = this.scene.children.filter(c =>
+                c.userData && c.userData.furnitureIndex !== undefined
+            );
+            for (const other of placed) {
+                const oSize = other.userData.size || { x: 1, z: 1 };
+                const oHalfX = oSize.x / 2;
+                const oHalfZ = oSize.z / 2;
+                const dx = Math.abs(pos.x - other.position.x);
+                const dz = Math.abs(pos.z - other.position.z);
+                if (dx < (myHalfX + oHalfX) && dz < (myHalfZ + oHalfZ)) {
+                    return false; // Kollision
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -471,11 +471,19 @@ class LivingSystemUI {
             this.state.anger = data.anger || 0;
             this.state.activity = data.current_activity;
 
+            this._apiErrors = 0; // Reset error count on success
             this.updateUI();
             this.checkProactiveMessage();
 
         } catch (error) {
-            console.warn('[Living UI] Konnte State nicht laden:', error.message);
+            this._apiErrors = (this._apiErrors || 0) + 1;
+            if (this._apiErrors <= 2) {
+                console.warn('[Living UI] Konnte State nicht laden:', error.message);
+            }
+            if (this._apiErrors >= 3) {
+                console.warn('[Living UI] API nicht erreichbar - Polling gestoppt. Nutze Default-Werte.');
+                this.stopPolling();
+            }
             // Zeige trotzdem Default-Werte
             this.updateUI();
         }

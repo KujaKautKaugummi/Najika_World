@@ -496,6 +496,7 @@
 
         let isRecording = false;
         let currentMode = 'chat';
+        let chatMode = 'public'; // 'public' oder 'private' (Kätzchen)
 
         // =========================================
         // INITIALIZATION
@@ -603,6 +604,22 @@
             if (!message) return;
 
             input.value = '';
+
+            // Codewort "kätzchen" / "kaetzchen" → NSFW Mode
+            const msgLower = message.toLowerCase();
+            if (msgLower === 'kätzchen' || msgLower === 'kaetzchen') {
+                chatMode = 'private';
+                showSpeech('*schnurr* Kaetzchen-Modus aktiviert...');
+                input.disabled = false;
+                return;
+            }
+            if (msgLower === 'normal' || msgLower === 'sfw') {
+                chatMode = 'public';
+                showSpeech('Normaler Modus aktiviert.');
+                input.disabled = false;
+                return;
+            }
+
             input.disabled = true;
 
             // Zeige "Najika denkt nach..."
@@ -612,7 +629,7 @@
                 const response = await fetch(`${API_BASE}/api/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ message: message, mode: chatMode })
                 });
 
                 const data = await response.json();

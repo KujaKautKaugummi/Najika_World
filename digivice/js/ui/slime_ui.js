@@ -376,7 +376,7 @@ class SlimeUI {
         // Show feedback
         this.showFeedback(result.message);
       } else {
-        alert(`❌ ${result.error}`);
+        if (typeof notify === 'function') notify(`❌ ${result.error}`, 'error');
       }
 
     } catch (error) {
@@ -385,8 +385,11 @@ class SlimeUI {
   }
 
   showFeedback(message) {
-    // TODO: Show toast notification
-    console.log(`✅ ${message}`);
+    if (typeof notify === 'function') {
+      notify(`✅ ${message}`, 'success');
+    } else {
+      console.log(`✅ ${message}`);
+    }
   }
 
   // ========================================================================

@@ -82,7 +82,7 @@
 
     // === PUBLIC API ===
 
-    function init(threeScene, playerId = 1) {
+    function init(threeScene, playerId = ((typeof getPlayerId === 'function') ? getPlayerId() : 1)) {
         scene = threeScene;
         currentPlayerId = playerId;
         console.log('🌾 Farming System 3D initialized');
@@ -960,10 +960,29 @@
                 }
             }
 
-            // F: Toggle farming menu (future feature)
+            // F: Farming-Menü für ausgewähltes Feld
             if (e.code === 'KeyF' && selectedPlot) {
-                // Could open full farming menu
-                console.log('🌾 Farming menu (not implemented yet)');
+                const plot = selectedPlot;
+                const crops = ['wheat', 'potato', 'carrot', 'herb_green', 'herb_blue', 'herb_red'];
+                const cropNames = { wheat: 'Weizen', potato: 'Kartoffel', carrot: 'Karotte', herb_green: 'Heilkraut', herb_blue: 'Manakraut', herb_red: 'Feuerkraut' };
+                if (!plot.crop) {
+                    // Pflanzen-Auswahl zeigen
+                    const menu = crops.map((c, i) => `${i + 1}. ${cropNames[c] || c}`).join('\n');
+                    if (typeof notify === 'function') notify(`🌾 Drücke 1-${crops.length} zum Pflanzen:\n${menu}`, 'info');
+                    const cropHandler = (ev) => {
+                        const idx = parseInt(ev.key) - 1;
+                        if (idx >= 0 && idx < crops.length) {
+                            plantCrop(currentPlayerId, plot.id, crops[idx]);
+                            document.removeEventListener('keydown', cropHandler);
+                        }
+                        if (ev.key === 'Escape') document.removeEventListener('keydown', cropHandler);
+                    };
+                    document.addEventListener('keydown', cropHandler);
+                } else if (plot.crop.ready) {
+                    harvestCrop(currentPlayerId, plot.id);
+                } else {
+                    waterCrop(plot.id);
+                }
             }
         });
     }

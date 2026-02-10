@@ -313,38 +313,41 @@ const FileManager = {
     },
 
     async createFolder() {
-        const name = prompt('Ordnername:');
-        if (!name) return;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('📁 Ordnername:', '', async (name) => {
+            if (!name) return;
 
-        const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
+            const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
-        try {
-            const response = await fetch('http://localhost:8000/api/file/write', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    path: `${path}/.keep`,
-                    content: ''
-                })
-            });
-            const data = await response.json();
+            try {
+                const response = await fetch('http://localhost:8000/api/file/write', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        path: `${path}/.keep`,
+                        content: ''
+                    })
+                });
+                const data = await response.json();
 
-            if (data.success) {
-                notify(`✓ Ordner erstellt: ${name}`, 'success');
-                this.refresh();
-            } else {
-                notify(`Fehler: ${data.error}`, 'error');
+                if (data.success) {
+                    notify(`✓ Ordner erstellt: ${name}`, 'success');
+                    this.refresh();
+                } else {
+                    notify(`Fehler: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                notify('Ordner konnte nicht erstellt werden', 'error');
             }
-        } catch (error) {
-            notify('Ordner konnte nicht erstellt werden', 'error');
-        }
+        });
     },
 
     async createFile() {
-        const name = prompt('Dateiname:');
-        if (!name) return;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('📄 Dateiname:', '', async (name) => {
+            if (!name) return;
 
-        const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
+            const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
         try {
             const response = await fetch('http://localhost:8000/api/file/write', {
@@ -357,19 +360,26 @@ const FileManager = {
             });
             const data = await response.json();
 
-            if (data.success) {
-                notify(`✓ Datei erstellt: ${name}`, 'success');
-                this.refresh();
-            } else {
-                notify(`Fehler: ${data.error}`, 'error');
+                if (data.success) {
+                    notify(`✓ Datei erstellt: ${name}`, 'success');
+                    this.refresh();
+                } else {
+                    notify(`Fehler: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                notify('Datei konnte nicht erstellt werden', 'error');
             }
-        } catch (error) {
-            notify('Datei konnte nicht erstellt werden', 'error');
-        }
+        });
     },
 
     async deleteFile(filename) {
-        if (!confirm(`Wirklich löschen: ${filename}?`)) return;
+        if (!this._deleteConfirmFile || this._deleteConfirmFile !== filename) {
+            this._deleteConfirmFile = filename;
+            if (typeof notify === 'function') notify(`⚠️ Nochmal klicken um "${filename}" zu löschen!`, 'warning');
+            setTimeout(() => { this._deleteConfirmFile = null; }, 3000);
+            return;
+        }
+        this._deleteConfirmFile = null;
 
         const filePath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
 
@@ -394,11 +404,12 @@ const FileManager = {
     },
 
     async renameFile(filename) {
-        const newName = prompt('Neuer Name:', filename);
-        if (!newName || newName === filename) return;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('✏️ Neuer Name:', filename, async (newName) => {
+            if (!newName || newName === filename) return;
 
-        const oldPath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
-        const newPath = this.currentPath === '.' ? newName : `${this.currentPath}/${newName}`;
+            const oldPath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
+            const newPath = this.currentPath === '.' ? newName : `${this.currentPath}/${newName}`;
 
         try {
             const response = await fetch('http://localhost:8000/api/file/rename', {
@@ -411,16 +422,17 @@ const FileManager = {
             });
             const data = await response.json();
 
-            if (data.success) {
-                notify(`✓ Umbenannt: ${filename} → ${newName}`, 'success');
-                this.refresh();
-            } else {
-                notify(`Fehler beim Umbenennen: ${data.error}`, 'error');
+                if (data.success) {
+                    notify(`✓ Umbenannt: ${filename} → ${newName}`, 'success');
+                    this.refresh();
+                } else {
+                    notify(`Fehler beim Umbenennen: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Rename error:', error);
+                notify('Datei konnte nicht umbenannt werden', 'error');
             }
-        } catch (error) {
-            console.error('Rename error:', error);
-            notify('Datei konnte nicht umbenannt werden', 'error');
-        }
+        });
     },
 
     goBack() {
@@ -639,9 +651,13 @@ const FileManager = {
         const filesList = this.selectedFiles.slice(0, 5).join(', ') +
                          (this.selectedFiles.length > 5 ? '...' : '');
 
-        if (!confirm(`${this.selectedFiles.length} Dateien löschen?\n${filesList}`)) {
+        if (!this._bulkDeletePending) {
+            this._bulkDeletePending = true;
+            if (typeof notify === 'function') notify(`⚠️ Nochmal klicken um ${this.selectedFiles.length} Dateien zu löschen!`, 'warning');
+            setTimeout(() => { this._bulkDeletePending = false; }, 3000);
             return;
         }
+        this._bulkDeletePending = false;
 
         let successCount = 0;
         let errorCount = 0;

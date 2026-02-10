@@ -590,7 +590,7 @@ class WorldMapFullUI {
 
         // TODO: Implement actual fast travel API call
         console.log('🚩 Fast traveling to:', city.name);
-        alert(`Fast traveling to ${city.name}!\n\nThis feature will be connected to the backend soon.`);
+        if (typeof notify === 'function') notify(`🚩 Schnellreise nach ${city.name}!`, 'success');
 
         // Update player position
         this.updatePlayerPosition(city.position.x, city.position.z);

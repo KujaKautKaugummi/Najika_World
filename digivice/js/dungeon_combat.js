@@ -81,6 +81,17 @@
         setupCombatEvents();
 
         console.log(`✅ Dungeon Combat started! ${currentDungeon.enemies.length} enemies spawned`);
+
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatStarted', {
+                type: 'dungeon',
+                level: level,
+                room: roomName,
+                enemyCount: currentDungeon.enemies.length
+            });
+        }
+
         return currentDungeon;
     }
 
@@ -165,7 +176,14 @@
             }
         }
 
-        // Add XP to player (TODO: Connect to backend)
+        // XP an Player-System senden
+        if (window.GameEvents) {
+            window.GameEvents.emit('enemyKilled', {
+                enemyLevel: enemy.level || currentDungeon?.level || 1,
+                enemyType: enemy.data?.type || 'dungeon_mob'
+            });
+        }
+
         // Update UI
         updateCombatUI();
 
@@ -203,7 +221,15 @@
             notify(`🎉 VICTORY! Level ${currentDungeon.level} cleared!`, 'success');
         }
 
-        // Show victory UI (TODO)
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatEnded', {
+                type: 'dungeon',
+                result: 'victory',
+                level: currentDungeon?.level || 1
+            });
+        }
+
         showVictoryScreen();
     }
 
@@ -229,12 +255,17 @@
         // Clear enemies
         DungeonEnemies.clearAllEnemies();
 
-        // Show game over UI (TODO)
-        setTimeout(() => {
-            if (confirm('💀 Defeated! Try again?')) {
-                startDungeonCombat(currentDungeon?.level || 1, window.Scene3D?.scene);
-            }
-        }, 1000);
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatEnded', {
+                type: 'dungeon',
+                result: 'defeat',
+                level: currentDungeon?.level || 1
+            });
+        }
+
+        // Show defeat overlay
+        setTimeout(() => showDefeatScreen(), 1000);
     }
 
     /**
@@ -388,8 +419,18 @@
             // Exit Combat Button
             const exitCombatBtn = document.getElementById('exit-combat-btn');
             if (exitCombatBtn) {
+                exitCombatBtn._confirmPending = false;
                 exitCombatBtn.onclick = () => {
-                    if (confirm('Kampf wirklich beenden?')) {
+                    if (!exitCombatBtn._confirmPending) {
+                        exitCombatBtn._confirmPending = true;
+                        exitCombatBtn.textContent = '⚠️ Sicher? (Klick)';
+                        exitCombatBtn.style.background = '#c0392b';
+                        setTimeout(() => {
+                            exitCombatBtn._confirmPending = false;
+                            exitCombatBtn.textContent = '🚪 Exit';
+                            exitCombatBtn.style.background = '';
+                        }, 3000);
+                    } else {
                         exitDungeon();
                         if (typeof notify === 'function') {
                             notify('🚪 Kampf beendet', 'info');
@@ -465,6 +506,76 @@
 
         document.getElementById('exitDungeonBtn').onclick = () => {
             document.body.removeChild(victoryDiv);
+            exitDungeon();
+        };
+    }
+
+    /**
+     * Show defeat screen
+     */
+    function showDefeatScreen() {
+        const defeatDiv = document.createElement('div');
+        defeatDiv.style.cssText = `
+            position: fixed;
+            inset: 0;
+            background: rgba(60, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s;
+        `;
+
+        const level = currentDungeon?.level || 1;
+        defeatDiv.innerHTML = `
+            <div style="
+                background: linear-gradient(135deg, #4a0000, #200000);
+                padding: 40px;
+                border-radius: 20px;
+                text-align: center;
+                color: white;
+                max-width: 500px;
+                border: 2px solid #ff4444;
+            ">
+                <h1 style="font-size: 3rem; margin: 0 0 20px 0;">💀 BESIEGT! 💀</h1>
+                <p style="font-size: 1.5rem; margin: 10px 0; color: #ff8888;">Dungeon Level ${level} gescheitert</p>
+                <p style="font-size: 1rem; margin: 20px 0; opacity: 0.9; color: #cc8888;">
+                    Du wurdest im Dungeon besiegt...
+                </p>
+                <button id="retryDungeonBtn" style="
+                    padding: 15px 30px;
+                    font-size: 1.2rem;
+                    background: #cc4400;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin: 10px;
+                    color: white;
+                    font-weight: bold;
+                ">🔄 Erneut versuchen</button>
+                <button id="exitDefeatBtn" style="
+                    padding: 15px 30px;
+                    font-size: 1.2rem;
+                    background: #444;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin: 10px;
+                    color: white;
+                    font-weight: bold;
+                ">🚪 Dungeon verlassen</button>
+            </div>
+        `;
+
+        document.body.appendChild(defeatDiv);
+
+        document.getElementById('retryDungeonBtn').onclick = () => {
+            document.body.removeChild(defeatDiv);
+            startDungeonCombat(level, window.Scene3D?.scene);
+        };
+
+        document.getElementById('exitDefeatBtn').onclick = () => {
+            document.body.removeChild(defeatDiv);
             exitDungeon();
         };
     }

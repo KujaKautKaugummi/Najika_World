@@ -368,11 +368,11 @@ class SkillTreeUI {
         const existingTree = this.equippedSpells[otherHand] ? this.getTreeForSkill(this.equippedSpells[otherHand]) : null;
 
         if (newTree === 'explosion' && existingTree) {
-            alert('⚠️ EXPLOSION kann nicht mit anderen Zaubern kombiniert werden!\nEntferne zuerst den anderen Zauber.');
+            if (typeof notify === 'function') notify('💥 EXPLOSION kann nicht mit anderen Zaubern kombiniert werden! Entferne zuerst den anderen Zauber.', 'error');
             return;
         }
         if (existingTree === 'explosion' && newTree !== 'explosion') {
-            alert('⚠️ EXPLOSION ist ausgerüstet!\nSie kann nicht mit anderen Zaubern kombiniert werden.');
+            if (typeof notify === 'function') notify('💥 EXPLOSION ist ausgerüstet! Sie kann nicht mit anderen Zaubern kombiniert werden.', 'error');
             return;
         }
 

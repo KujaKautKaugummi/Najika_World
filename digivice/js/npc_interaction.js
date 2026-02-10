@@ -78,7 +78,7 @@ class NPCInteractionSystem {
 
         const nearestNPC = this.findNearestNPC(playerPosition);
 
-        if (nearestNPC && nearestNPC.distance < 5) { // 5 Meter Radius
+        if (nearestNPC && nearestNPC.distance < 3) { // 3 Meter Radius (reduziert von 5)
             this.nearestNPC = nearestNPC;
             this.showPrompt(nearestNPC.npc);
         } else {
@@ -333,23 +333,42 @@ class NPCInteractionSystem {
 
     openInn(npc) {
         const npcName = npc.userData.npcName || 'Gasthaus';
-        alert(`🍺 ${npcName}\n\nKommt bald: Schlafen, Essen, Quests!`);
+        // Versuche das echte Inn-UI aus overworld_npcs zu öffnen
+        if (window.OverworldNPCs?.openInnUI) {
+            window.OverworldNPCs.openInnUI({ id: npc.userData.npcId, name: npcName });
+        } else if (typeof notify === 'function') {
+            notify(`🍺 ${npcName}: Willkommen!`, 'info');
+        }
     }
 
     openArena(npc) {
         const npcName = npc.userData.npcName || 'Arena';
-        alert(`⚔️ ${npcName}\n\nArena-System ist bereits aktiv!\nÖffne das Terminal → Special Features → Arena`);
+        if (window.NemesisArena) {
+            window.NemesisArena.show();
+        } else if (window.openNemesisArena) {
+            window.openNemesisArena();
+        } else if (typeof notify === 'function') {
+            notify(`⚔️ ${npcName}: Arena bereit!`, 'info');
+        }
     }
 
     openForge(npc) {
         const npcName = npc.userData.npcName || 'Schmiede';
-        alert(`🔨 ${npcName}\n\nKommt bald: Waffen schmieden, upgraden!`);
+        if (window.OverworldNPCs?.openForgeUI) {
+            window.OverworldNPCs.openForgeUI({ id: npc.userData.npcId, name: npcName });
+        } else if (typeof notify === 'function') {
+            notify(`🔨 ${npcName}: Willkommen in der Schmiede!`, 'info');
+        }
     }
 
     openDialog(npc) {
         const npcName = npc.userData.npcName || 'NPC';
         const npcDialog = npc.userData.npcDialog || 'Hallo Reisender!';
-        alert(`💬 ${npcName}\n\n"${npcDialog}"\n\n[Dialog-System kommt bald]`);
+        // Nutze Personality-System für dynamischen Dialog
+        const greeting = window.NPCPersonalitySystem?.getGreeting?.(npc.userData.npcId) || npcDialog;
+        if (typeof notify === 'function') {
+            notify(`💬 ${npcName}: "${greeting}"`, 'info');
+        }
     }
 }
 

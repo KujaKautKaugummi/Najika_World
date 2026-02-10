@@ -446,16 +446,19 @@ const UnifiedCombat = (function() {
     // ==========================================
 
     function init() {
-        console.log('⚔️ Unified Combat System v2 initializing...');
+        console.log('⚔️ Unified Combat System v3 initializing...');
         console.log('   📚 9 Magieschulen + Explosion');
         console.log('   💥 Finisher System aktiv');
+        console.log('   ✨ Spell-Diamond UI (Hogwarts Style)');
 
         calculateDerivedStats();
         createCombatUI();
+        createSpellDiamondUI();
         setupKeyBindings();
         startRegenLoop();
 
         console.log('✅ Unified Combat System ready!');
+        console.log('   🎮 Spell-Diamond: Halte R + ↑↓←→ (oder 1-9 für Elemente)');
     }
 
     function calculateDerivedStats() {
@@ -759,9 +762,34 @@ const UnifiedCombat = (function() {
                 damage *= (1 + state.player.special.INT * 0.03);
                 damage *= (1 + state.player.schoolMastery[spell.school] * 0.02);
 
-                // Element-Bonus/Malus
+                // Element-Bonus/Malus (Schwächen-Tabelle)
                 if (state.enemy && state.enemy.element) {
-                    // TODO: Element-Schwächen-Tabelle
+                    const ELEMENT_WEAKNESS = {
+                        feuer:  { weak: ['natur', 'eis'], resist: ['wasser', 'feuer'], immune: [] },
+                        wasser: { weak: ['blitz', 'natur'], resist: ['feuer', 'wasser', 'eis'], immune: [] },
+                        eis:    { weak: ['feuer', 'blitz'], resist: ['eis', 'wasser'], immune: [] },
+                        blitz:  { weak: ['erde'], resist: ['blitz', 'wind'], immune: [] },
+                        erde:   { weak: ['wasser', 'natur'], resist: ['blitz', 'erde'], immune: [] },
+                        wind:   { weak: ['eis', 'blitz'], resist: ['wind', 'erde'], immune: [] },
+                        natur:  { weak: ['feuer', 'eis'], resist: ['wasser', 'erde', 'natur'], immune: [] },
+                        licht:  { weak: ['dunkel'], resist: ['licht'], immune: [] },
+                        dunkel: { weak: ['licht'], resist: ['dunkel'], immune: [] }
+                    };
+                    const enemyEl = state.enemy.element;
+                    const spellEl = spell.school;
+                    const table = ELEMENT_WEAKNESS[enemyEl];
+                    if (table) {
+                        if (table.weak.includes(spellEl)) {
+                            damage *= 1.5;
+                            addLog(`💥 Elementar-Schwäche! 1.5x Schaden!`);
+                        } else if (table.resist.includes(spellEl)) {
+                            damage *= 0.5;
+                            addLog(`🛡️ Elementar-Resistenz! 0.5x Schaden...`);
+                        } else if (table.immune.includes(spellEl)) {
+                            damage = 0;
+                            addLog(`❌ Elementar-Immunität! Kein Schaden!`);
+                        }
+                    }
                 }
 
                 addLog(`${school.icon} ${spell.name}: ${Math.floor(damage)} Schaden!`);
@@ -823,7 +851,83 @@ const UnifiedCombat = (function() {
         }
 
         addLog(`✨ ${weave.name} verwoben! (${school1} + ${school2})`);
-        // TODO: Weave-Effekt anwenden
+
+        // Weave-Effekt anwenden
+        if (state.enemy) {
+            const baseDmg = 40 * weave.bonusDmg * (1 + state.player.special.INT * 0.03);
+            let totalDmg = baseDmg;
+
+            switch (weave.effect) {
+                case 'blind':
+                    state.enemy.isBlinded = true;
+                    state.enemy.blindDuration = 3000;
+                    addLog(`😵 Gegner geblendet für 3s! (Trefferchance -50%)`);
+                    break;
+                case 'aoe':
+                    totalDmg *= 1.2;
+                    state.enemies.forEach(e => { if (e.hp > 0) e.hp = Math.max(0, e.hp - totalDmg * 0.6); });
+                    addLog(`🌪️ Flächenschaden! Alle Gegner getroffen!`);
+                    break;
+                case 'dot+slow':
+                    state.enemy.dot = { damage: totalDmg * 0.15, ticks: 5, interval: 1000 };
+                    state.enemy.speedMod = 0.5;
+                    addLog(`🌋 Magma! DoT + Verlangsamung!`);
+                    break;
+                case 'freeze':
+                    state.enemy.isStunned = true;
+                    state.enemy.stunDuration = 4000;
+                    addLog(`❄️ Eingefroren für 4s!`);
+                    break;
+                case 'root+slow':
+                    state.enemy.isRooted = true;
+                    state.enemy.rootDuration = 3000;
+                    state.enemy.speedMod = 0.3;
+                    addLog(`🌿 Verwurzelt und verlangsamt!`);
+                    break;
+                case 'chain':
+                    totalDmg *= 1.3;
+                    state.enemies.forEach(e => { if (e.hp > 0) e.hp = Math.max(0, e.hp - totalDmg * 0.8); });
+                    addLog(`⚡ Schock-Kette! Springt zu allen Gegnern!`);
+                    break;
+                case 'random_strikes':
+                    for (let i = 0; i < 4; i++) {
+                        const target = state.enemies.filter(e => e.hp > 0);
+                        if (target.length > 0) {
+                            const t = target[Math.floor(Math.random() * target.length)];
+                            t.hp = Math.max(0, t.hp - totalDmg * 0.4);
+                        }
+                    }
+                    addLog(`⛈️ Gewitter! 4 zufällige Blitzschläge!`);
+                    break;
+                case 'blind+dot':
+                    state.enemy.isBlinded = true;
+                    state.enemy.blindDuration = 2000;
+                    state.enemy.dot = { damage: totalDmg * 0.1, ticks: 4, interval: 1000 };
+                    addLog(`🏜️ Sandsturm! Geblendet + DoT!`);
+                    break;
+                case 'armor_pierce':
+                    totalDmg *= 1.5; // Ignoriert Rüstung
+                    addLog(`🔥❄️ Thermal-Schock! Rüstung ignoriert!`);
+                    break;
+                case 'true_damage':
+                    totalDmg *= 2.0; // True Damage ignoriert ALLES
+                    addLog(`☯️ LEERE! True Damage - nichts schützt!`);
+                    break;
+            }
+
+            // Basis-Schaden anwenden
+            if (state.enemy.hp > 0) {
+                state.enemy.hp = Math.max(0, state.enemy.hp - totalDmg);
+                addLog(`${Math.floor(totalDmg)} Weave-Schaden!`);
+            }
+
+            // School XP für beide Schulen
+            gainSchoolXP(school1, 15);
+            gainSchoolXP(school2, 15);
+
+            checkEnemyDefeated();
+            updateUI();
+        }
 
         return true;
     }
@@ -912,9 +1016,11 @@ const UnifiedCombat = (function() {
             // Tier 3: Overworld beschädigen (1x pro Tag!)
             if (tier === 3 && config.overworldDamage) {
                 addLog(`🌍 Die Landschaft ist bis zur nächsten Regenerierung zerstört!`);
-                // TODO: Overworld Damage Event triggern
                 if (typeof window.triggerOverworldDamage === 'function') {
                     window.triggerOverworldDamage();
+                }
+                if (window.GameEvents) {
+                    window.GameEvents.emit('overworldDamage', { type: 'explosion', tier: 3, radius: 50 });
                 }
             }
 
@@ -1627,6 +1733,640 @@ const UnifiedCombat = (function() {
     }
 
     // ==========================================
+    // SPELL-DIAMOND SYSTEM (Hogwarts Legacy Style)
+    // ==========================================
+
+    const spellDiamond = {
+        active: false,
+        currentSchool: null,
+        visible: true, // Kann ausgeblendet werden für Immersion
+        selectedDirection: null,
+        rTriggerPressed: false
+    };
+
+    // Grund-Zauber pro Schule (Basis für Spezialisierung)
+    const GRUND_ZAUBER = {
+        feuer: [
+            { id: 'flammen', name: 'Flamme', direction: 'up', icon: '🔥', tier: 1 },
+            { id: 'feuerball', name: 'Feuerball', direction: 'right', icon: '🔥💫', tier: 2 },
+            { id: 'feuerwand', name: 'Feuerwand', direction: 'down', icon: '🔥🧱', tier: 3 },
+            { id: 'feuer_special', name: 'Inferno', direction: 'left', icon: '🔥🌀', tier: 4 }
+        ],
+        eis: [
+            { id: 'eiszapfen', name: 'Eiszapfen', direction: 'up', icon: '❄️', tier: 1 },
+            { id: 'einfrieren', name: 'Einfrieren', direction: 'right', icon: '❄️💎', tier: 2 },
+            { id: 'eis_special_3', name: 'Eiswand', direction: 'down', icon: '❄️🧱', tier: 3 },
+            { id: 'eis_special_4', name: 'Blizzard', direction: 'left', icon: '❄️🌀', tier: 4 }
+        ],
+        blitz: [
+            { id: 'blitzschlag', name: 'Blitzschlag', direction: 'up', icon: '⚡', tier: 1 },
+            { id: 'kettenblitz', name: 'Kettenblitz', direction: 'right', icon: '⚡🔗', tier: 2 },
+            { id: 'blitz_special_3', name: 'Schock', direction: 'down', icon: '⚡💥', tier: 3 },
+            { id: 'blitz_special_4', name: 'Gewitter', direction: 'left', icon: '⚡🌩️', tier: 4 }
+        ],
+        wasser: [
+            { id: 'heilung', name: 'Heilung', direction: 'up', icon: '💧', tier: 1 },
+            { id: 'wasserschild', name: 'Wasserschild', direction: 'right', icon: '💧🛡️', tier: 2 },
+            { id: 'wasser_special_3', name: 'Strahl', direction: 'down', icon: '💧🌊', tier: 3 },
+            { id: 'wasser_special_4', name: 'Tsunami', direction: 'left', icon: '💧🌀', tier: 4 }
+        ],
+        erde: [
+            { id: 'steinpanzer', name: 'Steinpanzer', direction: 'up', icon: '🪨', tier: 1 },
+            { id: 'erdbeben', name: 'Erdbeben', direction: 'right', icon: '🪨💥', tier: 2 },
+            { id: 'erde_special_3', name: 'Steinwurf', direction: 'down', icon: '🪨🎯', tier: 3 },
+            { id: 'erde_special_4', name: 'Meteorregen', direction: 'left', icon: '🪨☄️', tier: 4 }
+        ],
+        wind: [
+            { id: 'eile', name: 'Eile', direction: 'up', icon: '🌪️', tier: 1 },
+            { id: 'windklinge', name: 'Windklinge', direction: 'right', icon: '🌪️⚔️', tier: 2 },
+            { id: 'wind_special_3', name: 'Tornado', direction: 'down', icon: '🌪️🌀', tier: 3 },
+            { id: 'wind_special_4', name: 'Sturm', direction: 'left', icon: '🌪️💨', tier: 4 }
+        ],
+        natur: [
+            { id: 'verstricken', name: 'Verstricken', direction: 'up', icon: '🌿', tier: 1 },
+            { id: 'wolf_beschwören', name: 'Wolf', direction: 'right', icon: '🌿🐺', tier: 2 },
+            { id: 'natur_special_3', name: 'Dornen', direction: 'down', icon: '🌿🌹', tier: 3 },
+            { id: 'natur_special_4', name: 'Naturgewalt', direction: 'left', icon: '🌿🌳', tier: 4 }
+        ],
+        licht: [
+            { id: 'segen', name: 'Segen', direction: 'up', icon: '✨', tier: 1 },
+            { id: 'heiliges_licht', name: 'Heiliges Licht', direction: 'right', icon: '✨💫', tier: 2 },
+            { id: 'licht_special_3', name: 'Blitz', direction: 'down', icon: '✨⚡', tier: 3 },
+            { id: 'licht_special_4', name: 'Himmelslicht', direction: 'left', icon: '✨🌟', tier: 4 }
+        ],
+        dunkel: [
+            { id: 'leben_entziehen', name: 'Leben entziehen', direction: 'up', icon: '🌑', tier: 1 },
+            { id: 'fluch', name: 'Fluch', direction: 'right', icon: '🌑💀', tier: 2 },
+            { id: 'dunkel_special_3', name: 'Schatten', direction: 'down', icon: '🌑👥', tier: 3 },
+            { id: 'dunkel_special_4', name: 'Leere', direction: 'left', icon: '🌑⚫', tier: 4 }
+        ],
+        explosion: [
+            { id: 'kleine_explosion', name: 'Kleine Explosion', direction: 'up', icon: '💥', tier: 1 },
+            { id: 'exploooosion', name: 'EXPLOOOOSION!!!', direction: 'right', icon: '💥💥', tier: 2 },
+            { id: 'omega_detonation', name: 'OMEGA-DETONATION!!!', direction: 'down', icon: '💥💥💥', tier: 3 },
+            { id: 'giga_explosion', name: 'GIGA EXPLOSION!!!', direction: 'left', icon: '💥💥💥💥', tier: 4 }
+        ]
+    };
+
+    function createSpellDiamondUI() {
+        if (document.getElementById('spell-diamond-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'spell-diamond-overlay';
+        overlay.className = 'spell-diamond-overlay hidden';
+        overlay.innerHTML = `
+            <div class="spell-diamond-container">
+                <div class="diamond-center">
+                    <div class="element-icon" id="diamond-element-icon">🔥</div>
+                    <div class="element-name" id="diamond-element-name">FEUER</div>
+                </div>
+                <div class="diamond-spell up" id="diamond-spell-up" data-direction="up">
+                    <div class="spell-icon">🔥</div>
+                    <div class="spell-name">Flamme</div>
+                    <div class="spell-key">↑</div>
+                </div>
+                <div class="diamond-spell right" id="diamond-spell-right" data-direction="right">
+                    <div class="spell-icon">🔥💫</div>
+                    <div class="spell-name">Feuerball</div>
+                    <div class="spell-key">→</div>
+                </div>
+                <div class="diamond-spell down" id="diamond-spell-down" data-direction="down">
+                    <div class="spell-icon">🔥🧱</div>
+                    <div class="spell-name">Feuerwand</div>
+                    <div class="spell-key">↓</div>
+                </div>
+                <div class="diamond-spell left" id="diamond-spell-left" data-direction="left">
+                    <div class="spell-icon">🔥🌀</div>
+                    <div class="spell-name">Inferno</div>
+                    <div class="spell-key">←</div>
+                </div>
+                <div class="diamond-hint">Halte R + Wähle Richtung</div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        addSpellDiamondStyles();
+        attachSpellDiamondControls();
+    }
+
+    function addSpellDiamondStyles() {
+        if (document.getElementById('spell-diamond-styles')) return;
+
+        const styles = document.createElement('style');
+        styles.id = 'spell-diamond-styles';
+        styles.textContent = `
+            .spell-diamond-overlay {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 20000;
+                pointer-events: none;
+            }
+            .spell-diamond-overlay.hidden { display: none; }
+            .spell-diamond-overlay.invisible .diamond-spell,
+            .spell-diamond-overlay.invisible .diamond-hint { opacity: 0; }
+
+            .spell-diamond-container {
+                position: relative;
+                width: 400px;
+                height: 400px;
+            }
+
+            .diamond-center {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 120px;
+                background: radial-gradient(circle, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+                border: 3px solid #667eea;
+                border-radius: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            }
+
+            .element-icon {
+                font-size: 48px;
+                margin-bottom: 5px;
+            }
+
+            .element-name {
+                font-size: 14px;
+                font-weight: bold;
+                color: #fff;
+                text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            }
+
+            .diamond-spell {
+                position: absolute;
+                width: 140px;
+                height: 140px;
+                background: radial-gradient(circle, rgba(30,30,50,0.95), rgba(10,10,30,0.9));
+                border: 3px solid #444;
+                border-radius: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s;
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            }
+
+            .diamond-spell:hover,
+            .diamond-spell.selected {
+                transform: scale(1.15);
+                border-color: #667eea;
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.9);
+                background: radial-gradient(circle, rgba(50,50,90,0.95), rgba(30,30,60,0.9));
+            }
+
+            .diamond-spell.up { top: 0; left: 50%; transform: translate(-50%, -10px); }
+            .diamond-spell.right { top: 50%; right: 0; transform: translate(10px, -50%); }
+            .diamond-spell.down { bottom: 0; left: 50%; transform: translate(-50%, 10px); }
+            .diamond-spell.left { top: 50%; left: 0; transform: translate(-10px, -50%); }
+
+            .diamond-spell.up.selected { transform: translate(-50%, -20px) scale(1.15); }
+            .diamond-spell.right.selected { transform: translate(20px, -50%) scale(1.15); }
+            .diamond-spell.down.selected { transform: translate(-50%, 20px) scale(1.15); }
+            .diamond-spell.left.selected { transform: translate(-20px, -50%) scale(1.15); }
+
+            .spell-icon {
+                font-size: 40px;
+                margin-bottom: 8px;
+            }
+
+            .spell-name {
+                font-size: 13px;
+                font-weight: bold;
+                color: #fff;
+                text-align: center;
+                text-shadow: 0 0 5px rgba(0,0,0,0.8);
+                margin-bottom: 5px;
+            }
+
+            .spell-key {
+                font-size: 16px;
+                color: #667eea;
+                font-weight: bold;
+                padding: 3px 8px;
+                background: rgba(0,0,0,0.5);
+                border-radius: 5px;
+                border: 1px solid #667eea;
+            }
+
+            .diamond-hint {
+                position: absolute;
+                bottom: -40px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: #aaa;
+                font-size: 14px;
+                white-space: nowrap;
+                text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            }
+
+            @keyframes pulse-diamond {
+                0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+                50% { box-shadow: 0 0 40px rgba(102, 126, 234, 1); }
+            }
+
+            .diamond-center {
+                animation: pulse-diamond 2s infinite;
+            }
+        `;
+
+        document.head.appendChild(styles);
+    }
+
+    function attachSpellDiamondControls() {
+        // Keyboard Controls
+        document.addEventListener('keydown', handleSpellDiamondKeyDown);
+        document.addEventListener('keyup', handleSpellDiamondKeyUp);
+
+        // Click Handlers
+        const overlay = document.getElementById('spell-diamond-overlay');
+        if (overlay) {
+            overlay.querySelectorAll('.diamond-spell').forEach(spell => {
+                spell.addEventListener('click', () => {
+                    if (spellDiamond.active) {
+                        castSpellFromDiamond(spell.dataset.direction);
+                    }
+                });
+            });
+        }
+    }
+
+    function handleSpellDiamondKeyDown(e) {
+        // R-Trigger (R key) öffnet Diamond
+        if (e.key === 'r' || e.key === 'R') {
+            if (!spellDiamond.rTriggerPressed) {
+                spellDiamond.rTriggerPressed = true;
+                openSpellDiamond('feuer'); // Default: Feuer (kann später dynamisch sein)
+            }
+        }
+
+        // Directional selection while R is held
+        if (spellDiamond.rTriggerPressed && spellDiamond.active) {
+            let direction = null;
+            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') direction = 'up';
+            else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') direction = 'right';
+            else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') direction = 'down';
+            else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') direction = 'left';
+
+            if (direction) {
+                selectSpellDirection(direction);
+            }
+        }
+
+        // Number keys 1-9 für Element-Wechsel
+        const schoolKeys = {
+            '1': 'feuer', '2': 'eis', '3': 'blitz', '4': 'wasser',
+            '5': 'erde', '6': 'wind', '7': 'natur', '8': 'licht', '9': 'dunkel', '0': 'explosion'
+        };
+        if (schoolKeys[e.key] && spellDiamond.rTriggerPressed) {
+            openSpellDiamond(schoolKeys[e.key]);
+        }
+    }
+
+    function handleSpellDiamondKeyUp(e) {
+        // R-Trigger released = Cast spell and close diamond
+        if (e.key === 'r' || e.key === 'R') {
+            if (spellDiamond.rTriggerPressed) {
+                spellDiamond.rTriggerPressed = false;
+                if (spellDiamond.selectedDirection) {
+                    castSpellFromDiamond(spellDiamond.selectedDirection);
+                }
+                closeSpellDiamond();
+            }
+        }
+    }
+
+    function openSpellDiamond(school) {
+        if (!GRUND_ZAUBER[school]) return;
+
+        spellDiamond.active = true;
+        spellDiamond.currentSchool = school;
+        spellDiamond.selectedDirection = null;
+
+        const overlay = document.getElementById('spell-diamond-overlay');
+        if (!overlay) return;
+
+        overlay.classList.remove('hidden');
+        if (!spellDiamond.visible) {
+            overlay.classList.add('invisible');
+        }
+
+        // Update center element
+        const schoolData = MAGIC_SCHOOLS[school];
+        document.getElementById('diamond-element-icon').textContent = schoolData.icon;
+        document.getElementById('diamond-element-name').textContent = schoolData.name.toUpperCase();
+        document.querySelector('.diamond-center').style.borderColor = schoolData.color;
+        document.querySelector('.diamond-center').style.boxShadow = `0 0 30px ${schoolData.color}`;
+
+        // Update spells
+        const spells = GRUND_ZAUBER[school];
+        spells.forEach(spell => {
+            const element = document.getElementById(`diamond-spell-${spell.direction}`);
+            if (element) {
+                element.querySelector('.spell-icon').textContent = spell.icon;
+                element.querySelector('.spell-name').textContent = spell.name;
+                element.style.borderColor = schoolData.color;
+            }
+        });
+    }
+
+    function closeSpellDiamond() {
+        spellDiamond.active = false;
+        spellDiamond.selectedDirection = null;
+
+        const overlay = document.getElementById('spell-diamond-overlay');
+        if (overlay) {
+            overlay.classList.add('hidden');
+            overlay.querySelectorAll('.diamond-spell').forEach(s => s.classList.remove('selected'));
+        }
+    }
+
+    function selectSpellDirection(direction) {
+        spellDiamond.selectedDirection = direction;
+
+        const overlay = document.getElementById('spell-diamond-overlay');
+        if (overlay) {
+            overlay.querySelectorAll('.diamond-spell').forEach(s => {
+                s.classList.toggle('selected', s.dataset.direction === direction);
+            });
+        }
+    }
+
+    function castSpellFromDiamond(direction) {
+        if (!spellDiamond.currentSchool || !direction) return;
+
+        const spells = GRUND_ZAUBER[spellDiamond.currentSchool];
+        const spell = spells.find(s => s.direction === direction);
+
+        if (spell && SPELLS[spell.id]) {
+            castSpell(spell.id);
+            addLog(`✨ Zauber: ${spell.name} (${MAGIC_SCHOOLS[spellDiamond.currentSchool].name})`);
+        }
+    }
+
+    function toggleSpellDiamondVisibility() {
+        spellDiamond.visible = !spellDiamond.visible;
+        const overlay = document.getElementById('spell-diamond-overlay');
+        if (overlay) {
+            overlay.classList.toggle('invisible', !spellDiamond.visible);
+        }
+        addLog(spellDiamond.visible ? '✨ Spell-Diamond sichtbar' : '✨ Spell-Diamond unsichtbar (Immersion-Modus)');
+    }
+
+    // ==========================================
+    // MORPH-UI SYSTEM (Diablo 4 Style) - Task 2
+    // ==========================================
+
+    const morphSystem = {
+        learnedMorphs: {},
+        activeMorphs: {},
+        progressTracking: {},
+        visible: true
+    };
+
+    // Simple morph database (Backend wird komplette Liste haben)
+    const MORPH_DATABASE = {
+        kleine_explosion: [
+            { id: 'mini_explosion', name: 'Mini-Explosion', icon: '💥⚡', description: '50 DMG, spam-fähig!' },
+            { id: 'sniper_explosion', name: 'Sniper-Explosion', icon: '💥🎯', description: '120 DMG, präzise!' },
+            { id: 'chain_explosion', name: 'Chain-Explosion', icon: '💥🔗', description: '80 DMG, 3x Chain!' }
+        ]
+    };
+
+    function openMorphUI(spellId) {
+        const morphs = MORPH_DATABASE[spellId] || [];
+        const learned = morphSystem.learnedMorphs[spellId] || [];
+        const active = morphSystem.activeMorphs[spellId];
+
+        // Erstelle Morph-Auswahl Overlay
+        let existing = document.getElementById('morph-selection-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'morph-selection-overlay';
+        overlay.style.cssText = `
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.85); z-index:20000;
+            display:flex; align-items:center; justify-content:center;
+            font-family:'Segoe UI',Arial,sans-serif;
+        `;
+
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background:linear-gradient(135deg,#1a1a2e,#16213e);
+            border:3px solid #9b59b6; border-radius:15px;
+            padding:25px; max-width:500px; width:90%; color:#fff;
+        `;
+
+        let html = `<h2 style="color:#9b59b6;margin:0 0 15px">🔮 Morph-Auswahl: ${spellId}</h2>`;
+        html += `<p style="color:#aaa;font-size:13px;margin-bottom:15px">Nur 1 Morph gleichzeitig aktiv!</p>`;
+
+        // Basis-Spell (kein Morph)
+        html += `<div style="background:${!active ? 'rgba(155,89,182,0.3)' : 'rgba(255,255,255,0.05)'};
+            border:2px solid ${!active ? '#9b59b6' : '#444'}; border-radius:10px;
+            padding:12px; margin-bottom:8px; cursor:pointer;"
+            onclick="window.UnifiedCombat.activateMorph('${spellId}',null);document.getElementById('morph-selection-overlay').remove()">
+            <strong>📌 Original</strong> - Basis-Zauber (kein Morph)
+            ${!active ? '<span style="color:#9b59b6;float:right">✅ AKTIV</span>' : ''}
+        </div>`;
+
+        // Verfuegbare Morphs
+        morphs.forEach(m => {
+            const isLearned = learned.includes(m.id);
+            const isActive = active === m.id;
+            html += `<div style="background:${isActive ? 'rgba(155,89,182,0.3)' : isLearned ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.3)'};
+                border:2px solid ${isActive ? '#9b59b6' : isLearned ? '#666' : '#333'}; border-radius:10px;
+                padding:12px; margin-bottom:8px; ${isLearned ? 'cursor:pointer' : 'opacity:0.5'};"
+                ${isLearned ? `onclick="window.UnifiedCombat.activateMorph('${spellId}','${m.id}');document.getElementById('morph-selection-overlay').remove()"` : ''}>
+                <strong>${m.icon} ${m.name}</strong> - ${m.description}
+                ${isActive ? '<span style="color:#9b59b6;float:right">✅ AKTIV</span>' : ''}
+                ${!isLearned ? '<span style="color:#666;float:right">🔒 Nicht entdeckt</span>' : ''}
+            </div>`;
+        });
+
+        html += `<button onclick="document.getElementById('morph-selection-overlay').remove()" style="
+            background:#e74c3c; color:#fff; border:none; padding:10px 20px;
+            border-radius:8px; cursor:pointer; margin-top:10px; width:100%; font-size:14px;">
+            Schließen</button>`;
+
+        panel.innerHTML = html;
+        overlay.appendChild(panel);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+        addLog(`🔮 Morph-UI geöffnet für ${spellId}`);
+    }
+
+    function closeMorphUI() {
+        const overlay = document.getElementById('morph-selection-overlay');
+        if (overlay) overlay.remove();
+        addLog('🔮 Morph-UI geschlossen');
+    }
+
+    function activateMorph(spellId, morphId) {
+        morphSystem.activeMorphs[spellId] = morphId;
+        addLog(`🔮 Morph aktiviert: ${morphId}`);
+    }
+
+    // ==========================================
+    // PROGRESS-TRACKING UI - Task 3
+    // ==========================================
+
+    function updateProgressTracking(spellId, experiment, progress, max) {
+        morphSystem.progressTracking[spellId] = { experiment, progress, max };
+        const remaining = max - progress;
+
+        if (progress >= max) {
+            showBreakthroughNotification(spellId, experiment);
+        } else if (remaining <= 5) {
+            addLog(`🧪 Fast geschafft! Noch ${remaining}x bis Durchbruch!`);
+        }
+    }
+
+    function showBreakthroughNotification(spellId, experiment) {
+        addLog(`💡✨ DURCHBRUCH! Neuer Morph entdeckt: ${experiment}`);
+
+        // Learn morph
+        if (!morphSystem.learnedMorphs[spellId]) {
+            morphSystem.learnedMorphs[spellId] = [];
+        }
+        morphSystem.learnedMorphs[spellId].push(experiment);
+        delete morphSystem.progressTracking[spellId];
+    }
+
+    function toggleProgressUI() {
+        morphSystem.visible = !morphSystem.visible;
+        addLog(morphSystem.visible ? '🧪 Progress-Tracking sichtbar' : '🧪 Progress-Tracking ausgeblendet');
+    }
+
+    // ==========================================
+    // NAMEN-INPUT DIALOG - Task 4
+    // ==========================================
+
+    let currentSpellToName = null;
+
+    function openSpellNamingDialog(spellId) {
+        currentSpellToName = spellId;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('✨ Benenne deinen Zauber! (3-30 Zeichen)', '', (name) => {
+            if (name && name.length >= 3 && name.length <= 30) {
+                // Simple profanity check
+                const profanity = ['fuck', 'shit', 'arsch', 'scheiße'];
+                const hasProfanity = profanity.some(word => name.toLowerCase().includes(word));
+
+                if (hasProfanity) {
+                    addLog('⚠️ Bitte keine Schimpfwörter verwenden!');
+                    return;
+                }
+
+                if (!state.customSpellNames) state.customSpellNames = {};
+                state.customSpellNames[spellId] = name;
+                addLog(`✨ Zauber umbenannt: ${name}`);
+            } else if (name) {
+                addLog('⚠️ Name muss 3-30 Zeichen lang sein!');
+            }
+        });
+
+        currentSpellToName = null;
+    }
+
+    // ==========================================
+    // MEISTER-WARNUNG DIALOG - Task 5
+    // ==========================================
+
+    let currentSkillForMeister = null;
+
+    function openMeisterWarningDialog(skillId) {
+        currentSkillForMeister = skillId;
+
+        if (!openMeisterWarningDialog._confirmed) {
+            openMeisterWarningDialog._confirmed = true;
+            if (typeof notify === 'function') {
+                notify(`⚠️ MEISTER-WEG: ${skillId} — +300% Schaden, aber ALLE anderen Skills verkümmern! NICHT RÜCKGÄNGIG! Nochmal klicken zum Bestätigen!`, 'error');
+            }
+            setTimeout(() => { openMeisterWarningDialog._confirmed = false; }, 5000);
+            return;
+        }
+        openMeisterWarningDialog._confirmed = false;
+
+        if (true) {
+            confirmMeisterWeg();
+        } else {
+            cancelMeisterWeg();
+        }
+    }
+
+    function confirmMeisterWeg() {
+        if (currentSkillForMeister) {
+            if (!state.meisterSkills) state.meisterSkills = {};
+            state.meisterSkills[currentSkillForMeister] = {
+                activatedAt: Date.now(),
+                damageBonus: 3.0,
+                degradationStarted: true
+            };
+
+            addLog(`🎯 Du bist jetzt MEISTER in: ${currentSkillForMeister}`);
+            addLog(`⚠️ Andere Skills werden über Zeit verkümmern!`);
+        }
+        currentSkillForMeister = null;
+    }
+
+    function cancelMeisterWeg() {
+        addLog('↩️ Meister-Weg abgebrochen');
+        currentSkillForMeister = null;
+    }
+
+    // ==========================================
+    // SKILL-DEGRADATION ANZEIGE - Task 6
+    // ==========================================
+
+    function updateSkillDegradation() {
+        if (!state.meisterSkills) return;
+
+        const now = Date.now();
+        const degradedSkills = [];
+
+        Object.entries(SPELLS).forEach(([spellId, spell]) => {
+            const isMeisterSkill = Object.keys(state.meisterSkills).includes(spellId);
+            if (isMeisterSkill) return;
+
+            Object.values(state.meisterSkills).forEach(meisterData => {
+                const daysSince = (now - meisterData.activatedAt) / (1000 * 60 * 60 * 24);
+                let penalty = 0;
+
+                if (daysSince >= 180) penalty = 0.9;
+                else if (daysSince >= 90) penalty = 0.8;
+                else if (daysSince >= 30) penalty = 0.2;
+
+                if (penalty > 0) {
+                    degradedSkills.push({
+                        id: spellId,
+                        name: spell.name,
+                        penalty: Math.round(penalty * 100),
+                        days: Math.floor(daysSince)
+                    });
+                }
+            });
+        });
+
+        if (degradedSkills.length > 0) {
+            addLog(`📉 ${degradedSkills.length} Skills sind verkümmert`);
+        }
+
+        return degradedSkills;
+    }
+
+    // ==========================================
     // INIT
     // ==========================================
 
@@ -1665,7 +2405,35 @@ const UnifiedCombat = (function() {
         equipToHand,            // Zauber/Waffe in Hand ausruesten
         getActiveInfuses,       // Aktive Infuses anzeigen
         getInfuseBonus,         // Bonus fuer infuste Waffe
-        getInfuse: () => state.infuse  // Komplettes Infuse-State
+        getInfuse: () => state.infuse,  // Komplettes Infuse-State
+
+        // ========== SPELL-DIAMOND API ==========
+        openSpellDiamond,       // Diamond für Element öffnen
+        closeSpellDiamond,      // Diamond schließen
+        toggleSpellDiamondVisibility,  // Sichtbarkeit umschalten (Immersion!)
+        getSpellDiamond: () => spellDiamond,  // Diamond-State
+
+        // ========== MORPH SYSTEM API ==========
+        openMorphUI,            // Morph-UI für Skill öffnen
+        closeMorphUI,           // Morph-UI schließen
+        activateMorph,          // Morph aktivieren (nur 1 aktiv!)
+        getMorphSystem: () => morphSystem,  // Morph-State
+
+        // ========== PROGRESS TRACKING API ==========
+        updateProgressTracking, // Progress updaten (spellId, experiment, progress, max)
+        toggleProgressUI,       // Progress-UI ein/ausblenden
+        showBreakthroughNotification,  // Durchbruch-Notification anzeigen
+
+        // ========== SPELL NAMING API ==========
+        openSpellNamingDialog,  // Dialog zum Umbenennen öffnen
+
+        // ========== MEISTER-WEG API ==========
+        openMeisterWarningDialog,  // Warnung vor 1-Skill-Weg
+        confirmMeisterWeg,      // Meister-Weg bestätigen
+        cancelMeisterWeg,       // Meister-Weg abbrechen
+
+        // ========== DEGRADATION API ==========
+        updateSkillDegradation  // Degraded Skills updaten und anzeigen
     };
 })();
 
@@ -1674,5 +2442,6 @@ window.UnifiedCombat = UnifiedCombat;
 console.log('⚔️ Unified Combat System v3 loaded!');
 console.log('   🎮 Controls: Q/E/R (Light), A/D/F (Heavy), Space (Dodge), Shift (Parry)');
 console.log('   ✨ WEAPON INFUSE: Zauber auf Waffe = temporaerer Buff!');
-console.log('   🔮 Magic: 1 (Feuer), 2 (Eis), 3 (Heilung), 4 (EXPLOSION!)');
+console.log('   🔮 SPELL-DIAMOND: Halte R + ↑↓←→ zum Casten (1-9 für Elemente)');
+console.log('   💥 Elemente: 1=Feuer, 2=Eis, 3=Blitz, 4=Wasser, 5=Erde, 6=Wind, 7=Natur, 8=Licht, 9=Dunkel, 0=EXPLOSION!');
 console.log('   💀 Finisher: X (wenn verfügbar)');

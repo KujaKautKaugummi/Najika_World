@@ -1,7 +1,7 @@
 # NAJIKA WORLD - MASTER TODO FUER CLAUDE CODE TEAM
 
 **Erstellt:** 2026-01-27
-**Aktualisiert:** 2026-02-04 (**KRITISCH: UE5 STATT UEFN!**)
+**Aktualisiert:** 2026-02-09 (OPUS-2 ALLE FRONTEND TASKS FERTIG! 🎉✅)
 **Zweck:** Koordination zwischen 2 Claude Opus Instanzen
 **Update-Regel:** Jede Instanz updated nach getaner Arbeit!
 
@@ -130,6 +130,12 @@
 | ✅ **TIDS mit Gag-Reaktionen** | DONE | Monster-spezifische lustige Reaktionen |
 | ⬜ Game State API erweitern | TODO | **ECHTZEIT via WebSocket** statt Speichern/Laden! |
 | ✅ 3 Battle-Systeme vereinen | **DONE** | Real3DCombat als Primär, UnifiedCombat als Fallback |
+| ✅ **NajikaMind ↔ FastAPI** | **DONE** | AGI-Pipeline in `api/chat.py` integriert (09.02.) |
+| ✅ **Kreatur-Nemesis Gray Moral** | **DONE** | Enslave/Recruit/Surrender + Auto-Timeouts (09.02.) |
+| ✅ **CompanionApproval Verdrahtung** | **DONE** | `kill_creature`, `execute_surrender`, `enslave_creature` (09.02.) |
+| ✅ **NPC Tagesablauf** | **DONE** | Skyrim-Style Schedules + In-Game-Uhr + 6 Tageszeiten (09.02.) |
+| ✅ **NPC Beziehungssystem** | **DONE** | Affinity/Reputation + Geschenke + Witness-System (09.02.) |
+| ✅ **Save/Load v2.0** | **DONE** | Alle Sub-Systeme zentral im Snapshot (09.02.) |
 
 ### P2 - SPÄTER
 | Task | Status | Beschreibung |
@@ -138,6 +144,27 @@
 | ⬜ ChromaDB ↔ UE5 Sync | TODO | Gedächtnis-Integration |
 | ⬜ Voice System Adapter | TODO | TTS/STT für UE5 |
 | ⬜ Three.js → UE5 Mapping Doc | TODO | Was wird wie portiert |
+
+### P3 - MAGIC/SKILL SYSTEM V3 ⚡ (Hogwarts + Diablo 4)
+**Referenz:** [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md)
+
+**Betroffene Dateien:**
+- `backend/najika_battle.py` (Learning Rates)
+- `backend/najika_unified_combat_magic.py` (Morphs, Weave)
+- `backend/api/magic_schools.py` (API Endpoints)
+- `backend/services/magic_schools_system.py` (Service Layer)
+- `backend/game/magic_system.py` (Core Logic)
+- `backend/models/magic_progress.py` (Data Models)
+
+| Task | Status | Beschreibung |
+|------|--------|--------------|
+| ⬜ **Skill-Learning Rates senken** | TODO | 8%→2%, 20%→5% (najika_battle.py:690) |
+| ⬜ **Cross-Element Learning** | TODO | Gleich 10%, Ähnlich 3%, Fremd 1% + Similarity Table |
+| ⬜ **1-Skill-Weg System** | TODO | Meister-Flag, Degradation-Tracking, Vergessen-System |
+| ⬜ **Morphs-System Backend** | TODO | Beobachten, Experimentieren, 1 Morph aktiv, Wechsel |
+| ⬜ **S.P.E.C.I.A.L. Stats** | TODO | Max +25% bei 10 Punkten, Start 40 Punkte ⚠️ PLAYTEST! |
+| ⬜ **Namen-System Backend** | TODO | Spieler-Input, 3-30 Zeichen, Profanity-Filter DE/EN |
+| ⬜ **Slime-KI 2-Layer** | TODO | Persönlichkeit bleibt, Skills reset, Form-Copy 5% |
 
 ---
 
@@ -178,8 +205,40 @@
 | ✅ Götterfels Terrain | **DONE** | Python Scripts + WorldConfig.json erstellt! |
 | ✅ 8 Region Volumes | **DONE** | TriggerBoxes mit Tags |
 | ✅ Safe Zone | **DONE** | Schwarze Mühle Volume + Marker |
-| ⬜ 8 Teleporter | TODO | Level Streaming zu Regionen |
-| ⬜ NPCs | TODO | Dialog-System, Behavior Trees |
+| ✅ **8 Teleporter** | **DONE** | Fast Travel System mit UI, Unlock-System, Unlimited Pass! |
+| ✅ **NPCs** | **DONE** | 5 Systeme: Dialogue, Interaction, Schedule, Personality, Overworld |
+
+### P4 - MAGIC/SKILL SYSTEM V3 UI ⚡ (Hogwarts + Diablo 4)
+**Referenz:** [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md)
+
+**Betroffene Dateien:**
+- `digivice/js/unified_combat_system.js` (Spell-Diamond, Morphs)
+- `digivice/js/ui/combat_special_ui.js` (Combat UI)
+- `digivice/js/equipment_combat.js` (Equipment Integration)
+- `digivice/js/particles/magic_particles.js` (VFX)
+
+| Task | Status | Beschreibung |
+|------|--------|--------------|
+| ✅ **Hogwarts Spell-Diamond UI** | DONE | 4 Spells pro Element, R-Trigger halten, ↑↓←→, ausblendbar |
+| ✅ **Morph-UI** | DONE | Morph-Auswahl Menu, "Nur 1 aktiv" Indikator, Wechsel-UI |
+| ✅ **Progress-Tracking UI** | DONE | Experimentier-Progress (23/30), Durchbruch-Notification, ausblendbar |
+| ✅ **Namen-Input Dialog** | DONE | "Benenne deinen Zauber!", 3-30 Zeichen, Profanity-Check |
+| ✅ **Meister-Warnung Dialog** | DONE | Große Warnung, Konsequenzen zeigen, Bestätigungs-Dialog |
+| ✅ **Skill-Degradation Anzeige** | DONE | Verkümmerte Skills markieren, Tooltip "Vergessen", Warnung |
+
+---
+
+## 🧪 TESTING & BALANCE (MAGIC/SKILL SYSTEM V3)
+**Referenz:** [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md)
+
+### Kritische Balance-Tests ⚠️
+| Task | Zuständig | Status | Beschreibung |
+|------|-----------|--------|--------------|
+| ⬜ **S.P.E.C.I.A.L. Balance** | BEIDE | TODO | INT 1 vs INT 10 Test, Trap-Build Check, Community-Testing |
+| ⬜ **Meister vs. Generalist** | BEIDE | TODO | Endgame-Vergleich (Tag 180), Permadeath-Fairness |
+| ⬜ **Cross-Element Learning Raten** | OPUS-1 | TODO | 100x Kampf Test, Lern-Raten anpassen, Utility vs. Damage |
+| ⬜ **Morphs Discovery Balance** | OPUS-1 | TODO | 30x Experimentieren ok?, Beobachten vs. Experimentieren |
+| ⬜ **Hardcore-System Check** | OPUS-1 | TODO | Disconnect-Test, Lag-Simulation, "Bullshit Death" Check |
 
 ---
 
@@ -228,6 +287,40 @@
 | **Sync** | REST API | REST API |
 | **3D** | Nein | Ja |
 | **Offline** | Ja | Ja |
+
+---
+
+## ✅ ERLEDIGT (2026-02-09) - OPUS-1
+
+### Kreatur-Nemesis System (Graue Moral):
+- ✅ **Gray Morality (Fallout/Borderlands)** - Normales Kämpfen = morally neutral, nur Grausamkeit = negativ
+- ✅ **Enslave-Option** - Aufgestiegene Nemesis können versklavt werden (Farm-Arbeiter, NIE Kampf)
+- ✅ **Recruit-Option** - Rekrutierte Nemesis = Farm-Arbeiter (NIE im Kampf, kommen NIE mit)
+- ✅ **Surrender nur für Aufgestiegene** - Nur Rang 1+ Nemesis können aufgeben
+- ✅ **Auto-Timeouts** - 10s Surrender-Dialog, 12s Encounter-Dialog (flüssiger Kampf)
+- ✅ **CompanionApproval Fixes** - `kill_creature`, `execute_surrender`, `enslave_creature` korrekt verdrahtet
+
+### NajikaMind AGI-Integration:
+- ✅ **Chat-Pipeline gefixt!** - `api/chat.py` nutzt jetzt NajikaMind statt direktem Ollama-Aufruf
+- ✅ **9-Schritt AGI Pipeline aktiv** - ToM → Memory → Feel → Facetten → Think → Speak → Express → Remember → Learn
+- ✅ **ChatResponse erweitert** - Mood, Personality, Intent, Whispers, inner_thought als Felder
+- ✅ **Conversation History** - In-Memory History (50 Nachrichten) für Kontext
+- ✅ **Frontend AGI-Support** - chat_ui.js zeigt alle 14 Moods + AGI-Events via GameEvents
+- ✅ **Graceful Fallback** - Legacy Ollama-Aufruf wenn NajikaMind nicht verfügbar
+
+### Beta-Mechaniken:
+- ✅ **NPC Tagesablauf** - `npc_schedule_system.js` (330 Zeilen): 6 Tageszeiten, In-Game-Uhr (1 Echtmin=10 Game-Min), NPC-Bewegung, HUD-Uhr, Phase-Events
+- ✅ **NPC Beziehungssystem** - `npc_affinity_system.js` (300 Zeilen): Affinity 0-100, 6 Reputation-Stufen, Geschenk-System, Witness-System, Handelsrabatte
+- ✅ **Save/Load v2.0** - `save_system.js` erweitert: Zentraler Snapshot aller Sub-Systeme (CompanionApproval, NPC Affinity, Schedule, Nemesis, Taming, Economy, Factions, Housing, Career, Survival)
+
+### P1 UPDATE:
+| Task | Status | Beschreibung |
+|------|--------|--------------|
+| ✅ NajikaMind ↔ FastAPI | **DONE** | AGI-Pipeline in chat.py integriert |
+| ✅ NPC Tagesablauf | **DONE** | Skyrim-Style NPC Schedules |
+| ✅ NPC Beziehungssystem | **DONE** | Affinity/Reputation System |
+| ✅ Save/Load v2.0 | **DONE** | Alle Sub-Systeme zentral |
+| ⬜ Game State API erweitern | TODO | **WebSocket für Echtzeit-Events** |
 
 ---
 

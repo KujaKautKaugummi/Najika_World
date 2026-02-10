@@ -365,18 +365,50 @@ const OverworldNPCs = (function() {
         console.log(`💬 Interacting with NPC: ${npc.name}`);
         npc.isInteracting = true;
 
-        // GameEvent emittieren
-        if (window.GameEvents) {
-            window.GameEvents.emit('npcTalked', { npcId: npc.id, npcName: npc.name, npcType: npc.type });
+        // Fraktions-basierte NPC-Reaktion
+        let npcFaction = npc.faction || null;
+        let npcAttitude = 'neutral';
+        if (window.FactionSystem && npcFaction) {
+            const reaction = FactionSystem.getNPCReaction(npcFaction);
+            npcAttitude = reaction.attitude;
+            if (reaction.willAttack) {
+                showNotification(`⚔️ ${npc.name}: "${reaction.dialogue}"`, 'error');
+                npc.isInteracting = false;
+
+                // Kampf gegen feindlichen NPC starten
+                startHostileNPCCombat(npc);
+                return false;
+            }
         }
 
-        // Dialog-System öffnen
-        if (window.npcDialogueSystem && npc.dialogue && npc.dialogue.length > 0) {
-            window.npcDialogueSystem.openDialogue(npc.id, npc);
-        } else if (window.npcSystem && typeof window.npcSystem.interact === 'function') {
-            window.npcSystem.interact(npc);
+        // GameEvent emittieren (mit Faction-Info)
+        if (window.GameEvents) {
+            window.GameEvents.emit('npcTalked', { npcId: npc.id, npcName: npc.name, npcType: npc.type, npcFaction });
+        }
+
+        // NPC-Typ spezifische Aktionen
+        if (npc.type === 'arena' || npc.type === 'pvp_arena_master') {
+            if (window.NemesisArena) {
+                window.NemesisArena.show();
+            } else if (window.openNemesisArena) {
+                window.openNemesisArena();
+            } else {
+                showSimpleDialogue(npc);
+            }
+        } else if (npc.type === 'vendor' || npc.type === 'shop' || npc.type === 'merchant') {
+            openShopUI(npc);
+        } else if (npc.type === 'inn' || npc.type === 'inn_keeper' || npc.type === 'restaurant') {
+            openInnUI(npc);
+        } else if (npc.type === 'forge' || npc.type === 'blacksmith') {
+            openForgeUI(npc);
+        } else if (window.npcDialogueSystem && window.npcDialogueSystem.startDialogue) {
+            // Versuche Dialog-Baum System
+            const npcId = npc.id || npc.name;
+            if (!window.npcDialogueSystem.startDialogue(npcId, npc)) {
+                // Fallback wenn NPC nicht im Dialog-System registriert
+                showSimpleDialogue(npc);
+            }
         } else {
-            // Fallback: Simpler Alert-Dialog
             showSimpleDialogue(npc);
         }
 
@@ -389,7 +421,21 @@ const OverworldNPCs = (function() {
     }
 
     function showSimpleDialogue(npc) {
-        const text = npc.dialogue?.[0]?.text || `${npc.name}: Hallo, Reisender!`;
+        // Priority: Schedule dialogue override > Personality greeting > Default dialogue
+        let text;
+        const scheduleOverride = window.NPCScheduleSystem?.getNPCDialogueOverride?.(npc.id);
+        const personalityGreeting = window.NPCPersonalitySystem?.getGreeting?.(npc.id);
+
+        if (scheduleOverride) {
+            text = scheduleOverride;
+        } else if (personalityGreeting) {
+            text = personalityGreeting;
+        } else {
+            text = npc.dialogue?.[0]?.text || `${npc.name}: Hallo, Reisender!`;
+        }
+
+        // Show relationship label if available
+        const relLabel = window.NPCPersonalitySystem?.getRelationshipLabel?.(npc.id) || '';
 
         // Einfaches Dialog-Overlay
         let overlay = document.getElementById('simple-npc-dialog');
@@ -415,9 +461,10 @@ const OverworldNPCs = (function() {
         ).join('');
 
         overlay.innerHTML = `
-            <div style="color:#FFD700; font-size:18px; font-weight:bold; margin-bottom:10px;">
+            <div style="color:#FFD700; font-size:18px; font-weight:bold; margin-bottom:5px;">
                 ${npc.name}
             </div>
+            ${relLabel ? `<div style="font-size:12px; color:#aaa; margin-bottom:10px;">${relLabel}</div>` : ''}
             <div style="font-size:15px; margin-bottom:15px; line-height:1.5;">
                 ${text}
             </div>
@@ -426,6 +473,328 @@ const OverworldNPCs = (function() {
             </div>
         `;
         overlay.style.display = 'block';
+    }
+
+    // ==========================================
+    // SHOP UI - Handel mit Economy-System
+    // ==========================================
+
+    function openShopUI(npc) {
+        // Check if NPC is willing to sell (personality check)
+        if (window.NPCPersonalitySystem && !NPCPersonalitySystem.willNPCSell(npc.id)) {
+            if (typeof notify === 'function') {
+                notify(`${npc.name} weigert sich, mit dir zu handeln!`, 'error');
+            }
+            return;
+        }
+
+        let overlay = document.getElementById('shop-ui-overlay');
+        if (overlay) overlay.remove();
+
+        overlay = document.createElement('div');
+        overlay.id = 'shop-ui-overlay';
+        overlay.style.cssText = `
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.85); z-index:15000;
+            display:flex; align-items:center; justify-content:center;
+        `;
+
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background:linear-gradient(135deg,#1a1a2e,#1e3a2e);
+            border:3px solid #FFD700; border-radius:15px;
+            padding:25px; max-width:600px; width:90%; max-height:80vh;
+            overflow-y:auto; color:#fff;
+            font-family:'Segoe UI',Arial,sans-serif;
+        `;
+
+        const shopName = npc.name || 'Händler';
+        const shopType = npc.shopType || 'general';
+        const inventory = npc.inventory || ['health_potion', 'bread', 'iron_sword'];
+
+        // Preis-Berechnung via EconomySystem
+        const region = getCurrentRegion();
+        const priceModifier = getPriceModifierForNPC(npc);
+
+        let itemsHTML = '';
+        inventory.forEach(itemId => {
+            const ecoGood = window.EconomySystem?.GOODS?.[itemId];
+            let name = itemId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            let icon = '📦';
+            let price = 50;
+
+            if (ecoGood) {
+                name = ecoGood.name;
+                icon = ecoGood.icon;
+                price = window.EconomySystem.getPrice(itemId, region, true);
+            }
+            price = Math.round(price * priceModifier);
+
+            itemsHTML += `
+                <div style="display:flex;justify-content:space-between;align-items:center;
+                    background:rgba(255,255,255,0.05);border:1px solid rgba(255,215,0,0.2);
+                    border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;
+                    transition:border-color 0.2s;"
+                    onmouseover="this.style.borderColor='#FFD700'"
+                    onmouseout="this.style.borderColor='rgba(255,215,0,0.2)'">
+                    <div>
+                        <span style="font-size:20px;margin-right:8px;">${icon}</span>
+                        <strong>${name}</strong>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="color:#FFD700;font-weight:bold;font-size:16px;">${price}g</span>
+                        <button onclick="OverworldNPCs._buyItem('${itemId}','${npc.id}',${price})" style="
+                            background:#4CAF50;color:#fff;border:none;
+                            padding:8px 15px;border-radius:5px;cursor:pointer;font-size:13px;">
+                            Kaufen
+                        </button>
+                    </div>
+                </div>`;
+        });
+
+        panel.innerHTML = `
+            <h2 style="color:#FFD700;margin:0 0 5px;text-align:center">🏪 ${shopName}</h2>
+            <p style="color:#888;text-align:center;margin:0 0 15px;font-size:12px;">${shopType.toUpperCase()} | ${region}</p>
+            ${priceModifier !== 1.0 ? `<p style="color:${priceModifier < 1 ? '#2ecc71' : '#e74c3c'};text-align:center;font-size:12px;margin:0 0 15px;">
+                Preismodifikator: ${Math.round(priceModifier * 100)}% (Reputation)
+            </p>` : ''}
+            <div>${itemsHTML}</div>
+            <button onclick="document.getElementById('shop-ui-overlay').remove()" style="
+                width:100%;margin-top:15px;background:#555;color:#fff;border:none;
+                padding:12px;border-radius:10px;cursor:pointer;font-size:14px;">
+                Verlassen
+            </button>
+        `;
+
+        overlay.appendChild(panel);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+    }
+
+    function handleBuyItem(itemId, npcId, price) {
+        const region = getCurrentRegion();
+        let result = null;
+
+        if (window.EconomySystem) {
+            result = EconomySystem.buyGood(itemId, region, 1);
+        } else {
+            result = { success: true, totalCost: price };
+        }
+
+        if (result.success) {
+            showNotification(`🛒 ${itemId.replace(/_/g,' ')} gekauft! (-${result.totalCost || price}g)`, 'success');
+            if (window.GameEvents) {
+                GameEvents.emit('itemPurchased', { itemId, price: result.totalCost || price, npcId, region });
+            }
+        } else if (result.caught) {
+            showNotification(`🚨 ${result.reason}`, 'error');
+        } else {
+            showNotification(`❌ ${result.reason || 'Kauf fehlgeschlagen'}`, 'error');
+        }
+
+        const overlay = document.getElementById('shop-ui-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    function getCurrentRegion() {
+        if (window.WorldEventGenerator?.getCurrentBiome) {
+            return WorldEventGenerator.getCurrentBiome();
+        }
+        return 'goetterfels';
+    }
+
+    function getPriceModifierForNPC(npc) {
+        let modifier = 1.0;
+        // Faction reputation modifier
+        if (window.FactionSystem && npc.faction) {
+            const factionMod = FactionSystem.getPriceModifier(npc.faction);
+            if (factionMod !== Infinity) modifier = factionMod;
+        }
+        // Personality/relationship discount (-0.25 to +0.20)
+        if (window.NPCPersonalitySystem) {
+            const personalityDiscount = NPCPersonalitySystem.getShopDiscount(npc.id);
+            if (personalityDiscount) modifier += personalityDiscount;
+        }
+        return Math.max(0.5, modifier); // Min 50% price
+    }
+
+    // ==========================================
+    // INN UI - Schlafen, Essen, Heilen
+    // ==========================================
+
+    function openInnUI(npc) {
+        let overlay = document.getElementById('inn-ui-overlay');
+        if (overlay) overlay.remove();
+
+        overlay = document.createElement('div');
+        overlay.id = 'inn-ui-overlay';
+        overlay.style.cssText = `
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.8); z-index:15000;
+            display:flex; align-items:center; justify-content:center;
+        `;
+
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background:linear-gradient(135deg,#1a1a2e,#2d1b3d);
+            border:3px solid #e67e22; border-radius:15px;
+            padding:25px; max-width:450px; width:90%; color:#fff;
+            font-family:'Segoe UI',Arial,sans-serif;
+        `;
+
+        const innName = npc.name || 'Gasthaus';
+        panel.innerHTML = `
+            <h2 style="color:#e67e22;margin:0 0 20px;text-align:center">🍺 ${innName}</h2>
+            <p style="color:#ccc;text-align:center;margin-bottom:20px">"Willkommen, Reisender! Was darf es sein?"</p>
+
+            <div style="display:grid;gap:10px;">
+                <button onclick="OverworldNPCs._innAction('sleep','${npc.id}')" style="
+                    background:linear-gradient(135deg,#2c3e50,#3498db);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    🛏️ <strong>Schlafen</strong> - Voll heilen, Energie + Stamina auffüllen
+                    <br><small style="color:#aaa">Kostet 50 Gold</small>
+                </button>
+                <button onclick="OverworldNPCs._innAction('eat','${npc.id}')" style="
+                    background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    🍖 <strong>Essen</strong> - Hunger stillen, +30% HP Regen
+                    <br><small style="color:#aaa">Kostet 20 Gold</small>
+                </button>
+                <button onclick="OverworldNPCs._innAction('drink','${npc.id}')" style="
+                    background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    🍺 <strong>Trinken</strong> - Durst stillen, +10% Mana Regen
+                    <br><small style="color:#aaa">Kostet 10 Gold</small>
+                </button>
+                <button onclick="document.getElementById('inn-ui-overlay').remove()" style="
+                    background:#555;color:#fff;border:none;padding:12px;border-radius:10px;
+                    cursor:pointer;font-size:14px;margin-top:5px;">
+                    Verlassen
+                </button>
+            </div>
+        `;
+
+        overlay.appendChild(panel);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+    }
+
+    function handleInnAction(action, npcId) {
+        const overlay = document.getElementById('inn-ui-overlay');
+
+        if (action === 'sleep') {
+            // Voll heilen via Survival System
+            if (window.SurvivalSystem) {
+                window.SurvivalSystem.setNeed('energy', 100);
+                window.SurvivalSystem.setNeed('hunger', 80);
+                window.SurvivalSystem.setNeed('thirst', 80);
+            }
+            if (window.GameEvents) window.GameEvents.emit('playerRested', { type: 'inn', quality: 'full' });
+            showNotification('🛏️ Ausgeruht! Voll geheilt!', 'success');
+        } else if (action === 'eat') {
+            if (window.SurvivalSystem) window.SurvivalSystem.setNeed('hunger', 100);
+            if (window.GameEvents) window.GameEvents.emit('playerAte', { type: 'inn_meal' });
+            showNotification('🍖 Satt! +30% HP Regen!', 'success');
+        } else if (action === 'drink') {
+            if (window.SurvivalSystem) window.SurvivalSystem.setNeed('thirst', 100);
+            if (window.GameEvents) window.GameEvents.emit('playerDrank', { type: 'inn_drink' });
+            showNotification('🍺 Erfrischt! +10% Mana Regen!', 'success');
+        }
+
+        if (overlay) overlay.remove();
+    }
+
+    // ==========================================
+    // FORGE UI - Waffen upgraden, reparieren
+    // ==========================================
+
+    function openForgeUI(npc) {
+        let overlay = document.getElementById('forge-ui-overlay');
+        if (overlay) overlay.remove();
+
+        overlay = document.createElement('div');
+        overlay.id = 'forge-ui-overlay';
+        overlay.style.cssText = `
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.8); z-index:15000;
+            display:flex; align-items:center; justify-content:center;
+        `;
+
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background:linear-gradient(135deg,#1a1a2e,#3d1b1b);
+            border:3px solid #e74c3c; border-radius:15px;
+            padding:25px; max-width:450px; width:90%; color:#fff;
+            font-family:'Segoe UI',Arial,sans-serif;
+        `;
+
+        const forgeName = npc.name || 'Schmiede';
+        panel.innerHTML = `
+            <h2 style="color:#e74c3c;margin:0 0 20px;text-align:center">🔨 ${forgeName}</h2>
+            <p style="color:#ccc;text-align:center;margin-bottom:20px">"Feuer und Stahl, das ist meine Sprache!"</p>
+
+            <div style="display:grid;gap:10px;">
+                <button onclick="OverworldNPCs._forgeAction('upgrade','${npc.id}')" style="
+                    background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    ⬆️ <strong>Waffe verbessern</strong> - +10% Schaden
+                    <br><small style="color:#ffaaaa">Kostet 100 Gold + 5 Eisenbarren</small>
+                </button>
+                <button onclick="OverworldNPCs._forgeAction('repair','${npc.id}')" style="
+                    background:linear-gradient(135deg,#d35400,#e67e22);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    🔧 <strong>Reparieren</strong> - Haltbarkeit wiederherstellen
+                    <br><small style="color:#ffddaa">Kostet 30 Gold</small>
+                </button>
+                <button onclick="OverworldNPCs._forgeAction('infuse','${npc.id}')" style="
+                    background:linear-gradient(135deg,#2980b9,#3498db);color:#fff;border:none;
+                    padding:15px;border-radius:10px;cursor:pointer;font-size:15px;text-align:left;">
+                    🔮 <strong>Element-Infusion</strong> - Dauerhaftes Element auf Waffe
+                    <br><small style="color:#aaddff">Kostet 200 Gold + Elementar-Essenz</small>
+                </button>
+                <button onclick="document.getElementById('forge-ui-overlay').remove()" style="
+                    background:#555;color:#fff;border:none;padding:12px;border-radius:10px;
+                    cursor:pointer;font-size:14px;margin-top:5px;">
+                    Verlassen
+                </button>
+            </div>
+        `;
+
+        overlay.appendChild(panel);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        document.body.appendChild(overlay);
+    }
+
+    function handleForgeAction(action, npcId) {
+        const overlay = document.getElementById('forge-ui-overlay');
+
+        if (action === 'upgrade') {
+            if (window.GameEvents) window.GameEvents.emit('weaponUpgraded', { npcId });
+            showNotification('⬆️ Waffe verbessert! +10% Schaden!', 'success');
+        } else if (action === 'repair') {
+            if (window.GameEvents) window.GameEvents.emit('weaponRepaired', { npcId });
+            showNotification('🔧 Waffe repariert!', 'success');
+        } else if (action === 'infuse') {
+            if (window.GameEvents) window.GameEvents.emit('weaponInfused', { npcId });
+            showNotification('🔮 Element-Infusion aufgebracht!', 'success');
+        }
+
+        if (overlay) overlay.remove();
+    }
+
+    function showNotification(text, type) {
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+            position:fixed; top:80px; right:20px; z-index:20000;
+            background:${type === 'success' ? 'rgba(0,150,0,0.95)' : 'rgba(150,0,0,0.95)'};
+            color:#fff; padding:15px 25px; border-radius:10px;
+            border:2px solid ${type === 'success' ? '#00ff00' : '#ff4444'};
+            font-family:Arial; font-size:15px; font-weight:bold;
+            box-shadow:0 5px 20px rgba(0,0,0,0.5);
+        `;
+        notif.textContent = text;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
     }
 
     function handleDialogOption(npcId, action) {
@@ -437,11 +806,8 @@ const OverworldNPCs = (function() {
 
         switch(action) {
             case 'open_shop':
-                if (window.npcDialogueSystem) {
-                    window.npcDialogueSystem.openShop(npcId, npc);
-                } else {
-                    console.log(`🛒 Shop öffnen für ${npc.name} (${npc.shopType})`);
-                }
+                // Immer das neue integrierte Shop-UI verwenden (mit Economy-Preisen)
+                openShopUI(npc);
                 break;
             case 'show_quests':
                 if (window.questManager) {
@@ -490,6 +856,69 @@ const OverworldNPCs = (function() {
     });
 
     // ==========================================
+    // HOSTILE NPC COMBAT
+    // ==========================================
+
+    function startHostileNPCCombat(npc) {
+        // Build enemy data from NPC
+        const npcLevel = npc.level || 5;
+        const npcHp = npc.hp || (100 + npcLevel * 20);
+        const enemyData = {
+            id: npc.id,
+            name: npc.name,
+            level: npcLevel,
+            hp: npcHp,
+            maxHp: npcHp,
+            type: npc.model || npc.id,
+            faction: npc.faction || null
+        };
+
+        // Emit combatStarted
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatStarted', {
+                type: 'npc_hostile',
+                npcId: npc.id,
+                npcFaction: npc.faction,
+                enemies: [enemyData]
+            });
+        }
+
+        // Try Real3DCombat first
+        if (window.Real3DCombat && window.Real3DCombat.startCombat) {
+            const scene = window.Scene3D?.scene || state.scene;
+            const pos = npc.mesh ? npc.mesh.position : { x: 0, y: 0, z: -10 };
+            window.Real3DCombat.startCombat([enemyData], scene, pos);
+        }
+        // Fallback to CombatSystem
+        else if (window.CombatSystem && window.CombatSystem.startCombat) {
+            window.CombatSystem.startCombat({ enemy: enemyData, mode: 'MANUAL' });
+        }
+        // Last resort: notify
+        else {
+            if (typeof notify === 'function') {
+                notify(`⚔️ ${npc.name} greift an! (Kampfsystem lädt...)`, 'warning');
+            }
+        }
+
+        // Temporarily hide NPC during combat
+        if (npc.mesh) npc.mesh.visible = false;
+
+        // Restore NPC after combat ends (win or lose)
+        const restoreNPC = () => {
+            setTimeout(() => {
+                if (npc.mesh) npc.mesh.visible = true;
+                npc.isInteracting = false;
+            }, 3000);
+        };
+
+        if (window.GameEvents) {
+            window.GameEvents.once('combatEnded', restoreNPC);
+        } else {
+            setTimeout(restoreNPC, 10000);
+        }
+    }
+
+    // ==========================================
     // PUBLIC API
     // ==========================================
 
@@ -497,6 +926,12 @@ const OverworldNPCs = (function() {
         init,
         interactWithNearestNPC,
         handleDialogOption,
+        _innAction: handleInnAction,
+        _forgeAction: handleForgeAction,
+        _buyItem: handleBuyItem,
+        openInnUI,
+        openForgeUI,
+        openShopUI,
         getNPCs: () => state.spawnedNPCs,
         getNearestNPC: () => state.nearestInteractableNPC
     };

@@ -578,7 +578,7 @@
                     Math.pow(characterGroup.position.z - obj.position.z, 2)
                 );
 
-                if (dist < obj.userData.buildingRadius + 30 && dist < minDist) {
+                if (dist < obj.userData.buildingRadius + 3 && dist < minDist) {
                     closestBuilding = obj;
                     minDist = dist;
                 }
@@ -2850,6 +2850,12 @@
         // 🆕 Crafted Dungeon System
         placeDungeonEntrance,
         restoreCraftedDungeons
+    };
+
+    // Global getScene() für Combat/Arena Systeme (overworld_enemies, nemesis_arena)
+    // Fallback auf window.scene (von index.html erstellt) falls IIFE-Scene nicht initialisiert
+    window.getScene = function() {
+        return scene || window.scene || null;
     };
 
     // ⚠️ WICHTIG: bootWhenReady() ist für UNIFIED.html DEAKTIVIERT!

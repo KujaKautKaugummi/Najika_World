@@ -9,7 +9,7 @@ class HousingUI {
             housing: 'http://localhost:8000/api/housing',
             farming: 'http://localhost:8000/api/farming'
         };
-        this.playerId = 1;
+        this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
         this.currentHouse = null;
         this.furnitureCatalog = [];
         this.farmPlots = [];
@@ -221,7 +221,7 @@ class HousingUI {
 
     async placeFurniture(furnitureType) {
         if (this.currentHouse.furniture.length >= this.currentHouse.max_furniture) {
-            alert('House is full! Upgrade to place more furniture.');
+            if (typeof notify === 'function') notify('🏠 House is full! Upgrade to place more furniture.', 'warning'); else console.warn('House full');
             return;
         }
 
@@ -242,12 +242,12 @@ class HousingUI {
 
             const data = await response.json();
             if (data.success) {
-                alert(`✅ ${furnitureType} placed!`);
+                if (typeof notify === 'function') notify(`✅ ${furnitureType} placed!`, 'success');
                 await this.loadHouseData();
             }
         } catch (error) {
             console.error('Error placing furniture:', error);
-            alert('Failed to place furniture');
+            if (typeof notify === 'function') notify('Failed to place furniture', 'error');
         }
     }
 
@@ -264,7 +264,7 @@ class HousingUI {
 
             const data = await response.json();
             if (data.success) {
-                alert(`✅ Furniture removed!`);
+                if (typeof notify === 'function') notify('✅ Furniture removed!', 'success');
                 await this.loadHouseData();
             }
         } catch (error) {
@@ -274,26 +274,24 @@ class HousingUI {
 
     async upgradeHouse() {
         if (this.currentHouse.level >= 10) {
-            alert('House is already at max level!');
+            if (typeof notify === 'function') notify('🏠 House is already at max level!', 'info');
             return;
         }
 
-        if (confirm(`Upgrade house to level ${this.currentHouse.level + 1}?`)) {
-            try {
-                const response = await fetch(`${this.apiBase.housing}/upgrade`, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({player_id: this.playerId})
-                });
+        try {
+            const response = await fetch(`${this.apiBase.housing}/upgrade`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({player_id: this.playerId})
+            });
 
-                const data = await response.json();
-                if (data.success) {
-                    alert(`✅ House upgraded to level ${data.level}! Max furniture: ${data.max_furniture}`);
-                    await this.loadHouseData();
-                }
-            } catch (error) {
-                console.error('Error upgrading house:', error);
+            const data = await response.json();
+            if (data.success) {
+                if (typeof notify === 'function') notify(`✅ House upgraded to level ${data.level}! Max furniture: ${data.max_furniture}`, 'success');
+                await this.loadHouseData();
             }
+        } catch (error) {
+            console.error('Error upgrading house:', error);
         }
     }
 
@@ -399,7 +397,7 @@ class HousingUI {
         const cropType = select.value;
 
         if (!cropType) {
-            alert('Please select a crop!');
+            if (typeof notify === 'function') notify('🌱 Please select a crop!', 'warning');
             return;
         }
 
@@ -416,7 +414,7 @@ class HousingUI {
 
             const data = await response.json();
             if (data.success) {
-                alert(`✅ Planted ${cropType}!`);
+                if (typeof notify === 'function') notify(`✅ Planted ${cropType}!`, 'success');
                 await this.loadFarmData();
             }
         } catch (error) {
@@ -433,9 +431,9 @@ class HousingUI {
             const data = await response.json();
             if (data.success) {
                 if (data.ready_to_harvest) {
-                    alert(`✅ Crop is ready to harvest!`);
+                    if (typeof notify === 'function') notify('✅ Crop is ready to harvest!', 'success');
                 } else {
-                    alert(`💧 Watered! Growth stage: ${data.growth_stage}/4`);
+                    if (typeof notify === 'function') notify(`💧 Watered! Growth stage: ${data.growth_stage}/4`, 'info');
                 }
                 await this.loadFarmData();
             }
@@ -457,7 +455,7 @@ class HousingUI {
 
             const data = await response.json();
             if (data.success) {
-                alert(`✅ Harvested ${data.quantity}x ${data.crop}! Earned ${data.gold_earned} gold!`);
+                if (typeof notify === 'function') notify(`✅ Harvested ${data.quantity}x ${data.crop}! Earned ${data.gold_earned} gold!`, 'success');
                 await this.loadFarmData();
             }
         } catch (error) {

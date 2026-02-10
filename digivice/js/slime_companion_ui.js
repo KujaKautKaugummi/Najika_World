@@ -1220,22 +1220,24 @@ class SlimeCompanionUI {
     }
 
     async rename() {
-        const newName = prompt('Neuer Name:', this.activeSlime?.name || '');
-        if (!newName || !newName.trim()) return;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('🐾 Neuer Name:', this.activeSlime?.name || '', async (newName) => {
+            if (!newName || !newName.trim()) return;
 
-        try {
-            const response = await fetch('/api/slime/rename', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: newName.trim() })
-            });
+            try {
+                const response = await fetch('/api/slime/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: newName.trim() })
+                });
 
-            const data = await response.json();
-            this.showMessage(data.message || 'Umbenannt!');
-            await this.refreshSlimes();
-        } catch (error) {
-            this.showMessage('Fehler beim Umbenennen');
-        }
+                const data = await response.json();
+                this.showMessage(data.message || 'Umbenannt!');
+                await this.refreshSlimes();
+            } catch (error) {
+                this.showMessage('Fehler beim Umbenennen');
+            }
+        });
     }
 
     async activate(slimeId) {

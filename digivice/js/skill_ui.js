@@ -460,7 +460,7 @@ class SkillUI {
             const skill = this.skillSystem.learnedSkills[skillId];
             this.showSkillDetail(skillData, skill);
         } else {
-            alert('⚠️ Alle Skill-Slots belegt! (Max 4)');
+            if (typeof notify === 'function') notify('⚠️ Alle Skill-Slots belegt! (Max 4)', 'warning');
         }
     }
 

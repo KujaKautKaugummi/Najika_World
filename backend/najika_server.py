@@ -361,7 +361,7 @@ load_dotenv()
 # Project Root Directory (dynamisch für alle Systeme)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-HOST=os.getenv("HOST","0.0.0.0"); PORT=int(os.getenv("PORT","8000"))
+HOST=os.getenv("HOST","127.0.0.1"); PORT=int(os.getenv("PORT","8000"))
 AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
 CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
 CLOUD_PIN=os.getenv("CLOUD_PIN","")
@@ -5824,7 +5824,12 @@ class Handler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(result).encode()); return
         # ===== NAJIKA PROGRAMMIER-INTERFACE APIs =====
         if self.path=="/api/code/execute":
-            # Führt Python-Code aus (mit verbesserter Sicherheits-Sandbox)
+            # SECURITY: Nur Owner (127.0.0.1) darf Code ausfuehren!
+            client_ip = self.client_address[0] if self.client_address else ""
+            if client_ip not in ("127.0.0.1", "::1", "localhost"):
+                log("ERROR", f"BLOCKED code/execute from non-local IP: {client_ip}", "SECURITY")
+                self.send_response(403); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "error": "Nur lokal erlaubt (Gebot 1)"}).encode()); return
             try:
                 body_str = body.decode("utf-8")
             except UnicodeDecodeError:
@@ -5915,11 +5920,11 @@ class Handler(SimpleHTTPRequestHandler):
             data = json.loads(body_str)
             filepath = data.get("path", "")
 
-            # Sicherheit: Nur Dateien im NajikaCore-Ordner erlauben
-            base_dir = os.path.dirname(__file__)
-            full_path = os.path.join(base_dir, filepath)
+            # Sicherheit: Nur Dateien im NajikaCore-Ordner + Path Traversal Fix
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            full_path = os.path.normpath(os.path.join(base_dir, filepath))
 
-            if not full_path.startswith(base_dir):
+            if not full_path.startswith(base_dir) or '..' in filepath:
                 result = {"success": False, "error": "Zugriff verweigert", "content": ""}
             else:
                 try:
@@ -5942,11 +5947,11 @@ class Handler(SimpleHTTPRequestHandler):
             filepath = data.get("path", "")
             content = data.get("content", "")
 
-            # Sicherheit: Nur Dateien im NajikaCore-Ordner erlauben
-            base_dir = os.path.dirname(__file__)
-            full_path = os.path.join(base_dir, filepath)
+            # Sicherheit: Nur Dateien im NajikaCore-Ordner + Path Traversal Fix
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            full_path = os.path.normpath(os.path.join(base_dir, filepath))
 
-            if not full_path.startswith(base_dir):
+            if not full_path.startswith(base_dir) or '..' in filepath:
                 result = {"success": False, "error": "Zugriff verweigert"}
             else:
                 try:

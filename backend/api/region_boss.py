@@ -230,6 +230,37 @@ async def get_all_regions(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/ultimate")
+async def get_ultimate_ruler(db: Session = Depends(get_db)):
+    """
+    Get Ultimate Ruler (Frontend: game_systems_ui.js RegionBossUI.loadUltimateRuler)
+
+    Returns the player who controls the most regions.
+    """
+    try:
+        regions = db.query(RegionBoss).filter(RegionBoss.conquered_by != None).all()
+        if not regions:
+            return {"ultimate_ruler": None, "message": "Keine Regionen erobert"}
+
+        # Count regions per player
+        player_regions = {}
+        for r in regions:
+            pid = r.conquered_by
+            player_regions[pid] = player_regions.get(pid, 0) + 1
+
+        # Find player with most regions
+        top_player = max(player_regions, key=player_regions.get)
+        return {
+            "ultimate_ruler": {
+                "player_id": top_player,
+                "regions_controlled": player_regions[top_player],
+                "total_regions": len(regions)
+            }
+        }
+    except Exception as e:
+        return {"ultimate_ruler": None, "message": "Fehler beim Laden"}
+
+
 @router.post("/tax/set")
 async def set_tax_rate(request: SetTaxRateRequest, db: Session = Depends(get_db)):
     """

@@ -444,10 +444,9 @@ const HousingSystem = (function() {
             selectFurniture(furnitureType);
         } else {
             // Kaufen
-            if (confirm(`${furniture.name} für ${furniture.price}G kaufen?`)) {
-                if (buyFurniture(furnitureType)) {
-                    selectFurniture(furnitureType);
-                }
+            if (buyFurniture(furnitureType)) {
+                if (typeof notify === 'function') notify(`🛋️ ${furniture.name} für ${furniture.price}G gekauft!`, 'success');
+                selectFurniture(furnitureType);
             }
         }
     }

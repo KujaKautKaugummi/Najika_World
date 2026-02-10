@@ -48,6 +48,9 @@
             const cs = window.CareerSystem;
             if (cs?.joinCareer) {
                 cs.joinCareer(id);
+                if (window.GameEvents) {
+                    window.GameEvents.emit('careerJoined', { careerId: id });
+                }
                 this.render();
             }
         }

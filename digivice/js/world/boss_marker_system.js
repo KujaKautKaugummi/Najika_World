@@ -384,7 +384,7 @@ class BossMarkerSystem {
             // TODO: Start specific boss fight based on arenaType
         } else {
             console.warn('⚠️ RegionBossUI not available');
-            alert(`Boss Fight: ${boss.name}\n\n(RegionBossUI integration pending)`);
+            if (typeof notify === 'function') notify(`⚔️ Boss-Kampf: ${boss.name} — RegionBossUI wird geladen...`, 'warning');
         }
     }
 

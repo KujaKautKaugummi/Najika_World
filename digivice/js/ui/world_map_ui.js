@@ -7,7 +7,7 @@
 class WorldMapUI {
     constructor() {
         this.apiBase = 'http://localhost:8000/api/world-map';
-        this.playerId = 1; // TODO: Get from session
+        this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
 
         // Map state
         this.worldData = null;
@@ -477,7 +477,7 @@ class WorldMapUI {
 
     async fastTravel(point) {
         if (point.is_locked) {
-            alert(`🔒 This travel point is locked!\n\nRequirement: ${point.unlock_requirement}`);
+            if (typeof notify === 'function') notify(`🔒 Gesperrt! Voraussetzung: ${point.unlock_requirement}`, 'warning');
             return;
         }
 
@@ -494,16 +494,16 @@ class WorldMapUI {
             const result = await response.json();
 
             if (result.success) {
-                alert(`✅ Fast Travel Success!\n\nTraveled to: ${result.travel_point.name}\nRegion: ${result.region.name}`);
+                if (typeof notify === 'function') notify(`✅ Reise nach ${result.travel_point.name} (${result.region.name})`, 'success');
                 await this.loadPlayerPosition();
                 this.render();
                 this.updatePlayerInfoDisplay();
             } else {
-                alert('❌ Fast travel failed!');
+                if (typeof notify === 'function') notify('❌ Schnellreise fehlgeschlagen!', 'error');
             }
         } catch (error) {
             console.error('❌ Fast travel error:', error);
-            alert('❌ Fast travel failed!');
+            if (typeof notify === 'function') notify('❌ Schnellreise fehlgeschlagen!', 'error');
         }
     }
 

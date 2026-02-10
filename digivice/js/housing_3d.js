@@ -143,7 +143,7 @@
 
     // === PUBLIC API ===
 
-    function init(threeScene, playerId = 1) {
+    function init(threeScene, playerId = ((typeof getPlayerId === 'function') ? getPlayerId() : 1)) {
         scene = threeScene;
         currentPlayerId = playerId;
         console.log('🏠 Housing System 3D initialized');

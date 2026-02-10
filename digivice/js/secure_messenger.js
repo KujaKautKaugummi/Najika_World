@@ -345,7 +345,13 @@ const SecureMessenger = {
     },
 
     clearHistory() {
-        if (!confirm('Chat-Verlauf löschen?')) return;
+        if (!this._clearConfirmPending) {
+            this._clearConfirmPending = true;
+            if (typeof notify === 'function') notify('⚠️ Nochmal klicken um den Verlauf zu löschen!', 'warning');
+            setTimeout(() => { this._clearConfirmPending = false; }, 3000);
+            return;
+        }
+        this._clearConfirmPending = false;
 
         this.chatHistory = [];
         const chatArea = document.getElementById('messengerChatArea');

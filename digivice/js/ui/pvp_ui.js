@@ -252,17 +252,22 @@ class PvPUI {
   }
 
   async refuseMercy() {
-    // Player accepts permadeath
-    const confirmed = confirm('⚠️ Du wirst PERMANENT sterben! Bist du sicher?');
-
-    if (confirmed) {
+    // Player accepts permadeath - Double-click Bestätigung
+    if (!this._permadeathConfirm) {
+        this._permadeathConfirm = true;
+        if (typeof notify === 'function') notify('⚠️ PERMANENT STERBEN! Nochmal klicken zum Bestätigen!', 'error');
+        setTimeout(() => { this._permadeathConfirm = false; }, 5000);
+        return;
+    }
+    this._permadeathConfirm = false;
+    {
       try {
         const response = await fetch(`${this.apiBase}/mercy/decide`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             battle_id: this.currentBattle,
-            player_id: 1, // TODO: Get from game state
+            player_id: (typeof getPlayerId === 'function') ? getPlayerId() : 1,
             accept_mercy: false,
             player_inventory: []
           })
@@ -316,7 +321,7 @@ class PvPUI {
     const step = parseInt(document.getElementById('confirm-step').textContent);
 
     if (input.value.toUpperCase() !== 'JA') {
-      alert('❌ Du musst "JA" tippen!');
+      if (typeof notify === 'function') notify('❌ Du musst "JA" tippen!', 'error');
       return;
     }
 
@@ -334,7 +339,7 @@ class PvPUI {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             battle_id: this.currentBattle,
-            player_id: 1, // TODO: Get from game state
+            player_id: (typeof getPlayerId === 'function') ? getPlayerId() : 1,
             accept_mercy: true,
             player_inventory: this.playerInventory
           })
@@ -387,8 +392,11 @@ class PvPUI {
   }
 
   showPermadeath() {
-    alert('💀 Du bist gestorben. Character permanent verloren.');
-    // TODO: Handle character deletion
+    if (typeof notify === 'function') notify('💀 Du bist gestorben. Character permanent verloren.', 'error');
+    // Permadeath-Overlay anzeigen
+    if (window.SurvivalSystem?.handleDeath) {
+        window.SurvivalSystem.handleDeath('permadeath');
+    }
   }
 
   showBattleResult(winner, mode, itemsWon = []) {

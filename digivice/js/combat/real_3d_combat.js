@@ -654,8 +654,14 @@
     }
 
     function addXP(amount) {
-        // TODO: Connect to skill system
         console.log(`+${amount} XP`);
+        if (window.GameEvents) {
+            window.GameEvents.emit('xpGained', { amount, source: 'combat' });
+        }
+        // Connect to skill system
+        if (window.skillSystem && window.skillSystem.addXP) {
+            window.skillSystem.addXP('combat', amount);
+        }
     }
 
     // ==========================================
@@ -691,6 +697,15 @@
         startCombatLoop();
 
         console.log(`⚔️ Combat started: ${enemyList.length} enemies! Mode: ${combatMode}`);
+
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatStarted', {
+                type: 'real3d',
+                enemyCount: currentEnemies.length,
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+            });
+        }
     }
 
     function attackNearestEnemy(damage, range = 5, hand = 'right', isHeavy = false) {
@@ -956,6 +971,17 @@
         addLootToInventory(collectedLoot);
 
         removeCombatHUD();
+
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatEnded', {
+                type: 'real3d',
+                result: 'victory',
+                xp: totalXPEarned,
+                loot: collectedLoot,
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+            });
+        }
     }
 
     function gameOver() {
@@ -980,11 +1006,21 @@
             window.onCombatDefeat({ type: 'real3d' });
         }
 
-        // Respawn with half HP
+        // Show defeat overlay, then respawn
+        showDefeatScreen();
+
+        // Emit GameEvent
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatEnded', {
+                type: 'real3d',
+                result: 'defeat',
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+            });
+        }
+
         setTimeout(() => {
             playerStats.hp = Math.floor(playerStats.maxHp / 2);
             removeCombatHUD();
-            // Clean up damage numbers
             damageNumbers.forEach(dn => dn.element?.remove());
             damageNumbers = [];
         }, 2000);
@@ -1129,11 +1165,24 @@
             </div>
         `;
 
-        document.getElementById('exit-real-combat')?.addEventListener('click', () => {
-            if (confirm('Kampf beenden?')) {
-                endCombat();
-            }
-        });
+        const exitBtn = document.getElementById('exit-real-combat');
+        if (exitBtn) {
+            exitBtn._confirmPending = false;
+            exitBtn.addEventListener('click', () => {
+                if (!exitBtn._confirmPending) {
+                    exitBtn._confirmPending = true;
+                    exitBtn.textContent = '⚠️ Sicher?';
+                    exitBtn.style.background = '#c0392b';
+                    setTimeout(() => {
+                        exitBtn._confirmPending = false;
+                        exitBtn.textContent = '🚪 Exit';
+                        exitBtn.style.background = '';
+                    }, 3000);
+                } else {
+                    endCombat();
+                }
+            });
+        }
     }
 
     function removeCombatHUD() {
@@ -1826,6 +1875,40 @@
 
         // Auto-close after 8 seconds
         setTimeout(() => overlay.remove(), 8000);
+    }
+
+    function showDefeatScreen() {
+        const overlay = document.createElement('div');
+        overlay.id = 'defeat-screen';
+        overlay.style.cssText = `
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(80, 0, 0, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000; font-family: monospace;
+            animation: fadeIn 0.5s;
+        `;
+
+        overlay.innerHTML = `
+            <div style="background: rgba(40, 0, 0, 0.95); border: 2px solid #ff4444; border-radius: 12px;
+                        padding: 30px; min-width: 320px; max-width: 420px; text-align: center;">
+                <div style="color: #ff4444; font-size: 28px; font-weight: bold; margin-bottom: 12px;">
+                    💀 BESIEGT! 💀
+                </div>
+                <div style="color: #cc8888; font-size: 14px; margin-bottom: 20px;">
+                    Du wurdest im Kampf niedergestreckt...
+                </div>
+                <div style="color: #ffaa00; font-size: 13px; margin-bottom: 16px;">
+                    Wiederbelebung mit halber Gesundheit
+                </div>
+                <div style="color: #666; font-size: 11px;">Klicke zum Fortfahren</div>
+            </div>
+        `;
+
+        overlay.addEventListener('click', () => overlay.remove());
+        document.body.appendChild(overlay);
+
+        // Auto-close after 5 seconds
+        setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 5000);
     }
 
     function formatLootName(itemId) {

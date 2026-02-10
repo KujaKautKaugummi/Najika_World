@@ -84,7 +84,7 @@ class CheerType(str, Enum):
 # ===== REQUEST MODELS =====
 
 class StartBattleRequest(BaseModel):
-    player_id: str
+    player_id: str = "player1"
     arena_type: ArenaType = ArenaType.GAME_WORLD
     arena_mode: ArenaMode = ArenaMode.NORMAL
     companion_form: CompanionForm = CompanionForm.KOERPERLICH
@@ -95,50 +95,50 @@ class StartBattleRequest(BaseModel):
 
 class PlayerActionRequest(BaseModel):
     """Spieler-Aktion (Spieler ist IMMER manual)"""
-    player_id: str
-    action: str  # attack, defend, skill, item, flee
+    player_id: str = "player1"
+    action: str = "attack"  # attack, defend, skill, item, flee
     target_index: int = 0
     skill_name: Optional[str] = None
     item_name: Optional[str] = None
 
 class CompanionActionRequest(BaseModel):
     """Manuelle Companion-Aktion (wenn MANUAL mode)"""
-    player_id: str
-    action: str
+    player_id: str = "player1"
+    action: str = "attack"
     target_index: int = 0
     skill_name: Optional[str] = None
 
 class SlimeControlRequest(BaseModel):
     """Slime-Arena: Spieler kontrolliert Slime direkt"""
-    player_id: str
-    slime_id: str
-    action: str
+    player_id: str = "player1"
+    slime_id: str = "slime1"
+    action: str = "attack"
     target_index: int = 0
     skill_name: Optional[str] = None
 
 class CheerRequest(BaseModel):
-    player_id: str
-    cheer_type: CheerType
+    player_id: str = "player1"
+    cheer_type: CheerType = CheerType.ATTACK
 
 class SetModeRequest(BaseModel):
-    player_id: str
-    companion_combat_mode: CombatMode
+    player_id: str = "player1"
+    companion_combat_mode: CombatMode = CombatMode.AUTO
     companion_leads: bool = False
 
 class SetCompanionFormRequest(BaseModel):
-    player_id: str
-    companion_form: CompanionForm
+    player_id: str = "player1"
+    companion_form: CompanionForm = CompanionForm.KOERPERLICH
 
 class ExplainDecisionRequest(BaseModel):
     """Spieler erklärt der KI warum er nicht gefolgt ist"""
-    player_id: str
-    explanation: str
+    player_id: str = "player1"
+    explanation: str = ""
     context_tags: List[str] = []  # z.B. ["village_nearby", "fire_danger"]
 
 
 class FinisherRequest(BaseModel):
     """Finisher-Anfrage (wenn Gegner HP = 0)"""
-    player_id: str
+    player_id: str = "player1"
     words: List[str] = []  # Wörter die der Spieler vorgibt
     category: str = "ehrenvoll"  # ehrenvoll, lustig, grausam, episch
     target_index: int = 0
@@ -603,7 +603,7 @@ async def companion_action(request: CompanionActionRequest):
 
 
 @router.post("/companion-auto-turn")
-async def companion_auto_turn(player_id: str):
+async def companion_auto_turn(player_id: str = "player1"):
     """
     Companion führt AUTO-Zug aus (nur wenn AUTO oder CHEER mode)
     """
@@ -884,6 +884,32 @@ async def end_battle(player_id: str):
         "message": "Kampf beendet!",
         "final_status": final_status,
         "statistics": stats
+    }
+
+
+@router.post("/reset")
+async def reset_battle(player_id: str = "player1"):
+    """Reset/Beende den aktuellen Kampf (Compat für battle_api.js)"""
+    if player_id in battle_manager.battles:
+        battle_manager.remove_battle(player_id)
+    return {"success": True, "message": "Battle reset", "active": False}
+
+
+@router.get("/status")
+async def get_battle_status_default():
+    """Battle-Status ohne player_id (Compat für battle_api.js)"""
+    player_id = "player1"
+    if player_id not in battle_manager.battles:
+        return {"active": False, "message": "Kein aktiver Kampf"}
+    battle_data = battle_manager.battles[player_id]
+    status = battle_data["system"].get_battle_status()
+    return {
+        "active": True,
+        "player": status.get("player"),
+        "enemies": status.get("enemies", []),
+        "wave": battle_data.get("wave", 1),
+        "turn": battle_data["turn_count"],
+        "companion_mode": battle_data["companion_combat_mode"].value
     }
 
 

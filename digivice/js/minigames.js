@@ -1155,7 +1155,7 @@
                     status.innerHTML = '🎉 GEWONNEN! Du hast Najika geschlagen!';
                     updateScore(100);
                 } else if (playerScore < aiScore) {
-                    status.innerHTML = '😈 VERLOREN! Najika lacht: "Besser trainieren, Puddin\'!"';
+                    status.innerHTML = '😈 VERLOREN! Najika lacht: "Besser trainieren, Mr. K!"';
                     updateScore(20);
                 } else {
                     status.innerHTML = '🤝 UNENTSCHIEDEN!';
@@ -1283,7 +1283,7 @@
 
         function roll() {
             if (betAmount > playerGold) {
-                alert('Nicht genug Gold!');
+                if (typeof notify === 'function') notify('💰 Nicht genug Gold!', 'warning');
                 return;
             }
 
@@ -1325,14 +1325,14 @@
             } else if (playerTotal < npcTotal) {
                 playerGold -= betAmount;
                 streak = 0;
-                if (resultEl) resultEl.innerHTML = `😈 VERLOREN! -${betAmount} Gold<br>Najika: "Pech gehabt, Puddin'~"`;
+                if (resultEl) resultEl.innerHTML = `😈 VERLOREN! -${betAmount} Gold<br>Najika: "Pech gehabt, Mr. K~"`;
             } else {
                 if (resultEl) resultEl.innerHTML = '🤝 UNENTSCHIEDEN! Einsatz zurück.';
             }
 
             if (playerGold <= 0) {
                 scheduleTimeout(() => {
-                    alert('💀 Du bist pleite!\nNajika: "Tja, vielleicht beim nächsten Mal~"');
+                    if (typeof notify === 'function') notify('💀 Du bist pleite! Najika: "Tja, vielleicht beim nächsten Mal~"', 'error');
                     close();
                 }, 1500);
             }

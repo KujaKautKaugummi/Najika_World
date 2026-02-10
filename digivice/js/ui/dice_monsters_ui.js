@@ -15,7 +15,7 @@ class DiceMonstersUI {
             duel: 'http://localhost:8000/api/dice-duel'
         };
 
-        this.playerId = 1; // TODO: Get from session
+        this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
         this.currentDuel = null;
         this.selectedDice = [];
 
@@ -472,7 +472,7 @@ class DiceMonstersUI {
             this.showDuelBoard();
         } catch (error) {
             console.error('Failed to start duel:', error);
-            alert('❌ Failed to start duel');
+            if (typeof notify === 'function') notify('❌ Duell konnte nicht gestartet werden', 'error');
         }
     }
 
@@ -1033,7 +1033,7 @@ class DiceMonstersUI {
 
     useSynergy(comboName) {
         this.addLog(`⚡ Used ${comboName}!`);
-        alert(`⚡ Synergy Activated: ${comboName}\n\nEffect applied!`);
+        if (typeof notify === 'function') notify(`⚡ Synergie aktiviert: ${comboName}!`, 'success');
 
         // Remove the combo menu
         document.querySelectorAll('div').forEach(el => {
@@ -1044,8 +1044,39 @@ class DiceMonstersUI {
     }
 
     moveMonster(x, y) {
-        // TODO: Implement monster movement
-        this.addLog(`👹 Monster moved to (${x}, ${y})`);
+        if (!this.gameState || !this.gameState.board) return;
+
+        // Finde das ausgewählte Monster auf dem Board
+        const selectedMonster = this.gameState.selectedMonster;
+        if (!selectedMonster) {
+            this.addLog('⚠️ Kein Monster ausgewählt!');
+            return;
+        }
+
+        // Prüfe ob Zielfeld frei ist
+        if (this.gameState.board[y] && this.gameState.board[y][x]) {
+            this.addLog('⚠️ Feld besetzt!');
+            return;
+        }
+
+        // Prüfe Reichweite (max 2 Felder Manhattan-Distanz)
+        const dist = Math.abs(x - selectedMonster.x) + Math.abs(y - selectedMonster.y);
+        if (dist > 2) {
+            this.addLog('⚠️ Zu weit! (Max 2 Felder)');
+            return;
+        }
+
+        // Bewege Monster
+        if (this.gameState.board[selectedMonster.y]) {
+            this.gameState.board[selectedMonster.y][selectedMonster.x] = null;
+        }
+        if (!this.gameState.board[y]) this.gameState.board[y] = {};
+        this.gameState.board[y][x] = selectedMonster.monster;
+        selectedMonster.x = x;
+        selectedMonster.y = y;
+
+        this.addLog(`👹 ${selectedMonster.monster?.name || 'Monster'} → (${x}, ${y})`);
+        this.gameState.selectedMonster = null;
     }
 
     endTurn() {

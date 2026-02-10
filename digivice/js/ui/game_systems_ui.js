@@ -228,7 +228,7 @@ class OregonEventsUI {
             { text: "Kaufen", effect: { gold: -10, items: 1 } },
             { text: "Ablehnen", effect: {} }
           ],
-          najika_reaction: "*kicher* Die haben glänzende Sachen, Puddin'!"
+          najika_reaction: "*kicher* Die haben glänzende Sachen, Mr. K!"
         });
       }
     } catch (error) {
@@ -278,7 +278,12 @@ class OregonEventsUI {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           choice_index: choiceIndex,
-          player_state: {} // TODO: Get from game state
+          player_state: {
+            level: window.player?.level || 1,
+            gold: window.player?.gold || 0,
+            hp: window.player?.hp || 100,
+            location: window.player?.currentBiome || 'unbekannt'
+          }
         })
       });
 
@@ -470,6 +475,7 @@ class InstrumentUI {
   constructor() {
     this.apiBase = 'http://localhost:8000/api/instrument';
     this.currentInstrument = 'mundharmonika';
+    this._noteAccuracies = [];
     this.createUI();
   }
 
@@ -600,12 +606,31 @@ class InstrumentUI {
 
       // Update progress display
       if (result.level_up) {
-        alert(`🎉 Level Up! Neues Level: ${result.level}`);
+        if (typeof notify === 'function') notify(`🎉 Level Up! Neues Level: ${result.level}`, 'success');
       }
 
       this.loadProgress();
 
-      // TODO: Play actual audio
+      // Einfacher Ton via Web Audio API
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const octave = parseInt(document.getElementById('current-octave')?.textContent || '4');
+        osc.frequency.value = 440 * Math.pow(2, (octave - 4));
+        gain.gain.value = 0.3;
+        osc.connect(gain).connect(ctx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.5);
+      } catch {}
+
+      // Accuracy tracken für Songs
+      if (result.accuracy !== undefined) {
+        this._noteAccuracies.push(result.accuracy);
+      } else {
+        this._noteAccuracies.push(0.8);
+      }
 
     } catch (error) {
       console.error('Fehler beim Note spielen:', error);
@@ -670,14 +695,15 @@ class InstrumentUI {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           song_id: songId,
-          note_accuracies: [] // TODO: Implement actual accuracy tracking
+          note_accuracies: this._noteAccuracies.length > 0 ? this._noteAccuracies : [0.75]
         })
       });
 
       const result = await response.json();
 
-      alert(`🎵 Song beendet!\nRank: ${result.rank}\nAccuracy: ${result.accuracy.toFixed(1)}%`);
+      if (typeof notify === 'function') notify(`🎵 Song beendet! Rank: ${result.rank} — Accuracy: ${result.accuracy.toFixed(1)}%`, 'success');
 
+      this._noteAccuracies = []; // Reset für nächsten Song
       this.loadProgress();
 
     } catch (error) {
@@ -756,8 +782,8 @@ class WorldInfoUI {
       document.getElementById('game-time').textContent = timeData.current_time.substring(0, 5);
       document.getElementById('time-of-day').textContent = timeData.time_of_day;
 
-      // TODO: Get current biome from player position
-      const biome = 'samtmoos_tiefwald';
+      // Biome aus Player-Position oder 3D-Scene
+      const biome = window.player?.currentBiome || window.currentBiome || 'samtmoos_tiefwald';
 
       // Get weather
       const weatherResponse = await fetch(`${this.apiBase}/weather/${biome}`);

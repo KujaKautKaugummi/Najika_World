@@ -29,36 +29,33 @@ async function renderActions(room) {
 async function handleAction(room, action) {
     switch(action) {
         case 'Füttern':
-            alert('🍖 Najika ist satt!');
+            if (typeof notify === 'function') notify('🍖 Najika ist satt!', 'success');
             break;
         case 'Reden':
-            const text = prompt('Sag etwas zu Najika:');
-            if (text) {
-                const r = await api('/api/chat', 'POST', {message: text});
-                alert('Najika: ' + (r.response || '…'));
-            }
+            // Chat über das Eingabefeld im UI statt prompt()
+            if (typeof notify === 'function') notify('💬 Nutze das Chat-Feld um mit Najika zu reden', 'info');
             break;
         case 'Schlafen':
-            alert('😴 Najika schläft...');
+            if (typeof notify === 'function') notify('😴 Najika schläft...', 'info');
             break;
         case 'Lesen':
-            alert('📚 Najika liest ein Buch.');
+            if (typeof notify === 'function') notify('📚 Najika liest ein Buch.', 'info');
             break;
         case 'Kochen':
-            alert('👩‍🍳 Najika kocht etwas Leckeres!');
+            if (typeof notify === 'function') notify('👩‍🍳 Najika kocht etwas Leckeres!', 'success');
             break;
         case 'Toilette':
-            alert('🚽 Kurze Pause...');
+            if (typeof notify === 'function') notify('🚽 Kurze Pause...', 'info');
             break;
         case 'Waschen':
-            alert('🧼 Najika wäscht sich.');
+            if (typeof notify === 'function') notify('🧼 Najika wäscht sich.', 'info');
             break;
         case 'Gießen':
             await api('/api/minigame/garden', 'POST', {mode: 'water'});
-            alert('🌿 Garten gegossen!');
+            if (typeof notify === 'function') notify('🌿 Garten gegossen!', 'success');
             break;
         case 'Ernten':
-            alert('🌾 Ernte eingeholt!');
+            if (typeof notify === 'function') notify('🌾 Ernte eingeholt!', 'success');
             break;
         case 'Garten-Spiel':
             const gg = await api('/api/minigame/garden', 'POST', {});
@@ -70,7 +67,7 @@ async function handleAction(room, action) {
             break;
         case 'Heilen':
             const h = await api('/api/heal', 'POST', {});
-            alert('💊 Geheilt! HP: ' + h.hp);
+            if (typeof notify === 'function') notify('💊 Geheilt! HP: ' + h.hp, 'success');
             updateBattleHUD({hp: h.hp, max_hp: 100});
             break;
         case 'Cloud':
@@ -78,15 +75,16 @@ async function handleAction(room, action) {
             break;
         case 'Status':
             const s = await api('/health');
-            alert('Status:\n' + JSON.stringify(s, null, 2));
+            if (typeof notify === 'function') notify('📊 Status geladen (siehe Konsole)', 'info');
+            console.log('📊 Status:', s);
             break;
         case 'Studieren':
             const ev = await api('/api/event/next', 'POST', {});
-            alert('📜 Event: ' + ev.title + '\n\n' + ev.text);
+            if (typeof notify === 'function') notify('📜 ' + (ev.title || 'Event') + ': ' + (ev.text || ''), 'info');
             break;
         case 'Crafting':
             const c = await api('/api/crafting', 'POST', {});
-            alert('🔨 ' + c.msg);
+            if (typeof notify === 'function') notify('🔨 ' + (c.msg || 'Crafting abgeschlossen!'), 'success');
             break;
         case 'Reflex-Spiel':
             const rx = await api('/api/minigame/reflex', 'POST', {});

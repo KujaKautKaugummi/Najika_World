@@ -631,16 +631,20 @@ export class AdminDashboard {
      * View user details
      */
     async viewUser(userId) {
-        alert(`View user ${userId} (functionality to be implemented)`);
+        if (typeof notify === 'function') notify(`👤 User ${userId} anzeigen (in Arbeit)`, 'info');
     }
 
     /**
      * Delete user
      */
     async deleteUser(userId) {
-        if (!confirm(`Are you sure you want to delete user ${userId}?`)) {
+        if (!this._deleteConfirmId || this._deleteConfirmId !== userId) {
+            this._deleteConfirmId = userId;
+            if (typeof notify === 'function') notify(`⚠️ Nochmal klicken um User ${userId} zu löschen!`, 'warning');
+            setTimeout(() => { this._deleteConfirmId = null; }, 3000);
             return;
         }
+        this._deleteConfirmId = null;
 
         try {
             const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
@@ -651,14 +655,14 @@ export class AdminDashboard {
             });
 
             if (response.ok) {
-                alert('User deleted successfully');
+                if (typeof notify === 'function') notify('✅ User gelöscht', 'success');
                 this.loadUsersTable();
             } else {
-                alert('Failed to delete user');
+                if (typeof notify === 'function') notify('❌ User löschen fehlgeschlagen', 'error');
             }
         } catch (error) {
             console.error('Failed to delete user:', error);
-            alert('Error deleting user');
+            if (typeof notify === 'function') notify('❌ Fehler beim Löschen', 'error');
         }
     }
 

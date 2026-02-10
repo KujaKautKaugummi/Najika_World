@@ -686,8 +686,8 @@ class BattleSystem:
         enemy_type = enemy["type"]
         is_boss = enemy.get("boss", False)
 
-        # Boss: 20% Chance, Normal: 8% Chance
-        learn_chance = 0.20 if is_boss else 0.08
+        # Boss: 5% Chance, Normal: 2% Chance (Magic/Skill System V3)
+        learn_chance = 0.05 if is_boss else 0.02
 
         if random.random() < learn_chance:
             # Finde lernbare Skills von diesem Enemy-Typ

@@ -3,6 +3,12 @@ Najika Backend - Main Application
 FastAPI application entry point with all API routers
 """
 
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -20,7 +26,8 @@ from backend.api import (
     instrument, world, multiplayer, card_game, dice_monsters,
     housing, farming, world_map, najika_compat,
     najika_game_actions_router, readiness, combat_magic, battle_unified,
-    lebensraum, building, memory, voice_ue5, music
+    lebensraum, building, memory, voice_ue5, music, spell_names, special_stats, slime_2layer_ai,
+    chat, living, temperature
 )
 
 
@@ -115,13 +122,19 @@ app.include_router(training.router, prefix=settings.API_PREFIX)
 app.include_router(voice.router, prefix=settings.API_PREFIX)
 app.include_router(admin.router, prefix=settings.API_PREFIX)
 
+# Najika Compatibility Layer - MUSS VOR Game Systems (wegen catch-all routes)
+app.include_router(najika_compat.router)
+
 # Game Systems (FastAPI converted from Flask)
 app.include_router(slime.router)  # Already has /api/slime prefix
 app.include_router(slime_arena.router)  # Slime Arena: /api/slime-arena
+app.include_router(slime_2layer_ai.router)  # Already has /api/slime-ai prefix
 app.include_router(pvp.router)  # Already has /api/pvp prefix
 app.include_router(oregon_events.router)  # Already has /api/oregon prefix
 app.include_router(region_boss.router)  # Already has /api/region-boss prefix
 app.include_router(magic_schools.router)  # Already has /api/magic prefix
+app.include_router(spell_names.router)  # Already has /api/spells/name prefix
+app.include_router(special_stats.router)  # Already has /api/special prefix
 app.include_router(instrument.router)  # Already has /api/instrument prefix
 app.include_router(world.router)  # Already has /api/world prefix
 app.include_router(multiplayer.router)  # Already has /multiplayer prefix
@@ -142,9 +155,6 @@ app.include_router(farming.router)  # Already has /api/farming prefix
 
 # World Map System (9600x9600 Grid)
 app.include_router(world_map.router)  # Already has /api/world-map prefix
-
-# Najika Compatibility Layer (for old digivice frontend)
-app.include_router(najika_compat.router)
 
 # Najika Game Actions System (Autonomous Living)
 app.include_router(najika_game_actions_router.router)
@@ -173,12 +183,27 @@ app.include_router(voice_ue5.router)  # /api/voice-ue5 prefix
 # Music Mode (Fortnite Festival Style - NUR ZUM SPASS, keine Buffs!)
 app.include_router(music.router)  # /api/music prefix
 
+# Chat (Najika Chat mit Ollama - public + kätzchen mode)
+app.include_router(chat.router)  # /api/chat prefix
+
+# Living System (Hunger, Energy, Mood - für living_system_ui.js)
+app.include_router(living.router)  # /api/living prefix
+app.include_router(living.care_router)  # /api/najika/feed, /drink, /sleep, /wash
+app.include_router(living.status_router)  # /api/status/stream (SSE für private_mode.js)
+
+# Temperature System (Body + Environment Temp)
+app.include_router(temperature.router)  # /api/temperature prefix
+
 
 # ============================================================================
 # STATIC FILES - DIGIVICE FRONTEND
 # ============================================================================
 
-# Mount KayKit assets from digivice/static/assets
+# Mount /static → digivice/static (CSS, Assets, etc.)
+# JS-Code referenziert /static/assets/... für KayKit-Models + room_config
+app.mount("/static", StaticFiles(directory="digivice/static"), name="static_files")
+
+# Mount KayKit assets from digivice/static/assets (legacy /assets path)
 app.mount("/assets", StaticFiles(directory="digivice/static/assets"), name="kaykit_assets")
 
 # Mount digivice static files (must be last to allow HTML fallback)
@@ -272,7 +297,7 @@ async def internal_error_handler(request, exc):
 
 if __name__ == "__main__":
     uvicorn.run(
-        "backend.main:app",
+        "backend.main_fastapi:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.RELOAD,

@@ -10,6 +10,7 @@ const NajikaFullscreen = (function() {
     let isOpen = false;
     let currentMood = 'happy';
     let statusUpdateInterval = null;
+    let chatMode = 'public'; // 'public' oder 'private' (Kätzchen)
 
     // Najika's Stimmungs-Sprites (Emojis als Platzhalter)
     const MOOD_SPRITES = {
@@ -489,6 +490,19 @@ const NajikaFullscreen = (function() {
 
         input.value = '';
 
+        // Codewort "kätzchen" / "kaetzchen" → NSFW Mode
+        const msgLower = message.toLowerCase();
+        if (msgLower === 'kätzchen' || msgLower === 'kaetzchen') {
+            chatMode = 'private';
+            addMessage('System', 'Kaetzchen-Modus aktiviert... *schnurr*', 'system');
+            return;
+        }
+        if (msgLower === 'normal' || msgLower === 'sfw') {
+            chatMode = 'public';
+            addMessage('System', 'Normaler Modus aktiviert.', 'system');
+            return;
+        }
+
         // Add user message
         addMessage('Mr.K', message, 'user');
 
@@ -496,7 +510,7 @@ const NajikaFullscreen = (function() {
             const response = await fetch(`${API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: message, mode: chatMode })
             });
 
             const data = await response.json();

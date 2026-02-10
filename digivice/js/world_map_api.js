@@ -213,7 +213,7 @@ class WorldMapAPI {
 
     async savePlayerPosition(x, z, y, rotation) {
         try {
-            const response = await fetch(`${this.apiBase}/position`, {
+            const response = await fetch(`${this.apiBase}/position/update`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -410,33 +410,16 @@ async def switch_instrument(request: SwitchInstrumentRequest, db: Session = Depe
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{instrument_type}")
-async def get_instrument_info(instrument_type: str):
+@router.get("/songs")
+async def get_songs_alias():
     """
-    Get Instrument Info (static)
+    Get All Songs - alias (Frontend: game_systems_ui.js InstrumentUI.loadSongs)
 
-    Path: /api/instrument/mundharmonika
+    Path: /api/instrument/songs
     """
     try:
-        # Parse instrument
-        try:
-            instrument = InstrumentType(instrument_type)
-        except ValueError:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": f"Ungültiges Instrument: {instrument_type}",
-                    "valid_instruments": [i.value for i in InstrumentType]
-                }
-            )
-
-        # Get instrument info from system
-        info = instrument_system.get_instrument_info(instrument)
-
-        return info
-
-    except HTTPException:
-        raise
+        songs = instrument_system.get_all_songs()
+        return {"songs": songs, "count": len(songs)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -475,6 +458,16 @@ async def get_song(song_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/progress")
+async def get_progress_default(player_id: int = Query(1), db: Session = Depends(get_db)):
+    """
+    Get Player Progress - default (Frontend: game_systems_ui.js InstrumentUI.loadProgress)
+
+    Path: /api/instrument/progress?player_id=1
+    """
+    return await get_progress(player_id, db)
 
 
 @router.get("/progress/{player_id}")
@@ -542,4 +535,33 @@ async def export_state(player_id: int, db: Session = Depends(get_db)):
 
     except Exception as e:
         db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# CATCH-ALL: Must be LAST to not intercept /songs, /progress, etc.
+@router.get("/{instrument_type}")
+async def get_instrument_info(instrument_type: str):
+    """
+    Get Instrument Info (static)
+
+    Path: /api/instrument/mundharmonika
+    """
+    try:
+        try:
+            instrument = InstrumentType(instrument_type)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Ungültiges Instrument: {instrument_type}",
+                    "valid_instruments": [i.value for i in InstrumentType]
+                }
+            )
+
+        info = instrument_system.get_instrument_info(instrument)
+        return info
+
+    except HTTPException:
+        raise
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

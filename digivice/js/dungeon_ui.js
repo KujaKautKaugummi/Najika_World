@@ -734,7 +734,12 @@ class DungeonUI {
     }
 
     showLootPopup(loot) {
-        // TODO: Show fancy loot popup
+        if (!loot || loot.length === 0) return;
+        // Gebündeltes Loot-Popup
+        const lootText = loot.map(item => `${item.icon || '💎'} ${item.name}${item.amount ? ' x' + item.amount : ''}`).join(', ');
+        if (typeof notify === 'function') {
+            notify(`🎁 Beute: ${lootText}`, 'success');
+        }
         loot.forEach(item => {
             this.showNotification(`💎 ${item.icon} ${item.name}`, 'loot');
         });

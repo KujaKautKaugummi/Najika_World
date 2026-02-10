@@ -568,8 +568,37 @@
         }
 
         dropLoot() {
-            // TODO: Spawn loot items in 3D scene
-            console.log(`💎 Loot dropped:`, this.data.loot);
+            const loot = this.data.loot;
+            if (!loot || loot.length === 0) return;
+
+            // Gold-Loot direkt an Player
+            loot.forEach(item => {
+                if (item.type === 'gold' && window.player) {
+                    const amount = item.amount || 10;
+                    window.player.gold += amount;
+                    if (typeof notify === 'function') notify(`💰 +${amount}G Beute!`, 'success');
+                } else {
+                    // Item ins Inventar legen
+                    if (window.InventorySystem?.addItem) {
+                        window.InventorySystem.addItem(item.id || item.type, item.amount || 1);
+                        if (typeof notify === 'function') notify(`💎 ${item.name || item.type} erhalten!`, 'info');
+                    } else {
+                        // Fallback: localStorage
+                        try {
+                            const inv = JSON.parse(localStorage.getItem('najika_inventory') || '{}');
+                            const key = item.id || item.type;
+                            inv[key] = (inv[key] || 0) + (item.amount || 1);
+                            localStorage.setItem('najika_inventory', JSON.stringify(inv));
+                            if (typeof notify === 'function') notify(`💎 ${item.name || item.type} erhalten!`, 'info');
+                        } catch(e) { console.error('Loot save error:', e); }
+                    }
+                }
+            });
+
+            // Event emittieren für andere Systeme
+            if (window.GameEvents) {
+                window.GameEvents.emit('lootDropped', { items: loot, position: this.position });
+            }
         }
 
         dispose() {

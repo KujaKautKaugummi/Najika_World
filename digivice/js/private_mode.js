@@ -36,6 +36,11 @@
         if (window.Scene3D && typeof window.Scene3D.setPrivateMode === 'function') {
             window.Scene3D.setPrivateMode(active);
         }
+        // Chat-Mode synchronisieren
+        if (window.chatUI) {
+            window.chatUI.chatMode = active ? 'private' : 'public';
+            window.chatUI.updateModeButton();
+        }
     }
 
     if (document.readyState === 'loading') {

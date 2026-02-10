@@ -178,6 +178,60 @@ async def get_journey_status(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/random")
+async def get_random_event(player_id: int = Query(1), db: Session = Depends(get_db)):
+    """
+    Get Random Event (Frontend: game_systems_ui.js OregonEventsUI.show)
+
+    Returns a random Oregon Trail event for display.
+    """
+    try:
+        journey = get_or_create_journey(db, player_id)
+        event_data = oregon_system.trigger_random_event("wilderness", "adventurer")
+        if not event_data:
+            return {
+                "title": "Ruhige Reise",
+                "text": "Die Straße ist ruhig... zu ruhig.",
+                "options": [
+                    {"text": "Weiterreisen", "effect": {"distance": 10}},
+                    {"text": "Rasten", "effect": {"health": 5}}
+                ],
+                "najika_reaction": "*schaut sich nervös um* Kuja, hier ist es so still..."
+            }
+        return event_data
+    except Exception as e:
+        return {
+            "title": "Händler-Karawane",
+            "text": "Eine Karawane bietet dir ihre Waren an.",
+            "options": [
+                {"text": "Kaufen", "effect": {"gold": -10, "items": 1}},
+                {"text": "Ablehnen", "effect": {}}
+            ],
+            "najika_reaction": "*kicher* Die haben glänzende Sachen, Mr. K!"
+        }
+
+
+@router.get("/chaos")
+async def get_chaos_event():
+    """
+    Get Chaos Event (Frontend: game_systems_ui.js OregonEventsUI - chaos check)
+
+    Returns a random chaos event or no event.
+    """
+    chance = random.random()
+    if chance < 0.3:
+        return {
+            "chaos_event": True,
+            "event": {
+                "title": "CHAOS!",
+                "description": "Ein unerwartetes Chaos-Event!",
+                "effect": {"chaos_level": random.randint(1, 5)}
+            },
+            "najika_reaction": "EXPLOSION!!! *aufgeregt hüpf*"
+        }
+    return {"chaos_event": False, "message": "Kein Chaos... diesmal."}
+
+
 @router.post("/trigger")
 async def trigger_event(request: TriggerEventRequest, db: Session = Depends(get_db)):
     """

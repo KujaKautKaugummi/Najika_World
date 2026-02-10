@@ -271,6 +271,16 @@ const DungeonDiceShop = (function() {
         playerInventory.dice.push(dieId);
         saveInventory();
 
+        // Gold auch im zentralen Player-Objekt aktualisieren
+        if (window.player) {
+            window.player.gold = playerInventory.gold;
+        }
+
+        // GameEvent emittieren
+        if (window.GameEvents) {
+            window.GameEvents.emit('itemPurchased', { itemId: dieId, price: die.price, type: 'dice' });
+        }
+
         const shop = SHOP_LOCATIONS[currentShop];
         if (typeof showNotification === 'function') {
             showNotification(`${shop.shopkeeper}: "${shop.dialogue.buy}"`);

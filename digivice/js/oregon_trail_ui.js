@@ -1030,7 +1030,7 @@ Najika: "WO IST MEINE HAND?!"
             ],
             HARLEY: [
                 `*kicher* Ohhhh! Das wird CHAOTISCH! Ich LIEBE es!`,
-                `Puddin'! Das riecht nach SPASS! *giggle*`,
+                `Mr. K! Das riecht nach SPASS! *giggle*`,
                 `Let's make it MESSY~`
             ],
             SHIRO: [

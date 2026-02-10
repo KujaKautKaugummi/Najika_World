@@ -529,3 +529,85 @@ async def get_region_weather(region_id: int, db: Session = Depends(get_db)):
         "visibility": weather.visibility,
         "particle_effects": weather.particle_effects or {}
     }
+
+
+# ============================================================================
+# EXPLORATION ENDPOINTS (Frontend: world_map_api.js)
+# ============================================================================
+
+@router.get("/explored-regions")
+async def get_explored_regions(player_id: int = 1, db: Session = Depends(get_db)):
+    """
+    Get explored regions for a player (Frontend: WorldMapAPI.loadExploredRegions)
+    """
+    # Check which regions player has visited via travel point unlocks
+    unlocks = db.query(PlayerTravelPointUnlock).filter(
+        PlayerTravelPointUnlock.user_id == player_id
+    ).all()
+
+    # Get region codes from unlocked travel points
+    explored = set(["goetterfels"])  # Starting region always explored
+    for unlock in unlocks:
+        tp = db.query(FastTravelPoint).filter(FastTravelPoint.id == unlock.travel_point_id).first()
+        if tp:
+            region = db.query(Region).filter(Region.id == tp.region_id).first()
+            if region:
+                explored.add(region.region_code)
+
+    return {
+        "player_id": player_id,
+        "explored_regions": list(explored),
+        "count": len(explored)
+    }
+
+
+class DiscoverRegionRequest(BaseModel):
+    player_id: int = 1
+    region_id: str = ""
+
+
+@router.post("/discover-region")
+async def discover_region(request: DiscoverRegionRequest, db: Session = Depends(get_db)):
+    """
+    Mark a region as discovered (Frontend: WorldMapAPI.discoverRegion)
+    """
+    if not request.region_id:
+        raise HTTPException(status_code=400, detail="region_id required")
+
+    # Find region by code
+    region = db.query(Region).filter(Region.region_code == request.region_id).first()
+    if not region:
+        # Gracefully return success even if region not in DB yet
+        return {
+            "success": True,
+            "region_id": request.region_id,
+            "region_name": request.region_id,
+            "message": f"Region {request.region_id} entdeckt!"
+        }
+
+    # Auto-unlock the region's first travel point
+    first_tp = db.query(FastTravelPoint).filter(
+        FastTravelPoint.region_id == region.id
+    ).first()
+
+    if first_tp:
+        existing = db.query(PlayerTravelPointUnlock).filter(
+            PlayerTravelPointUnlock.user_id == request.player_id,
+            PlayerTravelPointUnlock.travel_point_id == first_tp.id
+        ).first()
+
+        if not existing:
+            unlock = PlayerTravelPointUnlock(
+                user_id=request.player_id,
+                travel_point_id=first_tp.id,
+                unlocked_at=datetime.utcnow()
+            )
+            db.add(unlock)
+            db.commit()
+
+    return {
+        "success": True,
+        "region_id": request.region_id,
+        "region_name": region.name,
+        "message": f"Region {region.name} entdeckt!"
+    }

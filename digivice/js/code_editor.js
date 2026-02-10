@@ -229,29 +229,31 @@ def najika_greeting():
         const textarea = document.getElementById('codeEditorTextarea');
         if (!textarea) return;
 
-        const filename = prompt('Dateiname:', 'code.py');
-        if (!filename) return;
+        if (!window.showInputDialog) return;
+        window.showInputDialog('📄 Dateiname:', 'code.py', async (filename) => {
+            if (!filename) return;
 
-        try {
-            const response = await fetch('http://localhost:8000/api/file/write', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    path: filename,
-                    content: textarea.value
-                })
-            });
-            const data = await response.json();
+            try {
+                const response = await fetch('http://localhost:8000/api/file/write', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        path: filename,
+                        content: textarea.value
+                    })
+                });
+                const data = await response.json();
 
-            if (data.success) {
-                notify(`✓ Datei gespeichert: ${filename}`, 'success');
-                this.addTerminalOutput(`Saved: ${filename}`);
-            } else {
-                notify(`Fehler: ${data.error}`, 'error');
+                if (data.success) {
+                    notify(`✓ Datei gespeichert: ${filename}`, 'success');
+                    this.addTerminalOutput(`Saved: ${filename}`);
+                } else {
+                    notify(`Fehler: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                notify('Speichern fehlgeschlagen', 'error');
             }
-        } catch (error) {
-            notify('Speichern fehlgeschlagen', 'error');
-        }
+        });
     },
 
     async listFiles() {
