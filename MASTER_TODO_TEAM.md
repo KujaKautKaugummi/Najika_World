@@ -232,9 +232,37 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 ---
 
-#### Task 2: Slime V2 → V3 Migration - KOMPLETTE NEUFASSUNG!
+#### 🔥 NEUE PRIORITÄT: FASTAPI MIGRATION (2026-02-14)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO - ZIEH DURCH, NUR BEI FRAGEN STOPPEN!
+**Status:** ⬜ TODO - START JETZT!
+
+**ENTSCHEIDUNG VON KUJA:**
+- Backend-Merge JETZT machen (najika_server.py → FastAPI)
+- Slime direkt als V3 implementieren (nicht V2→V3 migrieren!)
+- Deadline: 2-3 Tage
+
+**KOMPLETTER PLAN:**
+📄 **`DOCS/FASTAPI_MIGRATION_PLAN_FÜR_OPUS.md`** (60+ Seiten!)
+
+**Phasen:**
+1. Core (Chat, State) - 4-6h
+2. Game Systems (Battle, Quests) - 8-10h
+3. Slime V3 - 4-6h
+4. Frontend Update - 4-6h
+5. Testing - 2-4h
+
+**START:**
+```bash
+cd C:\Najika_World
+# Lies: DOCS/FASTAPI_MIGRATION_PLAN_FÜR_OPUS.md
+# Dann: Phase 1 beginnen
+```
+
+---
+
+#### Task 2: Slime V2 → V3 Migration - ❌ GESTOPPT!
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ❌ PAUSIERT - Wird Teil von FastAPI Migration!
 
 **DEIN JOB:** Lies die 2 Docs, dann schreib `slime_companion.js` komplett neu. Fertig. 20 Minuten Arbeit.
 
