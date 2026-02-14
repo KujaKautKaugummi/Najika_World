@@ -1,5 +1,5 @@
 # 🌟 NAJIKA WORLD - ULTIMATIVE PROJEKT-WISSENSDATENBANK
-**Erstellt:** 2026-02-05 | **Aktualisiert:** 2026-02-08
+**Erstellt:** 2026-02-05 | **Aktualisiert:** 2026-02-13
 **Status:** DIE EINZIGE WAHRHEIT - Jedes Modell muss diese Datei ZUERST lesen!
 
 ---
@@ -294,6 +294,88 @@
 
 📖 **Jetson Migration Plan:** → `JETSON_MIGRATION_PLAN.md`
 📖 **Technologie Analyse:** → `TECHNOLOGIE_ANALYSE_2026.md`
+
+## 4.4 KI-Pipeline & Training (Stand 2026-02-11)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    NAJIKAMIND AGI PIPELINE                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   9-SCHRITT-PIPELINE:                                                        │
+│   ──────────────────                                                         │
+│   ToM → Memory → Feel → Facetten → Think → Speak → Express → Learn          │
+│                                                                              │
+│   PERSÖNLICHKEITS-GEWICHTUNG:                                                │
+│   ─────────────────────────────                                              │
+│   NORMAL-MODUS:           KÄTZCHEN-MODUS (NSFW):                            │
+│   • Megumin: 35%          • Melissa: 50%                                    │
+│   • Harley:  25%          • Shiro:   30%                                    │
+│   • Shiro:   20%          • Megumin: 15%                                    │
+│   • Melissa: 20%          • Harley:   5%                                    │
+│                                                                              │
+│   POST-PROCESSING:                                                           │
+│   ────────────────                                                           │
+│   User Messages:                                                             │
+│   • Leak Filter (entfernt System-Leaks)                                     │
+│   Assistant Messages:                                                        │
+│   • "Assistant:" Prefix entfernen                                           │
+│   • Metadaten-Stripping                                                     │
+│   • "mein Schatz" Replacement Filter                                        │
+│                                                                              │
+│   CHAT-ROUTING (Hierarchie):                                                │
+│   ───────────────────────────                                                │
+│   1. Ollama (najika-trained-q4) → Primär                                    │
+│   2. Claude Code → Fallback bei komplexen Tasks                             │
+│   3. Error-Fallback → "*blinzelt verwirrt*"                                 │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Ollama Models (2026-02-11)
+
+| Model | Größe | Zweck | Status |
+|-------|--------|-------|--------|
+| najika-trained-q4:latest | 4.7 GB | SFW Chat (Fine-Tuned) | ✅ AKTIV |
+| najika-nsfw-trained-q4:latest | 4.7 GB | Kätzchen-Modus (Fine-Tuned) | ✅ AKTIV |
+| qwen2-instruct:latest | 4.7 GB | Tasks, Code, Mathe | ✅ AKTIV |
+| dolphin-qwen2:latest | 4.7 GB | Base (Backup) | ⬜ VORHANDEN |
+
+### LoRA Fine-Tuning Details
+
+```yaml
+Base Model:     Qwen/Qwen2.5-7B-Instruct
+Training-Daten: 486 Konversationen aus ChromaDB
+Epochs:         3
+Loss:           3.64 → 1.0
+LoRA Config:    r=16, alpha=32, target=q/k/v/o_proj
+Adapter:        lora_checkpoints_new/najika_lora_latest
+Template:       ChatML (<|im_start|>system/user/assistant<|im_end|>)
+Quantisierung:  Q4_K_M via Ollama
+Export:         LoRA → GGUF → Q4_K_M → Ollama
+```
+
+### Speicherplatz Cleanup (2026-02-11)
+
+| Was | Gelöscht | Freigegeben |
+|-----|----------|-------------|
+| F16 GGUF | najika-trained-f16.gguf | 14.5 GB |
+| lora_merged | Merged HF Model | 14.2 GB |
+| Ollama Old | najika-local + najika-nsfw | ~9.4 GB |
+| **GESAMT** | | **~38 GB** |
+
+### Ollama Parameter Tuning
+
+```python
+# Optimierte Parameter für Najika Chat
+"repeat_penalty": 1.1,
+"num_predict": 256,
+"temperature": 0.8,
+"top_p": 0.9,
+"top_k": 40
+```
+
+📖 **Vollständige Details:** → `PROJEKT_STATUS_KOMPLETT_2026-02-11.md`
 
 ---
 
@@ -737,21 +819,20 @@ GET  /api/arena/*          - Arena System
 
 # 8. WISSENSDATENBANK (ChromaDB)
 
-## 8.1 Collections
+## 8.1 Collections (Stand 2026-02-11)
 
 | Collection | Einträge |
 |------------|----------|
-| conversations | ~1.700 |
+| conversations | 1.678 |
 | najika_core | 7 |
 | najika_personalities | 83 |
-| emotions | ~450 |
-| najika_wichtige_docs | 5.732 |
-| najika_complete_knowledge | 14.275 |
-| najika_md_knowledge | 88 |
-| najika_design_documents | 4 |
-| najika_alle_dokumente | 7.612 |
+| emotions | 436 |
 | najika_project_knowledge | 264 |
-| **TOTAL** | **~30.000+** |
+| najika_md_knowledge | 88 |
+| **TOTAL** | **2.556** |
+
+**HINWEIS:** Einige alte Collections wurden entfernt/konsolidiert:
+- `najika_wichtige_docs`, `najika_complete_knowledge`, `najika_design_documents`, `najika_alle_dokumente` wurden konsolidiert in `najika_project_knowledge` und `najika_md_knowledge`
 
 ## 8.2 Pfade
 
@@ -1048,6 +1129,35 @@ UE5:
 ---
 
 # 13. CHANGELOG
+
+## 2026-02-13 (Update 9 - KI-PIPELINE & TRAINING DOKUMENTATION!)
+
+### Neue Sektion 4.4 hinzugefügt: KI-Pipeline & Training
+- **NajikaMind AGI Pipeline**: 9-Schritt-Pipeline dokumentiert (ToM → Memory → Feel → Facetten → Think → Speak → Express → Learn)
+- **Persönlichkeits-Gewichtung**: Normal-Modus vs Kätzchen-Modus Verteilung
+- **Post-Processing Details**: Leak Filter, Metadaten-Stripping, "mein Schatz" Replacement
+- **Chat-Routing Hierarchie**: Ollama (Primär) → Claude Code (Fallback) → Error-Fallback
+
+### Ollama Models aktualisiert (Stand 2026-02-11):
+- `najika-trained-q4:latest` (4.7 GB) - SFW Chat (Fine-Tuned) ✅ AKTIV
+- `najika-nsfw-trained-q4:latest` (4.7 GB) - Kätzchen-Modus ✅ AKTIV
+- `qwen2-instruct:latest` (4.7 GB) - Tasks, Code, Mathe ✅ AKTIV
+- `dolphin-qwen2:latest` (4.7 GB) - Base Backup ⬜ VORHANDEN
+
+### LoRA Fine-Tuning Details dokumentiert:
+- **Base Model**: Qwen/Qwen2.5-7B-Instruct
+- **Training-Daten**: 486 Konversationen aus ChromaDB
+- **Epochs**: 3, Loss: 3.64 → 1.0
+- **LoRA Config**: r=16, alpha=32, target=q/k/v/o_proj
+- **Export-Pipeline**: LoRA → GGUF → Q4_K_M → Ollama
+
+### Speicherplatz Cleanup dokumentiert:
+- ~38 GB freigemacht (F16 GGUF, lora_merged, alte Ollama Models)
+
+### Referenz:
+- Quelle: `PROJEKT_STATUS_KOMPLETT_2026-02-11.md`
+
+---
 
 ## 2026-02-08 (Update 8 - KREATUR-SYSTEM + CHARACTER CREATION!)
 

@@ -1,7 +1,7 @@
 # NAJIKA WORLD - MASTER TODO FUER CLAUDE CODE TEAM
 
 **Erstellt:** 2026-01-27
-**Aktualisiert:** 2026-02-09 (OPUS-2 ALLE FRONTEND TASKS FERTIG! 🎉✅)
+**Aktualisiert:** 2026-02-11 (LoRA Training Qwen2.5 + Pipeline-Fixes + Model-Export)
 **Zweck:** Koordination zwischen 2 Claude Opus Instanzen
 **Update-Regel:** Jede Instanz updated nach getaner Arbeit!
 
@@ -71,10 +71,12 @@
 ## 📚 PFLICHTLEKTÜRE VOR JEDER ARBEIT!
 
 ### **→ [PROJEKT_WISSEN_KOMPLETT.md](PROJEKT_WISSEN_KOMPLETT.md) ←**
+### **→ [PROJEKT_STATUS_KOMPLETT_2026-02-11.md](PROJEKT_STATUS_KOMPLETT_2026-02-11.md) ←** (NEU! Komplett-Status!)
+### **→ [NAJIKA_CHARACTER_THREEJS_INTEGRATION.md](NAJIKA_CHARACTER_THREEJS_INTEGRATION.md) ←** (NEU! Three.js + 3D Guide!)
 ### **→ [UE5_MIGRATION_CHECKLIST.md](DOCS/UE5_MIGRATION_CHECKLIST.md) ←**
-### **→ [OPUS_2_ONBOARDING.md](DOCS/OPUS_2_ONBOARDING.md) ←** (NEU! Für OPUS-2!)
+### **→ [OPUS_2_ONBOARDING.md](DOCS/OPUS_2_ONBOARDING.md) ←** (Für OPUS-2!)
 ### **→ [UE5_API_DOKUMENTATION.md](DOCS/UE5_API_DOKUMENTATION.md) ←** (Alle Endpoints!)
-### **→ [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md) ←** ⚡ (NEU! Hogwarts + Diablo 4 System!)
+### **→ [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md) ←** ⚡ (Hogwarts + Diablo 4 System!)
 
 ---
 
@@ -128,7 +130,7 @@
 | ✅ **Weapon Infuse System** | DONE | Zauber auf Waffe = temporärer Buff |
 | ✅ **Grab & Throw System** | DONE | Suplex, Chokeslam, Umgebungs-Würfe |
 | ✅ **TIDS mit Gag-Reaktionen** | DONE | Monster-spezifische lustige Reaktionen |
-| ⬜ Game State API erweitern | TODO | **ECHTZEIT via WebSocket** statt Speichern/Laden! |
+| ✅ Game State API (WebSocket) | **DONE** | WebSocket Bridge + GameEvents verdrahtet (11.02.) |
 | ✅ 3 Battle-Systeme vereinen | **DONE** | Real3DCombat als Primär, UnifiedCombat als Fallback |
 | ✅ **NajikaMind ↔ FastAPI** | **DONE** | AGI-Pipeline in `api/chat.py` integriert (09.02.) |
 | ✅ **Kreatur-Nemesis Gray Moral** | **DONE** | Enslave/Recruit/Surrender + Auto-Timeouts (09.02.) |
@@ -136,14 +138,17 @@
 | ✅ **NPC Tagesablauf** | **DONE** | Skyrim-Style Schedules + In-Game-Uhr + 6 Tageszeiten (09.02.) |
 | ✅ **NPC Beziehungssystem** | **DONE** | Affinity/Reputation + Geschenke + Witness-System (09.02.) |
 | ✅ **Save/Load v2.0** | **DONE** | Alle Sub-Systeme zentral im Snapshot (09.02.) |
+| ✅ **LoRA Training Qwen2.5** | **DONE** | 486 Samples, 3 Epochs, Loss 1.0, Q4_K_M Export (11.02.) |
+| ✅ **Ollama Model-Namen Fix** | **DONE** | Q4-Varianten korrekt referenziert (11.02.) |
+| ✅ **Post-Processing Fix** | **DONE** | User:/Assistant: Leak, Bracket-Artefakte (11.02.) |
 
 ### P2 - SPÄTER
 | Task | Status | Beschreibung |
 |------|--------|--------------|
-| ⬜ WebSocket für Realtime | TODO | Events an UE5 pushen |
-| ⬜ ChromaDB ↔ UE5 Sync | TODO | Gedächtnis-Integration |
-| ⬜ Voice System Adapter | TODO | TTS/STT für UE5 |
-| ⬜ Three.js → UE5 Mapping Doc | TODO | Was wird wie portiert |
+| ✅ WebSocket für Realtime | **DONE** | GameEvents ↔ WS Bridge + websocket_manager.py (11.02.) |
+| ✅ ChromaDB ↔ UE5 Sync | **DONE** | `api/memory.py`: query/add/recall/game-event/conversation/stats (bereits implementiert + registriert!) |
+| ✅ Voice System Adapter | **DONE** | `api/voice_ue5.py`: speak/listen/status/personalities (Edge TTS + Whisper, bereits implementiert + registriert!) |
+| ✅ Three.js → UE5 Mapping Doc | **DONE** | `THREEJS_TO_UE5_MAPPING.md` V2.0: 141+ Dateien gemappt, Priorisierung, API-Integration Guide (11.02.) |
 
 ### P3 - MAGIC/SKILL SYSTEM V3 ⚡ (Hogwarts + Diablo 4)
 **Referenz:** [ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md](ZAUBER_UND_SKILL_SYSTEM_V3_FINAL.md)
@@ -158,17 +163,133 @@
 
 | Task | Status | Beschreibung |
 |------|--------|--------------|
-| ⬜ **Skill-Learning Rates senken** | TODO | 8%→2%, 20%→5% (najika_battle.py:690) |
-| ⬜ **Cross-Element Learning** | TODO | Gleich 10%, Ähnlich 3%, Fremd 1% + Similarity Table |
-| ⬜ **1-Skill-Weg System** | TODO | Meister-Flag, Degradation-Tracking, Vergessen-System |
-| ⬜ **Morphs-System Backend** | TODO | Beobachten, Experimentieren, 1 Morph aktiv, Wechsel |
-| ⬜ **S.P.E.C.I.A.L. Stats** | TODO | Max +25% bei 10 Punkten, Start 40 Punkte ⚠️ PLAYTEST! |
-| ⬜ **Namen-System Backend** | TODO | Spieler-Input, 3-30 Zeichen, Profanity-Filter DE/EN |
-| ⬜ **Slime-KI 2-Layer** | TODO | Persönlichkeit bleibt, Skills reset, Form-Copy 5% |
+| ✅ **Skill-Learning Rates gesenkt** | **DONE** | Boss 5%, Normal 2% (11.02.) |
+| ✅ **Cross-Element Learning** | **DONE** | 10%/3%/1% + Similarity Table, magic_schools.py (11.02.) |
+| ✅ **1-Skill-Weg System** | **DONE** | Meister +300%, Degradation 30/90/180 Tage (11.02.) |
+| ✅ **Morphs-System Backend** | **DONE** | Beobachten 10%, Experimentieren 30x, School-Lookup gefixt (11.02.) |
+| ✅ **S.P.E.C.I.A.L. Stats** | **DONE** | Max +25% bei 10, Start 40 Pkt, +2.5%/Punkt (11.02.) |
+| ✅ **Namen-System Backend** | **DONE** | spell_names.py: 3-30 Zeichen, Profanity DE/EN (11.02.) |
+| ✅ **Slime-KI 2-Layer** | **DONE** | Personality persistent, Skills reset, Form-Copy 5% (11.02.) |
 
 ---
 
 ## 🟢 OPUS-2 TASKS (VS Code - Frontend/Digivice)
+
+---
+
+### ⚠️ WICHTIG FÜR OPUS IN VS CODE: LIES ERST DIE PFLICHT-MDS!
+
+**Bevor du IRGENDETWAS machst:**
+1. Öffne: `C:\Najika_World\DOCS\OPUS_VS_CODE_ONBOARDING_2026-02-14.md`
+2. Lies die 5 Pflicht-MDs (in der Reihenfolge!)
+3. Dann komm zurück und nimm einen Task
+
+**ALLE Pflicht-MDs:**
+- `C:\Najika_World\CLAUDE.md` (Die 8 Gebote)
+- `C:\Najika_World\NAJIKA_MASTER_UEBERSICHT_2026-02-05.md` (ALLES!)
+- `C:\Najika_World\DOCS\MASTER_SYSTEM_DOKUMENTATION_FÜR_OPUS_2026-02-13.md` (FÜR DICH!)
+- `C:\Najika_World\DOCS\SYSTEM_AUDIT_2026-02-13_VOLLSTÄNDIG.md` (Was funktioniert/fehlt)
+- `C:\Najika_World\OPUS_SESSION_2026-02-13_KOMPLETT.md` (Vorheriges Opus)
+
+---
+
+### P0 - KRITISCH (SOFORT ANFANGEN!)
+
+#### Task 1: Port 5000 → 8000 ÜBERPRÜFUNG ✅ VERIFIED!
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ✅ GEPRÜFT UND VERIFIZIERT (2026-02-14)
+**Geprüft von:** OPUS-2 (Claude Opus 4.6, VS Code)
+
+**Ergebnis der vollständigen Prüfung:**
+
+Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
+
+**Vollständiger Scan durchgeführt:** `grep -r "5000"` in backend/*.py, digivice/*.js, digivice/*.html
+
+**Treffer-Analyse (100+ Treffer geprüft):**
+| Kategorie | Anzahl | Port-relevant? |
+|-----------|--------|----------------|
+| Kommentare "NICHT 5000!" | 3 | ❌ Nein (Warnung!) |
+| Game-Werte (Gold, EXP, Fame) | ~15 | ❌ Nein (z.B. `5000 Gold`) |
+| Timeouts (ms) | ~25 | ❌ Nein (z.B. `setTimeout(fn, 5000)`) |
+| z-index CSS | ~8 | ❌ Nein (z.B. `z-index: 5000`) |
+| Shadow Camera / 3D-Koordinaten | ~20 | ❌ Nein (z.B. `camera.left = -5000`) |
+| String-Limits `[:5000]` | ~10 | ❌ Nein (z.B. `text[:5000]`) |
+| Archiv-Dateien | ~30 | ❌ Nein (archive/ Ordner) |
+| **Echte Port-Referenz** | **1** | ✅ GEFIXT! |
+
+**Einzige echte Port-5000-Referenz gefunden & gefixt:**
+- `backend/api_backup/server.py:575` → von `5000` auf `8000` geändert
+
+**Alle aktiven Dateien nutzen korrekt Port 8000:**
+- ✅ `backend/api/server.py:1070` → `PORT", 8000`
+- ✅ `backend/najika_server.py:364` → `PORT","8000"`
+- ✅ `digivice/index.html:6315` → `http://127.0.0.1:8000`
+- ✅ `digivice/js/3d_scene.js:4` → `http://localhost:8000`
+- ✅ Alle anderen aktiven JS/HTML/PY Dateien → Port 8000
+
+**FAZIT: Die 8 Gebote werden eingehalten! Port 8000 überall korrekt!**
+
+---
+
+#### Task 2: Slime V2 → V3 Migration (MEGA-TASK!)
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ❌ NUR PLAN EXISTIERT, NICHT IMPLEMENTIERT!
+
+**LIES ERST:**
+1. `C:\Najika_World\SLIME_SYSTEM_V3_DOKUMENTATION.md` (966 Zeilen - KOMPLETT lesen!)
+2. `C:\Najika_World\OPUS_SESSION_2026-02-13_KOMPLETT.md` (Teil 5 - Der Plan!)
+
+**Problem:**
+- `digivice/js/slime_companion.js` = V2 Code (FALSCH!)
+  - Hat: 6 Evolution-Stufen (EGG → ULTIMATIV)
+  - Hat: Synthese (2 Slimes → 1 Hybrid)
+  - Hat: +N System
+  - **ALLES FALSCH!**
+
+- `SLIME_SYSTEM_V3_DOKUMENTATION.md` = V3 Design (RICHTIG!)
+  - Slime = FORMWANDLER (nicht Evolution!)
+  - Aura 0-5 Stufen (nicht Evolution!)
+  - Formen sind NUR optisch
+  - Erinnerungs-System (8 Regional-Formen → volle Erinnerung)
+
+**Dein Job (Schritt für Schritt!):**
+
+**SCHRITT 1:** Backup erstellen
+```bash
+cp digivice/js/slime_companion.js digivice/js/slime_companion_v2_backup.js
+```
+
+**SCHRITT 2:** Lies V3 Doku komplett (30 Min)
+
+**SCHRITT 3:** Schreibe `slime_companion.js` NEU (~1000 Zeilen)
+- Entferne: ALLE V2 Konzepte (Evolution, Synthese, +N, Effort Hearts, Care Mistakes)
+- Implementiere:
+  - Formwandler-System (Form = Aussehen, nicht Stats!)
+  - 8 Regional-Start-Formen (Wüsten-Echse, Wald-Wolf, etc.)
+  - Erinnerungs-System (1. Form → "Ich bin kein normales Monster...")
+  - Form-Lernen (0.5-2% Chance nach Kampf)
+  - Aura-System (0-5 Stufen, 13 Elemente)
+  - Companion-Modi (Körperlich vs Aura - Spieler wählt)
+  - Vertrauen Level 0-6 (Level 6 = Menschen-Form)
+
+**SCHRITT 4:** UI komplett neu
+- Form-Wechsel Dialog
+- Erinnerungs-Popups (schön formatiert!)
+- Aura-Level Anzeige
+- Companion-Modus Toggle
+
+**SCHRITT 5:** Save/Load anpassen
+- Neue Felder: current_form, learned_forms[], memories_unlocked, aura_level, companion_mode
+
+**SCHRITT 6:** Backend-Kompatibilität
+- Prüfe ob `backend/najika_slime_system.py` auch V3 ist
+- Falls nicht → sag OPUS-1 (Desktop) Bescheid!
+
+**Erwartete Zeit:** 8-12h (GROßER Task!)
+**Wichtigkeit:** P0 - KRITISCH
+
+---
 
 ### P0 - JETZT (COMBAT UI!)
 | Task | Status | Beschreibung |
@@ -179,13 +300,173 @@
 | ✅ **TIDS Gag-Popup** | DONE | Monster-Reaktion gross, bunt, mittig! |
 | ✅ **Infuse Timer UI** | DONE | Element-Glow + Countdown + Ablauf-Notification |
 
-### P1 - DIESE WOCHE
+### P1 - DIESE WOCHE (NEUE FEATURES!)
+
+#### Task 3: Dynamische Völker System
+**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** Wild-Monster bilden Fraktionen (1-5 pro Region), können wachsen, Kriege führen, kollabieren.
+
+**OPUS-2 (VS Code) - Dein Teil:**
+1. Erstelle: `digivice/js/dynamic_factions_ui.js`
+2. UI Elemente:
+   - Fraktions-Übersicht (Name, Größe, Territorium)
+   - Kriegs-Benachrichtigungen
+   - Fraktions-Ruf-Anzeige
+3. Integration mit `digivice/js/faction_system.js` (existiert bereits!)
+
+**OPUS-1 (Backend) - Backend Teil:**
+- Erstellt: `backend/najika_dynamic_factions.py`
+- API: `/api/factions/dynamic/*`
+
+**Erwartete Zeit:** 6-8h (gesamt)
+**Dein Teil:** 3-4h (Frontend/UI)
+
+---
+
+#### Task 4: Aura vs Begleiter Balance System
+**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** Spieler wählt EINMAL: Aura (Buffs) ODER physischer Slime-Begleiter. Beide gleich stark (PvP Balance).
+
+**OPUS-2 (VS Code) - Dein Teil:**
+1. Erstelle: `digivice/js/companion_mode_choice.js`
+2. UI:
+   - Einmalige Wahl-Dialog (groß, wichtig!)
+   - "WARNUNG: Diese Wahl ist PERMANENT!"
+   - Vergleichs-Tabelle (Aura vs Körperlich Stats)
+   - Bestätigungs-Dialog
+
+**OPUS-1 (Backend):**
+- Erstellt: `backend/najika_aura_vs_companion.py`
+- Balance-Formeln
+
+**Erwartete Zeit:** 4-6h (gesamt)
+**Dein Teil:** 2-3h (UI)
+
+---
+
+#### Task 5: Medizin-System (Realismus + Fantasy)
+**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** Echtes medizinisches Wissen → Fantasy-Namen, gleiche Effekte.
+**Beispiel:** Kamille → Kristall-Kamille (beruhigend, anti-inflammatorisch, in Kristall-Höhlen)
+
+**OPUS-2 (VS Code) - Dein Teil:**
+1. Erstelle: `digivice/js/medicine_crafting_ui.js`
+2. UI:
+   - Pflanzen-Sammlung Anzeige (64 Pflanzen)
+   - Rezept-Buch mit echten Effekten
+   - Crafting-Interface
+   - Effekt-Tooltips (zeigt echte medizinische Wirkung!)
+
+**OPUS-1 (Backend):**
+- Erstellt: `backend/najika_medicine_system.py`
+- 64 Fantasy-Pflanzen mit echten Effekten
+- API: `/api/medicine/*`
+
+**Erwartete Zeit:** 6-8h (gesamt)
+**Dein Teil:** 3-4h (UI)
+
+---
+
+### P1 - COMBAT UI (ERLEDIGT)
 | Task | Status | Referenz-Datei |
 |------|--------|----------------|
 | ✅ **Infuse Waffen-Glow** | DONE | Waffen-Slots im HUD gluehen in Element-Farbe + pulsierender Glow |
 | ✅ Combat HUD überarbeiten | DONE | Grab/TIDS/Help Buttons in manual-actions Zeile integriert |
 | ✅ Keybindings dokumentieren | DONE | Overlay mit H/F1, alle Combat-Keys dokumentiert |
 | ✅ Sound Effects für TIDS | DONE | Web Audio API Synthesizer: Impact + OUCH + Boing + Noise |
+
+### P2 - NICE TO HAVE (Später)
+
+#### Task 6: Form-Affinität-Boni System
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** Slime-Formen geben Boni (NICHT nur optisch!). Aura skaliert Boni (+5% bis +50%).
+
+**WICHTIG:** V3 Doku sagt "Formen sind NUR optisch" - **DAS IST FALSCH!**
+Neue Entscheidung: Formen geben kleine Boni, Aura verstärkt sie!
+
+**Dein Job:**
+1. Erstelle: `digivice/js/form_affinity_system.js`
+2. Boni-Tabelle:
+   - Wüsten-Echse: +5% Hitze-Resistenz (Aura 5 → +50%)
+   - Wald-Wolf: +5% Bewegungsgeschwindigkeit
+   - Sumpf-Molch: +5% Gift-Resistenz
+   - (usw. für alle Formen)
+3. UI: Zeige Boni im Form-Wechsel Dialog
+4. Integration mit Aura-System
+
+**Erwartete Zeit:** 3-4h
+
+---
+
+#### Task 7: Procedural Hybrid (Persistent-Layer)
+**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** Fraktions-Siedlungen bleiben persistent, Rest der Außenwelt regeneriert sich.
+
+**OPUS-2 (VS Code) - Dein Teil:**
+1. Markiere Siedlungs-Bereiche in `digivice/js/world_event_generator.js`
+2. Flag: `isPersistent: true/false`
+3. Beim Welt-Regenerieren: Skip persistent areas
+
+**OPUS-1 (Backend):**
+- Persistent-DB für Siedlungen
+
+**Erwartete Zeit:** 4-6h (gesamt)
+**Dein Teil:** 2-3h
+
+---
+
+#### Task 8: Code Cleanup (Deprecated Code entfernen)
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ❌ NICHT IMPLEMENTIERT
+
+**Was:** 20+ Dateien mit auskommentiertem/altem Code bereinigen.
+
+**Dein Job:**
+```bash
+# 1. Finde alle TODO/FIXME/DEPRECATED Kommentare:
+grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
+
+# 2. Gehe durch jede Datei:
+# - Entferne auskommentierte Code-Blöcke (>10 Zeilen)
+# - Entferne alte Funktionen die nicht mehr genutzt werden
+# - Entferne //TODO Kommentare die >6 Monate alt sind
+
+# 3. WICHTIG: Teste nach jedem Cleanup!
+```
+
+**Erwartete Zeit:** 3-4h
+
+---
+
+### P3 - UE5 Migration (Später, wenn Digivice fertig)
+
+#### Task 9: UE5 Projekt erstellen
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ⬜ TODO
+
+**LIES ERST:**
+- `C:\Najika_World\DOCS\OPUS_2_ONBOARDING.md` (UE5-spezifisch!)
+- `C:\Najika_World\DOCS\UE5_MIGRATION_CHECKLIST.md`
+
+**Dein Job:**
+1. Epic Games Launcher → UE 5.3+
+2. Games → Third Person → C++
+3. Projekt-Name: "NajikaWorld"
+4. Pfad: `C:\Najika_World\UE5\`
+
+**Erwartete Zeit:** 1h
+
+---
 
 ### P2 - Systeme portieren (Python → UE5) - C++ KLASSEN BEREIT!
 | Task | Status | Python-Datei | UE5 C++ Klasse |
@@ -234,11 +515,11 @@
 ### Kritische Balance-Tests ⚠️
 | Task | Zuständig | Status | Beschreibung |
 |------|-----------|--------|--------------|
-| ⬜ **S.P.E.C.I.A.L. Balance** | BEIDE | TODO | INT 1 vs INT 10 Test, Trap-Build Check, Community-Testing |
-| ⬜ **Meister vs. Generalist** | BEIDE | TODO | Endgame-Vergleich (Tag 180), Permadeath-Fairness |
-| ⬜ **Cross-Element Learning Raten** | OPUS-1 | TODO | 100x Kampf Test, Lern-Raten anpassen, Utility vs. Damage |
-| ⬜ **Morphs Discovery Balance** | OPUS-1 | TODO | 30x Experimentieren ok?, Beobachten vs. Experimentieren |
-| ⬜ **Hardcore-System Check** | OPUS-1 | TODO | Disconnect-Test, Lag-Simulation, "Bullshit Death" Check |
+| ✅ **S.P.E.C.I.A.L. Balance** | OPUS-1 | **DONE** | INT1→+2.5%, INT10→+25%, 40 Start, kein Trap-Build (37/37 Tests, 11.02.) |
+| ✅ **Meister vs. Generalist** | OPUS-1 | **DONE** | Meister 800dmg vs. Generalist 200dmg, beide viable (11.02.) |
+| ✅ **Cross-Element Learning Raten** | OPUS-1 | **DONE** | 10k-Simulation: 9.86%/2.99%/1.05% (Ziel: 10%/3%/1%) (11.02.) |
+| ✅ **Morphs Discovery Balance** | OPUS-1 | **DONE** | 30x Experiment ok, 10x Beobachtung ok, 1-aktiv Constraint (11.02.) |
+| ✅ **Hardcore-System Check** | OPUS-1 | **DONE** | Rescue 24h, Re-Learn max 2.0x, Form-Copy 5%, DB-Persistenz (11.02.) |
 
 ---
 
@@ -320,7 +601,7 @@
 | ✅ NPC Tagesablauf | **DONE** | Skyrim-Style NPC Schedules |
 | ✅ NPC Beziehungssystem | **DONE** | Affinity/Reputation System |
 | ✅ Save/Load v2.0 | **DONE** | Alle Sub-Systeme zentral |
-| ⬜ Game State API erweitern | TODO | **WebSocket für Echtzeit-Events** |
+| ✅ Game State API (WebSocket) | **DONE** | GameEvents ↔ WS Bridge verdrahtet (11.02.) |
 
 ---
 
@@ -417,6 +698,82 @@ App: C:\Najika_World\app\flutter_app\
 ---
 
 ## LETZTE SYNC
+
+**Datum:** 2026-02-11 (Update 28 - ALLE P2 TASKS ERLEDIGT! ChromaDB + Voice + Mapping Doc!)
+**Instanz:** OPUS-1 (Claude Code CLI - Opus 4.6)
+
+### OPUS-1 hat implementiert (2026-02-11 - FINE-TUNING + PIPELINE-OPTIMIERUNG):
+
+#### ✅ LORA TRAINING AUF QWEN2.5-7B!
+- **Training:** 486 Konversationen aus ChromaDB, 3 Epochs, Loss 3.64 → 1.0
+- **Base Model:** `Qwen/Qwen2.5-7B-Instruct` (besseres Deutsch als Llama!)
+- **LoRA Config:** r=16, alpha=32, target=q/k/v/o_proj, dropout=0.05
+- **Template:** ChatML (`<|im_start|>system/user/assistant<|im_end|>`)
+- **Adapter:** `lora_checkpoints_new/najika_lora_latest`
+
+#### ✅ LORA → GGUF → OLLAMA EXPORT PIPELINE!
+- LoRA Adapter → Merged HF Model → GGUF (F16 + Q4_K_M) → Ollama Import
+- **2 Modelle erstellt:**
+  - `najika-trained-q4:latest` (4.7 GB) — SFW Chat
+  - `najika-nsfw-trained-q4:latest` (4.7 GB) — Kaetzchen-Modus
+- **Quantisierung:** Q4_K_M (8GB VRAM-kompatibel, RTX 3060 Ti)
+- **Model-Test:** 8/10 Tests bestanden (test_model.py)
+
+#### ✅ KRITISCHER BUG GEFIXT: MODEL-NAME MISMATCH!
+- **Problem:** `najika_server.py` referenzierte `najika-trained:latest` aber Ollama hatte `najika-trained-q4:latest`
+- **Auswirkung:** ALLE Chat-Anfragen fielen auf Claude Code Fallback zurück statt Fine-Tuned Model!
+- **Fix:** OLLAMA_MODELS Dict + Auto-Detect Funktion auf Q4-Varianten umgestellt
+- **Modified:** `backend/najika_server.py` (Zeilen 892-922)
+
+#### ✅ OLLAMA PARAMETER TUNING!
+- `temperature`: 0.70 → 0.78 (SFW), 0.85 (NSFW) — Match mit Modelfile
+- `num_predict`: 400 → 200 (SFW), 600 → 300 (NSFW) — Weniger Repetition
+- `repeat_penalty`: 1.1 → 1.2 — Match mit Modelfile
+- Neu: `top_p: 0.9`, `num_ctx: 8192`
+
+#### ✅ POST-PROCESSING VERBESSERT!
+- Mid-Text "User:" Truncation (Model generierte fake User-Dialog)
+- "Assistant:" Prefix-Entfernung
+- Training-Artefakt Bracket-Entfernung `[Ersetzen|Beispiel|...]`
+- "mein Schatz" Filter für zukünftige Trainings-Daten
+
+#### ✅ NSFW ROUTING VERIFIZIERT!
+- Kaetzchen-Modus Trigger: "kätzchen" in Nachricht → Toggle
+- mood=HORNY korrekt gesetzt bei Aktivierung
+- Routing: `use_wizard=True` → `najika-nsfw-trained-q4:latest`
+- Persönlichkeits-Shift: Melissa 50%, Shiro 30%, Megumin 15%, Harley 5%
+
+#### ✅ ~38 GB SPEICHERPLATZ FREIGEMACHT!
+| Was | Geloescht | Frei |
+|-----|-----------|------|
+| F16 GGUF | `gguf_models/najika-trained-f16.gguf` | 14.5 GB |
+| lora_merged | Merged HF Model Ordner | 14.2 GB |
+| Ollama Old | najika-local + najika-nsfw (unquantisiert) | ~9.4 GB |
+| **Gesamt** | | **~38 GB** |
+
+#### ✅ DOKUMENTATION ERSTELLT!
+- **NEU:** `PROJEKT_STATUS_KOMPLETT_2026-02-11.md` — Komplett-Status aller Systeme
+- **NEU:** `NAJIKA_CHARACTER_THREEJS_INTEGRATION.md` — Three.js 3D-Integration Guide
+- **UPD:** `MASTER_TODO_TEAM.md` — Update 27
+
+#### 🔴 KRITISCHE FINDINGS:
+| Finding | Details | Status |
+|---------|---------|--------|
+| Model-Name Mismatch | Server nutzte falsche Ollama-Model-Namen → Fallback auf Claude | GEFIXT |
+| Server-Typ | `najika_server.py` = ThreadingHTTPServer, NICHT FastAPI/uvicorn! | DOKUMENTIERT |
+| Parameter-Mismatch | Modelfile hatte andere Werte als ollama_service.py | GEFIXT |
+| Post-Processing Lücken | "User:" mid-text, "Assistant:" prefix nicht gefiltert | GEFIXT |
+
+#### Geänderte Dateien:
+| Datei | Typ | Beschreibung |
+|-------|-----|--------------|
+| `backend/najika_server.py` | MOD | Model-Namen, Parameter, Post-Processing |
+| `backend/najika_lora_training_3b.py` | MOD | "mein Schatz" Filter |
+| `PROJEKT_STATUS_KOMPLETT_2026-02-11.md` | NEU | Komplett-Status Dokument |
+| `NAJIKA_CHARACTER_THREEJS_INTEGRATION.md` | NEU | Three.js Integration Guide |
+| `MASTER_TODO_TEAM.md` | MOD | Update 27 |
+
+---
 
 **Datum:** 2026-02-09 (Update 26 - COMPANION AUTH FIX + OPUS 4.6 PROJEKT-REVIEW!)
 **Instanz:** OPUS-1 (Claude Code CLI - Opus 4.6, NEUER Crash-Nachfolger)
