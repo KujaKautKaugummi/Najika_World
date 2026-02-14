@@ -234,7 +234,7 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 #### 🔥 NEUE PRIORITÄT: FASTAPI MIGRATION (2026-02-14)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** 🔨 IN PROGRESS - Backend fertig, Frontend + Testing fehlt noch!
+**Status:** ✅ ERLEDIGT - Siehe unten in "ERLEDIGT (2026-02-14)"!
 
 **ENTSCHEIDUNG VON KUJA:**
 - Backend-Merge JETZT machen (najika_server.py → FastAPI)
@@ -253,7 +253,44 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 ---
 
-## 🚨 OPUS: EXAKTE ANWEISUNGEN FÜR FERTIGSTELLUNG
+## ✅ FASTAPI MIGRATION FERTIG! (Port Fix von Sonnet)
+
+Die Migration ist KOMPLETT! Details siehe weiter unten in "ERLEDIGT (2026-02-14)".
+
+---
+
+## 🎯 OPUS: NÄCHSTE TASKS (P1 - Diese Woche)
+
+**FastAPI Migration ist durch! Jetzt kommen die Frontend-Features:**
+
+### WÄHLE EINEN TASK AUS (von einfach zu komplex):
+
+#### 🟢 **EINFACH: Task 5 - Medizin-Crafting UI** (~2-3h)
+**Datei:** `digivice/js/medicine_crafting_ui.js` (NEU erstellen)
+**Was:** Echtes Med-Wissen → Fantasy-Namen mapping
+- Kamille → Kristall-Kamille
+- Pfefferminz → Frost-Minze
+- Salbei → Schatten-Salbei
+**Beschreibung:** Siehe Task 5 weiter unten in der TODO
+
+#### 🟡 **MITTEL: Task 4 - Aura vs Begleiter Wahl-UI** (~4-5h)
+**Datei:** `digivice/js/slime_mode_choice_ui.js` (NEU erstellen)
+**Was:** Spieler wählt EINMAL ob Slime "Aura" oder "Körperlich"
+- Beide gleich stark (Balance!)
+- Wahl ist permanent (wichtig!)
+**Beschreibung:** Siehe Task 4 weiter unten in der TODO
+
+#### 🔴 **KOMPLEX: Task 3 - Dynamische Völker System UI** (~6-8h)
+**Datei:** `digivice/js/dynamic_factions_ui.js` (NEU erstellen)
+**Was:** Wild-Monster Fraktionen (Wachstum, Kriege, Kollaps)
+- Fraktions-Übersicht anzeigen
+- Kriegs-Notifications
+- Ruf-System UI
+**Beschreibung:** Siehe Task 3 weiter unten in der TODO
+
+---
+
+### 📋 ALTE ANWEISUNGEN (IGNORIEREN - NUR FÜR HISTORIE):
 
 **Du hast bereits PERFEKT gemacht:**
 - ✅ `backend/shared_state.py` (163 Zeilen)
