@@ -516,21 +516,218 @@ Backend macht OPUS-1. Nur bei Problemen stoppen!
 
 ---
 
-#### Task 5: Medizin-Crafting UI
+#### 🎯 Task 5: Medizin-Crafting UI ⭐ **NÄCHSTER TASK FÜR OPUS!**
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ⬜ TODO - **START JETZT!**
 
 **WAS:** Echtes Med-Wissen → Fantasy-Namen (Kamille → Kristall-Kamille)
 
-**DEIN JOB:**
-Erstelle `digivice/js/medicine_crafting_ui.js` mit:
-- Pflanzen-Sammlung (64 Pflanzen)
-- Rezept-Buch mit echten Effekten
-- Crafting-Interface
-- Tooltips (zeigt echte medizinische Wirkung!)
+**WARUM DIESER TASK ZUERST:**
+- ✅ Einfachster der 3 offenen Tasks
+- ✅ Schneller Erfolg nach FastAPI (2-3h statt 6-8h)
+- ✅ Weniger fehleranfällig als Factions oder Slime-Choice
+- ✅ Cooles Feature das User sehen können!
 
-Backend macht OPUS-1. Nur bei Problemen stoppen!
-**Zeit:** ~20 Min
+---
+
+## 🚀 OPUS: EXAKTE ANWEISUNGEN FÜR TASK 5
+
+### SCHRITT 1: DATEI ERSTELLEN
+**Erstelle:** `C:\Najika_World\digivice\js\medicine_crafting_ui.js`
+
+**Inhalt:** (Beispiel-Struktur)
+```javascript
+// Medicine Crafting System UI
+// Fantasy-Namen für echte Heilpflanzen
+
+class MedicineCraftingUI {
+    constructor() {
+        this.plants = this.initPlants();
+        this.recipes = this.initRecipes();
+        this.inventory = {};
+    }
+
+    initPlants() {
+        // 64 Pflanzen: Real → Fantasy mapping
+        return {
+            'kamille': {
+                fantasyName: 'Kristall-Kamille',
+                realEffect: 'Beruhigend, entzündungshemmend',
+                rarity: 'common',
+                regions: ['Wiese', 'Wald']
+            },
+            'pfefferminz': {
+                fantasyName: 'Frost-Minze',
+                realEffect: 'Kühlend, schmerzlindernd',
+                rarity: 'common',
+                regions: ['Berg', 'Fluss']
+            },
+            'lavendel': {
+                fantasyName: 'Traum-Lavendel',
+                realEffect: 'Beruhigend, schlaffördernd',
+                rarity: 'uncommon',
+                regions: ['Hochland']
+            },
+            // ... 61 weitere Pflanzen
+        };
+    }
+
+    initRecipes() {
+        // Rezepte mit echten medizinischen Kombinationen
+        return {
+            'beruhigungstrank': {
+                ingredients: ['kamille', 'lavendel'],
+                effect: 'Stress -50%, Schlaf +30%',
+                realBasis: 'Kamille + Lavendel = bewährte Schlaf-Kombination'
+            },
+            // ... mehr Rezepte
+        };
+    }
+
+    // UI Methods
+    showCraftingInterface() { /* ... */ }
+    gatherPlant(plantId) { /* ... */ }
+    craftRecipe(recipeId) { /* ... */ }
+}
+
+// Init
+window.medicineCrafting = new MedicineCraftingUI();
+```
+
+### SCHRITT 2: 64 PFLANZEN DEFINIEREN
+**Kategorien:**
+- **Common (30):** Kamille, Minze, Salbei, Thymian, etc.
+- **Uncommon (20):** Lavendel, Arnika, Johanniskraut, etc.
+- **Rare (10):** Ginseng, Echinacea, Ginkgo, etc.
+- **Legendary (4):** Mandrake, Alraune, Phoenix-Farn, Mondblume
+
+**Jede Pflanze braucht:**
+```javascript
+{
+    fantasyName: "Kristall-Kamille",
+    realEffect: "Beruhigend, entzündungshemmend",
+    rarity: "common",
+    regions: ['Wiese', 'Wald'],
+    gatherChance: 0.8,  // 80% bei Common
+    icon: "🌼"
+}
+```
+
+### SCHRITT 3: REZEPTE MIT ECHTEN EFFEKTEN
+**Beispiele:**
+```javascript
+{
+    'heiltrank_klein': {
+        ingredients: ['kamille', 'salbei'],
+        effect: 'HP +50',
+        realBasis: 'Kamille (entzündungshemmend) + Salbei (antibakteriell)'
+    },
+    'energietrank': {
+        ingredients: ['pfefferminz', 'ginseng'],
+        effect: 'Stamina +100',
+        realBasis: 'Minze (belebend) + Ginseng (Energie)'
+    },
+    'gegengift': {
+        ingredients: ['kohle', 'ingwer'],  // Aktivkohle!
+        effect: 'Gift-Resistenz +80%',
+        realBasis: 'Aktivkohle bindet Toxine, Ingwer beruhigt Magen'
+    }
+}
+```
+
+### SCHRITT 4: UI ELEMENTS
+**Erstelle 3 Tabs:**
+1. **Sammeln** - Pflanzen in Regionen finden
+2. **Rezeptbuch** - Alle bekannten Rezepte
+3. **Crafting** - Tränke herstellen
+
+**CSS Classes:** (nutze existierende Najika-Styles!)
+- `.medicine-tab-container`
+- `.plant-card` (mit Rarity-Border!)
+- `.recipe-item`
+- `.crafting-slot`
+
+### SCHRITT 5: INTEGRATION
+**In `index.html` einfügen:** (vor `</body>`)
+```html
+<script src="js/medicine_crafting_ui.js"></script>
+```
+
+**Tab in Navigation hinzufügen:**
+```javascript
+// In der Tab-Liste
+<button onclick="showMedicineTab()">🌿 Medizin</button>
+```
+
+### SCHRITT 6: BACKEND SPÄTER
+**WICHTIG:** Backend macht OPUS-1 später!
+- Speichern/Laden der Inventory
+- Pflanzen-Spawn in Regionen
+- Rezept-Unlock System
+
+**Du machst NUR Frontend UI!** Das Backend kommt später.
+
+### SCHRITT 7: TESTEN
+1. Browser öffnen: `http://127.0.0.1:8001/`
+2. Medizin-Tab öffnen
+3. Check: Werden Pflanzen angezeigt?
+4. Check: Funktioniert Crafting-Interface?
+5. Browser Console (F12): Keine Errors!
+
+### SCHRITT 8: GIT COMMIT
+```bash
+cd C:\Najika_World
+git add digivice/js/medicine_crafting_ui.js
+git add digivice/index.html
+git commit -m "Medicine Crafting UI - 64 Fantasy-Pflanzen mit echten Effekten
+
+- Real → Fantasy mapping (Kamille → Kristall-Kamille)
+- 64 Pflanzen in 4 Rarity-Stufen
+- Rezepte basieren auf echtem medizinischen Wissen
+- UI: Sammeln, Rezeptbuch, Crafting Tabs
+- Backend Integration kommt später
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+```
+
+### SCHRITT 9: TODO UPDATE
+Ändere Status zu: `✅ ERLEDIGT`
+
+---
+
+## 📚 RECHERCHE-QUELLEN FÜR OPUS:
+
+**Für echte Pflanzenkunde:**
+- Kamille: Beruhigung, Entzündung
+- Salbei: Antibakteriell, Halsschmerzen
+- Pfefferminz: Kühlend, Kopfschmerz
+- Lavendel: Schlaf, Stress
+- Ingwer: Übelkeit, Entzündung
+- Thymian: Husten, antibakteriell
+- Johanniskraut: Stimmung (VORSICHT: Wechselwirkungen!)
+- Arnika: Prellungen, Schmerz
+- Baldrian: Schlaf, Angst
+- Echinacea: Immunsystem
+
+**Fantasy-Namen Muster:**
+- Element + Pflanze: "Frost-Minze", "Feuer-Ingwer"
+- Material + Pflanze: "Kristall-Kamille", "Silber-Salbei"
+- Eigenschaft + Pflanze: "Traum-Lavendel", "Heilige-Arnika"
+
+---
+
+## ⏱️ ZEITPLAN:
+
+- Schritt 1-2: Datei + Pflanzen definieren (1h)
+- Schritt 3: Rezepte (30 Min)
+- Schritt 4-5: UI + Integration (1h)
+- Schritt 6-9: Testen + Commit (30 Min)
+
+**TOTAL: 2-3 Stunden**
+
+---
+
+**Los geht's OPUS! Medizin-Crafting ist ein geiles Feature! 💊🌿**
 
 ---
 
