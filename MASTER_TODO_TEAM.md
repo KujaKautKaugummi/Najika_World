@@ -234,7 +234,7 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 #### 🔥 NEUE PRIORITÄT: FASTAPI MIGRATION (2026-02-14)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO - START JETZT!
+**Status:** 🔨 IN PROGRESS - Backend fertig, Frontend + Testing fehlt noch!
 
 **ENTSCHEIDUNG VON KUJA:**
 - Backend-Merge JETZT machen (najika_server.py → FastAPI)
@@ -245,17 +245,147 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 📄 **`DOCS/FASTAPI_MIGRATION_PLAN_FÜR_OPUS.md`** (60+ Seiten!)
 
 **Phasen:**
-1. Core (Chat, State) - 4-6h
-2. Game Systems (Battle, Quests) - 8-10h
-3. Slime V3 - 4-6h
-4. Frontend Update - 4-6h
-5. Testing - 2-4h
+1. ✅ Core (Chat, State) - FERTIG!
+2. ✅ Game Systems (Battle, Quests) - FERTIG!
+3. ✅ Slime V3 - FERTIG! (656 Zeilen)
+4. ⬜ Frontend Update - TODO
+5. ⬜ Testing - TODO
+
+---
+
+## 🚨 OPUS: EXAKTE ANWEISUNGEN FÜR FERTIGSTELLUNG
+
+**Du hast bereits PERFEKT gemacht:**
+- ✅ `backend/shared_state.py` (163 Zeilen)
+- ✅ `backend/api/state_v2.py` (215 Zeilen)
+- ✅ `backend/api/chat_v2.py` (489 Zeilen)
+- ✅ `backend/api/battle_v2.py` (318 Zeilen)
+- ✅ `backend/api/living_v2.py` (353 Zeilen)
+- ✅ `backend/api/quest_v2.py` (312 Zeilen)
+- ✅ `backend/api/minigame_v2.py` (241 Zeilen)
+- ✅ `backend/api/slime_v3.py` (656 Zeilen) - **Komplettes Slime V3 System!**
+- ✅ Alle Router in `main_fastapi.py` integriert
+
+**TOTAL: 2.747 Zeilen neuer FastAPI Code! 🎉**
+
+---
+
+### ⚠️ WAS DU JETZT TUN MUSST (EXAKT DIESE SCHRITTE):
+
+#### SCHRITT 1: PORT IM FRONTEND ÄNDERN
+**Datei:** `C:\Najika_World\digivice\index.html`
+**Zeile:** 6315
+**ÄNDERN VON:**
+```javascript
+window.API_BASE_URL = 'http://127.0.0.1:8000';
+```
+**ÄNDERN ZU:**
+```javascript
+window.API_BASE_URL = 'http://127.0.0.1:8001';
+```
+
+#### SCHRITT 2: FASTAPI SERVER TESTEN
+**Terminal öffnen:**
+```bash
+cd C:\Najika_World\backend
+python main_fastapi.py
+```
+
+**ERWARTETE AUSGABE:**
+```
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001
+```
+
+**Falls FEHLER:**
+- STOP sofort
+- Schreib den KOMPLETTEN Error in die TODO
+- Frage in der Chat
+
+#### SCHRITT 3: FRONTEND TESTEN
+**Browser öffnen:**
+```
+http://127.0.0.1:8001/
+```
+
+**TESTEN:**
+1. Chat mit Najika öffnen
+2. Eine Nachricht schreiben
+3. Battle starten
+4. Slime-Tab öffnen (sollte leer sein, aber keine Errors!)
+
+**Falls FEHLER in der Browser Console (F12):**
+- STOP sofort
+- Screenshot von den Errors machen
+- Schreib die Errors in die TODO
+- Frage in der Chat
+
+#### SCHRITT 4: GIT COMMIT
+**NUR wenn Schritt 2 + 3 OHNE Fehler:**
+```bash
+cd C:\Najika_World
+git add backend/shared_state.py
+git add backend/api/state_v2.py
+git add backend/api/chat_v2.py
+git add backend/api/battle_v2.py
+git add backend/api/living_v2.py
+git add backend/api/quest_v2.py
+git add backend/api/minigame_v2.py
+git add backend/api/slime_v3.py
+git add backend/main_fastapi.py
+git add digivice/index.html
+git add MASTER_TODO_TEAM.md
+
+git commit -m "FastAPI Migration Phase 1-3 komplett + Slime V3 System
+
+- Backend: 2.747 Zeilen neuer FastAPI Code
+- Slime V3: 8 Regional Forms + 13 Aura Elemente + Vertrauen System
+- Shared State: Keine circular imports mehr
+- Frontend: Port 8000 → 8001
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+```
+
+#### SCHRITT 5: TODO UPDATE
+**Wenn alles ERFOLGREICH:**
+- Ändere Status von `🔨 IN PROGRESS` zu `✅ ERLEDIGT`
+- Schreib in die Chat: "FastAPI Migration Phase 1-4 fertig! Server läuft auf Port 8001."
+
+**Wenn PROBLEME:**
+- Ändere Status NICHT
+- Schreib die EXAKTEN Fehlermeldungen in die TODO unter "PROBLEME:"
+- Frage in der Chat
+
+---
+
+### 🛑 WICHTIG FÜR OPUS:
+
+1. **Mach NUR diese 5 Schritte in EXAKT dieser Reihenfolge**
+2. **Bei jedem Fehler: STOP und frag in der Chat**
+3. **NICHT weitermachen wenn was nicht funktioniert**
+4. **Das sind max. 20 Minuten Arbeit wenn alles klappt**
+
+---
+
+### 📚 WELCHE MDs SOLLTEST DU LESEN (FALLS FRISCH):
+
+**PFLICHT (für Kontext):**
+1. `CLAUDE.md` - Projekt-Basics (Port 8000→8001 Info!)
+2. `DOCS/FASTAPI_MIGRATION_PLAN_FÜR_OPUS.md` - Dein Plan (den du gemacht hast)
+3. `MASTER_TODO_TEAM.md` - Diese Datei hier
+
+**OPTIONAL (nur bei Fragen):**
+4. `NAJIKA_ULTIMATE_STATUS_REPORT_2026-02-14.md` - Komplett-Status
+5. `DOCS/GELERNT_AUS_ALLEN_SESSIONS.md` - Lessons Learned
+
+---
+
+**Los geht's OPUS! Du packst das! 💪**
 
 **START:**
 ```bash
-cd C:\Najika_World
-# Lies: DOCS/FASTAPI_MIGRATION_PLAN_FÜR_OPUS.md
-# Dann: Phase 1 beginnen
+# Mach Schritt 1: Port ändern in digivice/index.html Zeile 6315
+# Dann Schritt 2: Server testen
 ```
 
 ---
