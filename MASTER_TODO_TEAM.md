@@ -712,6 +712,10 @@ grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
 - **10/10 Live-Tests bestanden** (curl gegen laufenden Server)
 - V1-Endpoints bleiben fuer Backward Compatibility
 
+#### Fix von Sonnet (7c69a6d):
+- ✅ **Frontend Port Fix** - OPUS hatte Port 8000→8001 in `index.html` Zeile 6315 vergessen
+- ✅ **Jetzt komplett fertig!** - Frontend redet jetzt mit FastAPI statt legacy Server
+
 ---
 
 ## ✅ ERLEDIGT (2026-02-09) - OPUS-1
