@@ -27,7 +27,10 @@ from backend.api import (
     housing, farming, world_map, najika_compat,
     najika_game_actions_router, readiness, combat_magic, battle_unified,
     lebensraum, building, memory, voice_ue5, music, spell_names, special_stats, slime_2layer_ai,
-    chat, living, temperature
+    chat, living, temperature,
+    state_v2, chat_v2,  # V2 Core Router (Migration Phase 1)
+    battle_v2, living_v2, quest_v2, minigame_v2,  # V2 Game Systems (Phase 2)
+    slime_v3,  # Slime V3 Formwandler + Aura (Phase 3)
 )
 
 
@@ -47,6 +50,54 @@ async def lifespan(app: FastAPI):
     print("Initializing database...")
     init_db()
 
+    # ================================================================
+    # Initialize Shared Systems (V2 Migration)
+    # ================================================================
+    import backend.shared_state as shared
+
+    # ChromaDB Memory (Enhanced)
+    try:
+        from najika_memory_enhanced import NajikaMemoryEnhanced
+        shared.NAJIKA_MEMORY = NajikaMemoryEnhanced(
+            persist_directory="C:\\Najika_World\\memory_db"
+        )
+        count = getattr(shared.NAJIKA_MEMORY, 'count', lambda: '?')
+        print(f"  ChromaDB Memory loaded")
+    except Exception as e:
+        print(f"  Memory not available: {e}")
+
+    # Web Search
+    try:
+        from najika_search import NajikaSearch
+        shared.NAJIKA_SEARCH = NajikaSearch()
+        print("  Web Search System loaded")
+    except Exception as e:
+        print(f"  Search not available: {e}")
+
+    # Security (Alcatraz)
+    try:
+        from najika_security import NajikaSecurity
+        shared.NAJIKA_SECURITY = NajikaSecurity()
+        print("  Alcatraz Security loaded")
+    except Exception as e:
+        print(f"  Security not available: {e}")
+
+    # Feature Flags
+    try:
+        from najika_personality_engine import PERSONALITY_ENGINE
+        shared.PERSONALITY_ENGINE_ENABLED = True
+        print("  PersonalityEngine v2.0 loaded")
+    except ImportError:
+        pass
+
+    try:
+        from najika_mind import get_mind
+        shared.NAJIKA_MIND_ENABLED = True
+        print("  NajikaMind AGI loaded")
+    except ImportError:
+        pass
+
+    print("=" * 70)
     print("Backend is ready!")
     print(f"API Docs: http://{settings.HOST}:{settings.PORT}/docs")
     print(f"ReDoc: http://{settings.HOST}:{settings.PORT}/redoc")
@@ -55,7 +106,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # Shutdown
-    print("👋 Shutting down Najika Backend...")
+    print("Shutting down Najika Backend...")
 
 
 # ============================================================================
@@ -193,6 +244,26 @@ app.include_router(living.status_router)  # /api/status/stream (SSE für private
 
 # Temperature System (Body + Environment Temp)
 app.include_router(temperature.router)  # /api/temperature prefix
+
+# ============================================================================
+# V2 CORE ROUTER (Migration Phase 1)
+# ============================================================================
+app.include_router(state_v2.router)   # /api/state - Zentraler State Management
+app.include_router(chat_v2.router)    # /api/v2/chat - Chat V2 mit Shared State
+
+# ============================================================================
+# V2 GAME SYSTEMS (Migration Phase 2)
+# ============================================================================
+app.include_router(battle_v2.router)      # /api/v2/battle - Battle V2
+app.include_router(living_v2.router)      # /api/v2/living - Living V2
+app.include_router(living_v2.care_router) # /api/v2/care - Care Actions V2
+app.include_router(quest_v2.router)       # /api/v2/quest - Quest V2
+app.include_router(minigame_v2.router)    # /api/v2/minigame - Minigames V2
+
+# ============================================================================
+# SLIME V3 (Migration Phase 3 - Formwandler + Aura)
+# ============================================================================
+app.include_router(slime_v3.router)       # /api/slime-v3 - Slime Formwandler System
 
 
 # ============================================================================

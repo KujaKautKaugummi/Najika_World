@@ -120,7 +120,7 @@ const SystemMonitor = {
         if (!panel) return;
 
         try {
-            const response = await fetch('http://localhost:8000/api/najika/status');
+            const response = await fetch('http://localhost:8000/api/state/najika');
             const data = await response.json();
 
             if (data.najika) {

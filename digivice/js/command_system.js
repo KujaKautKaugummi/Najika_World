@@ -247,7 +247,7 @@ class CommandSystem {
   async praise(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('http://localhost:8000/api/najika/praise', {
+      const response = await fetch('http://localhost:8000/api/v2/care/praise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -312,7 +312,7 @@ class CommandSystem {
   async scold(context = 'normal') {
     // Call server API to update backend state
     try {
-      const response = await fetch('http://localhost:8000/api/najika/scold', {
+      const response = await fetch('http://localhost:8000/api/v2/care/scold', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });

@@ -298,8 +298,12 @@
             cursor: pointer;
         }
 
+        #settings-panel {
+            display: none;
+        }
+
         #settings-panel.visible {
-            display: block;
+            display: block !important;
         }
 
         #najika-stats {
@@ -578,17 +582,11 @@
         <button onclick="window.openDungeonDice?.()" id="btn-dice" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">🎲 Dice</button>
         <button onclick="window.openGardenSystem?.()" id="btn-garden" style="background: linear-gradient(135deg, #8BC34A, #558B2F);">🌱 Garten</button>
         <button onclick="window.openFishingSystem?.()" id="btn-fishing" style="background: linear-gradient(135deg, #03A9F4, #0288D1);">🎣 Angeln</button>
-        <button onclick="window.openHousingSystem?.()" id="btn-housing" style="background: linear-gradient(135deg, #FF9800, #F57C00);">🏰 Housing</button>
+        <button onclick="window.openHousingSystemDirect?.()" id="btn-housing" style="background: linear-gradient(135deg, #FF9800, #F57C00);">🏰 Housing</button>
         <!-- RPG System Buttons -->
         <button onclick="window.characterStatsUI?.toggle()" id="btn-charstats" style="background: linear-gradient(135deg, #FFD700, #FF8F00);">📊 Stats</button>
-        <button onclick="window.statTrainingUI?.toggle()" id="btn-training" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">🏋️ Training</button>
-        <button onclick="window.skillTreeUI?.open()" id="btn-skilltree" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">🌳 Skills</button>
         <button onclick="window.questUI?.toggleQuestLog()" id="btn-quests" style="background: linear-gradient(135deg, #F57F17, #E65100);">📜 Quests</button>
-        <button onclick="window.affinityUI?.open()" id="btn-affinity" style="background: linear-gradient(135deg, #E91E63, #AD1457);">💕 Affinity</button>
         <button onclick="window.bestiaryUI?.toggle()" id="btn-bestiary" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">📖 Bestiary</button>
-        <button onclick="window.factionUI?.toggle()" id="btn-factions" style="background: linear-gradient(135deg, #8E24AA, #6A1B9A);">⚔️ Fraktionen</button>
-        <button onclick="window.careerUI?.toggle()" id="btn-careers" style="background: linear-gradient(135deg, #EF6C00, #E65100);">🏛️ Berufe</button>
-        <button onclick="window.tradeUI?.toggle()" id="btn-trade" style="background: linear-gradient(135deg, #FFD700, #FFA000);">💰 Handel</button>
         <button onclick="window.creatureUI?.toggle()" id="btn-creatures" style="background: linear-gradient(135deg, #4DB6AC, #00897B);">🐾 Kreaturen</button>
         <button onclick="window.slimeCompanion?.toggleUI()" id="btn-slime" style="background: linear-gradient(135deg, #00E676, #00C853);">🐾 Slime</button>
         <button onclick="toggleInventory()" id="btn-inventory" style="background: linear-gradient(135deg, #795548, #5D4037);">🎒 Inventar</button>
@@ -640,7 +638,7 @@
     <div id="canvas-container"></div>
 
     <!-- SETTINGS PANEL -->
-    <div id="settings-panel" class="panel" style="position: fixed; top: 60px; left: 50%; transform: translateX(-50%); width: 400px; max-height: 80vh; overflow-y: auto; background: rgba(10, 10, 10, 0.98); border: 2px solid #607D8B; border-radius: 12px; padding: 20px; z-index: 1001; display: none;">
+    <div id="settings-panel" class="panel" style="position: fixed; top: 60px; left: 50%; transform: translateX(-50%); width: 400px; max-height: 80vh; overflow-y: auto; background: rgba(10, 10, 10, 0.98); border: 2px solid #607D8B; border-radius: 12px; padding: 20px; z-index: 1001;">
         <h3 style="margin: 0 0 20px 0; color: #607D8B; text-align: center; font-size: 18px;">🔧 EINSTELLUNGEN</h3>
 
         <!-- GRAFIK -->
@@ -840,12 +838,9 @@
         <!-- SKILLS SCHNELLZUGRIFF -->
         <hr style="margin: 10px 0; border-color: #333;">
         <div style="background: rgba(150, 50, 255, 0.1); padding: 8px; border-radius: 5px; border: 1px solid #9632ff;">
-            <div style="font-size: 11px; color: #9632ff; margin-bottom: 6px; font-weight: bold;">✨ SKILLS (1-4)</div>
+            <div style="font-size: 11px; color: #9632ff; margin-bottom: 6px; font-weight: bold;">✨ GELERNTE ZAUBER</div>
             <div id="skill-quickbar" style="display: flex; gap: 5px; flex-wrap: wrap;">
-                <button onclick="useSkill('fireball')" class="skill-btn" title="Fireball">🔥</button>
-                <button onclick="useSkill('ice_shard')" class="skill-btn" title="Ice Shard">❄️</button>
-                <button onclick="useSkill('lightning_bolt')" class="skill-btn" title="Lightning">⚡</button>
-                <button onclick="useSkill('heal')" class="skill-btn" title="Heal">💚</button>
+                <div style="font-size: 10px; color: #888; font-style: italic;">Lerne Zauber bei einem Meister in der Welt!</div>
             </div>
             <div style="font-size: 10px; color: #aaa; margin-top: 4px;">
                 <span>💎 Mana: <span id="current-mana">50</span>/100</span>
@@ -962,6 +957,8 @@
     <script src="js/combat/real_3d_combat.js"></script>
     <!-- Game Event Bus (muss VOR allen Systemen laden) -->
     <script src="js/game_events.js"></script>
+    <!-- WebSocket ↔ GameEvents Bridge (Realtime Events) -->
+    <script src="js/game_events_ws_bridge.js"></script>
     <!-- Overworld Enemies + NPCs -->
     <script src="js/overworld_enemies.js"></script>
     <script src="js/overworld_npcs.js"></script>
@@ -1119,7 +1116,7 @@
             const text = isPositive ? 'Lob' : 'Tadel';
 
             try {
-                const response = await fetch(`http://localhost:8000/api/najika/${action}`, {
+                const response = await fetch(`http://localhost:8000/api/v2/care/${action}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({})
@@ -2801,27 +2798,27 @@
 
                 switch(action) {
                     case 'feed':
-                        endpoint = '/api/najika/feed';
+                        endpoint = '/api/v2/care/feed';
                         message = '🍖 Najika wird gefüttert...';
                         break;
                     case 'drink':
-                        endpoint = '/api/najika/drink';
+                        endpoint = '/api/v2/care/drink';
                         message = '💧 Najika trinkt...';
                         break;
                     case 'cook':
-                        endpoint = '/api/najika/feed';
+                        endpoint = '/api/v2/care/feed';
                         message = '🔥 Najika kocht ein leckeres Essen...'
                         break;
                     case 'shower':
-                        endpoint = '/api/najika/wash';
+                        endpoint = '/api/v2/care/wash';
                         message = '🚿 Najika duscht...';
                         break;
                     case 'toilet':
-                        endpoint = '/api/najika/wash';
+                        endpoint = '/api/v2/care/wash';
                         message = '🚽 Najika geht zur Toilette...';
                         break;
                     case 'sleep':
-                        endpoint = '/api/najika/sleep';
+                        endpoint = '/api/v2/care/sleep';
                         message = '🛏️ Najika schläft...';
                         break;
                 }
@@ -4400,7 +4397,7 @@
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
             try {
-                const response = await fetch(`${window.BACKEND_URL}/api/najika/status`);
+                const response = await fetch(`${window.BACKEND_URL}/api/state/najika`);
                 if (!response.ok) throw new Error('Backend nicht erreichbar');
 
                 const data = await response.json();
@@ -6376,7 +6373,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startNajikaStatusUpdates() {
     async function fetchAndUpdateNajikaStatus() {
         try {
-            const response = await fetch('http://localhost:8000/api/najika/status');
+            const response = await fetch('http://localhost:8000/api/state/najika');
             const data = await response.json();
 
             if (data) {

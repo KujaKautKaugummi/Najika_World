@@ -420,7 +420,7 @@ const NajikaFullscreen = (function() {
      */
     async function updateStatus() {
         try {
-            const response = await fetch(`${API_BASE}/api/najika/status`);
+            const response = await fetch(`${API_BASE}/api/state/najika`);
             const data = await response.json();
 
             if (data) {
@@ -559,7 +559,7 @@ const NajikaFullscreen = (function() {
      */
     async function action(actionType) {
         try {
-            const response = await fetch(`${API_BASE}/api/najika/${actionType}`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/${actionType}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });

@@ -7,14 +7,14 @@
  * - Activity Status
  * - Proactive Messages
  *
- * API Endpoints (Port 8000 - Flask):
- * - GET /api/living/state
- * - GET /api/living/proactive
- * - GET /api/living/activity/check
- * - POST /api/living/activity/start
- * - POST /api/najika/feed
- * - POST /api/najika/drink
- * - POST /api/najika/sleep
+ * API Endpoints (Port 8000 - FastAPI V2):
+ * - GET /api/v2/living/state
+ * - GET /api/v2/living/proactive
+ * - POST /api/v2/care/feed
+ * - POST /api/v2/care/drink
+ * - POST /api/v2/care/sleep
+ * - POST /api/v2/care/play
+ * - POST /api/v2/care/praise
  *
  * Author: Claude Code
  * Date: 2026-02-05
@@ -458,7 +458,7 @@ class LivingSystemUI {
 
     async loadState() {
         try {
-            const response = await fetch(`${this.apiBase}/api/living/state`);
+            const response = await fetch(`${this.apiBase}/api/v2/living/state`);
             if (!response.ok) throw new Error('API Error');
 
             const data = await response.json();
@@ -491,7 +491,7 @@ class LivingSystemUI {
 
     async checkProactiveMessage() {
         try {
-            const response = await fetch(`${this.apiBase}/api/living/proactive`);
+            const response = await fetch(`${this.apiBase}/api/v2/living/proactive`);
             if (!response.ok) return;
 
             const data = await response.json();
@@ -606,19 +606,19 @@ class LivingSystemUI {
 
             switch (action) {
                 case 'feed':
-                    endpoint = '/api/najika/feed';
+                    endpoint = '/api/v2/care/feed';
                     break;
                 case 'drink':
-                    endpoint = '/api/najika/drink';
+                    endpoint = '/api/v2/care/drink';
                     break;
                 case 'sleep':
-                    endpoint = '/api/najika/sleep';
+                    endpoint = '/api/v2/care/sleep';
                     break;
                 case 'play':
-                    endpoint = '/api/living/activity/start';
+                    endpoint = '/api/v2/care/play';
                     break;
                 case 'praise':
-                    endpoint = '/api/najika/praise';
+                    endpoint = '/api/v2/care/praise';
                     break;
                 default:
                     return;
@@ -631,13 +631,35 @@ class LivingSystemUI {
             });
 
             if (response.ok) {
-                console.log(`[Living UI] ${action} erfolgreich!`);
+                const data = await response.json();
+                console.log(`[Living UI] ${action} erfolgreich!`, data);
+
+                // Sichtbares Feedback für den User
+                const feedbackMap = {
+                    'feed': '🍖 Najika wurde gefüttert!',
+                    'drink': '🥤 Najika hat getrunken!',
+                    'sleep': '😴 Najika schläft...',
+                    'play': `🎮 ${data.message || data.activity || 'Najika spielt!'}`,
+                    'praise': '💕 Najika wurde gelobt!'
+                };
+                const msg = feedbackMap[action] || `✅ ${action} erfolgreich!`;
+                if (window.showNotification) {
+                    window.showNotification(msg, 3000);
+                }
+
                 // Reload state after action
                 setTimeout(() => this.loadState(), 500);
+            } else {
+                if (window.showNotification) {
+                    window.showNotification(`❌ ${action} fehlgeschlagen (${response.status})`, 2000);
+                }
             }
 
         } catch (error) {
             console.warn(`[Living UI] ${action} fehlgeschlagen:`, error.message);
+            if (window.showNotification) {
+                window.showNotification('❌ Backend nicht erreichbar', 2000);
+            }
         }
     }
 

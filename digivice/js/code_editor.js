@@ -305,10 +305,10 @@ def najika_greeting():
 
         // Najika Antwort holen
         try {
-            const response = await fetch('http://localhost:8000/api/chat', {
+            const response = await fetch('http://localhost:8000/api/v2/chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message})
+                body: JSON.stringify({message, use_rag: true, use_mind: true})
             });
             const data = await response.json();
 

@@ -52,7 +52,7 @@
 
     let roomGroup = null;
     let currentRoomName = 'Wohnzimmer';
-    let currentRoomSpan = FALLBACK_DEFAULTS.span;
+    let currentRoomSpan = 9600;  // Open World Default (9.6km) - NICHT 24!
     let privateModeActive = false;
     let usingFallbackRoom = true;
     let pendingRoomBuild = false;
@@ -1261,7 +1261,7 @@
         showFloatingMessage('💤 Najika schläft und regeneriert Energie...', '#7a8bff');
 
         try {
-            const response = await fetch(`${API_BASE}/api/najika/sleep`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/sleep`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1282,7 +1282,7 @@
         showFloatingMessage('🍳 Najika bereitet eine Mahlzeit zu...', '#ffb74d');
 
         try {
-            const response = await fetch(`${API_BASE}/api/najika/feed`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/feed`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1302,7 +1302,7 @@
         showFloatingMessage('🚿 Najika wird sauber und erfrischt...', '#8be6ff');
 
         try {
-            const response = await fetch(`${API_BASE}/api/najika/wash`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1323,7 +1323,7 @@
 
         // Toilet increases happiness slightly
         try {
-            const response = await fetch(`${API_BASE}/api/najika/wash`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1343,7 +1343,7 @@
         showFloatingMessage('🚰 Najika wäscht die Hände...', '#81d4fa');
 
         try {
-            const response = await fetch(`${API_BASE}/api/najika/wash`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/wash`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -1363,7 +1363,7 @@
         showFloatingMessage('🪑 Najika isst am Tisch...', '#ff9b71');
 
         try {
-            const response = await fetch(`${API_BASE}/api/najika/feed`, {
+            const response = await fetch(`${API_BASE}/api/v2/care/feed`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -2554,6 +2554,13 @@
     }
 
     function clampCharacterToRoom(position) {
+        // Open World: Welt-Grenzen (0 bis 9600) statt symmetrischem Clamp
+        if (currentRoomSpan >= 9600) {
+            position.x = clamp(position.x, 10, 9590);
+            position.z = clamp(position.z, 10, 9590);
+            return;
+        }
+        // Indoor (Muehle etc.): Raum-basierter Clamp
         const limit = Math.max(8, currentRoomSpan / 2 - CLAMP_PADDING);
         position.x = clamp(position.x, -limit, limit);
         position.z = clamp(position.z, -limit, limit);

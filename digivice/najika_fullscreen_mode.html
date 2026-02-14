@@ -526,7 +526,7 @@
 
         async function loadNajikaState() {
             try {
-                const response = await fetch(`${API_BASE}/api/najika/state`);
+                const response = await fetch(`${API_BASE}/api/state/najika`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.emotion) najikaState.emotion = data.emotion;
@@ -541,7 +541,7 @@
 
         async function updateStateFromBackend() {
             try {
-                const response = await fetch(`${API_BASE}/api/najika/state`);
+                const response = await fetch(`${API_BASE}/api/state/najika`);
                 if (response.ok) {
                     const data = await response.json();
                     // Update nur wenn sich was geaendert hat
@@ -720,7 +720,7 @@
 
             // Sende ans Backend
             try {
-                await fetch(`${API_BASE}/api/najika/touch`, {
+                await fetch(`${API_BASE}/api/v2/care/touch`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ zone: zone })

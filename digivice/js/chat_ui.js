@@ -233,10 +233,10 @@ class ChatUI {
         this.showTyping();
 
         try {
-            const response = await fetch(`${API_BASE}/api/chat`, {
+            const response = await fetch(`${API_BASE}/api/v2/chat`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: message, mode: this.chatMode, session_id: this.sessionId})
+                body: JSON.stringify({message: message, mode: this.chatMode, session_id: this.sessionId, use_rag: true, use_mind: true})
             });
 
             this.hideTyping();
@@ -395,8 +395,8 @@ class ChatUI {
     async loadChatHistory() {
         try {
             const url = this.sessionId
-                ? `${API_BASE}/api/chat/history?session_id=${this.sessionId}`
-                : `${API_BASE}/api/chat/history`;
+                ? `${API_BASE}/api/v2/chat/history?session_id=${this.sessionId}`
+                : `${API_BASE}/api/v2/chat/history`;
             const response = await fetch(url);
 
             if (!response.ok) {
