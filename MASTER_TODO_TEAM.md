@@ -232,62 +232,45 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 ---
 
-#### Task 2: Slime V2 → V3 Migration (MEGA-TASK!)
+#### Task 2: Slime V2 → V3 Migration - KOMPLETTE NEUFASSUNG!
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ❌ NUR PLAN EXISTIERT, NICHT IMPLEMENTIERT!
+**Status:** ⬜ TODO - ZIEH DURCH, NUR BEI FRAGEN STOPPEN!
 
-**LIES ERST:**
-1. `C:\Najika_World\SLIME_SYSTEM_V3_DOKUMENTATION.md` (966 Zeilen - KOMPLETT lesen!)
-2. `C:\Najika_World\OPUS_SESSION_2026-02-13_KOMPLETT.md` (Teil 5 - Der Plan!)
+**DEIN JOB:** Lies die 2 Docs, dann schreib `slime_companion.js` komplett neu. Fertig. 20 Minuten Arbeit.
 
-**Problem:**
-- `digivice/js/slime_companion.js` = V2 Code (FALSCH!)
-  - Hat: 6 Evolution-Stufen (EGG → ULTIMATIV)
-  - Hat: Synthese (2 Slimes → 1 Hybrid)
-  - Hat: +N System
-  - **ALLES FALSCH!**
+**LIES DIESE 2 DATEIEN:**
+1. `C:\Najika_World\SLIME_SYSTEM_V3_DOKUMENTATION.md` (V3 = RICHTIG!)
+2. `C:\Najika_World\OPUS_SESSION_2026-02-13_KOMPLETT.md` (Teil 5 = Der Plan)
 
-- `SLIME_SYSTEM_V3_DOKUMENTATION.md` = V3 Design (RICHTIG!)
-  - Slime = FORMWANDLER (nicht Evolution!)
-  - Aura 0-5 Stufen (nicht Evolution!)
-  - Formen sind NUR optisch
-  - Erinnerungs-System (8 Regional-Formen → volle Erinnerung)
+**WAS V2 HATTE (ALLES RAUS!):**
+- ❌ 6 Evolution-Stufen (EGG → ULTIMATIV)
+- ❌ Synthese (2 Slimes → 1 Hybrid)
+- ❌ +N System, Effort Hearts, Care Mistakes
 
-**Dein Job (Schritt für Schritt!):**
+**WAS V3 BRAUCHT (KOMPLETT NEU!):**
+✅ Formwandler (Form = nur Aussehen, keine Stats!)
+✅ 8 Regional-Start-Formen (Wüsten-Echse, Wald-Wolf, Sumpf-Molch, Vulkan-Salamander, Eis-Hase, Blitz-Vogel, Wellen-Qualle, Kristall-Spinne)
+✅ Erinnerungs-System (1. neue Form → "Ich bin kein normales Monster...", alle 8 → volle Erinnerung)
+✅ Form-Lernen (0.5-2% Chance nach Kampf gewonnen)
+✅ Aura-System (0-5 Stufen: Keine/Schwach/Mittel/Stark/Legendär/Göttlich, 13 Elemente)
+✅ Companion-Modi (Körperlich vs Aura - Spieler wählt EINMAL)
+✅ Vertrauen 0-6 (Fremd→Bekannt→Freund→Vertraut→Familie→Seelenbund)
+✅ Rescue System (1x pro 24h, Level 5+ = kein Cooldown)
+✅ UI: Form-Wechsel Dialog, Erinnerungs-Popups, Aura-Anzeige, Modus-Toggle
+✅ Save/Load: current_form, learned_forms[], memories_unlocked, aura_level, companion_mode, trust_level
 
-**SCHRITT 1:** Backup erstellen
+**COMMANDS:**
 ```bash
+# 1. Backup
 cp digivice/js/slime_companion.js digivice/js/slime_companion_v2_backup.js
+
+# 2. Schreib NEU (alle Infos in den 2 Docs!)
+# 3. Test im Browser
+# 4. Backend-Check: Ist backend/najika_slime_system.py auch V3? Falls nicht → sag Bescheid
 ```
 
-**SCHRITT 2:** Lies V3 Doku komplett (30 Min)
-
-**SCHRITT 3:** Schreibe `slime_companion.js` NEU (~1000 Zeilen)
-- Entferne: ALLE V2 Konzepte (Evolution, Synthese, +N, Effort Hearts, Care Mistakes)
-- Implementiere:
-  - Formwandler-System (Form = Aussehen, nicht Stats!)
-  - 8 Regional-Start-Formen (Wüsten-Echse, Wald-Wolf, etc.)
-  - Erinnerungs-System (1. Form → "Ich bin kein normales Monster...")
-  - Form-Lernen (0.5-2% Chance nach Kampf)
-  - Aura-System (0-5 Stufen, 13 Elemente)
-  - Companion-Modi (Körperlich vs Aura - Spieler wählt)
-  - Vertrauen Level 0-6 (Level 6 = Menschen-Form)
-
-**SCHRITT 4:** UI komplett neu
-- Form-Wechsel Dialog
-- Erinnerungs-Popups (schön formatiert!)
-- Aura-Level Anzeige
-- Companion-Modus Toggle
-
-**SCHRITT 5:** Save/Load anpassen
-- Neue Felder: current_form, learned_forms[], memories_unlocked, aura_level, companion_mode
-
-**SCHRITT 6:** Backend-Kompatibilität
-- Prüfe ob `backend/najika_slime_system.py` auch V3 ist
-- Falls nicht → sag OPUS-1 (Desktop) Bescheid!
-
-**Erwartete Zeit:** 8-12h (GROßER Task!)
-**Wichtigkeit:** P0 - KRITISCH
+**NUR BEI FRAGEN/PROBLEMEN STOPPEN! Sonst: Durchziehen!**
+**Erwartete Zeit:** ~20 Min (laut Kuja)
 
 ---
 
@@ -302,74 +285,57 @@ cp digivice/js/slime_companion.js digivice/js/slime_companion_v2_backup.js
 
 ### P1 - DIESE WOCHE (NEUE FEATURES!)
 
-#### Task 3: Dynamische Völker System
-**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
-**Status:** ❌ NICHT IMPLEMENTIERT
+#### Task 3: Dynamische Völker System (Frontend UI)
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ⬜ TODO
 
-**Was:** Wild-Monster bilden Fraktionen (1-5 pro Region), können wachsen, Kriege führen, kollabieren.
+**WAS:** Wild-Monster bilden Fraktionen (1-5 pro Region), wachsen, Kriege, kollabieren.
 
-**OPUS-2 (VS Code) - Dein Teil:**
-1. Erstelle: `digivice/js/dynamic_factions_ui.js`
-2. UI Elemente:
-   - Fraktions-Übersicht (Name, Größe, Territorium)
-   - Kriegs-Benachrichtigungen
-   - Fraktions-Ruf-Anzeige
-3. Integration mit `digivice/js/faction_system.js` (existiert bereits!)
+**DEIN JOB:**
+Erstelle `digivice/js/dynamic_factions_ui.js` mit:
+- Fraktions-Übersicht (Name, Größe, Territorium)
+- Kriegs-Benachrichtigungen
+- Fraktions-Ruf-Anzeige
+- Integration mit `faction_system.js` (existiert schon!)
 
-**OPUS-1 (Backend) - Backend Teil:**
-- Erstellt: `backend/najika_dynamic_factions.py`
-- API: `/api/factions/dynamic/*`
-
-**Erwartete Zeit:** 6-8h (gesamt)
-**Dein Teil:** 3-4h (Frontend/UI)
+Backend macht OPUS-1. Nur bei Problemen stoppen!
+**Zeit:** ~20 Min
 
 ---
 
-#### Task 4: Aura vs Begleiter Balance System
-**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
-**Status:** ❌ NICHT IMPLEMENTIERT
+#### Task 4: Aura vs Begleiter Wahl-UI
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ⬜ TODO
 
-**Was:** Spieler wählt EINMAL: Aura (Buffs) ODER physischer Slime-Begleiter. Beide gleich stark (PvP Balance).
+**WAS:** Spieler wählt EINMAL: Aura ODER Slime (beide gleich stark).
 
-**OPUS-2 (VS Code) - Dein Teil:**
-1. Erstelle: `digivice/js/companion_mode_choice.js`
-2. UI:
-   - Einmalige Wahl-Dialog (groß, wichtig!)
-   - "WARNUNG: Diese Wahl ist PERMANENT!"
-   - Vergleichs-Tabelle (Aura vs Körperlich Stats)
-   - Bestätigungs-Dialog
+**DEIN JOB:**
+Erstelle `digivice/js/companion_mode_choice.js` mit:
+- Einmalige Wahl-Dialog (groß!)
+- "WARNUNG: Diese Wahl ist PERMANENT!"
+- Vergleichs-Tabelle (Aura vs Körperlich)
+- Bestätigungs-Dialog
 
-**OPUS-1 (Backend):**
-- Erstellt: `backend/najika_aura_vs_companion.py`
-- Balance-Formeln
-
-**Erwartete Zeit:** 4-6h (gesamt)
-**Dein Teil:** 2-3h (UI)
+Backend macht OPUS-1. Nur bei Problemen stoppen!
+**Zeit:** ~15 Min
 
 ---
 
-#### Task 5: Medizin-System (Realismus + Fantasy)
-**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
-**Status:** ❌ NICHT IMPLEMENTIERT
+#### Task 5: Medizin-Crafting UI
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ⬜ TODO
 
-**Was:** Echtes medizinisches Wissen → Fantasy-Namen, gleiche Effekte.
-**Beispiel:** Kamille → Kristall-Kamille (beruhigend, anti-inflammatorisch, in Kristall-Höhlen)
+**WAS:** Echtes Med-Wissen → Fantasy-Namen (Kamille → Kristall-Kamille)
 
-**OPUS-2 (VS Code) - Dein Teil:**
-1. Erstelle: `digivice/js/medicine_crafting_ui.js`
-2. UI:
-   - Pflanzen-Sammlung Anzeige (64 Pflanzen)
-   - Rezept-Buch mit echten Effekten
-   - Crafting-Interface
-   - Effekt-Tooltips (zeigt echte medizinische Wirkung!)
+**DEIN JOB:**
+Erstelle `digivice/js/medicine_crafting_ui.js` mit:
+- Pflanzen-Sammlung (64 Pflanzen)
+- Rezept-Buch mit echten Effekten
+- Crafting-Interface
+- Tooltips (zeigt echte medizinische Wirkung!)
 
-**OPUS-1 (Backend):**
-- Erstellt: `backend/najika_medicine_system.py`
-- 64 Fantasy-Pflanzen mit echten Effekten
-- API: `/api/medicine/*`
-
-**Erwartete Zeit:** 6-8h (gesamt)
-**Dein Teil:** 3-4h (UI)
+Backend macht OPUS-1. Nur bei Problemen stoppen!
+**Zeit:** ~20 Min
 
 ---
 
@@ -383,68 +349,55 @@ cp digivice/js/slime_companion.js digivice/js/slime_companion_v2_backup.js
 
 ### P2 - NICE TO HAVE (Später)
 
-#### Task 6: Form-Affinität-Boni System
+#### Task 6: Form-Affinität-Boni
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ❌ NICHT IMPLEMENTIERT
+**Status:** ⬜ TODO
 
-**Was:** Slime-Formen geben Boni (NICHT nur optisch!). Aura skaliert Boni (+5% bis +50%).
+**WAS:** Formen geben kleine Boni (+5%), Aura verstärkt (bis +50%).
 
-**WICHTIG:** V3 Doku sagt "Formen sind NUR optisch" - **DAS IST FALSCH!**
-Neue Entscheidung: Formen geben kleine Boni, Aura verstärkt sie!
+**DEIN JOB:**
+Erstelle `digivice/js/form_affinity_system.js`:
+- Boni-Tabelle (Wüsten-Echse +5% Hitze, Wald-Wolf +5% Speed, etc.)
+- UI: Zeige Boni im Form-Dialog
+- Integration mit Aura-System
 
-**Dein Job:**
-1. Erstelle: `digivice/js/form_affinity_system.js`
-2. Boni-Tabelle:
-   - Wüsten-Echse: +5% Hitze-Resistenz (Aura 5 → +50%)
-   - Wald-Wolf: +5% Bewegungsgeschwindigkeit
-   - Sumpf-Molch: +5% Gift-Resistenz
-   - (usw. für alle Formen)
-3. UI: Zeige Boni im Form-Wechsel Dialog
-4. Integration mit Aura-System
-
-**Erwartete Zeit:** 3-4h
+Nur bei Problemen stoppen!
+**Zeit:** ~15 Min
 
 ---
 
 #### Task 7: Procedural Hybrid (Persistent-Layer)
-**Zuständig:** OPUS-2 (VS Code) + OPUS-1 (Backend)
-**Status:** ❌ NICHT IMPLEMENTIERT
+**Zuständig:** OPUS-2 (VS Code)
+**Status:** ⬜ TODO
 
-**Was:** Fraktions-Siedlungen bleiben persistent, Rest der Außenwelt regeneriert sich.
+**WAS:** Fraktions-Siedlungen bleiben, Rest regeneriert.
 
-**OPUS-2 (VS Code) - Dein Teil:**
-1. Markiere Siedlungs-Bereiche in `digivice/js/world_event_generator.js`
-2. Flag: `isPersistent: true/false`
-3. Beim Welt-Regenerieren: Skip persistent areas
+**DEIN JOB:**
+In `world_event_generator.js`:
+- Flag `isPersistent: true/false` für Siedlungen
+- Beim Regenerieren: Skip persistent areas
 
-**OPUS-1 (Backend):**
-- Persistent-DB für Siedlungen
-
-**Erwartete Zeit:** 4-6h (gesamt)
-**Dein Teil:** 2-3h
+Backend macht OPUS-1. Nur bei Problemen stoppen!
+**Zeit:** ~10 Min
 
 ---
 
-#### Task 8: Code Cleanup (Deprecated Code entfernen)
+#### Task 8: Code Cleanup (Deprecated entfernen)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ❌ NICHT IMPLEMENTIERT
+**Status:** ⬜ TODO
 
-**Was:** 20+ Dateien mit auskommentiertem/altem Code bereinigen.
-
-**Dein Job:**
+**DEIN JOB:**
 ```bash
-# 1. Finde alle TODO/FIXME/DEPRECATED Kommentare:
+# Finde deprecated Code:
 grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
 
-# 2. Gehe durch jede Datei:
-# - Entferne auskommentierte Code-Blöcke (>10 Zeilen)
-# - Entferne alte Funktionen die nicht mehr genutzt werden
-# - Entferne //TODO Kommentare die >6 Monate alt sind
-
-# 3. WICHTIG: Teste nach jedem Cleanup!
+# Entferne:
+# - Auskommentierte Blöcke (>10 Zeilen)
+# - Alte Funktionen (nicht mehr genutzt)
+# - Alte TODOs (>6 Monate)
+# Teste nach jedem File!
 ```
-
-**Erwartete Zeit:** 3-4h
+**Zeit:** ~30 Min
 
 ---
 
@@ -452,19 +405,16 @@ grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
 
 #### Task 9: UE5 Projekt erstellen
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ⬜ TODO (ERST wenn Digivice fertig!)
 
-**LIES ERST:**
-- `C:\Najika_World\DOCS\OPUS_2_ONBOARDING.md` (UE5-spezifisch!)
-- `C:\Najika_World\DOCS\UE5_MIGRATION_CHECKLIST.md`
-
-**Dein Job:**
-1. Epic Games Launcher → UE 5.3+
+**DEIN JOB:**
+1. Epic Launcher → UE 5.3+
 2. Games → Third Person → C++
-3. Projekt-Name: "NajikaWorld"
+3. Name: "NajikaWorld"
 4. Pfad: `C:\Najika_World\UE5\`
 
-**Erwartete Zeit:** 1h
+**LIES ERST:** `OPUS_2_ONBOARDING.md` + `UE5_MIGRATION_CHECKLIST.md`
+**Zeit:** ~10 Min
 
 ---
 
