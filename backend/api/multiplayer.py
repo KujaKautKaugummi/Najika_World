@@ -4,6 +4,7 @@ WebSocket endpoints for real-time multiplayer functionality
 """
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
+from backend.utils import handle_errors
 from typing import Optional
 import json
 import uuid
@@ -127,6 +128,7 @@ async def multiplayer_websocket(
 
 
 @router.get("/stats")
+@handle_errors()
 async def get_multiplayer_stats():
     """
     Get multiplayer server statistics
@@ -140,6 +142,7 @@ async def get_multiplayer_stats():
 
 
 @router.get("/rooms")
+@handle_errors()
 async def get_room_list():
     """
     Get list of active rooms
@@ -156,6 +159,7 @@ async def get_room_list():
 
 
 @router.get("/rooms/{room_id}")
+@handle_errors()
 async def get_room_info(room_id: str):
     """
     Get information about a specific room

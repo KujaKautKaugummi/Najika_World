@@ -4,6 +4,7 @@ Endpoints for player houses, furniture placement, and decorations
 """
 
 from fastapi import APIRouter, Depends, HTTPException
+from backend.utils import handle_errors
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List, Optional
@@ -62,6 +63,7 @@ class HouseResponse(BaseModel):
 # ============================================================================
 
 @router.get("/house/{player_id}", response_model=HouseResponse)
+@handle_errors()
 async def get_player_house(player_id: int, db: Session = Depends(get_db)):
     """
     Get player's house information
@@ -101,6 +103,7 @@ async def get_player_house(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/furniture/place")
+@handle_errors()
 async def place_furniture(request: PlaceFurnitureRequest, db: Session = Depends(get_db)):
     """
     Place furniture in player's house
@@ -142,6 +145,7 @@ async def place_furniture(request: PlaceFurnitureRequest, db: Session = Depends(
 
 
 @router.post("/furniture/remove")
+@handle_errors()
 async def remove_furniture(request: RemoveFurnitureRequest, db: Session = Depends(get_db)):
     """
     Remove furniture from player's house
@@ -172,6 +176,7 @@ async def remove_furniture(request: RemoveFurnitureRequest, db: Session = Depend
 
 
 @router.put("/upgrade")
+@handle_errors()
 async def upgrade_house(request: UpgradeHouseRequest, db: Session = Depends(get_db)):
     """
     Upgrade player's house level
@@ -206,6 +211,7 @@ async def upgrade_house(request: UpgradeHouseRequest, db: Session = Depends(get_
 
 
 @router.get("/furniture/catalog")
+@handle_errors()
 async def get_furniture_catalog():
     """
     Get catalog of available furniture types

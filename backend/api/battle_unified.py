@@ -32,6 +32,7 @@ Port: 8000 (NIEMALS 5000!)
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from enum import Enum
@@ -431,6 +432,7 @@ def apply_aura_buffs(battle_data: Dict, slime_type: str) -> Dict:
 # ===== API ENDPOINTS =====
 
 @router.post("/start")
+@handle_errors()
 async def start_battle(request: StartBattleRequest):
     """Startet einen neuen Kampf"""
     battle_data = battle_manager.get_or_create_battle(request.player_id)
@@ -481,6 +483,7 @@ async def start_battle(request: StartBattleRequest):
 
 
 @router.post("/player-action")
+@handle_errors()
 async def player_action(request: PlayerActionRequest):
     """
     Spieler-Aktion (Spieler ist IMMER manual in Game World / Player Arena)
@@ -557,6 +560,7 @@ async def player_action(request: PlayerActionRequest):
 
 
 @router.post("/companion-action")
+@handle_errors()
 async def companion_action(request: CompanionActionRequest):
     """
     Companion-Aktion (nur wenn Companion MANUAL mode)
@@ -603,6 +607,7 @@ async def companion_action(request: CompanionActionRequest):
 
 
 @router.post("/companion-auto-turn")
+@handle_errors()
 async def companion_auto_turn(player_id: str = "player1"):
     """
     Companion führt AUTO-Zug aus (nur wenn AUTO oder CHEER mode)
@@ -654,6 +659,7 @@ async def companion_auto_turn(player_id: str = "player1"):
 
 
 @router.post("/slime-arena/control")
+@handle_errors()
 async def slime_arena_control(request: SlimeControlRequest):
     """
     SCHLEIM-ARENA: Spieler kontrolliert Slime DIREKT (MANUAL mode)
@@ -688,6 +694,7 @@ async def slime_arena_control(request: SlimeControlRequest):
 
 
 @router.post("/cheer")
+@handle_errors()
 async def cheer_action(request: CheerRequest):
     """Führt einen Cheer aus (CHEER-Modus)"""
     if request.player_id not in battle_manager.battles:
@@ -746,6 +753,7 @@ async def cheer_action(request: CheerRequest):
 
 
 @router.post("/set-companion-mode")
+@handle_errors()
 async def set_companion_mode(request: SetModeRequest):
     """Wechselt den Companion-Kampfmodus"""
     if request.player_id not in battle_manager.battles:
@@ -772,6 +780,7 @@ async def set_companion_mode(request: SetModeRequest):
 
 
 @router.post("/set-companion-form")
+@handle_errors()
 async def set_companion_form(request: SetCompanionFormRequest):
     """
     Wechselt die Companion-Form (KÖRPERLICH ↔ AURA)
@@ -801,6 +810,7 @@ async def set_companion_form(request: SetCompanionFormRequest):
 
 
 @router.post("/explain-decision")
+@handle_errors()
 async def explain_decision(request: ExplainDecisionRequest):
     """
     Spieler erklärt der KI warum er einen Vorschlag ignoriert hat.
@@ -832,6 +842,7 @@ async def explain_decision(request: ExplainDecisionRequest):
 
 
 @router.get("/status/{player_id}")
+@handle_errors()
 async def get_battle_status(player_id: str):
     """Holt den aktuellen Kampfstatus"""
     if player_id not in battle_manager.battles:
@@ -860,6 +871,7 @@ async def get_battle_status(player_id: str):
 
 
 @router.post("/end/{player_id}")
+@handle_errors()
 async def end_battle(player_id: str):
     """Beendet den Kampf"""
     if player_id not in battle_manager.battles:
@@ -888,6 +900,7 @@ async def end_battle(player_id: str):
 
 
 @router.post("/reset")
+@handle_errors()
 async def reset_battle(player_id: str = "player1"):
     """Reset/Beende den aktuellen Kampf (Compat für battle_api.js)"""
     if player_id in battle_manager.battles:
@@ -896,6 +909,7 @@ async def reset_battle(player_id: str = "player1"):
 
 
 @router.get("/status")
+@handle_errors()
 async def get_battle_status_default():
     """Battle-Status ohne player_id (Compat für battle_api.js)"""
     player_id = "player1"
@@ -914,6 +928,7 @@ async def get_battle_status_default():
 
 
 @router.get("/modes")
+@handle_errors()
 async def get_available_modes():
     """Gibt alle verfügbaren Modi und deren Bedeutung zurück"""
     return {
@@ -954,12 +969,14 @@ async def get_available_modes():
 
 
 @router.get("/enemies")
+@handle_errors()
 async def get_enemy_database():
     """Gibt die Enemy-Datenbank zurück"""
     return {"enemies": ENEMY_DB, "count": len(ENEMY_DB)}
 
 
 @router.get("/skills")
+@handle_errors()
 async def get_skill_database():
     """Gibt die Skill-Datenbank zurück"""
     return {"skills": SKILL_DB, "count": len(SKILL_DB)}
@@ -1044,6 +1061,7 @@ def generate_najika_finisher(words: List[str], category: str, arena_type: ArenaT
 
 
 @router.post("/finisher")
+@handle_errors()
 async def execute_finisher(request: FinisherRequest):
     """
     Führt einen Finisher aus (wenn Gegner HP = 0 oder nahe 0).
@@ -1104,6 +1122,7 @@ async def execute_finisher(request: FinisherRequest):
 
 
 @router.get("/finisher/categories")
+@handle_errors()
 async def get_finisher_categories():
     """Gibt alle Finisher-Kategorien zurück"""
     return {

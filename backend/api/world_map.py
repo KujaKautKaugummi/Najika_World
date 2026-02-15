@@ -4,6 +4,7 @@ World Map API
 """
 
 from fastapi import APIRouter, Depends, HTTPException
+from backend.utils import handle_errors
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List, Optional
@@ -78,6 +79,7 @@ class PlayerPositionResponse(BaseModel):
 # ============================================================================
 
 @router.get("/map")
+@handle_errors()
 async def get_world_map(db: Session = Depends(get_db)):
     """
     Get complete 9600x9600 world map layout
@@ -119,6 +121,7 @@ async def get_world_map(db: Session = Depends(get_db)):
 
 
 @router.get("/regions", response_model=List[RegionResponse])
+@handle_errors()
 async def get_all_regions(db: Session = Depends(get_db)):
     """
     Get all regions
@@ -130,6 +133,7 @@ async def get_all_regions(db: Session = Depends(get_db)):
 
 
 @router.get("/regions/{region_id}")
+@handle_errors()
 async def get_region_details(region_id: int, db: Session = Depends(get_db)):
     """
     Get detailed region information
@@ -195,6 +199,7 @@ async def get_region_details(region_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/travel-points")
+@handle_errors()
 async def get_all_travel_points(player_id: int, db: Session = Depends(get_db)):
     """
     Get all fast travel points
@@ -235,6 +240,7 @@ async def get_all_travel_points(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/travel")
+@handle_errors()
 async def fast_travel(request: FastTravelRequest, db: Session = Depends(get_db)):
     """
     Fast travel to a travel point
@@ -317,6 +323,7 @@ async def fast_travel(request: FastTravelRequest, db: Session = Depends(get_db))
 # ============================================================================
 
 @router.get("/position/{player_id}", response_model=PlayerPositionResponse)
+@handle_errors()
 async def get_player_position(player_id: int, db: Session = Depends(get_db)):
     """
     Get player's current position in world
@@ -361,6 +368,7 @@ async def get_player_position(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/travel-points/{travel_point_id}/unlock")
+@handle_errors()
 async def unlock_travel_point(
     travel_point_id: int,
     player_id: int,
@@ -418,6 +426,7 @@ async def unlock_travel_point(
 
 
 @router.post("/position/update")
+@handle_errors()
 async def update_player_position(
     request: UpdatePositionRequest,
     db: Session = Depends(get_db)
@@ -469,6 +478,7 @@ async def update_player_position(
 # ============================================================================
 
 @router.get("/time")
+@handle_errors()
 async def get_day_night_cycle(db: Session = Depends(get_db)):
     """
     Get current day/night cycle state
@@ -503,6 +513,7 @@ async def get_day_night_cycle(db: Session = Depends(get_db)):
 
 
 @router.get("/weather/{region_id}")
+@handle_errors()
 async def get_region_weather(region_id: int, db: Session = Depends(get_db)):
     """
     Get current weather for region
@@ -536,6 +547,7 @@ async def get_region_weather(region_id: int, db: Session = Depends(get_db)):
 # ============================================================================
 
 @router.get("/explored-regions")
+@handle_errors()
 async def get_explored_regions(player_id: int = 1, db: Session = Depends(get_db)):
     """
     Get explored regions for a player (Frontend: WorldMapAPI.loadExploredRegions)
@@ -567,6 +579,7 @@ class DiscoverRegionRequest(BaseModel):
 
 
 @router.post("/discover-region")
+@handle_errors()
 async def discover_region(request: DiscoverRegionRequest, db: Session = Depends(get_db)):
     """
     Mark a region as discovered (Frontend: WorldMapAPI.discoverRegion)

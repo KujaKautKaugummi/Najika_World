@@ -4,6 +4,7 @@ Endpoints for crop farming and fishing mechanics
 """
 
 from fastapi import APIRouter, Depends, HTTPException
+from backend.utils import handle_errors
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List, Optional
@@ -58,6 +59,7 @@ class FishingCastRequest(BaseModel):
 # ============================================================================
 
 @router.get("/plots/{player_id}", response_model=List[FarmPlotResponse])
+@handle_errors()
 async def get_player_farm_plots(player_id: int, db: Session = Depends(get_db)):
     """
     Get all farm plots for a player
@@ -103,6 +105,7 @@ async def get_player_farm_plots(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/plant")
+@handle_errors()
 async def plant_crop(request: PlantCropRequest, db: Session = Depends(get_db)):
     """
     Plant a crop in a farm plot
@@ -146,6 +149,7 @@ async def plant_crop(request: PlantCropRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/water/{plot_id}")
+@handle_errors()
 async def water_crop(plot_id: int, db: Session = Depends(get_db)):
     """
     Water a crop to increase growth
@@ -183,6 +187,7 @@ async def water_crop(plot_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/harvest")
+@handle_errors()
 async def harvest_crop(request: HarvestCropRequest, db: Session = Depends(get_db)):
     """
     Harvest a fully grown crop
@@ -238,6 +243,7 @@ async def harvest_crop(request: HarvestCropRequest, db: Session = Depends(get_db
 # ============================================================================
 
 @router.get("/fishing/spots")
+@handle_errors()
 async def get_fishing_spots(db: Session = Depends(get_db)):
     """
     Get all fishing spots in the world
@@ -277,6 +283,7 @@ async def get_fishing_spots(db: Session = Depends(get_db)):
 
 
 @router.post("/fishing/cast")
+@handle_errors()
 async def cast_fishing_line(request: FishingCastRequest, db: Session = Depends(get_db)):
     """
     Cast fishing line and attempt to catch a fish
@@ -326,6 +333,7 @@ async def cast_fishing_line(request: FishingCastRequest, db: Session = Depends(g
 
 
 @router.get("/crops/catalog")
+@handle_errors()
 async def get_crop_catalog():
     """
     Get catalog of available crops

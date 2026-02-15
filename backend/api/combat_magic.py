@@ -18,6 +18,7 @@ Date: 2026-02-06
 """
 
 from fastapi import APIRouter, HTTPException, Query
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, Dict, List
 import sys
@@ -115,6 +116,7 @@ def check_system():
 # ============================================================================
 
 @router.get("/spells")
+@handle_errors()
 async def get_all_spells():
     """
     Alle verfuegbaren Zauber
@@ -148,6 +150,7 @@ async def get_all_spells():
 
 
 @router.get("/spells/{element}")
+@handle_errors()
 async def get_spells_by_element(element: str):
     """Zauber nach Element filtern"""
     check_system()
@@ -181,6 +184,7 @@ async def get_spells_by_element(element: str):
 
 
 @router.post("/spell/learn")
+@handle_errors()
 async def learn_spell(player_id: str, spell_id: str):
     """
     Zauber lernen
@@ -200,6 +204,7 @@ async def learn_spell(player_id: str, spell_id: str):
 
 
 @router.post("/spell/equip")
+@handle_errors()
 async def equip_spell(request: EquipSpellRequest):
     """
     Zauber in Hand ausruesten (Skyrim-Style)
@@ -220,6 +225,7 @@ async def equip_spell(request: EquipSpellRequest):
 
 
 @router.get("/spell/learned/{player_id}")
+@handle_errors()
 async def get_learned_spells(player_id: str):
     """Alle gelernten Zauber eines Spielers"""
     check_system()
@@ -249,6 +255,7 @@ async def get_learned_spells(player_id: str):
 # ============================================================================
 
 @router.post("/infuse")
+@handle_errors()
 async def infuse_weapon(request: InfuseWeaponRequest):
     """
     WEAPON INFUSE - Zauber auf Waffe = temporaerer Buff
@@ -278,6 +285,7 @@ async def infuse_weapon(request: InfuseWeaponRequest):
 
 
 @router.get("/infuse/active/{player_id}")
+@handle_errors()
 async def get_active_infuses(player_id: str):
     """
     Alle aktiven Weapon Infuses fuer einen Spieler
@@ -301,6 +309,7 @@ async def get_active_infuses(player_id: str):
 # ============================================================================
 
 @router.post("/combo")
+@handle_errors()
 async def combo_attack(request: ComboAttackRequest):
     """
     ECHTER COMBO ANGRIFF - Zauber UND Waffe gleichzeitig
@@ -419,6 +428,7 @@ async def combo_attack(request: ComboAttackRequest):
 # ============================================================================
 
 @router.post("/player/register")
+@handle_errors()
 async def register_player(request: RegisterPlayerRequest):
     """Spieler beim Combat System registrieren"""
     check_system()
@@ -448,6 +458,7 @@ async def register_player(request: RegisterPlayerRequest):
 
 
 @router.get("/player/{player_id}/status")
+@handle_errors()
 async def get_player_status(player_id: str):
     """Kompletter Spieler-Status (Combat + Magic)"""
     check_system()
@@ -478,6 +489,7 @@ async def get_player_status(player_id: str):
 
 
 @router.get("/player/{player_id}/loadout")
+@handle_errors()
 async def get_player_loadout(player_id: str):
     """Was hat der Spieler in welcher Hand?"""
     check_system()
@@ -548,6 +560,7 @@ class TIDSRequest(BaseModel):
 
 
 @router.post("/grab")
+@handle_errors()
 async def grab_enemy(request: GrabRequest):
     """
     GEGNER GREIFEN (Wrestling-Style!)
@@ -571,6 +584,7 @@ async def grab_enemy(request: GrabRequest):
 
 
 @router.post("/grab/execute")
+@handle_errors()
 async def execute_grab_move(request: GrabMoveRequest):
     """
     GRIFF-MOVE AUSFUEHREN
@@ -600,6 +614,7 @@ async def execute_grab_move(request: GrabMoveRequest):
 
 
 @router.get("/grab/skill/{player_id}")
+@handle_errors()
 async def get_throw_skill(player_id: str):
     """Wurf-Skill Status und freigeschaltete Moves"""
     check_system()
@@ -613,6 +628,7 @@ async def get_throw_skill(player_id: str):
 # ============================================================================
 
 @router.post("/tids")
+@handle_errors()
 async def use_tids(request: TIDSRequest):
     """
     TIDS - TRITT IN DEN SCHRITT!
@@ -655,6 +671,7 @@ async def use_tids(request: TIDSRequest):
 
 
 @router.get("/tids/cooldown/{player_id}")
+@handle_errors()
 async def get_tids_cooldown(player_id: str):
     """TIDS Cooldown Status"""
     check_system()
@@ -675,6 +692,7 @@ async def get_tids_cooldown(player_id: str):
 # ============================================================================
 
 @router.get("/health")
+@handle_errors()
 async def combat_magic_health():
     """System Health Check"""
     return {

@@ -4,6 +4,7 @@ Handles Nemesis Arena System and Mortal Kombat-style Finishers
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from backend.utils import handle_errors
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
@@ -52,6 +53,7 @@ class MonsterCreateRequest(BaseModel):
 # ============================================================================
 
 @router.get("/hierarchy")
+@handle_errors()
 async def get_arena_hierarchy(
     current_user: User = Depends(get_current_user)
 ):
@@ -70,6 +72,7 @@ async def get_arena_hierarchy(
 
 
 @router.get("/challengers")
+@handle_errors()
 async def get_available_challengers(
     limit: int = 20,
     current_user: User = Depends(get_current_user)
@@ -92,6 +95,7 @@ async def get_available_challengers(
 
 
 @router.get("/my-nemesis")
+@handle_errors()
 async def get_my_nemesis(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -118,6 +122,7 @@ async def get_my_nemesis(
 
 
 @router.get("/regions")
+@handle_errors()
 async def get_arena_regions(
     current_user: User = Depends(get_current_user)
 ):
@@ -135,6 +140,7 @@ async def get_arena_regions(
 
 
 @router.get("/monster/{monster_id}")
+@handle_errors()
 async def get_monster_details(
     monster_id: int,
     current_user: User = Depends(get_current_user)
@@ -155,6 +161,7 @@ async def get_monster_details(
 
 
 @router.post("/challenge")
+@handle_errors()
 async def challenge_monster(
     request: ChallengeRequest,
     current_user: User = Depends(get_current_user),
@@ -188,6 +195,7 @@ async def challenge_monster(
 
 
 @router.post("/battle")
+@handle_errors()
 async def execute_battle_action(
     request: BattleActionRequest,
     current_user: User = Depends(get_current_user),
@@ -210,6 +218,7 @@ async def execute_battle_action(
 
 
 @router.post("/promote/{monster_id}")
+@handle_errors()
 async def promote_monster(
     monster_id: int,
     current_user: User = Depends(get_current_user)
@@ -230,6 +239,7 @@ async def promote_monster(
 
 
 @router.post("/monster/create")
+@handle_errors()
 async def create_monster(
     request: MonsterCreateRequest,
     current_user: User = Depends(get_current_user)
@@ -274,6 +284,7 @@ async def create_monster(
 # ============================================================================
 
 @router.post("/finisher/create")
+@handle_errors()
 async def create_finisher(
     request: CreateFinisherRequest,
     current_user: User = Depends(get_current_user),
@@ -347,6 +358,7 @@ async def create_finisher(
 
 
 @router.get("/finisher/categories")
+@handle_errors()
 async def get_brutality_categories(
     current_user: User = Depends(get_current_user)
 ):
@@ -408,6 +420,7 @@ async def get_brutality_categories(
 
 
 @router.get("/finisher/random-ingredients")
+@handle_errors()
 async def get_random_finisher_ingredients(
     current_user: User = Depends(get_current_user)
 ):
@@ -422,6 +435,7 @@ async def get_random_finisher_ingredients(
 
 
 @router.get("/finisher/history")
+@handle_errors()
 async def get_finisher_history(
     limit: int = 20,
     current_user: User = Depends(get_current_user)
@@ -437,6 +451,7 @@ async def get_finisher_history(
 
 
 @router.get("/finisher/{finisher_id}")
+@handle_errors()
 async def get_finisher_details(
     finisher_id: int,
     current_user: User = Depends(get_current_user)
@@ -462,6 +477,7 @@ async def get_finisher_details(
 # ============================================================================
 
 @router.get("/stats")
+@handle_errors()
 async def get_arena_stats(
     current_user: User = Depends(get_current_user)
 ):

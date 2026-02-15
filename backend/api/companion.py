@@ -5,6 +5,7 @@ Für UE5 Integration
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, Dict, List
 import sys
@@ -58,6 +59,7 @@ class AttackRequest(BaseModel):
 # ============================================================================
 
 @router.get("/najika")
+@handle_errors()
 async def get_najika_status():
     """
     Get Najika's current status including personality, mood, combat style
@@ -87,6 +89,7 @@ async def get_najika_status():
 
 
 @router.get("/najika/combat")
+@handle_errors()
 async def get_najika_combat_style():
     """
     Get Najika's current combat style based on active personality
@@ -107,6 +110,7 @@ async def get_najika_combat_style():
 
 
 @router.get("/personalities")
+@handle_errors()
 async def get_personalities():
     """
     Get all 4 personalities with their traits
@@ -148,6 +152,7 @@ async def get_personalities():
 
 
 @router.post("/activity")
+@handle_errors()
 async def do_activity(request: ActivityRequest):
     """
     Do an activity with Najika to increase relationship
@@ -173,6 +178,7 @@ async def do_activity(request: ActivityRequest):
 
 
 @router.post("/gift")
+@handle_errors()
 async def give_gift(request: GiftRequest):
     """
     Give Najika a gift
@@ -196,6 +202,7 @@ async def give_gift(request: GiftRequest):
 
 
 @router.post("/personality/shift")
+@handle_errors()
 async def trigger_personality_shift(request: PersonalityShiftRequest):
     """
     Trigger a personality shift based on situation
@@ -219,6 +226,7 @@ async def trigger_personality_shift(request: PersonalityShiftRequest):
 
 
 @router.post("/attack")
+@handle_errors()
 async def najika_attack(request: AttackRequest):
     """
     Najika attacks a target
@@ -245,6 +253,7 @@ async def najika_attack(request: AttackRequest):
 
 
 @router.post("/pet-slime")
+@handle_errors()
 async def assign_pet_slime(slime_id: str):
     """
     Assign a slime as Najika's pet (optional companion for the companion)
@@ -263,6 +272,7 @@ async def assign_pet_slime(slime_id: str):
 
 
 @router.get("/dialogue/random")
+@handle_errors()
 async def get_random_dialogue():
     """
     Get a random dialogue line based on current personality and mood
@@ -297,6 +307,7 @@ async def get_random_dialogue():
 # ============================================================================
 
 @router.get("/health")
+@handle_errors()
 async def companion_health():
     """Check if Companion System is available"""
     return {

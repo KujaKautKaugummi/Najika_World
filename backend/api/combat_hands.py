@@ -5,6 +5,7 @@ Für UE5 Integration
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, Dict, List
 import sys
@@ -54,6 +55,7 @@ class DualCastRequest(BaseModel):
 # ============================================================================
 
 @router.get("/status")
+@handle_errors()
 async def get_combat_status():
     """
     Get current combat hands status
@@ -82,6 +84,7 @@ async def get_combat_status():
 
 
 @router.get("/weapons")
+@handle_errors()
 async def get_all_weapons():
     """
     Get all available weapons with stats and requirements
@@ -130,6 +133,7 @@ async def get_all_weapons():
 
 
 @router.get("/perks")
+@handle_errors()
 async def get_combat_perks():
     """
     Get all combat perks (Quick Cast etc.)
@@ -173,6 +177,7 @@ async def get_combat_perks():
 
 
 @router.get("/player/{player_id}")
+@handle_errors()
 async def get_player_combat_status(player_id: str):
     """
     Get a specific player's combat status
@@ -192,6 +197,7 @@ async def get_player_combat_status(player_id: str):
 
 
 @router.get("/weapon-preview/{player_id}/{weapon_id}")
+@handle_errors()
 async def preview_weapon(player_id: str, weapon_id: str):
     """
     Preview how a weapon would perform for a player
@@ -216,6 +222,7 @@ async def preview_weapon(player_id: str, weapon_id: str):
 
 
 @router.post("/register")
+@handle_errors()
 async def register_player(player_id: str, stats: Dict[str, int]):
     """
     Register a player with the combat system
@@ -237,6 +244,7 @@ async def register_player(player_id: str, stats: Dict[str, int]):
 
 
 @router.post("/equip")
+@handle_errors()
 async def equip_weapon(request: EquipRequest):
     """
     Equip a weapon in a hand
@@ -264,6 +272,7 @@ async def equip_weapon(request: EquipRequest):
 
 
 @router.post("/attack")
+@handle_errors()
 async def attack(request: AttackRequest):
     """
     Perform an attack
@@ -294,6 +303,7 @@ async def attack(request: AttackRequest):
 
 
 @router.post("/dual-cast")
+@handle_errors()
 async def dual_cast(request: DualCastRequest):
     """
     Dual-cast a spell (both hands)
@@ -319,6 +329,7 @@ async def dual_cast(request: DualCastRequest):
 
 
 @router.post("/perk/unlock")
+@handle_errors()
 async def unlock_perk(perk_id: str, player_id: str):
     """
     Unlock a combat perk
@@ -340,6 +351,7 @@ async def unlock_perk(perk_id: str, player_id: str):
 
 
 @router.post("/train")
+@handle_errors()
 async def train_skill(skill_id: str, player_id: str, xp: int):
     """
     Train a combat skill
@@ -368,6 +380,7 @@ async def train_skill(skill_id: str, player_id: str, xp: int):
 # ============================================================================
 
 @router.get("/keybinds")
+@handle_errors()
 async def get_keybinds():
     """
     Get recommended keybinds for combat
@@ -401,6 +414,7 @@ async def get_keybinds():
 # ============================================================================
 
 @router.get("/health")
+@handle_errors()
 async def combat_hands_health():
     """Check if Combat Hands System is available"""
     return {
