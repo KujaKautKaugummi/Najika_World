@@ -263,30 +263,21 @@ Die Migration ist KOMPLETT! Details siehe weiter unten in "ERLEDIGT (2026-02-14)
 
 **FastAPI Migration ist durch! Jetzt kommen die Frontend-Features:**
 
-### WÄHLE EINEN TASK AUS (von einfach zu komplex):
+### OPUS-2 TASKS - ALLE FERTIG! (2026-02-15) ✅
 
-#### 🟢 **EINFACH: Task 5 - Medizin-Crafting UI** (~2-3h)
-**Datei:** `digivice/js/medicine_crafting_ui.js` (NEU erstellen)
-**Was:** Echtes Med-Wissen → Fantasy-Namen mapping
-- Kamille → Kristall-Kamille
-- Pfefferminz → Frost-Minze
-- Salbei → Schatten-Salbei
-**Beschreibung:** Siehe Task 5 weiter unten in der TODO
+#### ✅ **Task 5 - Medizin-Crafting UI** - FERTIG
+**Datei:** `digivice/js/medicine_crafting_ui.js` (1042 Zeilen)
+64 Fantasy-Pflanzen, 4 Rarity-Stufen, 3 Tabs (Sammeln/Rezeptbuch/Crafting), Region-basiert
 
-#### 🟡 **MITTEL: Task 4 - Aura vs Begleiter Wahl-UI** (~4-5h)
-**Datei:** `digivice/js/slime_mode_choice_ui.js` (NEU erstellen)
-**Was:** Spieler wählt EINMAL ob Slime "Aura" oder "Körperlich"
-- Beide gleich stark (Balance!)
-- Wahl ist permanent (wichtig!)
-**Beschreibung:** Siehe Task 4 weiter unten in der TODO
+#### ✅ **Task 4 - Aura vs Begleiter Wahl-UI** - FERTIG
+**Datei:** `digivice/js/companion_mode_choice.js` (480 Zeilen)
+Permanente Wahl bei Trust-Level 2, Aura-Band vs Koerper-Band, Reselect bei Seelenbund
 
-#### 🔴 **KOMPLEX: Task 3 - Dynamische Völker System UI** (~6-8h)
-**Datei:** `digivice/js/dynamic_factions_ui.js` (NEU erstellen)
-**Was:** Wild-Monster Fraktionen (Wachstum, Kriege, Kollaps)
-- Fraktions-Übersicht anzeigen
-- Kriegs-Notifications
-- Ruf-System UI
-**Beschreibung:** Siehe Task 3 weiter unten in der TODO
+#### ✅ **Task 3 - Dynamische Völker System UI** - FERTIG
+**Datei:** `digivice/js/dynamic_factions_ui.js` (794 Zeilen)
+Fraktions-Übersicht, Kriege-Tab, Diplomatie-Karte, Event-Log, War-Notifications
+
+**Commit:** `8caa6cb` - feat: OPUS-2 UI Tasks komplett - 6 neue Systeme + Slime V3
 
 ---
 
@@ -482,7 +473,7 @@ cp digivice/js/slime_companion.js digivice/js/slime_companion_v2_backup.js
 
 #### Task 3: Dynamische Völker System (Frontend UI)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ✅ FERTIG (2026-02-15, Commit 8caa6cb)
 
 **WAS:** Wild-Monster bilden Fraktionen (1-5 pro Region), wachsen, Kriege, kollabieren.
 
@@ -500,7 +491,7 @@ Backend macht OPUS-1. Nur bei Problemen stoppen!
 
 #### Task 4: Aura vs Begleiter Wahl-UI
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ✅ FERTIG (2026-02-15, Commit 8caa6cb)
 
 **WAS:** Spieler wählt EINMAL: Aura ODER Slime (beide gleich stark).
 
@@ -516,9 +507,9 @@ Backend macht OPUS-1. Nur bei Problemen stoppen!
 
 ---
 
-#### 🎯 Task 5: Medizin-Crafting UI ⭐ **NÄCHSTER TASK FÜR OPUS!**
+#### Task 5: Medizin-Crafting UI
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO - **START JETZT!**
+**Status:** ✅ FERTIG (2026-02-15, Commit 8caa6cb)
 
 **WAS:** Echtes Med-Wissen → Fantasy-Namen (Kamille → Kristall-Kamille)
 
