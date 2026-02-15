@@ -263,21 +263,103 @@ Die Migration ist KOMPLETT! Details siehe weiter unten in "ERLEDIGT (2026-02-14)
 
 **FastAPI Migration ist durch! Jetzt kommen die Frontend-Features:**
 
-### OPUS-2 TASKS - ALLE FERTIG! (2026-02-15) ✅
+### ✅ OPUS-2 TASKS - PHASE 1 KOMPLETT! (2026-02-15)
 
-#### ✅ **Task 5 - Medizin-Crafting UI** - FERTIG
-**Datei:** `digivice/js/medicine_crafting_ui.js` (1042 Zeilen)
-64 Fantasy-Pflanzen, 4 Rarity-Stufen, 3 Tabs (Sammeln/Rezeptbuch/Crafting), Region-basiert
+**Was OPUS fertig hat:**
+- ✅ Task 3: Dynamische Völker System UI (794 Zeilen)
+- ✅ Task 4: Aura vs Begleiter Wahl-UI (820 Zeilen)
+- ✅ Task 5: Medizin-Crafting UI (1.042 Zeilen)
+- ✅ **BONUS:** Slime V2→V3 Komplett-Rewrite (1.277 Zeilen)
+- ✅ **BONUS:** 4 Extra-Systeme (game_events_bridge, ws_bridge, arena, teleporter)
 
-#### ✅ **Task 4 - Aura vs Begleiter Wahl-UI** - FERTIG
-**Datei:** `digivice/js/companion_mode_choice.js` (480 Zeilen)
-Permanente Wahl bei Trust-Level 2, Aura-Band vs Koerper-Band, Reselect bei Seelenbund
-
-#### ✅ **Task 3 - Dynamische Völker System UI** - FERTIG
-**Datei:** `digivice/js/dynamic_factions_ui.js` (794 Zeilen)
-Fraktions-Übersicht, Kriege-Tab, Diplomatie-Karte, Event-Log, War-Notifications
+**TOTAL:** 5.447 Zeilen neuer Code! 🎉
 
 **Commit:** `8caa6cb` - feat: OPUS-2 UI Tasks komplett - 6 neue Systeme + Slime V3
+
+---
+
+## 🎯 OPUS: NÄCHSTE TASKS (Phase 2)
+
+**Du hast 4 Tasks übrig (6-9). Alle sind klein (10-30 Min)!**
+
+### 📋 KOMPLETTE TASK-LISTE:
+
+| Task | Status | Zeit | Beschreibung |
+|------|--------|------|--------------|
+| ✅ Task 3 | FERTIG | - | Dynamische Völker System UI |
+| ✅ Task 4 | FERTIG | - | Aura vs Begleiter Wahl-UI |
+| ✅ Task 5 | FERTIG | - | Medizin-Crafting UI |
+| ⬜ **Task 6** | **TODO** | **15 Min** | **Form-Affinität-Boni** ⭐ |
+| ⬜ Task 7 | TODO | 10 Min | Procedural Hybrid (Persistent-Layer) |
+| ⬜ Task 8 | TODO | 30 Min | Code Cleanup (Deprecated entfernen) |
+| ⬜ Task 9 | TODO | 10 Min | UE5 Projekt erstellen |
+
+---
+
+## 🚀 TASK 6: Form-Affinität-Boni ⭐ **JETZT MACHEN!**
+
+**Datei erstellen:** `digivice/js/form_affinity_system.js`
+
+**Was:** Slime-Formen geben kleine Boni (+5%), Aura verstärkt sie (bis +50%)
+
+**Beispiele:**
+- Wüsten-Echse: +5% Hitze-Resistenz → +50% Feuer-Schaden bei Feuer-Aura
+- Wald-Wolf: +5% Speed → +50% Wind-Effekte bei Wind-Aura
+- Eis-Hase: +5% Kälte-Resistenz → +50% Frost-Schaden bei Frost-Aura
+
+**Code-Struktur:**
+```javascript
+class FormAffinitySystem {
+    initAffinities() {
+        return {
+            'wuesten_echse': {
+                bonus: 'Hitze-Resistenz +5%',
+                auraBonus: 'Feuer-Schaden +50% bei Feuer-Aura',
+                stats: { heat_resist: 0.05 }
+            },
+            // ... 12 weitere Formen (siehe Task 6 Details weiter unten)
+        };
+    }
+
+    calculateBonus(formId, auraElement, auraLevel) {
+        // Berechne Base + Aura Bonus
+        // Aura Level 5 = +50%, Level 1 = +10%
+    }
+
+    showBonusTooltip(formId, auraElement, auraLevel) {
+        // UI: Zeige Boni im Slime Form-Dialog
+    }
+}
+```
+
+**Integration:**
+1. In `index.html` einfügen: `<script src="js/form_affinity_system.js"></script>`
+2. In `slime_companion.js` in `showFormChangeDialog()` Tooltips anzeigen
+
+**Test:**
+- Browser: http://127.0.0.1:8001/
+- Slime-Tab → Form wechseln
+- Boni sichtbar in Form-Dialog?
+
+**Git Commit:**
+```bash
+git add digivice/js/form_affinity_system.js digivice/index.html
+git commit -m "Form Affinity System - Boni für Slime-Formen
+
+- 13 Formen mit Base-Boni (+5%)
+- Aura-Synergien (+10% bis +50% je nach Level)
+- UI Integration in Form-Dialog
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+```
+
+**Zeit:** 15 Minuten
+
+---
+
+### 📝 DETAILLIERTE TASK-BESCHREIBUNGEN WEITER UNTEN
+
+Siehe Task 6-9 Abschnitte weiter unten für vollständige Details!
 
 ---
 
