@@ -1,8 +1,8 @@
 # NAJIKA WORLD - MASTER TODO FUER CLAUDE CODE TEAM
 
 **Erstellt:** 2026-01-27
-**Aktualisiert:** 2026-02-11 (LoRA Training Qwen2.5 + Pipeline-Fixes + Model-Export)
-**Zweck:** Koordination zwischen 2 Claude Opus Instanzen
+**Aktualisiert:** 2026-02-15 (SONNET: 7 kritische Bugs gefixt + Port 8001 Migration FINAL!)
+**Zweck:** Koordination zwischen SONNET (Desktop) + OPUS (VS Code)
 **Update-Regel:** Jede Instanz updated nach getaner Arbeit!
 
 ---
@@ -80,24 +80,24 @@
 
 ---
 
-## 🚀 AKTIVE INSTANZEN (2x OPUS)
+## 🚀 AKTIVE INSTANZEN (SONNET + OPUS)
 
-| Instanz | Ort | Zuständigkeit |
-|---------|-----|---------------|
-| **OPUS-1** | Desktop App (Lokal) | Backend, Python API für UE5, System-Integration, Dokumentation |
-| **OPUS-2** | VS Code | UE5 Blueprints, C++ Portierung, Frontend/Game-Logik |
+| Instanz | Modell | Ort | Zuständigkeit |
+|---------|--------|-----|---------------|
+| **SONNET-1** | Claude Sonnet 4.5 | Desktop App (Lokal) | Backend Bug-Fixes, API-Integration, System-Debugging |
+| **OPUS-2** | Claude Opus 4.6 | VS Code | Frontend UI, Game Logic, UE5, Neue Features |
 
-### Arbeitsaufteilung Details:
+### 🎯 OPTIMALE AUFGABENTEILUNG NACH MODELL-STÄRKEN:
 
-**OPUS-1 (Desktop App - DU BIST HIER!):**
-- ✅ Backend-Systeme (Python API auf Port 8000)
-- ✅ ChromaDB / Najika Gedächtnis
-- ✅ API-Endpoints für UE5 HTTP-Calls anpassen
-- ✅ Dokumentation aktuell halten
-- ✅ Three.js Code als Referenz dokumentieren
-- ✅ System-Überwachung / Integration
+**SONNET (Desktop App - SCHNELL & PRÄZISE):**
+- ✅ **Bug-Fixes** (90%) - Schnelle, präzise Code-Änderungen
+- ✅ **API-Integration** (80%) - WebSocket, Static Mounts, Router
+- ✅ **Backend-Logik** (60%) - Bestehenden Code optimieren
+- ✅ **Testing** (70%) - Systematische Tests
+- ✅ **Code-Review** (80%) - Grep/Read für große Codebases
+- ✅ **Dokumentation** (60%) - Updates nach Änderungen
 
-**OPUS-2 (VS Code):**
+**OPUS (VS Code - KREATIV & ARCHITEKT):**
 - ⬜ UE5 Projekt erstellen + Najika Character Blueprint
 - ⬜ Movement, Camera, Animation Blueprints
 - ⬜ Combat System in C++/Blueprints
@@ -253,13 +253,39 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 ---
 
-## ✅ FASTAPI MIGRATION FERTIG! (Port Fix von Sonnet)
+## ✅ FASTAPI MIGRATION + BUG-FIXES FERTIG! (2026-02-15)
 
-Die Migration ist KOMPLETT! Details siehe weiter unten in "ERLEDIGT (2026-02-14)".
+### 🎉 PORT 8001 MIGRATION: 100% KOMPLETT!
+**Von:** OPUS (Port-Wechsel) + SONNET (letzte 4 Dateien + 7 Bug-Fixes)
+
+**SONNET Bug-Fixes (Commit 5061228):**
+1. ✅ World Data Loading - /data mount in FastAPI fehlte
+2. ✅ WebSocket Connection - Router war nicht importiert
+3. ✅ NPCScheduleSystem.advanceTime - Funktion fehlte
+4. ✅ Arena "Herausfordern" Button - Teleport fehlte
+5. ✅ Arena "Welle starten" Button - Teleport fehlte
+6. ✅ Gegner verschwinden - removeEnemy() zu früh aufgerufen
+7. ✅ Slime Arena Button - CSS nicht geladen
+
+**Details:** Siehe "ERLEDIGT (2026-02-15)" weiter unten!
 
 ---
 
-## 🎯 OPUS: NÄCHSTE TASKS (P1 - Diese Woche)
+## 🎯 SONNET: BACKEND TASKS (AKTUELL - 2026-02-15)
+
+### P0 - KRITISCH (SONNET MACHT JETZT):
+1. 🔧 **Backend Error-Handling Audit** - Alle API Endpoints Exception-Handling prüfen
+2. 📡 **WebSocket Events erweitern** - Mehr GameEvents für Frontend
+3. 🗄️ **ChromaDB Performance Check** - Slow Queries identifizieren
+
+### P1 - DIESE WOCHE (SONNET):
+4. 📊 **API Health-Checks** - `/health` für alle Services
+5. 🔐 **Security Audit** - CORS, Auth, Input-Validation
+6. 📚 **API Dokumentation** - OpenAPI/Swagger vervollständigen
+
+---
+
+## 🎯 OPUS: FRONTEND TASKS (AKTUELL - 2026-02-15)
 
 **FastAPI Migration ist durch! Jetzt kommen die Frontend-Features:**
 
@@ -983,6 +1009,55 @@ grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
 | **Sync** | REST API | REST API |
 | **3D** | Nein | Ja |
 | **Offline** | Ja | Ja |
+
+---
+
+## ✅ ERLEDIGT (2026-02-15) - SONNET (Claude Sonnet 4.5)
+
+### 7 Kritische Bug-Fixes nach Port 8001 Migration
+
+**Commit:** `5061228` | **6 Dateien geändert** | **+55 -5 Zeilen**
+
+**SONNET hat gecrashtete OPUS Arbeit fertiggestellt + User-Bugs gefixt:**
+
+#### ✅ Bug 1: World Data Loading Error
+**Problem:** `regions.json`, `biomes.json`, `cities.json` konnten nicht geladen werden
+**Grund:** `/data` mount fehlte in FastAPI!
+**Fix:** `app.mount("/data", StaticFiles(directory=DATA_DIR))` in `main_fastapi.py`
+
+#### ✅ Bug 2: WebSocket Connection Error
+**Problem:** `ws://127.0.0.1:8001/ws/connect` - Connection Failed
+**Grund:** WebSocket Router war NICHT in `main_fastapi.py` importiert!
+**Fix:** `from backend.api import websocket` + `app.include_router(websocket.router)`
+
+#### ✅ Bug 3: NPCScheduleSystem.advanceTime Error
+**Problem:** `NPCScheduleSystem.advanceTime is not a function`
+**Grund:** Funktion existierte nicht im `return {}` Export
+**Fix:** `advanceTime(minutes)` Funktion in `npc_schedule_system.js` hinzugefügt
+
+#### ✅ Bug 4: Arena "Herausfordern" Button
+**Problem:** Button startet Kampf, aber KEIN Teleport zur Arena
+**Fix:** `switchRoom('Kampfarena')` VOR Combat in `nemesis_arena_ui.js`
+
+#### ✅ Bug 5: Arena "Welle starten" Button
+**Problem:** Button startet Wave Combat, aber KEIN Teleport zur Arena
+**Fix:** `switchRoom('Kampfarena')` in `startWaveBattle()` in `nemesis_arena_frontend.js`
+
+#### ✅ Bug 6: Gegner verschwinden beim Annähern
+**Problem:** Gegner werden SOFORT entfernt, noch BEVOR Combat startet!
+**Grund:** `removeEnemy()` wurde zu früh in `triggerEncounter()` aufgerufen
+**Fix in `overworld_enemies.js`:**
+- Gegner werden nur **versteckt**: `mesh.visible = false` + `inCombat` Flag
+- Nach **Victory**: `removeEnemy()` entfernt Gegner permanent
+- Nach **Defeat**: `mesh.visible = true` + Gegner bleibt auf Map
+
+#### ✅ Bug 7: Slime Arena Button keine Funktion
+**Problem:** Button unter "Mehr" öffnet nichts
+**Grund:** `slime_arena.css` war NICHT in `index.html` geladen!
+**Fix:** `<link rel="stylesheet" href="static/css/slime_arena.css">` hinzugefügt
+
+#### ✅ Najika Chat: FUNKTIONIERT PERFEKT!
+Getestet mit `curl -X POST http://localhost:8001/api/chat` - Antwort korrekt! 🎀
 
 ---
 
