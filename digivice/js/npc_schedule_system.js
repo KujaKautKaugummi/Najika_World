@@ -576,6 +576,20 @@ const NPCScheduleSystem = (function() {
             timeState.lastRealTime = Date.now();
             updateAllNPCSchedules();
         },
+        advanceTime: (minutes) => {
+            // Advance game time by given minutes
+            timeState.gameMinute += minutes;
+            while (timeState.gameMinute >= 60) {
+                timeState.gameMinute -= 60;
+                timeState.gameHour++;
+                if (timeState.gameHour >= 24) {
+                    timeState.gameHour = 0;
+                    timeState.dayNumber++;
+                }
+            }
+            timeState.lastRealTime = Date.now();
+            updateAllNPCSchedules();
+        },
         getNPCActivity,
         isNPCInteractable,
         getNPCDialogueOverride,

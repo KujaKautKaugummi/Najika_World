@@ -709,7 +709,7 @@ const OverworldEnemies = (function() {
         if (Math.sqrt(dxCenter * dxCenter + dzCenter * dzCenter) < 500) return;
 
         state.activeEnemies.forEach(enemy => {
-            if (enemy.isAggro) return;
+            if (enemy.isAggro || enemy.inCombat) return; // Skip if already aggro or in combat
 
             const dist = distance2D(playerPos, enemy.position);
             if (dist < enemy.aggroRange) {
@@ -758,6 +758,12 @@ const OverworldEnemies = (function() {
                 window.onCombatDefeat = (result) => {
                     if (result.type === 'real3d') {
                         console.log('💀 Combat Defeat!');
+                        // Spieler verloren - Gegner wieder sichtbar machen
+                        if (enemy.mesh) {
+                            enemy.mesh.visible = true;
+                        }
+                        enemy.inCombat = false;
+                        enemy.isAggro = false;
                         if (window.GameEvents) {
                             window.GameEvents.emit('combatEnded', { won: false, enemyData: enemy.data });
                         }
@@ -797,8 +803,13 @@ const OverworldEnemies = (function() {
             return;
         }
 
-        // Nur entfernen wenn Kampf tatsächlich gestartet wurde
-        removeEnemy(enemy.id);
+        // Verstecke Gegner während Combat (statt ihn zu entfernen!)
+        if (enemy.mesh) {
+            enemy.mesh.visible = false;
+        }
+
+        // Markiere als "in combat" damit er nicht doppelt getriggert wird
+        enemy.inCombat = true;
     }
 
     // ==========================================
@@ -932,6 +943,9 @@ const OverworldEnemies = (function() {
         showLootNotification(enemy, actualLoot, goldDrop, xp);
 
         console.log(`💰 +${goldDrop}g | 📦 ${actualLoot.length} Items | ⭐ ${xp}XP`);
+
+        // Entferne Gegner NACH Kampf
+        removeEnemy(enemy.id);
     }
 
     function showLootNotification(enemy, loot, gold, xp) {

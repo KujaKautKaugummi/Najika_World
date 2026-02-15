@@ -453,8 +453,14 @@ export class NemesisArenaUI {
             }
 
             // Start battle
-            // This would integrate with your existing combat system
             console.log('Battle started with:', result.monster);
+
+            // Teleport player to Arena (using Digivice system)
+            if (window.switchRoom) {
+                window.switchRoom('Kampfarena');
+            } else if (window.DigiviceSystem && window.DigiviceSystem.switchRoom) {
+                window.DigiviceSystem.switchRoom('Kampfarena');
+            }
 
             // Trigger battle event
             window.dispatchEvent(new CustomEvent('arena-battle-start', {

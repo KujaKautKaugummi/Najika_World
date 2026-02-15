@@ -935,6 +935,13 @@ class NemesisArenaUI {
         if (window.Real3DCombat && window.Real3DCombat.startCombat) {
             this.arenaPanel.style.display = 'none';
 
+            // Teleport player to Arena FIRST!
+            if (window.switchRoom) {
+                window.switchRoom('Kampfarena');
+            } else if (window.DigiviceSystem && window.DigiviceSystem.switchRoom) {
+                window.DigiviceSystem.switchRoom('Kampfarena');
+            }
+
             const scene = window.getScene ? window.getScene() : null;
             const arenaCenter = { x: 0, y: 0, z: -10 };
 

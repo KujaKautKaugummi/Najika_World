@@ -27,7 +27,7 @@ from backend.api import (
     housing, farming, world_map, najika_compat,
     najika_game_actions_router, readiness, combat_magic, battle_unified,
     lebensraum, building, memory, voice_ue5, music, spell_names, special_stats, slime_2layer_ai,
-    chat, living, temperature,
+    chat, living, temperature, websocket,  # WebSocket Support hinzugefügt!
     state_v2, chat_v2,  # V2 Core Router (Migration Phase 1)
     battle_v2, living_v2, quest_v2, minigame_v2,  # V2 Game Systems (Phase 2)
     slime_v3,  # Slime V3 Formwandler + Aura (Phase 3)
@@ -245,6 +245,9 @@ app.include_router(living.status_router)  # /api/status/stream (SSE für private
 # Temperature System (Body + Environment Temp)
 app.include_router(temperature.router)  # /api/temperature prefix
 
+# WebSocket System (Real-time communication)
+app.include_router(websocket.router)  # /ws/connect - WebSocket Endpoint
+
 # ============================================================================
 # V2 CORE ROUTER (Migration Phase 1)
 # ============================================================================
@@ -276,6 +279,10 @@ DIGIVICE_DIR = os.path.join(BASE_DIR, "digivice")
 STATIC_DIR = os.path.join(DIGIVICE_DIR, "static")
 ASSETS_DIR = os.path.join(STATIC_DIR, "assets")
 JS_DIR = os.path.join(DIGIVICE_DIR, "js")
+DATA_DIR = os.path.join(DIGIVICE_DIR, "data")
+
+# Mount /data → digivice/data (World Data JSON files)
+app.mount("/data", StaticFiles(directory=DATA_DIR), name="world_data")
 
 # Mount /js → digivice/js (JavaScript files)
 app.mount("/js", StaticFiles(directory=JS_DIR), name="js_files")
