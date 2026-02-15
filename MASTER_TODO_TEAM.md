@@ -289,14 +289,14 @@ Die Migration ist KOMPLETT! Details siehe weiter unten in "ERLEDIGT (2026-02-14)
 | ✅ Task 3 | FERTIG | - | Dynamische Völker System UI |
 | ✅ Task 4 | FERTIG | - | Aura vs Begleiter Wahl-UI |
 | ✅ Task 5 | FERTIG | - | Medizin-Crafting UI |
-| ⬜ **Task 6** | **TODO** | **15 Min** | **Form-Affinität-Boni** ⭐ |
-| ⬜ Task 7 | TODO | 10 Min | Procedural Hybrid (Persistent-Layer) |
-| ⬜ Task 8 | TODO | 30 Min | Code Cleanup (Deprecated entfernen) |
-| ⬜ Task 9 | TODO | 10 Min | UE5 Projekt erstellen |
+| ✅ Task 6 | FERTIG | 15 Min | Form-Affinität-Boni (form_affinity_system.js, 376 Zeilen) |
+| ✅ Task 7 | FERTIG | 10 Min | Procedural Hybrid (Persistent-Layer in world_event_generator.js) |
+| ✅ Task 8 | FERTIG | 30 Min | Code Cleanup (3 Backup-Dateien entfernt, -7596 Zeilen) |
+| ✅ Task 9 | FERTIG | - | UE5 Projekt existiert bereits |
 
 ---
 
-## 🚀 TASK 6: Form-Affinität-Boni ⭐ **JETZT MACHEN!**
+## ✅ TASK 6: Form-Affinität-Boni - FERTIG!
 
 **Datei erstellen:** `digivice/js/form_affinity_system.js`
 
@@ -816,7 +816,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 #### Task 6: Form-Affinität-Boni
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ✅ FERTIG (2026-02-15) - form_affinity_system.js (376 Zeilen, 10 Formen + Aura-Synergien + UI)
 
 **WAS:** Formen geben kleine Boni (+5%), Aura verstärkt (bis +50%).
 
@@ -833,7 +833,7 @@ Nur bei Problemen stoppen!
 
 #### Task 7: Procedural Hybrid (Persistent-Layer)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ✅ FERTIG (2026-02-15) - persistentAreas in world_event_generator.js + 5 neue Funktionen
 
 **WAS:** Fraktions-Siedlungen bleiben, Rest regeneriert.
 
@@ -849,7 +849,7 @@ Backend macht OPUS-1. Nur bei Problemen stoppen!
 
 #### Task 8: Code Cleanup (Deprecated entfernen)
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO
+**Status:** ✅ FERTIG (2026-02-15) - 3 alte Backup-Dateien entfernt (-7596 Zeilen), Code war sauber
 
 **DEIN JOB:**
 ```bash
@@ -870,7 +870,7 @@ grep -r "TODO\|FIXME\|DEPRECATED" digivice/js/ > cleanup_candidates.txt
 
 #### Task 9: UE5 Projekt erstellen
 **Zuständig:** OPUS-2 (VS Code)
-**Status:** ⬜ TODO (ERST wenn Digivice fertig!)
+**Status:** ✅ FERTIG - Projekt existiert bereits (UE5/Najika/ mit Combat, Platforming, SideScrolling Variants)
 
 **DEIN JOB:**
 1. Epic Launcher → UE 5.3+

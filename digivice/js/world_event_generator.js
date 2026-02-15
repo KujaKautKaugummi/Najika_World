@@ -45,6 +45,7 @@
             consequences: [],     // Konsequenz-Ketten
             economyState: {},     // Händlerpreise, Verfügbarkeit
             lastGeneration: 0,    // Timestamp
+            persistentAreas: {},  // Procedural Hybrid: Siedlungen die NICHT regeneriert werden
         };
     }
 
@@ -426,10 +427,16 @@
             enemies: [], // Delegiert an MonsterRegistry
         };
 
+        // Procedural Hybrid: Persistent areas nicht ueberschreiben
+        const persistentData = getPersistentAreaData(playerX, playerZ, radius);
+        if (persistentData) {
+            result.persistent = persistentData;
+        }
+
         // Seeded Random basierend auf Position + Tag
         const seed = hashPosition(playerX, playerZ, worldState.day);
 
-        // 1. NPCs generieren
+        // 1. NPCs generieren (skip persistent areas)
         result.npcs = generateNPCsForSlice(biome, seed, playerX, playerZ, radius);
 
         // 2. Events prüfen (basierend auf Distanz seit letztem Event)
@@ -439,6 +446,61 @@
         applyConsequences(result);
 
         return result;
+    }
+
+    // ==========================================
+    // PROCEDURAL HYBRID (Persistent-Layer)
+    // ==========================================
+    // Fraktions-Siedlungen und Spieler-Bauten bleiben erhalten.
+    // Rest der Welt regeneriert bei jedem neuen Tag.
+
+    function markPersistent(areaId, x, z, radius, data) {
+        if (!worldState.persistentAreas) worldState.persistentAreas = {};
+        worldState.persistentAreas[areaId] = {
+            x, z, radius,
+            isPersistent: true,
+            createdDay: worldState.day,
+            data: data || {},
+            type: data?.type || 'settlement'
+        };
+        saveWorldState();
+    }
+
+    function removePersistent(areaId) {
+        if (worldState.persistentAreas) {
+            delete worldState.persistentAreas[areaId];
+            saveWorldState();
+        }
+    }
+
+    function isInPersistentArea(x, z) {
+        if (!worldState.persistentAreas) return false;
+        for (const area of Object.values(worldState.persistentAreas)) {
+            const dx = x - area.x;
+            const dz = z - area.z;
+            if (dx * dx + dz * dz <= area.radius * area.radius) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getPersistentAreaData(x, z, radius) {
+        if (!worldState.persistentAreas) return null;
+        const results = [];
+        for (const [id, area] of Object.entries(worldState.persistentAreas)) {
+            const dx = x - area.x;
+            const dz = z - area.z;
+            const dist = Math.sqrt(dx * dx + dz * dz);
+            if (dist <= radius + area.radius) {
+                results.push({ id, ...area });
+            }
+        }
+        return results.length > 0 ? results : null;
+    }
+
+    function getAllPersistentAreas() {
+        return worldState.persistentAreas || {};
     }
 
     function generateNPCsForSlice(biome, seed, centerX, centerZ, radius) {
@@ -714,6 +776,13 @@
         advanceDay,
         getCurrentBiome,
         saveWorldState,
+
+        // Procedural Hybrid (Persistent-Layer)
+        markPersistent,
+        removePersistent,
+        isInPersistentArea,
+        getPersistentAreaData,
+        getAllPersistentAreas,
 
         // Helfer
         isNPCTypeDead,
