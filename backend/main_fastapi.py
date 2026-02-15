@@ -318,6 +318,36 @@ def health_check():
     }
 
 
+@app.get("/api/performance/stats")
+def performance_stats():
+    """Performance statistics for all endpoints"""
+    from backend.utils import get_performance_stats
+    return {
+        "endpoints": get_performance_stats(),
+        "note": "Use @measure_performance() decorator to track endpoints"
+    }
+
+
+@app.get("/api/performance/slow")
+def slow_endpoints(limit: int = 10):
+    """Recent slow endpoint calls"""
+    from backend.utils import get_slow_endpoints
+    return {
+        "slow_calls": get_slow_endpoints(limit=limit),
+        "limit": limit
+    }
+
+
+@app.get("/api/performance/slowest")
+def slowest_endpoints(top_n: int = 10):
+    """Top N slowest endpoints by average time"""
+    from backend.utils import get_slowest_endpoints
+    return {
+        "slowest_endpoints": get_slowest_endpoints(top_n=top_n),
+        "top_n": top_n
+    }
+
+
 @app.get(f"{settings.API_PREFIX}/info")
 def api_info():
     """API information and available endpoints"""
