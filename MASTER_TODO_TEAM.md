@@ -273,40 +273,75 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 
 ## 🎯 SONNET: BACKEND TASKS (AKTUELL - 2026-02-15)
 
-### P0 - KRITISCH (SONNET MACHT JETZT):
-1. 🔧 **Backend Error-Handling Audit** - Alle API Endpoints Exception-Handling prüfen
-2. 📡 **WebSocket Events erweitern** - Mehr GameEvents für Frontend
-3. 🗄️ **ChromaDB Performance Check** - Slow Queries identifizieren
+**SONNET-STÄRKEN: Bug-Fixes (90%), API-Integration (80%), Testing (70%), Code-Review (80%)**
 
-### P1 - DIESE WOCHE (SONNET):
-4. 📊 **API Health-Checks** - `/health` für alle Services
-5. 🔐 **Security Audit** - CORS, Auth, Input-Validation
-6. 📚 **API Dokumentation** - OpenAPI/Swagger vervollständigen
+### ✅ P0 - ERLEDIGT (2026-02-15):
+1. ✅ **7 Kritische Bugs gefixt** - Arena, Enemies, WebSocket, NPC, World Data
+2. ✅ **Error-Handling Utils** - backend/utils/error_handling.py erstellt
+3. ✅ **P0 API Endpoints** - 8 Dateien, ~55 Endpoints mit @handle_errors()
+
+### 🔧 P1 - IN ARBEIT (SONNET MACHT JETZT):
+4. ⬜ **P1 Error-Handling** - Restliche 240 Endpoints fixen
+5. ⬜ **API Testing** - Unit Tests für kritische Endpoints schreiben
+6. ⬜ **ChromaDB Debugging** - Memory-Queries optimieren
+7. ⬜ **Backend Performance** - Slow Endpoints identifizieren
+
+### 📊 P2 - SPÄTER (SONNET):
+8. ⬜ **API Health-Checks** - `/health` für alle Services
+9. ⬜ **Security Audit** - CORS, Auth, Input-Validation
+10. ⬜ **Logging System** - Strukturiertes Logging vervollständigen
+11. ⬜ **API Dokumentation** - OpenAPI/Swagger vervollständigen
 
 ---
 
-## 🎯 OPUS: FRONTEND TASKS (AKTUELL - 2026-02-15)
+## 🎯 OPUS: FRONTEND/GAME TASKS (AKTUELL - 2026-02-15)
+
+**OPUS-STÄRKEN: Frontend UI (80%), Game Logic (80%), Kreativ (90%), Architektur (70%)**
 
 **FastAPI Migration ist durch! Jetzt kommen die Frontend-Features:**
 
-### ✅ OPUS-2 TASKS - PHASE 1 KOMPLETT! (2026-02-15)
+### ✅ OPUS PHASE 1 KOMPLETT! (2026-02-15)
 
 **Was OPUS fertig hat:**
-- ✅ Task 3: Dynamische Völker System UI (794 Zeilen)
-- ✅ Task 4: Aura vs Begleiter Wahl-UI (820 Zeilen)
-- ✅ Task 5: Medizin-Crafting UI (1.042 Zeilen)
-- ✅ **BONUS:** Slime V2→V3 Komplett-Rewrite (1.277 Zeilen)
-- ✅ **BONUS:** 4 Extra-Systeme (game_events_bridge, ws_bridge, arena, teleporter)
+- ✅ FastAPI Migration + Port 8001
+- ✅ Slime V3 Komplett-System (1.277 Zeilen)
+- ✅ Dynamische Völker UI (794 Zeilen)
+- ✅ Aura vs Begleiter Wahl-UI (820 Zeilen)
+- ✅ Medizin-Crafting UI (1.042 Zeilen)
+- ✅ Form-Affinität-Boni (376 Zeilen)
 
-**TOTAL:** 5.447 Zeilen neuer Code! 🎉
-
-**Commit:** `8caa6cb` - feat: OPUS-2 UI Tasks komplett - 6 neue Systeme + Slime V3
+**TOTAL:** ~6.000 Zeilen! 🎉
 
 ---
 
-## 🎯 OPUS: NÄCHSTE TASKS (Phase 2)
+## 🎨 OPUS: NEUE FRONTEND TASKS (Phase 2 - PASST ZU OPUS!)
 
-**Du hast 4 Tasks übrig (6-9). Alle sind klein (10-30 Min)!**
+**OPUS sollte machen (kreativ, UI, Game Logic):**
+
+### P0 - WICHTIGE NEUE FEATURES:
+1. ⬜ **Quest UI V2** - Quest-Tracker mit Fortschrittsbalken + Journal
+2. ⬜ **World Map 3D Viewer** - Interaktive Karte mit Region-Markers
+3. ⬜ **Skill Tree UI** - Visueller Skill-Baum (Diablo-Style)
+4. ⬜ **Housing System UI** - 3D Building-Placement erweitern
+
+### P1 - GAMEPLAY FEATURES:
+5. ⬜ **Combat UI Polish** - Animationen, Partikel-Effekte, Hit-Feedback
+6. ⬜ **NPC Dialogue UI** - Branching Dialogues (Visual Novel Style)
+7. ⬜ **Inventory UI V2** - Drag & Drop + Equipment-Slots
+8. ⬜ **Crafting Minigame** - Timing-basiertes Crafting
+
+### P2 - CONTENT CREATION:
+9. ⬜ **NPCs + Dialoge** - Mehr NPCs für alle Regionen
+10. ⬜ **Quests schreiben** - Story-Quests für Haupthandlung
+11. ⬜ **Items balancen** - Neue Waffen, Rüstungen, Consumables
+
+---
+
+## 🚫 OPUS SOLLTE NICHT MACHEN (Überlasse SONNET!):
+- ❌ Backend Bug-Fixes (SONNET ist schneller!)
+- ❌ API Error-Handling (SONNET hat Utils!)
+- ❌ Performance-Debugging (SONNET ist systematischer!)
+- ❌ Testing/Validation (SONNET ist besser darin!)
 
 ### 📋 KOMPLETTE TASK-LISTE:
 
