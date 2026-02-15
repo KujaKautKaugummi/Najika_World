@@ -455,11 +455,12 @@ export class NemesisArenaUI {
             // Start battle
             console.log('Battle started with:', result.monster);
 
-            // Teleport player to Arena (using Digivice system)
-            if (window.switchRoom) {
-                window.switchRoom('Kampfarena');
-            } else if (window.DigiviceSystem && window.DigiviceSystem.switchRoom) {
-                window.DigiviceSystem.switchRoom('Kampfarena');
+            // Teleport player to Arena using Scene3D.changeRoom()
+            if (window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+                window.Scene3D.changeRoom('Kampfarena');
+                console.log('🏟️ Teleported to Kampfarena');
+            } else {
+                console.error('❌ Scene3D.changeRoom() not available!');
             }
 
             // Trigger battle event

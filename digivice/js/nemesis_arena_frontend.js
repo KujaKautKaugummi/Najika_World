@@ -936,10 +936,11 @@ class NemesisArenaUI {
             this.arenaPanel.style.display = 'none';
 
             // Teleport player to Arena FIRST!
-            if (window.switchRoom) {
-                window.switchRoom('Kampfarena');
-            } else if (window.DigiviceSystem && window.DigiviceSystem.switchRoom) {
-                window.DigiviceSystem.switchRoom('Kampfarena');
+            if (window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
+                window.Scene3D.changeRoom('Kampfarena');
+                console.log('🏟️ Teleported to Kampfarena for Wave Battle');
+            } else {
+                console.error('❌ Scene3D.changeRoom() not available!');
             }
 
             const scene = window.getScene ? window.getScene() : null;
