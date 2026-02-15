@@ -13,6 +13,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
+from backend.utils import handle_errors
 import json
 import asyncio
 import time
@@ -233,6 +234,7 @@ class ChatResponse(BaseModel):
 
 @router.post("", response_model=ChatResponse)
 @router.post("/", response_model=ChatResponse)
+@handle_errors()
 async def chat_v2(message: ChatMessage):
     """
     Chat V2 - Nutzt Shared State + NajikaMind AGI-Orchester.
