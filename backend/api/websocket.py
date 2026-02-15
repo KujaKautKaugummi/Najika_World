@@ -4,6 +4,7 @@ Real-time communication endpoints
 """
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
+from backend.utils import handle_errors
 from sqlalchemy.orm import Session
 from typing import Optional
 import json
@@ -23,6 +24,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 @router.websocket("/connect")
+@handle_errors()
 async def websocket_endpoint(
     websocket: WebSocket,
     token: str = Query(...),
@@ -152,6 +154,7 @@ async def handle_websocket_message(user_id: int, message: dict):
 # ============================================================================
 
 @router.get("/stats")
+@handle_errors()
 async def get_websocket_stats(
     current_user: User = Depends(get_current_user)
 ):
@@ -165,6 +168,7 @@ async def get_websocket_stats(
 
 
 @router.get("/online-users")
+@handle_errors()
 async def get_online_users(
     current_user: User = Depends(get_current_user)
 ):
@@ -178,6 +182,7 @@ async def get_online_users(
 
 
 @router.post("/broadcast")
+@handle_errors()
 async def broadcast_message(
     message: dict,
     channel: Optional[str] = None,

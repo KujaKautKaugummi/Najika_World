@@ -9,6 +9,7 @@ Ersetzt die verstreuten State-Abfragen aus najika_server.py.
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
+from backend.utils import handle_errors
 import time
 
 import sys
@@ -76,6 +77,7 @@ class StateUpdateRequest(BaseModel):
 # ============================================================================
 
 @router.get("/", response_model=GameStateResponse)
+@handle_errors()
 async def get_game_state():
     """Gesamten Game-State abrufen (ohne sse_clients)"""
     return GameStateResponse(
@@ -91,12 +93,14 @@ async def get_game_state():
 
 
 @router.get("/najika")
+@handle_errors()
 async def get_najika_state():
     """Nur Najikas State (Needs, Stats, Equipment)"""
     return STATE["najika"]
 
 
 @router.post("/najika/update")
+@handle_errors()
 async def update_najika_state(request: StateUpdateRequest):
     """
     Najika-Stats updaten.
@@ -118,12 +122,14 @@ async def update_najika_state(request: StateUpdateRequest):
 
 
 @router.get("/user")
+@handle_errors()
 async def get_user_state():
     """Spieler-State (Level, XP, Inventory)"""
     return STATE["user"]
 
 
 @router.post("/user/update")
+@handle_errors()
 async def update_user_state(request: StateUpdateRequest):
     """Spieler-Stats updaten"""
     allowed_keys = {"level", "xp", "points"}
@@ -141,24 +147,28 @@ async def update_user_state(request: StateUpdateRequest):
 
 
 @router.get("/battle")
+@handle_errors()
 async def get_battle_state():
     """Battle-State"""
     return STATE["battle"]
 
 
 @router.get("/living")
+@handle_errors()
 async def get_living_state():
     """Living System State (Mood, Needs, Activity)"""
     return STATE["living"]
 
 
 @router.get("/rooms")
+@handle_errors()
 async def get_rooms():
     """Alle verfuegbaren Raeume"""
     return {"rooms": ROOMS}
 
 
 @router.post("/private-mode/toggle")
+@handle_errors()
 async def toggle_private_mode():
     """Kaetzchen-Modus ein/aus"""
     STATE["private_mode"] = not STATE["private_mode"]
@@ -169,12 +179,14 @@ async def toggle_private_mode():
 
 
 @router.get("/private-mode")
+@handle_errors()
 async def get_private_mode():
     """Kaetzchen-Modus Status"""
     return {"private_mode": STATE["private_mode"]}
 
 
 @router.post("/behavior-mode")
+@handle_errors()
 async def set_behavior_mode(mode: str = "standard"):
     """
     Verhaltens-Modus setzen.
@@ -190,6 +202,7 @@ async def set_behavior_mode(mode: str = "standard"):
 
 
 @router.get("/health")
+@handle_errors()
 async def state_health():
     """Health-Check mit System-Infos"""
     from backend.shared_state import (

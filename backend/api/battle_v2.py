@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from enum import Enum
+from backend.utils import handle_errors
 import random
 import time
 import sys
@@ -121,6 +122,7 @@ def _generate_enemy(location: str, difficulty: str) -> dict:
 # ============================================================================
 
 @router.post("/start", response_model=BattleStatusResponse)
+@handle_errors()
 async def start_battle(request: BattleStartRequest):
     """Battle starten - generiert Gegner basierend auf Location"""
     player = STATE["najika"]
@@ -163,6 +165,7 @@ async def start_battle(request: BattleStartRequest):
 
 
 @router.post("/action")
+@handle_errors()
 async def battle_action(action: BattleActionRequest):
     """Battle-Aktion ausfuehren (Spieler-Turn)"""
     battle = _get_battle()
@@ -270,6 +273,7 @@ async def battle_action(action: BattleActionRequest):
 
 
 @router.get("/status")
+@handle_errors()
 async def battle_status():
     """Aktuellen Battle-Status"""
     battle = _get_battle()
@@ -279,6 +283,7 @@ async def battle_status():
 
 
 @router.get("/log")
+@handle_errors()
 async def battle_log():
     """Battle-Log (letzte Aktionen)"""
     battle = _get_battle()
@@ -288,6 +293,7 @@ async def battle_log():
 
 
 @router.post("/end")
+@handle_errors()
 async def end_battle():
     """Battle manuell beenden"""
     if "default" in _active_battles:
@@ -297,6 +303,7 @@ async def end_battle():
 
 
 @router.get("/enemies")
+@handle_errors()
 async def get_enemy_db():
     """Gegner-Datenbank abrufen"""
     if not ENEMY_DB:
@@ -308,6 +315,7 @@ async def get_enemy_db():
 
 
 @router.get("/skills")
+@handle_errors()
 async def get_skill_db():
     """Skill-Datenbank abrufen"""
     if not SKILL_DB:

@@ -6,6 +6,7 @@ Ersetzt die getrennten States in living.py durch shared_state.
 """
 
 from fastapi import APIRouter
+from backend.utils import handle_errors
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
@@ -99,6 +100,7 @@ def _apply_needs_decay():
 # ============================================================================
 
 @router.get("/state")
+@handle_errors()
 async def get_living_state():
     """Kompletter Living State (Needs + Mood + Activity)"""
     _apply_needs_decay()
@@ -118,6 +120,7 @@ async def get_living_state():
 
 
 @router.get("/needs")
+@handle_errors()
 async def get_needs():
     """Nur die Beduerfnisse"""
     _apply_needs_decay()
@@ -132,6 +135,7 @@ async def get_needs():
 
 
 @router.post("/mood")
+@handle_errors()
 async def set_mood(update: MoodUpdate):
     """Mood manuell setzen"""
     STATE["living"]["mood"] = update.mood
@@ -144,12 +148,14 @@ async def set_mood(update: MoodUpdate):
 
 
 @router.get("/mood")
+@handle_errors()
 async def get_mood():
     """Aktuellen Mood abrufen"""
     return {"mood": STATE["living"].get("mood", "happy")}
 
 
 @router.get("/proactive")
+@handle_errors()
 async def get_proactive_message():
     """Pruefen ob Najika proaktiv sprechen will"""
     if not LIVING_SYSTEM_AVAILABLE:
@@ -171,6 +177,7 @@ async def get_proactive_message():
 
 
 @router.post("/decay")
+@handle_errors()
 async def trigger_needs_decay():
     """Needs Decay manuell triggern"""
     _apply_needs_decay()
@@ -186,6 +193,7 @@ async def trigger_needs_decay():
 
 
 @router.get("/stream")
+@handle_errors()
 async def living_stream():
     """SSE Stream fuer Living State Updates"""
     async def event_generator():

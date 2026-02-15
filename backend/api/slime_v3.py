@@ -14,6 +14,7 @@ Basierend auf SLIME_SYSTEM_V3_DOKUMENTATION.md:
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from enum import Enum
@@ -200,6 +201,7 @@ def _get_trust_level(points):
 # ============================================================================
 
 @router.get("/status")
+@handle_errors()
 async def get_slime_status():
     """Kompletter Slime V3 Status"""
     _update_hunger()
@@ -237,6 +239,7 @@ async def get_slime_status():
 # ============================================================================
 
 @router.post("/form/learn")
+@handle_errors()
 async def try_learn_form(enemy_type: str = "wild", enemy_form: Optional[str] = None, slime_had_kill: bool = False):
     """
     Versuche eine Form zu lernen (nach besiegtem Gegner).
@@ -296,6 +299,7 @@ async def try_learn_form(enemy_type: str = "wild", enemy_form: Optional[str] = N
 
 
 @router.post("/form/change")
+@handle_errors()
 async def change_form(form: str):
     """Form wechseln (nur gelernte Formen)"""
     if form not in _slime["learned_forms"]:
@@ -309,6 +313,7 @@ async def change_form(form: str):
 
 
 @router.get("/forms")
+@handle_errors()
 async def get_all_forms():
     """Alle gelernten Formen + verfuegbare"""
     regional = [{"id": f.value, "name": f.value.replace("_", " ").title(), "learned": f.value in _slime["learned_forms"]}
@@ -330,6 +335,7 @@ async def get_all_forms():
 # ============================================================================
 
 @router.post("/aura/set")
+@handle_errors()
 async def set_aura_element(element: str):
     """Aura-Element setzen (kann gewechselt werden durch Training)"""
     try:
@@ -352,6 +358,7 @@ async def set_aura_element(element: str):
 
 
 @router.post("/aura/upgrade")
+@handle_errors()
 async def upgrade_aura():
     """Aura-Stufe erhoehen (0 bis 5)"""
     if not _slime["aura_element"]:
@@ -371,6 +378,7 @@ async def upgrade_aura():
 
 
 @router.get("/aura")
+@handle_errors()
 async def get_aura_status():
     """Aura-Status"""
     return {
@@ -386,6 +394,7 @@ async def get_aura_status():
 # ============================================================================
 
 @router.post("/mode/switch")
+@handle_errors()
 async def switch_mode():
     """Zwischen Koerperlich und Aura wechseln"""
     if _slime["mode"] == CompanionMode.KOERPERLICH.value:
@@ -400,6 +409,7 @@ async def switch_mode():
 
 
 @router.post("/mode/set")
+@handle_errors()
 async def set_mode(mode: str):
     """Modus direkt setzen"""
     if mode not in [m.value for m in CompanionMode]:
@@ -417,6 +427,7 @@ async def set_mode(mode: str):
 # ============================================================================
 
 @router.get("/trust")
+@handle_errors()
 async def get_trust():
     """Vertrauens-Status"""
     lvl = _get_trust_level(_slime["trust_points"])
@@ -435,6 +446,7 @@ async def get_trust():
 
 
 @router.post("/trust/add")
+@handle_errors()
 async def add_trust(amount: int = 1):
     """Trust-Punkte hinzufuegen (DARF NIEMALS sinken!)"""
     if amount < 0:
@@ -466,6 +478,7 @@ async def add_trust(amount: int = 1):
 # ============================================================================
 
 @router.post("/skill/learn")
+@handle_errors()
 async def try_learn_skill(skill_name: str, enemy_type: str = "wild"):
     """Skill-Copy nach besiegtem Gegner (1-5% Chance, GETRENNT von Form-Lernen)"""
     if len(_slime["skills"]) >= _slime["max_skills"]:
@@ -484,6 +497,7 @@ async def try_learn_skill(skill_name: str, enemy_type: str = "wild"):
 
 
 @router.post("/skill/forget")
+@handle_errors()
 async def forget_skill(skill_name: str):
     """Skill vergessen (Spieler-Wahl)"""
     if skill_name not in _slime["skills"]:
@@ -509,6 +523,7 @@ def _update_hunger():
 
 
 @router.post("/care/feed")
+@handle_errors()
 async def feed_slime():
     """Slime fuettern (Hunger Hearts auffuellen)"""
     _slime["hunger_hearts"] = min(_slime["max_hunger_hearts"], _slime["hunger_hearts"] + 1)
@@ -519,6 +534,7 @@ async def feed_slime():
 
 
 @router.post("/care/play")
+@handle_errors()
 async def play_with_slime():
     """Mit Slime spielen"""
     _slime["trust_points"] += 2
@@ -527,6 +543,7 @@ async def play_with_slime():
 
 
 @router.post("/care/heal")
+@handle_errors()
 async def heal_slime():
     """Slime heilen"""
     _slime["hunger_hearts"] = _slime["max_hunger_hearts"]
@@ -540,6 +557,7 @@ async def heal_slime():
 # ============================================================================
 
 @router.post("/battle/won")
+@handle_errors()
 async def record_battle_won():
     """Battle gewonnen tracken"""
     _slime["battles_won"] += 1
@@ -557,6 +575,7 @@ async def record_battle_won():
 
 
 @router.post("/battle/lost")
+@handle_errors()
 async def record_battle_lost():
     """Battle verloren tracken"""
     _slime["battles_total"] += 1
@@ -569,6 +588,7 @@ async def record_battle_lost():
 # ============================================================================
 
 @router.post("/rescue")
+@handle_errors()
 async def rescue_check():
     """Rescue System: 1x pro 24h (oder kein Cooldown bei Trust 4+)"""
     now = time.time()
@@ -593,6 +613,7 @@ async def rescue_check():
 # ============================================================================
 
 @router.get("/memories")
+@handle_errors()
 async def get_memories():
     """Alle freigeschalteten Erinnerungen"""
     memories = []
@@ -616,6 +637,7 @@ async def get_memories():
 # ============================================================================
 
 @router.post("/human-form/toggle")
+@handle_errors()
 async def toggle_human_form():
     """Menschen-Form an/aus (nur bei Trust Level 5)"""
     if not _slime["human_form_unlocked"]:
@@ -631,6 +653,7 @@ async def toggle_human_form():
 # ============================================================================
 
 @router.post("/save")
+@handle_errors()
 async def save_state():
     """State manuell speichern"""
     _save_slime_state()
@@ -638,6 +661,7 @@ async def save_state():
 
 
 @router.post("/reset")
+@handle_errors()
 async def reset_state():
     """State zuruecksetzen (Vorsicht!)"""
     global _slime
@@ -647,6 +671,7 @@ async def reset_state():
 
 
 @router.post("/name")
+@handle_errors()
 async def set_slime_name(name: str):
     """Slime umbenennen"""
     if not name or len(name) > 30:

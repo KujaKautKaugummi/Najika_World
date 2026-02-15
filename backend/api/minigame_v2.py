@@ -4,6 +4,7 @@ Rhythm, Garten, Reflex, Kochen und andere Minigames.
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 import time
@@ -113,6 +114,7 @@ _highscores: Dict[str, dict] = {}
 # ============================================================================
 
 @router.get("/games")
+@handle_errors()
 async def list_minigames():
     """Alle verfuegbaren Minigames"""
     games = []
@@ -129,6 +131,7 @@ async def list_minigames():
 
 
 @router.post("/start")
+@handle_errors()
 async def start_minigame(request: MinigameStartRequest):
     """Minigame starten"""
     if request.game_type not in MINIGAME_CONFIG:
@@ -150,6 +153,7 @@ async def start_minigame(request: MinigameStartRequest):
 
 
 @router.post("/score", response_model=MinigameResult)
+@handle_errors()
 async def submit_score(request: MinigameScoreRequest):
     """Score einreichen und Rewards berechnen"""
     if request.game_type not in MINIGAME_CONFIG:
@@ -213,6 +217,7 @@ async def submit_score(request: MinigameScoreRequest):
 
 
 @router.get("/highscores")
+@handle_errors()
 async def get_highscores():
     """Alle Highscores"""
     result = {}
@@ -227,6 +232,7 @@ async def get_highscores():
 
 
 @router.get("/highscores/{game_type}")
+@handle_errors()
 async def get_game_highscore(game_type: str):
     """Highscore fuer ein Spiel"""
     if game_type not in MINIGAME_CONFIG:

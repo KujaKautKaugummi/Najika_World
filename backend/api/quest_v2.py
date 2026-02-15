@@ -4,6 +4,7 @@ Quests generieren, annehmen, Fortschritt tracken, abschliessen.
 """
 
 from fastapi import APIRouter, HTTPException
+from backend.utils import handle_errors
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 import random
@@ -155,6 +156,7 @@ def _init_quests():
 # ============================================================================
 
 @router.get("/available")
+@handle_errors()
 async def get_available_quests():
     """Verfuegbare Quests (basierend auf Spieler-Level)"""
     if QUEST_SYSTEM_AVAILABLE and _quest_system:
@@ -168,6 +170,7 @@ async def get_available_quests():
 
 
 @router.get("/active")
+@handle_errors()
 async def get_active_quests():
     """Aktive Quests"""
     if QUEST_SYSTEM_AVAILABLE and _quest_system:
@@ -180,6 +183,7 @@ async def get_active_quests():
 
 
 @router.post("/start")
+@handle_errors()
 async def start_quest(request: QuestStartRequest):
     """Quest starten"""
     if QUEST_SYSTEM_AVAILABLE and _quest_system:
@@ -207,6 +211,7 @@ async def start_quest(request: QuestStartRequest):
 
 
 @router.post("/update")
+@handle_errors()
 async def update_quest_progress(request: QuestUpdateRequest):
     """Quest-Fortschritt updaten"""
     if QUEST_SYSTEM_AVAILABLE and _quest_system:
@@ -247,6 +252,7 @@ async def update_quest_progress(request: QuestUpdateRequest):
 
 
 @router.post("/complete/{quest_id}")
+@handle_errors()
 async def complete_quest(quest_id: str):
     """Quest abschliessen und Rewards erhalten"""
     if QUEST_SYSTEM_AVAILABLE and _quest_system:
@@ -302,6 +308,7 @@ async def complete_quest(quest_id: str):
 
 
 @router.get("/stats")
+@handle_errors()
 async def quest_stats():
     """Quest-Statistiken"""
     return {
