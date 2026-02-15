@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import uvicorn
@@ -287,15 +287,8 @@ app.mount("/digivice", StaticFiles(directory="digivice", html=True), name="digiv
 
 @app.get("/")
 def root():
-    """Root endpoint with API information"""
-    return {
-        "name": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "status": "running",
-        "docs": "/docs",
-        "redoc": "/redoc",
-        "api_prefix": settings.API_PREFIX,
-    }
+    """Serve the Digivice frontend"""
+    return FileResponse("digivice/index.html")
 
 
 @app.get("/health")
