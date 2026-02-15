@@ -275,6 +275,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIGIVICE_DIR = os.path.join(BASE_DIR, "digivice")
 STATIC_DIR = os.path.join(DIGIVICE_DIR, "static")
 ASSETS_DIR = os.path.join(STATIC_DIR, "assets")
+JS_DIR = os.path.join(DIGIVICE_DIR, "js")
+
+# Mount /js → digivice/js (JavaScript files)
+app.mount("/js", StaticFiles(directory=JS_DIR), name="js_files")
 
 # Mount /static → digivice/static (CSS, Assets, etc.)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static_files")
