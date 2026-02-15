@@ -270,15 +270,20 @@ app.include_router(slime_v3.router)       # /api/slime-v3 - Slime Formwandler Sy
 # STATIC FILES - DIGIVICE FRONTEND
 # ============================================================================
 
+# Get absolute paths for static files
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DIGIVICE_DIR = os.path.join(BASE_DIR, "digivice")
+STATIC_DIR = os.path.join(DIGIVICE_DIR, "static")
+ASSETS_DIR = os.path.join(STATIC_DIR, "assets")
+
 # Mount /static → digivice/static (CSS, Assets, etc.)
-# JS-Code referenziert /static/assets/... für KayKit-Models + room_config
-app.mount("/static", StaticFiles(directory="digivice/static"), name="static_files")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static_files")
 
 # Mount KayKit assets from digivice/static/assets (legacy /assets path)
-app.mount("/assets", StaticFiles(directory="digivice/static/assets"), name="kaykit_assets")
+app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="kaykit_assets")
 
 # Mount digivice static files (must be last to allow HTML fallback)
-app.mount("/digivice", StaticFiles(directory="digivice", html=True), name="digivice")
+app.mount("/digivice", StaticFiles(directory=DIGIVICE_DIR, html=True), name="digivice")
 
 
 # ============================================================================
@@ -288,7 +293,8 @@ app.mount("/digivice", StaticFiles(directory="digivice", html=True), name="digiv
 @app.get("/")
 def root():
     """Serve the Digivice frontend"""
-    return FileResponse("digivice/index.html")
+    index_path = os.path.join(DIGIVICE_DIR, "index.html")
+    return FileResponse(index_path)
 
 
 @app.get("/health")
