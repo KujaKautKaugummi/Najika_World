@@ -319,16 +319,16 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 **OPUS sollte machen (kreativ, UI, Game Logic):**
 
 ### P0 - WICHTIGE NEUE FEATURES:
-1. ⬜ **Quest UI V2** - Quest-Tracker mit Fortschrittsbalken + Journal
-2. ⬜ **World Map 3D Viewer** - Interaktive Karte mit Region-Markers
-3. ⬜ **Skill Tree UI** - Visueller Skill-Baum (Diablo-Style)
-4. ⬜ **Housing System UI** - 3D Building-Placement erweitern
+1. ✅ **Quest UI V2** - FERTIG! `quest_tracker_v2.js` (Journal, Chains, Notifications, Witcher-Style Tracker) (15.02.)
+2. ✅ **World Map 3D Viewer** - FERTIG! `world_map_3d.js` (Three.js 3D-Karte, 8 Regionen + Götterfels, Fog of War) (15.02.)
+3. ✅ **Skill Tree UI** - FERTIG! `skill_tree_ui.js` (Canvas-basierter Diablo-Style Baum, 6 Schulen, 36 Skills) (15.02.)
+4. ✅ **Housing System UI** - FERTIG! `housing_ui_v2.js` (Möbel-Katalog, 30+ Items, Haus-Upgrade, Favoriten) (15.02.)
 
 ### P1 - GAMEPLAY FEATURES:
-5. ⬜ **Combat UI Polish** - Animationen, Partikel-Effekte, Hit-Feedback
-6. ⬜ **NPC Dialogue UI** - Branching Dialogues (Visual Novel Style)
-7. ⬜ **Inventory UI V2** - Drag & Drop + Equipment-Slots
-8. ⬜ **Crafting Minigame** - Timing-basiertes Crafting
+5. ✅ **Combat UI Polish** - FERTIG! `combat_ui_polish.js` (Damage Numbers, Combo, Screen Shake, Status Effects, Kill Streaks) (15.02.)
+6. ✅ **NPC Dialogue UI** - FERTIG! `npc_dialogue_vn.js` (Visual Novel Style, Portraits, Typewriter, Branching, Choice Memory) (15.02.)
+7. ✅ **Inventory UI V2** - FERTIG! `inventory_ui_v2.js` (Paperdoll Equipment, Drag&Drop, Tooltips, Item-Vergleich) (15.02.)
+8. ✅ **Crafting Minigame** - FERTIG! `crafting_minigame.js` (Timing-Bar, 7 Rezepte, 6 Phasen-Typen, Qualitäts-System) (15.02.)
 
 ### P2 - CONTENT CREATION:
 9. ⬜ **NPCs + Dialoge** - Mehr NPCs für alle Regionen
