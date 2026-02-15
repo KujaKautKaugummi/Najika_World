@@ -319,7 +319,8 @@ const OverworldEnemies = (function() {
         playerLevel: 1,
         currentBiome: 'samtmoos',
         scene: null,
-        isNight: false
+        isNight: false,
+        activeCombat: false     // Combat-Queue: Nur 1 Combat gleichzeitig!
     };
 
     // ==========================================
@@ -725,6 +726,13 @@ const OverworldEnemies = (function() {
     function triggerEncounter(enemy) {
         console.log(`⚔️ Encounter triggered: ${enemy.data.name}`);
 
+        // COMBAT-QUEUE: Nur 1 Combat gleichzeitig!
+        if (state.activeCombat) {
+            console.warn(`⚠️ Combat bereits aktiv! ${enemy.data.name} wird übersprungen.`);
+            enemy.isAggro = false;
+            return;
+        }
+
         // GameEvent emittieren
         if (window.GameEvents) {
             window.GameEvents.emit('combatStarted', {
@@ -744,13 +752,17 @@ const OverworldEnemies = (function() {
                 (window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 });
 
             if (scene) {
+                // Store current enemy reference (wichtig für Callbacks!)
+                const currentEnemy = enemy;
+
                 // Setup Callbacks BEFORE starting combat
                 window.onCombatVictory = (result) => {
                     if (result.type === 'real3d') {
                         console.log('✅ Combat Victory! XP:', result.xp, 'Loot:', result.loot);
-                        onEnemyDefeated(enemy);
+                        onEnemyDefeated(currentEnemy);
+                        state.activeCombat = false; // Combat beendet!
                         if (window.GameEvents) {
-                            window.GameEvents.emit('combatEnded', { won: true, enemyData: enemy.data });
+                            window.GameEvents.emit('combatEnded', { won: true, enemyData: currentEnemy.data });
                         }
                     }
                 };
@@ -759,13 +771,14 @@ const OverworldEnemies = (function() {
                     if (result.type === 'real3d') {
                         console.log('💀 Combat Defeat!');
                         // Spieler verloren - Gegner wieder sichtbar machen
-                        if (enemy.mesh) {
-                            enemy.mesh.visible = true;
+                        if (currentEnemy.mesh) {
+                            currentEnemy.mesh.visible = true;
                         }
-                        enemy.inCombat = false;
-                        enemy.isAggro = false;
+                        currentEnemy.inCombat = false;
+                        currentEnemy.isAggro = false;
+                        state.activeCombat = false; // Combat beendet!
                         if (window.GameEvents) {
-                            window.GameEvents.emit('combatEnded', { won: false, enemyData: enemy.data });
+                            window.GameEvents.emit('combatEnded', { won: false, enemyData: currentEnemy.data });
                         }
                     }
                 };
@@ -773,6 +786,7 @@ const OverworldEnemies = (function() {
                 // Real3DCombat erwartet: (enemyList, scene, position)
                 window.Real3DCombat.startCombat([enemy.data.id], scene, playerPos);
                 combatStarted = true;
+                state.activeCombat = true; // Markiere Combat als aktiv!
                 console.log(`⚔️ Real3D Combat gestartet: ${enemy.data.name}`);
             } else {
                 console.warn('Scene nicht verfügbar für Real3DCombat, versuche Fallback...');
@@ -781,19 +795,30 @@ const OverworldEnemies = (function() {
 
         if (!combatStarted && window.UnifiedCombat) {
             // Fallback: Unified Combat (UI-Buttons)
+            const currentEnemy = enemy; // Store reference
             window.UnifiedCombat.startCombat({
                 type: 'overworld',
                 enemy: enemy.data,
                 location: state.currentBiome,
                 isHardcore: false,
-                onWin: () => onEnemyDefeated(enemy),
+                onWin: () => {
+                    onEnemyDefeated(currentEnemy);
+                    state.activeCombat = false;
+                },
                 onLose: () => {
+                    if (currentEnemy.mesh) {
+                        currentEnemy.mesh.visible = true;
+                    }
+                    currentEnemy.inCombat = false;
+                    currentEnemy.isAggro = false;
+                    state.activeCombat = false;
                     if (window.GameEvents) {
-                        window.GameEvents.emit('combatEnded', { won: false, enemyData: enemy.data });
+                        window.GameEvents.emit('combatEnded', { won: false, enemyData: currentEnemy.data });
                     }
                 }
             });
             combatStarted = true;
+            state.activeCombat = true;
         }
 
         if (!combatStarted) {
