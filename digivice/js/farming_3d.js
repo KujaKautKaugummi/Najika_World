@@ -2,7 +2,7 @@
 (function() {
     const FARMING_CONFIG = {
         // API Endpoint
-        apiBaseUrl: 'http://localhost:8000/api/farming',
+        apiBaseUrl: 'http://localhost:8001/api/farming',
 
         // Farm Area in World (Near Schwarze Mühle)
         farmAreaCenter: [550, 0, 600],
@@ -936,7 +936,7 @@
     function setupKeyboardHandler() {
         document.addEventListener('keydown', (e) => {
             // E: Quick action (plant/water/harvest)
-            if (e.code === 'KeyE' && selectedPlot) {
+            if (e.code === 'KeyE' && selectedPlot && !window.combatActive) {
                 // Check if no other system is active
                 const buildingPrompt = document.getElementById('building-prompt-ui');
                 if (buildingPrompt && buildingPrompt.style.display === 'block') {

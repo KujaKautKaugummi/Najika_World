@@ -108,5 +108,16 @@
       "advice_given": 5,
       "pro_contra_created": 3
     }
+  },
+  {
+    "session_start": "2026-02-15T00:44:48.905962",
+    "session_end": "2026-02-15T00:44:49.112975",
+    "duration_minutes": 0.0034502166666666666,
+    "stats": {
+      "decisions_helped": 0,
+      "problems_solved": 0,
+      "advice_given": 0,
+      "pro_contra_created": 0
+    }
   }
 ]

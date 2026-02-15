@@ -26,7 +26,7 @@ class SlimeArenaUI {
         this.cheerBuffs = {}; // Active cheer buffs
 
         // API integration - FastAPI Server auf Port 8001
-        this.apiBase = 'http://127.0.0.1:8000/api/slime-arena';
+        this.apiBase = 'http://127.0.0.1:8001/api/slime-arena';
         this.currentDuelId = null;
         this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 'player_1';
 

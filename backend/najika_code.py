@@ -56,7 +56,7 @@ except ImportError:
 
 # Konfiguration
 OLLAMA_URL = "http://localhost:11434/api/generate"
-NAJIKA_API_URL = "http://localhost:8000/api/chat"
+NAJIKA_API_URL = "http://localhost:8001/api/chat"
 MODEL_NAME = "najika-local"  # Normal Mode (qwen2.5 basiert)
 NSFW_MODEL = "najika-nsfw"   # NSFW Mode (dolphin-mistral, nur wenn NSFW_LOCAL=true)
 FALLBACK_MODEL = "qwen2.5:7b"

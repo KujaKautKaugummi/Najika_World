@@ -2,8 +2,8 @@
 // Kommuniziert mit C:\NajikaCore\najika_server.py
 
 // BACKEND_URL is already defined globally in index.html
-// const BACKEND_URL = 'http://localhost:8000';
-const BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
+// const BACKEND_URL = 'http://localhost:8001';
+const BACKEND_URL = window.BACKEND_URL || 'http://localhost:8001';
 
 class BattleAPI {
   constructor() {

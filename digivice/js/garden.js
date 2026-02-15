@@ -939,8 +939,8 @@
             // NUR wenn im Garten (selectedPlot gesetzt)
             if (!selectedPlot) return;
 
-            // E: Plant/Harvest - NUR im Garten!
-            if (e.code === 'KeyE') {
+            // E: Plant/Harvest - NUR im Garten! NICHT im Combat!
+            if (e.code === 'KeyE' && !window.combatActive) {
                 // NICHT im Gebäude! (currentInterior wird in 3d_scene.js gesetzt)
                 if (window.currentInterior) {
                     return; // Im Gebäude = keine Garten-Aktionen!

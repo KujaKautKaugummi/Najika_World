@@ -11,7 +11,7 @@ print("TEST: NAJIKA STARTET CLAUDE CODE EIGENSTÄNDIG")
 print("="*80)
 print()
 
-SERVER_URL = "http://localhost:8000"
+SERVER_URL = "http://localhost:8001"
 
 # Test 1: Ohne Task
 print("[1] Test: Claude Code starten (ohne Task)")

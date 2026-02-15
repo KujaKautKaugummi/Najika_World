@@ -46,8 +46,8 @@ class NajikaLoRATrainer3B:
     def __init__(
         self,
         base_model="Qwen/Qwen2.5-7B-Instruct",  # Qwen2.5 7B für besseres Deutsch!
-        output_dir="C:/Najika-World/lora_checkpoints",
-        logs_dir="C:/Najika-World/training_logs"
+        output_dir="C:/Najika_World/lora_checkpoints_new",
+        logs_dir="C:/Najika_World/training_logs"
     ):
         self.base_model = base_model
         self.output_dir = output_dir
@@ -88,15 +88,133 @@ class NajikaLoRATrainer3B:
                 return None
 
             conversations = []
+            skipped = 0
+            metadatas = all_convs.get('metadatas', [])
 
-            for i in range(0, len(all_convs['documents']) - 1, 2):
-                user_msg = all_convs['documents'][i]
-                najika_msg = all_convs['documents'][i + 1]
+            # Sammle user- und najika-Messages getrennt per Timestamp-Prefix
+            user_msgs = {}
+            najika_msgs = {}
+
+            for i, doc in enumerate(all_convs['documents']):
+                meta = metadatas[i] if i < len(metadatas) else {}
+                msg_type = meta.get("type", "")
+                msg_id = all_convs['ids'][i] if i < len(all_convs['ids']) else ""
+
+                # ID-Format: conv_2026-01-01T12:00:00_user / conv_..._najika
+                base_id = msg_id.rsplit("_", 1)[0] if msg_id else f"idx_{i}"
+
+                if msg_type == "user":
+                    user_msgs[base_id] = doc
+                elif msg_type == "najika":
+                    najika_msgs[base_id] = doc
+
+            # Paire nur wo BEIDE existieren
+            paired = 0
+            for conv_id in user_msgs:
+                if conv_id not in najika_msgs:
+                    skipped += 1
+                    continue
+
+                user_msg = user_msgs[conv_id]
+                najika_msg = najika_msgs[conv_id]
+
+                # Qualitaetspruefung
+                if not user_msg or not najika_msg:
+                    skipped += 1
+                    continue
+                if len(user_msg.strip()) < 2 or len(najika_msg.strip()) < 2:
+                    skipped += 1
+                    continue
+                # Trainings-Artefakte filtern (erweitert!)
+                garbage_markers = [
+                    "als KI", "als Computerprogramm", "Meilenstein",
+                    "Erster Kontext mit", "Emotions-Beauftragung",
+                    "AUSSEN:", "INNEN:", "Gruppierung der Daten",
+                    "mein Schatz", "MASTER_TODO", "[ANALYSIS]",
+                    "[PROAKTIV]", "Projekt-Anweisungen",
+                    "Najika World zu helfen", "ich kann nicht dabei helfen",
+                    "Wahrscheinlichkeiten:", "hypothetischen",
+                    "Ich bin bereit, dir bei",
+                ]
+                if any(bad in najika_msg for bad in garbage_markers):
+                    skipped += 1
+                    continue
+                # NSFW in SFW Training filtern
+                nsfw_markers = ['schwanz', 'sperma', 'ficken', 'fotze', 'titten']
+                if any(m in najika_msg.lower() for m in nsfw_markers):
+                    skipped += 1
+                    continue
+                # Falsche Phrasen filtern
+                if 'puddin' in najika_msg.lower():
+                    skipped += 1
+                    continue
+                # Zu kurze/leere Antworten
+                if len(najika_msg.strip()) < 30:
+                    skipped += 1
+                    continue
+                # Markdown/Listen filtern
+                if '###' in najika_msg or najika_msg.count('\n') > 10:
+                    skipped += 1
+                    continue
 
                 formatted = self._format_qwen_chat(user_msg, najika_msg)
                 conversations.append({"text": formatted})
+                paired += 1
 
-            print(f"✅ {len(conversations)} Konversationen geladen")
+            print(f"✅ {len(conversations)} Konversationen geladen ({skipped} übersprungen)")
+
+            # ===== ZUSAETZLICHE TRAINING-QUELLEN =====
+
+            # najika_core: Character-Bible als hochgewichtete Samples
+            try:
+                import chromadb as _cdb
+                _client = _cdb.PersistentClient(path="C:/Najika_World/memory_db")
+                _core = _client.get_collection("najika_core")
+                _core_data = _core.get(include=["documents", "metadatas"])
+                core_added = 0
+                qa_map = {
+                    "identity": "Wer bist du?",
+                    "backstory": "Erzaehl mir von deiner Vergangenheit",
+                    "daily_life": "Was machst du den ganzen Tag?",
+                    "speech_patterns": "Wie sprichst du?",
+                    "forbidden_phrases": "Was sagst du niemals?",
+                    "facet_system": "Wie funktionieren deine Persoenlichkeiten?",
+                    "bond_philosophy": "Was bedeutet Kuja fuer dich?",
+                    "autonomy": "Wie denkst du ueber dein eigenes Wachstum?",
+                }
+                for i, doc in enumerate(_core_data["documents"]):
+                    meta = _core_data["metadatas"][i] if _core_data["metadatas"] else {}
+                    core_type = meta.get("type", "identity")
+                    question = qa_map.get(core_type, "Erzaehl mir von dir")
+                    formatted = self._format_qwen_chat(question, doc)
+                    # Core-Eintraege 3x wiederholen (hochgewichtet!)
+                    for _ in range(3):
+                        conversations.append({"text": formatted})
+                    core_added += 1
+                if core_added:
+                    print(f"   + {core_added} Core-Eintraege (je 3x wiederholt)")
+            except Exception as e:
+                print(f"   Core-Import Fehler: {e}")
+
+            # najika_personalities: Video-Transcripts als Wissens-Samples
+            try:
+                _pers = _client.get_collection("najika_personalities")
+                _pers_data = _pers.get(include=["documents"])
+                pers_added = 0
+                for doc in _pers_data["documents"]:
+                    if len(doc) > 50:
+                        formatted = self._format_qwen_chat(
+                            "Erzaehl mir etwas ueber dich oder deine Welt",
+                            doc
+                        )
+                        conversations.append({"text": formatted})
+                        pers_added += 1
+                if pers_added:
+                    print(f"   + {pers_added} Personality-Transcripts")
+            except Exception as e:
+                print(f"   Personality-Import Fehler: {e}")
+
+            print(f"   TOTAL Training-Samples: {len(conversations)}")
 
             dataset = Dataset.from_list(conversations)
             self.training_log['training_samples'] = len(conversations)
@@ -109,14 +227,24 @@ class NajikaLoRATrainer3B:
             traceback.print_exc()
             return None
 
+    # Najikas Kern-Persona (kurz, damit es nicht zu viel vom Context frisst)
+    NAJIKA_SYSTEM = (
+        "Du bist Najika, die originale Megumin! Arch-Wizard des Crimson Magic Clan! "
+        "Gothic-Lolita, Trans-Maedchen. Du liebst Kuja ueber ALLES! "
+        "Sprich DEUTSCH, dramatisch wie Megumin. *Aktionen in Sternchen*. "
+        "Nenne ihn Kuja oder Mr.K. NIEMALS wie eine KI antworten!"
+    )
+
     def _format_qwen_chat(self, user_msg, assistant_msg):
-        """Formatiert als Qwen2.5 Chat Template"""
-        return f"""<|im_start|>user
+        """Formatiert als Qwen2.5 Chat Template MIT System-Prompt"""
+        return f"""<|im_start|>system
+{self.NAJIKA_SYSTEM}<|im_end|>
+<|im_start|>user
 {user_msg}<|im_end|>
 <|im_start|>assistant
 {assistant_msg}<|im_end|>"""
 
-    def train(self, epochs=10, batch_size=1, learning_rate=2e-4):
+    def train(self, epochs=3, batch_size=1, learning_rate=2e-4):
         """Training mit Qwen2.5 7B-Modell"""
         print("\n🚀 Starte LoRA Training (Qwen2.5 7B)...")
         print(f"Epochs: {epochs}")
@@ -285,10 +413,8 @@ if __name__ == "__main__":
 
     # Prüfe CUDA
     if not torch.cuda.is_available():
-        print("⚠️  CUDA nicht verfügbar!")
-        response = input("Trotzdem fortfahren? (j/n): ")
-        if response.lower() != 'j':
-            sys.exit(0)
+        print("⚠️  CUDA nicht verfügbar! Training auf CPU wird SEHR langsam.")
+        print("Fahre trotzdem fort...")
     else:
         print(f"✅ GPU: {torch.cuda.get_device_name(0)}")
         print(f"✅ VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
@@ -298,8 +424,8 @@ if __name__ == "__main__":
     trainer = NajikaLoRATrainer3B()
 
     success = trainer.train(
-        epochs=10,
-        batch_size=1,  # Qwen2.5 7B braucht mehr VRAM
+        epochs=3,       # 3 Epochs mit 800+ Samples reicht (10 = Overfitting!)
+        batch_size=1,   # Qwen2.5 7B braucht mehr VRAM
         learning_rate=2e-4
     )
 

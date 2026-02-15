@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-02-13T13:24:56.921994",
+  "collections": {
+    "conversations": {
+      "total": 1910,
+      "sfw_kept": 549,
+      "nsfw_kept": 150,
+      "garbage": 1211
+    },
+    "najika_core": {
+      "total": 7,
+      "kept": 7
+    },
+    "najika_personalities": {
+      "total": 83,
+      "kept": 83
+    },
+    "emotions": {
+      "total": 552,
+      "kept": 552
+    },
+    "najika_wichtige_docs": {
+      "total": 5732,
+      "kept": 0,
+      "reason": "project_docs_leak"
+    },
+    "najika_project_knowledge": {
+      "total": 264,
+      "kept": 0,
+      "reason": "project_docs_leak"
+    },
+    "najika_md_knowledge": {
+      "total": 88,
+      "kept": 0,
+      "reason": "project_docs_leak"
+    }
+  }
+}

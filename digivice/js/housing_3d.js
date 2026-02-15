@@ -2,7 +2,7 @@
 (function() {
     const HOUSING_CONFIG = {
         // API Endpoint
-        apiBaseUrl: 'http://localhost:8000/api/housing',
+        apiBaseUrl: 'http://localhost:8001/api/housing',
 
         // House Positions in World (Schwarze Mühle Housing District)
         housePositions: {
@@ -932,8 +932,8 @@
                 }
             }
 
-            // E: Enter house (only when near and not inside)
-            if (e.code === 'KeyE' && selectedHouse && !isInsideHouse) {
+            // E: Enter house (only when near and not inside, NOT in combat!)
+            if (e.code === 'KeyE' && selectedHouse && !isInsideHouse && !window.combatActive) {
                 // Check if no other system is active
                 const buildingPrompt = document.getElementById('building-prompt-ui');
                 if (buildingPrompt && buildingPrompt.style.display === 'block') {

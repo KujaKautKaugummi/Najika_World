@@ -33,7 +33,7 @@ except ImportError:
     get_available_topics = None
 
 # Configuration
-API_URL = "http://localhost:8000/api/chat"
+API_URL = "http://localhost:8001/api/chat"
 TIMEOUT = 120
 KNOWLEDGE_FILE = Path("knowledge/complete_project_context.json")
 SESSION_FILE = Path("knowledge/najika_session.json")

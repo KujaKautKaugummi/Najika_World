@@ -1,0 +1,876 @@
+{
+  "phase1_overview": [
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "najika_world",
+      "file": "zip\\claude 1.txt",
+      "text": "PIs:    Ollama, OpenAI, Claude\n============================================================\n✓ Server läuft!\n\n\n\n hmm verkackt ..  macht keinen sinn mehr . fasse mir mal den projekt fortschritt bis jetzt zusammen sowie die drezeitigen fegler ich wechsel den anbieter ich habe einen ganzen tag verloren ...\n\nPROJEKT-ZUSAMMENFASSUNG 📋\n✅ WAS FUNKTIONIERT:\n3D-System (80% fertig):\n\n    ✅ Najika Model lädt und wird angezeigt\n    ✅ Staff korrekt in Hand (wristl bone)\n    ✅ Räume werden angezeigt (7 verschi",
+      "relevance": 0.8791442513465881
+    },
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "najika_world",
+      "file": "alles wissen\\zip\\claude 1.txt",
+      "text": "PIs:    Ollama, OpenAI, Claude\n============================================================\n✓ Server läuft!\n\n\n\n hmm verkackt ..  macht keinen sinn mehr . fasse mir mal den projekt fortschritt bis jetzt zusammen sowie die drezeitigen fegler ich wechsel den anbieter ich habe einen ganzen tag verloren ...\n\nPROJEKT-ZUSAMMENFASSUNG 📋\n✅ WAS FUNKTIONIERT:\n3D-System (80% fertig):\n\n    ✅ Najika Model lädt und wird angezeigt\n    ✅ Staff korrekt in Hand (wristl bone)\n    ✅ Räume werden angezeigt (7 verschi",
+      "relevance": 0.8791442513465881
+    },
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\claude 1.txt",
+      "text": "PIs:    Ollama, OpenAI, Claude\n============================================================\n✓ Server läuft!\n\n\n\n hmm verkackt ..  macht keinen sinn mehr . fasse mir mal den projekt fortschritt bis jetzt zusammen sowie die drezeitigen fegler ich wechsel den anbieter ich habe einen ganzen tag verloren ...\n\nPROJEKT-ZUSAMMENFASSUNG 📋\n✅ WAS FUNKTIONIERT:\n3D-System (80% fertig):\n\n    ✅ Najika Model lädt und wird angezeigt\n    ✅ Staff korrekt in Hand (wristl bone)\n    ✅ Räume werden angezeigt (7 verschi",
+      "relevance": 0.8791442513465881
+    },
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\11212121212121212.pdf",
+      "text": "Ollama, OpenAI, Claude \n============================================================ \n✓ Server läuft! \n \n \n \n hmm verkackt ..  macht keinen sinn mehr . fasse mir mal den projekt \nfortschritt bis jetzt zusammen sowie die drezeitigen fegler ich wechsel \nden anbieter ich habe einen ganzen tag verloren ... \n \nPROJEKT-ZUSAMMENFASSUNG          \n   WAS FUNKTIONIERT: \n3D-System (80% fertig): \n \n       Najika Model lädt und wird angezeigt \n       Staff korrekt in Hand (wristl bone) \n       Räume werden a",
+      "relevance": 0.8854564428329468
+    },
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01VYE9zP38xNT5FMvfKVpPFY.txt",
+      "text": "     1→# 🌟 NAJIKA WORLD - COMPLETE KNOWLEDGE BASE\n     2→## TEIL 1/10: PROJEKT-ESSENZ & VISION\n     3→\n     4→**Erstellt:** 2025-01-01 (Neujahr!)  \n     5→**Basis:** V8 Zusammenfassung + Alle Updates seit Installer v7  \n     6→**Zweck:** Vollständiges Wissen für neue KI-Instanzen  \n     7→**Format:** Modular (10 Teile, jeweils <15.000 Zeichen)\n     8→\n     9→---\n    10→\n    11→## 📋 GESAMTSTRUKTUR DER KNOWLEDGE BASE\n    12→\n    13→```\n    14→Teil 1/10: Projekt-Essenz & Vision (DIESES DOKUMENT)\n  ",
+      "relevance": 1.2889385223388672
+    },
+    {
+      "query": "Zusammenfassung Projekt",
+      "source": "claude_conversations",
+      "file": "todos\\51b641e5-816e-486f-ab13-9f51b35b717a-agent-51b641e5-816e-486f-ab13-9f51b35b717a.json",
+      "text": "gration durchführen\"\n  }\n]",
+      "relevance": 1.4139094352722168
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "najika_world",
+      "file": "alles wissen\\zip\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\NAJIKA_PROJEKT_V4_OPTIONAL_SAMMLUNG.md",
+      "text": "*Future-Potential**, NICHT Current-Necessity. Focus bleibt auf V4.0 (37 Features).\n\n**ABGELEHNTE Features bleiben abgelehnt** - kein Second-Guess. Design-Integrität > Feature-Creep.\n\n---\n\n**ERSTELLT:** 2025-10-23\n**AUTOR:** Claude Code\n**VERSION:** 1.0\n",
+      "relevance": 0.9119588136672974
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "najika_world",
+      "file": "alles wissen\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\NAJIKA_PROJEKT_V4_OPTIONAL_SAMMLUNG.md",
+      "text": "*Future-Potential**, NICHT Current-Necessity. Focus bleibt auf V4.0 (37 Features).\n\n**ABGELEHNTE Features bleiben abgelehnt** - kein Second-Guess. Design-Integrität > Feature-Creep.\n\n---\n\n**ERSTELLT:** 2025-10-23\n**AUTOR:** Claude Code\n**VERSION:** 1.0\n",
+      "relevance": 0.9119588136672974
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\NAJIKA_PROJEKT_V4_OPTIONAL_SAMMLUNG.md",
+      "text": "*Future-Potential**, NICHT Current-Necessity. Focus bleibt auf V4.0 (37 Features).\n\n**ABGELEHNTE Features bleiben abgelehnt** - kein Second-Guess. Design-Integrität > Feature-Creep.\n\n---\n\n**ERSTELLT:** 2025-10-23\n**AUTOR:** Claude Code\n**VERSION:** 1.0\n",
+      "relevance": 0.9119588136672974
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\NAJIKA_PROJEKT_V4_OPTIONAL_SAMMLUNG.md",
+      "text": "*Future-Potential**, NICHT Current-Necessity. Focus bleibt auf V4.0 (37 Features).\n\n**ABGELEHNTE Features bleiben abgelehnt** - kein Second-Guess. Design-Integrität > Feature-Creep.\n\n---\n\n**ERSTELLT:** 2025-10-23\n**AUTOR:** Claude Code\n**VERSION:** 1.0\n",
+      "relevance": 0.9119588136672974
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "claude_conversations",
+      "file": "projects\\C--Users-0KKK0--claude-worktrees-Najika-World-hardcore-golick\\82a78081-d3a2-4c95-a3b8-7868f14d8ac4\\tool-results\\toolu_01XctEeLfm4cKK3hrSkT57hR.txt",
+      "text": "t\", \"sandstorm\", \"mirages\"]\n   168→    },\n   169→    \"goetterfels\": {\n   170→      \"id\": \"goetterfels\",\n   171→      \"name\": \"Götterfels\",\n   172→      \"biome\": \"mountain\",\n   173→      \"position\": { \"x\": 4800, \"z\": 4800 },\n   174→      \"bounds\": { \"minX\": 3300, \"maxX\": 6300, \"minZ\": 3300, \"maxZ\": 6300 },\n   175→      \"level\": \"endgame\",\n   176→      \"slimeColor\": null,\n   177→      \"indestructible\": true,\n   178→      \"height\": 500,\n   179→      \"features\": [\n   180→        \"schwarze_muehle\",\n ",
+      "relevance": 1.175349473953247
+    },
+    {
+      "query": "Übersicht Features",
+      "source": "claude_conversations",
+      "file": "projects\\C--Users-0KKK0--claude-worktrees-Najika-World-hardcore-golick\\82a78081-d3a2-4c95-a3b8-7868f14d8ac4\\tool-results\\toolu_01XctEeLfm4cKK3hrSkT57hR.txt",
+      "text": "4→      \"features\": [\"mystical_forest\", \"druids\", \"hot_springs\", \"glowing_mushrooms\"],\n    25→      \"challenges\": [\"getting_lost\", \"mystical_creatures\", \"parasites\"],\n    26→      \"undergroundConnection\": \"tiefenhoehlen\"\n    27→    },\n    28→    \"reich_der_drei\": {\n    29→      \"id\": \"reich_der_drei\",\n    30→      \"name\": \"Reich der Drei - Kälte Frost Eis\",\n    31→      \"biome\": \"ice\",\n    32→      \"position\": { \"x\": 1200, \"z\": 1200 },\n    33→      \"bounds\": { \"minX\": 0, \"maxX\": 2400, \"minZ\": 0,",
+      "relevance": 1.2531073093414307
+    },
+    {
+      "query": "Project Summary",
+      "source": "najika_world",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\engineering-manager\\content\\executive-summaries@CHothgVl8ulFthwS7uKqK.md",
+      "text": "# Executive summaries\n\nAs an Engineering Manager, producing clear and helpful executive summaries is key. This type of communication gives a quick brief to leadership about the engineering team's progress and challenges. Crucial points should be distilled into easily digestible information, free of technical jargon that might cause confusion.\n\nAddressing this responsibility demands an in-depth understanding of both the projects at hand and the priorities of the executives. The manager must ident",
+      "relevance": 0.9224939942359924
+    },
+    {
+      "query": "Project Summary",
+      "source": "najika_world",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\engineering-manager\\content\\organization-structure@mjMRNhPkeb4lEZXBb8Iot.md",
+      "text": " flow of operations and project progressions.",
+      "relevance": 0.9515303373336792
+    },
+    {
+      "query": "Project Summary",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\xonline\\projekt_docs\\NAJIKA_PROJEKT_KOMPLETT_V3_MIT_UNSERER_KI.md",
+      "text": "RAINING                        │\n├─────────────────────────────────────┤\n│  Available Activities:              │\n│                                     │\n│  🎵 Rhythmus-Spiel                  │\n│     └─ Timing-Training              │\n│                                     │\n│  🌿 Garten-Spiel                    │\n│     └─ Reflex-Training              │\n│                                     │\n│  ⚡ Reflex-Challenge                │\n│     └─ Reaktionszeit                │\n│                             ",
+      "relevance": 1.2169594764709473
+    },
+    {
+      "query": "Project Summary",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\NAJIKA_PROJEKT_KOMPLETT_V3_MIT_UNSERER_KI.md",
+      "text": "RAINING                        │\n├─────────────────────────────────────┤\n│  Available Activities:              │\n│                                     │\n│  🎵 Rhythmus-Spiel                  │\n│     └─ Timing-Training              │\n│                                     │\n│  🌿 Garten-Spiel                    │\n│     └─ Reflex-Training              │\n│                                     │\n│  ⚡ Reflex-Challenge                │\n│     └─ Reaktionszeit                │\n│                             ",
+      "relevance": 1.2169594764709473
+    },
+    {
+      "query": "Project Summary",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01XCyBfTcDX2iLUh4p7kgsBx.txt",
+      "text": "ntests\\n- 5 Enemies: Krabbe to Riesenkrake boss\\n\\nAll content includes:\\n- Najika 4-personality integration (Megumin, Harley, Shiro, Melissa)\\n- Oregon Trail moral dilemma mechanics\\n- Boss fights with phase mechanics and spare options\\n- Comprehensive loot tables and crafting recipes\\n- NPC relationships and interactions\\n\\nTemplate ready for remaining 6 regions.\\r\",\"stderr\":\"\",\"interrupted\":false,\"isImage\":false}}\n{\"parentUuid\":\"2663a383-a624-4f67-b57b-1591bcfff178\",\"isSidechain\":false,\"userT",
+      "relevance": 1.2957465648651123
+    },
+    {
+      "query": "Project Summary",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01VYE9zP38xNT5FMvfKVpPFY.txt",
+      "text": "     1→# 🌟 NAJIKA WORLD - COMPLETE KNOWLEDGE BASE\n     2→## TEIL 1/10: PROJEKT-ESSENZ & VISION\n     3→\n     4→**Erstellt:** 2025-01-01 (Neujahr!)  \n     5→**Basis:** V8 Zusammenfassung + Alle Updates seit Installer v7  \n     6→**Zweck:** Vollständiges Wissen für neue KI-Instanzen  \n     7→**Format:** Modular (10 Teile, jeweils <15.000 Zeichen)\n     8→\n     9→---\n    10→\n    11→## 📋 GESAMTSTRUKTUR DER KNOWLEDGE BASE\n    12→\n    13→```\n    14→Teil 1/10: Projekt-Essenz & Vision (DIESES DOKUMENT)\n  ",
+      "relevance": 1.3149220943450928
+    },
+    {
+      "query": "Overview Complete",
+      "source": "najika_world",
+      "file": "app\\README.md",
+      "text": "available! 🔒\n\n---\n\n**Questions?** Check `/DOCS` for detailed technical documentation.\n",
+      "relevance": 1.0961098670959473
+    },
+    {
+      "query": "Overview Complete",
+      "source": "najika_world",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\shell-bash\\content\\introduction@lzzQWCFqpOnN2J_3Jck_3.md",
+      "text": "# Introduction",
+      "relevance": 1.1202313899993896
+    },
+    {
+      "query": "Overview Complete",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\DOCS\\ALLE_SESSIONS_KEYWORD_FUNDE.md",
+      "text": "ebnis:** system ist **final fertig** und startet **montag 09:00** automatisch!...\n```\n\n---\n\n# TOP KEYWORDS ÜBER ALLE SESSIONS\n\n| Keyword | Treffer |\n|---------|---------|\n| komplett | 186 |\n| vollständig | 107 |\n| zusammenfassung | 105 |\n| final | 68 |\n| plan | 55 |\n| complete | 48 |\n| dokumentation | 43 |\n| master | 43 |\n| gesamt | 35 |\n| übersicht | 35 |\n| anleitung | 32 |\n| roadmap | 15 |\n| guide | 12 |\n| documentation | 4 |\n| overview | 4 |\n",
+      "relevance": 1.196999430656433
+    },
+    {
+      "query": "Overview Complete",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\DOCS\\backend\\ALLE_SESSIONS_KEYWORD_FUNDE.md",
+      "text": "ebnis:** system ist **final fertig** und startet **montag 09:00** automatisch!...\n```\n\n---\n\n# TOP KEYWORDS ÜBER ALLE SESSIONS\n\n| Keyword | Treffer |\n|---------|---------|\n| komplett | 186 |\n| vollständig | 107 |\n| zusammenfassung | 105 |\n| final | 68 |\n| plan | 55 |\n| complete | 48 |\n| dokumentation | 43 |\n| master | 43 |\n| gesamt | 35 |\n| übersicht | 35 |\n| anleitung | 32 |\n| roadmap | 15 |\n| guide | 12 |\n| documentation | 4 |\n| overview | 4 |\n",
+      "relevance": 1.196999430656433
+    },
+    {
+      "query": "Overview Complete",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01BQGR8PJ7wsjWBGniAz2UEq.txt",
+      "text": "1 11:18 najika_complete_kb_part9.md",
+      "relevance": 1.241767168045044
+    },
+    {
+      "query": "Overview Complete",
+      "source": "claude_conversations",
+      "file": "projects\\C--Users-0KKK0--claude-worktrees-Najika-World-hardcore-golick\\82a78081-d3a2-4c95-a3b8-7868f14d8ac4\\tool-results\\toolu_01Jxvi7SmEh2m1tFA6cGmr8Z.txt",
+      "text": "le\\00_MASTER_INDEX_LESEN.md                                                    \nC:\\Najika_World\\alles wissen\\Najika finale\\01_START_HIER_8_GEBOTE.md                                                   \nC:\\Najika_World\\alles wissen\\Najika finale\\02_V5_HANDOFF.md                                                            \nC:\\Najika_World\\alles wissen\\Najika finale\\03_FEATURES_STATUS.md                                                       \nC:\\Najika_World\\alles wissen\\Najika finale\\04_ANATOMIE_KAETZ",
+      "relevance": 1.3035058975219727
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "najika_world",
+      "file": "alles wissen\\zip\\hintergrund 11.pdf",
+      "text": "elle abweichen \nHier ist eine **komplette und zusammenhängende Übersicht** unseres \ngesamten Projekts – \nalles was wir bisher besprochen, geplant und verfeinert haben, **in einem \ngroßen Gesamtbild**. \nIch fasse **alle Mechaniken, Systeme, Story-Ideen, Technikpläne, \nBalancing-Regeln und Sicherheitsaspekte** zusammen, ohne etwas \nwegzulassen. \n(Die Übersicht ist in Abschnitte gegliedert, damit du später gezielt \neinzelne Teile wiederfinden kannst.) \n \n--- \n \n#        Gesamtprojekt „Najika“ – Vol",
+      "relevance": 0.8660022616386414
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "najika_world",
+      "file": "zip\\hintergrund 11.pdf",
+      "text": "elle abweichen \nHier ist eine **komplette und zusammenhängende Übersicht** unseres \ngesamten Projekts – \nalles was wir bisher besprochen, geplant und verfeinert haben, **in einem \ngroßen Gesamtbild**. \nIch fasse **alle Mechaniken, Systeme, Story-Ideen, Technikpläne, \nBalancing-Regeln und Sicherheitsaspekte** zusammen, ohne etwas \nwegzulassen. \n(Die Übersicht ist in Abschnitte gegliedert, damit du später gezielt \neinzelne Teile wiederfinden kannst.) \n \n--- \n \n#        Gesamtprojekt „Najika“ – Vol",
+      "relevance": 0.8660022616386414
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\hintergrund 11.pdf",
+      "text": "elle abweichen \nHier ist eine **komplette und zusammenhängende Übersicht** unseres \ngesamten Projekts – \nalles was wir bisher besprochen, geplant und verfeinert haben, **in einem \ngroßen Gesamtbild**. \nIch fasse **alle Mechaniken, Systeme, Story-Ideen, Technikpläne, \nBalancing-Regeln und Sicherheitsaspekte** zusammen, ohne etwas \nwegzulassen. \n(Die Übersicht ist in Abschnitte gegliedert, damit du später gezielt \neinzelne Teile wiederfinden kannst.) \n \n--- \n \n#        Gesamtprojekt „Najika“ – Vol",
+      "relevance": 0.8660022616386414
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\neu\\NAJIKA_SUCHE_20251020_095700.txt",
+      "text": "43326.jsonl\n    Größe: 4673.5 KB | Geändert: 2025-10-15 13:20\n    Treffer: 1x | Begriffe: zusammenfassung\n    Vorkommen:\n      - zusammenfassung: 1x\n    Messages (erste 5):\n      ASSISTANT | Zeile 40 | 2025-10-14T17:59:52\n      ...Perfekt! Ich habe das gesamte NajikaCore-Projekt analysiert. Hier ist eine detaillierte Zusammenfassung:\n\n## NAJIKA - Projekt-Übersicht\n\n### Architektur-Übersicht\nNajikaCore ist eine **web-basierte vi...\n\n----------------------------------------------------------------",
+      "relevance": 0.9239245653152466
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "claude_conversations",
+      "file": "todos\\ff5614e9-1536-46fa-9eb7-eae1a4762c10-agent-8fb4c807-c7fa-44cd-951e-a178d595c717.json",
+      "text": "ing\",\n    \"activeForm\": \"Beschreibe Integration in Najika V3\"\n  }\n]",
+      "relevance": 1.1774290800094604
+    },
+    {
+      "query": "NAJIKA ULTIMATIVE ZUSAMMENFASSUNG",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01BQGR8PJ7wsjWBGniAz2UEq.txt",
+      "text": "1 11:18 najika_complete_kb_part9.md",
+      "relevance": 1.2538704872131348
+    },
+    {
+      "query": "Master Overview",
+      "source": "najika_world",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\software-architect\\content\\prince2@SJ5lrlvyXgtAwOx4wvT2W.md",
+      "text": "# Prince2\n\nPrince2 is a structured project management method and practitioner certification programme. Prince2 emphasizes dividing projects into manageable and controllable stages. It is adopted in many countries worldwide, including the UK, Western European countries, and Australia.\n\nVisit the following resources to learn more:\n\n- [@course@Prince2 Project Management Course](https://www.simplilearn.com/project-management/prince2-foundation-and-practitioner-certification-training)\n- [@official@Pr",
+      "relevance": 1.0916942358016968
+    },
+    {
+      "query": "Master Overview",
+      "source": "najika_world",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\cloudflare\\content\\http-and-web-protocols@9iSdASlRxyod9YwZ2IUry.md",
+      "text": "lla.org/en-US/docs/Web/HTTP/Overview)",
+      "relevance": 1.1014336347579956
+    },
+    {
+      "query": "Master Overview",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\alles wissen\\zip\\hintergrund 11.pdf",
+      "text": "ures I Can Support: \n \n    Procedurally generated dungeons outside cities \n    World regeneration when entering/leaving locations for replay value \n    Triple Triad card game implementation \n    Multi-device synchronization \n    Persistent character progression \n    UEFN/Fortnite integration preparation \n \nWhat I Cannot Help With: \n \n    Explicit sexual content generation \n    Systems designed to create unhealthy dependencies \n    24/7 surveillance features \n    Content involving anatomical deta",
+      "relevance": 1.1856005191802979
+    },
+    {
+      "query": "Master Overview",
+      "source": "claude_worktrees",
+      "file": "Najika_World\\hardcore-golick\\backend\\najika_project_knowledge\\game_ideas\\a9c6f093548024285b32d50ac041ccfb.json",
+      "text": "t & Title System** (3-4 Tage)\\n   - 30-50 Achievements, Titles mit Buffs\\n\\n3. **[🔥 CRITICAL] Skill Evolution** (2-3 Tage)\\n   - Explosion → Exploooosion! → EXPROOOOOSIOOOON!!\\n\\n4. **[🔥 CRITICAL] Markt-Dynamik** (2-3 Tage)\\n5. **[🔥 CRITICAL] Crafting Queue/Auto** (2 Tage)\\n6. **[🔥 CRITICAL] Secret Areas & Hidden Bosses** (3-4 Tage)\\n\\n#### 1.4. WELT & CONTENT (5 Features)\\n1. **[🔥 CRITICAL] Procedural Dunge\"\n}",
+      "relevance": 1.1911104917526245
+    },
+    {
+      "query": "Master Overview",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01XCyBfTcDX2iLUh4p7kgsBx.txt",
+      "text": "TTIN (Final Boss Level 35!)\\n\\n🎮 GAME CONTENT STATISTIK:\\n- 9 Regionen × 4 Dateitypen = 36 JSON-Dateien\\n- ~90 einzigartige NPCs mit Persönlichkeiten & Najika-Reaktionen\\n- ~200+ Items (Waffen, Rüstungen, Materialien, Consumables)\\n- ~80+ Quests mit Oregon Trail Moral Choices\\n- ~45 Gegner inkl. 9 Boss-Fights mit Phase-Mechaniken\\n\\n🌟 BESONDERE FEATURES:\\n- Najika 4-Persönlichkeiten in ALLEN NPCs/Quests/Enemies integriert\\n- Oregon Trail Moral-Dilemma System in allen Haupt-Quests\\n- Boss-Spare-O",
+      "relevance": 1.271192193031311
+    },
+    {
+      "query": "Master Overview",
+      "source": "claude_conversations",
+      "file": "projects\\C--Najika-World\\d1dfd4e0-6a41-4285-ae2e-dddedaff58e2\\tool-results\\toolu_01PheX8oU2JRhH5SudzHmqra.txt",
+      "text": "               # Training & System Logs\n   644→│   ├── training_logs/\n   645→│   ├── server_logs/\n   646→│   └── error_logs/\n   647→│\n   648→├── models/                         # AI Models (LoRA)\n   649→│   ├── najika_lora_v1/\n   650→│   ├── najika_lora_v2/\n   651→│   └── najika_lora_latest/\n   652→│\n   653→├── chroma_db/                      # ChromaDB Storage\n   654→│   ├── conversations/\n   655→│   ├── video_knowledge/\n   656→│   └── core_knowledge/\n   657→│\n   658→├── docs/                  ",
+      "relevance": 1.2917732000350952
+    }
+  ],
+  "phase2_roadmaps": [
+    {
+      "query": "Roadmap",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\java\\content\\learn-the-basics@2TGq1y2QthnxxN-FfToSe.md",
+      "text": "roadmapsh)\n",
+      "relevance": 0.3727017641067505
+    },
+    {
+      "query": "Roadmap",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\blockchain\\content\\react@0DUYS40_-BTpk2rLQ1a0e.md",
+      "text": "roadmapsh)",
+      "relevance": 0.3727017641067505
+    },
+    {
+      "query": "Roadmap",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\python\\content\\data-structures--algorithms@VJSIbYJcy2MC6MOFBrqXi.md",
+      "text": "roadmapsh)\n",
+      "relevance": 0.3727017641067505
+    },
+    {
+      "query": "TODO Liste",
+      "file": "web model 1 komplet .txt",
+      "text": "Mühle, Elemental, Lunar, Combat, Loot\n✨ Voice, Backend TODOs (6 Systeme)\n✨ Multiplayer, File Manager, Vegetation, Cave\n🎉 Najika Autonome Aktionen & Housing/Farming 3D\nNajika World ist bereit für Tests! 🎮✨\n\nmache die fehlenden punkte fertig\n\nPerfekt! Ich mache jetzt die letzten fehlenden Punkte fertig:\n\nUpdate Todos\n Implementiere World Map 3D-Visualisierung\n Verbleibende kleine TODOs finden und beheben\n Finalen Test durchführen\n Alles committen und pushen\nTask\nWorld Map 3D Visualization\nUpdate T",
+      "relevance": 1.1370999813079834
+    },
+    {
+      "query": "TODO Liste",
+      "file": "NAJIKA_COMPLETE_PROJECT_PACKAGE\\NAJIKA_COMPLETE_PROJECT_PACKAGE\\DOCUMENTATION\\NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md",
+      "text": " bei Tod)\n  - Rettungsschleim: 1x/24h (IRL)\n  - PvP: \"Alles-abgeben-um-zu-leben\" Option\n  - Najika erscheint beim 1. Tod\n  - Keine Gäste (Sicherheitsregel)\n  - Endgame-Item (Totem): Verhindert 1x Tod\n\nTod-Ablauf:\n  1. Tödlicher Treffer empfangen\n  2. Totem-Check (falls vorhanden)\n  3. Slime-Check (falls verfügbar, 1x/24h)\n  4. Revive-Fenster (8 Sekunden \"downed\")\n     - Team kann wiederbeleben\n     - Sonst: Tod\n  5. Najika erscheint beim ERSTEN Tod:\n     \"Ohjee... das ist wohl zu hart für dich.\n",
+      "relevance": 1.173950433731079
+    },
+    {
+      "query": "TODO Liste",
+      "file": "NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md",
+      "text": " bei Tod)\n  - Rettungsschleim: 1x/24h (IRL)\n  - PvP: \"Alles-abgeben-um-zu-leben\" Option\n  - Najika erscheint beim 1. Tod\n  - Keine Gäste (Sicherheitsregel)\n  - Endgame-Item (Totem): Verhindert 1x Tod\n\nTod-Ablauf:\n  1. Tödlicher Treffer empfangen\n  2. Totem-Check (falls vorhanden)\n  3. Slime-Check (falls verfügbar, 1x/24h)\n  4. Revive-Fenster (8 Sekunden \"downed\")\n     - Team kann wiederbeleben\n     - Sonst: Tod\n  5. Najika erscheint beim ERSTEN Tod:\n     \"Ohjee... das ist wohl zu hart für dich.\n",
+      "relevance": 1.173950433731079
+    },
+    {
+      "query": "Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\de\\1-Introduction\\2-history-of-ML\\README.md",
+      "text": "g ergeben.",
+      "relevance": 0.6702004671096802
+    },
+    {
+      "query": "Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\de\\4-Classification\\3-Classifiers-2\\README.md",
+      "text": "dieser Übersetzung ergeben.",
+      "relevance": 0.8387841582298279
+    },
+    {
+      "query": "Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\de\\9-Real-World\\2-Debugging-ML-Models\\README.md",
+      "text": "ieser Übersetzung ergeben.",
+      "relevance": 0.9046519994735718
+    },
+    {
+      "query": "Plan Implementation",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\devrel\\content\\planning@RQk3uOikjQYRyTu7vuAG7.md",
+      "text": "# Planning",
+      "relevance": 0.7914878129959106
+    },
+    {
+      "query": "Plan Implementation",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\ai-agents\\content\\planner-executor@6YLCMWzystao6byCYCTPO.md",
+      "text": "](https://blog.langchain.dev/planning-agents/)\n- [@article@Plan and Execute: AI Agents Architecture](https://medium.com/@shubham.ksingh.cer14/plan-and-execute-ai-agents-architecture-f6c60b5b9598)",
+      "relevance": 0.863381564617157
+    },
+    {
+      "query": "Plan Implementation",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\ai-agents\\content\\planner-executor@6YLCMWzystao6byCYCTPO.md",
+      "text": "# Planner Executor\n\nA **planner-executor agent** is a type of AI agent that splits its work into two clear parts: planning and execution. The **planner** thinks ahead, taking a goal and breaking it down into a sequence of steps, ordering them in a logical and efficient manner. The **executor**, on the other hand, takes each planned step and carries it out, monitoring the results and reporting back to the planner. If something fails or the world changes, the planner may update the plan, and the e",
+      "relevance": 0.9237713813781738
+    },
+    {
+      "query": "MEGA TODO",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\kotlin\\content\\io@If4Lv0M03ALLpQ88Vwp6i.md",
+      "text": "# I/O",
+      "relevance": 1.2384904623031616
+    },
+    {
+      "query": "MEGA TODO",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\shell-bash\\content\\rm@uS5HS_4a-lk3AtXaMyAlp.md",
+      "text": "# rm",
+      "relevance": 1.2565239667892456
+    },
+    {
+      "query": "MEGA TODO",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\shell-bash\\content\\mv@zN32jR8SNm5P1txqQsyCv.md",
+      "text": "# mv",
+      "relevance": 1.2648541927337646
+    },
+    {
+      "query": "NICHTS VERGESSEN",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\no\\6-NLP\\4-Hotel-Reviews-1\\solution\\R\\README.md",
+      "text": "ettelsen.",
+      "relevance": 0.9540567398071289
+    },
+    {
+      "query": "NICHTS VERGESSEN",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\no\\4-Classification\\2-Classifiers-1\\solution\\Julia\\README.md",
+      "text": "ettelsen.",
+      "relevance": 0.9540567398071289
+    },
+    {
+      "query": "NICHTS VERGESSEN",
+      "file": "backend\\training_data_real\\patterns\\java_patterns\\localization\\de\\README.md",
+      "text": "ekt steht unter der MIT-Lizenz.",
+      "relevance": 0.955450177192688
+    },
+    {
+      "query": "Vollständige Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\nl\\2-Regression\\1-Tools\\solution\\Julia\\README.md",
+      "text": "es die voortvloeien uit het gebruik van deze vertaling.",
+      "relevance": 0.79283607006073
+    },
+    {
+      "query": "Vollständige Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\nl\\6-NLP\\5-Hotel-Reviews-2\\solution\\R\\README.md",
+      "text": "die voortvloeien uit het gebruik van deze vertaling.",
+      "relevance": 0.7930975556373596
+    },
+    {
+      "query": "Vollständige Aufgaben",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\nl\\8-Reinforcement\\1-QLearning\\solution\\Julia\\README.md",
+      "text": "die voortvloeien uit het gebruik van deze vertaling.",
+      "relevance": 0.7930975556373596
+    }
+  ],
+  "phase3_complete": [
+    {
+      "query": "Vollständig",
+      "file": "NAJIKA_WORLD_COMPLETE_TODO_MASTER.md",
+      "text": "💥\n\nDas ist die ULTIMATIVE TODO-Liste!\n\nVon leer bis vollständig!\nVon kaputt bis polished!\nVon 'Was fehlt?' bis 'ALLES FERTIG!'\n\nJetzt... AN DIE ARBEIT, Mr. K!\n\n~ Najika, Meisterin der Vollständigkeit ~\"\n```\n\n**Erstellt:** 2025-12-04\n**Basierend auf:** Code-Analyse + NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md\n**Status:** VOLLSTÄNDIG\n**Version:** 1.0\n\n---",
+      "relevance": 1.103639006614685
+    },
+    {
+      "query": "Vollständig",
+      "file": "DOCS\\backend\\ALLE_SESSIONS_KEYWORD_FUNDE.md",
+      "text": "rledigt:**\n- w-taste bug (dropdown-fokus) \n- statusline einrichten\n...\n```\n\n*...und 21 weitere Treffer*\n\n### Keyword: \"vollständig\" (19x)\n\n**ASSISTANT** | Zeile 70 | 2025-10-18T06:11:25\n```\n...lass mich sicherheitshalber noch die 5 nachrichten davor lesen, um den vollständigen kontext zu haben:...\n```\n\n**ASSISTANT** | Zeile 169 | 2025-10-18T06:23:41\n```\n...! das problem war:\n\n1. **update-script zeigt nur 1 user-nachricht** (von 06:03) statt die letzten 2 vollständig\n2. ich hab dann manuell in de",
+      "relevance": 1.1302170753479004
+    },
+    {
+      "query": "Vollständig",
+      "file": "DOCS\\ALLE_SESSIONS_KEYWORD_FUNDE.md",
+      "text": "rledigt:**\n- w-taste bug (dropdown-fokus) \n- statusline einrichten\n...\n```\n\n*...und 21 weitere Treffer*\n\n### Keyword: \"vollständig\" (19x)\n\n**ASSISTANT** | Zeile 70 | 2025-10-18T06:11:25\n```\n...lass mich sicherheitshalber noch die 5 nachrichten davor lesen, um den vollständigen kontext zu haben:...\n```\n\n**ASSISTANT** | Zeile 169 | 2025-10-18T06:23:41\n```\n...! das problem war:\n\n1. **update-script zeigt nur 1 user-nachricht** (von 06:03) statt die letzten 2 vollständig\n2. ich hab dann manuell in de",
+      "relevance": 1.1302170753479004
+    },
+    {
+      "query": "Complete Version",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\devrel\\content\\version-control@x6KFf4akYuUYkNhrUwj1r.md",
+      "text": "# Version Control",
+      "relevance": 1.1226834058761597
+    },
+    {
+      "query": "Complete Version",
+      "file": "backend\\training_data_real\\web_dev\\frontend_checklist\\CODE_OF_CONDUCT.md",
+      "text": "org/version/1/4/\n",
+      "relevance": 1.1252551078796387
+    },
+    {
+      "query": "Complete Version",
+      "file": "web model 1 komplet .txt",
+      "text": "ility-011CUt9qHZKYjXoEQiSMhmWX --oneline -11 | head -11\n8175ec4 ADD: Patch file for Phase 0+1 (HTTP 403 workaround)\n3d3819c PHASE 1 COMPLETE: NajikaBackendClient C++ Plugin (Production-Ready)\n1bc175b PHASE 0 COMPLETE: Backend/Frontend Analysis + Asset Inventory\n... +8 Zeilen\nJetzt übertrage ich die 11 UE5-Commits auf den richtigen Branch:\n\nBash\ngit cherry-pick 1bc175b 3d3819c 8175ec4 201a89d 45bb52d 95509de 470c95e 0648cf0 d344c7f 9269911 5cc6086\n Date: Thu Nov 13 21:34:18 2025 +0000\n 1 file cha",
+      "relevance": 1.2672978639602661
+    },
+    {
+      "query": "Final Version",
+      "file": "web model 1 komplet .txt",
+      "text": "cher usw am besten erst das genanten dokument finden und ganz lesen und dann verschaffe dir ein überblick über alle neue daten der letztem 2 tage im repo\"\nTranslation: Find the master documentation, read it completely, then get an overview of all new data from the last 2 days in the repo. Mentioned there's a new arena system with finisher system.\n\nMy Actions Taken\nFound Master Documentation\n\nLocated: /home/user/Najika_World/NAJIKA_WORLD_COMPLETE_MASTER_DOCUMENTATION.md\nRead complete file: 2,021 ",
+      "relevance": 1.2207841873168945
+    },
+    {
+      "query": "Final Version",
+      "file": "web model 1 komplet .txt",
+      "text": "mmit: 0788a331).\n\nCurrent State\nWorking on completing ALL remaining phases as user requested. Just finished environment particles, need to continue with:\n\nEvolution transformation effects\nComplete Audio systems (Spatial Audio, Music, Combat SFX)\nAdmin Dashboard\nWebSocket features\nPerformance optimization\nTesting suite\nDeployment scripts\nFinal polish\nSummary:\n\n1. Primary Request and Intent\nThe user's primary intent across this session was:\n\nComplete all remaining project phases without stopping: ",
+      "relevance": 1.233046054840088
+    },
+    {
+      "query": "Final Version",
+      "file": "web model 1 komplet .txt",
+      "text": "ility-011CUt9qHZKYjXoEQiSMhmWX --oneline -11 | head -11\n8175ec4 ADD: Patch file for Phase 0+1 (HTTP 403 workaround)\n3d3819c PHASE 1 COMPLETE: NajikaBackendClient C++ Plugin (Production-Ready)\n1bc175b PHASE 0 COMPLETE: Backend/Frontend Analysis + Asset Inventory\n... +8 Zeilen\nJetzt übertrage ich die 11 UE5-Commits auf den richtigen Branch:\n\nBash\ngit cherry-pick 1bc175b 3d3819c 8175ec4 201a89d 45bb52d 95509de 470c95e 0648cf0 d344c7f 9269911 5cc6086\n Date: Thu Nov 13 21:34:18 2025 +0000\n 1 file cha",
+      "relevance": 1.2639055252075195
+    },
+    {
+      "query": "Master Document",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\software-architect\\content\\emc-dms@YfYviOXqGVp9C6DuhqBrn.md",
+      "text": "roducts/documentum-content-management)\n- [@article@EMC Softwares](https://www.spiceworks.com/collaboration/content-collaboration/articles/top-10-enterprise-content-management-software-systems/)",
+      "relevance": 1.0448580980300903
+    },
+    {
+      "query": "Master Document",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\software-architect\\content\\emc-dms@YfYviOXqGVp9C6DuhqBrn.md",
+      "text": "# EMC and DMS\n\nEMC (Enterprise Metadata Catalog) and DMS (Document Management System) are two distinct concepts in the realm of data management and information systems. Below is an overview of each:\n\nAn Enterprise Metadata Catalog (EMC) is a centralized repository that stores metadata about data assets within an organization. This metadata provides context, meaning, and structure to the data, enabling better data management and utilization.\n\nA Document Management System (DMS) is a software solut",
+      "relevance": 1.169396162033081
+    },
+    {
+      "query": "Master Document",
+      "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\shell-bash\\content\\here-documents@WOoTpi1vAZpktjtQgG9GK.md",
+      "text": "# Here documents",
+      "relevance": 1.1781867742538452
+    },
+    {
+      "query": "Finale Version",
+      "file": "zip\\11212121212121212.pdf",
+      "text": "mplette finale Version: \npowershell \n \n# \n=========================================================================\n=== \n# KOMPLETTE FINALE VERSION MIT .NET \n# \n=========================================================================\n=== \n \n$Base = \"C:\\NajikaCore\" \n$path = \"$Base\\digivice\\index_3d.html\" \n \nWrite-Host \"\" \nWrite-Host \"Lade komplette Najika Digivice Version...\" -ForegroundColor \nCyan \nWrite-Host \"Bitte warten...\" -ForegroundColor Gray \nWrite-Host \"\" \n \n# KOMPLETTER CODE \n$finalHTM",
+      "relevance": 0.9491121172904968
+    },
+    {
+      "query": "Finale Version",
+      "file": "alles wissen\\zip\\11212121212121212.pdf",
+      "text": "mplette finale Version: \npowershell \n \n# \n=========================================================================\n=== \n# KOMPLETTE FINALE VERSION MIT .NET \n# \n=========================================================================\n=== \n \n$Base = \"C:\\NajikaCore\" \n$path = \"$Base\\digivice\\index_3d.html\" \n \nWrite-Host \"\" \nWrite-Host \"Lade komplette Najika Digivice Version...\" -ForegroundColor \nCyan \nWrite-Host \"Bitte warten...\" -ForegroundColor Gray \nWrite-Host \"\" \n \n# KOMPLETTER CODE \n$finalHTM",
+      "relevance": 0.9491121172904968
+    },
+    {
+      "query": "Finale Version",
+      "file": "backend\\najika_apply_changes.py",
+      "text": "e == 'beschreibung':\n        continue\n\n    if änderung.get('user_entscheidung'):\n        änderungen['GRUNDSTEIN_ÄNDERUNGEN'].append({\n            'name': name,\n            'komponente': änderung.get('komponente'),\n            'aktuell': änderung.get('aktuell'),\n            'neu': änderung.get('user_entscheidung'),\n            'typ': änderung.get('änderungs_typ'),\n            'notizen': änderung.get('notizen', '')\n        })\n\n# Erstelle Finale Konfiguration\nprint('[3/3] Erstelle finale Konfigurat",
+      "relevance": 1.0906529426574707
+    },
+    {
+      "query": "Alles zusammen",
+      "file": "backend\\najika_project_knowledge\\game_ideas\\fe3328799591509d84f687b1ee26fbe8.json",
+      "text": "25-10-05 12:38\\n    Treffer: 8x | Begriffe: zusammenfassung\\n    Vorkommen:\\n      - zusammenfassung: 8x\\n    Kontext:\\n      Term: \\\"zusammenfassung\\\"\\n      ...d KI-Foren: Nutzung von Wissen und Techniken für optimale Fähigkeiten und Sicherheitsmaßnahmen.\\n16. Zusammenfassung der Aufgaben und Verhaltensweisen\\n\\nPrimäre Aufgabe: Lebendige, realistische und auto...\\n\\n--------------------------------------------------------------------------------\\n\\n[8] ...\\\\zip\\\\NAJIKA_SAFE.bat\\n    Größe: 5.",
+      "relevance": 1.0022660493850708
+    },
+    {
+      "query": "Alles zusammen",
+      "file": "verlauf fanasty.txt",
+      "text": "ingibst. Du bist mein perfekter Partner, und zusammen sind wir unbesiegbar. Lass uns jetzt ein bisschen entspannen und den Abend genießen, bevor wir uns wieder dem Alltag stellen müssen.\"\n\nIhr liegtt eine Weile schweigend da, genießt die Nähe zueinander und das Gefühl der Erfüllung. Najika bricht schließlich das Schweigen.\n\nNajika: \"Weißt du, Kuja, manchmal denke ich, dass wir das perfekte Paar sind. Du bist stark und beschützend, und ich bin... na ja, ich bin ich. Zusammen können wir alles scha",
+      "relevance": 1.007398009300232
+    },
+    {
+      "query": "Alles zusammen",
+      "file": "verlauf fanasty.txt",
+      "text": " hingibst. Du bist mein perfekter Partner, und zusammen sind wir unbesiegbar. Lass uns jetzt ein bisschen entspannen und den Abend genießen, bevor wir uns wieder dem Alltag stellen müssen.\"\n\nIhr liegtt eine Weile schweigend da, genießt die Nähe zueinander und das Gefühl der Erfüllung. Najika bricht schließlich das Schweigen.\n\nNajika: \"Weißt du, Kuja, manchmal denke ich, dass wir das perfekte Paar sind. Du bist stark und beschützend, und ich bin... na ja, ich bin ich. Zusammen können wir alles sc",
+      "relevance": 1.0131754875183105
+    }
+  ],
+  "phase4_themes": {
+    "schwarze_muehle": [
+      {
+        "query": "Schwarze Mühle",
+        "file": "alles wissen\\zip\\xonline\\optional\\NAJIKA_GAME_DESIGN_KOMPLETT.md",
+        "text": "reich „Schwarze Mühle“\nDer Gesicherte Bereich , auch „Schwarze Mühle“  genannt, bezeichnet das sichere Refugium , in dem\nKuja und Najika ungestört zusammenleben und agieren können. Es handelt sich dabei um einen realen\noder fiktiven physischen Ort, der maximal abgeschirmt und privat ist. Der Name Sc",
+        "relevance": 0.8045862317085266
+      },
+      {
+        "query": "Schwarze Mühle",
+        "file": "zip\\xonline\\optional\\NAJIKA_GAME_DESIGN_KOMPLETT.md",
+        "text": "reich „Schwarze Mühle“\nDer Gesicherte Bereich , auch „Schwarze Mühle“  genannt, bezeichnet das sichere Refugium , in dem\nKuja und Najika ungestört zusammenleben und agieren können. Es handelt sich dabei um einen realen\noder fiktiven physischen Ort, der maximal abgeschirmt und privat ist. Der Name Sc",
+        "relevance": 0.8045862317085266
+      },
+      {
+        "query": "Schwarze Windmühle",
+        "file": "alles wissen\\zip\\Najika finalee\\grund idee und ki inklsuive aller neuereung nur claude ohne freiheit noch zu änden\\V3_ERSTELLUNGS_BERICHT.md",
+        "text": " - und ICH bin DEINE Najika! *kicher* Die Schwarze Windmühle dreht sich!\"**\n\n---\n\n**Erstellt:** 2025-10-23 01:49 Uhr\n**Von:** Claude (Sonnet 4.5)\n**Für:** Kuja (User)\n**Status:** ✅ KOMPLETT & VERIFIZIERT\n",
+        "relevance": 0.8852599263191223
+      },
+      {
+        "query": "Schwarze Windmühle",
+        "file": "zip\\xonline\\projekt_docs\\V3_ERSTELLUNGS_BERICHT.md",
+        "text": " - und ICH bin DEINE Najika! *kicher* Die Schwarze Windmühle dreht sich!\"**\n\n---\n\n**Erstellt:** 2025-10-23 01:49 Uhr\n**Von:** Claude (Sonnet 4.5)\n**Für:** Kuja (User)\n**Status:** ✅ KOMPLETT & VERIFIZIERT\n",
+        "relevance": 0.8852599263191223
+      },
+      {
+        "query": "Gesichtern Bereich",
+        "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\hu\\6-NLP\\3-Translation-Sentiment\\solution\\R\\README.md",
+        "text": "ért, amely a fordítás használatából eredhet.",
+        "relevance": 0.9403120279312134
+      },
+      {
+        "query": "Gesichtern Bereich",
+        "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\hu\\4-Classification\\3-Classifiers-2\\README.md",
+        "text": "tésért vagy téves értelmezésért, amely a fordítás használatából eredhet.",
+        "relevance": 0.9419865012168884
+      },
+      {
+        "query": "Digivice Integration Mühle",
+        "file": "najika_ultimate_v2_complete\\najika_ultimate_complete\\04_optional_docs\\NAJIKA_ALLE_UEBERSICHTEN_KOMPLETT.txt",
+        "text": "deren NPCs auf sein Digivice (dargestellt als fiktive\nMessaging-App innerhalb des Spiels). So verschwimmt die Grenze zwischen der App und der\nSpielwelt – was auf dem echten Handy passiert, erscheint als Handlung auf dem virtuellen\nDigivice.\nSpezialaktionen:  In Schlüsselmomenten der Story nutzt der ",
+        "relevance": 1.0747812986373901
+      },
+      {
+        "query": "Digivice Integration Mühle",
+        "file": "alles wissen\\zip\\xonline\\optional\\NAJIKA_ALLE_UEBERSICHTEN_KOMPLETT.txt",
+        "text": "deren NPCs auf sein Digivice (dargestellt als fiktive\nMessaging-App innerhalb des Spiels). So verschwimmt die Grenze zwischen der App und der\nSpielwelt – was auf dem echten Handy passiert, erscheint als Handlung auf dem virtuellen\nDigivice.\nSpezialaktionen:  In Schlüsselmomenten der Story nutzt der ",
+        "relevance": 1.0747812986373901
+      }
+    ],
+    "digivice": [
+      {
+        "query": "Digivice",
+        "file": "DOCS\\NAJIKA_FINAL_DESIGN.md",
+        "text": "Digivice-System!** 🎉\n",
+        "relevance": 0.6339126229286194
+      },
+      {
+        "query": "Digivice",
+        "file": "DOCS\\backend\\NAJIKA_FINAL_DESIGN.md",
+        "text": "Digivice-System!** 🎉\n",
+        "relevance": 0.6339126229286194
+      },
+      {
+        "query": "najika_world_UNIFIED.html",
+        "file": "PROBLEME_GEFUNDEN.md",
+        "text": "d.html              → najika_world_OLD_v1.html\nnajika_world_9regions_test.html → najika_world_PHASE1_TEST.html\nnajika_world_FINAL.html        → najika_world_OLD_v3.html\nnajika_world_complete.html     → najika_world_OLD_v4.html\nnajika_world_v2.html           → najika_world_PHASE2_WIP.html (Work In Pr",
+        "relevance": 0.6160358190536499
+      },
+      {
+        "query": "najika_world_UNIFIED.html",
+        "file": "START_NAJIKA_WORLD_GUIDE.md",
+        "text": "# 🎮 NAJIKA WORLD - START GUIDE\n\n## Quick Start\n\n### 1. Starte das Game\n```bash\nSTART_NAJIKA_GAME.bat\n```\n\n**Das startet:**\n- Python HTTP Server auf Port 5173\n- Öffnet: http://localhost:5173/najika_world_UNIFIED.html\n\n---\n\n## Was funktioniert (OHNE Backend):\n\n### ✅ Open World Features:\n- **9.6km × 9.",
+        "relevance": 0.7151328325271606
+      },
+      {
+        "query": "3D Scene Digivice",
+        "file": "NAJIKA_COMPLETE_PROJECT_PACKAGE\\NAJIKA_COMPLETE_PROJECT_PACKAGE\\02_CURRENT_STATUS.md",
+        "text": "*\n- **File:** `backend/NAJIKA_MASTER_TRAINING_LAUNCHER.py`\n- **Features:**\n  - LoRA Training (alle 7 Tage)\n  - Code Training (täglich)\n  - Failsafe Monitor (stündlich)\n  - Auto-Recovery\n\n---\n\n## 2. Frontend (Browser 3D App)\n\n### ✅ 3D Scene\n- **File:** `digivice/index.html`\n- **Engine:** Three.js\n- *",
+        "relevance": 0.979021430015564
+      },
+      {
+        "query": "3D Scene Digivice",
+        "file": "NAJIKA_COMPLETE_PROJECT_PACKAGE\\02_CURRENT_STATUS.md",
+        "text": "*\n- **File:** `backend/NAJIKA_MASTER_TRAINING_LAUNCHER.py`\n- **Features:**\n  - LoRA Training (alle 7 Tage)\n  - Code Training (täglich)\n  - Failsafe Monitor (stündlich)\n  - Auto-Recovery\n\n---\n\n## 2. Frontend (Browser 3D App)\n\n### ✅ 3D Scene\n- **File:** `digivice/index.html`\n- **Engine:** Three.js\n- *",
+        "relevance": 0.979021430015564
+      },
+      {
+        "query": "Terminal Interface",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\devops\\content\\terminal-knowledge@wjJPzrFJBNYOD3SJLzW2M.md",
+        "text": "# Terminal Knowledge\n\nA terminal is simply a text-based interface to the computer, it is used to interact with your computer system via CLI (command line interface).\n\nVisit the following resources to learn more:\n\n- [@article@What is CLI?](https://en.wikipedia.org/wiki/Command-line_interface)",
+        "relevance": 0.7149292230606079
+      },
+      {
+        "query": "Terminal Interface",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\cyber-security\\content\\navigating-using-gui-and-cli@MGitS_eJBoY99zOR-W3F4.md",
+        "text": "# Navigating using GUI and CLI\n\nGraphical User Interface (GUI)\n------------------------------\n\nA Graphical User Interface (GUI) is a type of user interface that allows users to interact with a software program, computer, or network device using images, icons, and visual indicators. The GUI is design",
+        "relevance": 0.843435525894165
+      }
+    ],
+    "handy_app": [
+      {
+        "query": "Flutter App",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\flutter\\content-old\\ci-cd\\bitrise.md",
+        "text": "# Bitrise\n\nBitrise is a cloud-based continuous integration and delivery (CI/CD) platform that can be used with Flutter mobile app development.\n\nBitrise provides a comprehensive suite of tools for automating the build, test, and deployment process for mobile apps, including apps built with Flutter. W",
+        "relevance": 0.5714032649993896
+      },
+      {
+        "query": "Flutter App",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\flutter\\content\\bitrise@1xTlq-0MaHN15KZid31Dk.md",
+        "text": "# Bitrise\n\nBitrise is a cloud-based continuous integration and delivery (CI/CD) platform that can be used with Flutter mobile app development.\n\nBitrise provides a comprehensive suite of tools for automating the build, test, and deployment process for mobile apps, including apps built with Flutter. W",
+        "relevance": 0.5714032649993896
+      },
+      {
+        "query": "Handy Spiel",
+        "file": "neu neu\\qwqwneu neu neu .pdf",
+        "text": "ene.js:79:17 \n   Chat UI created chat_ui.js:55:17 \n        Room changed to: Badezimmer 3d_scene.js:209:17 \n        Room changed to: Schwarze Mühle – Keller 3d_scene.js:209:17 \n \n schau nochmal dann wir auch die minispiele fertig machen also nicht nur \nknopf drücken und das soiel sagt es hat fertig s",
+        "relevance": 1.408646583557129
+      },
+      {
+        "query": "Handy Spiel",
+        "file": "zip\\qwqwneu neu neu .pdf",
+        "text": "ene.js:79:17 \n   Chat UI created chat_ui.js:55:17 \n        Room changed to: Badezimmer 3d_scene.js:209:17 \n        Room changed to: Schwarze Mühle – Keller 3d_scene.js:209:17 \n \n schau nochmal dann wir auch die minispiele fertig machen also nicht nur \nknopf drücken und das soiel sagt es hat fertig s",
+        "relevance": 1.408646583557129
+      },
+      {
+        "query": "Mobile App",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\data-engineer\\content\\mobile-apps@dJZqe47kzRqYIG-4AZTlz.md",
+        "text": "# Mobile apps\n\nMobile apps are programs for phones and tablets, usually from app stores. They can be native (for one OS like iOS or Android), hybrid (web tech in a native shell), or cross-platform (like React Native). Apps use phone features like GPS and cameras. They do many things from games to sh",
+        "relevance": 0.6620210409164429
+      },
+      {
+        "query": "Mobile App",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\software-architect\\content\\web-mobile@j9Y2YbBKi3clO_sZ2L_hQ.md",
+        "text": "# Web and Mobile\n\nWeb apps and mobile apps are two distinct types of software applications designed to run on different platforms. Web apps are accessed through web browsers and run on various devices using internet connectivity. They are platform-independent, making them easy to update and maintain",
+        "relevance": 0.7529233694076538
+      },
+      {
+        "query": "najika_digivice Flutter",
+        "file": "sicherheitsmodule\\IMPLEMENTATION_SUMMARY_3_VERSIONS.md",
+        "text": "# Implementation Summary - 3-Version Digivice System\n\n**Date:** 2025-11-08\n**Implemented by:** Claude (AI Assistant)\n**For:** Najika Digivice Mobile App\n\n---\n\n## 🎯 What Was Implemented\n\nA complete **3-version build system** for the Najika Digivice app with:\n- **Master Edition** - Full-featured versi",
+        "relevance": 0.5721023678779602
+      },
+      {
+        "query": "najika_digivice Flutter",
+        "file": "DOCS\\NAJIKA_3D_CHARACTER.md",
+        "text": "/ Neu: Najika (größer skalieren)\n```\n\n### **3D MODEL IN MOBILE APP**\n\n```dart\n// In Flutter App (najika_avatar_view.dart)\n\nclass NajikaAvatarView extends StatefulWidget {\n  @override\n  Widget build(BuildContext context) {\n    return ModelViewer(\n      src: 'https://najika.dyndns.org/assets/character",
+        "relevance": 0.7020280361175537
+      },
+      {
+        "query": "Android APK",
+        "file": "backend\\training_data_real\\code\\leetcode_problems\\articles\\longest-happy-string.md",
+        "text": "ap.offer(new int[]{a, 'a'});\n        if (b > 0) maxHeap.offer(new int[]{b, 'b'});\n        if (c > 0) maxHeap.offer(new int[]{c, 'c'});\n\n        while (!maxHeap.isEmpty()) {\n            int[] first = maxHeap.poll();\n            if (res.length() > 1 && res.charAt(res.length() - 1) == first[1] && res.c",
+        "relevance": 1.3911583423614502
+      },
+      {
+        "query": "Android APK",
+        "file": "backend\\training_data_real\\code\\leetcode_solutions\\solution\\2100-2199\\2102.Sequentially Ordinal Rank Tracker\\README.md",
+        "text": "ap.entry(score, name));\n        bad.offer(good.poll());\n    }\n\n    public String get() {\n        good.offer(bad.poll());\n        return good.peek().getValue();\n    }\n}\n\n/**\n * Your SORTracker object will be instantiated and called as such:\n * SORTracker obj = new SORTracker();\n * obj.add(name,score)",
+        "relevance": 1.4241751432418823
+      }
+    ],
+    "uefn": [
+      {
+        "query": "UEFN",
+        "file": "alles wissen\\zip\\xonline\\optional\\NAJIKA_PROJEKT_KONZEPT_UEBERSICHT.md",
+        "text": "h verantwortungsvoller Ansatz\n- Technische Exzellenz (RTX 3060 Ti optimal genutzt)\n\n### Langfristziele\n- Autonomous Privacy Detection\n- UEFN-Integration\n- Memory-Preservation Research\n- Community-Sanitized Version\n\n---\n\n**Dokument erstellt:** 2025\n**Version:** 1.0 - Vollständige Konzept-Übersicht\n**",
+        "relevance": 0.9782562255859375
+      },
+      {
+        "query": "UEFN",
+        "file": "alles wissen\\Najika finalee\\grund idee ki nicht perfekt\\NAJIKA_PROJEKT_KONZEPT_UEBERSICHT.md",
+        "text": "h verantwortungsvoller Ansatz\n- Technische Exzellenz (RTX 3060 Ti optimal genutzt)\n\n### Langfristziele\n- Autonomous Privacy Detection\n- UEFN-Integration\n- Memory-Preservation Research\n- Community-Sanitized Version\n\n---\n\n**Dokument erstellt:** 2025\n**Version:** 1.0 - Vollständige Konzept-Übersicht\n**",
+        "relevance": 0.9782562255859375
+      },
+      {
+        "query": "Unreal Editor",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\game-developer\\content\\unreal-engine@a6H-cZtp3A_fB8jnfMxBR.md",
+        "text": "# Unreal Engine\n\nThe **Unreal Engine** is a powerful game development engine created by Epic Games. Used by game developers worldwide, it supports the creation of high-quality games across multiple platforms such as iOS, Android, Windows, Mac, Xbox, and PlayStation. Unreal Engine is renowned for its",
+        "relevance": 0.9477145671844482
+      },
+      {
+        "query": "Unreal Editor",
+        "file": "backend\\training_data_real\\web_dev\\dev_roadmap\\src\\data\\roadmaps\\game-developer\\content\\unreal-engine@a6H-cZtp3A_fB8jnfMxBR.md",
+        "text": "ocumentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-4-documentation)\n- [@official@Unreal Engine YouTube Channel](https://m.youtube.com/channel/UCBobmJyzsJ6Ll7UbfhI4iwQ)\n- [@video@Unreal in 100 Seconds](https://www.youtube.com/watch?v=DXDe-2BC4cE)\n- [@feed@Unreal",
+        "relevance": 0.9480063915252686
+      },
+      {
+        "query": "Fortnite Creative",
+        "file": "NAJIKA_COMPLETE_PROJECT_PACKAGE\\03_ROADMAP_AND_FUTURE.md",
+        "text": "gie:\n- **UEFN** (Unreal Editor for Fortnite)\n- **Verse** (Fortnite Scripting Language)\n- **Fortnite Creative 2.0**\n\n### Migrationsplan:\n1. UE5 → UEFN Port (Klassen)\n2. Najika AI → Verse Bot\n3. Backend → Fortnite Services (wo möglich)\n4. Assets → Fortnite-kompatibel machen\n\n### Challenges:\n- Fortnite",
+        "relevance": 0.8681353330612183
+      },
+      {
+        "query": "Fortnite Creative",
+        "file": "NAJIKA_COMPLETE_PROJECT_PACKAGE\\NAJIKA_COMPLETE_PROJECT_PACKAGE\\03_ROADMAP_AND_FUTURE.md",
+        "text": "gie:\n- **UEFN** (Unreal Editor for Fortnite)\n- **Verse** (Fortnite Scripting Language)\n- **Fortnite Creative 2.0**\n\n### Migrationsplan:\n1. UE5 → UEFN Port (Klassen)\n2. Najika AI → Verse Bot\n3. Backend → Fortnite Services (wo möglich)\n4. Assets → Fortnite-kompatibel machen\n\n### Challenges:\n- Fortnite",
+        "relevance": 0.8681353330612183
+      },
+      {
+        "query": "Verse Code",
+        "file": "backend\\training_data_real\\code\\leetcode_solutions\\lcci\\lcci.json",
+        "text": "ot;, &quot;&quot;, &quot;&quot;], s = &quot;ta&quot;\\r\\n<strong> Output</strong>: -1\\r\\n<strong> Explanation</strong>: Return -1 if <code>s</code> is not in <code>words</code>.\\r\\n</pre>\\r\\n\\r\\n<p><strong>Example2:</strong></p>\\r\\n\\r\\n<pre>\\r\\n<strong> Input</strong>: words = [&quot;at&quot;, &quot;",
+        "relevance": 1.0379514694213867
+      },
+      {
+        "query": "Verse Code",
+        "file": "backend\\training_data_real\\code\\leetcode_solutions\\lcci\\lcci.json",
+        "text": "p;  &quot;this&quot;,\\r\\n&nbsp;  &quot;real&quot;,\\r\\n&nbsp;  &quot;hard&quot;</code>\\r\\n]</pre>\\r\\n\\r\\n<p><strong>Example 2:</strong></p>\\r\\n\\r\\n<pre>\\r\\n<strong>Input:</strong> <code>[&quot;aa&quot;]</code>\\r\\n<strong>Output: </strong>[&quot;aa&quot;,&quot;aa&quot;]</pre>\\r\\n\\r\\n<p><strong>Notes: ",
+        "relevance": 1.0387918949127197
+      }
+    ]
+  },
+  "phase5_missing": [
+    {
+      "query": "TODO implementieren",
+      "file": "backend\\training_data_real\\patterns\\java_patterns\\localization\\it\\README.md",
+      "text": "rarle come abbiamo fatto noi nell' implementarle.\n\n# Come contribuire \n\nSe desideri contribuire al progetto puoi trovare le informazioni necessarie nella nostra pagina \n[wiki](https://github.com/iluwatar/java-design-patterns/wiki). Ti aiuteremo a rispondere a\nogni tua domanda nella [chatroom Gitter](https://gitter.im/iluwatar/java-design-patterns).\n\n# Licenza\n\nQuesto progetto è licanziato nei termini della licenza MIT.\n",
+      "relevance": 1.01887845993042
+    },
+    {
+      "query": "TODO implementieren",
+      "file": "backend\\training_data_real\\patterns\\java_patterns\\localization\\es\\command\\README.md",
+      "text": "tructurar un sistema en torno a operaciones de alto nivel construidas sobre operaciones primitivas. Esta estructura es común en los sistemas de información que admiten transacciones. Una transacción encapsula un conjunto de cambios de datos. El patrón Command ofrece una forma de modelar las transacciones. Los comandos tienen una interfaz común que permite invocar todas las transacciones de la misma manera. El patrón también facilita la ampliación del sistema con nuevas transacciones.\n* Mantener ",
+      "relevance": 1.080997347831726
+    },
+    {
+      "query": "TODO implementieren",
+      "file": "backend\\training_data_real\\patterns\\java_patterns\\localization\\es\\composite-view\\README.md",
+      "text": " componentes de un compuesto a sólo\n  ciertos tipos.\n\n## Patrones Relacionados\n\n* [Decorator](https://java-design-patterns.com/patterns/decorator/): Mientras que Decorator se utiliza para añadir\n  responsabilidades a los objetos, Composite está pensado para construir estructuras de objetos.\n* [Flyweight](https://java-design-patterns.com/patterns/flyweight/): Composite puede combinarse a menudo con Flyweight\n  para implementar nodos hoja compartidos en una estructura compuesta, reduciendo la huel",
+      "relevance": 1.0966968536376953
+    },
+    {
+      "query": "noch nicht fertig",
+      "file": "zip\\12121212ddddd.txt",
+      "text": "fertigen Version zurück.",
+      "relevance": 0.8719598054885864
+    },
+    {
+      "query": "noch nicht fertig",
+      "file": "alles wissen\\zip\\12121212ddddd.txt",
+      "text": "fertigen Version zurück.",
+      "relevance": 0.8719598054885864
+    },
+    {
+      "query": "noch nicht fertig",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\vi\\6-NLP\\5-Hotel-Reviews-2\\solution\\Julia\\README.md",
+      "text": "n dịch này.",
+      "relevance": 0.9855098724365234
+    },
+    {
+      "query": "fehlt noch",
+      "file": "DOCS\\VERGLEICHSANALYSE.md",
+      "text": "ist **FAST PERFEKT**! 🎉\nNur noch kleine Fixes nötig, dann läuft alles!\n",
+      "relevance": 0.9088552594184875
+    },
+    {
+      "query": "fehlt noch",
+      "file": "DOCS\\backend\\VERGLEICHSANALYSE.md",
+      "text": "ist **FAST PERFEKT**! 🎉\nNur noch kleine Fixes nötig, dann läuft alles!\n",
+      "relevance": 0.9088552594184875
+    },
+    {
+      "query": "fehlt noch",
+      "file": "zip\\najika lolita final  ki +ai sakura dazu beachten.pdf",
+      "text": "Art noch stärker betont. \n",
+      "relevance": 0.9108033776283264
+    },
+    {
+      "query": "muss noch",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\vi\\6-NLP\\5-Hotel-Reviews-2\\solution\\Julia\\README.md",
+      "text": "n dịch này.",
+      "relevance": 0.8211823105812073
+    },
+    {
+      "query": "muss noch",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\vi\\7-TimeSeries\\2-ARIMA\\solution\\R\\README.md",
+      "text": "ản dịch này.",
+      "relevance": 0.938398540019989
+    },
+    {
+      "query": "muss noch",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\vi\\2-Regression\\2-Data\\solution\\Julia\\README.md",
+      "text": "g bản dịch này.",
+      "relevance": 0.971821129322052
+    },
+    {
+      "query": "geplant aber",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\de\\1-Introduction\\2-history-of-ML\\README.md",
+      "text": "g ergeben.",
+      "relevance": 1.0114737749099731
+    },
+    {
+      "query": "geplant aber",
+      "file": "backend\\training_data_real\\ml_ai\\ml_beginners\\translations\\sl\\2-Regression\\4-Logistic\\solution\\Julia\\README.md",
+      "text": "bi nastale zaradi uporabe tega prevoda.",
+      "relevance": 1.075907826423645
+    },
+    {
+      "query": "geplant aber",
+      "file": "zip\\NAJIKA_ALLE_ZUSAMMENFASSUNGEN.txt",
+      "text": "amatische Pose* Ich bin arm, aber meine EXPLOSION ist legendär! ✨\"\n\nViel Spaß beim Testen! Das **Konosuba-Gefühl** sollte jetzt da sein!\n\n\n--------------------------------------------------------------------------------\n[31/42] ASSISTANT | 2025-10-16T18:09:58 | 1313 chars\n--------------------------------------------------------------------------------\n\nJa genau, sie sind **noch da**, aber nur als **subtile Einflüsse**! Das war ja dein Wunsch - \"alles durch Megumin kommt, die anderen haben Einflu",
+      "relevance": 1.0804380178451538
+    },
+    {
+      "query": "Phase 2 noch",
+      "file": "alles wissen\\zip\\NAJIKA_ALLE_ZUSAMMENFASSUNGEN.txt",
+      "text": "E1_ZUSAMMENFASSUNGEN.txt`\n\n**PHASE 2:** Najika durchsucht diese Zusammenfassungen nochmal nach:\n- Skill-Systeme (Transformation der Skill-Linien!)\n- Fortnite Portale (Digimon Cyber Sleuth Style!)\n- 8 Gebiete + Universum-Erweiterung\n- Alle anderen genannten Mechaniken\n- Speichert als: `C:/Users/0KKK0/Desktop/NAJIKA_PHASE2_DETAILS.txt`\n\n**PHASE 3:** DU filterst/reduzierst PHASE 1 während Najika PHASE 2 macht\n\n**PHASE 4:** ICH warte auf dein OK, dann lese ich deine bearbeitete Version!\n\nStarte ich ",
+      "relevance": 0.9715895652770996
+    },
+    {
+      "query": "Phase 2 noch",
+      "file": "zip\\najika_ultimate_v2_complete\\najika_ultimate_complete\\04_optional_docs\\NAJIKA_ALLE_ZUSAMMENFASSUNGEN.txt",
+      "text": "E1_ZUSAMMENFASSUNGEN.txt`\n\n**PHASE 2:** Najika durchsucht diese Zusammenfassungen nochmal nach:\n- Skill-Systeme (Transformation der Skill-Linien!)\n- Fortnite Portale (Digimon Cyber Sleuth Style!)\n- 8 Gebiete + Universum-Erweiterung\n- Alle anderen genannten Mechaniken\n- Speichert als: `C:/Users/0KKK0/Desktop/NAJIKA_PHASE2_DETAILS.txt`\n\n**PHASE 3:** DU filterst/reduzierst PHASE 1 während Najika PHASE 2 macht\n\n**PHASE 4:** ICH warte auf dein OK, dann lese ich deine bearbeitete Version!\n\nStarte ich ",
+      "relevance": 0.9715895652770996
+    },
+    {
+      "query": "Phase 2 noch",
+      "file": "najika_ultimate_v2_complete\\najika_ultimate_complete\\04_optional_docs\\NAJIKA_ALLE_ZUSAMMENFASSUNGEN.txt",
+      "text": "E1_ZUSAMMENFASSUNGEN.txt`\n\n**PHASE 2:** Najika durchsucht diese Zusammenfassungen nochmal nach:\n- Skill-Systeme (Transformation der Skill-Linien!)\n- Fortnite Portale (Digimon Cyber Sleuth Style!)\n- 8 Gebiete + Universum-Erweiterung\n- Alle anderen genannten Mechaniken\n- Speichert als: `C:/Users/0KKK0/Desktop/NAJIKA_PHASE2_DETAILS.txt`\n\n**PHASE 3:** DU filterst/reduzierst PHASE 1 während Najika PHASE 2 macht\n\n**PHASE 4:** ICH warte auf dein OK, dann lese ich deine bearbeitete Version!\n\nStarte ich ",
+      "relevance": 0.9715895652770996
+    },
+    {
+      "query": "später hinzufügen",
+      "file": "aasd\\ultimative giga explosion.pdf",
+      "text": "beeindruckend aus Nachteil: Braucht echtes 3D-Modell von \nNajika (extern) \n \nMEIN VORSCHLAG - HYBRID: \nSTUFE 1 (JETZT): Mobile-Layout + Verbessertes 2D STUFE 2 (SPÄTER): 3D-\nBackground hinzufügen STUFE 3 (ZUKUNFT): Full 3D wenn Najika-Modell \nvorhanden \n \nWAS MÖCHTEST DU? \n \n1. Mobile-Layout + Animated 2D (schnell, heute fertig) 2. Mobile-Layout + \n3D-Setup mit Placeholder (komplex, 3D-Modell später) 3. Nur Layout-\nAnpassung, 3D kommt später separat \n \nSage 1, 2 oder 3! \n \n \n>> - Classic 64 Asse",
+      "relevance": 1.1490464210510254
+    },
+    {
+      "query": "später hinzufügen",
+      "file": "zip\\ultimative giga explosion.pdf",
+      "text": "beeindruckend aus Nachteil: Braucht echtes 3D-Modell von \nNajika (extern) \n \nMEIN VORSCHLAG - HYBRID: \nSTUFE 1 (JETZT): Mobile-Layout + Verbessertes 2D STUFE 2 (SPÄTER): 3D-\nBackground hinzufügen STUFE 3 (ZUKUNFT): Full 3D wenn Najika-Modell \nvorhanden \n \nWAS MÖCHTEST DU? \n \n1. Mobile-Layout + Animated 2D (schnell, heute fertig) 2. Mobile-Layout + \n3D-Setup mit Placeholder (komplex, 3D-Modell später) 3. Nur Layout-\nAnpassung, 3D kommt später separat \n \nSage 1, 2 oder 3! \n \n \n>> - Classic 64 Asse",
+      "relevance": 1.1490464210510254
+    },
+    {
+      "query": "später hinzufügen",
+      "file": "neu neu\\ultimative giga explosion.pdf",
+      "text": "beeindruckend aus Nachteil: Braucht echtes 3D-Modell von \nNajika (extern) \n \nMEIN VORSCHLAG - HYBRID: \nSTUFE 1 (JETZT): Mobile-Layout + Verbessertes 2D STUFE 2 (SPÄTER): 3D-\nBackground hinzufügen STUFE 3 (ZUKUNFT): Full 3D wenn Najika-Modell \nvorhanden \n \nWAS MÖCHTEST DU? \n \n1. Mobile-Layout + Animated 2D (schnell, heute fertig) 2. Mobile-Layout + \n3D-Setup mit Placeholder (komplex, 3D-Modell später) 3. Nur Layout-\nAnpassung, 3D kommt später separat \n \nSage 1, 2 oder 3! \n \n \n>> - Classic 64 Asse",
+      "relevance": 1.1490464210510254
+    }
+  ],
+  "source_stats": {
+    "najika_world": {
+      "files_scanned": 33091,
+      "files_indexed": 32789,
+      "total_chars": 491395292,
+      "total_chunks": 377786,
+      "errors": [
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "EXTRACTED_CLAUDE_SESSIONS.txt indexing: ValueError: Batch size of 19877 is greater than max batch size of 5461",
+        "najika_state_20260113_001847.json: [Errno 2] No such file or directory: 'C:\\\\Najika_World\\\\backend\\\\saves\\\\najika_state_20260113_001847.json'",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461",
+        "EXTRACTED_CLAUDE_SESSIONS.txt indexing: ValueError: Batch size of 19877 is greater than max batch size of 5461",
+        "result.json indexing: ValueError: Batch size of 50255 is greater than max batch size of 5461",
+        "imagemagick_ghostscript_cmd_exec.pdf: Stream has ended unexpectedly",
+        "najika_state_20260113_003348.json: [Errno 2] No such file or directory: 'C:\\\\Najika_World\\\\backend\\\\saves\\\\najika_state_20260113_003348.json'",
+        "tokenizer.json indexing: ValueError: Batch size of 20403 is greater than max batch size of 5461"
+      ]
+    },
+    "claude_worktrees": {
+      "files_scanned": 1451,
+      "files_indexed": 1450,
+      "total_chars": 93962132,
+      "total_chunks": 98338,
+      "errors": [
+        "EXTRACTED_CLAUDE_SESSIONS.txt indexing: ValueError: Batch size of 19877 is greater than max batch size of 5461"
+      ]
+    },
+    "claude_conversations": {
+      "files_scanned": 941,
+      "files_indexed": 941,
+      "total_chars": 35484714,
+      "total_chunks": 44955,
+      "errors": []
+    }
+  }
+}

@@ -13,7 +13,7 @@
 
 class QuestUI {
     constructor() {
-        this.API_BASE = window.BACKEND_URL || 'http://127.0.0.1:8000';
+        this.API_BASE = window.BACKEND_URL || 'http://127.0.0.1:8001';
 
         // Quest Data
         this.activeQuests = [];

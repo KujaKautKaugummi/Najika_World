@@ -796,7 +796,7 @@
             const text = isPositive ? 'Lob' : 'Tadel';
 
             try {
-                const response = await fetch(`http://localhost:8000/api/najika/${action}`, {
+                const response = await fetch(`http://localhost:8001/api/najika/${action}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({})
@@ -3722,8 +3722,8 @@
 
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
-        // Backend URL (localhost:8000)
-        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
+        // Backend URL (localhost:8001)
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8001';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
@@ -5692,7 +5692,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startNajikaStatusUpdates() {
     async function fetchAndUpdateNajikaStatus() {
         try {
-            const response = await fetch('http://localhost:8000/api/najika/status');
+            const response = await fetch('http://localhost:8001/api/najika/status');
             const data = await response.json();
 
             if (data) {

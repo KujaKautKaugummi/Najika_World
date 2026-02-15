@@ -6,7 +6,7 @@ import requests
 import json
 
 def test_backend():
-    base_url = "http://127.0.0.1:5000"
+    base_url = "http://127.0.0.1:8001"
     
     print("🧪 Testing Najika Backend...")
     print()

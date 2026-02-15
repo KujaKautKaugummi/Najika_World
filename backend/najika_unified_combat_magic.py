@@ -166,14 +166,16 @@ def get_weave_result(school1: MagicSchool, school2: MagicSchool) -> Optional[Dic
 @dataclass
 class PlayerStats:
     """Fallout-Style Basis-Attribute + Ressourcen + Skills"""
-    # S.P.E.C.I.A.L. (1-15)
-    strength: int = 5
+    # S.P.E.C.I.A.L. (1-10, Start: 40 Punkte verteilt, Max +25% bei 10)
+    strength: int = 6
     perception: int = 5
-    endurance: int = 5
+    endurance: int = 6
     charisma: int = 5
-    intelligence: int = 5
-    agility: int = 5
+    intelligence: int = 7
+    agility: int = 6
     luck: int = 5
+    # Total: 6+5+6+5+7+6+5 = 40 Startpunkte
+    # Max pro Stat: 10 (gibt +25% auf zugehoerige Berechnungen)
 
     # Ressourcen
     hp: int = 100
@@ -208,6 +210,25 @@ class PlayerStats:
 
     # Najika-Spezial
     is_najika: bool = False
+
+    STAT_CAP: int = 10  # Max pro Stat
+    STAT_TOTAL_START: int = 40  # Startpunkte insgesamt
+
+    def get_stat_bonus(self, stat_name: str) -> float:
+        """Berechne Bonus fuer einen Stat (max +25% bei 10)"""
+        val = min(getattr(self, stat_name, 5), self.STAT_CAP)
+        return val * 0.025  # +2.5% pro Punkt, max +25%
+
+    def validate_stats(self) -> bool:
+        """Pruefe ob Stats gueltig sind (1-10, total <= 40 + Level-Ups)"""
+        stats = [self.strength, self.perception, self.endurance,
+                 self.charisma, self.intelligence, self.agility, self.luck]
+        return all(1 <= s <= self.STAT_CAP for s in stats)
+
+    def get_stats_total(self) -> int:
+        """Summe aller S.P.E.C.I.A.L. Stats"""
+        return (self.strength + self.perception + self.endurance +
+                self.charisma + self.intelligence + self.agility + self.luck)
 
 
 # =============================================================================
@@ -280,11 +301,14 @@ class Skill:
         base = self.base_damage or self.base_heal
 
         if self.school == MagicSchool.EXPLOSION:
-            # Explosion skaliert mit INT + LUCK
-            multiplier = 1 + (stats.intelligence * 0.05) + (stats.luck * 0.02)
+            # Explosion skaliert mit INT + LUCK (max +25% bei 10, +12.5% Luck bei 10)
+            int_bonus = min(stats.intelligence, 10) * 0.025
+            luck_bonus = min(stats.luck, 10) * 0.0125
+            multiplier = 1 + int_bonus + luck_bonus
         else:
-            # Normale Magie skaliert mit INT
-            multiplier = 1 + (stats.intelligence * 0.05)
+            # Normale Magie skaliert mit INT (max +25% bei 10)
+            int_bonus = min(stats.intelligence, 10) * 0.025
+            multiplier = 1 + int_bonus
 
         # Skill-Level Bonus (+2% pro Level)
         level_bonus = 1 + (self.level * 0.02)

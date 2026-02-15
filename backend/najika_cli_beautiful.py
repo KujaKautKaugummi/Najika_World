@@ -41,8 +41,8 @@ except ImportError:
     sys.exit(1)
 
 # Configuration
-API_URL = "http://localhost:8000/api/chat"
-STATUS_URL = "http://localhost:8000/api/status"
+API_URL = "http://localhost:8001/api/chat"
+STATUS_URL = "http://localhost:8001/api/status"
 TIMEOUT = 60
 
 # Gothic-Lolita Color Scheme

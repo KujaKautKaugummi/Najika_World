@@ -20,7 +20,7 @@
 
     const WS_CONFIG = {
         // WebSocket URL (gleicher Host wie API, ws:// statt http://)
-        url: 'ws://127.0.0.1:8000/ws/connect',
+        url: 'ws://127.0.0.1:8001/ws/connect',
         reconnectDelay: 5000,
         maxReconnects: 0,  // Kein Reconnect - WS-Server existiert nicht
         pingInterval: 30000,

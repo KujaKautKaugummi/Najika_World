@@ -1,0 +1,1 @@
+{"model": "najika-natural:latest", "messages": [{"role": "user", "content": "Erzaehl mir was"}], "stream": false, "options": {"temperature": 0.80, "num_predict": 500, "repeat_penalty": 1.2, "top_p": 0.9}}

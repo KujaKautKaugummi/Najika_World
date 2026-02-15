@@ -29,7 +29,7 @@ except ImportError:
     parse_tool_request = None
 
 # Configuration
-API_URL = "http://localhost:8000/api/chat"
+API_URL = "http://localhost:8001/api/chat"
 TIMEOUT = 60  # seconds
 
 def clean_unicode(text):

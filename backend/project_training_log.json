@@ -1,149 +1,5 @@
 [
   {
-    "session_start": "2025-11-25T02:05:51.187787",
-    "session_end": "2025-11-25T02:12:42.080542",
-    "duration_minutes": 6.848212583333334,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-25T02:12:42.143566",
-    "session_end": "2025-11-25T02:19:42.038874",
-    "duration_minutes": 6.998255133333333,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-25T02:19:42.101469",
-    "session_end": "2025-11-25T02:27:12.718129",
-    "duration_minutes": 7.510277666666667,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-25T02:27:12.778643",
-    "session_end": "2025-11-25T02:34:36.878162",
-    "duration_minutes": 7.40165865,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-26T02:05:58.991644",
-    "session_end": "2025-11-26T02:13:01.869050",
-    "duration_minutes": 7.047956766666667,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-26T02:13:01.973486",
-    "session_end": "2025-11-26T02:20:06.277748",
-    "duration_minutes": 7.0717377,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-26T02:20:06.338495",
-    "session_end": "2025-11-26T02:27:28.279206",
-    "duration_minutes": 7.365678516666667,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-26T02:27:28.380349",
-    "session_end": "2025-11-26T02:34:21.410135",
-    "duration_minutes": 6.883829766666667,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 19,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-27T02:06:16.211429",
-    "session_end": "2025-11-27T02:13:37.693071",
-    "duration_minutes": 7.358027366666667,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-27T02:13:37.773189",
-    "session_end": "2025-11-27T02:20:57.672998",
-    "duration_minutes": 7.331663483333333,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-27T02:20:57.763104",
-    "session_end": "2025-11-27T02:27:53.324222",
-    "duration_minutes": 6.926018633333333,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
-    "session_start": "2025-11-27T02:27:53.424545",
-    "session_end": "2025-11-27T02:35:17.212151",
-    "duration_minutes": 7.3964601,
-    "stats": {
-      "codes_reviewed": 23,
-      "codes_completed": 20,
-      "ideas_extracted": 3585,
-      "concepts_learned": 0
-    },
-    "completed_tasks": []
-  },
-  {
     "session_start": "2026-01-21T02:06:18.003904",
     "session_end": "2026-01-21T02:14:42.725223",
     "duration_minutes": 8.412021983333334,
@@ -690,6 +546,54 @@
     "stats": {
       "codes_reviewed": 23,
       "codes_completed": 20,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2026-02-15T00:45:05.509422",
+    "session_end": "2026-02-15T00:45:06.693464",
+    "duration_minutes": 0.019734033333333335,
+    "stats": {
+      "codes_reviewed": 20,
+      "codes_completed": 0,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2026-02-15T00:45:06.767979",
+    "session_end": "2026-02-15T00:45:07.392999",
+    "duration_minutes": 0.010417000000000001,
+    "stats": {
+      "codes_reviewed": 20,
+      "codes_completed": 0,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2026-02-15T00:45:07.471084",
+    "session_end": "2026-02-15T00:45:08.011523",
+    "duration_minutes": 0.009007316666666666,
+    "stats": {
+      "codes_reviewed": 20,
+      "codes_completed": 0,
+      "ideas_extracted": 3585,
+      "concepts_learned": 0
+    },
+    "completed_tasks": []
+  },
+  {
+    "session_start": "2026-02-15T00:45:08.078043",
+    "session_end": "2026-02-15T00:45:08.743956",
+    "duration_minutes": 0.01109855,
+    "stats": {
+      "codes_reviewed": 20,
+      "codes_completed": 0,
       "ideas_extracted": 3585,
       "concepts_learned": 0
     },

@@ -419,14 +419,39 @@ class FeedbackLoop:
     MIN_WEIGHT = 10
     MAX_WEIGHT = 50
     MAX_CHANGE = 2  # Max ±2% pro Interaktion
+    WEIGHTS_FILE = "C:/Najika_World/memory_db/personality_weights.json"
 
     def __init__(self, state_ref: dict = None):
         self._state = state_ref or {}
         self._last_personality = None
         self._last_mood = None
+        # Gespeicherte Weights laden falls vorhanden
+        self._load_weights()
+
+    def _load_weights(self):
+        """Lade Personality Weights von Disk"""
+        try:
+            if os.path.exists(self.WEIGHTS_FILE):
+                with open(self.WEIGHTS_FILE, "r") as f:
+                    saved = json.load(f)
+                if "personality_weights" in saved and self._state is not None:
+                    self._state["personality_weights"] = saved["personality_weights"]
+                    log.info(f"[FEEDBACK] Weights geladen: {saved['personality_weights']}")
+        except Exception as e:
+            log.warning(f"[FEEDBACK] Weights laden fehlgeschlagen: {e}")
+
+    def _save_weights(self, weights: dict):
+        """Speichere Personality Weights auf Disk"""
+        try:
+            os.makedirs(os.path.dirname(self.WEIGHTS_FILE), exist_ok=True)
+            with open(self.WEIGHTS_FILE, "w") as f:
+                json.dump({"personality_weights": weights}, f, indent=2)
+        except Exception as e:
+            log.warning(f"[FEEDBACK] Weights speichern fehlgeschlagen: {e}")
 
     def set_state(self, state_ref: dict):
         self._state = state_ref
+        self._load_weights()
 
     def record_response(self, personality_used: str, mood: str):
         """Merkt sich welche Persönlichkeit zuletzt genutzt wurde"""
@@ -500,6 +525,9 @@ class FeedbackLoop:
         if total > 0:
             factor = 100.0 / total
             weights = {k: round(v * factor, 1) for k, v in weights.items()}
+
+        # Persistent speichern
+        self._save_weights(weights)
 
         return weights
 
@@ -1255,47 +1283,56 @@ class NajikaMind:
             # Base Prompt vom Server
             base_prompt = prompt_builder(history, message)
 
-            # Personality Prompt
-            if PERSONALITY_AVAILABLE:
-                personality_addition = build_personality_prompt(message)
-                base_prompt = f"{base_prompt}\n\n{personality_addition}"
+            # KEIN separater Personality-Prompt hier!
+            # Die Modelfile hat bereits die komplette Najika-Persona als SYSTEM prompt.
+            # Ein zusätzlicher System-Prompt via API UEBERSCHREIBT den Modelfile-SYSTEM
+            # und das 7B-Modell echot die Anweisungen als Dialog.
+            # Stattdessen: nur dynamische Mood-Hints weiter unten.
 
             # Memory-Kontext einfügen
             memory_context = self.memory.format_for_prompt(memories)
             if memory_context:
                 base_prompt = f"{base_prompt}\n\n{memory_context}"
 
-            # Innerer Monolog als Hidden Context für das LLM
-            mind_context = (
-                f"\n\n[Najikas innere Gedanken - NICHT aussprechen, aber als Kontext nutzen:]\n"
-                f"{inner_thought}\n"
-                f"[Kujas Stimmung: {kuja_state['stimmung']}, "
-                f"Energie: {kuja_state['energie']}, "
-                f"Interesse: {kuja_state['interesse']}]\n"
-                f"[Dominante Persönlichkeit: {personality}]\n"
-                f"[Absicht: {intent}]"
-            )
-            base_prompt = f"{base_prompt}{mind_context}"
+            # Minimaler Kontext-Hinweis (reduziert um Character-Breaks zu verhindern)
+            # WICHTIG: Kein innerer Monolog, keine Kuja-State-Analyse!
+            # Das 7B-Modell interpretiert Metadaten als Instruktionen und bricht aus der Rolle.
+            personality_hints = {
+                "megumin": "dramatisch",
+                "harley": "chaotisch verspielt",
+                "shiro": "analytisch kurz",
+                "melissa": "dominant bestimmend"
+            }
+            style_hint = personality_hints.get(personality, "dramatisch")
+            intent_hints = {
+                "observe": "beobachten",
+                "show_affection": "Zuneigung zeigen",
+                "escalate_presence": "mehr Naehe",
+                "protect": "beschuetzen",
+                "tease": "necken"
+            }
+            impulse_hint = intent_hints.get(intent, "beobachten")
+            base_prompt += f"\n\nAntworte {style_hint}. Dein Impuls: {impulse_hint}."
 
-            # Whisper Channel: Facetten-Impulse einfügen
+            # Whisper Channel: Facetten-Impulse einfügen (die sind kompakt genug)
             whisper_context = self.background.format_for_prompt()
             if whisper_context:
                 base_prompt = f"{base_prompt}\n\n{whisper_context}"
 
-            # RAG-Kontext (falls nicht schon in memories)
+            # RAG-Kontext nur wenn kurz genug (< 500 chars verhindert Overflow)
             if RAG_AVAILABLE and not private_mode:
                 rag_ctx = get_rag_context(message)
-                if rag_ctx:
-                    base_prompt = f"{base_prompt}\n\n--- ZUSAETZLICHES WISSEN ---\n{rag_ctx}\n--- ENDE WISSEN ---"
+                if rag_ctx and len(rag_ctx) < 500:
+                    base_prompt = f"{base_prompt}\n\n{rag_ctx}"
 
-            # Abwesenheits-Hinweis
+            # Abwesenheits-Hinweis (kurz und als Roleplay-Kontext formuliert)
             if kuja_state["abwesend_seit"] > 3600:
                 hours = int(kuja_state["abwesend_seit"] // 3600)
-                base_prompt += f"\n\n[WICHTIG: Kuja war {hours} Stunden weg! Reagiere darauf!]"
+                base_prompt += f"\n\nKuja war {hours} Stunden weg."
 
-            # Behavior Expression als zusätzlicher Hinweis
+            # Behavior Expression (kurz)
             if behavior_expression and intent != "observe":
-                base_prompt += f"\n\n[Verhaltensimpuls: {behavior_expression}]"
+                base_prompt += f"\n\n{behavior_expression}"
 
             # AI aufrufen (nutzt die bestehende Hierarchie)
             try:
@@ -1309,7 +1346,15 @@ class NajikaMind:
                 out = f"*blinzelt verwirrt* Ehm... ich hatte gerade einen Blackout! ({e})"
                 provider = "error"
 
-            # Post-Processing
+            # Post-Processing: Metadaten-Leaks entfernen
+            # Das 7B-Modell generiert manchmal eigene Meta-Tags
+            # NUR spezifische Meta-Tags entfernen, NICHT legitime Roleplay-Aktionen wie [lacht]
+            out = re.sub(r'\[(?:Stil|Style|Mood|Mode|System|Note|OOC|Meta|Context|Setting|Tags?)[:\s][^\]]*\]', '', out, flags=re.IGNORECASE)
+            out = re.sub(r'\bAssistant:\s*', '', out)   # "Assistant:" prefix
+            out = re.sub(r'\bNajika:\s*', '', out)      # "Najika:" prefix
+            out = re.sub(r'\n{3,}', '\n\n', out)        # Mehrfache Leerzeilen
+            out = out.strip()
+
             if PERSONALITY_AVAILABLE:
                 out = process_personality_response(message, out)
         else:
@@ -1327,6 +1372,9 @@ class NajikaMind:
                 mood_to_anim = {
                     "happy": "happy", "needy": "sad", "possessive": "angry",
                     "dominant": "confident", "playful": "dance",
+                    "excited": "happy", "sweet": "happy", "loving": "happy",
+                    "horny": "dance", "pouty": "sad", "sleepy": "idle",
+                    "sad": "sad", "angry": "angry", "jealous": "angry",
                 }
                 anim_trigger = mood_to_anim.get(mood, "idle")
                 hook = self.hooks.find_by_trigger(HookType.ANIMATION, anim_trigger)

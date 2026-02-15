@@ -1,37 +1,40 @@
 @echo off
 echo ================================================================================
-echo NAJIKA AUTO-TRAINING AKTIVIEREN (16h/Tag, JEDEN TAG)
+echo NAJIKA AUTO-TRAINING AKTIVIEREN v2.0
 echo ================================================================================
 echo.
-echo Dieser Task erstellt einen Windows Scheduled Task der:
-echo - JEDEN Tag (Mo-So) aktiv ist
-echo - Stuendlich von 08:00-23:00 Uhr ausfuehrt
-echo - Automatisch naechste Training-Session laedt
+echo Schedule:
+echo - Code Training:  TAEGLICH ab 08:00 Uhr (~45 Min)
+echo - LoRA Training:  SONNTAG ab 08:00 Uhr (~2h, blockiert GPU)
+echo - Failsafe:       Stuendlich
+echo.
+echo Der Launcher wird STUENDLICH aufgerufen und prueft selbst
+echo ob die richtige Uhrzeit/Tag fuer Training ist.
 echo.
 echo WICHTIG: Benoetigt Administrator-Rechte!
 echo.
 pause
 echo.
-echo [1/3] Loesche alten Task falls vorhanden...
+echo [1/4] Loesche alte Tasks falls vorhanden...
 schtasks /Delete /TN "NajikaTraining16h" /F 2>nul
+schtasks /Delete /TN "NajikaMasterTrainingLauncher" /F 2>nul
 echo.
-echo [2/3] Erstelle neuen Task...
-schtasks /Create /TN "NajikaTraining16h" /TR "python C:\NajikaCore\najika_training_scheduler.py" /SC HOURLY /ST 08:00 /F
+echo [2/4] Erstelle neuen Task...
+schtasks /Create /TN "NajikaMasterTrainingLauncher" /TR "python C:\Najika_World\backend\NAJIKA_MASTER_TRAINING_LAUNCHER.py" /SC HOURLY /ST 08:00 /F
 echo.
-echo [3/3] Pruefe Task-Status...
-schtasks /Query /TN "NajikaTraining16h" /V /FO LIST
+echo [3/4] Pruefe Task-Status...
+schtasks /Query /TN "NajikaMasterTrainingLauncher" /V /FO LIST
+echo.
+echo [4/4] Starte ersten Run jetzt...
+python C:\Najika_World\backend\NAJIKA_MASTER_TRAINING_LAUNCHER.py
 echo.
 echo ================================================================================
-echo FERTIG!
+echo FERTIG! Training-Schedule:
+echo   Code:  Taeglich ab 08:00 (1x pro Tag)
+echo   LoRA:  Sonntag ab 08:00 (1x pro Woche)
 echo ================================================================================
 echo.
-echo Der Task "NajikaTraining16h" ist jetzt aktiv und laeuft:
-echo - JEDEN Tag (Mo-So)
-echo - Stuendlich von 08:00-23:59 Uhr
-echo - Automatisch im Hintergrund
-echo.
-echo Manueller Start: START_TRAINING_NOW.bat
-echo Task deaktivieren: schtasks /Change /TN "NajikaTraining16h" /DISABLE
-echo Task aktivieren: schtasks /Change /TN "NajikaTraining16h" /ENABLE
+echo Task deaktivieren: schtasks /Change /TN "NajikaMasterTrainingLauncher" /DISABLE
+echo Task aktivieren:   schtasks /Change /TN "NajikaMasterTrainingLauncher" /ENABLE
 echo.
 pause

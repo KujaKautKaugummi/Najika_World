@@ -465,7 +465,7 @@ class DungeonUI {
 
     async generateDungeon(biome = 'caves', difficulty = 1, floor = 1, seed = null) {
         try {
-            let url = `http://localhost:8000/api/dungeon/generate/${biome}/${difficulty}/${floor}`;
+            let url = `http://localhost:8001/api/dungeon/generate/${biome}/${difficulty}/${floor}`;
             if (seed) url += `?seed=${seed}`;
 
             const response = await fetch(url);
@@ -562,7 +562,7 @@ class DungeonUI {
 
     async getBiomes() {
         try {
-            const response = await fetch('http://localhost:8000/api/dungeon/biomes');
+            const response = await fetch('http://localhost:8001/api/dungeon/biomes');
             return await response.json();
         } catch (error) {
             return ['caves', 'forest', 'volcano', 'ice', 'desert', 'swamp', 'coast', 'highland'];
@@ -571,7 +571,7 @@ class DungeonUI {
 
     async getDifficulties() {
         try {
-            const response = await fetch('http://localhost:8000/api/dungeon/difficulties');
+            const response = await fetch('http://localhost:8001/api/dungeon/difficulties');
             return await response.json();
         } catch (error) {
             return [1, 2, 3, 4, 5, 99];

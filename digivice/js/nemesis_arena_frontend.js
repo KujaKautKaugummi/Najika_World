@@ -5,7 +5,7 @@
 
 class NemesisArenaUI {
     constructor() {
-        this.apiBase = 'http://localhost:8000';  // Backend API
+        this.apiBase = 'http://localhost:8001';  // Backend API
         this.currentBattle = null;
         this.arenaPanel = null;
         this.hierarchyView = null;

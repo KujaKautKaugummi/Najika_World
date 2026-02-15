@@ -735,10 +735,13 @@ const OverworldEnemies = (function() {
             });
         }
 
+        let combatStarted = false;
+
         // Use REAL 3D Combat (Tastatur-Controls: Q/E/Space)
         if (window.Real3DCombat && window.Real3DCombat.startCombat) {
-            const scene = window.getScene ? window.getScene() : null;
-            const playerPos = window.getPlayerPosition ? window.getPlayerPosition() : { x: 0, y: 0, z: 0 };
+            const scene = window.getScene ? window.getScene() : (state.scene || window.scene);
+            const playerPos = window.getPlayerPosition ? window.getPlayerPosition() :
+                (window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 });
 
             if (scene) {
                 // Setup Callbacks BEFORE starting combat
@@ -762,13 +765,15 @@ const OverworldEnemies = (function() {
                 };
 
                 // Real3DCombat erwartet: (enemyList, scene, position)
-                // enemyList = Array von enemy type IDs
                 window.Real3DCombat.startCombat([enemy.data.id], scene, playerPos);
+                combatStarted = true;
                 console.log(`⚔️ Real3D Combat gestartet: ${enemy.data.name}`);
             } else {
-                console.error('Scene nicht verfügbar für Real3DCombat!');
+                console.warn('Scene nicht verfügbar für Real3DCombat, versuche Fallback...');
             }
-        } else if (window.UnifiedCombat) {
+        }
+
+        if (!combatStarted && window.UnifiedCombat) {
             // Fallback: Unified Combat (UI-Buttons)
             window.UnifiedCombat.startCombat({
                 type: 'overworld',
@@ -782,11 +787,17 @@ const OverworldEnemies = (function() {
                     }
                 }
             });
-        } else {
-            console.error('Kein Combat-System geladen!');
+            combatStarted = true;
         }
 
-        // Remove enemy from overworld
+        if (!combatStarted) {
+            // Kein Combat-System verfügbar - Gegner NICHT entfernen!
+            console.error('Kein Combat-System geladen! Gegner bleibt auf der Map.');
+            enemy.isAggro = false; // Reset aggro so player can try again
+            return;
+        }
+
+        // Nur entfernen wenn Kampf tatsächlich gestartet wurde
         removeEnemy(enemy.id);
     }
 
@@ -971,7 +982,16 @@ const OverworldEnemies = (function() {
     // ==========================================
 
     function getPlayerPosition() {
-        // Try verschiedene Quellen für Spieler-Position
+        // 1. Scene3D characterGroup (Hauptquelle!)
+        if (window.Scene3D && window.Scene3D.characterGroup && window.Scene3D.characterGroup.position) {
+            return {
+                x: window.Scene3D.characterGroup.position.x,
+                y: window.Scene3D.characterGroup.position.y,
+                z: window.Scene3D.characterGroup.position.z
+            };
+        }
+
+        // 2. Legacy: window.character
         if (window.character && window.character.position) {
             return {
                 x: window.character.position.x,
@@ -980,11 +1000,12 @@ const OverworldEnemies = (function() {
             };
         }
 
+        // 3. Fallback
         if (window.playerPosition) {
             return window.playerPosition;
         }
 
-        // Fallback: Mitte der Welt
+        // 4. Letzte Rettung: Welt-Mitte
         return { x: 4800, y: 0, z: 4800 };
     }
 

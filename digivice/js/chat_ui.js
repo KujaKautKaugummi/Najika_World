@@ -2,7 +2,7 @@
 // CHAT UI - Najika World Chat System (V2 - CSS-Based)
 // =============================================================================
 
-const API_BASE = window.API_BASE_URL || 'http://localhost:8000';
+const API_BASE = window.API_BASE_URL || 'http://localhost:8001';
 
 class ChatUI {
     constructor() {

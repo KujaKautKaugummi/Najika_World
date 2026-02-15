@@ -270,7 +270,7 @@ class NPCInteractionSystem {
     buyItem(itemName, price) {
         console.log(`[Shop] Kaufe ${itemName} für ${price}g`);
 
-        fetch('http://localhost:8000/api/shop/buy', {
+        fetch('http://localhost:8001/api/shop/buy', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -320,7 +320,7 @@ class NPCInteractionSystem {
         const goldElement = document.getElementById('player-gold');
         if (!goldElement) return;
 
-        fetch('http://localhost:8000/api/player/gold')
+        fetch('http://localhost:8001/api/player/gold')
             .then(r => r.json())
             .then(data => {
                 goldElement.textContent = data.gold || 1000;

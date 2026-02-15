@@ -34,23 +34,24 @@ from pathlib import Path
 # ==========================================
 
 # Pfade
-LORA_CHECKPOINTS_DIR = Path("C:/Najika_World/lora_checkpoints")
+LORA_CHECKPOINTS_DIR = Path("C:/Najika_World/lora_checkpoints_new")
 LORA_LATEST = LORA_CHECKPOINTS_DIR / "najika_lora_latest"
 
 # Alle verfügbaren Checkpoints (nach Datum sortiert)
 AVAILABLE_CHECKPOINTS = sorted([
     d for d in LORA_CHECKPOINTS_DIR.iterdir()
-    if d.is_dir() and "najika_lora_2025" in d.name
+    if d.is_dir() and "najika_lora_2026" in d.name
 ], key=lambda x: x.name, reverse=True)
 
 # Output
 OUTPUT_DIR = Path("C:/Najika_World/lora_merged")
 GGUF_DIR = Path("C:/Najika_World/gguf_models")
-MODELFILE_SFW_PATH = Path("C:/Najika_World/backend/najika-trained.Modelfile")
-MODELFILE_NSFW_PATH = Path("C:/Najika_World/backend/najika-nsfw-trained.Modelfile")
+MODELFILE_SFW_PATH = Path("C:/Najika_World/backend/najika-trained-q4.Modelfile")
+MODELFILE_NSFW_PATH = Path("C:/Najika_World/backend/najika-nsfw-trained-q4.Modelfile")
 
 # Base Model (muss mit dem übereinstimmen worauf LoRA trainiert wurde!)
-BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct"
+# 2026-02-10: Qwen2.5 statt Llama-3.1 (Training nutzt jetzt Qwen2.5!)
+BASE_MODEL = "Qwen/Qwen2.5-7B-Instruct"
 
 # Quantisierung
 QUANTIZATION = "q4_K_M"  # Guter Kompromiss: Qualität vs Größe für 8GB VRAM
@@ -388,17 +389,16 @@ def _extract_modelfile_parts(modelfile_path):
 
 
 def _build_trained_modelfile(gguf_path, system_msg, messages, params, stop_token):
-    """Baut eine Modelfile mit Llama-3.1 Template"""
+    """Baut eine Modelfile mit ChatML Template (Qwen2.5)"""
     content = f'FROM {gguf_path}\n\n'
 
-    # Template (Llama-3.1 Format!)
-    content += '''TEMPLATE """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
-
-{{ .System }}<|eot_id|><|start_header_id|>user<|end_header_id|>
-
-{{ .Prompt }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-
-{{ .Response }}<|eot_id|>"""
+    # Template (ChatML Format für Qwen2.5!)
+    content += '''TEMPLATE """<|im_start|>system
+{{ .System }}<|im_end|>
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+{{ .Response }}<|im_end|>"""
 
 '''
 
@@ -445,13 +445,13 @@ def step4_create_modelfiles(gguf_path):
         "num_predict": 300,
     }
 
-    sfw_content = _build_trained_modelfile(gguf_path, sfw_system, sfw_messages, sfw_params, "<|eot_id|>")
+    sfw_content = _build_trained_modelfile(gguf_path, sfw_system, sfw_messages, sfw_params, "<|im_end|>")
 
     with open(MODELFILE_SFW_PATH, 'w', encoding='utf-8') as f:
         f.write(sfw_content)
 
     print(f"     ✅ {MODELFILE_SFW_PATH.name} ({len(sfw_messages)} Examples)")
-    created.append(("najika-trained", str(MODELFILE_SFW_PATH)))
+    created.append(("najika-trained-q4", str(MODELFILE_SFW_PATH)))
 
     # ═══════════════════════════════════════
     # NSFW Model (najika-nsfw-trained)
@@ -472,23 +472,23 @@ def step4_create_modelfiles(gguf_path):
         "num_ctx": 8192,
         "temperature": 0.85,
         "top_p": 0.90,
-        "repeat_penalty": 1.1,
+        "repeat_penalty": 1.15,
         "top_k": 40,
         "num_predict": 400,
     }
 
-    nsfw_content = _build_trained_modelfile(gguf_path, nsfw_system, nsfw_messages, nsfw_params, "<|eot_id|>")
+    nsfw_content = _build_trained_modelfile(gguf_path, nsfw_system, nsfw_messages, nsfw_params, "<|im_end|>")
 
     with open(MODELFILE_NSFW_PATH, 'w', encoding='utf-8') as f:
         f.write(nsfw_content)
 
     print(f"     ✅ {MODELFILE_NSFW_PATH.name} ({len(nsfw_messages)} Examples)")
-    created.append(("najika-nsfw-trained", str(MODELFILE_NSFW_PATH)))
+    created.append(("najika-nsfw-trained-q4", str(MODELFILE_NSFW_PATH)))
 
     print()
     print(f"  ✅ {len(created)} Modelfiles erstellt!")
     print(f"     GGUF: {gguf_path}")
-    print(f"     Template: Llama-3.1 Chat Format")
+    print(f"     Template: ChatML (Qwen2.5)")
 
     return created
 
@@ -645,7 +645,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     print()
-    input("Drücke ENTER um den Merge-Prozess zu starten...")
+    print("Starte Merge-Prozess automatisch...")
 
     # Schritt 1: Merge
     success = step1_merge_lora()
@@ -678,10 +678,7 @@ if __name__ == "__main__":
         print("⚠️  Nicht alle Models erstellt - prüfe Fehler oben")
 
     # Schritt 6: Server-Config updaten
-    print()
-    response = input("Server-Config automatisch updaten? [j/n]: ").strip().lower()
-    if response == 'j':
-        step6_update_server_config()
+    step6_update_server_config()
 
     print()
     print("=" * 60)

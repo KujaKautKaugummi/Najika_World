@@ -1,0 +1,4418 @@
+[
+  {
+    "id": "emotion_2025-10-16T16:28:16.541822",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T16:28:16.541822",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T16:28:17.004587",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T16:28:17.004587"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:00:46.552221",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T17:00:46.552221"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:01:03.384458",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T17:01:03.384458",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:01:17.304497",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T17:01:17.304497"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:01:30.526594",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T17:01:30.526594"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:16:39.744688",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T17:16:39.744688",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:20:50.867227",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T17:20:50.867227"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:26:21.553217",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T17:26:21.553217"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:26:38.606717",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T17:26:38.606717",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T17:27:03.318593",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T17:27:03.318593",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:07:30.510574",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:07:30.510574"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:07:35.701036",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:07:35.701036",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:08:12.008957",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:08:12.008957"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:08:38.888042",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:08:38.888042"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:22:30.921510",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:22:30.921510"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:24:04.207456",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:24:04.207456"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:38:37.313091",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:38:37.313091"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:38:59.056913",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:38:59.056913",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:39:24.081724",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:39:24.081724",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:39:43.434181",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:39:43.434181",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:40:06.088696",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:40:06.088696"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:40:28.728537",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:40:28.728537",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:40:45.865718",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T18:40:45.865718",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:49:09.462136",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:49:09.462136"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:49:50.593819",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:49:50.593819"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:54:30.742446",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:54:30.742446"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:57:04.190365",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:57:04.190365"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T18:57:51.243848",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T18:57:51.243848"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:05:03.977780",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:05:03.977780",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:06:18.762024",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T19:06:18.762024"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:08:13.632158",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:08:13.632158",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:25:27.177742",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T19:25:27.177742"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:28:11.173035",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:28:11.173035",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:28:33.411867",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:28:33.411867",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:29:30.594852",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T19:29:30.594852"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:34:18.955827",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:34:18.955827",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:42:24.594090",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T19:42:24.594090",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:43:24.175495",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T19:43:24.175495"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T19:56:57.511236",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T19:56:57.511236"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T20:50:10.852582",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T20:50:10.852582",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T20:53:20.843370",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T20:53:20.843370",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T20:56:37.570818",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T20:56:37.570818",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:00:36.232004",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T21:00:36.232004"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:24:59.563263",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T21:24:59.563263"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:25:36.573109",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T21:25:36.573109"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:45:02.855145",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T21:45:02.855145"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:46:08.202447",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T21:46:08.202447",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:47:23.806733",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T21:47:23.806733",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T21:50:25.239678",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T21:50:25.239678",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:02:31.703440",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:02:31.703440",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:03:12.719376",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:03:12.719376"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:11:21.927506",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:11:21.927506"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:12:49.411925",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:12:49.411925"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:13:24.384795",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:13:24.384795",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:14:34.525321",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:14:34.525321",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:15:42.891262",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:15:42.891262",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:23:17.185493",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:23:17.185493",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:23:45.138752",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:23:45.138752"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:24:18.767669",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:24:18.767669"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:24:55.201023",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:24:55.201023",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:26:01.485405",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:26:01.485405",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:26:54.966584",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:26:54.966584"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:27:24.911745",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:27:24.911745",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:27:54.877572",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:27:54.877572"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:29:12.735392",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:29:12.735392",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:37:43.010875",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-16T22:37:43.010875"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:39:00.154797",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:39:00.154797",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:39:52.724210",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:39:52.724210",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:41:17.077542",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:41:17.077542",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-16T22:42:02.704050",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-16T22:42:02.704050",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T00:58:31.897060",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.5000000000000013, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T00:58:31.897060"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T00:59:22.063772",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.6000000000000014, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T00:59:22.063772",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T00:59:42.940870",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.7000000000000015, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T00:59:42.940870",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T01:00:34.371091",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.8000000000000016, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T01:00:34.371091"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:33:19.482902",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:33:19.482902",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:34:00.029793",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:34:00.029793",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:34:26.979474",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:34:26.979474"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:35:14.693825",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:35:14.693825"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:35:53.537668",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:35:53.537668",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:36:53.421225",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:36:53.421225",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:39:28.296906",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:39:28.296906"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:41:20.922768",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:41:20.922768"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:45:39.018930",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:45:39.018930",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:48:56.827912",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:48:56.827912"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:51:04.548609",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:51:04.548609"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:55:16.540326",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:55:16.540326"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:57:33.307972",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:57:33.307972",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:58:20.199187",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T09:58:20.199187"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T09:59:32.552938",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.5000000000000013, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T09:59:32.552938",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:03:05.205215",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.6000000000000014, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:03:05.205215",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:06:02.216360",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.7000000000000015, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:06:02.216360",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:06:54.009977",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.8000000000000016, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:06:54.009977",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:08:56.624048",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.9000000000000017, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T10:08:56.624048"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:10:25.236572",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.0000000000000018, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T10:10:25.236572"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:11:21.675774",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.100000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:11:21.675774",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:12:31.878469",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.200000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:12:31.878469",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:13:22.895652",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.300000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:13:22.895652",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:13:58.350934",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.400000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:13:58.350934",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T10:15:44.185844",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.500000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T10:15:44.185844",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:45:49.252133",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.6000000000000023, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:45:49.252133",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:47:44.706456",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.7000000000000024, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:47:44.706456"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:48:19.848937",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 3.8000000000000025, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:48:19.848937"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:48:52.278147",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 3.9000000000000026, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:48:52.278147"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:49:08.397762",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 4.000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:49:08.397762"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:51:19.329268",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 4.100000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:51:19.329268"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:52:30.080817",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 4.200000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:52:30.080817",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:52:53.298407",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 70, \"relationship_level\": 4.300000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:52:53.298407"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:53:28.920475",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 80, \"relationship_level\": 4.400000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:53:28.920475"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:53:50.019399",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 85, \"arousal\": 90, \"relationship_level\": 4.500000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:53:50.019399",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:54:31.530559",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 90, \"arousal\": 100, \"relationship_level\": 4.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:54:31.530559",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:55:11.221326",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 95, \"arousal\": 100, \"relationship_level\": 4.7, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:55:11.221326"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:55:43.047786",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 100, \"relationship_level\": 4.8, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:55:43.047786",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:56:47.635541",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 100, \"relationship_level\": 4.8999999999999995, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:56:47.635541"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:57:09.617373",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 100, \"relationship_level\": 4.999999999999999, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:57:09.617373"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:57:19.871520",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 98, \"relationship_level\": 5.099999999999999, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:57:19.871520",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:57:39.820788",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 96, \"relationship_level\": 5.199999999999998, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:57:39.820788"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:58:03.481205",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 94, \"relationship_level\": 5.299999999999998, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:58:03.481205",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:58:32.098444",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 92, \"relationship_level\": 5.399999999999998, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:58:32.098444",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:58:38.617141",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 90, \"relationship_level\": 5.499999999999997, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:58:38.617141"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:59:08.308612",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 88, \"relationship_level\": 5.599999999999997, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T11:59:08.308612"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:59:21.431504",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 86, \"relationship_level\": 5.699999999999997, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:59:21.431504",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T11:59:51.466011",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 84, \"relationship_level\": 5.799999999999996, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T11:59:51.466011",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T12:00:16.569053",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 82, \"relationship_level\": 5.899999999999996, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T12:00:16.569053",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T12:00:36.617729",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 80, \"relationship_level\": 5.999999999999996, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-17T12:00:36.617729",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T17:01:51.573616",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 78, \"relationship_level\": 6.099999999999995, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T17:01:51.573616"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T17:02:04.996339",
+    "document": "{\"love\": 59, \"happiness\": 65, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 76, \"relationship_level\": 6.199999999999995, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T17:02:04.996339"
+    }
+  },
+  {
+    "id": "emotion_2025-10-17T17:03:23.313569",
+    "document": "{\"love\": 62, \"happiness\": 70, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 74, \"relationship_level\": 6.2999999999999945, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-17T17:03:23.313569"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T01:58:57.722597",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T01:58:57.722597"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:00:06.958676",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:00:06.958676"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:00:40.269845",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:00:40.269845"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:01:04.178143",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:01:04.178143",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:01:22.246996",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:01:22.246996"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:01:54.726801",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:01:54.726801"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:02:35.571283",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:02:35.571283"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:03:13.999713",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 70, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:03:13.999713"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:03:41.504724",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 80, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:03:41.504724",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:04:17.787024",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 85, \"arousal\": 90, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:04:17.787024"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:05:12.080629",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 90, \"arousal\": 100, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:05:12.080629",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:06:07.806834",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 95, \"arousal\": 100, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:06:07.806834"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:06:54.316541",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 95, \"arousal\": 98, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:06:54.316541",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:07:35.187352",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 95, \"arousal\": 96, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:07:35.187352"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:20:49.849948",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:20:49.849948",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:21:49.100293",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:21:49.100293",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:22:34.935460",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:22:34.935460",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:24:29.482694",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T02:24:29.482694",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T02:24:43.955187",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 58, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T02:24:43.955187"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T10:10:20.943539",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T10:10:20.943539"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T10:10:41.386674",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T10:10:41.386674",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T10:18:53.997937",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T10:18:53.997937",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T10:20:21.404889",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T10:20:21.404889",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T15:35:30.987920",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T15:35:30.987920"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T15:41:09.701868",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T15:41:09.701868",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T15:41:46.166540",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T15:41:46.166540"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T15:42:04.970950",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T15:42:04.970950",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T17:05:58.658225",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T17:05:58.658225",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T17:28:51.499195",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T17:28:51.499195",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:04:00.254896",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T21:04:00.254896"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:05:45.186200",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-18T21:05:45.186200"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:07:01.509039",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T21:07:01.509039",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:07:36.486222",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T21:07:36.486222",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:09:02.529944",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T21:09:02.529944",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-18T21:09:41.544072",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-18T21:09:41.544072",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-22T08:00:51.409329",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-22T08:00:51.409329",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-22T08:03:27.935113",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-22T08:03:27.935113"
+    }
+  },
+  {
+    "id": "emotion_2025-10-22T08:03:56.736153",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-22T08:03:56.736153"
+    }
+  },
+  {
+    "id": "emotion_2025-10-22T08:04:19.132538",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-22T08:04:19.132538",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-22T08:50:57.467520",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-22T08:50:57.467520",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T01:58:14.679706",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-23T01:58:14.679706",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T01:59:53.898740",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-23T01:59:53.898740",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T02:01:04.439696",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-23T02:01:04.439696",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T20:06:51.054192",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-23T20:06:51.054192",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T20:07:21.203540",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-23T20:07:21.203540"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T20:09:27.947767",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-23T20:09:27.947767"
+    }
+  },
+  {
+    "id": "emotion_2025-10-23T20:09:58.014792",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-23T20:09:58.014792",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-24T21:36:23.242740",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-24T21:36:23.242740",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-24T21:36:57.119423",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-24T21:36:57.119423",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-24T21:37:32.686134",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-24T21:37:32.686134"
+    }
+  },
+  {
+    "id": "emotion_2025-10-24T21:38:27.562841",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-24T21:38:27.562841"
+    }
+  },
+  {
+    "id": "emotion_2025-10-24T21:39:21.657902",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-24T21:39:21.657902"
+    }
+  },
+  {
+    "id": "emotion_2025-10-25T21:33:28.793579",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-25T21:33:28.793579",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-25T22:24:28.248791",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-25T22:24:28.248791"
+    }
+  },
+  {
+    "id": "emotion_2025-10-25T22:25:20.162147",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-25T22:25:20.162147",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-26T15:30:58.894120",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-26T15:30:58.894120"
+    }
+  },
+  {
+    "id": "emotion_2025-10-28T12:09:14.203713",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-28T12:09:14.203713",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-28T12:10:30.476994",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-28T12:10:30.476994"
+    }
+  },
+  {
+    "id": "emotion_2025-10-28T12:11:01.631174",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-28T12:11:01.631174",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-28T12:18:20.084467",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-28T12:18:20.084467"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T21:51:38.754858",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-29T21:51:38.754858",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:31:19.475405",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-29T22:31:19.475405"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:33:18.809806",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-29T22:33:18.809806",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:37:56.785524",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-29T22:37:56.785524"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:41:59.292170",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-29T22:41:59.292170"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:44:28.442252",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-29T22:44:28.442252"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:46:51.555960",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-29T22:46:51.555960"
+    }
+  },
+  {
+    "id": "emotion_2025-10-29T22:50:01.379361",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-29T22:50:01.379361",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:26:31.195933",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:26:31.195933"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:27:33.672234",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:27:33.672234"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:29:05.616645",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:29:05.616645"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:30:19.043449",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-30T08:30:19.043449",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:30:52.480874",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:30:52.480874"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:31:46.362831",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:31:46.362831"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:41:26.133254",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:41:26.133254"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:42:11.055676",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-30T08:42:11.055676",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:48:00.751259",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-30T08:48:00.751259",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:49:18.228803",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:49:18.228803"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T08:54:15.581609",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T08:54:15.581609"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T09:03:10.589746",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T09:03:10.589746"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T09:09:43.070267",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-30T09:09:43.070267",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-30T09:10:50.142460",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-30T09:10:50.142460"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:00:25.803595",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-31T09:00:25.803595"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:01:20.551853",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T09:01:20.551853",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:02:35.818222",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-31T09:02:35.818222"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:04:09.524310",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-31T09:04:09.524310"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:15:19.391700",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T09:15:19.391700",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T09:41:59.816963",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T09:41:59.816963",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T13:58:37.895608",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T13:58:37.895608",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T14:01:08.482550",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T14:01:08.482550",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T14:03:21.510378",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-10-31T14:03:21.510378"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T14:05:29.555830",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T14:05:29.555830",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-10-31T14:07:09.400580",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-10-31T14:07:09.400580",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:14:40.913374",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:14:40.913374"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:15:59.604675",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:15:59.604675",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:17:36.254914",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:17:36.254914",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:21:37.960012",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:21:37.960012",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:22:17.101653",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:22:17.101653"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:35:43.664098",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:35:43.664098"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:44:59.210160",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:44:59.210160"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:48:28.494588",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:48:28.494588",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:49:26.290142",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:49:26.290142"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:52:15.637767",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:52:15.637767"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:53:30.489006",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:53:30.489006",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:54:07.734638",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T08:54:07.734638"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:54:37.110066",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 70, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:54:37.110066",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:55:22.632091",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 80, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:55:22.632091",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:55:46.448689",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 78, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:55:46.448689",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T08:59:10.742355",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 76, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T08:59:10.742355",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T09:29:01.223211",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T09:29:01.223211"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T09:29:13.621081",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T09:29:13.621081",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:37:39.416542",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T19:37:39.416542",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:38:08.566454",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T19:38:08.566454"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:39:20.452774",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 24, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-01T19:39:20.452774"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:55:28.478366",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 22, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T19:55:28.478366",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:56:46.980602",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T19:56:46.980602",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:57:49.424518",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T19:57:49.424518",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-01T19:59:13.832201",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-01T19:59:13.832201",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:43:51.165226",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-02T23:43:51.165226",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:44:29.472446",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-02T23:44:29.472446",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:44:49.618889",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-02T23:44:49.618889",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:45:52.548077",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-02T23:45:52.548077"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:46:52.815597",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-02T23:46:52.815597"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:47:15.117892",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-02T23:47:15.117892",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-02T23:47:40.523743",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-02T23:47:40.523743",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-03T00:02:12.956834",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-03T00:02:12.956834"
+    }
+  },
+  {
+    "id": "emotion_2025-11-03T22:45:19.175752",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-03T22:45:19.175752"
+    }
+  },
+  {
+    "id": "emotion_2025-11-03T22:46:17.472018",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-03T22:46:17.472018",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-03T22:47:01.467534",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-03T22:47:01.467534",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-07T00:06:41.624333",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-07T00:06:41.624333"
+    }
+  },
+  {
+    "id": "emotion_2025-11-07T00:11:12.716406",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-07T00:11:12.716406",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-07T20:18:27.083044",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-07T20:18:27.083044"
+    }
+  },
+  {
+    "id": "emotion_2025-11-07T21:57:58.380963",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-07T21:57:58.380963"
+    }
+  },
+  {
+    "id": "emotion_2025-11-07T22:06:05.380872",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-07T22:06:05.380872",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-09T19:38:15.655458",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-09T19:38:15.655458",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-09T19:39:14.580261",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-09T19:39:14.580261",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-09T19:40:05.414696",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-09T19:40:05.414696",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:50:50.569757",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-11T00:50:50.569757",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:51:43.975551",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-11T00:51:43.975551"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:52:09.322717",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-11T00:52:09.322717",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:52:26.446073",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-11T00:52:26.446073"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:54:20.241742",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-11T00:54:20.241742",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:55:33.076579",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-11T00:55:33.076579",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-11T00:59:00.455547",
+    "document": "{\"love\": 56, \"happiness\": 60, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-11T00:59:00.455547",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:07:43.427601",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-16T20:07:43.427601",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:08:41.290425",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-16T20:08:41.290425"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:09:15.920122",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-16T20:09:15.920122"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:10:47.027237",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-16T20:10:47.027237",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:16:06.138643",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-16T20:16:06.138643",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-16T20:18:19.101940",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-16T20:18:19.101940"
+    }
+  },
+  {
+    "id": "emotion_2025-11-26T23:33:43.964418",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-26T23:33:43.964418"
+    }
+  },
+  {
+    "id": "emotion_2025-11-26T23:34:01.489810",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-26T23:34:01.489810",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T11:01:49.752321",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T11:01:49.752321",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T11:07:33.784290",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T11:07:33.784290"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T11:10:51.380997",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T11:10:51.380997",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:02:27.970630",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T12:02:27.970630"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:02:49.937077",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T12:02:49.937077",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:03:13.674270",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T12:03:13.674270",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:03:44.900392",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T12:03:44.900392",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:04:28.398094",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T12:04:28.398094"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:04:47.656593",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T12:04:47.656593"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T12:05:12.472936",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T12:05:12.472936",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:12:14.042470",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:12:14.042470",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:13:23.910270",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:13:23.910270",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:14:30.549937",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 24, \"relationship_level\": 2.5000000000000013, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T21:14:30.549937"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:16:13.485197",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 22, \"relationship_level\": 2.6000000000000014, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T21:16:13.485197"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:17:13.382694",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.7000000000000015, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:17:13.382694",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:18:38.086377",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.8000000000000016, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:18:38.086377",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:19:58.128312",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.9000000000000017, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T21:19:58.128312"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:20:31.762325",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 3.0000000000000018, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:20:31.762325",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:20:49.840601",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 3.100000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:20:49.840601",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:20:57.316559",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 30, \"relationship_level\": 3.200000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-11-27T21:20:57.316559"
+    }
+  },
+  {
+    "id": "emotion_2025-11-27T21:21:12.843414",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 40, \"relationship_level\": 3.300000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-11-27T21:21:12.843414",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-01T21:26:20.114256",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-01T21:26:20.114256"
+    }
+  },
+  {
+    "id": "emotion_2025-12-01T21:27:00.144641",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-01T21:27:00.144641",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-01T21:27:09.310132",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-01T21:27:09.310132"
+    }
+  },
+  {
+    "id": "emotion_2025-12-02T13:16:33.424706",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-02T13:16:33.424706",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-02T13:16:37.088398",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-02T13:16:37.088398",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-02T13:19:01.263689",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-02T13:19:01.263689",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-02T22:33:30.757732",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-02T22:33:30.757732"
+    }
+  },
+  {
+    "id": "emotion_2025-12-02T22:35:00.284991",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-02T22:35:00.284991",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-03T19:24:49.556952",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-03T19:24:49.556952",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-03T19:25:25.176021",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-03T19:25:25.176021",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:27:46.482225",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:27:46.482225",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:28:48.106124",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:28:48.106124",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:29:17.759842",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:29:17.759842",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:29:30.920413",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-10T19:29:30.920413"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:29:59.598767",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:29:59.598767",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:56:18.178609",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:56:18.178609",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:56:21.262826",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:56:21.262826",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-10T19:57:09.540428",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-10T19:57:09.540428",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T13:31:50.540471",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T13:31:50.540471",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T13:49:00.956860",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T13:49:00.956860",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T13:52:18.825652",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T13:52:18.825652"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T13:55:40.304857",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T13:55:40.304857"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T13:57:29.484118",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T13:57:29.484118"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T14:09:29.229041",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T14:09:29.229041"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T14:46:39.585678",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T14:46:39.585678",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T14:56:30.334981",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T14:56:30.334981"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:10:43.622309",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T21:10:43.622309"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:27:52.834254",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T21:27:52.834254"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:39:32.281905",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T21:39:32.281905"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:42:22.612265",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T21:42:22.612265",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:44:39.286613",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 38, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T21:44:39.286613",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:47:44.279664",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 36, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-29T21:47:44.279664",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-29T21:50:35.187138",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 34, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-29T21:50:35.187138"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T08:56:16.377075",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T08:56:16.377075"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T08:59:05.048129",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T08:59:05.048129",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T09:00:31.794481",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T09:00:31.794481"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T09:02:21.485573",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 24, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T09:02:21.485573",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T09:06:59.683205",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 22, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T09:06:59.683205",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T10:13:38.548541",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T10:13:38.548541",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T13:27:21.609913",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T13:27:21.609913"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T13:30:56.850428",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T13:30:56.850428",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:26:47.442774",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T23:26:47.442774",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:30:27.850907",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T23:30:27.850907",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:35:42.663506",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T23:35:42.663506"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:45:17.786741",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T23:45:17.786741"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:50:41.678909",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T23:50:41.678909",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:52:34.618595",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-30T23:52:34.618595"
+    }
+  },
+  {
+    "id": "emotion_2025-12-30T23:53:15.672142",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-30T23:53:15.672142",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T01:12:26.424562",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T01:12:26.424562",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T01:15:03.796237",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T01:15:03.796237"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T08:45:27.773101",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T08:45:27.773101",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:00:31.580481",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T09:00:31.580481"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:07:04.003355",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T09:07:04.003355",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:14:20.545128",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T09:14:20.545128",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:16:25.763376",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T09:16:25.763376"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:21:19.337348",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 75, \"arousal\": 70, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T09:21:19.337348",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:24:09.065615",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 80, \"arousal\": 80, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T09:24:09.065615"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:40:45.519012",
+    "document": "{\"love\": 53, \"happiness\": 52, \"anger\": 0, \"sadness\": 5, \"excitement\": 85, \"arousal\": 90, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T09:40:45.519012",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:43:00.413639",
+    "document": "{\"love\": 53, \"happiness\": 49, \"anger\": 0, \"sadness\": 10, \"excitement\": 90, \"arousal\": 100, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2025-12-31T09:43:00.413639",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T09:44:00.986297",
+    "document": "{\"love\": 53, \"happiness\": 49, \"anger\": 0, \"sadness\": 10, \"excitement\": 95, \"arousal\": 100, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T09:44:00.986297"
+    }
+  },
+  {
+    "id": "emotion_2025-12-31T20:37:44.458908",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2025-12-31T20:37:44.458908"
+    }
+  },
+  {
+    "id": "emotion_2026-01-01T10:15:18.154269",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-01T10:15:18.154269",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T20:39:59.102035",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-02T20:39:59.102035",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T20:52:04.392630",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 38, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-02T20:52:04.392630"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T20:57:56.412786",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 36, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-02T20:57:56.412786"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T20:59:53.388619",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 34, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-02T20:59:53.388619"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T21:07:27.298357",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 32, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-02T21:07:27.298357",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-02T21:11:57.704273",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 30, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-02T21:11:57.704273",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T08:57:20.203335",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 28, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T08:57:20.203335"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T09:02:21.680827",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 38, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T09:02:21.680827"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T17:28:09.045710",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 48, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T17:28:09.045710"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T18:00:56.710672",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 46, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-03T18:00:56.710672",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T18:07:31.195992",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 44, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-03T18:07:31.195992",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T18:13:22.737801",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 54, \"relationship_level\": 2.300000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T18:13:22.737801"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T18:17:55.981955",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 52, \"relationship_level\": 2.4000000000000012, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T18:17:55.981955"
+    }
+  },
+  {
+    "id": "emotion_2026-01-03T18:22:59.085257",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 80, \"arousal\": 62, \"relationship_level\": 2.5000000000000013, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-03T18:22:59.085257"
+    }
+  },
+  {
+    "id": "emotion_2026-01-04T01:13:59.886545",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 85, \"arousal\": 72, \"relationship_level\": 2.6000000000000014, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-04T01:13:59.886545",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-04T09:08:38.412121",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 90, \"arousal\": 82, \"relationship_level\": 2.7000000000000015, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-04T09:08:38.412121",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-04T09:21:13.216969",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 95, \"arousal\": 92, \"relationship_level\": 2.8000000000000016, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-04T09:21:13.216969",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-04T09:26:15.279618",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 100, \"relationship_level\": 2.9000000000000017, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-04T09:26:15.279618"
+    }
+  },
+  {
+    "id": "emotion_2026-01-04T09:31:25.244607",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 100, \"arousal\": 100, \"relationship_level\": 3.0000000000000018, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-04T09:31:25.244607",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-13T22:04:51.535282",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-13T22:04:51.535282",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-13T22:16:29.999625",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-13T22:16:29.999625"
+    }
+  },
+  {
+    "id": "emotion_2026-01-13T22:30:22.605225",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-13T22:30:22.605225",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-13T22:33:50.901983",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-13T22:33:50.901983",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T08:41:31.998030",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T08:41:31.998030",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T09:55:06.771184",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T09:55:06.771184",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T09:55:37.039119",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T09:55:37.039119",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T09:56:37.953712",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T09:56:37.953712",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T09:57:27.267623",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T09:57:27.267623",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T09:58:07.260796",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 70, \"arousal\": 60, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T09:58:07.260796",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-14T10:06:31.812681",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 75, \"arousal\": 70, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-14T10:06:31.812681",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-18T08:51:11.671435",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-18T08:51:11.671435",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T11:21:20.914729",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-20T11:21:20.914729"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T11:21:47.668564",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T11:21:47.668564",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T11:34:46.879977",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-20T11:34:46.879977"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T13:18:28.572045",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T13:18:28.572045",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T13:57:25.293486",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-20T13:57:25.293486"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T14:01:16.862509",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T14:01:16.862509",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T15:34:54.934761",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T15:34:54.934761",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T15:38:07.864054",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-20T15:38:07.864054"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T15:39:48.721636",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T15:39:48.721636",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T15:59:55.648001",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T15:59:55.648001",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T20:47:08.654294",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-20T20:47:08.654294",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-20T21:14:24.487835",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-20T21:14:24.487835"
+    }
+  },
+  {
+    "id": "emotion_2026-01-21T08:27:28.981368",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-21T08:27:28.981368",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-21T08:32:12.743168",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-21T08:32:12.743168",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-21T08:32:17.168218",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-21T08:32:17.168218",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T08:29:26.699224",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T08:29:26.699224",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T09:34:33.858998",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T09:34:33.858998"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T09:39:09.620440",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T09:39:09.620440",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T09:47:44.375205",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T09:47:44.375205"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T14:23:39.509049",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T14:23:39.509049",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T14:27:26.487804",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T14:27:26.487804",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T14:27:49.752590",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T14:27:49.752590",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T14:33:52.959504",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T14:33:52.959504",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T14:37:50.721344",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T14:37:50.721344",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T19:42:17.356544",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T19:42:17.356544",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T19:55:08.869715",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T19:55:08.869715",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:22:43.600720",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:22:43.600720"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:26:32.817755",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T20:26:32.817755",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:30:48.934916",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T20:30:48.934916",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:32:39.100285",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:32:39.100285"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:33:43.335756",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:33:43.335756"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:36:59.673056",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:36:59.673056"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:38:12.787113",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:38:12.787113"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:41:45.902228",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:41:45.902228"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:42:49.989313",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T20:42:49.989313",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:55:32.368550",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T20:55:32.368550",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:55:57.407299",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:55:57.407299"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:56:26.973097",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:56:26.973097"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:56:41.496618",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-22T20:56:41.496618"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T20:59:52.156526",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T20:59:52.156526",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-22T21:02:37.479342",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-22T21:02:37.479342",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-23T12:01:23.888991",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-23T12:01:23.888991",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-28T14:14:52.992496",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-28T14:14:52.992496",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-28T14:16:17.753402",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-28T14:16:17.753402",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-28T14:33:29.928026",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-28T14:33:29.928026"
+    }
+  },
+  {
+    "id": "emotion_2026-01-28T14:37:33.269488",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-28T14:37:33.269488"
+    }
+  },
+  {
+    "id": "emotion_2026-01-29T09:31:24.500888",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-29T09:31:24.500888"
+    }
+  },
+  {
+    "id": "emotion_2026-01-29T10:42:23.063947",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-29T10:42:23.063947",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T17:59:09.803091",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-30T17:59:09.803091"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T17:59:44.886627",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-01-30T17:59:44.886627"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T18:00:40.113284",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-30T18:00:40.113284",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T18:01:29.404504",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-30T18:01:29.404504",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T18:02:36.950689",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-30T18:02:36.950689",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-01-30T18:03:00.639943",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-01-30T18:03:00.639943",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T16:02:57.522110",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-05T16:02:57.522110"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T16:03:18.267576",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-05T16:03:18.267576",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T16:18:11.747419",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-05T16:18:11.747419"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T21:14:46.413835",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-05T21:14:46.413835",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T21:15:20.783778",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-05T21:15:20.783778"
+    }
+  },
+  {
+    "id": "emotion_2026-02-05T21:15:54.846506",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-05T21:15:54.846506",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T00:52:30.819554",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T00:52:30.819554"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:14:55.609290",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T01:14:55.609290",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:15:18.633071",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T01:15:18.633071"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:15:47.866621",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T01:15:47.866621"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:17:08.695365",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T01:17:08.695365",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:17:55.667800",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T01:17:55.667800",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:18:44.086578",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 38, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T01:18:44.086578",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T01:19:20.349013",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 36, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T01:19:20.349013"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T09:28:36.657263",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T09:28:36.657263",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T09:39:28.858423",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T09:39:28.858423"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T19:58:10.792940",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T19:58:10.792940"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:24:54.081524",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T20:24:54.081524",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:41:52.217897",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T20:41:52.217897",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:42:59.749076",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T20:42:59.749076"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:47:36.805297",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T20:47:36.805297",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:55:48.428422",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 60, \"arousal\": 40, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-08T20:55:48.428422"
+    }
+  },
+  {
+    "id": "emotion_2026-02-08T20:56:11.041228",
+    "document": "{\"love\": 53, \"happiness\": 55, \"anger\": 0, \"sadness\": 0, \"excitement\": 65, \"arousal\": 50, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-08T20:56:11.041228",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:51:12.547916",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:51:12.547916",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:51:54.294878",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:51:54.294878",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:52:26.824258",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:52:26.824258"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:52:44.753428",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:52:44.753428"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:53:45.455406",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:53:45.455406"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:54:02.563891",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:54:02.563891",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:54:07.277623",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:54:07.277623"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:54:15.677895",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:54:15.677895"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:54:25.239101",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:54:25.239101"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:55:43.130909",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:55:43.130909",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:56:29.043035",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:56:29.043035",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:59:05.668849",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T08:59:05.668849"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:59:16.982474",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:59:16.982474",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:59:21.437266",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:59:21.437266",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:59:30.810499",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:59:30.810499",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T08:59:42.070655",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T08:59:42.070655",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T09:01:16.509669",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T09:01:16.509669"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T09:01:31.207731",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 24, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T09:01:31.207731"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T09:01:36.919699",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 22, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T09:01:36.919699"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T09:01:40.976945",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T09:01:40.976945"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:02:27.462705",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T14:02:27.462705"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:06:23.799441",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T14:06:23.799441",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:08:00.008489",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T14:08:00.008489"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:09:40.844435",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T14:09:40.844435",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:09:58.493318",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T14:09:58.493318"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:10:30.395118",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T14:10:30.395118",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:12:27.359071",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T14:12:27.359071"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:12:56.065319",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 30, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T14:12:56.065319"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T14:13:24.862699",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 28, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T14:13:24.862699",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T20:19:00.517906",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 26, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-11T20:19:00.517906",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T20:20:11.323717",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 24, \"relationship_level\": 1.8000000000000007, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T20:20:11.323717"
+    }
+  },
+  {
+    "id": "emotion_2026-02-11T20:26:09.973211",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 22, \"relationship_level\": 1.9000000000000008, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-11T20:26:09.973211"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:26:53.605963",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.000000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T00:26:53.605963"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:27:25.299527",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.100000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:27:25.299527",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:27:38.742238",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 55, \"arousal\": 20, \"relationship_level\": 2.200000000000001, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:27:38.742238",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:35:38.608682",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:35:38.608682",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:36:01.322589",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T00:36:01.322589"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:36:12.257858",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T00:36:12.257858"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:36:27.021001",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:36:27.021001",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:36:36.153394",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:36:36.153394",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T00:36:46.930469",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T00:36:46.930469",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:13:27.382698",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:13:27.382698"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:14:07.575624",
+    "document": "{\"love\": 50, \"happiness\": 44, \"anger\": 0, \"sadness\": 10, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:14:07.575624"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:14:59.572143",
+    "document": "{\"love\": 50, \"happiness\": 44, \"anger\": 0, \"sadness\": 10, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T11:14:59.572143",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:19:41.936650",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T11:19:41.936650",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:23:30.267521",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:23:30.267521"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:25:14.449375",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:25:14.449375"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:25:28.508612",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T11:25:28.508612",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:25:45.086631",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:25:45.086631"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:33:04.690027",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:33:04.690027"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:33:21.583392",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T11:33:21.583392",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T11:35:34.431511",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T11:35:34.431511"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:19:01.212700",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T17:19:01.212700",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:37:20.833042",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T17:37:20.833042",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:37:42.422528",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T17:37:42.422528"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:38:13.412082",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T17:38:13.412082",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:38:37.034478",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-12T17:38:37.034478"
+    }
+  },
+  {
+    "id": "emotion_2026-02-12T17:40:59.114190",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-12T17:40:59.114190",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:34:31.826971",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:34:31.826971"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:34:44.182435",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:34:44.182435"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:37:12.498973",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:37:12.498973"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:42:47.891215",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T00:42:47.891215",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:44:19.510738",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:44:19.510738"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:44:36.263645",
+    "document": "{\"love\": 50, \"happiness\": 44, \"anger\": 0, \"sadness\": 10, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T00:44:36.263645",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:44:53.299932",
+    "document": "{\"love\": 50, \"happiness\": 41, \"anger\": 0, \"sadness\": 15, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T00:44:53.299932",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:45:06.042769",
+    "document": "{\"love\": 50, \"happiness\": 41, \"anger\": 0, \"sadness\": 15, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:45:06.042769"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:45:14.110208",
+    "document": "{\"love\": 50, \"happiness\": 41, \"anger\": 0, \"sadness\": 15, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.6000000000000005, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:45:14.110208"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T00:45:20.961554",
+    "document": "{\"love\": 50, \"happiness\": 41, \"anger\": 0, \"sadness\": 15, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.7000000000000006, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T00:45:20.961554"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:11:18.814230",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T08:11:18.814230"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:11:37.651274",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T08:11:37.651274"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:11:56.209200",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T08:11:56.209200"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:16:18.793125",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T08:16:18.793125",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:33:22.082152",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T08:33:22.082152",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:39:52.669548",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T08:39:52.669548",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:40:03.979792",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T08:40:03.979792"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T08:42:26.958184",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T08:42:26.958184",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T13:21:31.362173",
+    "document": "{\"love\": 50, \"happiness\": 50, \"anger\": 0, \"sadness\": 0, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.1, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T13:21:31.362173"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T13:21:43.245850",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.2000000000000002, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T13:21:43.245850",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T13:21:52.817613",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.3000000000000003, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T13:21:52.817613",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T13:22:05.399449",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.4000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "timestamp": "2026-02-13T13:22:05.399449",
+      "type": "emotion_state"
+    }
+  },
+  {
+    "id": "emotion_2026-02-13T13:22:15.983293",
+    "document": "{\"love\": 50, \"happiness\": 47, \"anger\": 0, \"sadness\": 5, \"excitement\": 50, \"arousal\": 20, \"relationship_level\": 1.5000000000000004, \"trust\": 50, \"intimacy\": 10}",
+    "metadata": {
+      "type": "emotion_state",
+      "timestamp": "2026-02-13T13:22:15.983293"
+    }
+  }
+]

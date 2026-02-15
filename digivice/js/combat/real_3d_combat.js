@@ -23,6 +23,7 @@
     // ==========================================
 
     let combatActive = false;
+    window.combatActive = false;
     let combatMode = 'MANUAL'; // MANUAL, AUTO, CHEER
     let currentEnemies = [];
     let playerStats = {
@@ -670,6 +671,11 @@
 
     function startCombat(enemyList, scene, position) {
         combatActive = true;
+        window.combatActive = true;
+        // WICHTIG: Fokus von Chat/Input-Feldern nehmen damit Keyboard-Controls funktionieren!
+        if (document.activeElement && document.activeElement.tagName !== 'BODY') {
+            document.activeElement.blur();
+        }
         currentEnemies = [];
         collectedLoot = [];
         totalXPEarned = 0;
@@ -940,6 +946,7 @@
 
     function victory() {
         combatActive = false;
+        window.combatActive = false;
         combatMode = 'MANUAL'; // Modus zurücksetzen
         stopCombatLoop();
         stopAutoMode();
@@ -986,6 +993,7 @@
 
     function gameOver() {
         combatActive = false;
+        window.combatActive = false;
         stopCombatLoop();
         stopAutoMode();
         hideFinisherQTE();
@@ -1098,6 +1106,13 @@
             z-index: 900;
             border-top: 2px solid #ff4444;
         `;
+        // Event-Delegation: Close-Button Click einmal registrieren (ueberlebt innerHTML Updates)
+        hud.addEventListener('click', (e) => {
+            if (e.target.id === 'exit-real-combat' || e.target.closest('#exit-real-combat')) {
+                e.stopPropagation();
+                endCombat();
+            }
+        });
         document.body.appendChild(hud);
 
         updateCombatHUD();
@@ -1167,20 +1182,8 @@
 
         const exitBtn = document.getElementById('exit-real-combat');
         if (exitBtn) {
-            exitBtn._confirmPending = false;
             exitBtn.addEventListener('click', () => {
-                if (!exitBtn._confirmPending) {
-                    exitBtn._confirmPending = true;
-                    exitBtn.textContent = '⚠️ Sicher?';
-                    exitBtn.style.background = '#c0392b';
-                    setTimeout(() => {
-                        exitBtn._confirmPending = false;
-                        exitBtn.textContent = '🚪 Exit';
-                        exitBtn.style.background = '';
-                    }, 3000);
-                } else {
-                    endCombat();
-                }
+                endCombat();
             });
         }
     }
@@ -1192,6 +1195,7 @@
 
     function endCombat() {
         combatActive = false;
+        window.combatActive = false;
         combatMode = 'MANUAL'; // Modus zurücksetzen
         stopCombatLoop();
         stopAutoMode();
@@ -1320,6 +1324,11 @@
                 case 'x':
                     // Finisher trigger
                     triggerFinisher();
+                    break;
+                case 'escape':
+                    // Exit combat with Escape key
+                    e.preventDefault();
+                    endCombat();
                     break;
 
                 // CHEER Mode buttons (1-4)

@@ -57,7 +57,7 @@ class ChaosEventUI {
 
     async checkForEvent() {
         try {
-            const response = await fetch('http://localhost:8000/api/chaos/check_event');
+            const response = await fetch('http://localhost:8001/api/chaos/check_event');
             const data = await response.json();
 
             if (data.event_triggered) {

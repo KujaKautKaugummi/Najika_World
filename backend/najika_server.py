@@ -729,19 +729,14 @@ def build_prompt(history, user_text):
     context_parts = [p for p in [bond_context, living_context, memory_context, mode_addition] if p]
     context_line = " ".join(context_parts) if context_parts else ""
 
-    # KRITISCHER FIX: Explizite Anweisung, auf Kujas LETZTE Nachricht zu reagieren
-    # Das verhindert, dass Najika generische/wiederholte Antworten gibt
-    response_instruction = (
-        "WICHTIG: Reagiere DIREKT auf Kujas letzte Nachricht! "
-        "Wenn er eine Frage stellt, beantworte sie! "
-        "Wenn er etwas erzaehlt, geh darauf ein! "
-        "Wiederhole NICHT was du vorher gesagt hast!"
-    )
+    # Kontext fuer den Prompt - KEIN expliziter Befehl, nur Kontext.
+    # Die Modelfile hat bereits die perfekte Persona und Few-Shot Examples.
+    # Zusaetzliche Anweisungen verwirren das 7B-Model und brechen den Charakter.
 
     if ctx:
-        return f"{context_line}\n\n{response_instruction}\n\nGespraechsverlauf:\n{ctx}\n\nKuja: {user_text}\nNajika:"
+        return f"{context_line}\n\nGespraechsverlauf:\n{ctx}\n\nKuja: {user_text}\nNajika:"
     else:
-        return f"{context_line}\n\n{response_instruction}\n\nKuja: {user_text}\nNajika:"
+        return f"{context_line}\n\nKuja: {user_text}\nNajika:"
 
 def clean_najika_response(response):
     """
@@ -752,10 +747,15 @@ def clean_najika_response(response):
     """
     import re
 
-    # ===== NEU: Entferne "User: xyz" Prompt-Echo am Anfang =====
+    # ===== NEU: Entferne "User: xyz" Prompt-Echo =====
     # Ollama wiederholt manchmal den User-Input im Response
+    # Am Anfang:
     response = re.sub(r'^User:\s*[^\n]+\s*\n*', '', response, flags=re.IGNORECASE)
     response = re.sub(r'^Kuja:\s*[^\n]+\s*\n*', '', response, flags=re.IGNORECASE)
+    # Mid-Text: Alles ab "User:" abschneiden (Model generiert Fake-Dialog)
+    user_mid = re.search(r'\nUser:', response, re.IGNORECASE)
+    if user_mid and user_mid.start() > 20:
+        response = response[:user_mid.start()].strip()
 
     # Entferne "Ich kann als Najika antworten:" Präfix
     patterns = [
@@ -809,8 +809,11 @@ def clean_najika_response(response):
             if last_closed > 0:
                 response = response[:last_closed+1].strip()
 
-    # Entferne "Najika:" Präfix wenn vorhanden (Najika soll direkt sprechen)
+    # Entferne "Najika:" und "Assistant:" Präfix
     response = re.sub(r'^Najika:\s*', '', response, flags=re.MULTILINE)
+    response = re.sub(r'^Assistant:\s*', '', response, flags=re.MULTILINE)
+    # Entferne Trainings-Artefakte in eckigen Klammern
+    response = re.sub(r'\[(?:Ersetzen|Beispiel|Alternative|Hinweis|Note)[^\]]*\]', '', response)
 
     # ===== BOT-SPRACHE FILTER =====
     # Najika soll Kuja NIEMALS "Kätzchen", "meine Liebe" etc. nennen
@@ -820,6 +823,7 @@ def clean_najika_response(response):
         "Hey Kätzchen": "Hey Kuja",
         "hey kätzchen": "Hey Kuja",
         "meine Liebe": "Kuja",
+        "mein Lieber": "Kuja",
         "mein Schatz": "Kuja",
         "mein Liebling": "Mr.K",
         "Paradies-Urlaubszeit": "",
@@ -828,6 +832,88 @@ def clean_najika_response(response):
     for bad, good in bot_phrases.items():
         if bad in response:
             response = response.replace(bad, good)
+
+    # ===== WINDOWS LINE ENDINGS =====
+    response = response.replace('\r\n', '\n').strip()
+
+    # ===== LORA-MÜLL: Meta-Text, Markdown, Hashtags, Listen =====
+    # Das LoRA-Training hat diverse Artefakte gelernt die rausmüssen.
+
+    # Schneide ab bestimmten Müll-Markern komplett ab
+    cutoff_markers = [
+        '\n###',           # Markdown headers
+        '\n---',           # Markdown separators
+        '\n[PAST RESPONSE]', '\n[ACTUAL CONTEXT]', '\n[Neue Nachricht]',
+        '\nHinweis:', '\nErinnerung:', '\nP.S.:', '\nP.S:',
+        '\nWie findest du', '\nWas möchtest DU',   # Meta-Fragen an den "User"
+        '\nDaher antworten:', '\nNajikas Antwort',
+        '\nNach kurzem', '\nUnd jetzt weiter',
+        '\n(Danke ', '\n(Keine Meta',
+        '\n120 Wörter', '\nNur Antworten von',
+    ]
+    for marker in cutoff_markers:
+        idx = response.find(marker)
+        if idx > 10:  # Nur abschneiden wenn genug davor steht
+            response = response[:idx].strip()
+
+    # Entferne Hashtags (#najikaloveexplosion etc.)
+    response = re.sub(r'#\w{5,}', '', response)
+
+    # Entferne Zeilen die mit "-" starten (Bullet-Listen = nicht Najika-Style)
+    lines = response.split('\n')
+    clean_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith('- "') or stripped.startswith('- \''):
+            continue  # Bullet-Point mit Quotes = Müll-Liste
+        if stripped.startswith('- ') and not stripped.startswith('- *'):
+            continue  # Bullet-Point = Müll (aber "- *kichert*" wäre OK)
+        if re.match(r'^\d+[.)]\s', stripped):
+            continue  # Nummerierte Liste = Müll
+        clean_lines.append(line)
+    response = '\n'.join(clean_lines).strip()
+
+    # ===== MULTI-TURN CUTOFF =====
+    # Das 7B-Model generiert manchmal mehrere "Turns" in einer Antwort.
+    # Behalte bis zu 3 Absaetze wenn sie sinnvoll sind.
+    if '\n\n' in response:
+        paragraphs = [p.strip() for p in response.split('\n\n') if p.strip()]
+        # Behalte maximal 3 Absaetze (genuegend fuer natuerliche Antwort)
+        good_paragraphs = []
+        for i, p in enumerate(paragraphs[:3]):
+            # Erkenne Muell-Absaetze: zu viele Emojis, repetitiv, oder Meta
+            if i > 0 and len(p) < 5:
+                continue  # Leerer/Mini Absatz
+            good_paragraphs.append(p)
+        response = '\n\n'.join(good_paragraphs) if good_paragraphs else paragraphs[0]
+
+    # ===== REPEATED BLOCK DETECTION =====
+    sentences = re.split(r'(?<=[.!?✨💕💥💜])\s+', response)
+    if len(sentences) > 2:
+        seen = set()
+        clean_sentences = []
+        for s in sentences:
+            norm = re.sub(r'[*💕💥✨💜😏🥺😤\s]+', ' ', s.lower()).strip()
+            if len(norm) < 5:
+                clean_sentences.append(s)
+                continue
+            if norm in seen:
+                break
+            seen.add(norm)
+            clean_sentences.append(s)
+        response = ' '.join(clean_sentences)
+
+    # Entferne "Kuja-Baby" (nicht im Charakter-Vokabular)
+    response = response.replace("Kuja-Baby", "Kuja")
+    response = response.replace("K-J-Kuja-Baby", "K-Kuja")
+    response = response.replace("K-J-J-Kuja", "K-Kuja")
+    response = response.replace("Kuja-baby", "Kuja")
+
+    # Letzte Bereinigung: Entferne trailing Emojis-only oder leere Reste
+    response = response.strip()
+    if not response or len(re.sub(r'[\s*💕💥✨💜😏🥺😤💖❤️🔥💙🥰😊😉💕]', '', response)) < 3:
+        # Antwort ist nur Emojis/Sternchen → Fallback
+        response = "*huepft aufgeregt* Kuja! 💕"
 
     return response.strip()
 
@@ -890,9 +976,9 @@ OLLAMA_URL = "http://localhost:11434"
 # Dual-Model System (Ollama)
 # Trainierte Models werden bevorzugt wenn verfuegbar (nach LoRA-Pipeline)
 OLLAMA_MODELS = {
-    "chat": "najika-trained:latest",         # Chat, Normal-Modus
-    "nsfw": "najika-nsfw-trained:latest",           # Kaetzchen-Modus (NSFW)
-    "instruct": "qwen2-instruct:latest"     # Tasks, Code, Mathe
+    "chat": "najika-natural:latest",          # Chat, Normal-Modus (bereinigtes Modelfile!)
+    "nsfw": "najika-nsfw-natural:latest",     # Kaetzchen-Modus (bereinigtes NSFW Modelfile!)
+    "instruct": "qwen2-instruct:latest"      # Tasks, Code, Mathe
 }
 
 # Auto-Detect: Wenn trainierte Models existieren, nutze die!
@@ -904,16 +990,19 @@ def _detect_trained_models():
             available = result.stdout
             # Zeile-fuer-Zeile pruefen (sicherer als substring match)
             lines = available.lower().split('\n')
-            has_sfw = any("najika-trained" in line and "nsfw" not in line for line in lines)
-            has_nsfw = any("najika-nsfw-trained" in line for line in lines)
-            if has_sfw:
-                # najika-trained existiert (SFW)
-                OLLAMA_MODELS["chat"] = "najika-trained:latest"
-                log("INFO", "Trainiertes SFW-Model gefunden: najika-trained", "OLLAMA")
-            if has_nsfw:
-                # najika-nsfw-trained existiert (NSFW)
-                OLLAMA_MODELS["nsfw"] = "najika-nsfw-trained:latest"
-                log("INFO", "Trainiertes NSFW-Model gefunden: najika-nsfw-trained", "OLLAMA")
+            has_natural = any("najika-natural" in line for line in lines)
+            has_nsfw_natural = any("najika-nsfw-natural" in line for line in lines)
+            # NUR najika-natural und najika-nsfw-natural - KEIN Fallback auf alten Schrott!
+            if has_natural:
+                OLLAMA_MODELS["chat"] = "najika-natural:latest"
+                log("INFO", "SFW-Model: najika-natural", "OLLAMA")
+            else:
+                log("WARNING", "najika-natural NICHT gefunden! Bitte START.bat ausfuehren!", "OLLAMA")
+            if has_nsfw_natural:
+                OLLAMA_MODELS["nsfw"] = "najika-nsfw-natural:latest"
+                log("INFO", "NSFW-Model: najika-nsfw-natural", "OLLAMA")
+            else:
+                log("WARNING", "najika-nsfw-natural NICHT gefunden! Bitte START.bat ausfuehren!", "OLLAMA")
     except Exception as e:
         pass  # Kein Problem - nutze defaults
 
@@ -967,11 +1056,11 @@ def call_ollama(prompt, use_wizard=False, user_message=None):
     # NSFW/Kaetzchen-Modus: Optimierte Parameter (kurz, direkt, explizit)
     # Normal: Standard Parameter
     if use_wizard:
-        temperature = 0.85  # Hoeher = kreativer & expliziter
-        num_predict = 600   # Kuerzer = direkter auf den Punkt (2-4 Saetze)
+        temperature = 0.85  # NSFW braucht etwas mehr Kreativitaet
+        num_predict = 600   # Kätzchen braucht mehr Platz
     else:
-        temperature = 0.70  # Normal = kohaerenter
-        num_predict = 400   # Standard
+        temperature = 0.80  # Passend zum najika-natural Modelfile (0.80)
+        num_predict = 500   # Mehr Platz fuer natuerliche Antworten - clean_najika_response kuerzt Muell
 
     # RAG: Erweitere Prompt mit relevantem Wissen (falls aktiviert und nicht NSFW)
     enhanced_prompt = prompt
@@ -988,34 +1077,24 @@ def call_ollama(prompt, use_wizard=False, user_message=None):
     # Die Modelfile-SYSTEM und MESSAGE-Examples werden automatisch geladen!
     # Wir fügen nur den aktuellen Gesprächsverlauf als messages hinzu.
 
-    # Kontext-Anreicherung (Bond, Mood, Mode) - wird als System-Ergänzung mitgegeben
+    # Kontext-Anreicherung (Bond, Mode) - wird als Prefix zur User-Message
     mode = STATE.get("behavior_mode", "standard")
     bond = STATE.get("bond_strength", 0)
     mode_addition = get_mode_prompt_addition(mode) if mode != "standard" else ""
 
-    context_hints = []
+    # Baue Kontext-Prefix für die User-Message (NICHT als system-Message!)
+    # Die Modelfile hat die PERFEKTE Megumin-Persona + 25 Few-Shot Examples.
+    # Ein system-Message hier wuerde die Modelfile-SYSTEM-Message UEBERSCHREIBEN!
+    context_prefix_parts = []
     if bond >= 75:
-        context_hints.append("Beziehung ist sehr stark - sei besonders liebevoll!")
+        context_prefix_parts.append("Beziehung: sehr stark")
     elif bond >= 50:
-        context_hints.append("Beziehung ist stark.")
+        context_prefix_parts.append("Beziehung: stark")
     if mode_addition:
-        context_hints.append(mode_addition)
-
-    # Konversations-Anweisung (KRITISCH für gute Antworten!)
-    context_hints.append(
-        "WICHTIG: Reagiere DIREKT auf Kujas letzte Nachricht! "
-        "Wiederhole NICHT was du vorher gesagt hast! "
-        "Jede Antwort muss einzigartig sein!"
-    )
-
-    context_system = "\n".join(context_hints) if context_hints else ""
+        context_prefix_parts.append(mode_addition)
 
     # Chat-Messages aus History aufbauen (letzte 8 Messages)
     chat_messages = []
-
-    # WICHTIG: KEINEN system-Message hier einfügen!
-    # Die Modelfile hat die PERFEKTE Megumin-Persona + 25 Few-Shot Examples.
-    # Ein system-Message hier wuerde die Modelfile-SYSTEM-Message UEBERSCHREIBEN!
 
     # History als echte Chat-Messages (statt flacher Text)
     history = STATE.get("history", [])
@@ -1041,9 +1120,15 @@ def call_ollama(prompt, use_wizard=False, user_message=None):
                 actual_user_msg = line.replace("Kuja:", "").strip()
 
     if actual_user_msg:
+        # Kontext-Prefix nur anhängen wenn vorhanden (Bond, Mode)
+        if context_prefix_parts:
+            prefix = "[" + ", ".join(context_prefix_parts) + "] "
+            final_msg = prefix + actual_user_msg
+        else:
+            final_msg = actual_user_msg
         chat_messages.append({
             "role": "user",
-            "content": actual_user_msg
+            "content": final_msg
         })
 
     # Ollama /api/chat Format
@@ -1053,9 +1138,19 @@ def call_ollama(prompt, use_wizard=False, user_message=None):
         "stream": False,
         "options": {
             "temperature": temperature,
-            "num_predict": num_predict
+            "num_predict": num_predict,
+            "repeat_penalty": 1.15,
+            "repeat_last_n": 128,
+            "top_k": 50,
+            "top_p": 0.9,
+            "num_ctx": 4096
         }
     }
+
+    # DEBUG: Log was genau an Ollama gesendet wird
+    log("DEBUG", f"Ollama Chat Messages ({len(chat_messages)} msgs, model={model}):", "OLLAMA")
+    for i, m in enumerate(chat_messages):
+        log("DEBUG", f"  [{i}] {m['role']}: {m['content'][:120]}...", "OLLAMA")
 
     try:
         response = _post_json(
@@ -1102,8 +1197,8 @@ def call_ollama_stream(prompt, use_wizard=False):
 
     # NSFW/Kaetzchen-Modus: Optimierte Parameter
     if use_wizard:
-        temperature = 0.85  # Kreativer & expliziter
-        num_predict = 600   # Kuerzer = direkter
+        temperature = 0.85
+        num_predict = 600
     else:
         temperature = 0.70
         num_predict = 400
@@ -1118,7 +1213,12 @@ def call_ollama_stream(prompt, use_wizard=False):
         "stream": True,
         "options": {
             "temperature": temperature,
-            "num_predict": num_predict
+            "num_predict": num_predict,
+            "repeat_penalty": 1.15,
+            "repeat_last_n": 128,
+            "top_k": 50,
+            "top_p": 0.9,
+            "num_ctx": 4096
         }
     }).encode("utf-8")
 
@@ -1489,6 +1589,54 @@ def calculate_message_importance(message, is_user=True):
 
 def add_message_with_importance(role, content):
     """Fügt Message mit Importance-Score zur History hinzu"""
+    # ===== QUALITY GUARD: Verhindere dass Müll-Antworten die History vergiften =====
+    if role == "assistant":
+        # Erkenne kaputte Antworten die das Model in Zukunft verwirren
+        garbage_markers = [
+            "Ich bin bereit, dir bei",  # Assistent-Modus statt Najika
+            "MASTER_TODO",              # Projekt-Leakage
+            "[ANALYSIS]",               # Meta-Analyse statt Roleplay
+            "[PROAKTIV]",               # Proaktive System-Nachrichten
+            "Wahrscheinlichkeiten:",     # Analytischer Müll
+            "Bist DU die Najika oder eine KI",  # Endlos-Schleife
+            "Najika World zu helfen",   # Assistent-Modus
+            "Projekt-Anweisungen",      # Projekt-Leakage
+            "auf der anderen Seite des Internet",  # Bot-Phrase
+            "Was kann ich für dich tun",  # Assistent-Modus
+            "Alle AI-Systeme offline",  # Fehlermeldung
+            "Bitte starte LM Studio",  # Fehlermeldung
+            "Berechtigung, um die",     # Assistent-Modus
+            "Tut mir leid für den Missverstand",  # Bot-Phrase
+            "Lass uns von vorne beginnen",  # Bot-Phrase
+            "SCHWIERIGKEITSGRAD:",      # Meta-Tag
+            "NSFW-Intensität",          # Meta-Leakage
+            "MEGUMIN-MODUS AKTIVIERT",  # Meta-Tag
+            "MEGUMIN-MODUS DEACTIV",    # Meta-Tag
+            "MELISSA-MODUS AKTIV",      # Meta-Tag
+            "Puddin",                   # Falsche Phrase
+        ]
+        for marker in garbage_markers:
+            if marker in content:
+                print(f"[HISTORY GUARD] Müll-Antwort abgefangen: '{marker}' gefunden → nicht in History")
+                return
+
+        # Zu kurze Antworten (< 10 Zeichen) sind meistens Fehler
+        if len(content.strip()) < 10:
+            return
+
+        # ===== ROLEPLAY QUALITY CHECK =====
+        # Najika MUSS *Aktionen in Sternchen* haben - das ist ihr Markenzeichen!
+        # Antworten ohne *Aktionen* sind generischer Bot-Text und vergiften die History.
+        import re as _re_guard
+        has_actions = bool(_re_guard.search(r'\*[^*]{3,}\*', content))
+        has_kuja = ("kuja" in content.lower() or "mr.k" in content.lower() or "mr. k" in content.lower())
+        if not has_actions:
+            print(f"[HISTORY GUARD] Keine *Aktionen* gefunden → nicht in History: '{content[:80]}...'")
+            return
+        if not has_kuja:
+            print(f"[HISTORY GUARD] Kein 'Kuja'/'Mr.K' gefunden → nicht in History: '{content[:80]}...'")
+            return
+
     is_user = (role == "user")
     importance = calculate_message_importance(content, is_user)
 

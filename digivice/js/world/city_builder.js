@@ -680,7 +680,7 @@ class CityBuilder {
   createBuilding(type, x, z, regionId) {
     const template = this.buildingTemplates.get(type);
     if (!template) {
-      console.warn(`  ⚠️ Building template not found: ${type}`);
+      console.debug(`  Building template not found: ${type} (skipped)`);
       return null;
     }
 
@@ -727,7 +727,7 @@ class CityBuilder {
 
     const template = this.buildingTemplates.get(type);
     if (!template) {
-      console.warn(`  ⚠️ Building template not found: ${type}`);
+      console.debug(`  Building template not found: ${type} (skipped)`);
       return null;
     }
 

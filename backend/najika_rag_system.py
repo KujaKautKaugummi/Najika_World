@@ -42,19 +42,18 @@ MAX_RAG_CONTEXT_CHARS = 1500
 
 # Keywords die RAG-Suche triggern
 RAG_TRIGGER_KEYWORDS = [
-    # Spielsysteme
-    "skill", "kampf", "combat", "explosion", "megumin", "omega", "ultima",
+    # Spielsysteme (spezifisch genug um nicht bei Smalltalk zu triggern)
+    "skill system", "kampfsystem", "combat system", "omega explosion", "ultima explosion",
     "1-weg", "einweg", "spezialisierung", "trade-off",
-    # Lore
-    "schwarze mühle", "windmühle", "kuja", "mr. k", "owner",
-    "8 gebote", "gebote", "regeln",
-    # Technik
+    # Lore (nur spezifische Begriffe, NICHT "kuja" - das ist in jedem Chat!)
+    "schwarze mühle", "windmühle", "8 gebote",
+    # Technik (nur wenn User wirklich nach Technik fragt)
     "chromadb", "ollama", "backend", "frontend",
-    # Persönlichkeit
-    "harley", "shiro", "melissa", "persönlichkeit",
-    # Allgemein
-    "erkläre", "was ist", "wie funktioniert", "wer ist", "warum",
-    "erzähl mir", "weißt du", "erinnerst du dich"
+    # Persönlichkeit (spezifisch)
+    "persönlichkeit", "personality engine",
+    # Allgemein (NUR wenn es um Spielwissen geht, NICHT Smalltalk!)
+    "wie funktioniert das spiel", "erkläre das system", "was ist ein skill",
+    "erinnerst du dich an"
 ]
 
 class NajikaRAG:
@@ -105,8 +104,9 @@ class NajikaRAG:
             if keyword in msg_lower:
                 return True
 
-        # Fragen triggern immer RAG
-        if "?" in user_message:
+        # Fragen triggern RAG NUR wenn sie lang genug sind (keine Smalltalk-Fragen)
+        # "Wie gehts dir?" = kein RAG, "Wie funktioniert das Kampfsystem?" = RAG
+        if "?" in user_message and len(user_message) > 40:
             return True
 
         return False

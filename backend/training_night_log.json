@@ -1988,5 +1988,185 @@
       "errors": 1,
       "success_rate": 95.83333333333334
     }
+  },
+  {
+    "session_start": "2026-02-15T00:00:01.481841",
+    "session_end": "2026-02-15T00:45:08.772035",
+    "total_hours": 0.7520247755555556,
+    "completed_tasks": [
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 1/4",
+        "duration_minutes": 9.953480394681295,
+        "status": "success",
+        "timestamp": "2026-02-15T00:09:58.693668"
+      },
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 2/4",
+        "duration_minutes": 9.953725516796112,
+        "status": "success",
+        "timestamp": "2026-02-15T00:19:55.918199"
+      },
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 3/4",
+        "duration_minutes": 10.434689831733703,
+        "status": "success",
+        "timestamp": "2026-02-15T00:30:22.001588"
+      },
+      {
+        "script": "najika_lora_training_3b.py",
+        "description": "LoRA Training Session 4/4",
+        "duration_minutes": 10.357021474838257,
+        "status": "success",
+        "timestamp": "2026-02-15T00:40:43.422877"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 1/8",
+        "duration_minutes": 0.577003546555837,
+        "status": "success",
+        "timestamp": "2026-02-15T00:41:18.044088"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 2/8",
+        "duration_minutes": 0.5018716096878052,
+        "status": "success",
+        "timestamp": "2026-02-15T00:41:48.156385"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 3/8",
+        "duration_minutes": 0.5386637806892395,
+        "status": "success",
+        "timestamp": "2026-02-15T00:42:20.476211"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 4/8",
+        "duration_minutes": 0.45918084383010865,
+        "status": "success",
+        "timestamp": "2026-02-15T00:42:48.027062"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 5/8",
+        "duration_minutes": 0.4409075935681661,
+        "status": "success",
+        "timestamp": "2026-02-15T00:43:14.482517"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 6/8",
+        "duration_minutes": 0.576632038752238,
+        "status": "success",
+        "timestamp": "2026-02-15T00:43:49.081440"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 7/8",
+        "duration_minutes": 0.4714202960332235,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:17.367659"
+      },
+      {
+        "script": "najika_code_training_real.py",
+        "description": "Code Kata Session 8/8",
+        "duration_minutes": 0.5217878103256226,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:48.675927"
+      },
+      {
+        "script": "najika_advisor_training.py",
+        "description": "Advisor Training (Lebensberatung)",
+        "duration_minutes": 0.007542943954467774,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:49.129505"
+      },
+      {
+        "script": "najika_fact_checker_training.py",
+        "description": "Fact Checker (Error Detection)",
+        "duration_minutes": 0.009329179922739664,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:49.916233"
+      },
+      {
+        "script": "najika_emotional_intelligence_training.py",
+        "description": "Emotional Intelligence (RLHF)",
+        "duration_minutes": 0.010118548075358074,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:50.524347"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 1/4",
+        "duration_minutes": 0.07511234680811564,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:55.032093"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 2/4",
+        "duration_minutes": 0.0435712456703186,
+        "status": "success",
+        "timestamp": "2026-02-15T00:44:57.647368"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 3/4",
+        "duration_minutes": 0.06148803234100342,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:01.337654"
+      },
+      {
+        "script": "najika_chromadb_setup.py",
+        "description": "ChromaDB Enhancement 4/4",
+        "duration_minutes": 0.06610675652821858,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:05.305061"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 1/4",
+        "duration_minutes": 0.023523394266764322,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:06.717463"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 2/4",
+        "duration_minutes": 0.01162559191385905,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:07.415998"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 3/4",
+        "duration_minutes": 0.010208749771118164,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:08.029523"
+      },
+      {
+        "script": "najika_project_knowledge_training.py",
+        "description": "Project Knowledge Session 4/4",
+        "duration_minutes": 0.012341837088267008,
+        "status": "success",
+        "timestamp": "2026-02-15T00:45:08.770034"
+      }
+    ],
+    "errors": [
+      {
+        "script": "najika_thought_organizer_training.py",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 331, in <module>\n    trainer.run()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 314, in run\n    self.train_mindmap_creation()\n  File \"C:\\Najika_World\\backend\\najika_thought_organizer_training.py\", line 159, in train_mindmap_creation\n    if response and \"ZENTRUM\" in response or \"```\" in response:\n                                             ^^^^^^^^^^^^^^^^^\nTypeError: argument of type 'NoneType' is not iterable\n",
+        "timestamp": "2026-02-15T00:44:49.355483"
+      }
+    ],
+    "stats": {
+      "success": 23,
+      "errors": 1,
+      "success_rate": 95.83333333333334
+    }
   }
 ]

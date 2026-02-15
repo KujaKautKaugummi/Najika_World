@@ -585,7 +585,7 @@
             }
 
             // E-Taste: NUR wenn am Angelspot UND kein Gebäude in der Nähe
-            if (e.code === 'KeyE' && currentSpot && !isFishing) {
+            if (e.code === 'KeyE' && currentSpot && !isFishing && !window.combatActive) {
                 // Check if near building (Building hat Priorität!)
                 const buildingPrompt = document.getElementById('building-prompt-ui');
                 if (buildingPrompt && buildingPrompt.style.display === 'block') {

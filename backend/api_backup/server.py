@@ -572,7 +572,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
 if __name__ == "__main__":
     host = os.getenv("BACKEND_HOST", "127.0.0.1")
-    port = int(os.getenv("BACKEND_PORT", 5000))
+    # WICHTIG: Port 8000 laut den 8 Geboten! NIEMALS Port 5000!
+    port = int(os.getenv("BACKEND_PORT", 8000))
     
     print("🌟 Najika Backend starting...")
     print(f"🔗 Listening on {host}:{port}")

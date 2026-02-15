@@ -554,7 +554,7 @@
         // 🌐 GLOBALE API KONFIGURATION
         // Backend Server läuft auf Port 8000 (najika_server.py)
         // Frontend HTTP Server läuft auf Port 5173 (nur für statische Dateien)
-        const API_BASE_URL = 'http://localhost:8000';
+        const API_BASE_URL = 'http://localhost:8001';
         window.API_BASE_URL = API_BASE_URL;
         console.log('🌐 API Base URL:', API_BASE_URL);
 
@@ -3100,8 +3100,8 @@
 
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
-        // Backend URL (localhost:8000)
-        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
+        // Backend URL (localhost:8001)
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8001';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {

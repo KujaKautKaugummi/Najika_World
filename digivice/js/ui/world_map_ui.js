@@ -6,7 +6,7 @@
 
 class WorldMapUI {
     constructor() {
-        this.apiBase = 'http://localhost:8000/api/world-map';
+        this.apiBase = 'http://localhost:8001/api/world-map';
         this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
 
         // Map state

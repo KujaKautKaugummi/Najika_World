@@ -1,0 +1,10 @@
+{
+  "start_time": "2026-02-11T09:13:41.734685",
+  "base_model": "Qwen/Qwen2.5-7B-Instruct",
+  "model_size": "7B",
+  "deployment_ready": true,
+  "training_samples": 486,
+  "status": "completed",
+  "end_time": "2026-02-11T09:48:46.207110",
+  "adapter_path": "C:/Najika_World/lora_checkpoints_new\\najika_lora_latest"
+}

@@ -15,23 +15,35 @@ OLLAMA_URL = "http://localhost:11434"
 # F16-Modelle (najika-trained, najika-nsfw-trained) sind 16GB = zu groß!
 # Persona ist im Modelfile eingebaut = kein extra Context overhead!
 OLLAMA_MODELS = {
-    "chat": "najika-trained-q4:latest",      # SFW Chat - trainiert + Q4_K_M quantisiert (~5GB)
-    "nsfw": "najika-nsfw-trained-q4:latest",  # NSFW/Kätzchen-Modus - trainiert + Q4_K_M (~5GB)
+    "chat": "najika-natural:latest",          # SFW Chat - bereinigtes Modelfile (natuerlicher!)
+    "nsfw": "najika-nsfw-natural:latest",     # NSFW/Kätzchen-Modus - bereinigtes Modelfile!
     "instruct": "qwen2-instruct:latest"      # Tasks, Code, Mathe
 }
 
 
 def is_task_request(text: str) -> bool:
-    """Erkennt ob eine Nachricht ein Task-Request ist (braucht Instruct-Model)"""
+    """Erkennt ob eine Nachricht ein Task-Request ist (braucht Instruct-Model)
+
+    WICHTIG: Nur echte technische Tasks! Normale Fragen wie "Was ist dein Lieblingszauber?"
+    sind KEINE Tasks und sollen von Najika beantwortet werden!
+    """
     task_keywords = [
-        "zaehle", "zähle", "berechne", "rechne", "liste", "erklaere", "erklär",
-        "code", "programmiere", "schreibe code", "funktion", "python", "javascript",
-        "analysiere", "zusammenfassung", "fasse zusammen", "uebersetze", "übersetze",
-        "konvertiere", "formatiere", "sortiere", "finde", "suche nach", "wie viel",
-        "was ist", "definiere", "beschreibe technisch"
+        "zaehle", "zähle", "berechne", "rechne",
+        "programmiere", "schreibe code", "funktion", "python", "javascript",
+        "fasse zusammen", "uebersetze", "übersetze",
+        "konvertiere", "formatiere", "sortiere",
+        "beschreibe technisch"
     ]
     text_lower = text.lower()
-    return any(kw in text_lower for kw in task_keywords)
+    # Nur matchen wenn der Task-Keyword am Anfang steht (als Befehl)
+    # oder wenn die Nachricht sehr kurz und technisch ist
+    for kw in task_keywords:
+        if text_lower.startswith(kw) or f" {kw} " in f" {text_lower} ":
+            # Ausschluss: Fragen die mit "dein/deine/dir" persönlich sind
+            if any(p in text_lower for p in ["dein", "deine", "dir", "du", "najika"]):
+                return False
+            return True
+    return False
 
 
 def select_model(prompt: str, use_wizard: bool = False) -> str:
@@ -65,10 +77,10 @@ async def call_ollama(prompt: str, use_wizard: bool = False) -> Optional[str]:
     # NSFW/Kaetzchen-Modus: Optimierte Parameter
     if use_wizard:
         temperature = 0.85
-        num_predict = 300
+        num_predict = 600
     else:
         temperature = 0.70
-        num_predict = 150  # KURZ!
+        num_predict = 400
 
     # Najika-Modelle haben Persona eingebaut, instruct braucht sie
     use_system = model == OLLAMA_MODELS["instruct"]
@@ -81,7 +93,8 @@ async def call_ollama(prompt: str, use_wizard: bool = False) -> Optional[str]:
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
-            "repeat_penalty": 1.1,
+            "repeat_penalty": 1.35,
+            "repeat_last_n": 256,
             "top_p": 0.9,
             "num_ctx": 8192
         }
@@ -126,10 +139,10 @@ async def call_ollama_stream(prompt: str, use_wizard: bool = False) -> AsyncGene
     # NSFW/Kaetzchen-Modus: Optimierte Parameter
     if use_wizard:
         temperature = 0.85
-        num_predict = 300
+        num_predict = 600
     else:
         temperature = 0.70
-        num_predict = 150
+        num_predict = 400
 
     use_system = model == OLLAMA_MODELS["instruct"]
 
@@ -140,7 +153,8 @@ async def call_ollama_stream(prompt: str, use_wizard: bool = False) -> AsyncGene
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
-            "repeat_penalty": 1.1,
+            "repeat_penalty": 1.35,
+            "repeat_last_n": 256,
             "top_p": 0.9,
             "num_ctx": 8192
         }
@@ -214,7 +228,8 @@ async def call_ollama_chat(messages: list, use_wizard: bool = False) -> Optional
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
-            "repeat_penalty": 1.1,
+            "repeat_penalty": 1.35,
+            "repeat_last_n": 256,
             "top_p": 0.9,
             "num_ctx": 8192
         }
@@ -248,7 +263,8 @@ async def call_ollama_chat(messages: list, use_wizard: bool = False) -> Optional
                         "options": {
                             "temperature": temperature,
                             "num_predict": num_predict,
-                            "repeat_penalty": 1.1,
+                            "repeat_penalty": 1.35,
+                            "repeat_last_n": 256,
                             "top_p": 0.9,
                             "num_ctx": 8192
                         }
@@ -293,7 +309,8 @@ def call_ollama_chat_sync(messages: list, use_wizard: bool = False) -> Optional[
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
-            "repeat_penalty": 1.1,
+            "repeat_penalty": 1.35,
+            "repeat_last_n": 256,
             "top_p": 0.9,
             "num_ctx": 8192
         }
@@ -369,7 +386,8 @@ async def call_ollama_chat_stream(messages: list, use_wizard: bool = False) -> A
         "options": {
             "temperature": temperature,
             "num_predict": num_predict,
-            "repeat_penalty": 1.1,
+            "repeat_penalty": 1.35,
+            "repeat_last_n": 256,
             "top_p": 0.9,
             "num_ctx": 8192
         }

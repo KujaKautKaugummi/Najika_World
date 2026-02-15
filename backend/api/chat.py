@@ -56,6 +56,17 @@ try:
 except ImportError as e:
     print(f"[CHAT] PersonalityEngine nicht verfügbar: {e}")
 
+# ===== ChromaDB Memory Persistence =====
+MEMORY_AVAILABLE = False
+_memory_instance = None
+try:
+    from najika_memory import NajikaMemory
+    _memory_instance = NajikaMemory()
+    MEMORY_AVAILABLE = True
+    print(f"[CHAT] ChromaDB Memory verfügbar ({_memory_instance.conversations.count()} Conversations)")
+except Exception as e:
+    print(f"[CHAT] ChromaDB Memory nicht verfügbar: {e}")
+
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
 
 # ===== IN-MEMORY CONVERSATION STORE =====
@@ -135,9 +146,10 @@ def _build_hooks_from_mood(mood: str) -> list:
     """Generiert Animation-Hooks basierend auf Mood"""
     mood_animations = {
         "happy": "cheer", "excited": "cheer", "sad": "wave",
-        "angry": "idle", "explosive": "cheer", "tired": "idle",
+        "angry": "idle", "explosive": "cheer", "sleepy": "idle",
         "needy": "wave", "dominant": "idle", "playful": "dance",
-        "possessive": "idle",
+        "possessive": "idle", "sweet": "cheer", "horny": "dance",
+        "pouty": "wave", "jealous": "idle", "loving": "cheer",
     }
     anim = mood_animations.get(mood)
     if anim:
@@ -152,20 +164,25 @@ def _process_with_mind_sync(message: str, history: list, is_private: bool) -> di
     Synchroner Wrapper für NajikaMind-Pipeline.
     Wird via asyncio.to_thread() aufgerufen.
     """
-    # Prompt-Builder: baut Base-Prompt aus History
+    # Prompt-Builder: KEIN History-Text hier!
+    # History wird bereits über den 'context' Parameter als separate Messages gesendet.
+    # Hier nur den User-Message als Kontext, damit NajikaMind darauf aufbauen kann.
     def _prompt_builder(hist, msg):
-        lines = []
-        for h in hist[-8:]:
-            role = "Kuja" if h.get("role") == "user" else "Najika"
-            lines.append(f"{role}: {h.get('content', '')}")
-        lines.append(f"Kuja: {msg}")
-        lines.append("Najika:")
-        return "\n".join(lines)
+        return f"Kuja sagt: {msg}"
 
     # AI-Caller: nutzt call_ollama_chat_sync mit Messages-Array
+    # WICHTIG: 'prompt' enthält den angereicherten NajikaMind-Kontext
+    # (Personality, Memory, Whispers, RAG, Stil-Hinweise) und MUSS an Ollama!
     def _ai_caller(prompt, use_wizard, context, user_message):
-        # Baue Messages-Array aus context (History) + aktuelle Nachricht
         chat_messages = []
+
+        # KEIN Kontext-Injection ins LLM!
+        # Das 7B-Modell kann keine komplexen Kontext-Prompts verarbeiten ohne
+        # Character-Breaks (echot Metadaten, generiert analytische Texte).
+        # Die Modelfile hat bereits die komplette Najika-Persona als SYSTEM-Prompt.
+        # NajikaMind's Wert = Routing + Mood + Post-Processing + Memory, NICHT Prompting.
+
+        # History einfügen
         if context:
             for h in context[-8:]:
                 content = h.get("content", "")
@@ -174,7 +191,8 @@ def _process_with_mind_sync(message: str, history: list, is_private: bool) -> di
                         "role": "user" if h.get("role") == "user" else "assistant",
                         "content": content[:2000]
                     })
-        # Aktuelle User-Nachricht
+
+        # Aktuelle User-Nachricht (sauber)
         if user_message:
             chat_messages.append({"role": "user", "content": user_message})
 
@@ -336,6 +354,19 @@ async def chat(message: ChatMessage):
         "timestamp": time.time(),
         "mood": mood
     })
+
+    # ChromaDB Memory Persistence - Konversation dauerhaft speichern
+    if MEMORY_AVAILABLE and _memory_instance:
+        try:
+            room = "Schlafzimmer" if is_private else "Wohnzimmer"
+            _memory_instance.add_conversation(
+                user_message=message.message,
+                najika_response=response_text,
+                room=room,
+                private_mode=is_private
+            )
+        except Exception as e:
+            print(f"[CHAT] ChromaDB Save Fehler: {e}")
 
     return ChatResponse(
         response=response_text,

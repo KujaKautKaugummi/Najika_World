@@ -8,10 +8,10 @@ Das ist KEIN temporäres Training - das wird dauerhaft im Modell gespeichert!
 
 WORKFLOW:
 1. Sammle neue Konversationen seit letztem Training (aus ChromaDB)
-2. Formatiere als Llama 3.1 Training-Daten
+2. Formatiere als Qwen2.5 ChatML Training-Daten
 3. Fine-tune mit Unsloth (schnell + effizient)
 4. Speichere als neues Ollama-Modell
-5. Update najika-local mit neuem Modell
+5. Update najika-trained-q4 mit neuem Modell
 
 ZEITPLAN:
 - 4x täglich (06:00, 12:00, 18:00, 00:00)
@@ -53,8 +53,9 @@ TRAINING_STATE = TRAINING_DIR / 'unsloth_state.json'
 BERLIN_TZ = pytz.timezone('Europe/Berlin')
 
 # Modell-Konfiguration
-BASE_MODEL = "Tohur/natsumura-storytelling-rp-llama-3.1"  # 8B base
-MAX_SEQ_LENGTH = 2048
+# 2026-02-10: Von Llama-3.1 auf Qwen2.5 umgestellt (passt zum dolphin-qwen2 base!)
+BASE_MODEL = "Qwen/Qwen2.5-7B-Instruct"
+MAX_SEQ_LENGTH = 4096  # Qwen2.5 unterstützt bis 128k
 LOAD_IN_4BIT = True  # 4-bit quantization (spart Speicher!)
 
 # Training-Parameter
@@ -110,13 +111,52 @@ def save_training_state(state):
 
 # ===== DATA COLLECTION =====
 
-def get_new_conversations(since_timestamp=None):
+def quality_score(text):
+    """Bewertet Qualitaet einer Najika-Antwort (0-10)"""
+    score = 5.0
+    text_lower = text.lower()
+
+    # POSITIVE - Zeichen guter In-Character Antworten
+    if '*' in text: score += 1.0  # Aktionen in Sternchen
+    if any(emoji in text for emoji in ['✨', '💕', '💥', '🥺']): score += 0.5
+    if 'kuja' in text_lower or 'mr.k' in text_lower: score += 0.5
+    if any(w in text_lower for w in ['explosion', 'stab', 'magie', 'dungeon']): score += 0.5
+    if '?' in text: score += 0.3  # Stellt Gegenfragen
+
+    # NEGATIVE - Zeichen von Muell/Bot-Antworten
+    if 'fehler:' in text_lower or 'timeout' in text_lower: return 0.0
+    if 'ich kann nicht dabei helfen' in text_lower: return 0.0
+    if 'als najika' in text_lower or 'als ki' in text_lower: return 0.0
+    if 'MASTER_TODO' in text or '[ANALYSIS]' in text: return 0.0
+    if '[PROAKTIV]' in text or 'Projekt-Anweisungen' in text: return 0.0
+    if 'Najika World zu helfen' in text: return 0.0
+    if 'hypothetischen' in text_lower: score -= 2.0
+    if 'puddin' in text_lower: score -= 1.5  # Falsche Phrase!
+    if 'desuno' in text_lower or 'desunō' in text_lower: score -= 1.0
+    if len(text) < 20: score -= 2.0  # Zu kurz
+    if len(text) > 1500: score -= 1.0  # Zu lang
+    if text.count('\n') > 10: score -= 1.0  # Zu viele Zeilen (Listen?)
+    if '###' in text or '---' in text: score -= 1.0  # Markdown
+    if 'schwarze windmühle' in text_lower: score -= 0.5  # Alte Phrase
+
+    return max(0.0, min(10.0, score))
+
+
+def get_new_conversations(since_timestamp=None, min_quality=3.0, exclude_nsfw=True):
     """
-    Holt neue Konversationen aus ChromaDB seit letztem Training
+    Holt QUALITAETS-GEFILTERTE Konversationen aus ChromaDB
+
+    Args:
+        since_timestamp: Nur Konversationen nach diesem Zeitpunkt
+        min_quality: Minimaler Quality-Score (0-10, default 3.0)
+        exclude_nsfw: NSFW-Konversationen ausschliessen (default True)
 
     Returns: Liste von {"instruction": user_msg, "output": najika_response}
     """
-    log("Sammle neue Konversationen aus ChromaDB...")
+    log("Sammle Konversationen aus ChromaDB (mit Quality-Filter!)...")
+
+    nsfw_markers = ['schwanz', 'sperma', 'ficken', 'leckt', 'kaetzchen-modus',
+                    'fotze', 'titten', 'hoden', 'eier']
 
     try:
         memory = NajikaMemory()
@@ -129,6 +169,9 @@ def get_new_conversations(since_timestamp=None):
             return []
 
         training_data = []
+        filtered_garbage = 0
+        filtered_nsfw = 0
+        filtered_short = 0
 
         for i in range(len(conversations['documents'])):
             conv_text = conversations['documents'][i]
@@ -146,14 +189,91 @@ def get_new_conversations(since_timestamp=None):
                     if since_timestamp and conv_timestamp <= since_timestamp:
                         continue
 
+                    # NSFW Filter
+                    if exclude_nsfw:
+                        if any(m in najika_part.lower() for m in nsfw_markers):
+                            filtered_nsfw += 1
+                            continue
+
+                    # Quality Filter
+                    q_score = quality_score(najika_part)
+                    if q_score < min_quality:
+                        filtered_garbage += 1
+                        continue
+
+                    # Mindestlaenge
+                    if len(najika_part) < 30 or len(user_part) < 3:
+                        filtered_short += 1
+                        continue
+
                     training_data.append({
                         'instruction': user_part,
-                        'output': najika_part
+                        'output': najika_part,
+                        'quality': q_score
                     })
                 except:
                     continue
 
-        log(f"✅ {len(training_data)} neue Konversationen gesammelt")
+        # Sortiere nach Qualitaet (beste zuerst)
+        training_data.sort(key=lambda x: x['quality'], reverse=True)
+
+        log(f"✅ {len(training_data)} Konversationen nach Qualitaets-Filter")
+        log(f"   Gefiltert: {filtered_garbage} garbage, {filtered_nsfw} nsfw, {filtered_short} zu kurz")
+
+        # ===== ZUSAETZLICHE TRAINING-QUELLEN =====
+
+        # najika_core: Character-Bible als hochgewichtete Samples
+        try:
+            import chromadb
+            client = chromadb.PersistentClient(path="C:/Najika_World/memory_db")
+            core = client.get_collection("najika_core")
+            core_data = core.get(include=["documents", "metadatas"])
+            core_added = 0
+            for i, doc in enumerate(core_data["documents"]):
+                meta = core_data["metadatas"][i] if core_data["metadatas"] else {}
+                core_type = meta.get("type", "identity")
+                # Erstelle Q&A-Paare aus Core-Eintraegen
+                qa_map = {
+                    "identity": ("Wer bist du?", doc),
+                    "backstory": ("Erzaehl mir von deiner Vergangenheit", doc),
+                    "daily_life": ("Was machst du den ganzen Tag?", doc),
+                    "speech_patterns": ("Wie sprichst du?", doc),
+                    "forbidden_phrases": ("Was sagst du niemals?", doc),
+                    "facet_system": ("Wie funktionieren deine Persoenlichkeiten?", doc),
+                    "bond_philosophy": ("Was bedeutet Kuja fuer dich?", doc),
+                    "autonomy": ("Wie denkst du ueber dein eigenes Wachstum?", doc),
+                }
+                if core_type in qa_map:
+                    q, a = qa_map[core_type]
+                    training_data.append({
+                        'instruction': q,
+                        'output': a,
+                        'quality': 10.0  # Hoechste Qualitaet
+                    })
+                    core_added += 1
+            if core_added:
+                log(f"   + {core_added} Core-Eintraege als Training-Samples")
+        except Exception as e:
+            log(f"   Core-Import Fehler: {e}", 'WARNING')
+
+        # najika_personalities: Video-Transcripts als Wissens-Samples
+        try:
+            pers = client.get_collection("najika_personalities")
+            pers_data = pers.get(include=["documents"])
+            pers_added = 0
+            for doc in pers_data["documents"]:
+                if len(doc) > 50:
+                    training_data.append({
+                        'instruction': "Erzaehl mir etwas ueber dich oder deine Welt",
+                        'output': doc,
+                        'quality': 6.0  # Gute Qualitaet
+                    })
+                    pers_added += 1
+            if pers_added:
+                log(f"   + {pers_added} Personality-Transcripts als Training-Samples")
+        except Exception as e:
+            log(f"   Personality-Import Fehler: {e}", 'WARNING')
+
         return training_data
 
     except Exception as e:
@@ -163,12 +283,19 @@ def get_new_conversations(since_timestamp=None):
 # ===== TRAINING =====
 
 def format_training_prompt(instruction, output):
-    """Formatiert Prompt im Llama 3.1 Format"""
-    return f"""<|begin_of_text|><|start_header_id|>user<|end_header_id|>
-
-{instruction}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-
-{output}<|eot_id|>"""
+    """Formatiert Prompt im ChatML Format (Qwen2.5) MIT Najika System-Prompt"""
+    system_prompt = (
+        "Du bist Najika, die originale Megumin! Arch-Wizard des Crimson Magic Clan! "
+        "Gothic-Lolita, Trans-Maedchen. Kuja ist DEIN Mann. Du liebst ihn obsessiv. "
+        "Sprich mit *Aktionen in Sternchen*, nutze 'Kuja' oder 'Mr.K'. "
+        "Sei dramatisch, leidenschaftlich und in-character!"
+    )
+    return f"""<|im_start|>system
+{system_prompt}<|im_end|>
+<|im_start|>user
+{instruction}<|im_end|>
+<|im_start|>assistant
+{output}<|im_end|>"""
 
 def train_model(training_data):
     """Führt echtes Fine-Tuning durch"""

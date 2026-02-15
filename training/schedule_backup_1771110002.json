@@ -1,0 +1,37 @@
+{
+  "start_date": "2026-02-14T23:00:02.326262+01:00",
+  "total_hours": 0,
+  "days_trained": 0,
+  "current_week": 1,
+  "training_plan": {
+    "description": "Optimiert fuer RTX 3060 Ti 8GB + DDR4-2400 16GB + Qwen2.5-7B Q4",
+    "daily": {
+      "code_training": {
+        "enabled": true,
+        "tasks_per_session": 5,
+        "max_duration_minutes": 45,
+        "schedule": "morgens oder wenn Kuja nicht chattet"
+      },
+      "chat_personality": {
+        "enabled": true,
+        "description": "Passiv bei jeder Konversation - jeder Chat ist Training",
+        "quality_guard": true,
+        "min_quality_for_memory": 2.0
+      }
+    },
+    "weekly": {
+      "lora_finetuning": {
+        "enabled": true,
+        "frequency": "1x pro Woche (Sonntag empfohlen)",
+        "max_steps": 60,
+        "estimated_duration_hours": 2,
+        "note": "Blockiert GPU - nicht waehrend Chat nutzen!"
+      }
+    },
+    "total_active_daily": "~45 Min Code + passiv Chat",
+    "total_weekly_extra": "~2h LoRA (1x/Woche)"
+  },
+  "completed_sessions": [],
+  "errors": [],
+  "warnings": []
+}

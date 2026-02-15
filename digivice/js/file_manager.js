@@ -102,7 +102,7 @@ const FileManager = {
         fileList.innerHTML = '<div class="loading-indicator">🔄 Lädt Dateien...</div>';
 
         try {
-            const response = await fetch('http://localhost:8000/api/file/list', {
+            const response = await fetch('http://localhost:8001/api/file/list', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path})
@@ -266,7 +266,7 @@ const FileManager = {
         const filePath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
 
         try {
-            const response = await fetch('http://localhost:8000/api/file/read', {
+            const response = await fetch('http://localhost:8001/api/file/read', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({path: filePath})
@@ -320,7 +320,7 @@ const FileManager = {
             const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
             try {
-                const response = await fetch('http://localhost:8000/api/file/write', {
+                const response = await fetch('http://localhost:8001/api/file/write', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -350,7 +350,7 @@ const FileManager = {
             const path = this.currentPath === '.' ? name : `${this.currentPath}/${name}`;
 
         try {
-            const response = await fetch('http://localhost:8000/api/file/write', {
+            const response = await fetch('http://localhost:8001/api/file/write', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -384,7 +384,7 @@ const FileManager = {
         const filePath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
 
         try {
-            const response = await fetch('http://localhost:8000/api/file/delete', {
+            const response = await fetch('http://localhost:8001/api/file/delete', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ path: filePath })
@@ -412,7 +412,7 @@ const FileManager = {
             const newPath = this.currentPath === '.' ? newName : `${this.currentPath}/${newName}`;
 
         try {
-            const response = await fetch('http://localhost:8000/api/file/rename', {
+            const response = await fetch('http://localhost:8001/api/file/rename', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -667,7 +667,7 @@ const FileManager = {
             const filePath = this.currentPath === '.' ? filename : `${this.currentPath}/${filename}`;
 
             try {
-                const response = await fetch('http://localhost:8000/api/file/delete', {
+                const response = await fetch('http://localhost:8001/api/file/delete', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ path: filePath })

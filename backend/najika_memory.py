@@ -9,7 +9,7 @@ import json
 import os
 
 class NajikaMemory:
-    def __init__(self, persist_directory="C:\\NajikaFinal\\memory_db"):
+    def __init__(self, persist_directory="C:/Najika_World/memory_db"):
         """
         Initialisiert das ChromaDB Memory System
         """

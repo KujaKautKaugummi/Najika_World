@@ -22,7 +22,7 @@
 
 class LivingSystemUI {
     constructor() {
-        this.apiBase = 'http://127.0.0.1:8000';
+        this.apiBase = 'http://127.0.0.1:8001';
         this.isOpen = false;
         this.state = {
             hunger: 80,

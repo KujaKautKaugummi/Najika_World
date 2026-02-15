@@ -18,7 +18,7 @@
 
 class SlimeUI {
   constructor() {
-    this.apiBase = 'http://localhost:8000/api/slime';
+    this.apiBase = 'http://localhost:8001/api/slime';
     this.companionId = null;
     this.updateInterval = null;
 

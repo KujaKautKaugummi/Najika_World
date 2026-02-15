@@ -256,6 +256,34 @@ async def get_all_spells(
 
 
 # ============================================================================
+# SPELL → SCHOOL LOOKUP
+# ============================================================================
+
+# Build spell_id → school mapping from spell definitions
+SPELL_SCHOOL_MAP = {}
+
+def _build_spell_school_map():
+    """Build spell_id → school mapping (called once at import)"""
+    spells = [
+        ("feuerball", "feuer"), ("feuersturm", "feuer"),
+        ("eislanze", "eis"), ("blizzard", "eis"),
+        ("blitzschlag", "blitz"), ("donnersturm", "blitz"),
+        ("wasserstrahl", "wasser"), ("erdstoss", "erde"),
+        ("windsense", "wind"), ("heiliges_licht", "licht"),
+        ("schattenpfeil", "dunkelheit"), ("explosion", "explosion"),
+    ]
+    for spell_id, school in spells:
+        SPELL_SCHOOL_MAP[spell_id] = school
+
+_build_spell_school_map()
+
+
+def get_school_for_spell(spell_id: str) -> str:
+    """Lookup school for a spell_id. Falls back to 'feuer' if unknown."""
+    return SPELL_SCHOOL_MAP.get(spell_id, "feuer")
+
+
+# ============================================================================
 # CROSS-ELEMENT LEARNING (Magic/Skill System V3)
 # ============================================================================
 
@@ -556,8 +584,7 @@ async def learn_morph(request: LearnMorphRequest, db: Session = Depends(get_db))
 
     try:
         # Get progress for spell's school
-        # (You'd need to determine school from spell_id)
-        school = "feuer"  # TODO: Look up from spell database
+        school = get_school_for_spell(request.spell_id)
 
         progress = get_or_create_school_progress(db, request.player_id, school)
 
@@ -625,7 +652,7 @@ async def activate_morph(request: ActivateMorphRequest, db: Session = Depends(ge
     }
     """
     try:
-        school = "feuer"  # TODO: Look up from spell_id
+        school = get_school_for_spell(request.spell_id)
         progress = get_or_create_school_progress(db, request.player_id, school)
 
         # Track active morphs

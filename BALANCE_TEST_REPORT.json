@@ -1,0 +1,193 @@
+{
+  "date": "2026-02-11T19:21:57.562908",
+  "total": 37,
+  "passed": 37,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Start-Punkte = 40",
+      "status": "PASS",
+      "detail": "Ist: 40"
+    },
+    {
+      "name": "Alle Stats 1-10",
+      "status": "PASS",
+      "detail": "S=6 P=5 E=6 C=5 I=7 A=6 L=5"
+    },
+    {
+      "name": "INT 10 = max +25% Bonus",
+      "status": "PASS",
+      "detail": "Power: 127 (Base 100)"
+    },
+    {
+      "name": "INT 1 = minimal (+2.5%)",
+      "status": "PASS",
+      "detail": "Power: 104 (Base 100)"
+    },
+    {
+      "name": "Explosion INT10+LUCK10 = +37.5%",
+      "status": "PASS",
+      "detail": "Power: 140 (Base 100)"
+    },
+    {
+      "name": "Kein Trap-Build moeglich (min-Stats funktionieren)",
+      "status": "PASS",
+      "detail": "Alle Stats >= 5 bei Start"
+    },
+    {
+      "name": "Meister Haupt-Skill 4x staerker als Generalist",
+      "status": "PASS",
+      "detail": "Meister: 800 vs. Generalist: 200"
+    },
+    {
+      "name": "Meister Neben-Skills fast unbrauchbar (Tag 180)",
+      "status": "PASS",
+      "detail": "Meister-Side: 20 vs. Generalist: 200"
+    },
+    {
+      "name": "Generalist hat mehr Flexibilitaet",
+      "status": "PASS",
+      "detail": "Generalist Total (9 Skills): 1800 vs. Meister Total: 960"
+    },
+    {
+      "name": "Degradation Tag 30 = -20%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Degradation Tag 90 = -80%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Degradation Tag 180 = -90%",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Meister = Burst-Spezialist (viable)",
+      "status": "PASS",
+      "detail": "Damage: 800"
+    },
+    {
+      "name": "Generalist = Allrounder (viable)",
+      "status": "PASS",
+      "detail": "Damage pro Skill: 200"
+    },
+    {
+      "name": "Same Element ~10% Lernrate",
+      "status": "PASS",
+      "detail": "Gemessen: 9.86% (über 10000 Versuche)"
+    },
+    {
+      "name": "Similar Element ~3% Lernrate",
+      "status": "PASS",
+      "detail": "Gemessen: 2.99%"
+    },
+    {
+      "name": "Foreign Element ~1% Lernrate",
+      "status": "PASS",
+      "detail": "Gemessen: 1.05%"
+    },
+    {
+      "name": "Same: ~10 Versuche bis Lernen",
+      "status": "PASS",
+      "detail": "E[Versuche]: 10"
+    },
+    {
+      "name": "Similar: ~33 Versuche bis Lernen",
+      "status": "PASS",
+      "detail": "E[Versuche]: 33"
+    },
+    {
+      "name": "Foreign: ~100 Versuche bis Lernen",
+      "status": "PASS",
+      "detail": "E[Versuche]: 100"
+    },
+    {
+      "name": "Feuer similar zu Blitz",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Eis similar zu Wasser",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Explosion nicht cross-lernbar",
+      "status": "PASS",
+      "detail": "Explosion hat keine Similarity-Eintraege (NIEMALS weaven!)"
+    },
+    {
+      "name": "Morphs verfuegbar ab Level 25",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Experiment: 30x Nutzung fuer Durchbruch",
+      "status": "PASS",
+      "detail": "Nicht zu leicht, nicht zu schwer"
+    },
+    {
+      "name": "Beobachtung: ~10 Versuche fuer Morph",
+      "status": "PASS",
+      "detail": "E[Versuche]: 10"
+    },
+    {
+      "name": "Nur 1 Morph pro Spell aktiv (Constraint)",
+      "status": "PASS",
+      "detail": "Enforced via active_morphs dict (1 key = 1 value)"
+    },
+    {
+      "name": "Skills haben Morph-Optionen (2+)",
+      "status": "PASS",
+      "detail": "Optionen: ['meteor', 'fire_stream']"
+    },
+    {
+      "name": "Rescue-Cooldown = 24h",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Nur 1 Rescue pro 24h Zyklus",
+      "status": "PASS",
+      "detail": "rescue_available Flag + cooldown_until Timestamp"
+    },
+    {
+      "name": "Layer 1 (Persoenlichkeit) ueberlebt Tod",
+      "status": "PASS",
+      "detail": "PersonalityMemory bleibt, GameSkills werden resettet"
+    },
+    {
+      "name": "Re-Learn Speed Bonus nach 3 Toden",
+      "status": "PASS",
+      "detail": "Speed: 1.8x (max 2.0x)"
+    },
+    {
+      "name": "Max Re-Learn Speed = 2.0x (gedeckelt)",
+      "status": "PASS",
+      "detail": "Max: 2.0x"
+    },
+    {
+      "name": "Form-Copy Chance = 5%",
+      "status": "PASS",
+      "detail": "Selten genug um spannend zu bleiben"
+    },
+    {
+      "name": "Slime lernt von Gegnern (12.5%)",
+      "status": "PASS",
+      "detail": "Chance: 12.5%"
+    },
+    {
+      "name": "Slime lernt von Spieler (1%)",
+      "status": "PASS",
+      "detail": "Strategisch: Starke Gegner suchen!"
+    },
+    {
+      "name": "Disconnect-Safety",
+      "status": "PASS",
+      "detail": "Slime State via DB persistiert (SQLAlchemy)"
+    }
+  ]
+}

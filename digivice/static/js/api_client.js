@@ -7,7 +7,7 @@
  */
 
 class NajikaAPIClient {
-    constructor(baseURL = 'http://localhost:8000') {
+    constructor(baseURL = 'http://localhost:8001') {
         this.baseURL = baseURL;
         this.isOnline = false;
         this.useFallback = true; // Use local fallback if offline
