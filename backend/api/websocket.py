@@ -32,7 +32,7 @@ async def websocket_endpoint(
     Main WebSocket connection endpoint
 
     Usage:
-    ws://localhost:8000/ws/connect?token=<auth_token>
+    ws://localhost:8001/ws/connect?token=<auth_token>
     """
     user = None
     user_id = None

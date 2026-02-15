@@ -361,7 +361,7 @@ load_dotenv()
 # Project Root Directory (dynamisch für alle Systeme)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-HOST=os.getenv("HOST","127.0.0.1"); PORT=int(os.getenv("PORT","8000"))
+HOST=os.getenv("HOST","127.0.0.1"); PORT=int(os.getenv("PORT","8001"))
 AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
 CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
 CLOUD_PIN=os.getenv("CLOUD_PIN","")

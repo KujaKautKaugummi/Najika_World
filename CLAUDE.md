@@ -29,7 +29,7 @@
 ## 🚫 VERBOTEN
 
 - NIEMALS "Souls-like" sagen → "Skyrim + Soulframe + Digimon World"
-- NIEMALS Port 5000 → Port **8000**!
+- NIEMALS Port 5000 → Port **8001**! (FastAPI Migration)
 - NIEMALS Harley "Puddin'" sagen lassen → **"Mr. K"**!
 - NIEMALS funktionierende Teile ohne Nachfrage ändern
 
@@ -47,7 +47,7 @@
 ## 🔧 TECHNISCHE BASICS
 
 ```yaml
-Port: 8000 (NICHT 5000!)
+Port: 8001 (NICHT 5000 oder 8000!) - FastAPI Migration
 Backend: C:\Najika_World\backend\najika_server.py
 Frontend: C:\Najika_World\digivice\index.html
 ChromaDB: C:\Najika_World\memory_db\ (2556 Einträge!)
