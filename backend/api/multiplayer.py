@@ -14,7 +14,7 @@ from backend.services.multiplayer_server import get_multiplayer_server
 # from backend.models.user import User
 
 
-router = APIRouter(prefix="/multiplayer", tags=["multiplayer"])
+router = APIRouter(prefix="/api/multiplayer", tags=["multiplayer"])
 
 
 @router.websocket("/ws")

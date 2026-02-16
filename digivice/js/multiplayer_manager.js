@@ -50,7 +50,7 @@ class MultiplayerManager {
     getServerUrl() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.host;
-        return `${protocol}//${host}/api/v1/multiplayer/ws`;
+        return `${protocol}//${host}/api/multiplayer/ws`;
     }
 
     /**
