@@ -31,7 +31,7 @@ from backend.api import (
     state_v2, chat_v2,  # V2 Core Router (Migration Phase 1)
     battle_v2, living_v2, quest_v2, minigame_v2,  # V2 Game Systems (Phase 2)
     slime_v3,  # Slime V3 Formwandler + Aura (Phase 3)
-    companion, combat_hands, mimik, stat_training,  # AUDIT FIX: Fehlende Router hinzugefügt
+    # companion, combat_hands, mimik, stat_training,  # DEAKTIVIERT: Backend-Module fehlen (siehe MISSING_DEPENDENCIES_AUDIT_2026-02-16.md)
 )
 
 
@@ -271,11 +271,12 @@ app.include_router(slime_v3.router)       # /api/slime-v3 - Slime Formwandler Sy
 
 # ============================================================================
 # AUDIT FIX 2026-02-15: FEHLENDE ROUTER REGISTRIERT
+# DEAKTIVIERT 2026-02-16: Backend-Module fehlen (siehe MISSING_DEPENDENCIES_AUDIT_2026-02-16.md)
 # ============================================================================
-app.include_router(companion.router)      # /api/companion - Companion Management
-app.include_router(combat_hands.router)   # /api/combat/hands - Hand Combat System
-app.include_router(mimik.router)          # /api/mimik - Mimik Class (Formwandler)
-app.include_router(stat_training.router)  # /api/training/stats - Stat Training System
+# app.include_router(companion.router)      # /api/companion - Module fehlt: najika_companion_system.py
+# app.include_router(combat_hands.router)   # /api/combat/hands - Module fehlt: najika_combat_hands_system.py
+# app.include_router(mimik.router)          # /api/mimik - Module fehlt: najika_mimik_system.py
+# app.include_router(stat_training.router)  # /api/training/stats - Module fehlt: najika_stat_training_system.py
 
 
 # ============================================================================
