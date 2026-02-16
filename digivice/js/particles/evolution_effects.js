@@ -3,9 +3,9 @@
  * Digimon-style evolution sequences with dramatic particle effects
  */
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
-export class EvolutionEffectSystem {
+class EvolutionEffectSystem {
     constructor(scene) {
         this.scene = scene;
         this.activeEvolutions = [];

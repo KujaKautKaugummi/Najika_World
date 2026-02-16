@@ -3,9 +3,9 @@
  * Digimon World style combat particles with Three.js
  */
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
-export class CombatParticleSystem {
+class CombatParticleSystem {
     constructor(scene) {
         this.scene = scene;
         this.particlePools = new Map();

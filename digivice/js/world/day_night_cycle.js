@@ -443,4 +443,10 @@ class DayNightCycle {
   }
 }
 
+// ES6 export for module usage
 export default DayNightCycle;
+
+// Window export for script-tag usage
+if (typeof window !== 'undefined') {
+  window.DayNightCycle = DayNightCycle;
+}

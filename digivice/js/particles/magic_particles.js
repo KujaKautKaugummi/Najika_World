@@ -3,9 +3,9 @@
  * Digimon skills and magic effects
  */
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
-export class MagicParticleSystem {
+class MagicParticleSystem {
     constructor(scene) {
         this.scene = scene;
         this.activeMagicEffects = [];

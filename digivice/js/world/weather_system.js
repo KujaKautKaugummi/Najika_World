@@ -450,4 +450,10 @@ class WeatherSystem {
   }
 }
 
+// ES6 export for module usage
 export default WeatherSystem;
+
+// Window export for script-tag usage
+if (typeof window !== 'undefined') {
+  window.WeatherSystem = WeatherSystem;
+}

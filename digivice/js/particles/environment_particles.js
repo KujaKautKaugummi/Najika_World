@@ -3,9 +3,9 @@
  * Footsteps, dust, debris, environmental effects
  */
 
-import * as THREE from 'three';
+const THREE = window.THREE;
 
-export class EnvironmentParticleSystem {
+class EnvironmentParticleSystem {
     constructor(scene) {
         this.scene = scene;
         this.activeEffects = [];
