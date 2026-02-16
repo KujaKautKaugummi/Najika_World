@@ -4,6 +4,8 @@
 **Session:** 2026-02-16 Round 3
 **Assigned to:** OPUS Model (Frontend/Design Spezialist)
 **Geschätzter Aufwand:** ~100 Minuten
+**Branch:** main (zusammen mit SONNET - keine Konflikte da Frontend/Backend getrennt!)
+**Location:** C:\Najika_World (Hauptordner)
 
 ---
 
