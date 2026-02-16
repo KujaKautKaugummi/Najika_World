@@ -568,6 +568,18 @@
     <link rel="stylesheet" href="static/css/chat.css">
     <!-- Slime Arena CSS -->
     <link rel="stylesheet" href="static/css/slime_arena.css">
+
+    <!-- AUDIT FIX 2026-02-15: Missing CSS Files -->
+    <link rel="stylesheet" href="css/admin_dashboard.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/performance_stats.css">
+    <link rel="stylesheet" href="static/css/terminal_modules.css">
+    <link rel="stylesheet" href="static/css/code_editor.css">
+    <link rel="stylesheet" href="static/css/file_manager.css">
+    <link rel="stylesheet" href="static/css/secure_messenger.css">
+    <link rel="stylesheet" href="static/css/system_monitor.css">
+    <link rel="stylesheet" href="static/css/minigames.css">
+    <link rel="stylesheet" href="static/css/game_systems.css">
 </head>
 <body>
     <!-- UI Top Bar -->
@@ -890,6 +902,11 @@
     <!-- Three.js und eigene Skripte -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- AUDIT FIX 2026-02-15: Audio Systems -->
+    <script src="js/audio/combat_sfx_system.js"></script>
+    <script src="js/audio/music_system.js"></script>
+    <script src="js/audio/spatial_audio_engine.js"></script>
 
     <!-- Core Najika Modules (MUSS ZUERST!) -->
     <script src="js/core/najika_spawn_system.js"></script>
@@ -6413,7 +6430,7 @@ function startNajikaStatusUpdates() {
 <script src="js/medicine_crafting_ui.js"></script>
 <script src="js/companion_mode_choice.js"></script>
 <script src="js/dynamic_factions_ui.js"></script>
-<script src="js/game_events_ws_bridge.js"></script>
+<!-- AUDIT FIX: Duplikat entfernt (bereits in Zeile 963) -->
 
 <!-- Phase 2: UI Systems (OPUS 15.02.2026) -->
 <script src="js/quest_tracker_v2.js"></script>

@@ -31,6 +31,7 @@ from backend.api import (
     state_v2, chat_v2,  # V2 Core Router (Migration Phase 1)
     battle_v2, living_v2, quest_v2, minigame_v2,  # V2 Game Systems (Phase 2)
     slime_v3,  # Slime V3 Formwandler + Aura (Phase 3)
+    companion, combat_hands, mimik, stat_training,  # AUDIT FIX: Fehlende Router hinzugefügt
 )
 
 
@@ -267,6 +268,14 @@ app.include_router(minigame_v2.router)    # /api/v2/minigame - Minigames V2
 # SLIME V3 (Migration Phase 3 - Formwandler + Aura)
 # ============================================================================
 app.include_router(slime_v3.router)       # /api/slime-v3 - Slime Formwandler System
+
+# ============================================================================
+# AUDIT FIX 2026-02-15: FEHLENDE ROUTER REGISTRIERT
+# ============================================================================
+app.include_router(companion.router)      # /api/companion - Companion Management
+app.include_router(combat_hands.router)   # /api/combat/hands - Hand Combat System
+app.include_router(mimik.router)          # /api/mimik - Mimik Class (Formwandler)
+app.include_router(stat_training.router)  # /api/training/stats - Stat Training System
 
 
 # ============================================================================
