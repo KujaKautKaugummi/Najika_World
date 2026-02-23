@@ -448,14 +448,14 @@ class RegionBossFinisher:
 
     def __init__(self):
         self.region_finishers = {
-            'Bernstein-Dünen': self._desert_finisher,
-            'Smaragd-Hain': self._forest_finisher,
-            'Azur-Klippen': self._ocean_finisher,
-            'Amethyst-Steppe': self._plains_finisher,
-            'Onyx-Morast': self._swamp_finisher,
-            'Perl-Gletscher': self._ice_finisher,
-            'Rubin-Schlucht': self._volcano_finisher,
-            'Obsidian-Nacht': self._void_finisher
+            'Heiße Dünen': self._desert_finisher,
+            'Samtmoos-Tiefwald': self._forest_finisher,
+            'Salzwind-Küste': self._ocean_finisher,
+            'Blitzebene': self._plains_finisher,
+            'Grünschlamm-Sumpf': self._swamp_finisher,
+            'Reich der Drei': self._ice_finisher,
+            'Magmaströme': self._volcano_finisher,
+            'Tiefenhöhlen': self._void_finisher
         }
 
     def _desert_finisher(self, ingredients: List[str]) -> FinisherAnimation:
@@ -669,7 +669,7 @@ if __name__ == "__main__":
     print("-" * 30)
 
     boss_finisher = region_boss.get_region_finisher(
-        "Rubin-Schlucht",
+        "Magmaströme",
         ["Diamant", "Feuer", "Drache"]
     )
     print(boss_finisher.play())

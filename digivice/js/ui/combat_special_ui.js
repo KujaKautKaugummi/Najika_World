@@ -17,7 +17,7 @@
 (function() {
     'use strict';
 
-    const API_BASE = 'http://127.0.0.1:8001';
+    const API_BASE = 'http://127.0.0.1:8000';
 
     // ==========================================
     // ELEMENT FARBEN (fuer Infuse Glow)
@@ -1015,21 +1015,8 @@
             }
         }
 
-        // Auch von UnifiedCombat pruefen
-        if (window.UnifiedCombat) {
-            if (!leftWeapon && window.UnifiedCombat.getHand) {
-                leftWeapon = window.UnifiedCombat.getHand('left');
-            }
-            if (!rightWeapon && window.UnifiedCombat.getHand) {
-                rightWeapon = window.UnifiedCombat.getHand('right');
-            }
-        }
-
         // Infuse-Daten holen
         let infuses = [];
-        if (window.UnifiedCombat && typeof window.UnifiedCombat.getActiveInfuses === 'function') {
-            infuses = window.UnifiedCombat.getActiveInfuses();
-        }
 
         // Linke Hand updaten
         updateSingleHand(leftSlot, leftWeapon, infuses, 'left', 'L');
@@ -1449,11 +1436,6 @@
         if (!display) return;
 
         let infuses = [];
-
-        // Von UnifiedCombat holen
-        if (window.UnifiedCombat && typeof window.UnifiedCombat.getActiveInfuses === 'function') {
-            infuses = window.UnifiedCombat.getActiveInfuses();
-        }
 
         // Ablauf-Check
         const currentWeapons = new Set(infuses.map(i => i.weapon));

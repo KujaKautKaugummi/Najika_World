@@ -12,10 +12,10 @@
 class CardGameUI {
     constructor() {
         this.apiBase = {
-            cards: 'http://localhost:8001/api/cards',
-            decks: 'http://localhost:8001/api/decks',
-            matches: 'http://localhost:8001/api/matches',
-            rankings: 'http://localhost:8001/api/rankings'
+            cards: 'http://localhost:8000/api/cards',
+            decks: 'http://localhost:8000/api/decks',
+            matches: 'http://localhost:8000/api/matches',
+            rankings: 'http://localhost:8000/api/rankings'
         };
 
         this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;

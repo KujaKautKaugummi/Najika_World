@@ -27,6 +27,7 @@ from datetime import datetime
 
 from backend.database import get_db
 from backend.models.magic_progress import RegionBoss, Challenge
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/region-boss", tags=["region_boss"])
@@ -59,6 +60,7 @@ class SetTaxRateRequest(BaseModel):
 # ============================================================================
 
 @router.post("/conquer")
+@handle_errors()
 async def conquer_region(request: ConquerRegionRequest, db: Session = Depends(get_db)):
     """
     Conquer Region (DATABASE)
@@ -115,6 +117,7 @@ async def conquer_region(request: ConquerRegionRequest, db: Session = Depends(ge
 
 
 @router.post("/challenge/create")
+@handle_errors()
 async def create_challenge(request: CreateChallengeRequest, db: Session = Depends(get_db)):
     """
     Create Challenge (DATABASE)
@@ -171,6 +174,7 @@ async def create_challenge(request: CreateChallengeRequest, db: Session = Depend
 
 
 @router.get("/region/{region}")
+@handle_errors()
 async def get_region_info(region: str, db: Session = Depends(get_db)):
     """
     Get Region Info (DATABASE)
@@ -211,6 +215,7 @@ async def get_region_info(region: str, db: Session = Depends(get_db)):
 
 
 @router.get("/all")
+@handle_errors()
 async def get_all_regions(db: Session = Depends(get_db)):
     """
     Get All Regions (DATABASE)
@@ -231,6 +236,7 @@ async def get_all_regions(db: Session = Depends(get_db)):
 
 
 @router.get("/ultimate")
+@handle_errors()
 async def get_ultimate_ruler(db: Session = Depends(get_db)):
     """
     Get Ultimate Ruler (Frontend: game_systems_ui.js RegionBossUI.loadUltimateRuler)
@@ -262,6 +268,7 @@ async def get_ultimate_ruler(db: Session = Depends(get_db)):
 
 
 @router.post("/tax/set")
+@handle_errors()
 async def set_tax_rate(request: SetTaxRateRequest, db: Session = Depends(get_db)):
     """
     Set Tax Rate (DATABASE)
@@ -307,6 +314,7 @@ async def set_tax_rate(request: SetTaxRateRequest, db: Session = Depends(get_db)
 
 
 @router.get("/state/export")
+@handle_errors()
 async def export_state(db: Session = Depends(get_db)):
     """
     Export Complete State (DATABASE)

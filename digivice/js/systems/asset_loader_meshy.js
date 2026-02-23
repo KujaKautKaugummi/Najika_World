@@ -12,8 +12,7 @@
  * - Texture optimization
  */
 
-// Verwende globale THREE.js (wird vorher als Script geladen)
-const THREE = window.THREE;
+// THREE is loaded globally
 const GLTFLoader = THREE.GLTFLoader || (window.THREE && window.THREE.GLTFLoader);
 const DRACOLoader = THREE.DRACOLoader || (window.THREE && window.THREE.DRACOLoader);
 

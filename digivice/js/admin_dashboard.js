@@ -3,9 +3,9 @@
  * Comprehensive administrative interface for Najika World
  */
 
-import { API_BASE_URL } from './config.js';
+const API_BASE_URL = (window.NajikaConfig && window.NajikaConfig.API_BASE_URL) || 'http://localhost:8000';
 
-export class AdminDashboard {
+class AdminDashboard {
     constructor() {
         this.container = null;
         this.currentView = 'overview';

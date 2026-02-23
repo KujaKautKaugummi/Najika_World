@@ -66,12 +66,14 @@
                         ${this.renderTab('companion', '🐾 Begleiter')}
                         ${this.renderTab('forms', '🔄 Formen')}
                         ${this.renderTab('training', '💪 V-Pet Training')}
+                        ${this.renderTab('farm', '🐄 Farm')}
                     </div>
 
                     <div id="creature-tab-content">
                         ${this.activeTab === 'companion' ? this.renderCompanionTab(companionData, state) : ''}
                         ${this.activeTab === 'forms' ? this.renderFormsTab(cs, state) : ''}
                         ${this.activeTab === 'training' ? this.renderTrainingTab(companionData, state, cs) : ''}
+                        ${this.activeTab === 'farm' ? this.renderFarmTab() : ''}
                     </div>
                 </div>
             `;
@@ -223,6 +225,78 @@
             </div>`;
         }
     }
+
+    // Add renderFarmTab method
+    CreatureUI.prototype.renderFarmTab = function() {
+        const ct = window.CreatureTaming;
+        const farmStatus = ct?.getFarmStatus?.() || null;
+        const tamedCreatures = ct?.getTamedCreatures?.() || [];
+        const farmAnimals = tamedCreatures.filter(c => c.role === 'farm' || c.type === 'livestock');
+
+        if (!farmStatus && farmAnimals.length === 0) {
+            return `
+            <div style="text-align: center; padding: 40px;">
+                <div style="font-size: 48px; margin-bottom: 20px;">🐄</div>
+                <h3 style="color: #8BC34A;">FARM-TIERE</h3>
+                <div style="color: #888; font-size: 14px; margin-top: 10px;">
+                    Noch keine Farmtiere gezähmt!
+                </div>
+                <div style="color: #555; font-size: 12px; margin-top: 15px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    Fange wilde Tiere in der Overworld und weise sie der Farm zu.
+                    Farmtiere produzieren Ressourcen wie Milch, Eier oder Wolle.
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    <div style="background: rgba(139,195,74,0.1); border: 1px solid rgba(139,195,74,0.2); border-radius: 8px; padding: 12px;">
+                        <div style="font-size: 24px;">🐔</div>
+                        <div style="font-size: 11px; color: #8BC34A; margin-top: 4px;">Huhn</div>
+                        <div style="font-size: 9px; color: #888;">Eier</div>
+                    </div>
+                    <div style="background: rgba(139,195,74,0.1); border: 1px solid rgba(139,195,74,0.2); border-radius: 8px; padding: 12px;">
+                        <div style="font-size: 24px;">🐄</div>
+                        <div style="font-size: 11px; color: #8BC34A; margin-top: 4px;">Kuh</div>
+                        <div style="font-size: 9px; color: #888;">Milch</div>
+                    </div>
+                    <div style="background: rgba(139,195,74,0.1); border: 1px solid rgba(139,195,74,0.2); border-radius: 8px; padding: 12px;">
+                        <div style="font-size: 24px;">🐑</div>
+                        <div style="font-size: 11px; color: #8BC34A; margin-top: 4px;">Schaf</div>
+                        <div style="font-size: 9px; color: #888;">Wolle</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        return `
+        <div>
+            <h3 style="color: #8BC34A; margin-bottom: 15px;">🐄 FARM-TIERE (${farmAnimals.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+                ${farmAnimals.map((animal, idx) => {
+                    const icons = { chicken: '🐔', cow: '🐄', sheep: '🐑', pig: '🐷', goat: '🐐', horse: '🐴' };
+                    const icon = icons[animal.species] || '🐾';
+                    const hungry = (animal.hunger || 0) < 50;
+                    const hasProduct = animal.productReady || false;
+                    return `
+                    <div style="background: rgba(30,30,50,0.9); border: 1px solid ${hasProduct ? '#FFD700' : '#333'}; border-radius: 8px; padding: 14px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 28px;">${icon}</span>
+                            <span style="font-size: 12px; color: ${hungry ? '#e74c3c' : '#4CAF50'};">${hungry ? '🍽️ Hungrig!' : '😊 Satt'}</span>
+                        </div>
+                        <div style="font-size: 13px; color: #e0e0e0; font-weight: bold;">${animal.name || animal.species}</div>
+                        <div style="font-size: 10px; color: #888; margin-top: 2px;">Zufriedenheit: ${animal.happiness || 50}%</div>
+                        <div style="display: flex; gap: 6px; margin-top: 10px;">
+                            <button onclick="window.CreatureTaming?.feedFarmAnimal?.(${idx}); window.creatureUI.render();" style="flex:1; padding: 6px; background: #f39c12; border: none; border-radius: 4px; color: white; cursor: pointer; font-family: inherit; font-size: 11px;">🍖 Füttern</button>
+                            <button onclick="window.CreatureTaming?.collectProduct?.(${idx}); window.creatureUI.render();" style="flex:1; padding: 6px; background: ${hasProduct ? '#FFD700' : '#555'}; border: none; border-radius: 4px; color: ${hasProduct ? '#000' : '#888'}; cursor: ${hasProduct ? 'pointer' : 'not-allowed'}; font-family: inherit; font-size: 11px;">${hasProduct ? '📦 Sammeln!' : '⏳ Warten...'}</button>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>
+            ${farmStatus ? `
+            <div style="margin-top: 20px; background: rgba(139,195,74,0.08); border: 1px solid rgba(139,195,74,0.2); border-radius: 8px; padding: 15px;">
+                <div style="font-size: 12px; color: #8BC34A; font-weight: bold; margin-bottom: 8px;">📊 Farm-Statistiken</div>
+                <div style="font-size: 11px; color: #888;">Tiere gesamt: ${farmStatus.totalAnimals || 0}</div>
+                <div style="font-size: 11px; color: #888;">Tägliche Produktion: ${farmStatus.dailyOutput || '???'}</div>
+            </div>` : ''}
+        </div>`;
+    };
 
     window.creatureUI = new CreatureUI();
     console.log('🐾 CreatureUI geladen');

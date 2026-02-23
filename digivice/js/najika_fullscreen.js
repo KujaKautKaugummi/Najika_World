@@ -4,7 +4,7 @@
  */
 
 const NajikaFullscreen = (function() {
-    const API_BASE = window.API_BASE_URL || 'http://localhost:8001';
+    const API_BASE = window.API_BASE_URL || 'http://localhost:8000';
 
     let overlay = null;
     let isOpen = false;

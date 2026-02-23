@@ -704,11 +704,6 @@ const OverworldEnemies = (function() {
         const playerPos = getPlayerPosition();
         if (!playerPos) return;
 
-        // Safe Zone: Keine Aggro in Götterfels (Schwarze Mühle)
-        const dxCenter = playerPos.x - 4800;
-        const dzCenter = playerPos.z - 4800;
-        if (Math.sqrt(dxCenter * dxCenter + dzCenter * dzCenter) < 500) return;
-
         state.activeEnemies.forEach(enemy => {
             if (enemy.isAggro || enemy.inCombat) return; // Skip if already aggro or in combat
 
@@ -728,9 +723,8 @@ const OverworldEnemies = (function() {
 
         // COMBAT-QUEUE: Nur 1 Combat gleichzeitig!
         if (state.activeCombat) {
-            console.warn(`⚠️ Combat bereits aktiv! ${enemy.data.name} wird übersprungen.`);
             enemy.isAggro = false;
-            return;
+            return; // Kein Spam-Log mehr - silently skip
         }
 
         // GameEvent emittieren
@@ -743,94 +737,92 @@ const OverworldEnemies = (function() {
             });
         }
 
-        let combatStarted = false;
+        // ⚔️ REAL 3D COMBAT - Einziges Combat-System (Desktop + Mobile)
+        // Desktop: Tastatur-Controls Q/E/Space
+        // Mobile: Touch-Controls via touch_combat.js
 
-        // Use REAL 3D Combat (Tastatur-Controls: Q/E/Space)
-        if (window.Real3DCombat && window.Real3DCombat.startCombat) {
-            const scene = window.getScene ? window.getScene() : (state.scene || window.scene);
-            const playerPos = window.getPlayerPosition ? window.getPlayerPosition() :
-                (window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 });
-
-            if (scene) {
-                // Store current enemy reference (wichtig für Callbacks!)
-                const currentEnemy = enemy;
-
-                // Setup Callbacks BEFORE starting combat
-                window.onCombatVictory = (result) => {
-                    if (result.type === 'real3d') {
-                        console.log('✅ Combat Victory! XP:', result.xp, 'Loot:', result.loot);
-                        onEnemyDefeated(currentEnemy);
-                        state.activeCombat = false; // Combat beendet!
-                        if (window.GameEvents) {
-                            window.GameEvents.emit('combatEnded', { won: true, enemyData: currentEnemy.data });
-                        }
-                    }
-                };
-
-                window.onCombatDefeat = (result) => {
-                    if (result.type === 'real3d') {
-                        console.log('💀 Combat Defeat!');
-                        // Spieler verloren - Gegner wieder sichtbar machen
-                        if (currentEnemy.mesh) {
-                            currentEnemy.mesh.visible = true;
-                        }
-                        currentEnemy.inCombat = false;
-                        currentEnemy.isAggro = false;
-                        state.activeCombat = false; // Combat beendet!
-                        if (window.GameEvents) {
-                            window.GameEvents.emit('combatEnded', { won: false, enemyData: currentEnemy.data });
-                        }
-                    }
-                };
-
-                // Real3DCombat erwartet: (enemyList, scene, position)
-                window.Real3DCombat.startCombat([enemy.data.id], scene, playerPos);
-                combatStarted = true;
-                state.activeCombat = true; // Markiere Combat als aktiv!
-                console.log(`⚔️ Real3D Combat gestartet: ${enemy.data.name}`);
-            } else {
-                console.warn('Scene nicht verfügbar für Real3DCombat, versuche Fallback...');
-            }
-        }
-
-        if (!combatStarted && window.UnifiedCombat) {
-            // Fallback: Unified Combat (UI-Buttons)
-            const currentEnemy = enemy; // Store reference
-            window.UnifiedCombat.startCombat({
-                type: 'overworld',
-                enemy: enemy.data,
-                location: state.currentBiome,
-                isHardcore: false,
-                onWin: () => {
-                    onEnemyDefeated(currentEnemy);
-                    state.activeCombat = false;
-                },
-                onLose: () => {
-                    if (currentEnemy.mesh) {
-                        currentEnemy.mesh.visible = true;
-                    }
-                    currentEnemy.inCombat = false;
-                    currentEnemy.isAggro = false;
-                    state.activeCombat = false;
-                    if (window.GameEvents) {
-                        window.GameEvents.emit('combatEnded', { won: false, enemyData: currentEnemy.data });
-                    }
-                }
-            });
-            combatStarted = true;
-            state.activeCombat = true;
-        }
-
-        if (!combatStarted) {
-            // Kein Combat-System verfügbar - Gegner NICHT entfernen!
-            console.error('Kein Combat-System geladen! Gegner bleibt auf der Map.');
-            enemy.isAggro = false; // Reset aggro so player can try again
+        if (!window.Real3DCombat || !window.Real3DCombat.startCombat) {
+            console.error('❌ Real3DCombat nicht geladen! Bitte UNIFIED.html prüfen.');
+            enemy.isAggro = false;
             return;
         }
 
-        // Verstecke Gegner während Combat (statt ihn zu entfernen!)
-        if (enemy.mesh) {
-            enemy.mesh.visible = false;
+        const scene = window.getScene ? window.getScene() : (state.scene || window.scene);
+        const playerPos = window.getPlayerPosition ? window.getPlayerPosition() :
+            (window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 });
+
+        if (!scene) {
+            console.error('❌ Scene nicht verfügbar für Real3DCombat!');
+            enemy.isAggro = false;
+            return;
+        }
+
+        // Store current enemy reference (wichtig für Callbacks!)
+        const currentEnemy = enemy;
+
+        // Setup Callbacks BEFORE starting combat
+        window.onCombatVictory = (result) => {
+            if (result.type === 'real3d') {
+                console.log('✅ Combat Victory! XP:', result.xp, 'Loot:', result.loot);
+                onEnemyDefeated(currentEnemy);
+                state.activeCombat = false;
+                // combatEnded wird bereits von real_3d_combat.js emittiert - NICHT doppelt!
+            }
+        };
+
+        window.onCombatDefeat = (result) => {
+            if (result.type === 'real3d') {
+                console.log(result.reason === 'exit' ? '🚪 Combat Exit!' : '💀 Combat Defeat!');
+                // Bei Exit: Gegner wieder sichtbar (nicht besiegt)
+                if (currentEnemy.mesh) {
+                    currentEnemy.mesh.visible = true;
+                }
+                currentEnemy.inCombat = false;
+                currentEnemy.isAggro = false;
+                state.activeCombat = false;
+                // combatEnded wird bereits von real_3d_combat.js emittiert - NICHT doppelt!
+            }
+        };
+
+        // Exit-Callback: Manueller Abbruch (ESC/X) - Reset ohne Defeat-Logik
+        window.onCombatExit = (result) => {
+            if (result.type === 'real3d') {
+                console.log('🚪 Combat manuell beendet');
+                if (currentEnemy.mesh) {
+                    currentEnemy.mesh.visible = true;
+                }
+                currentEnemy.inCombat = false;
+                currentEnemy.isAggro = false;
+                state.activeCombat = false;
+            }
+        };
+
+        // Real3DCombat erwartet: (enemyList, scene, position)
+        window.Real3DCombat.startCombat([enemy.data.id], scene, playerPos);
+        state.activeCombat = true; // Markiere Combat als aktiv!
+        console.log(`⚔️ Real3D Combat gestartet: ${enemy.data.name}`);
+
+        // 🔥 FIXED: Don't hide immediately - wait for combat enemies to load first
+        // Listen for combatEnemiesLoaded event to hide overworld enemy
+        const hideEnemyAfterLoad = (event) => {
+            if (event.type === 'real3d' && enemy.mesh) {
+                enemy.mesh.visible = false;
+                console.log(`👻 Overworld enemy hidden after combat loaded: ${enemy.data.name}`);
+                // Remove listener after use
+                if (window.GameEvents) {
+                    window.GameEvents.off('combatEnemiesLoaded', hideEnemyAfterLoad);
+                }
+            }
+        };
+
+        if (window.GameEvents && window.Real3DCombat) {
+            // Real3DCombat uses async loading - wait for it
+            window.GameEvents.on('combatEnemiesLoaded', hideEnemyAfterLoad);
+        } else {
+            // UnifiedCombat or other systems - hide immediately
+            if (enemy.mesh) {
+                enemy.mesh.visible = false;
+            }
         }
 
         // Markiere als "in combat" damit er nicht doppelt getriggert wird
@@ -951,11 +943,8 @@ const OverworldEnemies = (function() {
         }
 
         // ===== GAME EVENTS =====
+        // combatEnded wird bereits von real_3d_combat.js emittiert - hier nur enemyKilled
         if (window.GameEvents) {
-            window.GameEvents.emit('combatEnded', {
-                won: true, enemyData: enemy.data,
-                loot: actualLoot, xp, biome: state.currentBiome
-            });
             window.GameEvents.emit('enemyKilled', {
                 enemyId: enemy.data.id, enemyType: enemy.data.id,
                 biome: state.currentBiome, loot: actualLoot,
@@ -1021,16 +1010,8 @@ const OverworldEnemies = (function() {
     // ==========================================
 
     function getPlayerPosition() {
-        // 1. Scene3D characterGroup (Hauptquelle!)
-        if (window.Scene3D && window.Scene3D.characterGroup && window.Scene3D.characterGroup.position) {
-            return {
-                x: window.Scene3D.characterGroup.position.x,
-                y: window.Scene3D.characterGroup.position.y,
-                z: window.Scene3D.characterGroup.position.z
-            };
-        }
-
-        // 2. Legacy: window.character
+        // 1. window.character (Hauptquelle!)
+        // (Scene3D.characterGroup existiert nicht in UNIFIED.html)
         if (window.character && window.character.position) {
             return {
                 x: window.character.position.x,

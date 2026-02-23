@@ -925,20 +925,20 @@ class MedicineCraftingUI {
     async applyEffect(effect) {
         try {
             if (effect.hp) {
-                await fetch('http://127.0.0.1:8001/api/v2/care/heal', {
+                await fetch('http://127.0.0.1:8000/api/v2/care/heal', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
             }
             if (effect.energy) {
-                await fetch('http://127.0.0.1:8001/api/state/najika/update', {
+                await fetch('http://127.0.0.1:8000/api/state/najika/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ updates: { energy: Math.min(100, 70 + effect.energy) } })
                 });
             }
             if (effect.happiness) {
-                await fetch('http://127.0.0.1:8001/api/state/najika/update', {
+                await fetch('http://127.0.0.1:8000/api/state/najika/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ updates: { happiness: Math.min(100, 70 + effect.happiness) } })

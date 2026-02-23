@@ -48,17 +48,20 @@ def main():
 
     # 1. Flask Server (Chat, TTS, Living System)
     print("[1/2] Starte Flask Server (Port 8000)...")
-    flask_cmd = [sys.executable, "najika_server.py"]
+    flask_env = os.environ.copy()
+    flask_env["PYTHONUNBUFFERED"] = "1"  # Output sofort durchreichen
+    flask_cmd = [sys.executable, "-u", "najika_server.py"]
     flask_proc = subprocess.Popen(
         flask_cmd,
         cwd=BACKEND_DIR,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
-        bufsize=1
+        bufsize=1,
+        env=flask_env
     )
     processes.append(("Flask (8000)", flask_proc))
-    time.sleep(2)  # Warte kurz
+    time.sleep(15)  # Flask braucht Zeit (TTS, ChromaDB, Ollama, etc.)
 
     if flask_proc.poll() is None:
         print("  [OK] Flask Server gestartet!")
@@ -76,7 +79,8 @@ def main():
         "backend.main_fastapi:app",
         "--host", "127.0.0.1",
         "--port", "8001",
-        "--reload"
+        "--reload",
+        "--reload-dir", "backend"
     ]
     fastapi_proc = subprocess.Popen(
         fastapi_cmd,
@@ -100,7 +104,7 @@ def main():
     print("  ALLE SERVER LAUFEN!")
     print("=" * 70)
     print()
-    print("  Flask Server:   http://127.0.0.1:8001")
+    print("  Flask Server:   http://127.0.0.1:8000")
     print("    - Chat API, TTS, Living System, Battle")
     print()
     print("  FastAPI Server: http://127.0.0.1:8001")
@@ -110,7 +114,7 @@ def main():
     print("    - Farming (/api/farming)")
     print("    - API Docs: http://127.0.0.1:8001/docs")
     print()
-    print("  Digivice:       http://127.0.0.1:8001")
+    print("  Digivice:       http://127.0.0.1:8001/digivice/")
     print()
     print("  Druecke CTRL+C zum Beenden")
     print("=" * 70)

@@ -34,6 +34,7 @@ from backend.models.instrument_progress import InstrumentProgress, PlayedNote, L
 from backend.services.instrument_system import (
     InstrumentSystem, InstrumentType, Note, NoteQuality
 )
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/instrument", tags=["instrument"])
@@ -125,6 +126,7 @@ class SwitchInstrumentRequest(BaseModel):
 # ============================================================================
 
 @router.post("/play-note")
+@handle_errors()
 async def play_note(request: PlayNoteRequest, db: Session = Depends(get_db)):
     """
     Play Single Note (DATABASE)
@@ -247,6 +249,7 @@ async def play_note(request: PlayNoteRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/play-song")
+@handle_errors()
 async def play_song(request: PlaySongRequest, db: Session = Depends(get_db)):
     """
     Play Complete Song (DATABASE)
@@ -365,6 +368,7 @@ async def play_song(request: PlaySongRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/switch")
+@handle_errors()
 async def switch_instrument(request: SwitchInstrumentRequest, db: Session = Depends(get_db)):
     """
     Switch Instrument (DATABASE)
@@ -411,6 +415,7 @@ async def switch_instrument(request: SwitchInstrumentRequest, db: Session = Depe
 
 
 @router.get("/songs")
+@handle_errors()
 async def get_songs_alias():
     """
     Get All Songs - alias (Frontend: game_systems_ui.js InstrumentUI.loadSongs)
@@ -425,6 +430,7 @@ async def get_songs_alias():
 
 
 @router.get("/songs/all")
+@handle_errors()
 async def get_all_songs():
     """
     Get All Songs (static)
@@ -440,6 +446,7 @@ async def get_all_songs():
 
 
 @router.get("/songs/{song_id}")
+@handle_errors()
 async def get_song(song_id: str):
     """
     Get Specific Song (static)
@@ -461,6 +468,7 @@ async def get_song(song_id: str):
 
 
 @router.get("/progress")
+@handle_errors()
 async def get_progress_default(player_id: int = Query(1), db: Session = Depends(get_db)):
     """
     Get Player Progress - default (Frontend: game_systems_ui.js InstrumentUI.loadProgress)
@@ -471,6 +479,7 @@ async def get_progress_default(player_id: int = Query(1), db: Session = Depends(
 
 
 @router.get("/progress/{player_id}")
+@handle_errors()
 async def get_progress(player_id: int, db: Session = Depends(get_db)):
     """
     Get Player Progress (DATABASE)
@@ -498,6 +507,7 @@ async def get_progress(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/state/export/{player_id}")
+@handle_errors()
 async def export_state(player_id: int, db: Session = Depends(get_db)):
     """
     Export Complete State (DATABASE)
@@ -540,6 +550,7 @@ async def export_state(player_id: int, db: Session = Depends(get_db)):
 
 # CATCH-ALL: Must be LAST to not intercept /songs, /progress, etc.
 @router.get("/{instrument_type}")
+@handle_errors()
 async def get_instrument_info(instrument_type: str):
     """
     Get Instrument Info (static)

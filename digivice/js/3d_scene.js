@@ -1,7 +1,7 @@
 // Najika Digivice – Three.js scene manager with KayKit rooms, character controls and camera modes
 (function () {
     // API Base URL - Backend auf Port 8000
-    const API_BASE = window.API_BASE_URL || 'http://localhost:8001';
+    const API_BASE = window.API_BASE_URL || 'http://localhost:8000';
     const CAMERA_MODES = {
         ORBIT: 'orbit',
         THIRD: 'third',
@@ -36,8 +36,14 @@
     };
 
     const CHARACTER_SPEED = 7.5;
-    const CHARACTER_HEIGHT = 3.8;
+    const BASE_CHARACTER_HEIGHT = 3.8;
+    let characterScale = 1.0;       // Dynamisch: Spieler/Monster-Größe
     const CLAMP_PADDING = 2;
+
+    // Dynamische Höhe basierend auf Charakter/Monster-Größe
+    function getCharacterHeight() {
+        return BASE_CHARACTER_HEIGHT * characterScale;
+    }
 
     let scene;
     let camera;
@@ -64,6 +70,9 @@
     let characterReady = false;
     let characterHeading = 0;
     const activeKeys = new Set();
+
+    // ⚔️ Angriffs-Animation State
+    const attackAnimState = { active: false, cancelFn: null };
 
     // 🗡️ DUAL-WIELD KAMPFSYSTEM (Skyrim + Dark Souls)
     const COMBAT_SYSTEM = {
@@ -877,7 +886,7 @@
         console.log(`🚪 Verlasse Gebäude: ${currentInterior}`);
 
         // 🆕 Crawler-Dungeon beenden falls aktiv
-        if (window.DungeonCrawler && window.DungeonCrawler.isActive()) {
+        if (window.DungeonCrawler && window.DungeonCrawler.isActive) {
             window.DungeonCrawler.exitCrawlerDungeon();
         }
 
@@ -1777,6 +1786,17 @@
                 }
             }
         }
+        // V-Taste: Kamera-Modus wechseln (Orbit → Third → First → Orbit)
+        if (event.code === 'KeyV') {
+            const modes = [CAMERA_MODES.ORBIT, CAMERA_MODES.THIRD, CAMERA_MODES.FIRST];
+            const idx = modes.indexOf(cameraMode);
+            const next = modes[(idx + 1) % modes.length];
+            updateCameraMode(next);
+            window.dispatchEvent(new CustomEvent('cameramode', { detail: { mode: next } }));
+            const labels = { orbit: 'Orbit (UI an)', third: 'Third Person', first: 'First Person' };
+            console.log(`[Kamera] Wechsel → ${labels[next]}`);
+        }
+
         // T-Taste: Terminal öffnen (nur im Terminal-Raum = Turm = Floor 2)
         if (event.code === 'KeyT') {
             if (currentInterior === 'Schwarze Mühle' && currentFloor === 2) {
@@ -2508,6 +2528,165 @@
         characterGroup.add(wand);
     }
 
+    // ⚔️ Directional Attack Animation (For Honor Style - procedural lean + weapon trail)
+    function triggerAttackAnimation({ hand, type, weapon, element, direction = 'neutral' }) {
+        if (!characterGroup) return;
+
+        // Cancel laufende Animation
+        if (attackAnimState.cancelFn) {
+            attackAnimState.cancelFn();
+            attackAnimState.cancelFn = null;
+        }
+
+        // Richtung → Lean-Winkel [pitch(x), roll(z)] in Radian
+        // Vorzeichen-Spiegelung für linke Hand
+        const handSign = (hand === 'left') ? -1 : 1;
+        const LEAN = {
+            neutral: { x:  0.20, z:  0.00 * handSign },
+            up:      { x: -0.35, z:  0.00 },           // Überkopf-Schwung: nach hinten lehnen
+            down:    { x:  0.45, z:  0.00 },           // Tiefer Sweep: nach vorne lehnen
+            left:    { x:  0.15, z: -0.35 * handSign },// Diagonal links
+            right:   { x:  0.15, z:  0.35 * handSign },// Diagonal rechts
+        };
+        const lean    = LEAN[direction] || LEAN.neutral;
+        const swingMs  = (type === 'heavy') ? 280 : 150;
+        const returnMs = (type === 'heavy') ? 380 : 220;
+
+        const baseX = characterGroup.rotation.x;
+        const baseZ = characterGroup.rotation.z;
+        let cancelled = false;
+
+        attackAnimState.active = true;
+        attackAnimState.cancelFn = () => {
+            cancelled = true;
+            characterGroup.rotation.x = baseX;
+            characterGroup.rotation.z = baseZ;
+            attackAnimState.active = false;
+        };
+
+        // Phase 1: Ausholbewegung
+        let t0 = null;
+        function swing(ts) {
+            if (cancelled) return;
+            if (!t0) t0 = ts;
+            const t = Math.min((ts - t0) / swingMs, 1);
+            // Ease-in-out cubic
+            const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+            characterGroup.rotation.x = baseX + lean.x * ease;
+            characterGroup.rotation.z = baseZ + lean.z * ease;
+            if (t < 1) {
+                requestAnimationFrame(swing);
+            } else {
+                // Phase 2: Rückkehr zur Grundhaltung
+                let t1 = null;
+                function ret(ts2) {
+                    if (cancelled) return;
+                    if (!t1) t1 = ts2;
+                    const r = Math.min((ts2 - t1) / returnMs, 1);
+                    const rease = 1 - Math.pow(1 - r, 3); // ease-out cubic
+                    characterGroup.rotation.x = (baseX + lean.x) * (1 - rease) + baseX * rease;
+                    characterGroup.rotation.z = (baseZ + lean.z) * (1 - rease) + baseZ * rease;
+                    if (r < 1) {
+                        requestAnimationFrame(ret);
+                    } else {
+                        characterGroup.rotation.x = baseX;
+                        characterGroup.rotation.z = baseZ;
+                        attackAnimState.active = false;
+                        attackAnimState.cancelFn = null;
+                    }
+                }
+                requestAnimationFrame(ret);
+            }
+        }
+        requestAnimationFrame(swing);
+
+        // Waffen-Trail Partikel
+        spawnAttackTrail(hand, type, element, direction);
+    }
+
+    // ✨ Waffen-Trail: Leuchtende Partikel entlang des Angriffs-Bogens
+    function spawnAttackTrail(hand, type, element, direction) {
+        if (!scene || !characterGroup) return;
+
+        const ELEMENT_COLORS = {
+            fire:      0xFF4400,
+            ice:       0x44AAFF,
+            lightning: 0xFFFF00,
+            physical:  0xDDDDDD,
+            magic:     0xCC44FF,
+            wind:      0x44FF88,
+        };
+        const color = ELEMENT_COLORS[element] || ELEMENT_COLORS.physical;
+
+        // Vertikaler Offset je nach Richtung
+        const DIR_OFFSET = {
+            up:      { x: 0,    y: 2.4, z:  0.0 },
+            down:    { x: 0,    y: 0.6, z:  0.4 },
+            left:    { x:-0.9,  y: 1.6, z:  0.0 },
+            right:   { x: 0.9,  y: 1.6, z:  0.0 },
+            neutral: { x: 0,    y: 1.5, z: -0.2 },
+        };
+        const off  = DIR_OFFSET[direction] || DIR_OFFSET.neutral;
+        const hOff = (hand === 'left') ? -0.5 : 0.5;
+
+        const count = (type === 'heavy') ? 7 : 4;
+        const delay = (type === 'heavy') ? 55 : 32; // ms zwischen Partikeln
+
+        for (let i = 0; i < count; i++) {
+            const size = ((type === 'heavy') ? 0.9 : 0.55) * (1 - i / count * 0.4);
+            setTimeout(() => {
+                if (!scene) return;
+                const sprite = createGlowSprite(color, size);
+                sprite.position.set(
+                    characterGroup.position.x + off.x + hOff + (Math.random() - 0.5) * 0.4,
+                    characterGroup.position.y + off.y + (Math.random() - 0.5) * 0.5,
+                    characterGroup.position.z + off.z + (Math.random() - 0.5) * 0.3
+                );
+                scene.add(sprite);
+                let t = 0;
+                const fadeOut = () => {
+                    t += 0.06;
+                    sprite.material.opacity = Math.max(0, 1 - t * 1.6);
+                    sprite.position.y += 0.025;
+                    if (t < 1) {
+                        requestAnimationFrame(fadeOut);
+                    } else {
+                        scene.remove(sprite);
+                        sprite.material.map?.dispose();
+                        sprite.material.dispose();
+                    }
+                };
+                fadeOut();
+            }, i * delay);
+        }
+    }
+
+    // 🔵 Leucht-Sprite für Trail-Partikel
+    function createGlowSprite(color, size = 0.5) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64; canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        const r = (color >> 16) & 0xFF;
+        const g = (color >>  8) & 0xFF;
+        const b =  color        & 0xFF;
+        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        grad.addColorStop(0,   `rgba(${r},${g},${b},1)`);
+        grad.addColorStop(0.4, `rgba(${r},${g},${b},0.6)`);
+        grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 64, 64);
+        const tex = new THREE.CanvasTexture(canvas);
+        const mat = new THREE.SpriteMaterial({
+            map:         tex,
+            transparent: true,
+            blending:    THREE.AdditiveBlending,
+            depthWrite:  false,
+        });
+        const sprite = new THREE.Sprite(mat);
+        sprite.scale.set(size, size, size);
+        return sprite;
+    }
+
     function updateCharacter(delta) {
         // 🎬 Update Animation Mixer
         if (!characterGroup) return;
@@ -2540,7 +2719,8 @@
             const moveX = Math.sin(worldAngle);
             const moveZ = Math.cos(worldAngle);
 
-            const speed = CHARACTER_SPEED * (cameraMode === CAMERA_MODES.FIRST ? 0.9 : 1);
+            const baseSpeed = CHARACTER_SPEED * (cameraMode === CAMERA_MODES.FIRST ? 0.9 : 1);
+            const speed = baseSpeed * (window.WeightSystem?.getMovementSpeedMultiplier() ?? 1.0);
             characterGroup.position.x += moveX * speed * delta;
             characterGroup.position.z += moveZ * speed * delta;
             clampCharacterToRoom(characterGroup.position);
@@ -2554,10 +2734,12 @@
     }
 
     function clampCharacterToRoom(position) {
-        // Open World: Welt-Grenzen (0 bis 9600) statt symmetrischem Clamp
+        // Open World: Welt-Grenzen symmetrisch (-4790 bis +4790)
+        // PlaneGeometry ist zentriert, also geht die Map von -4800 bis +4800
         if (currentRoomSpan >= 9600) {
-            position.x = clamp(position.x, 10, 9590);
-            position.z = clamp(position.z, 10, 9590);
+            const halfWorld = currentRoomSpan / 2 - 10;
+            position.x = clamp(position.x, -halfWorld, halfWorld);
+            position.z = clamp(position.z, -halfWorld, halfWorld);
             return;
         }
         // Indoor (Muehle etc.): Raum-basierter Clamp
@@ -2568,7 +2750,7 @@
 
     function getCameraTarget() {
         if (characterGroup) {
-            return characterGroup.position.clone().add(new THREE.Vector3(0, CHARACTER_HEIGHT * 0.85, 0));
+            return characterGroup.position.clone().add(new THREE.Vector3(0, getCharacterHeight() * 0.85, 0));
         }
         return new THREE.Vector3(0, 0, 0);
     }
@@ -2583,18 +2765,20 @@
         const sinYaw = Math.sin(orbitYaw);
 
         if (cameraMode === CAMERA_MODES.ORBIT || !characterGroup) {
-            // ORBIT Mode: Freie Kamera-Steuerung
+            // ORBIT Mode: Freie Kamera-Steuerung (skaliert mit Charakter-Größe)
+            const scaledOrbitDist = orbitDistance * Math.max(0.7, characterScale);
             const offset = new THREE.Vector3(
                 sinYaw * cosPitch,
                 sinPitch,
                 cosYaw * cosPitch
-            ).multiplyScalar(orbitDistance);
+            ).multiplyScalar(scaledOrbitDist);
             camera.position.copy(target).add(offset);
             camera.lookAt(target);
         } else if (cameraMode === CAMERA_MODES.THIRD) {
             // THIRD: Kamera wie Orbit, nur näher (Fortnite-Style: Maus steuert Kamera)
-            const distance = 12;
-            const height = 4;
+            // Distanz und Höhe skalieren mit Charakter-Größe
+            const distance = 12 * characterScale;
+            const height = 4 * characterScale;
             const offset = new THREE.Vector3(
                 sinYaw * cosPitch * distance,
                 height + sinPitch * distance * 0.5,
@@ -2604,7 +2788,7 @@
             camera.lookAt(target);
         } else if (cameraMode === CAMERA_MODES.FIRST) {
             // FIRST: Kamera DIREKT am Kopf (Augen), Blickrichtung = orbitYaw/Pitch
-            const eyeHeight = CHARACTER_HEIGHT * 0.85;
+            const eyeHeight = getCharacterHeight() * 0.85;
 
             // Kamera DIREKT am Kopf (keine Offset-Berechnung nötig)
             camera.position.set(
@@ -2835,6 +3019,11 @@
                 if (name === 'Schwarze Mühle – Keller' && window.DungeonGenerator) {
                     DungeonGenerator.preloadDungeonAssets();
                 }
+                // 🏟️ Teleport to Arena when entering Kampfarena
+                if (name === 'Kampfarena') {
+                    resetCharacterPosition([-2000, 0, -2000]);
+                    console.log('🏟️ Character teleported to Kampfarena at [-2000, 0, -2000]');
+                }
                 // Open World baut sich NICHT neu!
             }
         },
@@ -2856,7 +3045,21 @@
         get currentFloor() { return currentFloor; },
         // 🆕 Crafted Dungeon System
         placeDungeonEntrance,
-        restoreCraftedDungeons
+        restoreCraftedDungeons,
+
+        // 📏 Dynamische Charakter-Größe / Kamerahöhe
+        setCharacterScale(scale) {
+            characterScale = Math.max(0.3, Math.min(5.0, scale));
+            // Auch den 3D-Charakter skalieren
+            if (characterGroup) {
+                characterGroup.scale.setScalar(characterScale);
+            }
+            console.log(`📏 Charakter-Größe: ${characterScale.toFixed(2)}x (Kamerahöhe: ${getCharacterHeight().toFixed(1)})`);
+        },
+        getCharacterScale() { return characterScale; },
+        getCharacterHeight,
+        // ⚔️ Directional Attack Animation (called by game_input.js)
+        triggerAttackAnimation
     };
 
     // Global getScene() für Combat/Arena Systeme (overworld_enemies, nemesis_arena)

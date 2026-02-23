@@ -3,7 +3,7 @@
  * Lazy loading and resource management for optimal performance
  */
 
-export class ResourceLoader {
+class ResourceLoader {
     constructor() {
         this.loadedModules = new Map();
         this.loadingPromises = new Map();
@@ -310,7 +310,7 @@ export class ResourceLoader {
 /**
  * Code Splitting Helper
  */
-export class CodeSplitter {
+class CodeSplitter {
     constructor(resourceLoader) {
         this.resourceLoader = resourceLoader;
         this.chunks = new Map();
@@ -412,8 +412,8 @@ export class CodeSplitter {
 }
 
 // Global resource loader instance
-export const resourceLoader = new ResourceLoader();
-export const codeSplitter = new CodeSplitter(resourceLoader);
+const resourceLoader = new ResourceLoader();
+const codeSplitter = new CodeSplitter(resourceLoader);
 
 // Define standard chunks
 codeSplitter.defineStandardChunks();

@@ -340,10 +340,8 @@
 
             // Start 3D Combat
             if (window.Real3DCombat && window.Real3DCombat.startCombat) {
-                const scene = (window.Scene3D && window.Scene3D.scene) ? window.Scene3D.scene : (window.scene || null);
-                const playerPos = (window.Scene3D && window.Scene3D.characterGroup)
-                    ? window.Scene3D.characterGroup.position
-                    : { x: 4800, y: 0, z: 4800 };
+                const scene = window.getScene ? window.getScene() : (window.scene || null);
+                const playerPos = window.character?.position || { x: 4800, y: 0, z: 4800 };
 
                 if (scene) {
                     window.Real3DCombat.startCombat([{
@@ -365,17 +363,8 @@
         };
     };
 
-    // Fallback combat (wenn 3D Combat nicht verfügbar)
     function startFallbackCombat(enemy) {
-        // Use unified combat system if available
-        if (window.CombatSystem && window.CombatSystem.startCombat) {
-            window.CombatSystem.startCombat({
-                enemy: enemy,
-                mode: 'MANUAL'
-            });
-        } else {
-            notify(`⚔️ Kampf gegen ${enemy.name} (Lvl ${enemy.level}, HP: ${enemy.hp}) — 3D Combat wird geladen...`, 'warning');
-        }
+        console.warn('Real3DCombat nicht verfügbar!');
     }
 
     // Initialize on load

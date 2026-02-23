@@ -20,7 +20,7 @@
 
 class RegionBossUI {
   constructor() {
-    this.apiBase = 'http://localhost:8001/api/region-boss';
+    this.apiBase = 'http://localhost:8000/api/region-boss';
     this.createUI();
   }
 
@@ -140,7 +140,7 @@ class RegionBossUI {
 
 class OregonEventsUI {
   constructor() {
-    this.apiBase = 'http://localhost:8001/api/oregon';
+    this.apiBase = 'http://localhost:8000/api/oregon';
     this.currentEvent = null;
     this.createUI();
   }
@@ -343,7 +343,7 @@ class OregonEventsUI {
 
 class MagicSchoolsUI {
   constructor() {
-    this.apiBase = 'http://localhost:8001/api/magic';
+    this.apiBase = 'http://localhost:8000/api/magic';
     this.createUI();
   }
 
@@ -473,7 +473,7 @@ class MagicSchoolsUI {
 
 class InstrumentUI {
   constructor() {
-    this.apiBase = 'http://localhost:8001/api/instrument';
+    this.apiBase = 'http://localhost:8000/api/instrument';
     this.currentInstrument = 'mundharmonika';
     this._noteAccuracies = [];
     this.createUI();
@@ -747,7 +747,7 @@ class InstrumentUI {
 
 class WorldInfoUI {
   constructor() {
-    this.apiBase = 'http://localhost:8001/api/world';
+    this.apiBase = 'http://localhost:8000/api/world';
     this.createUI();
     this.startAutoUpdate();
   }
@@ -777,27 +777,44 @@ class WorldInfoUI {
     try {
       // Get time
       const timeResponse = await fetch(`${this.apiBase}/time`);
+      if (!timeResponse.ok) throw new Error('Time API error');
       const timeData = await timeResponse.json();
 
-      document.getElementById('game-time').textContent = timeData.current_time.substring(0, 5);
-      document.getElementById('time-of-day').textContent = timeData.time_of_day;
+      const timeEl = document.getElementById('game-time');
+      const todEl = document.getElementById('time-of-day');
+      if (timeEl && timeData.current_time) timeEl.textContent = timeData.current_time.substring(0, 5);
+      if (todEl && timeData.time_of_day) todEl.textContent = timeData.time_of_day;
 
       // Biome aus Player-Position oder 3D-Scene
       const biome = window.player?.currentBiome || window.currentBiome || 'samtmoos_tiefwald';
 
       // Get weather
       const weatherResponse = await fetch(`${this.apiBase}/weather/${biome}`);
+      if (!weatherResponse.ok) throw new Error('Weather API error');
       const weatherData = await weatherResponse.json();
 
-      document.getElementById('weather-type').textContent = weatherData.weather.type;
-      document.getElementById('temperature').textContent = `${weatherData.weather.temperature}°C`;
+      const weatherEl = document.getElementById('weather-type');
+      const tempEl = document.getElementById('temperature');
+      const iconEl = document.getElementById('weather-icon');
 
-      // Update weather icon
-      const icon = this.getWeatherIcon(weatherData.weather.type);
-      document.getElementById('weather-icon').textContent = icon;
+      if (weatherData.weather) {
+        if (weatherEl) weatherEl.textContent = weatherData.weather.type || 'clear';
+        if (tempEl) tempEl.textContent = `${weatherData.weather.temperature || 20}°C`;
+        if (iconEl) iconEl.textContent = this.getWeatherIcon(weatherData.weather.type);
+      }
 
+      this._worldInfoErrors = 0;
     } catch (error) {
-      console.error('Fehler beim World Info Update:', error);
+      this._worldInfoErrors = (this._worldInfoErrors || 0) + 1;
+      if (this._worldInfoErrors <= 2) {
+        console.warn('[World Info] Update fehlgeschlagen:', error.message);
+      }
+      // Nach 5 Fehlern: Polling verlangsamen statt spammen
+      if (this._worldInfoErrors >= 5) {
+        console.warn('[World Info] API nicht erreichbar - verlangsame Polling auf 5min');
+        clearInterval(this._autoUpdateInterval);
+        this._autoUpdateInterval = setInterval(() => this.updateWorldInfo(), 300000);
+      }
     }
   }
 
@@ -833,8 +850,9 @@ class WorldInfoUI {
   }
 
   startAutoUpdate() {
+    this._worldInfoErrors = 0;
     // Update every 30 seconds
-    setInterval(() => {
+    this._autoUpdateInterval = setInterval(() => {
       this.updateWorldInfo();
     }, 30000);
 

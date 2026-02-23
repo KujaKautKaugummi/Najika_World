@@ -27,7 +27,7 @@
 // =============================================================================
 
 const SLIME_CONFIG = {
-    API_BASE: window.API_BASE_URL || 'http://localhost:8001',
+    API_BASE: window.API_BASE_URL || 'http://localhost:8000',
 
     // 8 Regionale Start-Kreaturen
     REGIONAL_FORMS: {

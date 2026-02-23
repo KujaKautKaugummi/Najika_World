@@ -411,12 +411,16 @@
     }
 
     function handleDeath(source) {
-        // Emit GameEvent
+        // Oregon Trail Tod: ALLES verloren
+        if (window.DeathSystem?.handleOregonTrailDeath) {
+            window.DeathSystem.handleOregonTrailDeath(source);
+            return;
+        }
+
+        // Fallback: Original-Verhalten
         if (window.GameEvents) {
             window.GameEvents.emit('playerDied', { source });
         }
-
-        // Show death overlay
         showDeathScreen(source);
     }
 

@@ -374,9 +374,9 @@ class CraftingSystem {
 
             // Platziere Eingang nahe Spielerposition
             if (window.Scene3D && typeof Scene3D.placeDungeonEntrance === 'function') {
-                const charGroup = Scene3D.characterGroup;
-                const px = charGroup ? charGroup.position.x + 30 : 50;
-                const pz = charGroup ? charGroup.position.z + 30 : 50;
+                const charPos = window.character ? window.character.position : null;
+                const px = charPos ? charPos.x + 30 : 50;
+                const pz = charPos ? charPos.z + 30 : 50;
                 const dungeonName = Scene3D.placeDungeonEntrance(recipe.dungeonType, recipe.dungeonLevel, px, pz);
                 console.log(`🔨 Dungeon platziert: ${dungeonName}`);
             } else {

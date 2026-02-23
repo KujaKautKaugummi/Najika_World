@@ -3,7 +3,7 @@
  * Player chooses brutality category before creating finisher
  */
 
-export class FinisherCategorySelector {
+class FinisherCategorySelector {
     constructor(apiClient) {
         this.apiClient = apiClient;
         this.categories = [];
@@ -16,7 +16,7 @@ export class FinisherCategorySelector {
      */
     async loadCategories() {
         try {
-            const response = await this.apiClient.get('http://localhost:8001/api/v1/game/arena/finisher/categories');
+            const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/finisher/categories');
             this.categories = response.data.categories;
             return this.categories;
         } catch (error) {
@@ -123,7 +123,7 @@ export class FinisherCategorySelector {
      */
     async showIngredientDialog() {
         // Get random ingredient suggestions
-        const response = await this.apiClient.get('http://localhost:8001/api/v1/game/arena/finisher/random-ingredients');
+        const response = await this.apiClient.get('http://localhost:8000/api/v1/game/arena/finisher/random-ingredients');
         const suggestions = response.data.ingredients;
 
         const overlay = document.createElement('div');
@@ -206,7 +206,7 @@ export class FinisherCategorySelector {
 
         try {
             // Create finisher via API
-            const response = await this.apiClient.post('http://localhost:8001/api/v1/game/arena/finisher/create', {
+            const response = await this.apiClient.post('http://localhost:8000/api/v1/game/arena/finisher/create', {
                 category: this.selectedCategory,
                 ingredients: ingredients,
                 defeated_monster_id: this.defeatedMonsterId

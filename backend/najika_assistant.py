@@ -28,11 +28,16 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 
-# Fix Windows encoding
+# Fix Windows encoding (nur wenn Buffer noch offen ist)
 if sys.platform == 'win32':
     import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    try:
+        if hasattr(sys.stdout, 'buffer') and not sys.stdout.buffer.closed:
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        if hasattr(sys.stderr, 'buffer') and not sys.stderr.buffer.closed:
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except (ValueError, OSError):
+        pass
 
 # Imports
 try:

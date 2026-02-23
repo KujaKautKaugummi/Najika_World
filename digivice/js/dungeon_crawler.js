@@ -406,8 +406,8 @@
         scene.add(group);
 
         // Spieler positionieren
-        if (window.Scene3D && window.Scene3D.characterGroup) {
-            Scene3D.characterGroup.position.set(
+        if (window.character) {
+            window.character.position.set(
                 playerGridX * TILE_SIZE,
                 0,
                 playerGridZ * TILE_SIZE

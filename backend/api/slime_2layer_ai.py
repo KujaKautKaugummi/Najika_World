@@ -26,6 +26,7 @@ from pydantic import BaseModel
 from typing import Dict, List, Optional
 from datetime import datetime
 from enum import Enum
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/slime-ai", tags=["slime_ai"])
 
@@ -136,6 +137,7 @@ def copy_form_stats(original_stats: Dict[str, int]) -> Dict[str, int]:
 # ==================== PERSONALITY ENDPOINTS (EBENE 1) ====================
 
 @router.post("/personality/create")
+@handle_errors()
 async def create_personality(slime_id: int, owner_id: int):
     """
     Create personality memory for new slime
@@ -165,6 +167,7 @@ async def create_personality(slime_id: int, owner_id: int):
 
 
 @router.post("/personality/learn-boss")
+@handle_errors()
 async def learn_boss_weakness(
     slime_id: int,
     boss_id: str,
@@ -221,6 +224,7 @@ async def learn_boss_weakness(
 
 
 @router.get("/personality/recall-boss")
+@handle_errors()
 async def recall_boss_weakness(slime_id: int, boss_id: str):
     """
     Slime AI recalls boss weakness from memory
@@ -256,6 +260,7 @@ async def recall_boss_weakness(slime_id: int, boss_id: str):
 
 
 @router.post("/personality/add-memory")
+@handle_errors()
 async def add_personality_memory(slime_id: int, memory: str):
     """
     Add general memory to AI personality
@@ -283,6 +288,7 @@ async def add_personality_memory(slime_id: int, memory: str):
 # ==================== GAME SKILLS ENDPOINTS (EBENE 2) ====================
 
 @router.post("/skills/create")
+@handle_errors()
 async def create_game_skills(slime_id: int):
     """
     Create game skills for slime
@@ -304,6 +310,7 @@ async def create_game_skills(slime_id: int):
 
 
 @router.post("/skills/reset")
+@handle_errors()
 async def reset_game_skills(slime_id: int):
     """
     Reset game skills (bei Tod)
@@ -351,6 +358,7 @@ async def reset_game_skills(slime_id: int):
 
 
 @router.post("/skills/train")
+@handle_errors()
 async def train_skill(
     slime_id: int,
     skill_id: str,
@@ -409,6 +417,7 @@ async def train_skill(
 # ==================== FORM-COPY SYSTEM ====================
 
 @router.post("/form/copy")
+@handle_errors()
 async def copy_enemy_form(
     slime_id: int,
     enemy_id: str,
@@ -471,6 +480,7 @@ async def copy_enemy_form(
 
 
 @router.get("/form/list")
+@handle_errors()
 async def list_copied_forms(slime_id: int):
     """List all copied forms for training"""
     forms = FORM_COPIES.get(slime_id, [])
@@ -484,6 +494,7 @@ async def list_copied_forms(slime_id: int):
 
 
 @router.post("/form/train-against")
+@handle_errors()
 async def train_against_form(slime_id: int, form_id: str):
     """
     Train against copied form (SAFE!)
@@ -523,6 +534,7 @@ async def train_against_form(slime_id: int, form_id: str):
 # ==================== STATUS ENDPOINTS ====================
 
 @router.get("/status")
+@handle_errors()
 async def get_slime_ai_status(slime_id: int):
     """
     Get complete 2-layer status

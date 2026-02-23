@@ -97,38 +97,38 @@ class SpecialFeatures {
             softy: 'Softy'
         };
 
+        // Teleport zur Handelsfestung Arena (Desert Biom)
+        const arenaPos = { x: 8400, y: 10, z: 8200 };
+        const character = window.character;
+        if (character) {
+            character.position.set(arenaPos.x, arenaPos.y, arenaPos.z);
+            if (window.setTeleportCooldown) window.setTeleportCooldown(60);
+            console.log(`📍 Teleport zur Arena: ${arenaPos.x}, ${arenaPos.z}`);
+        }
+
         // Starte echte Arena mit NemesisArena System!
         if (window.NemesisArena) {
-            window.NemesisArena.arenaMode = mode;
-            window.NemesisArena.showArenaPanel();
+            if (window.NemesisArena.showArenaPanel) {
+                window.NemesisArena.showArenaPanel();
+            } else if (window.NemesisArena.open) {
+                window.NemesisArena.open();
+            }
             console.log(`🏟️ Nemesis Arena gestartet im ${modeNames[mode]} Modus!`);
-        } else if (window.UnifiedCombat) {
-            // Fallback: Starte direkt einen Arena-Kampf via UnifiedCombat
-            const enemies = mode === 'hardcore'
-                ? [{ name: 'Arena-Champion', hp: 150, attack: 25, defense: 15, speed: 1.2, xp: 100 }]
-                : mode === 'normal'
-                ? [{ name: 'Arena-Gladiator', hp: 100, attack: 18, defense: 10, speed: 1.0, xp: 60 }]
-                : [{ name: 'Arena-Novize', hp: 60, attack: 10, defense: 5, speed: 0.8, xp: 30 }];
-
-            window.UnifiedCombat.startCombat({
-                type: 'arena',
-                enemy: enemies[0],
-                location: 'Arena - ' + modeNames[mode],
-                isHardcore: mode === 'hardcore'
-            });
-            console.log(`🏟️ Arena-Kampf gestartet: ${modeNames[mode]}!`);
-        } else if (window.Real3DCombat && window.scene) {
-            // Fallback 2: Real3DCombat
-            const playerPos = window.Scene3D?.characterGroup?.position || { x: 4800, y: 0, z: 4800 };
+        } else if (window.Real3DCombat) {
+            // Real3DCombat direkt starten
+            const scene = (window.getScene ? window.getScene() : null) || window.scene;
+            const playerPos = window.character?.position || { x: 4800, y: 10, z: 4800 };
             const arenaEnemies = mode === 'hardcore'
                 ? ['corrupted_knight', 'skeleton_mage', 'witch']
                 : mode === 'normal'
-                ? ['skeleton_warrior', 'goblin_chief']
+                ? ['skeleton_warrior', 'goblin']
                 : ['slime'];
-            window.Real3DCombat.startCombat(arenaEnemies, window.scene, playerPos);
-            console.log(`🏟️ 3D Arena-Kampf: ${arenaEnemies.length} Gegner!`);
+            if (scene) {
+                window.Real3DCombat.startCombat(arenaEnemies, scene, playerPos);
+                console.log(`🏟️ 3D Arena-Kampf: ${arenaEnemies.length} Gegner!`);
+            }
         } else {
-            alert(`Arena Modus: ${modeNames[mode]}\n\n⚔️ Kampf wird vorbereitet...`);
+            console.error('Kein Kampfsystem verfügbar!');
         }
     }
 

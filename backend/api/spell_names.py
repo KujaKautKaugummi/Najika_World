@@ -17,6 +17,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, validator
 from typing import Dict, Optional
 import re
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/spells/name", tags=["spell_names"])
 
@@ -147,6 +148,7 @@ def get_spell_key(player_id: int, spell_id: str) -> str:
 # ==================== ENDPOINTS ====================
 
 @router.post("/set")
+@handle_errors()
 async def set_spell_name(request: SetSpellNameRequest):
     """
     Set custom name for spell (first time)
@@ -188,6 +190,7 @@ async def set_spell_name(request: SetSpellNameRequest):
 
 
 @router.get("/get")
+@handle_errors()
 async def get_spell_name(
     player_id: int = Query(..., description="Player ID"),
     spell_id: str = Query(..., description="Spell ID (z.B. feuer_feuerball)")
@@ -221,6 +224,7 @@ async def get_spell_name(
 
 
 @router.post("/rename")
+@handle_errors()
 async def rename_spell(request: RenameSpellRequest):
     """
     Rename spell (requires item/event token)
@@ -278,6 +282,7 @@ async def rename_spell(request: RenameSpellRequest):
 
 
 @router.get("/all")
+@handle_errors()
 async def get_all_spell_names(player_id: int = Query(...)):
     """
     Get all custom spell names for player
@@ -306,6 +311,7 @@ async def get_all_spell_names(player_id: int = Query(...)):
 
 
 @router.delete("/reset")
+@handle_errors()
 async def reset_spell_name(
     player_id: int = Query(...),
     spell_id: str = Query(...)
@@ -334,6 +340,7 @@ async def reset_spell_name(
 
 
 @router.post("/validate")
+@handle_errors()
 async def validate_name(name: str = Query(..., min_length=1)):
     """
     Validate spell name (for frontend preview)

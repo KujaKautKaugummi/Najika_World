@@ -3,7 +3,7 @@
  * Track FPS, memory usage, and performance metrics
  */
 
-export class PerformanceMonitor {
+class PerformanceMonitor {
     constructor() {
         this.enabled = true;
         this.visible = false;
@@ -407,7 +407,7 @@ export class PerformanceMonitor {
 /**
  * Object Pool for performance
  */
-export class ObjectPool {
+class ObjectPool {
     constructor(factory, initialSize = 10, maxSize = 100) {
         this.factory = factory;
         this.maxSize = maxSize;
@@ -484,7 +484,7 @@ export class ObjectPool {
 }
 
 // Global performance monitor
-export const performanceMonitor = new PerformanceMonitor();
+const performanceMonitor = new PerformanceMonitor();
 
 // Make globally available
 window.performanceMonitor = performanceMonitor;

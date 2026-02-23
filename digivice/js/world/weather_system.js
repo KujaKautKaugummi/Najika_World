@@ -1,7 +1,7 @@
 // 🌧️ WEATHER SYSTEM - Dynamic weather effects for biomes
 // Rain, Snow, Fog, Storms, Wind effects
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class WeatherSystem {
   constructor(scene, camera) {
@@ -450,8 +450,7 @@ class WeatherSystem {
   }
 }
 
-// ES6 export for module usage
-export default WeatherSystem;
+// Window export for script-tag usage (ES6 export removed)
 
 // Window export for script-tag usage
 if (typeof window !== 'undefined') {

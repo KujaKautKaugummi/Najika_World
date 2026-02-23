@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 import asyncio
 import json
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/living", tags=["Living System"])
 
@@ -36,12 +37,14 @@ _state = {
 # ============================================================================
 
 @router.get("/state")
+@handle_errors()
 async def get_living_state():
     """Get Najika's current living state"""
     return _state
 
 
 @router.get("/proactive")
+@handle_errors()
 async def get_proactive_message():
     """Check if Najika wants to say something proactively"""
     return {
@@ -51,6 +54,7 @@ async def get_proactive_message():
 
 
 @router.get("/activity/check")
+@handle_errors()
 async def check_activity():
     """Check current activity status"""
     return {
@@ -61,6 +65,7 @@ async def check_activity():
 
 
 @router.post("/activity/start")
+@handle_errors()
 async def start_activity(activity: dict = {"name": "idle"}):
     """Start a new activity for Najika"""
     _state["current_activity"] = activity.get("name", "idle")
@@ -85,24 +90,28 @@ def _care_response(action: str, hunger_delta=0, energy_delta=0):
 
 
 @care_router.post("/feed")
+@handle_errors()
 async def feed_najika():
     """Feed Najika - increases hunger/satiation"""
     return _care_response("feed", hunger_delta=15)
 
 
 @care_router.post("/drink")
+@handle_errors()
 async def drink_najika():
     """Give Najika a drink"""
     return _care_response("drink", hunger_delta=5, energy_delta=5)
 
 
 @care_router.post("/sleep")
+@handle_errors()
 async def sleep_najika():
     """Put Najika to sleep - restores energy"""
     return _care_response("sleep", energy_delta=30)
 
 
 @care_router.post("/wash")
+@handle_errors()
 async def wash_najika():
     """Najika takes a shower/bath"""
     return _care_response("wash", energy_delta=5)

@@ -3,7 +3,7 @@
  * Digimon skills and magic effects
  */
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class MagicParticleSystem {
     constructor(scene) {

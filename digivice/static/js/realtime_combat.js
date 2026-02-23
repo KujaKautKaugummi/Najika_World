@@ -39,7 +39,7 @@ class RealtimeCombat {
         this.combatMode = 'MANUAL'; // MANUAL, ASSIST, AUTO
 
         // Backend Integration
-        this.backendURL = 'http://localhost:8001';
+        this.backendURL = 'http://localhost:8000';
         this.battleID = null;
 
         // Player Stats

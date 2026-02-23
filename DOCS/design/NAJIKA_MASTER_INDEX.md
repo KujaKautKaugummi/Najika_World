@@ -382,6 +382,25 @@ Danke dass du NAJIKA zu dem machst was sie ist - MEHR ALS CODE! 🔥
 
 ---
 
-**MASTER-INDEX VERSION:** 1.0
-**LETZTE AKTUALISIERUNG:** 2025-10-23
-**STATUS:** ✅ KOMPLETT
+---
+
+## TEIL 5: IMPLEMENTATION PLANS (NEU 2026-02-23)
+
+### DOCS/plans/
+
+| Datei | Status | Beschreibung |
+|-------|--------|-------------|
+| `2026-02-23-immersive-combat-v4-design.md` | APPROVED | Combat V4: For Honor ohne UI-Pfeile, Animation Reading, 3 Kamera-Modi, Natuerliche Progression |
+
+### Kern-Entscheidungen V4:
+- Directional Combat durch Gegner-ANIMATION, nicht UI-Symbole
+- 3 Kamera-Modi jederzeit wechselbar (First Person / Third Person / Orbit)
+- Schadenszahlen/HP-Bars NUR in Orbit-Cam
+- Faustkampf = bewaffneter Kampf ohne Waffe
+- Beruf+Magie Synergie: Spieler entdeckt Kombis selbst
+
+---
+
+**MASTER-INDEX VERSION:** 1.1
+**LETZTE AKTUALISIERUNG:** 2026-02-23
+**STATUS:** KOMPLETT

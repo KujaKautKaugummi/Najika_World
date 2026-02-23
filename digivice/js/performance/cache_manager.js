@@ -3,7 +3,7 @@
  * Intelligent caching system for API responses and resources
  */
 
-export class CacheManager {
+class CacheManager {
     constructor() {
         this.caches = new Map();
         this.config = {
@@ -398,7 +398,7 @@ class Cache {
 /**
  * API Response Cache Wrapper
  */
-export class APICacheWrapper {
+class APICacheWrapper {
     constructor(cacheManager) {
         this.cacheManager = cacheManager;
     }
@@ -452,8 +452,8 @@ export class APICacheWrapper {
 }
 
 // Global cache manager
-export const cacheManager = new CacheManager();
-export const apiCache = new APICacheWrapper(cacheManager);
+const cacheManager = new CacheManager();
+const apiCache = new APICacheWrapper(cacheManager);
 
 // Make globally available
 window.cacheManager = cacheManager;

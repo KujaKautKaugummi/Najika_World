@@ -26,13 +26,27 @@
     window.combatActive = false;
     let combatMode = 'MANUAL'; // MANUAL, AUTO, CHEER
     let currentEnemies = [];
+
+    // ==========================================
+    // S.P.E.C.I.A.L. STATS (Fallout-Style)
+    // ==========================================
+    const SPECIAL = {
+        POW: 5,  // Power - Melee +2% DMG pro Punkt
+        INT: 5,  // Intellect - Spell +3% DMG, +10 Mana pro Punkt
+        AGI: 5,  // Agility - Dodge +1%, Speed +1%
+        VIT: 5,  // Vitality - +15 HP pro Punkt
+        WIL: 5,  // Willpower - Mana Regen +1%
+        LUK: 5,  // Luck - Crit +1%, Crit DMG +5%
+        PER: 5   // Perception - Hit Chance +2%
+    };
+
     let playerStats = {
-        hp: 100,
-        maxHp: 100,
+        hp: 100 + (SPECIAL.VIT * 15),
+        maxHp: 100 + (SPECIAL.VIT * 15),
         stamina: 100,
         maxStamina: 100,
-        mana: 100,
-        maxMana: 100
+        mana: 100 + (SPECIAL.INT * 10),
+        maxMana: 100 + (SPECIAL.INT * 10)
     };
 
     // Combo System
@@ -75,7 +89,7 @@
     let finisherMeter = 0;
     const FINISHER_MAX = 100;
     let lastFinisherTime = 0;
-    const FINISHER_COOLDOWN = 24 * 60 * 60 * 1000; // 24h
+    const FINISHER_COOLDOWN = 60 * 1000; // 60 Sekunden Cooldown pro Session
     let finisherQTEActive = false;
     let finisherQTESequence = [];
     let finisherQTEIndex = 0;
@@ -199,6 +213,216 @@
             attackRange: 3, xp: 150, tier: 4,
             loot: ['great_axe', 'berserker_helm', 'rare_gem'],
             isBoss: true
+        },
+
+        // ==========================================
+        // OVERWORLD ENEMY TYPES (von overworld_enemies.js)
+        // ==========================================
+
+        // === SAMTMOOS (Wald) ===
+        forest_spider: {
+            name: 'Waldspinne', model: 'skeleton_minion',
+            hp: 25, damage: 12, speed: 1.5, attackRange: 2, xp: 12, tier: 1,
+            loot: ['spider_silk', 'venom'], color: 0x336633
+        },
+        boar: {
+            name: 'Wildschwein', model: 'default',
+            hp: 50, damage: 10, speed: 0.8, attackRange: 2.5, xp: 20, tier: 2,
+            loot: ['raw_meat', 'boar_hide'], color: 0x8B4513
+        },
+        bear: {
+            name: 'Bär', model: 'barbarian',
+            hp: 120, damage: 20, speed: 0.9, attackRange: 3, xp: 50, tier: 3,
+            loot: ['bear_pelt', 'raw_meat', 'bear_claw'], color: 0x654321
+        },
+        treant: {
+            name: 'Baumwächter', model: 'knight',
+            hp: 150, damage: 15, speed: 0.4, attackRange: 3.5, xp: 60, tier: 3,
+            loot: ['ancient_wood', 'nature_crystal'], color: 0x228B22
+        },
+        sporax: {
+            name: 'Sporax der Pilzfürst', model: 'barbarian',
+            hp: 500, damage: 35, speed: 0.6, attackRange: 4, xp: 200, tier: 4,
+            loot: ['boss_mushroom', 'rare_spore', 'gold_coin'], color: 0x8B008B, isBoss: true
+        },
+
+        // === REICH DER DREI (Eis) ===
+        ice_wolf: {
+            name: 'Eiswolf', model: 'skeleton_minion',
+            hp: 45, damage: 10, speed: 1.4, attackRange: 2, xp: 18, tier: 2,
+            loot: ['ice_fang', 'wolf_pelt'], color: 0x88CCFF
+        },
+        snow_hare: {
+            name: 'Schneehase', model: 'default',
+            hp: 20, damage: 5, speed: 2.0, attackRange: 1.5, xp: 8, tier: 1,
+            loot: ['hare_pelt', 'raw_meat'], color: 0xDDDDFF
+        },
+        frost_giant: {
+            name: 'Frostriese', model: 'barbarian',
+            hp: 200, damage: 30, speed: 0.5, attackRange: 4, xp: 80, tier: 3,
+            loot: ['frost_crystal', 'giant_bone'], color: 0x4488FF
+        },
+        yeti: {
+            name: 'Yeti', model: 'barbarian',
+            hp: 180, damage: 25, speed: 0.7, attackRange: 3, xp: 70, tier: 3,
+            loot: ['yeti_fur', 'ice_crystal'], color: 0xCCCCFF
+        },
+        ice_queen: {
+            name: 'Eiskönigin Crystalia', model: 'witch',
+            hp: 600, damage: 40, speed: 0.8, attackRange: 10, xp: 250, tier: 4,
+            loot: ['ice_crown', 'frost_gem', 'rare_crystal'], color: 0x00BBFF, isBoss: true
+        },
+
+        // === HEISSE DUENEN (Wüste) ===
+        sand_scorpion: {
+            name: 'Sandskorpion', model: 'skeleton_minion',
+            hp: 35, damage: 15, speed: 1.2, attackRange: 2, xp: 15, tier: 1,
+            loot: ['scorpion_tail', 'chitin'], color: 0xCC9944
+        },
+        desert_snake: {
+            name: 'Wüstenschlange', model: 'skeleton_minion',
+            hp: 30, damage: 12, speed: 1.6, attackRange: 2, xp: 12, tier: 1,
+            loot: ['snake_skin', 'venom'], color: 0xDDAA44
+        },
+        sand_beetle: {
+            name: 'Sandkäfer', model: 'default',
+            hp: 40, damage: 8, speed: 0.8, attackRange: 2, xp: 14, tier: 1,
+            loot: ['chitin', 'sand_crystal'], color: 0xAA8833
+        },
+        sand_wurm: {
+            name: 'Sandwurm', model: 'barbarian',
+            hp: 180, damage: 35, speed: 1.0, attackRange: 4, xp: 80, tier: 3,
+            loot: ['wurm_scale', 'sand_gem'], color: 0xDDCC88
+        },
+        fire_lord: {
+            name: 'Feuerfürst Ignis', model: 'barbarian',
+            hp: 550, damage: 45, speed: 0.9, attackRange: 5, xp: 220, tier: 4,
+            loot: ['fire_crown', 'flame_gem', 'rare_ember'], color: 0xFF4400, isBoss: true
+        },
+
+        // === SALZWIND (Küste) ===
+        crab: {
+            name: 'Riesenkrabbe', model: 'default',
+            hp: 45, damage: 10, speed: 0.6, attackRange: 2, xp: 15, tier: 1,
+            loot: ['crab_shell', 'raw_meat'], color: 0xFF6644
+        },
+        seagull: {
+            name: 'Aggressiver Seevogel', model: 'skeleton_minion',
+            hp: 20, damage: 8, speed: 2.0, attackRange: 2, xp: 8, tier: 1,
+            loot: ['feather'], color: 0xEEEEEE
+        },
+        sea_serpent: {
+            name: 'Seeschlange', model: 'skeleton_mage',
+            hp: 160, damage: 28, speed: 1.2, attackRange: 4, xp: 65, tier: 3,
+            loot: ['serpent_scale', 'sea_gem'], color: 0x2266AA
+        },
+        kraken: {
+            name: 'Kraken Tidelord', model: 'barbarian',
+            hp: 700, damage: 50, speed: 0.5, attackRange: 5, xp: 280, tier: 4,
+            loot: ['kraken_tentacle', 'sea_crown', 'rare_pearl'], color: 0x003366, isBoss: true
+        },
+
+        // === MAGMASTROEME (Vulkan) ===
+        fire_imp: {
+            name: 'Feuerteufel', model: 'rogue',
+            hp: 30, damage: 18, speed: 1.4, attackRange: 2, xp: 15, tier: 1,
+            loot: ['imp_horn', 'fire_shard'], color: 0xFF2200
+        },
+        lava_slug: {
+            name: 'Lavaschnecke', model: 'default',
+            hp: 50, damage: 12, speed: 0.3, attackRange: 2, xp: 18, tier: 2,
+            loot: ['lava_goo', 'fire_crystal'], color: 0xFF6600
+        },
+        magma_golem: {
+            name: 'Magmagolem', model: 'knight',
+            hp: 220, damage: 35, speed: 0.4, attackRange: 3.5, xp: 85, tier: 3,
+            loot: ['golem_core', 'magma_shard'], color: 0xCC3300
+        },
+        fire_drake: {
+            name: 'Feuerdrache', model: 'barbarian',
+            hp: 250, damage: 40, speed: 1.0, attackRange: 4, xp: 100, tier: 3,
+            loot: ['drake_scale', 'fire_gem'], color: 0xFF4422
+        },
+        volcano_titan: {
+            name: 'Vulkantitan Pyroclast', model: 'barbarian',
+            hp: 800, damage: 60, speed: 0.3, attackRange: 5, xp: 320, tier: 4,
+            loot: ['titan_core', 'volcano_gem', 'rare_obsidian'], color: 0xAA2200, isBoss: true
+        },
+
+        // === GRUENSCHLAMM (Sumpf) ===
+        swamp_slime: {
+            name: 'Sumpfschleim', model: 'default',
+            hp: 35, damage: 8, speed: 0.6, attackRange: 2, xp: 12, tier: 1,
+            loot: ['slime_goo', 'swamp_herb'], color: 0x336600
+        },
+        poison_frog: {
+            name: 'Giftfrosch', model: 'skeleton_minion',
+            hp: 25, damage: 15, speed: 1.3, attackRange: 2, xp: 14, tier: 1,
+            loot: ['poison_gland', 'frog_leg'], color: 0x00CC44
+        },
+        swamp_leech: {
+            name: 'Riesenegel', model: 'default',
+            hp: 40, damage: 10, speed: 0.8, attackRange: 2, xp: 16, tier: 2,
+            loot: ['leech_blood', 'swamp_slime'], color: 0x333300
+        },
+        bog_horror: {
+            name: 'Sumpfschrecken', model: 'knight',
+            hp: 170, damage: 28, speed: 0.7, attackRange: 3.5, xp: 70, tier: 3,
+            loot: ['horror_claw', 'swamp_gem'], color: 0x224400
+        },
+        swamp_queen: {
+            name: 'Sumpfkönigin Morbia', model: 'witch',
+            hp: 550, damage: 38, speed: 0.6, attackRange: 8, xp: 230, tier: 4,
+            loot: ['swamp_crown', 'poison_gem', 'rare_moss'], color: 0x006622, isBoss: true
+        },
+
+        // === BLITZEBENE (Steppe) ===
+        lightning_hawk: {
+            name: 'Blitzfalke', model: 'skeleton_archer',
+            hp: 30, damage: 14, speed: 2.0, attackRange: 8, xp: 15, tier: 1,
+            loot: ['feather', 'lightning_shard'], color: 0xFFFF00
+        },
+        plains_runner: {
+            name: 'Steppenläufer', model: 'rogue',
+            hp: 45, damage: 10, speed: 1.8, attackRange: 2, xp: 18, tier: 2,
+            loot: ['runner_hide', 'raw_meat'], color: 0xCCAA44
+        },
+        storm_elemental: {
+            name: 'Sturmelementar', model: 'skeleton_mage',
+            hp: 150, damage: 32, speed: 1.5, attackRange: 8, xp: 70, tier: 3,
+            loot: ['storm_crystal', 'lightning_gem'], color: 0x8888FF
+        },
+        thunder_lord: {
+            name: 'Donnerfürst Voltaris', model: 'barbarian',
+            hp: 580, damage: 48, speed: 1.2, attackRange: 5, xp: 240, tier: 4,
+            loot: ['thunder_crown', 'storm_gem', 'rare_bolt'], color: 0xFFFF44, isBoss: true
+        },
+
+        // === TIEFENHOEHLEN (Höhlen) ===
+        cave_bat: {
+            name: 'Höhlenfledermaus', model: 'default',
+            hp: 20, damage: 8, speed: 1.8, attackRange: 2, xp: 8, tier: 1,
+            loot: ['bat_wing'], color: 0x444444
+        },
+        rock_golem: {
+            name: 'Steingolem', model: 'knight',
+            hp: 80, damage: 15, speed: 0.3, attackRange: 3, xp: 35, tier: 2,
+            loot: ['stone_core', 'iron_ore'], color: 0x888888
+        },
+        mushroom_creature: {
+            name: 'Pilzwesen', model: 'default',
+            hp: 35, damage: 10, speed: 0.7, attackRange: 2, xp: 14, tier: 1,
+            loot: ['mushroom', 'spore_dust'], color: 0xAA4488
+        },
+        crystal_dragon: {
+            name: 'Kristalldrache', model: 'barbarian',
+            hp: 280, damage: 42, speed: 0.8, attackRange: 4, xp: 110, tier: 3,
+            loot: ['dragon_scale', 'crystal_gem'], color: 0xCC44FF
+        },
+        deep_king: {
+            name: 'Tiefenkönig Abyssal', model: 'barbarian',
+            hp: 750, damage: 55, speed: 0.5, attackRange: 5, xp: 300, tier: 4,
+            loot: ['abyss_crown', 'deep_gem', 'rare_void'], color: 0x220044, isBoss: true
         }
     };
 
@@ -258,9 +482,19 @@
             this.rotation = Math.random() * Math.PI * 2;
 
             // AI State
-            this.state = 'idle'; // idle, patrol, chase, attack, hurt, dead
+            this.state = 'idle'; // idle, patrol, chase, attack, windup, hurt, dead
             this.target = null;
             this.attackCooldown = 0;
+            this.nextAttackDir = null;  // ⚔️ Angriffsrichtung (gesetzt beim Wind-Up)
+
+            // ⚔️ Wind-Up System (For Honor-Style Tells)
+            // Dauer nach Tier: 1=600ms, 2=450ms, 3=300ms, 4+=200ms
+            const WINDUP_BY_TIER = { 1: 0.6, 2: 0.45, 3: 0.30, 4: 0.20, 5: 0.20 };
+            this.windUpDuration = WINDUP_BY_TIER[this.data.tier || 1] || 0.5;
+            this.windUpTimer    = 0;    // Countdown in Sekunden
+            this.windUpSprite   = null; // Tell-Indicator im 3D-Raum
+            this.windUpDir      = 'neutral';
+            this.feintChance    = (this.data.tier >= 4) ? 0.3 : 0; // Boss-Feints
 
             // 3D Model
             this.group = null;
@@ -308,6 +542,19 @@
                 this.group.position.copy(this.position);
                 this.group.rotation.y = this.rotation;
 
+                // 🔥 DEBUG: Add bright visible box to ensure enemy is visible
+                const debugBox = new THREE.Mesh(
+                    new THREE.BoxGeometry(2, 3, 2),
+                    new THREE.MeshBasicMaterial({
+                        color: 0xff00ff,
+                        wireframe: true,
+                        transparent: false
+                    })
+                );
+                debugBox.position.y = 1.5;
+                this.group.add(debugBox);
+                console.log(`🔥 [ENEMY DEBUG] Added debug box to ${this.data.name} at`, this.position);
+
                 // Health bar
                 this.createHealthBar();
 
@@ -350,8 +597,9 @@
         createFallbackModel() {
             this.group = new THREE.Group();
 
+            // 🔥 Use MeshBasicMaterial instead of Lambert (doesn't need lights!)
             const geometry = new THREE.BoxGeometry(1, 2, 1);
-            const material = new THREE.MeshLambertMaterial({
+            const material = new THREE.MeshBasicMaterial({
                 color: this.data.color || 0xff0000
             });
             this.model = new THREE.Mesh(geometry, material);
@@ -410,18 +658,55 @@
                 this.mixer.update(delta);
             }
 
+            // 🔥 DEBUG: Log position every 3 seconds
+            if (!this._lastPosLog) this._lastPosLog = 0;
+            this._lastPosLog += delta;
+            if (this._lastPosLog > 3) {
+                console.log(`🔥 [ENEMY DEBUG] ${this.data.name} at (${this.position.x.toFixed(1)}, ${this.position.y.toFixed(1)}, ${this.position.z.toFixed(1)}), group visible: ${this.group?.visible}, in scene: ${this.scene?.children.includes(this.group)}`);
+                this._lastPosLog = 0;
+            }
+
             // AI
             if (playerPosition) {
                 const distance = this.position.distanceTo(playerPosition);
                 const prevState = this.state;
 
                 if (distance < this.data.attackRange) {
-                    // Attack!
-                    if (this.attackCooldown <= 0) {
-                        this.attack(playerPosition);
-                        this.attackCooldown = 1 + Math.random() * 0.5;
+                    // ⚔️ Wind-Up Phase (For Honor-Style Tell)
+                    if (this.state === 'windup') {
+                        this.windUpTimer -= delta;
+                        // Tell-Sprite Farbe: orange → rot
+                        if (this.windUpSprite?.material) {
+                            const progress = 1 - (this.windUpTimer / this.windUpDuration);
+                            this.windUpSprite.material.opacity = 0.6 + progress * 0.4;
+                        }
+                        if (this.windUpTimer <= 0) {
+                            // Boss-Feint: Richtung wechseln, kurze Verzögerung
+                            if (this.feintChance > 0 && Math.random() < this.feintChance) {
+                                const DIRS = ['up', 'down', 'left', 'right'];
+                                const newDir = DIRS[Math.floor(Math.random() * DIRS.length)];
+                                if (newDir !== this.windUpDir) {
+                                    console.log(`[WindUp] FEINT! ${this.data.name}: ${this.windUpDir} → ${newDir}`);
+                                    this.windUpDir = newDir;
+                                    this.windUpTimer = 0.15; // kurze Feint-Verzögerung
+                                    this.updateWindUpTell(newDir, true); // Feint-Tell
+                                    this.state = 'windup';
+                                    this.attackCooldown = 0; // Feint kostet keinen Cooldown
+                                    return; // Nächsten Frame abwarten
+                                }
+                            }
+                            // Wind-Up abgeschlossen: angreifen
+                            this.nextAttackDir = this.windUpDir;
+                            this.hideWindUpTell();
+                            this.attack(playerPosition);
+                            this.attackCooldown = 1 + Math.random() * 0.5;
+                            this.state = 'attack';
+                        }
+                    } else if (this.attackCooldown <= 0) {
+                        // Wind-Up starten
+                        this.startWindUp();
                     }
-                    this.state = 'attack';
+                    if (this.state !== 'windup') this.state = 'attack';
                 } else if (distance < 15) {
                     // Chase
                     this.state = 'chase';
@@ -446,9 +731,11 @@
             this.group.position.copy(this.position);
             this.group.rotation.y = this.rotation;
 
-            // Billboard healthbar
+            // Billboard healthbar - NUR in Orbit-Cam sichtbar (UI-Layer V4)
             if (this.healthBar && window.Scene3D?.camera) {
                 this.healthBar.lookAt(Scene3D.camera.position);
+                const camMode = window.Scene3D?.getCameraMode?.() || 'orbit';
+                this.healthBar.visible = (camMode === 'orbit');
             }
         }
 
@@ -482,15 +769,111 @@
         }
 
         attack(playerPosition) {
-            console.log(`⚔️ ${this.data.name} greift an! -${this.damage} HP`);
+            // ⚔️ Angriffsrichtung: zufällig (wird durch Wind-Up-System ersetzt)
+            const DIRS = ['neutral', 'up', 'down', 'left', 'right'];
+            const attackDir = this.nextAttackDir || DIRS[Math.floor(Math.random() * DIRS.length)];
+            this.nextAttackDir = null; // Reset nach Angriff
+
+            console.log(`⚔️ ${this.data.name} greift an [${attackDir.toUpperCase()}]! -${this.damage} HP`);
             this.playEnemyAnim('attack', false);
 
-            // Damage player
-            takeDamage(this.damage, this.data.name);
+            // Damage player (mit Angriffsrichtung für Directional Block)
+            takeDamage(this.damage, this.data.name, attackDir);
 
             // Notify UnifiedCombat if it exists
             if (typeof UnifiedCombat !== 'undefined' && UnifiedCombat.notify) {
                 UnifiedCombat.notify(`${this.data.name} greift an! -${this.damage} HP`);
+            }
+        }
+
+        // ⚔️ Wind-Up starten: Richtung wählen, Tell anzeigen, Timer setzen
+        startWindUp() {
+            const DIRS = ['neutral', 'up', 'down', 'left', 'right'];
+            // Gewichtung: neutrale Angriffe seltener (einfacher zu lesen)
+            const weighted = ['up', 'up', 'down', 'down', 'left', 'right', 'neutral'];
+            this.windUpDir   = weighted[Math.floor(Math.random() * weighted.length)];
+            this.windUpTimer = this.windUpDuration;
+            this.state       = 'windup';
+            this.playEnemyAnim('attack', false); // Ausholanimation (falls vorhanden)
+            this.showWindUpTell(this.windUpDir, false);
+            console.log(`[WindUp] ${this.data.name} holt aus [${this.windUpDir.toUpperCase()}] (${(this.windUpDuration * 1000).toFixed(0)}ms)`);
+        }
+
+        // ⚔️ Tell-Sprite erstellen: Pfeil über dem Gegner
+        showWindUpTell(direction, isFeint = false) {
+            if (!this.scene || !this.group) return;
+            this.hideWindUpTell(); // Vorherigen Tell entfernen
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            this._drawTellArrow(ctx, direction, isFeint);
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({
+                map: tex, transparent: true,
+                opacity: 0.7,
+                depthWrite: false,
+            });
+            this.windUpSprite = new THREE.Sprite(mat);
+            this.windUpSprite.scale.set(1.5, 1.5, 1.5);
+            // Über dem Gegner schweben
+            const height = (this.data.modelScale || 2.0) + 1.2;
+            this.windUpSprite.position.set(0, height, 0);
+            this.group.add(this.windUpSprite);
+        }
+
+        // ⚔️ Tell-Pfeil auf Canvas zeichnen
+        _drawTellArrow(ctx, direction, isFeint) {
+            ctx.clearRect(0, 0, 64, 64);
+            // Hintergrund-Kreis
+            ctx.beginPath();
+            ctx.arc(32, 32, 28, 0, Math.PI * 2);
+            ctx.fillStyle = isFeint ? 'rgba(255,0,200,0.5)' : 'rgba(255,100,0,0.5)';
+            ctx.fill();
+            ctx.strokeStyle = isFeint ? '#FF00FF' : '#FF6600';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            // Pfeil je nach Richtung
+            ctx.fillStyle = isFeint ? '#FF88FF' : '#FFD700';
+            ctx.beginPath();
+            const cx = 32, cy = 32, sz = 16;
+            const arrows = {
+                up:      [[cx, cy-sz], [cx-10, cy+sz*0.4], [cx+10, cy+sz*0.4]],
+                down:    [[cx, cy+sz], [cx-10, cy-sz*0.4], [cx+10, cy-sz*0.4]],
+                left:    [[cx-sz, cy], [cx+sz*0.4, cy-10], [cx+sz*0.4, cy+10]],
+                right:   [[cx+sz, cy], [cx-sz*0.4, cy-10], [cx-sz*0.4, cy+10]],
+                neutral: [[cx, cy-sz], [cx-10, cy], [cx+10, cy], [cx, cy+sz]], // Diamant
+            };
+            const pts = arrows[direction] || arrows.neutral;
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // ⚔️ Tell aktualisieren (z.B. bei Feint)
+        updateWindUpTell(direction, isFeint) {
+            if (!this.windUpSprite) {
+                this.showWindUpTell(direction, isFeint);
+                return;
+            }
+            // Canvas neu zeichnen
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            this._drawTellArrow(ctx, direction, isFeint);
+            this.windUpSprite.material.map?.dispose();
+            this.windUpSprite.material.map = new THREE.CanvasTexture(canvas);
+            this.windUpSprite.material.needsUpdate = true;
+        }
+
+        // ⚔️ Tell entfernen
+        hideWindUpTell() {
+            if (this.windUpSprite) {
+                this.group?.remove(this.windUpSprite);
+                this.windUpSprite.material.map?.dispose();
+                this.windUpSprite.material.dispose();
+                this.windUpSprite = null;
             }
         }
 
@@ -499,6 +882,15 @@
 
             this.hp -= amount;
             this.updateHealthBar();
+
+            // ⚔️ Wind-Up unterbrechen (Hit-Stagger)
+            if (this.state === 'windup') {
+                this.hideWindUpTell();
+                this.windUpTimer = 0;
+                this.state = 'hurt';
+                // Nach Stagger wieder angreifen (mit kurzer Verzögerung)
+                this.attackCooldown = 0.5;
+            }
 
             // Hit animation (kurz, dann zurück zum vorherigen State)
             if (this.mixer && this.state !== 'dead') {
@@ -539,6 +931,7 @@
         die() {
             this.isDead = true;
             this.state = 'dead';
+            this.hideWindUpTell(); // ⚔️ Tell beim Tod entfernen
 
             // Death animation
             this.playEnemyAnim('die', false);
@@ -607,7 +1000,7 @@
     // PLAYER FUNCTIONS
     // ==========================================
 
-    function takeDamage(amount, source = 'Unknown') {
+    function takeDamage(amount, source = 'Unknown', attackDirection = 'neutral') {
         // Cheer defense buff
         let finalAmount = amount;
         if (cheerBuffs.defend > 0) {
@@ -615,9 +1008,9 @@
             cheerBuffs.defend--;
         }
 
-        // Equipment armor reduction
+        // Equipment armor reduction + Directional Block
         if (window.EquipmentCombat) {
-            const ecResult = EquipmentCombat.takeDamage(finalAmount);
+            const ecResult = EquipmentCombat.takeDamage(finalAmount, null, attackDirection);
             if (ecResult === 0) return; // Dodged
             if (ecResult === -1) return; // Parried
             finalAmount = ecResult;
@@ -669,7 +1062,9 @@
     // COMBAT FUNCTIONS
     // ==========================================
 
-    function startCombat(enemyList, scene, position) {
+    async function startCombat(enemyList, scene, position) {
+        console.log(`🔥 [COMBAT DEBUG] startCombat called with:`, { enemyList, scene: !!scene, position });
+
         combatActive = true;
         window.combatActive = true;
         // WICHTIG: Fokus von Chat/Input-Feldern nehmen damit Keyboard-Controls funktionieren!
@@ -683,24 +1078,67 @@
         comboCount = 0;
         cheerBuffs = { attack: 0, defend: 0, combo: 0, focus: 0 };
 
-        enemyList.forEach((enemyType, i) => {
-            const offset = {
-                x: position.x + (Math.random() - 0.5) * 10,
-                y: 0,
-                z: position.z + (Math.random() - 0.5) * 10
-            };
+        if (!scene) {
+            console.error('❌ [COMBAT DEBUG] Scene is null/undefined! Combat cannot start.');
+            combatActive = false;
+            window.combatActive = false;
+            return;
+        }
 
+        // 🔥 FIXED: Load all enemies BEFORE hiding overworld enemies
+        const loadPromises = [];
+        enemyList.forEach((enemyType, i) => {
+            const ox = position.x + (Math.random() - 0.5) * 10;
+            const oz = position.z + (Math.random() - 0.5) * 10;
+            // CRITICAL FIX: Ensure y-position is always valid (minimum 5 units above ground)
+            let oy;
+            if (typeof window.getGroundHeight === 'function') {
+                oy = window.getGroundHeight(ox, oz);
+            } else if (position.y !== undefined && position.y !== null) {
+                oy = position.y;
+            } else {
+                oy = 5; // Safe fallback above ground
+            }
+            const offset = { x: ox, y: Math.max(oy, 5), z: oz }; // Ensure minimum y=5
+
+            console.log(`🔥 [COMBAT DEBUG] Creating enemy ${i}: ${enemyType} at`, offset);
             const level = 1 + Math.floor(Math.random() * 3);
             const enemy = new Enemy3D(enemyType, offset, level, scene);
-            enemy.load();
+            loadPromises.push(enemy.load());
             currentEnemies.push(enemy);
             // Track encounter in Bestiary
             if (window.bestiaryTrackEncounter) window.bestiaryTrackEncounter(enemyType);
         });
 
+        // Wait for all enemies to load
+        try {
+            await Promise.all(loadPromises);
+            console.log(`✅ [COMBAT DEBUG] All ${currentEnemies.length} combat enemies loaded successfully!`);
+            console.log(`🔥 [COMBAT DEBUG] Enemy states:`, currentEnemies.map(e => ({
+                type: e.type,
+                loaded: e.isLoaded,
+                dead: e.isDead,
+                hasGroup: !!e.group,
+                inScene: e.group && e.scene && e.scene.children.includes(e.group)
+            })));
+        } catch (error) {
+            console.error('❌ [COMBAT DEBUG] Failed to load enemies:', error);
+            combatActive = false;
+            window.combatActive = false;
+            return;
+        }
+
+        // NOW it's safe to hide overworld enemies
+        if (window.GameEvents) {
+            window.GameEvents.emit('combatEnemiesLoaded', { type: 'real3d' });
+        }
+
         combatMode = 'MANUAL'; // Immer im manuellen Modus starten
         createCombatHUD();
+        console.log(`🔥 [COMBAT DEBUG] HUD created`);
+
         startCombatLoop();
+        console.log(`🔥 [COMBAT DEBUG] Combat loop started, combatActive=${combatActive}`);
 
         console.log(`⚔️ Combat started: ${enemyList.length} enemies! Mode: ${combatMode}`);
 
@@ -709,7 +1147,7 @@
             window.GameEvents.emit('combatStarted', {
                 type: 'real3d',
                 enemyCount: currentEnemies.length,
-                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.data.name, level: e.level }))
             });
         }
     }
@@ -777,7 +1215,25 @@
                 cheerBuffs.focus--;
             }
 
-            const comboDamage = Math.floor(finalDamage * (1 + comboCount * 0.1) * cheerMultiplier * (isCrit ? 2.0 : 1.0));
+            // 🎮 SPECIAL Stats Bonuses
+            const powMultiplier = 1 + (SPECIAL.POW * 0.02); // +2% Melee DMG per point
+            const lukCritChance = 0.05 + (SPECIAL.LUK * 0.01); // Base 5% + 1% per LUK
+            const lukCritDamage = 1.5 + (SPECIAL.LUK * 0.05); // Base 1.5x + 5% per LUK
+            const perHitChance = 0.95 + (SPECIAL.PER * 0.02); // Base 95% + 2% per PER
+
+            // Hit chance check
+            if (Math.random() > perHitChance) {
+                spawnDamageNumber(0, nearest.position, false);  // 0 = MISS
+                return null;
+            }
+
+            // LUK crit chance
+            if (!isCrit && Math.random() < lukCritChance) {
+                isCrit = true;
+            }
+
+            const critMultiplier = isCrit ? lukCritDamage : 1.0;
+            const comboDamage = Math.floor(finalDamage * (1 + comboCount * 0.1) * cheerMultiplier * powMultiplier * critMultiplier);
             nearest.takeDamage(comboDamage, isCrit);
 
             if (isCrit) {
@@ -931,15 +1387,17 @@
     }
 
     function getPlayerPosition() {
-        if (window.Scene3D?.characterGroup) {
-            return Scene3D.characterGroup.position.clone();
+        if (window.character?.position) {
+            return window.character.position.clone();
         }
         return null;
     }
 
     function checkVictory() {
         const living = currentEnemies.filter(e => !e.isDead);
+        console.log(`🔥 [COMBAT DEBUG] checkVictory: ${living.length}/${currentEnemies.length} enemies alive, combatActive=${combatActive}`);
         if (living.length === 0 && combatActive) {
+            console.log(`🔥 [COMBAT DEBUG] Calling victory()!`);
             victory();
         }
     }
@@ -986,7 +1444,7 @@
                 result: 'victory',
                 xp: totalXPEarned,
                 loot: collectedLoot,
-                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.data.name, level: e.level }))
             });
         }
     }
@@ -1022,7 +1480,7 @@
             window.GameEvents.emit('combatEnded', {
                 type: 'real3d',
                 result: 'defeat',
-                enemies: currentEnemies.map(e => ({ id: e.type, name: e.name, level: e.level }))
+                enemies: currentEnemies.map(e => ({ id: e.type, name: e.data.name, level: e.level }))
             });
         }
 
@@ -1039,8 +1497,17 @@
     // ==========================================
 
     function startCombatLoop() {
+        let loopCount = 0;
         const loop = () => {
-            if (!combatActive) return;
+            if (!combatActive) {
+                console.warn(`🔥 [COMBAT DEBUG] Loop stopped: combatActive=${combatActive} after ${loopCount} iterations`);
+                return;
+            }
+
+            loopCount++;
+            if (loopCount % 60 === 0) {
+                console.log(`🔥 [COMBAT DEBUG] Loop running (iteration ${loopCount}), enemies: ${currentEnemies.length}, alive: ${currentEnemies.filter(e => !e.isDead).length}`);
+            }
 
             const delta = clock.getDelta();
             const playerPos = getPlayerPosition();
@@ -1075,6 +1542,7 @@
             animationFrame = requestAnimationFrame(loop);
         };
 
+        console.log(`🔥 [COMBAT DEBUG] Starting combat loop with ${currentEnemies.length} enemies`);
         loop();
     }
 
@@ -1180,12 +1648,8 @@
             </div>
         `;
 
-        const exitBtn = document.getElementById('exit-real-combat');
-        if (exitBtn) {
-            exitBtn.addEventListener('click', () => {
-                endCombat();
-            });
-        }
+        // Exit-Button wird via Event-Delegation in createCombatHUD() behandelt
+        // KEIN neuer addEventListener hier (würde sich jeden Frame stacken!)
     }
 
     function removeCombatHUD() {
@@ -1193,10 +1657,11 @@
         if (hud) hud.remove();
     }
 
-    function endCombat() {
+    function endCombat(reason) {
+        if (!combatActive && reason !== 'force') return; // Verhindert doppelte Aufrufe
         combatActive = false;
         window.combatActive = false;
-        combatMode = 'MANUAL'; // Modus zurücksetzen
+        combatMode = 'MANUAL';
         stopCombatLoop();
         stopAutoMode();
         hideFinisherQTE();
@@ -1209,6 +1674,18 @@
         finisherMeter = 0;
 
         removeCombatHUD();
+
+        // Overworld-State resetten: nur bei manuellem Exit (ESC/X)
+        // Bei Victory/Defeat wird der Callback von victory()/gameOver() aufgerufen
+        if (reason === 'exit' || reason === undefined) {
+            if (typeof window.onCombatExit === 'function') {
+                window.onCombatExit({ type: 'real3d', reason: 'exit' });
+            } else if (typeof window.onCombatDefeat === 'function') {
+                // Fallback: nutze onCombatDefeat mit reason 'exit' um state.activeCombat zu resetten
+                window.onCombatDefeat({ type: 'real3d', reason: 'exit' });
+            }
+        }
+
         console.log('🚪 Combat beendet');
     }
 
@@ -1217,6 +1694,50 @@
     // ==========================================
 
     function setupControls() {
+        // 📱 TOUCH CONTROLS INTEGRATION
+        window.addEventListener('touchAttack', (e) => {
+            if (!combatActive) return;
+            const { hand, type } = e.detail;
+
+            if (type === 'combined') {
+                // Both hands attack (like Q+E dual attack)
+                dualAttackNearestEnemy(false);
+            } else if (type === 'light') {
+                attackNearestEnemy(hand === 'left' ? 15 : 12, 4, hand, false);
+            } else if (type === 'heavy') {
+                attackNearestEnemy(hand === 'left' ? 15 : 12, 4, hand, true);
+            }
+        });
+
+        window.addEventListener('touchDodge', (e) => {
+            if (!combatActive) return;
+            if (window.EquipmentCombat) {
+                EquipmentCombat.dodge(e.detail.direction || 'back');
+            }
+            if (window.CharacterAnimations && window.CharacterAnimations.isReady()) {
+                window.CharacterAnimations.playDodge();
+            }
+            gainFinisher('perfectDodge');
+            console.log('🌀 Touch Dodge!');
+        });
+
+        window.addEventListener('touchBlock', (e) => {
+            if (!combatActive) return;
+            if (window.EquipmentCombat && e.detail.active) {
+                // Touch-Block nutzt DirectionResolver falls verfügbar
+                const dir = window.DirectionResolver?.getBlockDirection() || 'neutral';
+                EquipmentCombat.block(dir);
+            }
+        });
+
+        window.addEventListener('touchParry', (e) => {
+            if (!combatActive) return;
+            if (window.EquipmentCombat) {
+                EquipmentCombat.parry();
+            }
+        });
+
+        // ⌨️ KEYBOARD CONTROLS
         document.addEventListener('keydown', (e) => {
             // Skip if typing
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -1325,6 +1846,15 @@
                     // Finisher trigger
                     triggerFinisher();
                     break;
+                case 'v':
+                    // Völlerei/Devour - Gegner fressen!
+                    if (window.VoellereiSystem && window.VoellereiSystem.canDevour) {
+                        const devourTarget = currentEnemies.find(e => window.VoellereiSystem.canDevour(e));
+                        if (devourTarget) {
+                            window.VoellereiSystem.devourEnemy(devourTarget);
+                        }
+                    }
+                    break;
                 case 'escape':
                     // Exit combat with Escape key
                     e.preventDefault();
@@ -1332,29 +1862,22 @@
                     break;
 
                 // CHEER Mode buttons (1-4)
+                // 🎮 UPDATED: CHEER works in MANUAL too (for Slime companion!)
                 case '1':
-                    if (combatMode === 'CHEER') {
-                        cheer('attack');
-                        e.preventDefault();
-                    }
+                    cheer('attack');
+                    e.preventDefault();
                     break;
                 case '2':
-                    if (combatMode === 'CHEER') {
-                        cheer('defend');
-                        e.preventDefault();
-                    }
+                    cheer('defend');
+                    e.preventDefault();
                     break;
                 case '3':
-                    if (combatMode === 'CHEER') {
-                        cheer('combo');
-                        e.preventDefault();
-                    }
+                    cheer('combo');
+                    e.preventDefault();
                     break;
                 case '4':
-                    if (combatMode === 'CHEER') {
-                        cheer('focus');
-                        e.preventDefault();
-                    }
+                    cheer('focus');
+                    e.preventDefault();
                     break;
             }
         });
@@ -1470,7 +1993,8 @@
     // ==========================================
 
     function cheer(type) {
-        if (combatMode !== 'CHEER') return false;
+        // 🎮 CHEER works in any mode (for Slime companion support!)
+        // if (combatMode !== 'CHEER') return false;
 
         const effects = {
             attack: { buff: 'attack', rounds: 3, msg: '💪 "GIB IHM!" - Angriff +10%!', color: '#ff4444' },
@@ -1731,6 +2255,10 @@
     // ==========================================
 
     function spawnDamageNumber(amount, position, isCrit) {
+        // UI-Layer: Schadenszahlen NUR in Orbit-Cam (Design-Entscheidung V4)
+        const camMode = window.Scene3D?.getCameraMode?.() || 'orbit';
+        if (camMode !== 'orbit') return;
+
         const dmgNum = {
             value: Math.floor(amount),
             x: position.x + (Math.random() - 0.5) * 1.5,
@@ -1759,7 +2287,7 @@
                 'font-size: 20px; color: #ffdd00;'
             }
         `;
-        el.textContent = isCrit ? `💥${amount}` : `-${amount}`;
+        el.textContent = amount === 0 ? 'MISS' : (isCrit ? `💥${amount}` : `-${amount}`);
         document.body.appendChild(el);
 
         dmgNum.element = el;
@@ -1987,6 +2515,7 @@
 
         // State
         isActive: () => combatActive,
+        isInCombat: () => combatActive,
         getMode: () => combatMode,
         setMode: (mode) => {
             combatMode = mode;
@@ -1996,6 +2525,7 @@
         },
         getPlayerStats: () => ({ ...playerStats }),
         getEnemies: () => currentEnemies,
+        getPlayerPosition,
 
         // Combat Modes
         cheer,
@@ -2019,6 +2549,7 @@
     console.log('   🤖 AUTO: KI kämpft automatisch');
     console.log('   📣 CHEER: 1-4 Anfeuern (Digimon Style!)');
     console.log('   💀 X = Finisher (wenn Meter voll + Gegner < 20% HP)');
+    console.log('   🍖 V = Völlerei/Fressen (Gegner < 30% HP schwächen + fressen!)');
     console.log('   💎 Loot-System + Damage Numbers aktiv!');
 
 })();

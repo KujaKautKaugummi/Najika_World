@@ -38,7 +38,9 @@ class Housing3DPlacement {
         // Raycaster for mouse picking
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
+        // Use terrain height if available, otherwise flat Y=0 plane
         this.groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        this.useTerrainHeight = typeof window.getGroundHeight === 'function';
 
         // Event listeners
         this.onMouseMoveBound = this.onMouseMove.bind(this);
@@ -140,9 +142,17 @@ class Housing3DPlacement {
                 this.housePosition.z + halfDepth - this.gridSize
             );
 
+            // Use terrain height for Y position
+            if (this.useTerrainHeight) {
+                intersection.y = window.getGroundHeight(intersection.x, intersection.z);
+            }
+
             this.placementPosition.copy(intersection);
             this.ghostObject.position.x = intersection.x;
             this.ghostObject.position.z = intersection.z;
+            // Set Y to terrain height + half furniture height
+            const furnitureHalfHeight = (this.currentFurniture?.size?.y || 1) / 2;
+            this.ghostObject.position.y = (intersection.y || 0) + furnitureHalfHeight;
 
             // Apply rotation
             this.ghostObject.rotation.y = this.placementRotation;

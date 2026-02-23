@@ -353,6 +353,7 @@
         comboCount: 0,
         lastAttackTime: 0,
         comboWindow: 800, // ms für Combo
+        blockDirection: 'neutral',   // ⚔️ Directional Block: wohin der Spieler blockt
 
         // Status Effects
         effects: [], // { type, duration, strength, startTime }
@@ -588,17 +589,17 @@
 
     // ===== DEFENSE FUNCTIONS =====
 
-    function block() {
+    function block(direction = 'neutral') {
         const shieldId = state.leftHand;
         const shield = WEAPONS[shieldId];
 
-        if (!shield || shield.type !== 'shield') {
-            console.log('⚠️ Kein Schild ausgerüstet!');
-            return false;
-        }
-        if (state.stamina < shield.staminaCostBlock) return false;
+        // ⚔️ Auch ohne Schild kann man mit Waffe blocken (50% Grundreduktion)
+        const hasShield = shield && shield.type === 'shield';
+        const staminaCost = hasShield ? (shield.staminaCostBlock || 10) : 8;
+        if (state.stamina < staminaCost) return false;
 
         state.isBlocking = true;
+        state.blockDirection = direction || 'neutral'; // ⚔️ Richtung merken
         return true;
     }
 
@@ -657,7 +658,34 @@
 
     // ===== DAMAGE CALCULATION =====
 
-    function takeDamage(incomingDamage, element = null) {
+    // ⚔️ Richtungs-Kompatibilität: prüft ob Block-Richtung zum Angriff passt
+    function evaluateDirectionalBlock(attackDir) {
+        const blockDir = state.blockDirection || 'neutral';
+        if (!state.isBlocking) return { blocked: false, reduction: 0 };
+
+        // neutral blockt alles (kein Richtungsdruck) = Standard-Block
+        if (blockDir === 'neutral' || attackDir === 'neutral') {
+            return { blocked: true, reduction: 0.7, type: 'standard' };
+        }
+        // Perfekter Richtungs-Block
+        if (blockDir === attackDir) {
+            return { blocked: true, reduction: 1.0, type: 'perfect' };
+        }
+        // Benachbarte Richtungen (z.B. Block links, Angriff oben)
+        const adjacent = {
+            up:    ['left', 'right'],
+            down:  ['left', 'right'],
+            left:  ['up', 'down'],
+            right: ['up', 'down'],
+        };
+        if (adjacent[blockDir]?.includes(attackDir)) {
+            return { blocked: true, reduction: 0.45, type: 'glancing' };
+        }
+        // Falsche Richtung (z.B. Block oben, Angriff unten) = kein Block
+        return { blocked: false, reduction: 0, type: 'wrong_dir' };
+    }
+
+    function takeDamage(incomingDamage, element = null, attackDirection = 'neutral') {
         if (state.iFrames) {
             console.log('🌀 Dodge! Kein Schaden!');
             return 0;
@@ -665,20 +693,31 @@
 
         let finalDamage = incomingDamage;
 
-        // Block Reduction
-        if (state.isBlocking) {
-            const shield = WEAPONS[state.leftHand];
-            if (shield && shield.type === 'shield') {
-                finalDamage *= (1 - shield.blockReduction);
-                state.stamina -= Math.floor(incomingDamage * 0.3);
-                console.log(`🛡️ Block! Reduziert auf ${Math.floor(finalDamage)} Schaden`);
-            }
-        }
-
-        // Parry (vollständige Negation + Riposte Window)
+        // Parry (vollständige Negation + Riposte Window, prüfe VOR Block)
         if (state.isParrying) {
             console.log('⚔️ PARRY! Riposte möglich!');
             return -1; // -1 = Successful Parry
+        }
+
+        // ⚔️ Directional Block Check
+        if (state.isBlocking) {
+            const shield = WEAPONS[state.leftHand];
+            const hasShield = shield && shield.type === 'shield';
+            const baseReduction = hasShield ? (shield.blockReduction || 0.7) : 0.5;
+
+            const { blocked, reduction, type } = evaluateDirectionalBlock(attackDirection);
+            if (blocked) {
+                const effectiveReduction = baseReduction * reduction;
+                finalDamage *= (1 - effectiveReduction);
+                state.stamina -= Math.floor(incomingDamage * (hasShield ? 0.2 : 0.35));
+
+                const label = type === 'perfect' ? '🛡️✨ PERFEKTER BLOCK' :
+                              type === 'glancing' ? '🛡️ Abfälschend' : '🛡️ Block';
+                console.log(`${label} [${state.blockDirection}→${attackDirection}] → ${Math.floor(finalDamage)} Schaden (${Math.round(effectiveReduction * 100)}% Red.)`);
+            } else {
+                // Falsche Richtung: Stagger + volller Schaden (kurzer i-frame-Verlust)
+                console.log(`❌ Block-Richtung falsch! [Block:${state.blockDirection} vs. Angriff:${attackDirection}] - voller Schaden!`);
+            }
         }
 
         // Armor Reduction
@@ -946,7 +985,10 @@
         // Arkane
         arcane: { level: 1, xp: 0, xpNeeded: 170 },      // Basis-Magie
         // EXPLOSION (STANDALONE - Megumin-Klasse!)
-        explosion: { level: 1, xp: 0, xpNeeded: 500 }    // Nie mit anderen kombinieren!
+        explosion: { level: 1, xp: 0, xpNeeded: 500 },   // Nie mit anderen kombinieren!
+
+        // ========== VÖLLEREI (Gluttony/Devour) ==========
+        voellerei: { level: 1, xp: 0, xpNeeded: 150 }    // Gegner fressen = Learning by Doing!
     };
 
     // ========== 1-SKILL-WEG SYSTEM ==========
@@ -1528,6 +1570,50 @@
             const remaining = tidsState.cooldownMs - (Date.now() - tidsState.lastUsed);
             return remaining > 0 ? remaining : 0;
         },
+
+        // ⚔️ CombatInputHandler Interface (game_input.js Adapter)
+        executeAttack(hand, type) {
+            const result = type === 'heavy' ? attackHeavy(hand) : attackLight(hand);
+            if (!result) return { success: false, reason: 'cooldown', remaining: 500 };
+            return { success: true, damage: result.damage, element: result.element, weapon: hand === 'right' ? state.rightHand : state.leftHand };
+        },
+        executeBlock(blockDirection = 'neutral') {
+            const shield = WEAPONS[state.leftHand];
+            const hasShield = shield && shield.type === 'shield';
+            const success = block(blockDirection);
+            if (!success) return { success: false, reason: 'no_stamina' };
+            const blockVal = hasShield ? Math.round((shield.blockReduction || 0.7) * 100) : 50;
+            return { success: true, type: hasShield ? 'shield' : 'weapon', blockValue: blockVal, direction: blockDirection };
+        },
+        executeParry() {
+            const shield = WEAPONS[state.leftHand];
+            const parryWin = shield?.parryWindow ? Math.round(shield.parryWindow * 1000) : 300;
+            const success = parry();
+            if (!success) return { success: false, reason: 'no_stamina' };
+            return { success: true, parryWindow: parryWin };
+        },
+        executeWeave() {
+            // Placeholder: Weave-System via Elemente-Kombo (TODO: Element-Weave V2)
+            const leftWep = WEAPONS[state.leftHand];
+            const rightWep = WEAPONS[state.rightHand];
+            if (!leftWep || !rightWep) return { success: false, message: 'Keine Waffen' };
+            const weaveDmg = Math.floor((leftWep.damage.light + rightWep.damage.light) * 0.8);
+            return { success: true, weave: { name: 'Dual Weave', damage: weaveDmg, element: rightWep.element || leftWep.element } };
+        },
+        executeCombo(buffer) {
+            if (!buffer || buffer.length < 2) return null;
+            const pattern = buffer.join('-');
+            const combos = {
+                'light-light-heavy': { name: 'Rising Storm',   multiplier: 1.8 },
+                'heavy-light-light': { name: 'Hammer & Blade', multiplier: 1.6 },
+                'light-heavy':       { name: 'Quick Finisher', multiplier: 1.4 },
+                'heavy-heavy':       { name: 'Double Crush',   multiplier: 2.0 },
+            };
+            return combos[pattern] || null;
+        },
+
+        // Skill-XP vergeben (für externe Systeme wie Völlerei)
+        _gainSkillXP: gainSkillXP,
 
         // Stats modifizieren
         modifyPlayerStat: (stat, amount) => {

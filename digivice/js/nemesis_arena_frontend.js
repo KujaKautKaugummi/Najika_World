@@ -3,9 +3,13 @@
 // Shadow of Mordor meets Digimon World
 // ============================================
 
+// Guard: Nur definieren wenn noch nicht vorhanden (verhindert Konflikte mit nemesis_arena_ui.js)
+if (typeof window._NemesisArenaFrontendLoaded === 'undefined') {
+window._NemesisArenaFrontendLoaded = true;
+
 class NemesisArenaUI {
     constructor() {
-        this.apiBase = 'http://localhost:8001';  // Backend API
+        this.apiBase = 'http://localhost:8000';  // Backend API
         this.currentBattle = null;
         this.arenaPanel = null;
         this.hierarchyView = null;
@@ -331,91 +335,118 @@ class NemesisArenaUI {
 
             const battle = await response.json();
 
-            if (battle.battle_started) {
+            if (battle.success || battle.battle_id || battle.battle_started) {
                 this.currentBattle = battle;
 
-                // NUTZE UNIFIED COMBAT SYSTEM wenn verfügbar
-                if (window.UnifiedCombat) {
-                    // Verstecke Arena Panel während Kampf
-                    this.arenaPanel.style.display = 'none';
-
-                    // Starte Combat mit Monster-Daten
-                    window.UnifiedCombat.startCombat({
-                        type: 'arena',
-                        enemy: {
-                            name: battle.monster?.basic?.name || 'Arena-Gegner',
-                            hp: battle.monster?.stats?.hp || 80,
-                            maxHp: battle.monster?.stats?.hp || 80,
-                            attack: battle.monster?.stats?.attack || 15,
-                            defense: battle.monster?.stats?.defense || 8,
-                            speed: battle.monster?.stats?.speed || 1.0,
-                            xp: battle.monster?.stats?.xp || 50,
-                            loot: battle.monster?.loot || [],
-                            traits: battle.monster?.personality?.traits || [],
-                            element: battle.monster?.basic?.element || null
-                        },
-                        location: 'Nemesis Arena',
-                        isHardcore: false,
-                        waveNumber: 0
-                    });
-
-                    // Callback für Arena nach Kampf
-                    window.onCombatVictory = (result) => {
-                        if (result.type === 'arena') {
-                            this.playerStats.wins++;
-                            document.getElementById('player-wins').textContent = this.playerStats.wins;
-                            this.arenaPanel.style.display = 'flex';
-                        }
-                    };
-                    window.onCombatDefeat = (result) => {
-                        if (result.type === 'arena') {
-                            this.playerStats.losses++;
-                            document.getElementById('player-losses').textContent = this.playerStats.losses;
-                            this.arenaPanel.style.display = 'flex';
-                        }
-                    };
-                } else {
-                    // Fallback zum alten System
+                // ⚔️ REAL 3D COMBAT - Map API monster to enemy type
+                if (!window.Real3DCombat || !window.Real3DCombat.startCombat) {
+                    console.error('❌ Real3DCombat nicht verfügbar!');
                     this.showBattleScreen(battle);
+                    return;
                 }
+
+                this.arenaPanel.style.display = 'none';
+
+                // Teleport nur wenn NICHT bereits im Interior (Stadt)
+                const alreadyInCity = window.isInInterior === true;
+                if (!alreadyInCity && window.character) {
+                    window.character.position.set(8400, 10, 8200);
+                    if (window.setTeleportCooldown) window.setTeleportCooldown(60);
+                    console.log('🏟️ Teleportiert zur Handelsfestung Arena');
+                }
+
+                const scene = window.getScene ? window.getScene() : null;
+                const arenaCenter = window.character?.position
+                    ? { x: window.character.position.x, y: 0, z: window.character.position.z }
+                    : { x: 8400, y: 0, z: 8200 };
+
+                if (!scene) {
+                    console.error('❌ Scene nicht verfügbar!');
+                    this.showBattleScreen(battle);
+                    return;
+                }
+
+                // Map monster element/stats to Real3DCombat enemy type
+                const element = battle.monster?.basic?.element;
+                const hp = battle.monster?.stats?.hp || 80;
+                let enemyType = 'skeleton_warrior'; // Default
+
+                if (hp > 150) {
+                    enemyType = 'corrupted_knight'; // High HP = Tank
+                } else if (element === 'feuer' || element === 'fire') {
+                    enemyType = 'skeleton_mage'; // Fire element
+                } else if (element === 'eis' || element === 'ice') {
+                    enemyType = 'skeleton_mage'; // Ice element
+                } else if (hp < 50) {
+                    enemyType = 'goblin'; // Low HP = Fast
+                } else {
+                    enemyType = 'wolf'; // Medium stats
+                }
+
+                const self = this;
+                window.onCombatVictory = (result) => {
+                    if (result.type === 'real3d') {
+                        self.playerStats.wins++;
+                        document.getElementById('player-wins').textContent = self.playerStats.wins;
+                        self.arenaPanel.style.display = 'flex';
+                    }
+                };
+                window.onCombatDefeat = (result) => {
+                    if (result.type === 'real3d') {
+                        self.playerStats.losses++;
+                        document.getElementById('player-losses').textContent = self.playerStats.losses;
+                        self.arenaPanel.style.display = 'flex';
+                    }
+                };
+
+                window.Real3DCombat.startCombat([enemyType], scene, arenaCenter);
+                console.log(`⚔️ Challenge Combat: ${battle.monster?.basic?.name || 'Arena-Gegner'}`);
             }
 
         } catch (error) {
             console.error('Kampf konnte nicht gestartet werden:', error);
-            // Fallback mit Mock-Daten für Offline
-            if (window.UnifiedCombat) {
-                this.arenaPanel.style.display = 'none';
-                window.UnifiedCombat.startCombat({
-                    type: 'arena',
-                    enemy: {
-                        name: 'Arena-Champion',
-                        hp: 100,
-                        attack: 18,
-                        defense: 10,
-                        speed: 1.0,
-                        xp: 60,
-                        loot: ['gold_coin', 'arena_token']
-                    },
-                    location: 'Nemesis Arena',
-                    isHardcore: false
-                });
-
-                // Callbacks auch im Offline-Modus setzen
-                window.onCombatVictory = (result) => {
-                    if (result.type === 'arena') {
-                        this.playerStats.wins++;
-                        document.getElementById('player-wins').textContent = this.playerStats.wins;
-                        this.arenaPanel.style.display = 'flex';
-                    }
-                };
-                window.onCombatDefeat = (result) => {
-                    if (result.type === 'arena') {
-                        this.playerStats.losses++;
-                        document.getElementById('player-losses').textContent = this.playerStats.losses;
-                        this.arenaPanel.style.display = 'flex';
-                    }
-                };
+            // Offline-Fallback mit Real3DCombat
+            if (!window.Real3DCombat) {
+                console.error('❌ Real3DCombat nicht verfügbar!');
+                return;
             }
+
+            this.arenaPanel.style.display = 'none';
+
+            // Teleport nur wenn nicht im Interior
+            if (window.isInInterior !== true && window.character) {
+                window.character.position.set(8400, 10, 8200);
+                if (window.setTeleportCooldown) window.setTeleportCooldown(60);
+            }
+
+            const scene = window.getScene ? window.getScene() : null;
+            if (!scene) {
+                console.error('❌ Scene nicht verfügbar!');
+                return;
+            }
+
+            const fallbackCenter = window.character?.position
+                ? { x: window.character.position.x, y: 0, z: window.character.position.z }
+                : { x: 8400, y: 0, z: 8200 };
+
+            const self = this;
+            window.onCombatVictory = (result) => {
+                if (result.type === 'real3d') {
+                    self.playerStats.wins++;
+                    document.getElementById('player-wins').textContent = self.playerStats.wins;
+                    self.arenaPanel.style.display = 'flex';
+                }
+            };
+            window.onCombatDefeat = (result) => {
+                if (result.type === 'real3d') {
+                    self.playerStats.losses++;
+                    document.getElementById('player-losses').textContent = self.playerStats.losses;
+                    self.arenaPanel.style.display = 'flex';
+                }
+            };
+
+            window.Real3DCombat.startCombat(['corrupted_knight'], scene, fallbackCenter);
+            console.log('⚔️ Offline Arena Combat: Arena-Champion');
         }
     }
 
@@ -761,7 +792,7 @@ class NemesisArenaUI {
     fleeBattle() {
         if (!this._fleeConfirmPending) {
             this._fleeConfirmPending = true;
-            notify('⚠️ Wirklich fliehen? Klicke nochmal zum Bestätigen!', 'warning');
+            if (typeof notify === 'function') notify('⚠️ Wirklich fliehen? Klicke nochmal zum Bestätigen!', 'warning');
             setTimeout(() => { this._fleeConfirmPending = false; }, 3000);
             return;
         }
@@ -769,7 +800,7 @@ class NemesisArenaUI {
         const battleScreen = document.getElementById('battle-screen');
         if (battleScreen) battleScreen.remove();
         this.playerStats.losses++;
-        notify('Du bist aus der Arena geflohen...', 'warning');
+        if (typeof notify === 'function') notify('Du bist aus der Arena geflohen...', 'warning');
     }
 
     setupEventListeners() {
@@ -935,16 +966,18 @@ class NemesisArenaUI {
         if (window.Real3DCombat && window.Real3DCombat.startCombat) {
             this.arenaPanel.style.display = 'none';
 
-            // Teleport player to Arena FIRST!
-            if (window.Scene3D && typeof window.Scene3D.changeRoom === 'function') {
-                window.Scene3D.changeRoom('Kampfarena');
-                console.log('🏟️ Teleported to Kampfarena for Wave Battle');
-            } else {
-                console.error('❌ Scene3D.changeRoom() not available!');
+            // Teleport nur wenn NICHT bereits im Interior (Stadt)
+            const alreadyInCity = window.isInInterior === true;
+            if (!alreadyInCity && window.character) {
+                window.character.position.set(8400, 10, 8200);
+                if (window.setTeleportCooldown) window.setTeleportCooldown(60);
+                console.log('🏟️ Teleportiert zur Handelsfestung Arena (Wellen-Modus)');
             }
 
             const scene = window.getScene ? window.getScene() : null;
-            const arenaCenter = { x: 0, y: 0, z: -10 };
+            const arenaCenter = window.character?.position
+                ? { x: window.character.position.x, y: 0, z: window.character.position.z }
+                : { x: 8400, y: 0, z: 8200 };
 
             if (scene) {
                 // Setup Callbacks BEFORE starting combat
@@ -986,49 +1019,12 @@ class NemesisArenaUI {
                 console.error('Scene nicht verfügbar!');
             }
 
-        } else if (window.UnifiedCombat) {
-            // Fallback: Unified Combat
-            this.arenaPanel.style.display = 'none';
-
-            window.UnifiedCombat.startCombat({
-                type: 'arena',
-                enemies: waveEnemies,
-                location: `Nemesis Arena - Welle ${nextWave}`,
-                isHardcore: isHardcore,
-                waveNumber: nextWave
-            });
-
-            const self = this;
-            window.onCombatVictory = (result) => {
-                if (result.type === 'arena') {
-                    self.onWaveBattleEnd(true);
-                    self.arenaPanel.style.display = 'flex';
-                }
-            };
-            window.onCombatDefeat = (result) => {
-                if (result.type === 'arena') {
-                    self.onWaveBattleEnd(false);
-                    self.arenaPanel.style.display = 'flex';
-                }
-            };
-
         } else {
-            // Fallback zum alten System
-            try {
-                const response = await fetch(`${this.apiBase}/api/arena/wave-battle`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ wave: nextWave, hardcore: isHardcore })
-                });
-                const battle = await response.json();
-                if (battle.battle_started || battle.success) {
-                    this.currentBattle = battle;
-                    this.showBattleScreen(battle);
-                }
-            } catch (error) {
-                console.error('Wave-Kampf Fehler:', error);
-            }
+            console.error('❌ Real3DCombat nicht verfügbar!');
+            return;
         }
+
+        // Dead fallback code entfernt
     }
 
     /**
@@ -1702,3 +1698,4 @@ if (document.readyState === 'loading') {
 }
 
 console.log('✅ Nemesis Arena System geladen!');
+} // end guard

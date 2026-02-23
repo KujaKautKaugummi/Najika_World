@@ -28,91 +28,83 @@ These 8 regions are referenced in game design docs. Each has:
 - Special events
 - Themed biome
 
-### 1. **Bernstein-Dünen** (Amber Dunes)
-**Biome:** Desert
-**Schleim:** Bernstein (Amber)
+### 1. **Heiße Dünen**
+**Biome:** Desert (Wüste)
+**Stadt:** Handelsfestung (Hauptstadt!)
 **Risiken:** Durst, Sandsturm
 **Events:** Karawanenhandel, versandete Ruinen
 **Besonderheit:** Seltene Alchemie-Zutaten in Oasen
 
-### 2. **Smaragd-Hain** (Emerald Grove)
-**Biome:** Forest
-**Schleim:** Smaragd (Emerald)
+### 2. **Samtmoos-Tiefwald**
+**Biome:** Forest (Wald)
+**Stadt:** Dampf-Hain (japanisch-mystisch, Onsen, Druiden)
 **Risiken:** Verirren, Parasiten
 **Events:** Druidenrätsel, Kräutersuche
 **Besonderheit:** Versteckte Pfade, sprechende Bäume
 
-### 3. **Azur-Klippen** (Azure Cliffs)
-**Biome:** Coastal
-**Schleim:** Azur (Azure)
+### 3. **Salzwind-Küste**
+**Biome:** Coastal (Küste)
+**Stadt:** Salzige Bucht (Piraten-Hafen, Leuchtturm)
 **Risiken:** Sturmflut, Ertrinken
 **Events:** Schiffwracks, Gezeitenkisten, Angeln
 **Besonderheit:** Unterwasser-Höhlen
 
-### 4. **Amethyst-Steppe** (Amethyst Steppe)
-**Biome:** Highland
-**Schleim:** Amethyst
+### 4. **Blitzebene**
+**Biome:** Highland (Hochland)
+**Stadt:** Runenheim (Magie-Akademie)
 **Risiken:** Blitzschlag, Sturm
 **Events:** Wetter-Altäre, Totems
 **Besonderheit:** Elementar-Ladungen für Experimente
 
-### 5. **Onyx-Morast** (Onyx Swamp)
-**Biome:** Swamp/Marsh
-**Schleim:** Onyx
+### 5. **Grünschlamm-Sumpf**
+**Biome:** Swamp/Marsh (Sumpf)
+**Stadt:** KEINE (Hexen-Gebiet!)
 **Risiken:** Krankheit, Miasma
 **Events:** Hexenkreise, Moor-Bosse
 **Besonderheit:** Nekromantie-Forschung
 
-### 6. **Perl-Gletscher** (Pearl Glacier)
-**Biome:** Snow/Ice
-**Schleim:** Perle (Pearl)
-**Risiken:** Erfrierung, Lawinen
-**Events:** Eishöhlen, Rutsch-Traversal
-**Besonderheit:** Kryomagie-Experimente
-
-### 7. **Rubin-Schlucht** (Ruby Canyon)
-**Biome:** Volcano
-**Schleim:** Rubin (Ruby)
+### 6. **Magmaströme**
+**Biome:** Volcano (Vulkan)
+**Stadt:** Funken-Siedlung (Schmiede, vulkanisch-industriell)
 **Risiken:** Überhitzung, Asche
 **Events:** Lava-Kanäle, Erzadern
 **Besonderheit:** Schmiedekunst auf höchstem Niveau
 
-### 8. **Obsidian-Nacht** (Obsidian Night)
-**Biome:** Endgame Dark Zone
-**Schleim:** Obsidian
-**Risiken:** Nachtkreaturen, Wahnsinn
-**Events:** Nemesis-Spawns, Finisher-Sigils
-**Besonderheit:** Härteste Herausforderungen
+### 7. **Tiefenhöhlen**
+**Biome:** Cave (Höhlen)
+**Stadt:** KEINE (Goblin-Gebiet!)
+**Risiken:** Einstürze, Dunkelheit
+**Events:** Erzadern, unterirdische Seen
+**Besonderheit:** Seltene Erze, Goblin-Lager
+
+### 8. **Reich der Drei**
+**Biome:** Tundra/Ice (Eis/Undead)
+**Stadt:** KEINE (Untote/Nekromanten-Gebiet!)
+**Risiken:** Erfrierung, Untote
+**Events:** Nekromanten-Rituale, Geister
+**Besonderheit:** Härteste Herausforderungen, Endgame-Gebiet
 
 ---
 
-## ❓ MISSING INFORMATION - USER INPUT NEEDED
+## ✅ 5 STÄDTE (DEFINIERT - aus cities.json)
 
-### **5 STÄDTE (5 Cities)**
-User mentioned "5 Städte" should be placed on map.
+| Stadt | Region | Stil |
+|-------|--------|------|
+| **Handelsfestung** (Hauptstadt) | Heiße Dünen | Western, PvP-Arena, Spieler-Shops |
+| **Dampf-Hain** | Samtmoos-Tiefwald | Japanisch-mystisch, Onsen, Druiden |
+| **Salzige Bucht** | Salzwind-Küste | Piraten-Küste, Hafen, Leuchtturm |
+| **Runenheim** | Blitzebene | Magisches Hochland, Magie-Akademie |
+| **Funken-Siedlung** | Magmaströme | Vulkanisch-industriell, Schmiede |
 
-**QUESTION:** Which specific cities should be placed?
-- Axel (from KonoSuba)?
-- Alcanretia (from KonoSuba)?
-- Crimson Magic Village (from KonoSuba)?
-- Custom cities within the 8 regions?
-- Trade hubs for each region?
-
-**Current Status:** Not yet specified in docs
+**3 Regionen OHNE Stadt:** Grünschlamm-Sumpf (Hexen), Tiefenhöhlen (Goblins), Reich der Drei (Untote)
 
 ---
 
-### **3 SPEZIALORTE (3 Special Locations)**
-User mentioned "3 Ortze" (3 special locations) should be placed.
-
-**QUESTION:** Which 3 special locations?
-- Kampfarena (Combat Arena) - mentioned in new strategy?
-- Dungeon entrances (3 mega-dungeons)?
-- Secret training grounds?
-- Legendary boss spawns?
-- Crafting hotspots?
-
-**Current Status:** Not yet specified
+### **SPEZIALORTE**
+- **Götterfels** = Zentraler Berg (wie Mount Everest, in ALLEN 8 Regionen sichtbar/erreichbar)
+  - Schwarze Mühle (Safe Zone, Fast-Travel Hub)
+  - Schmelz-Welt (Lava-Interior, Dungeon)
+  - Turm der 100 Prüfungen (Mega-Dungeon)
 
 ---
 
@@ -137,42 +129,13 @@ User mentioned "3 Ortze" (3 special locations) should be placed.
 
 ---
 
-## 📝 RECOMMENDATIONS
-
-### **Option A: KonoSuba-Inspired Cities**
-Place 5 KonoSuba cities on the map:
-1. **Axel** (Starter Town) - near Black Windmill
-2. **Alcanretia** (Hot Springs City) - near Perl-Gletscher
-3. **Crimson Magic Village** - near Rubin-Schlucht
-4. **Elroad** (Royal Capital)
-5. **Arcanletia** (Magic Academy City)
-
-### **Option B: Custom Regional Cities**
-Each major region gets a city:
-1. **Bernstein-Stadt** (Amber City) - Desert trade hub
-2. **Smaragd-Dorf** (Emerald Village) - Forest settlement
-3. **Azur-Hafen** (Azure Port) - Coastal trading post
-4. **Rubin-Schmiede** (Ruby Forge) - Volcano crafting hub
-5. **Obsidian-Zitadelle** (Obsidian Citadel) - Endgame hub
-
-### **Option C: Hybrid Approach**
-Mix of KonoSuba + Custom:
-1. **Axel** (Starter, near Black Windmill)
-2. **Crimson Magic Village** (near Rubin-Schlucht)
-3. **Alcanretia** (near Perl-Gletscher)
-4. **[Custom] Smaragd Trading Post** (Forest)
-5. **[Custom] Azur Harbor** (Coast)
-
----
-
 ## 🚧 NEXT STEPS
 
-1. **User Decision:** Which 5 cities + 3 special locations?
-2. **Placement Strategy:** Where on 2400×2400 map?
-3. **Implementation:** Add as markers/waypoints
-4. **Testing:** Use for non-combat mechanics
+1. **Placement Strategy:** Positionen aus regions.json + cities.json auf 2400×2400 Mini-Map mappen
+2. **Implementation:** Als Markers/Waypoints umsetzen
+3. **Testing:** Non-Combat Mechaniken testen
 
 ---
 
-**Status:** AWAITING USER INPUT
+**Status:** Städte + Regionen DEFINIERT (siehe regions.json + cities.json)
 **File:** MAP_LOCATIONS_FOR_TESTING.md

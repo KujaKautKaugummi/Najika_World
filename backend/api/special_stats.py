@@ -19,6 +19,7 @@ Max +25% bonus at 10 points (sanft, nicht dominant!)
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/special", tags=["special"])
 
@@ -59,6 +60,7 @@ def calculate_bonuses(stats: SpecialStats) -> Dict:
 
 
 @router.post("/set")
+@handle_errors()
 async def set_special(request: SetSpecialRequest):
     """
     Set S.P.E.C.I.A.L. stats for player
@@ -121,6 +123,7 @@ async def set_special(request: SetSpecialRequest):
 
 
 @router.get("/bonuses")
+@handle_errors()
 async def get_bonuses(player_id: int):
     """
     Get calculated bonuses for player's S.P.E.C.I.A.L. stats

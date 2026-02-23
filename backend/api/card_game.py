@@ -42,6 +42,7 @@ from backend.database import get_db
 from backend.models.card_game import (
     Card, PlayerCardCollection, PlayerDeck, CardGameMatch, CardGameRanking
 )
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/cards", tags=["card_game"])
@@ -107,6 +108,7 @@ class UpdateRankingRequest(BaseModel):
 # ============================================================================
 
 @router.get("")
+@handle_errors()
 async def get_all_cards(
     faction: Optional[str] = Query(None, description="Filter by faction"),
     rarity: Optional[str] = Query(None, description="Filter by rarity"),
@@ -148,6 +150,7 @@ async def get_all_cards(
 
 
 @router.get("/{card_id}")
+@handle_errors()
 async def get_card(card_id: int, db: Session = Depends(get_db)):
     """
     Get Specific Card (DATABASE)
@@ -170,6 +173,7 @@ async def get_card(card_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/add-to-collection")
+@handle_errors()
 async def add_card_to_collection(request: AddCardToCollectionRequest, db: Session = Depends(get_db)):
     """
     Add Card to Player Collection (DATABASE)
@@ -230,6 +234,7 @@ async def add_card_to_collection(request: AddCardToCollectionRequest, db: Sessio
 
 
 @router.get("/collection/{player_id}")
+@handle_errors()
 async def get_player_collection(player_id: int, db: Session = Depends(get_db)):
     """
     Get Player's Card Collection (DATABASE)

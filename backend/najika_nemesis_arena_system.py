@@ -246,9 +246,9 @@ class ArenaManager:
             'fighters': []
         }
         self.regions = [
-            "Bernstein-Dünen", "Smaragd-Hain", "Azur-Klippen",
-            "Amethyst-Steppe", "Onyx-Morast", "Perl-Gletscher",
-            "Rubin-Schlucht", "Obsidian-Nacht"
+            "Heiße Dünen", "Samtmoos-Tiefwald", "Salzwind-Küste",
+            "Blitzebene", "Grünschlamm-Sumpf", "Magmaströme",
+            "Tiefenhöhlen", "Reich der Drei"
         ]
         self.active_battles: Dict[str, Dict] = {}
 

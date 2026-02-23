@@ -26,7 +26,7 @@ class SlimeArenaUI {
         this.cheerBuffs = {}; // Active cheer buffs
 
         // API integration - FastAPI Server auf Port 8001
-        this.apiBase = 'http://127.0.0.1:8001/api/slime-arena';
+        this.apiBase = 'http://127.0.0.1:8000/api/slime-arena';
         this.currentDuelId = null;
         this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 'player_1';
 
@@ -398,6 +398,7 @@ class SlimeArenaUI {
                         ${match.player2}
                     </div>
                     ${match.winner ? '<div class="finisher-badge">💀 FINISHED</div>' : ''}
+                    ${!match.winner && (match.player1 === 'Du' || match.player2 === 'Du') ? '<button data-action="start-tournament-fight" style="background:#ff4444;color:white;border:none;padding:4px 12px;cursor:pointer;border-radius:4px;margin-top:4px;font-weight:bold;">Kämpfen!</button>' : ''}
                 </div>
             `;
         }
@@ -469,6 +470,9 @@ class SlimeArenaUI {
             if (target.dataset.action === 'close-bracket') {
                 this.showMainMenu();
             }
+            if (target.dataset.action === 'start-tournament-fight') {
+                this.startBattle('finisher');
+            }
 
             // Flee
             if (target.dataset.action === 'flee') {
@@ -520,50 +524,70 @@ class SlimeArenaUI {
 
         const enemyTemplate = slimeTypes[Math.floor(Math.random() * slimeTypes.length)];
 
-        // NUTZE UNIFIED COMBAT SYSTEM
-        if (window.UnifiedCombat) {
-            this.container.classList.add('hidden');
+        // ⚔️ REAL 3D COMBAT - Slime Arena (AUTO/CHEER only!)
+        if (!window.Real3DCombat || !window.Real3DCombat.startCombat) {
+            console.error('❌ Real3DCombat nicht verfügbar!');
+            this.startFallbackBattle(mode, enemyTemplate);
+            return;
+        }
 
-            window.UnifiedCombat.startCombat({
-                type: 'arena',
-                enemy: {
-                    name: enemyTemplate.name,
-                    hp: enemyTemplate.hp,
-                    maxHp: enemyTemplate.hp,
-                    attack: enemyTemplate.attack,
-                    defense: enemyTemplate.defense,
-                    speed: 1.0,
-                    xp: 30,
-                    loot: ['slime_gel', 'slime_core'],
-                    element: enemyTemplate.element,
-                    traits: mode === 'finisher' ? ['Finisher-Modus'] : []
-                },
-                location: 'Schlammige Münze - Slime Arena',
-                isHardcore: false
-            });
+        this.container.classList.add('hidden');
 
-            // Callback für nach dem Kampf
-            const self = this;
-            window.onCombatVictory = (result) => {
-                if (result.type === 'arena') {
-                    self.container.classList.remove('hidden');
-                    if (mode === 'finisher') {
-                        // Zeige Finisher-Auswahl
-                        self.container.innerHTML = self.getFinisherSelectionHTML();
-                        self.attachEventListeners();
-                    } else {
-                        self.showBattleResult(true);
-                    }
+        // Don't teleport for Slime Arena - stays in current location
+        const scene = window.getScene ? window.getScene() : null;
+        if (!scene) {
+            console.error('❌ Scene nicht verfügbar!');
+            this.startFallbackBattle(mode, enemyTemplate);
+            return;
+        }
+
+        // Map slime element to enemy type
+        const elementMap = {
+            'nature': 'slime',
+            'fire': 'bat',
+            'water': 'slime',
+            'light': 'slime',
+            'dark': 'slime'
+        };
+        const enemyType = elementMap[enemyTemplate.element] || 'slime';
+
+        const self = this;
+        const playerPos = window.getPlayerPosition ? window.getPlayerPosition() : { x: 0, y: 0, z: 0 };
+
+        window.onCombatVictory = (result) => {
+            if (result.type === 'real3d') {
+                self.container.classList.remove('hidden');
+                if (mode === 'finisher') {
+                    self.container.innerHTML = self.getFinisherSelectionHTML();
+                    self.attachEventListeners();
+                } else {
+                    self.showBattleResult(true);
                 }
-            };
-            window.onCombatDefeat = (result) => {
-                if (result.type === 'arena') {
-                    self.container.classList.remove('hidden');
-                    self.showBattleResult(false);
-                }
-            };
+            }
+        };
+        window.onCombatDefeat = (result) => {
+            if (result.type === 'real3d') {
+                self.container.classList.remove('hidden');
+                self.showBattleResult(false);
+            }
+        };
 
-        } else {
+        window.Real3DCombat.startCombat([enemyType], scene, playerPos);
+
+        // 🎮 Auto-set to CHEER mode for Slime Arena (Digimon World style!)
+        setTimeout(() => {
+            if (window.Real3DCombat && window.Real3DCombat.setMode) {
+                window.Real3DCombat.setMode('CHEER');
+            }
+        }, 100);
+
+        console.log(`⚔️ Slime Arena: ${enemyTemplate.name} (CHEER-Modus!)`);
+
+    }
+
+    startFallbackBattle(mode, enemyTemplate) {
+        // Fallback zum alten internen System
+        if (true) {
             // Fallback zum alten internen System
             this.playerSlime = {
                 name: 'Dein Schleim',
@@ -630,7 +654,10 @@ class SlimeArenaUI {
     // === COMBAT ACTIONS ===
 
     executeAttack() {
-        const damage = Math.floor(this.playerSlime.attack * (0.8 + Math.random() * 0.4));
+        let attackMult = 1.0;
+        if (this.cheerBuffs && this.cheerBuffs.attack > 0) attackMult *= 1.10;
+        if (this.cheerBuffs && this.cheerBuffs.combo > 0) attackMult *= 1.25;
+        const damage = Math.floor(this.playerSlime.attack * (0.8 + Math.random() * 0.4) * attackMult);
         this.enemySlime.hp = Math.max(0, this.enemySlime.hp - damage);
 
         this.addLogEntry(`${this.playerSlime.name} greift an! ${damage} Schaden!`);
@@ -718,7 +745,8 @@ class SlimeArenaUI {
 
         setTimeout(() => {
             const damage = Math.floor(this.enemySlime.attack * (0.8 + Math.random() * 0.4));
-            const actualDamage = this.playerSlime.defending ? Math.floor(damage * 0.5) : damage;
+            const defMult = (this.cheerBuffs && this.cheerBuffs.defend > 0) ? 0.3 : 0.5;
+            const actualDamage = this.playerSlime.defending ? Math.floor(damage * defMult) : damage;
             this.playerSlime.defending = false;
 
             this.playerSlime.hp = Math.max(0, this.playerSlime.hp - actualDamage);
@@ -733,7 +761,25 @@ class SlimeArenaUI {
     }
 
     openItemMenu() {
-        this.addLogEntry('Item-Menü (noch nicht implementiert)');
+        if (!this.arenaItems) {
+            this.arenaItems = [
+                { name: 'Heiltrank', heal: 25, count: 2 },
+                { name: 'Mana-Trank', heal: 15, count: 1 }
+            ];
+        }
+        const available = this.arenaItems.filter(i => i.count > 0);
+        if (available.length === 0) {
+            this.addLogEntry('Keine Items mehr!');
+            return;
+        }
+        const item = available[0];
+        item.count--;
+        const oldHp = this.playerSlime.hp;
+        this.playerSlime.hp = Math.min(this.playerSlime.maxHp, this.playerSlime.hp + item.heal);
+        const healed = this.playerSlime.hp - oldHp;
+        this.addLogEntry(`${item.name} benutzt! +${healed} HP (${item.count} übrig)`);
+        this.updateBattleDisplay();
+        setTimeout(() => this.executeEnemyTurn(), 800);
     }
 
     handleBattleEnd(playerWon) {

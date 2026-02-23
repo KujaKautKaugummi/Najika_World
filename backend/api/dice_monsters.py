@@ -32,6 +32,7 @@ from backend.database import get_db
 from backend.models.dice_monsters import (
     DiceMonster, PlayerDiceCollection, DiceDuelMatch
 )
+from backend.utils import handle_errors
 
 # Create FastAPI Routers
 router = APIRouter(prefix="/api/dice", tags=["dice_monsters"])
@@ -79,6 +80,7 @@ class EndDuelRequest(BaseModel):
 # ============================================================================
 
 @router.get("")
+@handle_errors()
 async def get_all_dice_monsters(
     element: Optional[str] = Query(None, description="Filter by element"),
     rarity: Optional[str] = Query(None, description="Filter by rarity"),
@@ -120,6 +122,7 @@ async def get_all_dice_monsters(
 
 
 @router.get("/{dice_id}")
+@handle_errors()
 async def get_dice_monster(dice_id: int, db: Session = Depends(get_db)):
     """
     Get Specific Dice Monster (DATABASE)
@@ -142,6 +145,7 @@ async def get_dice_monster(dice_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/add-to-collection")
+@handle_errors()
 async def add_dice_to_collection(request: AddDiceToCollectionRequest, db: Session = Depends(get_db)):
     """
     Add Dice Monster to Player Collection (DATABASE)
@@ -202,6 +206,7 @@ async def add_dice_to_collection(request: AddDiceToCollectionRequest, db: Sessio
 
 
 @router.get("/collection/{player_id}")
+@handle_errors()
 async def get_player_dice_collection(player_id: int, db: Session = Depends(get_db)):
     """
     Get Player's Dice Collection (DATABASE)

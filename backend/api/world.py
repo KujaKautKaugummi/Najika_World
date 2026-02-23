@@ -32,6 +32,7 @@ from datetime import datetime
 from backend.database import get_db
 from backend.models.world_state import WorldState, PlayerWorldState
 from backend.services.world_system import WorldSystem, Biome
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/world", tags=["world"])
@@ -105,6 +106,7 @@ class CheckCityEntryRequest(BaseModel):
 # ============================================================================
 
 @router.get("/info")
+@handle_errors()
 async def get_map_info():
     """
     Get Map Info
@@ -134,6 +136,7 @@ async def get_map_info():
 
 
 @router.get("/biomes")
+@handle_errors()
 async def get_all_biomes():
     """
     Get All Biomes
@@ -181,6 +184,7 @@ async def get_all_biomes():
 
 
 @router.get("/biome/{biome_id}")
+@handle_errors()
 async def get_biome(biome_id: str):
     """
     Get Specific Biome
@@ -231,6 +235,7 @@ async def get_biome(biome_id: str):
 
 
 @router.get("/weather/{biome_id}")
+@handle_errors()
 async def get_weather(biome_id: str):
     """
     Get Weather for Biome
@@ -277,6 +282,7 @@ async def get_weather(biome_id: str):
 
 
 @router.post("/weather/{biome_id}/update")
+@handle_errors()
 async def update_weather(biome_id: str):
     """
     Force Weather Update for Biome
@@ -317,6 +323,7 @@ async def update_weather(biome_id: str):
 
 
 @router.get("/time")
+@handle_errors()
 async def get_time(db: Session = Depends(get_db)):
     """
     Get Current Game Time (DATABASE)
@@ -365,6 +372,7 @@ async def get_time(db: Session = Depends(get_db)):
 
 
 @router.post("/time/set")
+@handle_errors()
 async def set_time(request: SetTimeRequest, db: Session = Depends(get_db)):
     """
     Set Game Time (DATABASE)
@@ -403,6 +411,7 @@ async def set_time(request: SetTimeRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/time/update")
+@handle_errors()
 async def update_time(request: UpdateTimeRequest, db: Session = Depends(get_db)):
     """
     Update Game Time (Delta) (DATABASE)
@@ -449,6 +458,7 @@ async def update_time(request: UpdateTimeRequest, db: Session = Depends(get_db))
 
 
 @router.get("/cities")
+@handle_errors()
 async def get_all_cities():
     """
     Get All Cities
@@ -480,6 +490,7 @@ async def get_all_cities():
 
 
 @router.get("/city/{city_id}")
+@handle_errors()
 async def get_city(city_id: str):
     """
     Get Specific City
@@ -527,6 +538,7 @@ async def get_city(city_id: str):
 
 
 @router.post("/city/enter")
+@handle_errors()
 async def check_city_entry(request: CheckCityEntryRequest):
     """
     Check if Player Can Enter City
@@ -555,6 +567,7 @@ async def check_city_entry(request: CheckCityEntryRequest):
 
 
 @router.get("/wilderness/{biome_id}")
+@handle_errors()
 async def get_wilderness(
     biome_id: str,
     player_id: int = Query(..., description="Player ID")
@@ -603,6 +616,7 @@ async def get_wilderness(
 
 
 @router.get("/state/export")
+@handle_errors()
 async def export_state(db: Session = Depends(get_db)):
     """
     Export Complete World State (DATABASE)

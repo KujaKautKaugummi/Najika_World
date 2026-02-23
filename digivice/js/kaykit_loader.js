@@ -1,6 +1,6 @@
 ﻿// KAYKIT ASSET LOADER
 (function() {
-    const ASSETS_ROOT = 'http://localhost:8001/assets/';
+    const ASSETS_ROOT = 'http://localhost:8000/assets/';
     const loadedModels = {};
     let loader = null;
     let config = null;
@@ -22,7 +22,7 @@
 
     async function loadRoomConfig() {
         try {
-            const response = await fetch('http://localhost:8001/config/room_config_detailed.json');
+            const response = await fetch('http://localhost:8000/config/room_config_detailed.json');
             config = await response.json();
             console.log('📦 Room config loaded:', config);
             roomMap = {};

@@ -6,11 +6,11 @@
  */
 
 // API Configuration
-export const API_BASE_URL = 'http://127.0.0.1:8001';
-export const WS_BASE_URL = 'ws://127.0.0.1:8001';
+const API_BASE_URL = 'http://127.0.0.1:8000';
+const WS_BASE_URL = 'ws://127.0.0.1:8000';
 
 // API Endpoints
-export const API_ENDPOINTS = {
+const API_ENDPOINTS = {
     // Auth
     AUTH: `${API_BASE_URL}/api/auth`,
 
@@ -41,14 +41,14 @@ export const API_ENDPOINTS = {
 };
 
 // WebSocket Configuration
-export const WS_CONFIG = {
+const WS_CONFIG = {
     URL: `${WS_BASE_URL}/ws/connect`,
     RECONNECT_INTERVAL: 5000,  // 5 seconds
     MAX_RECONNECT_ATTEMPTS: 10
 };
 
 // Environment
-export const ENV = {
+const ENV = {
     isDevelopment: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
     isProduction: window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
 };

@@ -596,15 +596,42 @@
         const ownedIdx = housingState.ownedFurniture.indexOf(itemId);
         if (ownedIdx === -1) return false;
 
+        const item = FURNITURE_ITEMS.find(f => f.id === itemId);
+
+        // Use 3D Placement system (Fortnite-style ghost preview + click)
+        if (window.housing3DPlacement) {
+            const playerPos = window.Scene3D?.characterGroup?.position;
+            const housePos = playerPos ? { x: playerPos.x, y: 0, z: playerPos.z } : { x: 0, y: 0, z: 0 };
+            const houseSize = { width: 10 + (housingState.houseLevel * 2), depth: 10 + (housingState.houseLevel * 2) };
+
+            // Close housing UI to see 3D scene
+            closeHousingUI();
+
+            // Start 3D placement mode
+            window.housing3DPlacement.startPlacement(
+                { id: itemId, name: item?.name || itemId, size: { x: 1, y: 1, z: 1 } },
+                housePos,
+                houseSize
+            );
+
+            // Listen for placement completion
+            const onPlaced = (e) => {
+                window.removeEventListener('furniturePlaced', onPlaced);
+                housingState.ownedFurniture.splice(ownedIdx, 1);
+                housingState.placedFurniture.push(itemId);
+                saveHousing();
+                console.log(`🏠 Möbel platziert: ${item?.name || itemId}`);
+            };
+            window.addEventListener('furniturePlaced', onPlaced);
+
+            return true;
+        }
+
+        // Fallback: direkt platzieren ohne 3D
         housingState.ownedFurniture.splice(ownedIdx, 1);
         housingState.placedFurniture.push(itemId);
         saveHousing();
         refreshUI();
-
-        // Trigger 3D placement if available
-        if (window.HousingSystem && window.HousingSystem.placeFurniture) {
-            window.HousingSystem.placeFurniture(itemId);
-        }
         return true;
     }
 

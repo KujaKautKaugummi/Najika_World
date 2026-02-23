@@ -451,7 +451,7 @@ def step4_create_modelfiles(gguf_path):
         f.write(sfw_content)
 
     print(f"     ✅ {MODELFILE_SFW_PATH.name} ({len(sfw_messages)} Examples)")
-    created.append(("najika-trained-q4", str(MODELFILE_SFW_PATH)))
+    created.append(("najika-natural", str(MODELFILE_SFW_PATH)))
 
     # ═══════════════════════════════════════
     # NSFW Model (najika-nsfw-trained)
@@ -483,7 +483,7 @@ def step4_create_modelfiles(gguf_path):
         f.write(nsfw_content)
 
     print(f"     ✅ {MODELFILE_NSFW_PATH.name} ({len(nsfw_messages)} Examples)")
-    created.append(("najika-nsfw-trained-q4", str(MODELFILE_NSFW_PATH)))
+    created.append(("najika-nsfw-natural", str(MODELFILE_NSFW_PATH)))
 
     print()
     print(f"  ✅ {len(created)} Modelfiles erstellt!")

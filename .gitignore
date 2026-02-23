@@ -220,3 +220,9 @@ LocalConfig/
 # *.psb
 # *.tga
 # *.exr
+
+# Training Schedule Backups (automatisch generiert, nicht committen)
+training/schedule_backup_*.json
+
+# Test Screenshots
+test_screenshot.png

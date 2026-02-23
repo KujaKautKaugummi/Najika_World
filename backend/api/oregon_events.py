@@ -27,6 +27,7 @@ import random
 from backend.database import get_db
 from backend.models.oregon_trail import OregonTrailJourney, OregonTrailEvent
 from backend.services.oregon_trail_events import OregonTrailEventsSystem
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/oregon", tags=["oregon"])
@@ -103,6 +104,7 @@ class AddProgressRequest(BaseModel):
 # ============================================================================
 
 @router.get("/journey/start")
+@handle_errors()
 async def start_journey(
     player_id: int = Query(..., description="Player ID"),
     db: Session = Depends(get_db)
@@ -153,6 +155,7 @@ async def start_journey(
 
 
 @router.get("/journey/status")
+@handle_errors()
 async def get_journey_status(
     player_id: int = Query(..., description="Player ID"),
     db: Session = Depends(get_db)
@@ -179,6 +182,7 @@ async def get_journey_status(
 
 
 @router.get("/random")
+@handle_errors()
 async def get_random_event(player_id: int = Query(1), db: Session = Depends(get_db)):
     """
     Get Random Event (Frontend: game_systems_ui.js OregonEventsUI.show)
@@ -212,6 +216,7 @@ async def get_random_event(player_id: int = Query(1), db: Session = Depends(get_
 
 
 @router.get("/chaos")
+@handle_errors()
 async def get_chaos_event():
     """
     Get Chaos Event (Frontend: game_systems_ui.js OregonEventsUI - chaos check)
@@ -233,6 +238,7 @@ async def get_chaos_event():
 
 
 @router.post("/trigger")
+@handle_errors()
 async def trigger_event(request: TriggerEventRequest, db: Session = Depends(get_db)):
     """
     Trigger Random Event (DATABASE)
@@ -290,6 +296,7 @@ async def trigger_event(request: TriggerEventRequest, db: Session = Depends(get_
 
 
 @router.post("/choice")
+@handle_errors()
 async def execute_choice(request: ExecuteChoiceRequest, db: Session = Depends(get_db)):
     """
     Execute Player Choice (DATABASE)
@@ -366,6 +373,7 @@ async def execute_choice(request: ExecuteChoiceRequest, db: Session = Depends(ge
 
 
 @router.post("/progress")
+@handle_errors()
 async def add_progress(request: AddProgressRequest, db: Session = Depends(get_db)):
     """
     Add Travel Progress (DATABASE)
@@ -419,6 +427,7 @@ async def add_progress(request: AddProgressRequest, db: Session = Depends(get_db
 
 
 @router.get("/events")
+@handle_errors()
 async def get_event_history(
     player_id: int = Query(..., description="Player ID"),
     limit: int = Query(10, ge=1, le=100, description="Max events to return"),

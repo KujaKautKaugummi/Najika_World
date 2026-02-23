@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 import hashlib
 import hmac
 import json
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/lebensraum", tags=["Lebensraum"])
 
@@ -163,6 +164,7 @@ def process_action(state: UserState, action: str, data: Dict[str, Any]) -> Dict[
 # ============================================================================
 
 @router.post("/sync", response_model=SyncResponse)
+@handle_errors()
 async def sync_action(action: SignedAction):
     """
     Sync a signed action from the Digivice app.
@@ -227,6 +229,7 @@ async def sync_action(action: SignedAction):
     )
 
 @router.get("/state/{user_id}")
+@handle_errors()
 async def get_state(user_id: str):
     """Get current user state"""
     state = get_or_create_user_state(user_id)
@@ -254,6 +257,7 @@ async def get_state(user_id: str):
     }
 
 @router.get("/inventory/{user_id}")
+@handle_errors()
 async def get_inventory(user_id: str, limit: int = 50):
     """Get user inventory"""
     state = get_or_create_user_state(user_id)
@@ -265,6 +269,7 @@ async def get_inventory(user_id: str, limit: int = 50):
     }
 
 @router.post("/set-private/{user_id}")
+@handle_errors()
 async def set_private_mode(user_id: str, is_private: bool):
     """Set private mode (no limits) - requires authentication in production"""
     state = get_or_create_user_state(user_id)
@@ -277,6 +282,7 @@ async def set_private_mode(user_id: str, is_private: bool):
     }
 
 @router.get("/limits")
+@handle_errors()
 async def get_limits():
     """Get current daily limits"""
     limits = DailyLimits()
@@ -293,6 +299,7 @@ async def get_limits():
     }
 
 @router.delete("/reset/{user_id}")
+@handle_errors()
 async def reset_daily_counts(user_id: str):
     """Reset daily counts (admin only in production)"""
     state = get_or_create_user_state(user_id)

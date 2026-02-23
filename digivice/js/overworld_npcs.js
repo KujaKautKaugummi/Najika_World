@@ -389,7 +389,7 @@ const OverworldNPCs = (function() {
         // NPC-Typ spezifische Aktionen
         if (npc.type === 'arena' || npc.type === 'pvp_arena_master') {
             if (window.NemesisArena) {
-                window.NemesisArena.show();
+                window.NemesisArena.showArenaPanel ? window.NemesisArena.showArenaPanel() : (window.NemesisArena.open ? window.NemesisArena.open() : console.warn('NemesisArena hat keine show/open Methode'));
             } else if (window.openNemesisArena) {
                 window.openNemesisArena();
             } else {
@@ -883,21 +883,13 @@ const OverworldNPCs = (function() {
             });
         }
 
-        // Try Real3DCombat first
+        // Real3DCombat ist das einzige Kampfsystem
         if (window.Real3DCombat && window.Real3DCombat.startCombat) {
             const scene = window.Scene3D?.scene || state.scene;
             const pos = npc.mesh ? npc.mesh.position : { x: 0, y: 0, z: -10 };
             window.Real3DCombat.startCombat([enemyData], scene, pos);
-        }
-        // Fallback to CombatSystem
-        else if (window.CombatSystem && window.CombatSystem.startCombat) {
-            window.CombatSystem.startCombat({ enemy: enemyData, mode: 'MANUAL' });
-        }
-        // Last resort: notify
-        else {
-            if (typeof notify === 'function') {
-                notify(`⚔️ ${npc.name} greift an! (Kampfsystem lädt...)`, 'warning');
-            }
+        } else {
+            console.error('Real3DCombat nicht geladen!');
         }
 
         // Temporarily hide NPC during combat

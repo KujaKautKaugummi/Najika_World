@@ -21,6 +21,7 @@ import hashlib
 import hmac
 import json
 import math
+from backend.utils import handle_errors
 
 # WebSocket for realtime notifications
 from backend.services.websocket_manager import websocket_manager
@@ -373,6 +374,7 @@ def do_craft(inventory: ResourceInventory, recipe_id: str, quantity: int = 1) ->
 # ============================================================================
 
 @router.post("/gather")
+@handle_errors()
 async def gather_resources(request: GatherRequest, background_tasks: BackgroundTasks):
     """
     Gather resources from the world.
@@ -419,6 +421,7 @@ async def gather_resources(request: GatherRequest, background_tasks: BackgroundT
     }
 
 @router.post("/craft")
+@handle_errors()
 async def craft_item(request: CraftRequest, background_tasks: BackgroundTasks):
     """
     Craft an item at a station.
@@ -459,6 +462,7 @@ async def craft_item(request: CraftRequest, background_tasks: BackgroundTasks):
     }
 
 @router.post("/build")
+@handle_errors()
 async def place_building(request: BuildRequest, background_tasks: BackgroundTasks):
     """
     Place a building in the world.
@@ -509,6 +513,7 @@ async def place_building(request: BuildRequest, background_tasks: BackgroundTask
     }
 
 @router.get("/inventory/{user_id}")
+@handle_errors()
 async def get_player_inventory(user_id: str):
     """Get player's resource inventory"""
     inventory = get_inventory(user_id)
@@ -519,6 +524,7 @@ async def get_player_inventory(user_id: str):
     }
 
 @router.get("/buildings/{user_id}")
+@handle_errors()
 async def get_player_buildings(user_id: str):
     """Get player's placed buildings"""
     buildings = player_buildings.get(user_id, [])
@@ -529,6 +535,7 @@ async def get_player_buildings(user_id: str):
     }
 
 @router.get("/recipes")
+@handle_errors()
 async def get_all_recipes():
     """Get all available recipes"""
     return {
@@ -537,6 +544,7 @@ async def get_all_recipes():
     }
 
 @router.get("/recipe/{recipe_id}")
+@handle_errors()
 async def get_recipe(recipe_id: str):
     """Get a specific recipe"""
     if recipe_id not in RECIPES:
@@ -548,6 +556,7 @@ async def get_recipe(recipe_id: str):
     }
 
 @router.get("/gather-rates")
+@handle_errors()
 async def get_gather_rates():
     """Get resource gather rates"""
     return {
@@ -556,6 +565,7 @@ async def get_gather_rates():
     }
 
 @router.delete("/building/{user_id}")
+@handle_errors()
 async def remove_building(user_id: str, building_index: int):
     """Remove a placed building (returns resources)"""
     if user_id not in player_buildings or building_index >= len(player_buildings[user_id]):

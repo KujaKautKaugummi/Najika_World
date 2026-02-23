@@ -19,6 +19,8 @@ import uuid
 import sys
 import os
 
+from backend.utils import handle_errors
+
 from backend.services.ollama_service import (
     call_ollama,
     call_ollama_chat,
@@ -242,6 +244,7 @@ class ChatResponse(BaseModel):
 
 @router.post("", response_model=ChatResponse)
 @router.post("/", response_model=ChatResponse)
+@handle_errors()
 async def chat(message: ChatMessage):
     """
     Multi-Turn Chat mit NajikaMind AGI-Orchester
@@ -427,6 +430,7 @@ async def chat_stream(message: ChatMessage):
 
 
 @router.get("/health")
+@handle_errors()
 async def chat_health():
     """Check if Ollama is running and Najika models are available"""
     health = await check_ollama_health()
@@ -436,13 +440,14 @@ async def chat_health():
 
 
 @router.get("/models")
+@handle_errors()
 async def get_models():
     """Get information about Najika's Ollama models"""
     return {
         "backend": "ollama",
         "models": {
-            "sfw": "najika-trained-q4 (dolphin-qwen2 + Najika Persona, Q4_K_M)",
-            "nsfw": "najika-nsfw-trained-q4 (dolphin-qwen2 + NSFW Persona, Q4_K_M)"
+            "sfw": "najika-natural:latest",
+            "nsfw": "najika-nsfw-natural:latest"
         },
         "mind_available": MIND_AVAILABLE,
         "personality_available": PERSONALITY_AVAILABLE,
@@ -451,6 +456,7 @@ async def get_models():
 
 
 @router.get("/history")
+@handle_errors()
 async def chat_history(session_id: str = None, limit: int = 50):
     """
     Get chat history for a session
@@ -478,6 +484,7 @@ async def chat_history(session_id: str = None, limit: int = 50):
 
 
 @router.get("/sessions")
+@handle_errors()
 async def list_sessions():
     """List active chat sessions"""
     sessions = []

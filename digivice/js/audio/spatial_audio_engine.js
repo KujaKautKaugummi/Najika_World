@@ -4,9 +4,9 @@
  * Digimon World style environmental and combat audio
  */
 
-import * as THREE from 'three';
+// THREE is loaded globally via index.html
 
-export class SpatialAudioEngine {
+class SpatialAudioEngine {
     constructor(camera) {
         this.camera = camera;
         this.listener = null;
@@ -591,7 +591,7 @@ export class SpatialAudioEngine {
 
 // Placeholder audio file definitions
 // These should be replaced with actual audio files
-export const AUDIO_ASSETS = {
+const AUDIO_ASSETS = {
     // Footsteps
     footstep_grass: '/assets/audio/sfx/footstep_grass.mp3',
     footstep_dirt: '/assets/audio/sfx/footstep_dirt.mp3',

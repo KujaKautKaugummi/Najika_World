@@ -20,6 +20,7 @@ import random
 
 # WebSocket for multiplayer sync
 from backend.services.websocket_manager import websocket_manager
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/music", tags=["Music"])
 
@@ -305,6 +306,7 @@ def get_performance_rank(score_percent: float) -> str:
 # ============================================================================
 
 @router.get("/instruments")
+@handle_errors()
 async def get_instruments():
     """Get all available instruments"""
     return {
@@ -319,6 +321,7 @@ async def get_instruments():
     }
 
 @router.get("/songs")
+@handle_errors()
 async def get_songs(instrument: Optional[InstrumentType] = None):
     """Get available songs, optionally filtered by instrument"""
     songs = []
@@ -336,6 +339,7 @@ async def get_songs(instrument: Optional[InstrumentType] = None):
     }
 
 @router.get("/song/{song_id}")
+@handle_errors()
 async def get_song(song_id: str):
     """Get specific song details"""
     if song_id not in SONGS:
@@ -346,6 +350,7 @@ async def get_song(song_id: str):
     }
 
 @router.post("/start-song")
+@handle_errors()
 async def start_song(request: StartSongRequest):
     """
     Start playing a song.
@@ -394,6 +399,7 @@ async def start_song(request: StartSongRequest):
     }
 
 @router.post("/note-hit")
+@handle_errors()
 async def note_hit(request: NoteHitRequest):
     """
     Register a note hit during gameplay.
@@ -441,6 +447,7 @@ async def note_hit(request: NoteHitRequest):
     }
 
 @router.post("/song-complete")
+@handle_errors()
 async def song_complete(request: SongCompleteRequest, background_tasks: BackgroundTasks):
     """
     Complete a song and see your results!
@@ -519,6 +526,7 @@ async def song_complete(request: SongCompleteRequest, background_tasks: Backgrou
     return result
 
 @router.get("/high-scores/{user_id}")
+@handle_errors()
 async def get_high_scores(user_id: str):
     """Get player's high scores"""
     scores = high_scores.get(user_id, {})
@@ -540,6 +548,7 @@ async def get_high_scores(user_id: str):
 # ============================================================================
 
 @router.post("/jam/join")
+@handle_errors()
 async def join_jam(request: JoinJamRequest, background_tasks: BackgroundTasks):
     """
     Join or create a multiplayer jam session.
@@ -594,6 +603,7 @@ async def join_jam(request: JoinJamRequest, background_tasks: BackgroundTasks):
     }
 
 @router.get("/jam/{jam_id}")
+@handle_errors()
 async def get_jam_status(jam_id: str):
     """Get jam session status"""
     if jam_id not in jam_sessions:
@@ -612,6 +622,7 @@ async def get_jam_status(jam_id: str):
     }
 
 @router.post("/jam/{jam_id}/start")
+@handle_errors()
 async def start_jam(jam_id: str, background_tasks: BackgroundTasks):
     """Start the jam session - play music together!"""
     if jam_id not in jam_sessions:
@@ -661,6 +672,7 @@ async def start_jam(jam_id: str, background_tasks: BackgroundTasks):
     }
 
 @router.delete("/jam/{jam_id}")
+@handle_errors()
 async def leave_jam(jam_id: str, user_id: str, background_tasks: BackgroundTasks):
     """Leave a jam session"""
     if jam_id not in jam_sessions:

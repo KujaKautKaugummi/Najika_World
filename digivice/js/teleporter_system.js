@@ -27,6 +27,7 @@
     // TELEPORTER KONFIGURATION
     // ==========================================
 
+    // 8 Regionen verteilt auf 9.6km x 9.6km Map (zentriert: -4800 bis +4800)
     const REGIONS = {
         goetterfels: {
             id: 'goetterfels',
@@ -34,8 +35,8 @@
             icon: '🏔️',
             description: 'Startgebiet - Die Schwarze Mühle',
             position: { x: 0, y: 50, z: 0 },
-            unlocked: true,  // Immer freigeschaltet
-            cost: 0,  // Kein Teleport-Cost zur Basis
+            unlocked: true,
+            cost: 0,
             color: '#8b4513',
             background: 'linear-gradient(135deg, #654321, #8b7355)'
         },
@@ -550,9 +551,11 @@
                 // Setze nur X/Z, Y wird von updateCharacterHeight() automatisch korrigiert
                 character.position.x = region.position.x;
                 character.position.z = region.position.z;
-                // Y auf safe Wert setzen (wird nächsten Frame korrigiert)
+                // Y auf die Region-Höhe setzen
                 character.position.y = Math.max(region.position.y, 10);
-                console.log(`✨ Teleportiert nach: ${region.name} (${region.position.x}, ${region.position.z})`);
+                // Height-Korrektur für 60 Frames pausieren damit Teleport nicht überschrieben wird
+                if (window.setTeleportCooldown) window.setTeleportCooldown(60);
+                console.log(`✨ Teleportiert nach: ${region.name} (${region.position.x}, ${region.position.y}, ${region.position.z})`);
             } else if (window.player && window.player.mesh) {
                 window.player.mesh.position.set(region.position.x, region.position.y, region.position.z);
                 console.log(`✨ Teleportiert nach: ${region.name} (fallback player.mesh)`);

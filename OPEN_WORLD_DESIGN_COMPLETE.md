@@ -46,10 +46,10 @@
 
 ## 🌍 DIE 8 REGIONEN - NEUE NAMEN (Fantasy-Western-Mix)
 
-### 1. **SUNSCORCH BARRENS** (früher: Bernstein-Dünen)
+### 1. **SUNSCORCH BARRENS** (= Heiße Dünen)
 **Biome:** Desert Wasteland
 **Inspiration:** Skyrim (Alik'r Desert) + Wild West Ghost Towns
-**Slime:** Amber (Bernstein)
+**Slime:** Amber
 **Ästhetik:**
 - Verwitterte Holz-Outposts
 - Kakteen + magische Kristalle
@@ -60,10 +60,10 @@
 
 ---
 
-### 2. **VERDANT HOLLOW** (früher: Smaragd-Hain)
+### 2. **VERDANT HOLLOW** (= Samtmoos-Tiefwald)
 **Biome:** Mystical Forest
 **Inspiration:** Soulframe (Nature-Magic) + Skyrim (Eldergleam Sanctuary)
-**Slime:** Emerald (Smaragd)
+**Slime:** Emerald
 **Ästhetik:**
 - Alte Bäume mit Runen
 - Druiden-Kreise
@@ -74,10 +74,10 @@
 
 ---
 
-### 3. **TIDECALLER REACH** (früher: Azur-Klippen)
+### 3. **TIDECALLER REACH** (= Salzwind-Küste)
 **Biome:** Coastal Cliffs
 **Inspiration:** Final Fantasy (Costa del Sol) + Pirate Western
-**Slime:** Azure (Azur)
+**Slime:** Azure
 **Ästhetik:**
 - Steilklippen mit Schiffwracks
 - Leuchtturm-Ruinen
@@ -88,7 +88,7 @@
 
 ---
 
-### 4. **STORMSPIRE MESA** (früher: Amethyst-Steppe)
+### 4. **STORMSPIRE MESA** (= Blitzebene)
 **Biome:** Highland Plateau
 **Inspiration:** Monument Valley (Western) + Final Fantasy (Thunder Plains)
 **Slime:** Amethyst
@@ -102,7 +102,7 @@
 
 ---
 
-### 5. **SHADOWMIRE EXPANSE** (früher: Onyx-Morast)
+### 5. **SHADOWMIRE EXPANSE** (= Grünschlamm-Sumpf)
 **Biome:** Cursed Swamp
 **Inspiration:** Skyrim (Morthal Swamps) + Digimon World (Dark Area)
 **Slime:** Onyx
@@ -116,7 +116,7 @@
 
 ---
 
-### 6. **FROSTPEAK TUNDRA** (früher: Perl-Gletscher)
+### 6. **FROSTPEAK TUNDRA** (= Reich der Drei)
 **Biome:** Frozen Wasteland
 **Inspiration:** Skyrim (Winterhold) + Oregon Trail (Frozen Pass)
 **Slime:** Pearl (Perle)
@@ -130,10 +130,10 @@
 
 ---
 
-### 7. **EMBERVEIL GORGE** (früher: Rubin-Schlucht)
+### 7. **EMBERVEIL GORGE** (= Magmaströme)
 **Biome:** Volcanic Canyon
 **Inspiration:** Mortal Kombat (Netherrealm) + Final Fantasy (Ifrit's Lair)
-**Slime:** Ruby (Rubin)
+**Slime:** Ruby
 **Ästhetik:**
 - Lava-Ströme
 - Schmieden in Felsen
@@ -144,7 +144,7 @@
 
 ---
 
-### 8. **VOIDFALL WASTES** (früher: Obsidian-Nacht)
+### 8. **VOIDFALL WASTES** (= Tiefenhöhlen)
 **Biome:** Endgame Nightmare Zone
 **Inspiration:** Digimon World (Dark Area) + Mortal Kombat (Dark Realm)
 **Slime:** Obsidian

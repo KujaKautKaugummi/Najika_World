@@ -17,7 +17,7 @@ OLLAMA_URL = "http://localhost:11434"
 OLLAMA_MODELS = {
     "chat": "najika-natural:latest",          # SFW Chat - bereinigtes Modelfile (natuerlicher!)
     "nsfw": "najika-nsfw-natural:latest",     # NSFW/Kätzchen-Modus - bereinigtes Modelfile!
-    "instruct": "qwen2-instruct:latest"      # Tasks, Code, Mathe
+    "instruct": "qwen2:7b"                   # Tasks, Code, Mathe
 }
 
 
@@ -427,8 +427,8 @@ async def check_ollama_health() -> dict:
                 available_models = [m["name"] for m in data.get("models", [])]
 
                 # Check ob unsere trainierten Q4 Modelle da sind
-                najika_local_ok = any("najika-trained-q4" in m for m in available_models)
-                najika_nsfw_ok = any("najika-nsfw-trained-q4" in m for m in available_models)
+                najika_local_ok = any("najika-natural" in m for m in available_models)
+                najika_nsfw_ok = any("najika-nsfw-natural" in m for m in available_models)
 
                 return {
                     "status": "online",

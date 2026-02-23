@@ -361,7 +361,7 @@ load_dotenv()
 # Project Root Directory (dynamisch für alle Systeme)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-HOST=os.getenv("HOST","127.0.0.1"); PORT=int(os.getenv("PORT","8001"))
+HOST=os.getenv("HOST","127.0.0.1"); PORT=int(os.getenv("PORT","8000"))
 AI_PROVIDER=os.getenv("AI_PROVIDER","ollama")
 CLOUD_ENABLED=os.getenv("CLOUD_ENABLED","false").lower()=="true"
 CLOUD_PIN=os.getenv("CLOUD_PIN","")
@@ -439,10 +439,10 @@ STATE = {
 CHROMA_MEMORY_PATH = "C:\\Najika_World\\memory_db"
 try:
     NAJIKA_MEMORY = NajikaMemoryEnhanced(persist_directory=CHROMA_MEMORY_PATH)
-    print(f"[NAJIKA MEMORY ENHANCED] ✅ Najikas echtes Gedächtnis geladen: {CHROMA_MEMORY_PATH}")
+    print(f"[NAJIKA MEMORY ENHANCED] ✅ Najikas echtes Gedächtnis geladen: {CHROMA_MEMORY_PATH}", flush=True)
 except Exception as e:
     NAJIKA_MEMORY = None
-    print(f"[NAJIKA MEMORY] WARNING Memory System konnte nicht geladen werden: {e}")
+    print(f"[NAJIKA MEMORY] WARNING Memory System konnte nicht geladen werden: {e}", flush=True)
 
 # ===== WEB SEARCH SYSTEM =====
 try:
@@ -978,7 +978,7 @@ OLLAMA_URL = "http://localhost:11434"
 OLLAMA_MODELS = {
     "chat": "najika-natural:latest",          # Chat, Normal-Modus (bereinigtes Modelfile!)
     "nsfw": "najika-nsfw-natural:latest",     # Kaetzchen-Modus (bereinigtes NSFW Modelfile!)
-    "instruct": "qwen2-instruct:latest"      # Tasks, Code, Mathe
+    "instruct": "qwen2:7b"                   # Tasks, Code, Mathe
 }
 
 # Auto-Detect: Wenn trainierte Models existieren, nutze die!
@@ -1024,14 +1024,15 @@ def is_task_request(text):
     text_lower = text.lower()
     return any(kw in text_lower for kw in task_keywords)
 
-def select_ollama_model(prompt, use_wizard=False):
+def select_ollama_model(prompt, use_wizard=False, user_message=None):
     """Waehlt das richtige Ollama Model basierend auf dem Prompt"""
     # NSFW/Kaetzchen-Modus -> najika-nsfw (uncensored)
     if use_wizard:
         return OLLAMA_MODELS["nsfw"]
 
-    # Task-Request -> instruct model
-    if is_task_request(prompt):
+    # Task-Request -> instruct model (nur user_message pruefen, nicht den vollen System-Prompt!)
+    check_text = user_message if user_message else prompt
+    if is_task_request(check_text):
         log("DEBUG", f"Task erkannt - nutze Instruct Model", "OLLAMA")
         return OLLAMA_MODELS["instruct"]
 
@@ -1050,7 +1051,7 @@ def call_ollama(prompt, use_wizard=False, user_message=None):
     auf verschiedene Situationen reagiert (Eifersucht, Müdigkeit, Tech etc.)
     Diese Examples waren der Grund warum Najika am Anfang gut funktioniert hat!
     """
-    model = select_ollama_model(prompt, use_wizard)
+    model = select_ollama_model(prompt, use_wizard, user_message=user_message)
     timeout = 120  # Ollama braucht mehr Zeit (CPU)
 
     # NSFW/Kaetzchen-Modus: Optimierte Parameter (kurz, direkt, explizit)
@@ -2010,6 +2011,123 @@ class Handler(SimpleHTTPRequestHandler):
 
         return os.path.join(PROJECT_ROOT, path.lstrip("/"))
     def do_GET(self):
+        # === V2 API ALIASES (Frontend nutzt andere Pfade als Server) ===
+        if self.path == "/api/state/najika" or self.path.startswith("/api/state/najika?"):
+            self.path = "/api/state"
+        elif self.path.startswith("/api/v2/chat/history"):
+            self.path = self.path.replace("/api/v2/chat/history", "/api/chat/history")
+        elif self.path.startswith("/api/v2/living/"):
+            self.path = self.path.replace("/api/v2/living/", "/api/living/")
+        elif self.path.startswith("/api/instrument/"):
+            self.path = self.path.replace("/api/instrument/", "/api/music/")
+        elif self.path.startswith("/api/bard/"):
+            # Bard = EchoHarp Alias
+            self.path = self.path.replace("/api/bard/", "/api/echoharp/")
+
+        # === STUB ENDPOINTS: Frontend-Module die noch keinen Backend-Support haben ===
+        # Gibt leere aber gueltige JSON-Responses zurueck (kein HTML 404!)
+        if self.path.startswith("/api/world-map/"):
+            sub = self.path.replace("/api/world-map/", "").split("?")[0]
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            if sub == "map":
+                self.wfile.write(json.dumps({"regions": [], "connections": [], "stub": True}).encode()); return
+            elif sub.startswith("position/"):
+                self.wfile.write(json.dumps({"region": "schwarze_muehle", "x": 0, "y": 0, "stub": True}).encode()); return
+            elif sub.startswith("travel-points"):
+                self.wfile.write(json.dumps({"points": [], "stub": True}).encode()); return
+            elif sub.startswith("explored-regions"):
+                self.wfile.write(json.dumps({"regions": ["schwarze_muehle"], "stub": True}).encode()); return
+            else:
+                self.wfile.write(json.dumps({"stub": True}).encode()); return
+
+        if self.path.startswith("/api/world/"):
+            sub = self.path.replace("/api/world/", "").split("?")[0]
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            if sub == "time":
+                import datetime
+                now = datetime.datetime.now()
+                hour = now.hour
+                tod = "Night" if hour < 6 else "Morning" if hour < 12 else "Noon" if hour < 14 else "Afternoon" if hour < 18 else "Evening" if hour < 22 else "Night"
+                self.wfile.write(json.dumps({"current_time": f"{hour:02d}:{now.minute:02d}:00", "time_of_day": tod, "hour": hour, "minute": now.minute, "stub": True}).encode()); return
+            elif sub.startswith("weather/"):
+                self.wfile.write(json.dumps({"weather": {"type": "clear", "temperature": 20, "wind_speed": 5}, "stub": True}).encode()); return
+            elif sub == "progress":
+                self.wfile.write(json.dumps({"level": 1, "xp": 0, "stub": True}).encode()); return
+            else:
+                self.wfile.write(json.dumps({"stub": True}).encode()); return
+
+        if self.path == "/api/player/session":
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"player_id": "kuja", "session_active": True, "stub": True}).encode()); return
+
+        if self.path.startswith("/api/quests/available"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"quests": [], "stub": True}).encode()); return
+
+        if self.path.startswith("/api/housing/"):
+            sub = self.path.replace("/api/housing/", "").split("?")[0]
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            if sub.startswith("house/"):
+                self.wfile.write(json.dumps({"level": 1, "furniture": [], "stub": True}).encode()); return
+            elif sub.startswith("furniture/catalog"):
+                self.wfile.write(json.dumps({"items": [], "stub": True}).encode()); return
+            else:
+                self.wfile.write(json.dumps({"stub": True}).encode()); return
+
+        if self.path.startswith("/api/farming/"):
+            sub = self.path.replace("/api/farming/", "").split("?")[0]
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            if sub.startswith("plots/"):
+                self.wfile.write(json.dumps({"plots": [], "stub": True}).encode()); return
+            elif sub.startswith("crops/catalog"):
+                self.wfile.write(json.dumps({"crops": [], "stub": True}).encode()); return
+            elif sub.startswith("fishing/spots"):
+                self.wfile.write(json.dumps({"spots": [], "stub": True}).encode()); return
+            else:
+                self.wfile.write(json.dumps({"stub": True}).encode()); return
+
+        if self.path.startswith("/api/magic/"):
+            sub = self.path.replace("/api/magic/", "").split("?")[0]
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            if sub == "schools":
+                self.wfile.write(json.dumps({"schools": [{"id": "destruction", "name": "Destruction"}, {"id": "restoration", "name": "Restoration"}, {"id": "alteration", "name": "Alteration"}], "stub": True}).encode()); return
+            elif sub.startswith("school/"):
+                self.wfile.write(json.dumps({"spells": [], "stub": True}).encode()); return
+            else:
+                self.wfile.write(json.dumps({"stub": True}).encode()); return
+
+        if self.path.startswith("/api/region-boss/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"active": False, "stub": True}).encode()); return
+
+        if self.path.startswith("/api/oregon/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"active": False, "stub": True}).encode()); return
+
+        if self.path.startswith("/api/cards") or self.path.startswith("/api/matches"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"cards": [], "collection": [], "stub": True}).encode()); return
+
+        if self.path.startswith("/api/dice/") or self.path.startswith("/api/duel/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"collection": [], "history": [], "stub": True}).encode()); return
+
+        if self.path.startswith("/api/pvp/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"wins": 0, "losses": 0, "stub": True}).encode()); return
+
+        if self.path.startswith("/api/combat-magic/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"available": False, "stub": True}).encode()); return
+
+        if self.path.startswith("/api/slime/types"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"types": [], "stub": True}).encode()); return
+
+        if self.path.startswith("/api/slime/companion/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"name": "Slime", "level": 1, "stub": True}).encode()); return
+
         if self.path == "/health":
             self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
             health_data = {
@@ -3272,8 +3390,8 @@ class Handler(SimpleHTTPRequestHandler):
         if self.path == "/api/arena/hierarchy":
             try:
                 if not NEMESIS_ARENA_ENABLED or not NEMESIS_ARENA:
-                    self.send_response(200); self.send_header("Content-Type","text/plain"); self.end_headers()
-                    self.wfile.write("Arena nicht verfügbar".encode()); return
+                    self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                    self.wfile.write(json.dumps({"hierarchy": {}, "display_text": "Arena nicht verfügbar"}).encode()); return
 
                 hierarchy = NEMESIS_ARENA.get_arena_hierarchy()
                 # Format as text display
@@ -3296,8 +3414,8 @@ class Handler(SimpleHTTPRequestHandler):
                 lines.append(f"👊 Kämpfer: {len(hierarchy.get('fighters', []))}")
 
                 hierarchy_text = "\n".join(lines)
-                self.send_response(200); self.send_header("Content-Type","text/plain; charset=utf-8"); self.end_headers()
-                self.wfile.write(hierarchy_text.encode("utf-8")); return
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps({"hierarchy": hierarchy, "display_text": hierarchy_text}).encode("utf-8")); return
             except Exception as e:
                 print(f"Arena Hierarchy Error: {e}")
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
@@ -3323,9 +3441,66 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(500); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode()); return
 
+        # === CATCH-ALL: Unbekannte /api/ Pfade als JSON 404 zurueckgeben ===
+        # Verhindert JSON Parse Errors im Frontend (sonst kommt HTML zurueck)
+        if self.path.startswith("/api/"):
+            self.send_response(404); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"error": "Endpoint not found", "path": self.path.split("?")[0], "method": "GET"}).encode()); return
+
         return super().do_GET()
     def do_POST(self):
         n=int(self.headers.get("Content-Length","0")); body=self.rfile.read(n) or b"{}"
+
+        # === V2 API ALIASES (Frontend nutzt /api/v2/..., Server hat /api/...) ===
+        if self.path == "/api/v2/chat":
+            self.path = "/api/chat"
+        elif self.path.startswith("/api/v2/care/"):
+            action = self.path.split("/api/v2/care/")[1]
+            care_map = {"feed": "/api/najika/feed", "drink": "/api/najika/drink",
+                        "wash": "/api/najika/wash", "sleep": "/api/najika/sleep",
+                        "praise": "/api/najika/praise", "scold": "/api/najika/scold",
+                        "heal": "/api/heal", "touch": "/api/najika/praise"}
+            self.path = care_map.get(action, f"/api/najika/{action}")
+        elif self.path == "/api/state/najika" or self.path == "/api/state/najika/update":
+            self.path = "/api/state"
+        elif self.path.startswith("/api/instrument/"):
+            self.path = self.path.replace("/api/instrument/", "/api/music/")
+        elif self.path == "/api/battle/player-action":
+            self.path = "/api/battle/action"
+        elif self.path.startswith("/api/bard/"):
+            self.path = self.path.replace("/api/bard/", "/api/echoharp/")
+        elif self.path == "/api/echoharp/quest/accept":
+            self.path = "/api/echoharp/quest/get"
+
+        # === POST STUB ENDPOINTS: Module ohne Backend ===
+        if self.path.startswith("/api/world-map/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/housing/"):
+            sub = self.path.replace("/api/housing/", "")
+            if sub not in ("upgrade",) and not self.path.startswith("/api/housing/furniture/"):
+                pass  # Fall through to existing endpoints if any
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/farming/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/cards") or self.path.startswith("/api/matches"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/duel/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/pvp/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/combat-magic/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+        if self.path.startswith("/api/magic/"):
+            self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+            self.wfile.write(json.dumps({"success": True, "stub": True}).encode()); return
+
         if self.path=="/api/chat":
             # Robust UTF-8 decoding mit Fallback auf Latin-1
             try:
@@ -6622,7 +6797,9 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
                 self.wfile.write(json.dumps(result).encode()); return
 
-        self.send_error(404,"unknown")
+        # === CATCH-ALL: Unbekannte POST /api/ Pfade als JSON 404 zurueckgeben ===
+        self.send_response(404); self.send_header("Content-Type","application/json"); self.end_headers()
+        self.wfile.write(json.dumps({"error": "Endpoint not found", "path": self.path.split("?")[0], "method": "POST"}).encode()); return
 
 # ===== BACKGROUND THREAD FÜR LIVING SYSTEM =====
 
@@ -6759,12 +6936,15 @@ def kill_existing_server():
                     if parts and parts[-1].isdigit():
                         pids.add(parts[-1])
 
-            # Töte gefundene Prozesse
+            # Töte gefundene Prozesse (aber NICHT uns selbst!)
+            current_pid = str(os.getpid())
             for pid in pids:
+                if pid == current_pid:
+                    continue  # Eigenen Prozess nicht killen!
                 try:
                     subprocess.run(['taskkill', '/F', '/PID', pid],
                                  capture_output=True, timeout=3)
-                    print(f"[CLEANUP] Alter Server-Prozess (PID {pid}) beendet")
+                    print(f"[CLEANUP] Alter Server-Prozess (PID {pid}) beendet", flush=True)
                 except:
                     pass
         else:
@@ -6776,14 +6956,21 @@ def kill_existing_server():
         print(f"[INFO] Kein alter Server gefunden oder Cleanup fehlgeschlagen: {e}")
 
 kill_existing_server()
+time.sleep(2)  # Windows braucht Zeit um Port freizugeben
 
 # THREADING: Mehrere Requests parallel bedienen (wichtig für SSE!)
-server = ThreadingHTTPServer((HOST,PORT), Handler)
-print(f"Najika Server: http://{HOST}:{PORT}")
+try:
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+except OSError as e:
+    print(f"[WARNING] Port {PORT} noch belegt ({e}), warte 5s...", flush=True)
+    time.sleep(5)
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+
+print(f"Najika Server: http://{HOST}:{PORT}", flush=True)
 try:
     server.serve_forever()
 except KeyboardInterrupt:
-    print("\n[SHUTDOWN] Server wird heruntergefahren...")
+    print("\n[SHUTDOWN] Server wird heruntergefahren...", flush=True)
     save_state()
-    print("[SHUTDOWN] Auf Wiedersehen!")
+    print("[SHUTDOWN] Auf Wiedersehen!", flush=True)
 

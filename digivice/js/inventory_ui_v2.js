@@ -242,8 +242,10 @@
 
     function buildEquipPanel() {
         const weight = getCurrentWeight();
-        const weightPercent = Math.min(100, (weight / invState.maxWeight) * 100);
-        const weightColor = weightPercent > 90 ? '#FF4444' : weightPercent > 70 ? '#FF9800' : '#4CAF50';
+        const maxW = window.WeightSystem ? window.WeightSystem.getMaxWeight() : invState.maxWeight;
+        const weightPercent = Math.min(100, (weight / maxW) * 100);
+        const ratio = weight / maxW;
+        const weightColor = ratio > 1.5 ? '#F44336' : ratio > 1.0 ? '#FF9800' : ratio > 0.7 ? '#FF9800' : '#4CAF50';
 
         let html = `
             <div style="text-align:center;margin-bottom:14px;">
@@ -315,7 +317,7 @@
             <div style="margin-top:12px;">
                 <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px;">
                     <span style="color:rgba(255,255,255,0.4);">Gewicht</span>
-                    <span style="color:${weightColor};">${weight}/${invState.maxWeight}</span>
+                    <span style="color:${weightColor};">${Math.round(weight*10)/10}/${Math.round(maxW*10)/10}${ratio > 1.0 ? ' ÜBERLADEN' : ''}</span>
                 </div>
                 <div style="background:rgba(255,255,255,0.06);height:3px;border-radius:2px;">
                     <div style="background:${weightColor};height:100%;width:${weightPercent}%;
@@ -760,11 +762,31 @@
         unequip: unequipItem,
         use: useItem,
         drop: dropItem,
-        addItem: (item) => { invState.items.push(item); saveInventory(); },
+        addItem: (item) => {
+            const itemWeight = (item.weight || 0) * (item.count || 1);
+            if (window.WeightSystem && !window.WeightSystem.canPickUp(itemWeight)) {
+                console.warn('[INVENTORY] Zu schwer! Kann nicht aufheben:', item.name || item.id);
+                if (window.QuestTrackerV2?.showNotification) {
+                    window.QuestTrackerV2.showNotification('ZU SCHWER', 'Inventar überladen! Kann nicht aufheben.', '#F44336');
+                }
+                return false;
+            }
+            invState.items.push(item);
+            saveInventory();
+            return true;
+        },
         addGold: (amount) => { invState.gold += amount; saveInventory(); },
         getGold: () => invState.gold,
+        setGold: (amount) => { invState.gold = amount; saveInventory(); },
         getItems: () => [...invState.items],
         getEquipped: () => ({ ...invState.equipped }),
+        getCurrentWeight,
+        clearAll: () => {
+            invState.items = [];
+            invState.equipped = {};
+            invState.gold = 0;
+            saveInventory();
+        },
         ITEM_TYPES,
         RARITY,
         EQUIP_SLOTS,

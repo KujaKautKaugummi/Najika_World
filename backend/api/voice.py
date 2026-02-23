@@ -15,6 +15,7 @@ from backend.database import get_db
 from backend.models.user import User
 from backend.api.auth import decode_token
 from backend.config import settings
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/voice", tags=["Voice"])
 
@@ -293,6 +294,7 @@ class TranscribeRequest(BaseModel):
 
 
 @router.post("/transcribe")
+@handle_errors()
 async def transcribe_audio(request: TranscribeRequest):
     """
     Transcribe audio using Whisper AI
@@ -384,6 +386,7 @@ async def text_to_speech(request: TTSRequest):
 
 
 @router.get("/voices")
+@handle_errors()
 async def get_available_voices():
     """
     Get list of available TTS voices

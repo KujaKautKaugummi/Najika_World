@@ -1,7 +1,7 @@
 // ☀️🌙 DAY/NIGHT CYCLE - Dynamic time progression and lighting
 // Simulates 24-hour cycle with realistic lighting transitions
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class DayNightCycle {
   constructor(scene, camera, renderer) {
@@ -443,8 +443,7 @@ class DayNightCycle {
   }
 }
 
-// ES6 export for module usage
-export default DayNightCycle;
+// Window export for script-tag usage (ES6 export removed)
 
 // Window export for script-tag usage
 if (typeof window !== 'undefined') {

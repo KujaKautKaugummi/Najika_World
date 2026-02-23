@@ -3,7 +3,7 @@
  * Digimon-style evolution sequences with dramatic particle effects
  */
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class EvolutionEffectSystem {
     constructor(scene) {

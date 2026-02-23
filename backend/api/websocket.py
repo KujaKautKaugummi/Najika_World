@@ -13,7 +13,7 @@ import logging
 from backend.database import get_db
 from backend.models.user import User
 from backend.services.websocket_manager import websocket_manager
-from backend.api.auth import get_current_user_from_token
+from backend.api.auth import get_current_user
 
 router = APIRouter(prefix="/ws", tags=["WebSocket"])
 logger = logging.getLogger(__name__)

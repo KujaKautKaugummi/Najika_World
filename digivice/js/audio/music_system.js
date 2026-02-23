@@ -4,9 +4,9 @@
  * Digimon World style adaptive music
  */
 
-import * as THREE from 'three';
+// THREE is loaded globally via index.html
 
-export class MusicSystem {
+class MusicSystem {
     constructor(listener) {
         this.listener = listener;
         this.audioContext = listener.context;
@@ -578,7 +578,7 @@ export class MusicSystem {
 }
 
 // Placeholder music track definitions
-export const MUSIC_TRACKS = {
+const MUSIC_TRACKS = {
     // Exploration
     exploration_1: { url: '/assets/audio/music/exploration_1.mp3', metadata: { title: 'Forest Path', bpm: 90, mood: 'peaceful' } },
     exploration_2: { url: '/assets/audio/music/exploration_2.mp3', metadata: { title: 'Mountain Trail', bpm: 95, mood: 'adventurous' } },

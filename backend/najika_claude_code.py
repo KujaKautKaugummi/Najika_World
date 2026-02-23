@@ -18,10 +18,15 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-# Fix Windows console encoding
+# Fix Windows console encoding (nur wenn Buffer noch offen ist)
 if sys.platform == 'win32':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    try:
+        if hasattr(sys.stdout, 'buffer') and not sys.stdout.buffer.closed:
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        if hasattr(sys.stderr, 'buffer') and not sys.stderr.buffer.closed:
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    except (ValueError, OSError):
+        pass  # Buffer already closed/piped - skip encoding fix
 
 class NajikaClaudeCode:
     """Integration zwischen Najika und Claude Code"""

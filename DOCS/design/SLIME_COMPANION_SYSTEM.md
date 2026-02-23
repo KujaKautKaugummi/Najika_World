@@ -1,6 +1,7 @@
+# ⚠️ VERALTET (V2) - Siehe SLIME_SYSTEM_V3_DOKUMENTATION.md für aktuelle Version!
 # SLIME BEGLEITER-SYSTEM
 **Stand:** 2025-11-05
-**Status:** Design-Phase
+**Status:** VERALTET - Farb-System entfernt in V3, Slime ist jetzt Formwandler
 **Quelle:** Chat-Verlauf "111" + Zusammenfassungen
 
 ---
@@ -97,35 +98,35 @@ Ablauf:
 
 **Farbe hängt von REGION ab, wo Metamorphose stattfindet:**
 
-1. **🟡 Bernstein** (Amber) - *Bernstein-Dünen* (Wüste)
+1. **🟡 Bernstein** (Amber) - *Heiße Dünen* (Wüste)
    - Eigenschaften: Hitzeresistent, Sand-Tarnung
    - Bonus: +10% Schaden in Wüsten
 
-2. **🟢 Smaragd** (Emerald) - *Smaragd-Hain* (Wald)
+2. **🟢 Smaragd** (Emerald) - *Samtmoos-Tiefwald* (Wald)
    - Eigenschaften: Heilung, Giftresistenz
    - Bonus: +15% Kräuter-Effektivität
 
-3. **🔵 Azur** (Azure) - *Azur-Klippen* (Küste)
+3. **🔵 Azur** (Azure) - *Salzwind-Küste* (Küste)
    - Eigenschaften: Wasser-Atmung, Wellenreiten
    - Bonus: +20% Angeln-Erfolgsrate
 
-4. **🟣 Amethyst** (Amethyst) - *Amethyst-Steppe* (Hochebene)
+4. **🟣 Amethyst** (Amethyst) - *Blitzebene* (Hochland)
    - Eigenschaften: Blitz-Resistenz, Schnelligkeit
    - Bonus: +10% Bewegungsgeschwindigkeit
 
-5. **⚫ Onyx** (Onyx) - *Onyx-Morast* (Sumpf)
+5. **⚫ Onyx** (Onyx) - *Grünschlamm-Sumpf* (Sumpf)
    - Eigenschaften: Krankheits-Immunität, Giftangriffe
    - Bonus: +15% Gift-Schaden
 
-6. **⚪ Perle** (Pearl) - *Perl-Gletscher* (Eis/Schnee)
+6. **⚪ Perle** (Pearl) - *Reich der Drei* (Tundra/Eis)
    - Eigenschaften: Kälte-Immunität, Rutsch-Control
    - Bonus: +10% Verteidigung in Schnee
 
-7. **🔴 Rubin** (Ruby) - *Rubin-Schlucht* (Vulkan)
+7. **🔴 Rubin** (Ruby) - *Magmaströme* (Vulkan)
    - Eigenschaften: Feuer-Immunität, Lava-Durchquerung
    - Bonus: +15% Feuer-Magie
 
-8. **🟤 Obsidian** (Obsidian) - *Obsidian-Nacht* (Endgame)
+8. **🟤 Obsidian** (Obsidian) - *Tiefenhöhlen* (Höhlen)
    - Eigenschaften: Nachtsicht, Schatten-Tarnung
    - Bonus: +20% Kritchance nachts
 
@@ -222,8 +223,8 @@ Nach Slime-Rettung:
   - Slime ist "erschöpft"
   - Heilung nur durch Ritual mit seltenen Zutaten:
     → Mondblume (Nacht-Spawn in Wald)
-    → Vulkanessenz (Rubin-Schlucht Boss-Drop)
-    → Kristallwasser (Perl-Gletscher Eisquelle)
+    → Vulkanessenz (Magmaströme Boss-Drop)
+    → Kristallwasser (Reich der Drei Eisquelle)
 
   - Ohne Ritual: Slime bleibt schwach (-50% Stats)
   - Mit Ritual: Sofort volle Kraft zurück
@@ -360,42 +361,42 @@ class SlimeCompanion:
 
     SLIME_COLORS = {
         "bernstein": {
-            "region": "Bernstein-Dünen",
+            "region": "Heiße Dünen",
             "bonus": {"desert_damage": 1.10},
             "hex_color": "#FFA500"
         },
         "smaragd": {
-            "region": "Smaragd-Hain",
+            "region": "Samtmoos-Tiefwald",
             "bonus": {"herb_effectiveness": 1.15},
             "hex_color": "#50C878"
         },
         "azur": {
-            "region": "Azur-Klippen",
+            "region": "Salzwind-Küste",
             "bonus": {"fishing_success": 1.20},
             "hex_color": "#007FFF"
         },
         "amethyst": {
-            "region": "Amethyst-Steppe",
+            "region": "Blitzebene",
             "bonus": {"movement_speed": 1.10},
             "hex_color": "#9966CC"
         },
         "onyx": {
-            "region": "Onyx-Morast",
+            "region": "Grünschlamm-Sumpf",
             "bonus": {"poison_damage": 1.15},
             "hex_color": "#353839"
         },
         "perle": {
-            "region": "Perl-Gletscher",
+            "region": "Reich der Drei",
             "bonus": {"ice_defense": 1.10},
             "hex_color": "#F0EAD6"
         },
         "rubin": {
-            "region": "Rubin-Schlucht",
+            "region": "Magmaströme",
             "bonus": {"fire_magic": 1.15},
             "hex_color": "#E0115F"
         },
         "obsidian": {
-            "region": "Obsidian-Nacht",
+            "region": "Tiefenhöhlen",
             "bonus": {"night_crit": 1.20},
             "hex_color": "#0B1215"
         }
@@ -458,14 +459,14 @@ class SlimeCompanion:
         """
         # Determine color based on region
         color_map = {
-            "Bernstein-Dünen": "bernstein",
-            "Smaragd-Hain": "smaragd",
-            "Azur-Klippen": "azur",
-            "Amethyst-Steppe": "amethyst",
-            "Onyx-Morast": "onyx",
-            "Perl-Gletscher": "perle",
-            "Rubin-Schlucht": "rubin",
-            "Obsidian-Nacht": "obsidian"
+            "Heiße Dünen": "bernstein",
+            "Samtmoos-Tiefwald": "smaragd",
+            "Salzwind-Küste": "azur",
+            "Blitzebene": "amethyst",
+            "Grünschlamm-Sumpf": "onyx",
+            "Reich der Drei": "perle",
+            "Magmaströme": "rubin",
+            "Tiefenhöhlen": "obsidian"
         }
 
         self.slime_color = color_map.get(region, "bernstein")  # Default: Bernstein

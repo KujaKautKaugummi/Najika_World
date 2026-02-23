@@ -630,7 +630,8 @@
             <button onclick="window.slimeArenaUI?.open()" class="activity-btn">🍺 Slime Arena</button>
             <button onclick="startOverworldCombat()" class="activity-btn">⚔️ Overworld Kampf</button>
             <button onclick="openTripleTriad()" class="activity-btn">🃏 Triple Triad</button>
-            <button onclick="openDungeonDice()" class="activity-btn">🎲 Dungeon Dice</button>
+            <button onclick="window.pvpUI?.show()" class="activity-btn">🏴 PvP Arena</button>
+            <button onclick="window.DungeonCrawler?.enterCrawlerDungeon(1)" class="activity-btn">🏰 Dungeon Crawler</button>
         </div>
 
         <!-- Minigames & Musik -->
@@ -638,6 +639,8 @@
             <div style="color: #3498db; font-size: 12px; margin-bottom: 8px; font-weight: bold;">🎯 MINIGAMES & MUSIK</div>
             <button onclick="openMinigames()" class="activity-btn">🎮 Minigame-Auswahl</button>
             <button onclick="openInstrument()" class="activity-btn">🎵 Instrumente spielen</button>
+            <button onclick="window.medicineCraftingUI?.open()" class="activity-btn">🌿 Kräuter & Tränke</button>
+            <button onclick="window.FactionSystem?.showUI?.()" class="activity-btn">🏳️ Fraktionen</button>
         </div>
 
         <!-- Terminal & Tools -->
@@ -902,6 +905,11 @@
     <!-- Three.js und eigene Skripte -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.6.10/umd/index.min.js"></script>
+    <script>if(window.fflate) window.fflate = window.fflate;</script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/curves/NURBSCurve.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/curves/NURBSUtils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
 
     <!-- AUDIT FIX 2026-02-15: Audio Systems -->
     <script src="js/audio/combat_sfx_system.js"></script>
@@ -971,8 +979,9 @@
     <script src="js/dungeon_generator.js"></script>
     <script src="js/dungeon_enemies.js"></script>
     <script src="js/dungeon_combat.js"></script>
-    <!-- Unified Combat System (3 Modi: Auto/Manual/Cheer) -->
-    <script src="js/unified_combat_system.js"></script>
+    <!-- ENTFERNT: unified_combat_system.js - Real3DCombat ist das einzige Kampfsystem -->
+    <!-- Direction Resolver (For Honor Richtungs-Input) - muss VOR real_3d_combat laden -->
+    <script src="js/combat/direction_resolver.js"></script>
     <!-- NEUES Real 3D Combat System mit echten KayKit Gegnern! -->
     <script src="js/combat/real_3d_combat.js"></script>
     <!-- Game Event Bus (muss VOR allen Systemen laden) -->
@@ -1011,6 +1020,14 @@
     <script src="js/companion_swap_system.js"></script>
     <script src="js/creature_taming.js"></script>
     <script src="js/creature_recruit.js"></script>
+
+    <!-- Gewicht / Wagen / Arbeiter / Tod Systeme -->
+    <script src="js/weight_system.js"></script>
+    <script src="js/world_items.js"></script>
+    <script src="js/wagon_system.js"></script>
+    <script src="js/worker_system.js"></script>
+    <script src="js/death_system.js"></script>
+
     <script src="js/3d_scene.js"></script>
     <script src="js/companion_3d.js"></script>
     <script src="js/companion_approval.js"></script>
@@ -1019,20 +1036,21 @@
     <script src="js/voice_call.js"></script>
     <!-- Phase 1 Systems -->
     <script src="js/equipment_combat.js"></script>
+    <script src="js/voellerei_system.js"></script>
     <script src="js/touch_combat.js"></script>
     <script src="js/triple_triad.js"></script>
-    <script src="js/dungeon_dice_shop.js"></script>
-    <script src="js/dungeon_dice_game.js"></script>
+    <!-- ENTFERNT: Dice Monsters wird komplett neu designed -->
     <script src="js/housing_system.js"></script>
     <script src="js/instrument_system.js"></script>
     <script src="js/slime_companion.js"></script>
     <!-- UI Systems -->
     <script src="js/ui/living_system_ui.js"></script>
     <script src="js/ui/card_game_ui.js"></script>
-    <script src="js/ui/dice_monsters_ui.js"></script>
+    <!-- ENTFERNT: Dice Monsters UI wird komplett neu designed -->
     <script src="js/ui/slime_arena_ui.js"></script>
     <!-- Arena Systems -->
     <script src="js/nemesis_arena_frontend.js"></script>
+    <script src="js/nemesis_arena_ui.js"></script>
     <script src="js/simple_arena.js"></script>
     <!-- Combat Special UI (Grab, TIDS, Infuse) -->
     <script src="js/ui/combat_special_ui.js"></script>
@@ -1135,7 +1153,7 @@
             const text = isPositive ? 'Lob' : 'Tadel';
 
             try {
-                const response = await fetch(`http://localhost:8001/api/v2/care/${action}`, {
+                const response = await fetch(`http://localhost:8000/api/v2/care/${action}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({})
@@ -1769,50 +1787,110 @@
         let kujaModel = null;
 
         async function loadNajikaCharacter() {
+            // ===== SCHRITT 1: KayKit Animationen laden (immer, als Quelle) =====
+            let kaykitGltf = null;
             try {
-                // KayKit AnimatedCharacter - hat Skeleton + alle Animationen!
-                const gltf = await new Promise((resolve, reject) => {
+                kaykitGltf = await new Promise((resolve, reject) => {
                     gltfLoader.load('static/assets/KayKit Character Animations 1.2/Animations/gltf/KayKit_AnimatedCharacter_v1.2.glb', resolve, undefined, reject);
                 });
+                console.log(`🎬 KayKit Animationen geladen: ${kaykitGltf.animations.length} Clips`);
+            } catch (e) {
+                console.warn('⚠️ KayKit Animationen nicht geladen:', e);
+            }
 
-                kujaModel = gltf.scene;
-                kujaModel.scale.set(0.75, 0.75, 0.75);
+            // ===== SCHRITT 2: Najika FBX laden (Custom Avatar) =====
+            let najikaLoaded = false;
+            if (THREE.FBXLoader) {
+                try {
+                    const fbxLoader = new THREE.FBXLoader();
+                    const fbxModel = await new Promise((resolve, reject) => {
+                        fbxLoader.load('/assets/models/najika/najika_rigged_final.fbx', resolve, undefined, reject);
+                    });
 
-                // Kuja-Look: Dunkle Skelett-Magier Farben
-                kujaModel.traverse((child) => {
-                    if (child.isMesh) {
-                        child.castShadow = true;
-                        child.receiveShadow = true;
-                        if (child.material) {
-                            child.material = child.material.clone();
-                            child.material.color.set(0x6a4c93);      // Dunkles Lila
-                            child.material.emissive = new THREE.Color(0x1a0a2e);
-                            child.material.emissiveIntensity = 0.3;
+                    // Debug: Bone-Namen loggen
+                    const bones = [];
+                    fbxModel.traverse((child) => {
+                        if (child.isBone) bones.push(child.name);
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+                    console.log(`🎭 Najika FBX geladen! Bones: ${bones.length}`, bones.slice(0, 20));
+
+                    // Skalierung anpassen (140cm Charakter)
+                    fbxModel.scale.set(0.008, 0.008, 0.008);  // FBX ist oft in cm, Three.js in m
+
+                    kujaModel = fbxModel;
+                    character.add(kujaModel);
+
+                    // Versuche KayKit-Animationen auf Najika-Modell anzuwenden
+                    if (kaykitGltf && kaykitGltf.animations.length > 0) {
+                        // Fake GLTF-Objekt fuer CharacterAnimations.init()
+                        const fakeGltf = { animations: kaykitGltf.animations };
+
+                        if (window.CharacterAnimations) {
+                            window.CharacterAnimations.init(kujaModel, fakeGltf);
+                            const animCount = window.CharacterAnimations.listAnimations().length;
+                            if (animCount > 0) {
+                                console.log(`🎬✅ ${animCount} KayKit-Animationen auf Najika angewendet!`);
+                            } else {
+                                console.warn('⚠️ Animationen geladen aber Bones matchen nicht!');
+                                console.log('🔧 Najika Bones:', bones.join(', '));
+                            }
                         }
                     }
-                });
 
-                character.add(kujaModel);
+                    // Animations-Daten exportieren
+                    window.kujaAnimationClips = kaykitGltf ? kaykitGltf.animations : [];
 
-                // Animations-System initialisieren!
-                if (window.CharacterAnimations) {
-                    window.CharacterAnimations.init(kujaModel, gltf);
-                    console.log('🎬 Kuja Animationen aktiviert!');
+                    najikaLoaded = true;
+                    console.log('🎭✅ Najika Custom Avatar geladen!');
+                } catch (error) {
+                    console.warn('⚠️ Najika FBX fehlgeschlagen, nutze KayKit Fallback:', error);
                 }
+            }
 
-                // Animations-Daten exportieren für Companion
-                window.kujaAnimationClips = gltf.animations;
+            // ===== SCHRITT 3: Fallback auf KayKit wenn Najika fehlschlaegt =====
+            if (!najikaLoaded) {
+                try {
+                    if (!kaykitGltf) throw new Error('Kein KayKit GLTF verfuegbar');
 
-                console.log('💀 Kuja Character (Animated + Skeleton-Look) geladen!');
-            } catch (error) {
-                console.warn('⚠️  Kuja Character konnte nicht geladen werden, verwende Fallback:', error);
-                // Fallback: Simple colored cube
-                const fallbackGeometry = new THREE.BoxGeometry(0.45, 1.35, 0.45);
-                const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
-                const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
-                fallback.castShadow = true;
-                fallback.receiveShadow = true;
-                character.add(fallback);
+                    kujaModel = kaykitGltf.scene;
+                    kujaModel.scale.set(0.75, 0.75, 0.75);
+
+                    // Kuja-Look: Dunkle Skelett-Magier Farben
+                    kujaModel.traverse((child) => {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                            if (child.material) {
+                                child.material = child.material.clone();
+                                child.material.color.set(0x6a4c93);
+                                child.material.emissive = new THREE.Color(0x1a0a2e);
+                                child.material.emissiveIntensity = 0.3;
+                            }
+                        }
+                    });
+
+                    character.add(kujaModel);
+
+                    if (window.CharacterAnimations) {
+                        window.CharacterAnimations.init(kujaModel, kaykitGltf);
+                        console.log('🎬 KayKit Animationen aktiviert (Fallback)!');
+                    }
+
+                    window.kujaAnimationClips = kaykitGltf.animations;
+                    console.log('💀 KayKit Character (Fallback) geladen!');
+                } catch (error) {
+                    console.warn('⚠️ Auch KayKit fehlgeschlagen, verwende Box-Fallback:', error);
+                    const fallbackGeometry = new THREE.BoxGeometry(0.45, 1.35, 0.45);
+                    const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0x4CAF50 });
+                    const fallback = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+                    fallback.castShadow = true;
+                    fallback.receiveShadow = true;
+                    character.add(fallback);
+                }
             }
         }
 
@@ -1988,8 +2066,10 @@
 
         window.addEventListener('keydown', (e) => {
             if (isTypingInInput()) return; // KEYBOARD GUARD
-            // E-Taste: Gebäude betreten/verlassen (PRIORITÄT über Combat!)
+            // E-Taste: Gebäude betreten/verlassen
             if (e.key === 'e' || e.key === 'E') {
+                // Combat-Check ZUERST
+                if (window.combatActive || (window.Real3DCombat && window.Real3DCombat.isInCombat && window.Real3DCombat.isInCombat())) return;
                 // Cooldown check to prevent rapid enter/exit
                 if (Date.now() - lastInteriorToggle < INTERIOR_TOGGLE_COOLDOWN) {
                     return;
@@ -2018,6 +2098,8 @@
 
             // Q-Taste: Interior verlassen (Mühle/Stadt)
             if (e.key === 'q' || e.key === 'Q') {
+                // Combat-Check
+                if (window.combatActive || (window.Real3DCombat && window.Real3DCombat.isInCombat && window.Real3DCombat.isInCombat())) return;
                 if (isInInterior) {
                     unloadBuildingInterior();
                 }
@@ -3105,6 +3187,8 @@
         }
 
         // Get ground height at position (based on WorldManager terrain or fallback)
+        // Exponiert als window.getGroundHeight für Combat-System etc.
+        window.getGroundHeight = getGroundHeight;
         function getGroundHeight(x, z) {
             // If WorldManager is initialized, use its terrain height
             if (worldManager && worldManager.initialized) {
@@ -3131,10 +3215,25 @@
         }
 
         // Update character height based on region
+        let _teleportCooldown = 0; // Skip height correction after teleport
         function updateCharacterHeight() {
+            // Nach Teleport kurz die Height-Korrektur aussetzen
+            if (_teleportCooldown > 0) {
+                _teleportCooldown--;
+                return;
+            }
             const groundHeight = getGroundHeight(character.position.x, character.position.z);
-            character.position.y = groundHeight + 3.5;  // 3.5 = character height offset
+            // Sanft anpassen statt hart setzen (verhindert in-Terrain-Stuck)
+            const targetY = groundHeight + 3.5;
+            const diff = targetY - character.position.y;
+            if (Math.abs(diff) > 0.5) {
+                character.position.y += diff * 0.1; // Lerp statt Snap
+            } else {
+                character.position.y = targetY;
+            }
         }
+        // Global setter für Teleport-Cooldown
+        window.setTeleportCooldown = function(frames) { _teleportCooldown = frames || 60; };
 
         // Gebietsgrenzen visualisieren
         function createRegionMarker(x, z, color, label) {
@@ -4410,8 +4509,8 @@
 
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
-        // Backend URL (localhost:8001 - FastAPI)
-        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8001';
+        // Backend URL (localhost:8000 - FastAPI)
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
@@ -4590,9 +4689,11 @@
             }
         }
 
-        // Skill-Hotkeys (1-4)
+        // Skill-Hotkeys (1-4) - NUR im Overworld-Modus (nicht während Combat oder Interior)
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (window.combatActive) return; // Combat hat eigene Tastenbelegung
+            if (typeof isInInterior !== 'undefined' && isInInterior) return;
             switch(e.key) {
                 case '1': useSkill('fireball'); break;
                 case '2': useSkill('ice_shard'); break;
@@ -5101,6 +5202,7 @@
         const originalEKeyHandler = window.addEventListener;
         window.addEventListener('keydown', (e) => {
             if (isTypingInInput()) return; // KEYBOARD GUARD
+            if (window.combatActive || (window.Real3DCombat && window.Real3DCombat.isInCombat && window.Real3DCombat.isInCombat())) return;
             if ((e.key === 'e' || e.key === 'E') && !isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const nearLocation = specialLocations.checkEntranceProximity(character.position);
                 if (nearLocation) {
@@ -5506,6 +5608,7 @@
         window.addEventListener('keydown', (e) => {
             if (isTypingInInput()) return; // KEYBOARD GUARD
             // E key to talk to NPC
+            if (window.combatActive || (window.Real3DCombat && window.Real3DCombat.isInCombat && window.Real3DCombat.isInCombat())) return;
             if ((e.key === 'e' || e.key === 'E') && nearestNPC && !dialogueOpen && isInInterior) {
                 e.preventDefault();
                 startDialogue(nearestNPC);
@@ -5608,6 +5711,7 @@
         // E key handler for buildings
         window.addEventListener('keydown', (e) => {
             if (isTypingInInput()) return; // KEYBOARD GUARD
+            if (window.combatActive || (window.Real3DCombat && window.Real3DCombat.isInCombat && window.Real3DCombat.isInCombat())) return;
             if ((e.key === 'e' || e.key === 'E') && isInInterior && !dialogueOpen && !inventoryOpen && !questLogOpen) {
                 const currentBuildings = interiorGenerator.getCurrentInterior()?.buildings || [];
 
@@ -6038,6 +6142,9 @@
             if (isTypingInInput()) return; // KEYBOARD GUARD
             // Q or J to open quest log
             if ((e.key === 'q' || e.key === 'Q' || e.key === 'j' || e.key === 'J') && !dialogueOpen && !inventoryOpen && !questLogOpen) {
+                // Q ist auch Interior-Exit - nur Questlog öffnen wenn NICHT im Interior
+                if ((e.key === 'q' || e.key === 'Q') && typeof isInInterior !== 'undefined' && isInInterior) return;
+                if (window.combatActive) return; // Im Kampf kein Questlog
                 e.preventDefault();
                 toggleQuestLog();
             }
@@ -6331,7 +6438,7 @@
 <!-- ============================================ -->
 <script>
     // Set API Base URL for event systems
-    window.API_BASE_URL = 'http://127.0.0.1:8001';
+    window.API_BASE_URL = 'http://127.0.0.1:8000';
 </script>
 <script src="js/chaos_event_ui.js"></script>
 
@@ -6353,10 +6460,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('[Najika] ✓ Chaos Event UI');
     }
 
-    // Combat Input (Desktop)
-    if (window.commandSystem && typeof CombatInputHandler !== 'undefined') {
-        window.combatInput = new CombatInputHandler(window.commandSystem);
-        console.log('[Najika] ✓ Combat Input Handler');
+    // Combat Input (Desktop) - nutzt EquipmentCombat als Kampf-Interface
+    if (typeof CombatInputHandler !== 'undefined') {
+        const combatCS = window.EquipmentCombat || window.commandSystem;
+        if (combatCS) {
+            window.combatInput = new CombatInputHandler(combatCS);
+            console.log('[Najika] ✓ Combat Input Handler (via', window.EquipmentCombat ? 'EquipmentCombat' : 'commandSystem', ')');
+        }
     }
 
     console.log('[Najika] New systems initialized!');
@@ -6392,7 +6502,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startNajikaStatusUpdates() {
     async function fetchAndUpdateNajikaStatus() {
         try {
-            const response = await fetch('http://localhost:8001/api/state/najika');
+            const response = await fetch('http://localhost:8000/api/state/najika');
             const data = await response.json();
 
             if (data) {
@@ -6465,6 +6575,92 @@ function startNajikaStatusUpdates() {
 
 <!-- OPUS Integration 2026-02-16: Minigames -->
 <script src="js/minigames/turn_based_battle_minigame.js"></script>
+
+<!-- 3D Housing + Farming (Fortnite-Style Placement) -->
+<script src="js/housing_3d.js"></script>
+<script src="js/housing_3d_placement.js"></script>
+<script src="js/farming_3d.js"></script>
+
+<!-- Minimap -->
+<script src="js/ui/minimap.js"></script>
+
+<!-- Voice Call Panel (DOM-Elemente für voice_call.js) -->
+<div id="voice-call-panel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.95);border:2px solid #e91e63;border-radius:12px;padding:20px;z-index:10000;min-width:300px;color:white;font-family:monospace;">
+    <div style="text-align:center;margin-bottom:10px;">
+        <span style="font-size:24px;">📞</span>
+        <span id="call-status-text" style="font-size:14px;margin-left:8px;">Bereit</span>
+    </div>
+    <div id="call-duration" style="display:none;text-align:center;font-size:20px;color:#e91e63;margin:10px 0;">00:00</div>
+    <canvas id="audio-visualizer" width="260" height="40" style="display:block;margin:10px auto;background:#111;border-radius:4px;"></canvas>
+    <div id="call-transcript" style="max-height:120px;overflow-y:auto;font-size:11px;color:#aaa;margin:8px 0;padding:4px;background:#111;border-radius:4px;min-height:30px;"></div>
+    <div id="call-stats" style="display:none;text-align:center;font-size:10px;color:#666;">
+        <span id="stt-latency">-</span>ms STT / <span id="tts-latency">-</span>ms TTS
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;">
+        <button id="start-call-btn" onclick="if(window.startVoiceCall)startVoiceCall()" style="background:#4CAF50;color:white;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;">Anruf starten</button>
+        <button id="end-call-btn" style="display:none;background:#f44336;color:white;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;" onclick="if(window.endVoiceCall)endVoiceCall()">Auflegen</button>
+    </div>
+</div>
+<button id="voiceCallBtn" onclick="document.getElementById('voice-call-panel').style.display=document.getElementById('voice-call-panel').style.display==='none'?'block':'none'" style="position:fixed;bottom:10px;right:10px;background:#e91e63;color:white;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;z-index:900;font-size:18px;">📞</button>
+
+<!-- Late Init: 3D Systeme instanziieren -->
+<script>
+(function() {
+    // Housing 3D Placement
+    const initHousing3D = () => {
+        if (window.Housing3DPlacement && window.Scene3D) {
+            const scene = window.Scene3D.scene || window.scene;
+            const camera = window.Scene3D.camera || window.camera;
+            if (scene && camera) {
+                window.housing3DPlacement = new Housing3DPlacement(scene, camera);
+                console.log('✅ Housing 3D Placement aktiviert (Fortnite-Style)');
+            }
+        }
+    };
+
+    // Farming 3D
+    const initFarming3D = () => {
+        if (window.Farming3D && window.Scene3D) {
+            const scene = window.Scene3D.scene || window.scene;
+            if (scene) {
+                window.farming3D = new Farming3D(scene);
+                console.log('✅ Farming 3D aktiviert');
+            }
+        }
+    };
+
+    // Minimap
+    const initMinimap = () => {
+        if (window.Minimap) {
+            window.minimap = new Minimap({ position: 'top-right', size: 180, zoom: 20 });
+            console.log('✅ Minimap aktiviert');
+        }
+    };
+
+    // Gewicht/Wagen/Arbeiter/Tod Systeme
+    const initLogistik = () => {
+        if (window.WorldItems?.init) window.WorldItems.init();
+        if (window.WagonSystem?.init) window.WagonSystem.init();
+        if (window.WorkerSystem?.init) window.WorkerSystem.init();
+        if (window.DeathSystem?.init) window.DeathSystem.init();
+        console.log('[OK] Logistik-Systeme initialisiert (Gewicht/Wagen/Arbeiter/Tod)');
+    };
+
+    // Warte bis Scene geladen
+    const tryInit = () => {
+        initHousing3D();
+        initFarming3D();
+        initMinimap();
+        initLogistik();
+    };
+
+    if (document.readyState === 'complete') {
+        setTimeout(tryInit, 2000);
+    } else {
+        window.addEventListener('load', () => setTimeout(tryInit, 2000));
+    }
+})();
+</script>
 
 </body>
 </html>

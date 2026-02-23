@@ -682,7 +682,10 @@
         if (!recruit) return { success: false, error: 'Kreatur nicht gefunden' };
 
         const validJobs = ['guard', 'worker', 'scout', 'merchant'];
-        if (!validJobs.includes(job)) return { success: false, error: `Ungültiger Job: ${job}` };
+        const workerJobs = window.WorkerSystem?.JOB_DEFINITIONS;
+        if (!validJobs.includes(job) && !(workerJobs && workerJobs[job])) {
+            return { success: false, error: `Ungültiger Job: ${job}` };
+        }
 
         recruit.job = job;
         _save();
@@ -1018,6 +1021,22 @@
         setDay,
         dailyUpdate,
         processRumors,
+
+        // Death
+        scatterOnDeath: () => {
+            const stayed = [];
+            const fled = [];
+            recruitedCreatures.forEach(r => {
+                if (r.loyalty > 70) { stayed.push(r.name); }
+                else { fled.push(r.name); }
+            });
+            recruitedCreatures = recruitedCreatures.filter(r => r.loyalty > 70);
+
+            const escaped = enslavedCreatures.map(s => s.name);
+            enslavedCreatures = [];
+            _save();
+            return { stayed, fled, escaped };
+        },
 
         // Config
         CLAN_CONFIG,

@@ -6,8 +6,8 @@
 class HousingUI {
     constructor() {
         this.apiBase = {
-            housing: 'http://localhost:8001/api/housing',
-            farming: 'http://localhost:8001/api/farming'
+            housing: 'http://localhost:8000/api/housing',
+            farming: 'http://localhost:8000/api/farming'
         };
         this.playerId = (typeof getPlayerId === 'function') ? getPlayerId() : 1;
         this.currentHouse = null;

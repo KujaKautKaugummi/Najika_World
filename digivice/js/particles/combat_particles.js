@@ -3,7 +3,7 @@
  * Digimon World style combat particles with Three.js
  */
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class CombatParticleSystem {
     constructor(scene) {

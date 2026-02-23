@@ -14,6 +14,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 import base64
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/voice-ue5", tags=["Voice UE5"])
 
@@ -37,6 +38,7 @@ class PlayerSpeechRequest(BaseModel):
 # ============================================================================
 
 @router.post("/speak")
+@handle_errors()
 async def najika_speak(request: NajikaSpeakRequest):
     """
     Make Najika speak the given text.
@@ -112,6 +114,7 @@ async def najika_speak(request: NajikaSpeakRequest):
         raise HTTPException(status_code=500, detail=f"TTS failed: {str(e)}")
 
 @router.post("/listen")
+@handle_errors()
 async def player_speech(request: PlayerSpeechRequest):
     """
     Transcribe player speech to text.
@@ -191,6 +194,7 @@ async def player_speech(request: PlayerSpeechRequest):
         raise HTTPException(status_code=500, detail=f"STT failed: {str(e)}")
 
 @router.get("/status")
+@handle_errors()
 async def voice_status():
     """
     Check status of voice services.
@@ -236,6 +240,7 @@ async def voice_status():
     return status
 
 @router.get("/personalities")
+@handle_errors()
 async def get_personalities():
     """
     Get available Najika personalities and their voices.

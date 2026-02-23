@@ -102,6 +102,50 @@ This script:
 python najika_server.py
 ```
 
+## NEU - Session 2026-02-23 (AKTUELLSTES UPDATE!)
+
+### Combat V4 - Immersives Kampfsystem (APPROVED)
+| Datei | Beschreibung |
+|-------|-------------|
+| `DOCS/plans/2026-02-23-immersive-combat-v4-design.md` | **COMBAT V4 DESIGN** - For Honor OHNE UI-Pfeile, Animation Reading, 3 Kamera-Modi |
+| `COMBAT_SYSTEM_KOMPLETT_V3.md` | Master-Kampfdok (~1400 Zeilen) - Basis fuer V4 |
+
+### V4 Kern-Aenderungen gegenueber V3:
+- **Spieler-Identitaet:** Spieler = man SELBST, Najika = KI-Begleiterin (= Slime fuer andere Spieler)
+- **Directional Combat ohne UI-Pfeile** - Gegner-ANIMATION zeigt Richtung, nicht Symbole/Pfeile
+- **Natuerliche Schwierigkeits-Progression** - Schwache Gegner telegraphieren lang (~0.6s), Bosse feinten
+- **3 Kamera-Modi (jederzeit wechselbar, auch im Kampf!):**
+  - First Person (Fortnite Ballistic) = max Immersion, keine Schadenszahlen
+  - Third Person (klassisch Fortnite) = Action-Balance, dezente UI
+  - Orbit Cam (aktueller Modus) = volle UI mit Zahlen fuer Strategen
+- **Faustkampf = Kampf ohne Waffe** (kein separates System, gleiche Richtungen)
+- **Beruf+Magie Synergie** - Spieler entdeckt Kombis selbst (Holzfaeller+Wind etc.)
+- **KI-Monster die aufsteigen** = kuerzere Wind-Ups = natuerliche Schwierigkeit
+
+### Fuer Kampfsystem-Arbeit immer lesen:
+- `DOCS/plans/2026-02-23-immersive-combat-v4-design.md` ← NEUESTES DESIGN (V4)
+- `COMBAT_SYSTEM_KOMPLETT_V3.md` ← Basis-Mechaniken (V3, weiterhin gueltig)
+- `backend/najika_safezone_system.py` ← fuer Zone/PvP-Logik
+
+---
+
+## Session 2026-02-22
+
+### Dateien erstellt:
+| Datei | Beschreibung |
+|-------|-------------|
+| `COMBAT_SYSTEM_KOMPLETT_V3.md` | **MASTER-KAMPFDOK** (~1400 Zeilen) - For Honor 4-Dir, Spell-Diamond, Faustkampf, Grappling, Bajonett/Sniper-Speer, Magische Munition, Koerperteil-Targeting, Prothesen-System, 7 Design-Prinzipien |
+| `backend/najika_safezone_system.py` | **Safe-Zone Backend-Modul** - ZoneType, 8 Regionen korrekt, Goetterfels, PvP-Check, Duell-System, Ranger-Transport-Raids, Disconnect-Handling, Permadeath-Konsequenzen |
+
+### Korrekturen (2026-02-22 + 2026-02-23):
+- **8 Regionen** (nicht 9!) - Goetterfels ist KEIN eigenes Biom, von allen 8 Regionen erreichbar
+- Die 8 Regionen: Heisse Duenen / Samtmoos-Tiefwald / Salzwind-Kueste / Blitzebene / Gruenschlamm-Sumpf / Magmastroeme / Tiefenhoehlen / Reich der Drei
+- **Fake Edelstein-Regionsnamen komplett bereinigt** (13+ Dateien, Backend + Docs)
+- FBXLoader + fflate CDN in index.html eingebaut (fuer Najika Avatar)
+- Beruf+Magie Synergie in COMBAT_SYSTEM_KOMPLETT_V3.md ergaenzt
+
+---
+
 ## Architecture
 
 ### Backend (`najika_server.py`)

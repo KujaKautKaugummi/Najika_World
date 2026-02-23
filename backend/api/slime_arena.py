@@ -38,6 +38,7 @@ import random
 
 from backend.database import get_db
 from backend.models.slime_arena import SlimeDuel, SlimeTournament, SlimeFame
+from backend.utils import handle_errors
 
 # Create FastAPI Routers
 router = APIRouter(prefix="/api/slime-arena", tags=["slime_arena"])
@@ -180,6 +181,7 @@ def generate_npc_opponent() -> Dict:
 # ============================================================================
 
 @router.post("/start-duel")
+@handle_errors()
 async def start_duel(request: StartDuelRequest, db: Session = Depends(get_db)):
     """Start a new slime duel"""
 
@@ -220,6 +222,7 @@ async def start_duel(request: StartDuelRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/action")
+@handle_errors()
 async def execute_action(request: CombatActionRequest, db: Session = Depends(get_db)):
     """Execute a combat action during a duel"""
 
@@ -280,6 +283,7 @@ async def execute_action(request: CombatActionRequest, db: Session = Depends(get
 
 
 @router.post("/end-duel")
+@handle_errors()
 async def end_duel(request: EndDuelRequest, db: Session = Depends(get_db)):
     """End a duel and record results"""
 
@@ -344,6 +348,7 @@ async def end_duel(request: EndDuelRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/finisher")
+@handle_errors()
 async def execute_finisher(request: FinisherRequest, db: Session = Depends(get_db)):
     """Execute a finisher move (only when opponent HP = 0)"""
 
@@ -391,6 +396,7 @@ async def execute_finisher(request: FinisherRequest, db: Session = Depends(get_d
 # ============================================================================
 
 @router.get("/leaderboard")
+@handle_errors()
 async def get_leaderboard(
     limit: int = Query(100, le=500),
     region: Optional[str] = None,
@@ -420,6 +426,7 @@ async def get_leaderboard(
 
 
 @router.get("/fame/{player_id}")
+@handle_errors()
 async def get_player_fame(player_id: str, db: Session = Depends(get_db)):
     """Get player fame statistics"""
 
@@ -443,6 +450,7 @@ async def get_player_fame(player_id: str, db: Session = Depends(get_db)):
 # ============================================================================
 
 @router.post("/tournament/register")
+@handle_errors()
 async def register_tournament(request: TournamentRegisterRequest, db: Session = Depends(get_db)):
     """Register player for a tournament"""
 
@@ -484,6 +492,7 @@ async def register_tournament(request: TournamentRegisterRequest, db: Session = 
 
 
 @router.get("/tournament/{tournament_id}")
+@handle_errors()
 async def get_tournament(tournament_id: int, db: Session = Depends(get_db)):
     """Get tournament information"""
 
@@ -498,6 +507,7 @@ async def get_tournament(tournament_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/tournament/active")
+@handle_errors()
 async def get_active_tournaments(db: Session = Depends(get_db)):
     """Get active and upcoming tournaments"""
 
@@ -515,6 +525,7 @@ async def get_active_tournaments(db: Session = Depends(get_db)):
 
 
 @router.post("/tournament/advance")
+@handle_errors()
 async def advance_tournament(request: TournamentAdvanceRequest, db: Session = Depends(get_db)):
     """Advance tournament to next round (admin endpoint)"""
 

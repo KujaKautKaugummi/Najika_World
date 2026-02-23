@@ -962,7 +962,7 @@ class NPCDialogueSystem {
 
     async loadPlayerGold() {
         try {
-            const response = await fetch('http://localhost:8001/api/player/gold');
+            const response = await fetch('http://localhost:8000/api/player/gold');
             const data = await response.json();
             const goldEl = document.getElementById('shop-gold');
             if (goldEl) goldEl.textContent = data.gold || 1000;
@@ -976,7 +976,7 @@ class NPCDialogueSystem {
         console.log(`[SHOP] Buying: ${itemId} for ${price}g`);
 
         try {
-            const response = await fetch('http://localhost:8001/api/shop/buy', {
+            const response = await fetch('http://localhost:8000/api/shop/buy', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1097,7 +1097,7 @@ class NPCDialogueSystem {
         console.log(`[DIALOGUE] Using service: ${serviceType}`);
 
         try {
-            const response = await fetch('http://localhost:8001/api/service/use', {
+            const response = await fetch('http://localhost:8000/api/service/use', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

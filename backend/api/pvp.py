@@ -29,6 +29,7 @@ import random
 
 from backend.database import get_db
 from backend.models.pvp_battle import PvPBattle, PvPStats
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/pvp", tags=["pvp"])
@@ -87,6 +88,7 @@ def get_or_create_pvp_stats(db: Session, player_id: int) -> PvPStats:
 # ============================================================================
 
 @router.post("/battle/start")
+@handle_errors()
 async def start_battle(request: StartBattleRequest, db: Session = Depends(get_db)):
     """
     Start PvP Battle
@@ -163,6 +165,7 @@ async def start_battle(request: StartBattleRequest, db: Session = Depends(get_db
 
 
 @router.post("/battle/end")
+@handle_errors()
 async def end_battle(request: EndBattleRequest, db: Session = Depends(get_db)):
     """
     End PvP Battle
@@ -251,6 +254,7 @@ async def end_battle(request: EndBattleRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/mercy/decide")
+@handle_errors()
 async def mercy_decision(request: MercyDecisionRequest, db: Session = Depends(get_db)):
     """
     Process Mercy Decision (Hardcore PvP only)
@@ -342,6 +346,7 @@ async def mercy_decision(request: MercyDecisionRequest, db: Session = Depends(ge
 
 
 @router.post("/normal/item-loss")
+@handle_errors()
 async def normal_item_loss(request: NormalItemLossRequest, db: Session = Depends(get_db)):
     """
     Select Random Item Loss (Normal PvP only)
@@ -397,6 +402,7 @@ async def normal_item_loss(request: NormalItemLossRequest, db: Session = Depends
 
 
 @router.get("/rankings/{mode}")
+@handle_errors()
 async def get_rankings(mode: str, db: Session = Depends(get_db)):
     """
     Get Rankings for PvP Mode
@@ -464,6 +470,7 @@ async def get_rankings(mode: str, db: Session = Depends(get_db)):
 
 
 @router.get("/stats/{player_id}")
+@handle_errors()
 async def get_player_stats(player_id: int, db: Session = Depends(get_db)):
     """
     Get Player PvP Stats
@@ -479,6 +486,7 @@ async def get_player_stats(player_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/can-pvp")
+@handle_errors()
 async def check_can_pvp(
     attacker_id: int = Query(..., description="ID des Angreifers"),
     defender_id: int = Query(..., description="ID des Verteidigers"),
@@ -563,6 +571,7 @@ async def check_can_pvp(
 
 
 @router.get("/state/export")
+@handle_errors()
 async def export_state(db: Session = Depends(get_db)):
     """
     Export complete PvP state
@@ -594,6 +603,7 @@ async def export_state(db: Session = Depends(get_db)):
 
 
 @router.post("/state/import")
+@handle_errors()
 async def import_state(state: Dict[str, Any], db: Session = Depends(get_db)):
     """
     Import PvP state

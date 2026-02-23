@@ -8,7 +8,7 @@
             eventSource.close();
         }
 
-        eventSource = new EventSource('http://localhost:8001/api/status/stream');
+        eventSource = new EventSource('http://localhost:8000/api/status/stream');
 
         eventSource.onmessage = (event) => {
             try {

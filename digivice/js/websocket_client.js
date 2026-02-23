@@ -3,9 +3,9 @@
  * Real-time communication for Najika World
  */
 
-import { API_BASE_URL } from './config.js';
+const API_BASE_URL = (window.NajikaConfig && window.NajikaConfig.API_BASE_URL) || 'http://localhost:8000';
 
-export class WebSocketClient {
+class WebSocketClient {
     constructor() {
         this.ws = null;
         this.connected = false;
@@ -357,12 +357,12 @@ export class WebSocketClient {
 /**
  * Global WebSocket client instance
  */
-export const websocketClient = new WebSocketClient();
+const websocketClient = new WebSocketClient();
 
 /**
  * WebSocket Notification System
  */
-export class NotificationSystem {
+class NotificationSystem {
     constructor(wsClient) {
         this.wsClient = wsClient;
         this.notifications = [];
@@ -530,7 +530,7 @@ export class NotificationSystem {
 }
 
 // Create global notification system
-export const notificationSystem = new NotificationSystem(websocketClient);
+const notificationSystem = new NotificationSystem(websocketClient);
 
 // Make globally available
 window.websocketClient = websocketClient;

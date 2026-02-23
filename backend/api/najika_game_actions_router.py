@@ -21,6 +21,7 @@ from najika_game_actions import (
     check_action_completion,
     export_game_action_state
 )
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/najika", tags=["Najika Game Actions"])
 
@@ -39,12 +40,14 @@ class ActionRequest(BaseModel):
 
 
 @router.get("/status")
+@handle_errors()
 async def get_najika_status():
     """Get Najika's complete status (location, hunger, energy, mood, activity)"""
     return export_game_action_state()
 
 
 @router.get("/current-activity")
+@handle_errors()
 async def get_najika_activity():
     """Get what Najika is currently doing"""
     activity = GAME_ACTION_STATE.get("current_activity")
@@ -59,6 +62,7 @@ async def get_najika_activity():
 
 
 @router.post("/suggest-action")
+@handle_errors()
 async def suggest_next_action():
     """Suggest next action based on current state"""
     # Analyze current state and suggest actions
@@ -81,6 +85,7 @@ async def suggest_next_action():
 
 
 @router.post("/auto-decide-action")
+@handle_errors()
 async def auto_decide_action():
     """Najika autonomously decides her next action!"""
     result = decide_next_action()
@@ -88,12 +93,14 @@ async def auto_decide_action():
 
 
 @router.get("/locations")
+@handle_errors()
 async def get_locations():
     """Get all available locations"""
     return {"success": True, "locations": list(LOCATIONS.values())}
 
 
 @router.post("/teleport")
+@handle_errors()
 async def teleport_to_location(request: TeleportRequest):
     """Teleport Najika to a location"""
     if request.location_id not in LOCATIONS:
@@ -111,6 +118,7 @@ async def teleport_to_location(request: TeleportRequest):
 
 
 @router.get("/recipes")
+@handle_errors()
 async def get_recipes():
     """Get all available recipes (cooking & crafting)"""
     all_recipes = {
@@ -121,6 +129,7 @@ async def get_recipes():
 
 
 @router.get("/actions")
+@handle_errors()
 async def get_actions():
     """Get all available actions"""
     all_actions = {
@@ -131,6 +140,7 @@ async def get_actions():
 
 
 @router.post("/cook")
+@handle_errors()
 async def cook_recipe(request: RecipeRequest):
     """Cook a recipe"""
     result = choose_cooking_recipe(request.recipe_id)
@@ -140,6 +150,7 @@ async def cook_recipe(request: RecipeRequest):
 
 
 @router.post("/craft")
+@handle_errors()
 async def craft_recipe(request: RecipeRequest):
     """Craft an item"""
     result = choose_crafting_recipe(request.recipe_id)
@@ -149,6 +160,7 @@ async def craft_recipe(request: RecipeRequest):
 
 
 @router.post("/explore")
+@handle_errors()
 async def explore_action(request: ActionRequest):
     """Start an exploring action"""
     result = choose_exploring_action(request.action_id)
@@ -158,6 +170,7 @@ async def explore_action(request: ActionRequest):
 
 
 @router.post("/farm")
+@handle_errors()
 async def farm_action(request: ActionRequest):
     """Start a farming action"""
     result = choose_farming_action(request.action_id)
@@ -167,6 +180,7 @@ async def farm_action(request: ActionRequest):
 
 
 @router.post("/complete-action")
+@handle_errors()
 async def complete_current_action():
     """Complete the current activity"""
     result = complete_action()
@@ -176,6 +190,7 @@ async def complete_current_action():
 
 
 @router.get("/dashboard")
+@handle_errors()
 async def get_dashboard():
     """Get complete Najika dashboard (status + recipes + locations + actions)"""
     return {
@@ -191,6 +206,7 @@ async def get_dashboard():
 
 
 @router.get("/health")
+@handle_errors()
 async def health_check():
     """Health check for Game Actions system"""
     return {

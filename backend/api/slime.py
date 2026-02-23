@@ -32,6 +32,7 @@ from datetime import datetime, timedelta
 
 from backend.database import get_db
 from backend.models.slime_companion import SlimeCompanion
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/slime", tags=["slime"])
@@ -98,6 +99,7 @@ class LetSleepRequest(BaseModel):
 # ============================================================================
 
 @router.post("/create")
+@handle_errors()
 async def create_companion(request: CreateCompanionRequest, db: Session = Depends(get_db)):
     """
     Create Companion
@@ -167,6 +169,7 @@ async def create_companion(request: CreateCompanionRequest, db: Session = Depend
 
 
 @router.post("/experience")
+@handle_errors()
 async def add_experience(request: AddExperienceRequest, db: Session = Depends(get_db)):
     """
     Add Experience
@@ -235,6 +238,7 @@ async def add_experience(request: AddExperienceRequest, db: Session = Depends(ge
 
 
 @router.post("/metamorphosis")
+@handle_errors()
 async def perform_metamorphosis(request: MetamorphosisRequest, db: Session = Depends(get_db)):
     """
     Perform Metamorphosis (Level 50)
@@ -298,6 +302,7 @@ async def perform_metamorphosis(request: MetamorphosisRequest, db: Session = Dep
 
 
 @router.post("/color/collect")
+@handle_errors()
 async def collect_color(request: CollectColorRequest, db: Session = Depends(get_db)):
     """
     Collect Slime Color (Rainbow Quest)
@@ -388,6 +393,7 @@ async def collect_color(request: CollectColorRequest, db: Session = Depends(get_
 
 
 @router.post("/learn")
+@handle_errors()
 async def try_learn_move(request: LearnMoveRequest, db: Session = Depends(get_db)):
     """
     Try Learn Move
@@ -476,6 +482,7 @@ async def try_learn_move(request: LearnMoveRequest, db: Session = Depends(get_db
 
 
 @router.post("/rescue")
+@handle_errors()
 async def use_rescue(request: RescueRequest, db: Session = Depends(get_db)):
     """
     Use Rescue Mechanic (Hardcore)
@@ -543,6 +550,7 @@ async def use_rescue(request: RescueRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/tamagotchi/update")
+@handle_errors()
 async def update_tamagotchi(request: UpdateTamagotchiRequest, db: Session = Depends(get_db)):
     """
     Update Tamagotchi Stats (Decay)
@@ -620,6 +628,7 @@ async def update_tamagotchi(request: UpdateTamagotchiRequest, db: Session = Depe
 
 
 @router.post("/feed")
+@handle_errors()
 async def feed_companion(request: FeedCompanionRequest, db: Session = Depends(get_db)):
     """
     Feed Companion
@@ -667,6 +676,7 @@ async def feed_companion(request: FeedCompanionRequest, db: Session = Depends(ge
 
 
 @router.post("/water")
+@handle_errors()
 async def give_water(request: GiveWaterRequest, db: Session = Depends(get_db)):
     """
     Give Water
@@ -714,6 +724,7 @@ async def give_water(request: GiveWaterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/sleep")
+@handle_errors()
 async def let_sleep(request: LetSleepRequest, db: Session = Depends(get_db)):
     """
     Let Sleep
@@ -763,6 +774,7 @@ async def let_sleep(request: LetSleepRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/{companion_id}")
+@handle_errors()
 async def get_companion_info(companion_id: int, db: Session = Depends(get_db)):
     """
     Get Companion Info
@@ -786,6 +798,7 @@ async def get_companion_info(companion_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/state/export")
+@handle_errors()
 async def export_state(db: Session = Depends(get_db)):
     """
     Export Slime State
@@ -810,6 +823,7 @@ async def export_state(db: Session = Depends(get_db)):
 
 
 @router.post("/state/import")
+@handle_errors()
 async def import_state(state: Dict[str, Any], db: Session = Depends(get_db)):
     """
     Import Slime State

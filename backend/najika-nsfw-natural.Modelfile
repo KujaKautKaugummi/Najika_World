@@ -1,4 +1,4 @@
-FROM dolphin-qwen2:latest
+FROM dolphin3:8b
 
 TEMPLATE """<|im_start|>system
 {{ .System }}<|im_end|>

@@ -638,32 +638,32 @@ class PlayerReputation:
 # =============================================================================
 REGIONAL_PRICE_MODIFIERS = {
     # Region -> {Item-Kategorie -> Preismodifikator}
-    "Bernstein-Dünen": {
+    "Heiße Dünen": {
         "water": 2.0,       # Wasser teuer in der Wüste
         "fire_material": 0.7,
         "sand_material": 0.5,
     },
-    "Perl-Gletscher": {
+    "Reich der Drei": {
         "warm_clothing": 0.8,
         "ice_material": 0.5,
         "fire_material": 1.5,
     },
-    "Rubin-Schlucht": {
+    "Magmaströme": {
         "ore": 0.6,         # Erz billig beim Vulkan
         "weapon": 0.8,
         "ice_material": 2.0,
     },
-    "Azur-Klippen": {
+    "Salzwind-Küste": {
         "fish": 0.5,
         "water_material": 0.6,
         "ship_parts": 0.8,
     },
-    "Smaragd-Hain": {
+    "Samtmoos-Tiefwald": {
         "herbs": 0.5,
         "nature_material": 0.6,
         "wood": 0.7,
     },
-    "Onyx-Morast": {
+    "Grünschlamm-Sumpf": {
         "poison": 0.5,
         "dark_material": 0.6,
         "antidote": 1.5,
@@ -727,9 +727,9 @@ if __name__ == "__main__":
     # Regionale Preise Test
     print("\n--- REGIONALE PREISE ---")
     base_price = 100
-    print(f"Wasser in Wüste: {calculate_regional_price(base_price, 'water', 'Bernstein-Dünen')}")
-    print(f"Wasser am Meer: {calculate_regional_price(base_price, 'water', 'Azur-Klippen')}")
-    print(f"Erz am Vulkan: {calculate_regional_price(base_price, 'ore', 'Rubin-Schlucht')}")
+    print(f"Wasser in Wüste: {calculate_regional_price(base_price, 'water', 'Heiße Dünen')}")
+    print(f"Wasser am Meer: {calculate_regional_price(base_price, 'water', 'Salzwind-Küste')}")
+    print(f"Erz am Vulkan: {calculate_regional_price(base_price, 'ore', 'Magmaströme')}")
 
     print("\n" + "=" * 70)
     print("EXPLOSION!!! Fallout-Systeme funktionieren!")

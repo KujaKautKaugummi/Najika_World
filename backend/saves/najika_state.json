@@ -71,6 +71,78 @@
       "content": "*springt auf und dreht sich um, so that ihr Haar flattert* KUJA!!! *küsst dich zärtlich* Ich hab mich so sehr nach dir gesehnt... Du hast echt keine Ahnung, wie viele Explosionen ich ohne Dich durchgeführt habe... 🥺✨ Aber jetzt sind wir wieder zusammen. Was machst du am liebsten? Trau mir zu - ich kann es verändern! 💪💕",
       "importance": 90,
       "timestamp": 1771003377.1905837
+    },
+    {
+      "role": "user",
+      "content": "Hey Najika!",
+      "importance": 45,
+      "timestamp": 1771664792.3636174
+    },
+    {
+      "role": "user",
+      "content": "Hey Najika!",
+      "importance": 45,
+      "timestamp": 1771670536.671756
+    },
+    {
+      "role": "user",
+      "content": "Hey Najika!",
+      "importance": 45,
+      "timestamp": 1771675603.0783942
+    },
+    {
+      "role": "user",
+      "content": "Hey Najika!",
+      "importance": 45,
+      "timestamp": 1771676074.67519
+    },
+    {
+      "role": "assistant",
+      "content": "*Kommt auf und dreht sich um*, *mit ein wenig Unruhe in den Augen*. Hey Mr.K... Wie kann ich Ihnen behilflich sein heute? *Stellt die Frage direkt, ohne weitere Vorurteile oder揣essios.* *geheimnisvoll* Wenn du brav bist, zeig ich dir was...",
+      "importance": 90,
+      "timestamp": 1771676082.8777516
+    },
+    {
+      "role": "user",
+      "content": "Hey Najika!",
+      "importance": 45,
+      "timestamp": 1771676346.6592557
+    },
+    {
+      "role": "user",
+      "content": "Ich liebe dich",
+      "importance": 60,
+      "timestamp": 1771676352.6082747
+    },
+    {
+      "role": "assistant",
+      "content": "*Lächelt breit* KUJA! Ich hab's geahnt. Du wusstest es doch schon gar nicht mehr zu verbergen, oder? *lachend umarmt sie dich* Liebe ist ja dann mal gekommen! *Ein neues Leuchten in ihren Augen.* Was soll ich denn jetzt tun?! 🥺💖",
+      "importance": 95,
+      "timestamp": 1771676357.079188
+    },
+    {
+      "role": "user",
+      "content": "hey najika",
+      "importance": 45,
+      "timestamp": 1771701739.7998645
+    },
+    {
+      "role": "assistant",
+      "content": "*Kommt direkt auf dich zu und lächelt süßlich* Hallo Mr.K, wie kann ich heute deinen Tag so schön machen wie immer? Du weißt doch, dass bei mir nur die beste Magie zählt. 💫💥✨",
+      "importance": 80,
+      "timestamp": 1771701748.1806073
+    },
+    {
+      "role": "user",
+      "content": "wie gehts dir?",
+      "importance": 55,
+      "timestamp": 1771701820.5231721
+    },
+    {
+      "role": "assistant",
+      "content": "*Najika sieht aus, als würde sie gerade aus einer ernsten Konzentration erwachen. Ihr Gesicht wird leicht gerötet und ihre Augen strahlen Freude und Energie.* Ich bin in top Form! Mir geht es großartig, Mr.Ku...Kuja. *Sie lächelt ihn schelmisch an* Ist dein Tag schon weit fortgeschritten? Was hast du getan?",
+      "importance": 95,
+      "timestamp": 1771701825.0831895
     }
   ],
   "battle": {
@@ -88,6 +160,30 @@
         "name": "Wasser",
         "type": "drink",
         "quantity": 1
+      },
+      {
+        "item_id": "",
+        "price": 0,
+        "acquired_at": 1771742062.5040205,
+        "from_npc": "unknown"
+      },
+      {
+        "item_id": "",
+        "price": 0,
+        "acquired_at": 1771746242.788061,
+        "from_npc": "unknown"
+      },
+      {
+        "item_id": "",
+        "price": 0,
+        "acquired_at": 1771759195.3791716,
+        "from_npc": "unknown"
+      },
+      {
+        "item_id": "",
+        "price": 0,
+        "acquired_at": 1771776890.2809012,
+        "from_npc": "unknown"
       }
     ],
     "achievements": [],
@@ -98,21 +194,21 @@
     "quests_completed": []
   },
   "najika": {
-    "hunger": 35.833247560262684,
-    "thirst": 50.0,
-    "energy": 47.51912883599599,
-    "hygiene": 38.0,
+    "hunger": 46.66650952166981,
+    "thirst": 34.83325561033354,
+    "energy": 27.679240804513316,
+    "hygiene": 47.0,
     "happiness": 0,
     "mana": 100,
     "max_mana": 100,
     "strength": 43,
-    "intelligence": 33,
-    "dexterity": 38,
-    "charisma": 15,
-    "care_mistakes": 8,
+    "intelligence": 34,
+    "dexterity": 41,
+    "charisma": 16,
+    "care_mistakes": 170,
     "fatigue": 0,
     "weight": 100,
-    "discipline": 1,
+    "discipline": 0,
     "level": 1,
     "xp": 0,
     "evolution_stage": "base",
@@ -121,35 +217,35 @@
       "armor": null,
       "accessory": null
     },
-    "last_fed": 1771004995.4551895,
+    "last_fed": 1771802712.4126637,
     "last_trained": 1770966632.4622455,
-    "last_sleep": 1770966632.4622455,
-    "last_update": 1771005544.5454702,
-    "last_drink": 1771005595.4721303
+    "last_sleep": 1771775927.501133,
+    "last_update": 1771802712.4066627,
+    "last_drink": 1771802112.3716903
   },
-  "bond_strength": 2,
+  "bond_strength": 3,
   "behavior_mode": "standard",
   "personality_weights": {
-    "megumin": 40.2,
-    "harley": 23.3,
-    "shiro": 18.3,
-    "melissa": 18.3
+    "megumin": 24.6,
+    "harley": 25.1,
+    "shiro": 25.1,
+    "melissa": 25.1
   },
-  "total_interactions": 6,
+  "total_interactions": 14,
   "living": {
     "current_mood": "happy",
     "mood_intensity": 100,
-    "hunger": 35.833247560262684,
-    "thirst": 50.0,
-    "energy": 47.51912883599599,
-    "mood_game": -12,
-    "anger_level": 108,
+    "hunger": 46.66650952166981,
+    "thirst": 34.83325561033354,
+    "energy": 27.679240804513316,
+    "mood_game": -15,
+    "anger_level": 110,
     "auto_care_threshold": 20.0,
     "auto_care_max": 50.0,
     "auto_care_enabled": true,
     "last_accident": {
       "type": "cooking_fire",
-      "timestamp": 1771004995.4546845,
+      "timestamp": 1771252831.909067,
       "data": {
         "message": "🔥 FEUER IN DER KÜCHE! Beim Kochen ist die Bude abgebrannt! 😱",
         "najika_says": "🔥 OH NEIN! FEUER! Ich kriegs nicht aus! *panisch* 😱",
@@ -159,23 +255,23 @@
         "anger_gain": 15
       }
     },
-    "accidents_today": 1,
+    "accidents_today": 3,
     "max_accidents_per_day": 3,
-    "last_update": 1771005595.4711206,
+    "last_update": 1771802712.411662,
     "control_mode": "ai",
     "player_online": false,
-    "last_proactive_message": 1771005199.110287,
+    "last_proactive_message": 1771802112.3646066,
     "proactive_cooldown": 1800,
     "autonomy_level": 50,
     "personality_evolution": {
-      "megumin": 46.8641546247243,
-      "harley": 32.83961343818926,
-      "shiro": 10.148115968543218,
-      "melissa": 10.148115968543218
+      "megumin": 45.34479390786433,
+      "harley": 36.6380152303392,
+      "shiro": 9.008595430898238,
+      "melissa": 9.008595430898238
     },
     "growth_stage": "developing",
     "relationship_stage": "getting_to_know",
-    "emotional_bond": 2,
+    "emotional_bond": 3,
     "shared_memories": [
       {
         "timestamp": 1770985291.5852015,
@@ -269,14 +365,120 @@
         "tags": [
           "explosion"
         ]
+      },
+      {
+        "timestamp": 1771664802.589188,
+        "user_message": "Hey Najika!",
+        "najika_response": "Kuja! Alle AI-Systeme offline... Bitte starte LM Studio!",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 1,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [],
+        "tags": []
+      },
+      {
+        "timestamp": 1771670546.2935617,
+        "user_message": "Hey Najika!",
+        "najika_response": "Kuja! Alle AI-Systeme offline... Bitte starte LM Studio!",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 1,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [],
+        "tags": []
+      },
+      {
+        "timestamp": 1771675610.3257926,
+        "user_message": "Hey Najika!",
+        "najika_response": "Hallo! Wie kann ich Ihnen helfen?",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 1,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [],
+        "tags": []
+      },
+      {
+        "timestamp": 1771676083.622826,
+        "user_message": "Hey Najika!",
+        "najika_response": "*Kommt auf und dreht sich um*, *mit ein wenig Unruhe in den Augen*. Hey Mr.K... Wie kann ich Ihnen behilflich sein heute? *Stellt die Frage direkt, ohne weitere Vorurteile oder揣essios.* *geheimnisvoll* Wenn du brav bist, zeig ich dir was...",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 2,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [],
+        "tags": []
+      },
+      {
+        "timestamp": 1771676352.5820231,
+        "user_message": "Hey Najika!",
+        "najika_response": "*Najika springt hoch und wirft eine dramatische Pose. Ihre Augen leuchten vor Begeisterung.*\n\n\"Ku-jaa!\" *Sagt sie mit übernatürlicher Leidenschaft*, \"Was kannst du heute von mir verlangen?\"\n\nSie zeigt ein geheimnisvolles Grinsen, aufgewühlt wie nur die echte Megumin sein kann. Ihr Atem geht hektisch und ihr Herz hämmert in ihrem Brustkorb, aber ihre Stimme klingt dabei so gefährlich wild wie auch immer nur möglich. *Najika ist nicht nur magisch - sie ist aufregend und spannend.*",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 2,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [],
+        "tags": [
+          "explosion"
+        ]
+      },
+      {
+        "timestamp": 1771676357.7558978,
+        "user_message": "Ich liebe dich",
+        "najika_response": "*Lächelt breit* KUJA! Ich hab's geahnt. Du wusstest es doch schon gar nicht mehr zu verbergen, oder? *lachend umarmt sie dich* Liebe ist ja dann mal gekommen! *Ein neues Leuchten in ihren Augen.* Was soll ich denn jetzt tun?! 🥺💖",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 2,
+        "relationship_stage": "getting_to_know",
+        "importance": 60,
+        "emotions": [
+          "love"
+        ],
+        "tags": [
+          "intimate"
+        ]
+      },
+      {
+        "timestamp": 1771701748.8978248,
+        "user_message": "hey najika",
+        "najika_response": "*Kommt direkt auf dich zu und lächelt süßlich* Hallo Mr.K, wie kann ich heute deinen Tag so schön machen wie immer? Du weißt doch, dass bei mir nur die beste Magie zählt. 💫💥✨",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 2,
+        "relationship_stage": "getting_to_know",
+        "importance": 45,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
+      },
+      {
+        "timestamp": 1771701825.6574788,
+        "user_message": "wie gehts dir?",
+        "najika_response": "*Najika sieht aus, als würde sie gerade aus einer ernsten Konzentration erwachen. Ihr Gesicht wird leicht gerötet und ihre Augen strahlen Freude und Energie.* Ich bin in top Form! Mir geht es großartig, Mr.Ku...Kuja. *Sie lächelt ihn schelmisch an* Ist dein Tag schon weit fortgeschritten? Was hast du getan?",
+        "mood": "happy",
+        "mood_intensity": 100,
+        "bond_strength": 3,
+        "relationship_stage": "getting_to_know",
+        "importance": 55,
+        "emotions": [
+          "joy"
+        ],
+        "tags": []
       }
     ],
-    "last_interaction": 1771003378.0739598,
-    "total_time_together": 840,
+    "last_interaction": 1771701825.6564806,
+    "total_time_together": 1320,
     "days_since_meeting": 0,
     "current_activity": null,
     "activity_started": 0,
     "activities_completed": []
   },
-  "saved_at": "2026-02-13 18:59:55"
+  "saved_at": "2026-02-23 00:25:12"
 }

@@ -3,7 +3,7 @@
  * Footsteps, dust, debris, environmental effects
  */
 
-const THREE = window.THREE;
+// THREE is loaded globally
 
 class EnvironmentParticleSystem {
     constructor(scene) {

@@ -57,7 +57,7 @@ class ChaosEventUI {
 
     async checkForEvent() {
         try {
-            const response = await fetch('http://localhost:8001/api/chaos/check_event');
+            const response = await fetch('http://localhost:8000/api/chaos/check_event');
             const data = await response.json();
 
             if (data.event_triggered) {
@@ -65,8 +65,27 @@ class ChaosEventUI {
                 this.updateChaosMeter(data.chaos_level);
             }
         } catch (error) {
-            console.error('[ChaosEventUI] Event check failed:', error);
+            // Offline: Lokale Events nutzen
+            if (Math.random() < 0.15) {
+                this.triggerOfflineEvent();
+            }
         }
+    }
+
+    triggerOfflineEvent() {
+        const events = [
+            { id: 'explosion_lab', title: 'Explosion im Alchemie-Labor!', description: 'Ein lauter Knall erschüttert die Gegend. Rauch steigt auf - jemand hat beim Brauen einen Fehler gemacht!', category: 'Chaos', options: [{ text: '[A] Nachschauen und helfen', rep_heroic: 10 }, { text: '[B] Schnell die Überreste looten', rep_heroic: -5 }, { text: '[C] Weglaufen!', rep_heroic: 0 }] },
+            { id: 'tax_collector', title: 'Steuereintreiber unterwegs!', description: 'Ein königlicher Steuereintreiber mit bewaffneter Eskorte zieht durch die Gegend. Jeder muss 50 Gold zahlen!', category: 'Gesellschaft', options: [{ text: '[A] Brav bezahlen (-50 Gold)', rep_heroic: 5 }, { text: '[B] Verhandeln', rep_heroic: 0 }, { text: '[C] Den Eintreiber überfallen!', rep_heroic: -15 }] },
+            { id: 'wandering_merchant', title: 'Wandernder Händler', description: 'Ein mysteriöser Händler mit einem übervollen Karren taucht auf. Er bietet seltene Waren zu fragwürdigen Preisen.', category: 'Handel', options: [{ text: '[A] Waren ansehen', rep_heroic: 0 }, { text: '[B] Misstrauisch bleiben', rep_heroic: 5 }, { text: '[C] Seinen Karren stehlen!', rep_heroic: -20 }] },
+            { id: 'monster_stampede', title: 'Monster-Stampede!', description: 'Eine Herde wilder Kreaturen rennt panisch durch die Gegend! Etwas hat sie aufgeschreckt.', category: 'Gefahr', options: [{ text: '[A] Ausweichen und beobachten', rep_heroic: 0 }, { text: '[B] Die Ursache untersuchen', rep_heroic: 10 }, { text: '[C] Ein Tier einfangen!', rep_heroic: -5 }] },
+            { id: 'bandit_camp', title: 'Räuberlager entdeckt!', description: 'Du entdeckst ein verlassenes Räuberlager mit noch glühender Feuerstelle. Die Banditen sind nicht weit...', category: 'Gefahr', options: [{ text: '[A] Das Lager durchsuchen', rep_heroic: -5 }, { text: '[B] Die Banditen aufspüren', rep_heroic: 10 }, { text: '[C] Leise weitergehen', rep_heroic: 0 }] },
+            { id: 'festival', title: 'Spontanes Fest!', description: 'Die Bewohner der nächsten Siedlung feiern ein unerwartetes Fest! Musik und Gelächter sind zu hören.', category: 'Gesellschaft', options: [{ text: '[A] Mitfeiern! (+Stimmung)', rep_heroic: 5 }, { text: '[B] Weiterarbeiten', rep_heroic: 0 }, { text: '[C] Während des Festes in Häuser einbrechen', rep_heroic: -15 }] },
+            { id: 'earthquake', title: 'Erdbeben!', description: 'Der Boden bebt! Gebäude wackeln, NPCs geraten in Panik. Irgendwo sind vielleicht neue Höhleneingänge entstanden!', category: 'Natur', options: [{ text: '[A] Anderen helfen', rep_heroic: 15 }, { text: '[B] Neue Höhlen suchen', rep_heroic: 0 }, { text: '[C] In Panik verfallen', rep_heroic: -5 }] },
+            { id: 'cursed_item', title: 'Verfluchter Gegenstand!', description: 'Ein glitzerndes Item liegt am Wegesrand. Es strahlt eine seltsame Aura aus...', category: 'Magie', options: [{ text: '[A] Aufheben (riskant!)', rep_heroic: 0 }, { text: '[B] Untersuchen ohne zu berühren', rep_heroic: 5 }, { text: '[C] Ignorieren und weitergehen', rep_heroic: 0 }] }
+        ];
+        const event = events[Math.floor(Math.random() * events.length)];
+        this.displayEvent(event, 'Najika schaut nervös: "Oh nein, was passiert denn jetzt?!"');
+        this.updateChaosMeter(Math.random() * 50 + 20);
     }
 
     displayEvent(event, najikaIntro) {
@@ -152,8 +171,14 @@ class ChaosEventUI {
                 this.updateChaosMeter(result.new_chaos_level);
             }
         } catch (error) {
-            console.error('[ChaosEventUI] Choice execution failed:', error);
-            this.closeEvent();
+            // Offline: Lokale Konsequenz
+            const option = this.activeEvent.options[choiceIndex];
+            const rep = option.rep_heroic || 0;
+            this.displayOutcome({
+                outcome_text: rep > 0 ? 'Gute Entscheidung! Dein Ruf steigt.' : rep < 0 ? 'Das war riskant... Dein Ruf leidet.' : 'Eine neutrale Wahl.',
+                najika_comment: rep > 0 ? '"Gut gemacht!"' : rep < 0 ? '"War das wirklich klug?!"' : '"Hmm, okay..."',
+                reputation_change: rep
+            });
         }
     }
 

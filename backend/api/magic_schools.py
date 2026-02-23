@@ -25,6 +25,7 @@ from datetime import datetime
 
 from backend.database import get_db
 from backend.models.magic_progress import MagicSchoolProgress
+from backend.utils import handle_errors
 
 # Create FastAPI Router
 router = APIRouter(prefix="/api/magic", tags=["magic"])
@@ -74,6 +75,7 @@ class CastSpellRequest(BaseModel):
 # ============================================================================
 
 @router.post("/cast")
+@handle_errors()
 async def cast_spell(request: CastSpellRequest, db: Session = Depends(get_db)):
     """
     Cast Spell (Skyrim Learning by Doing!)
@@ -143,6 +145,7 @@ async def cast_spell(request: CastSpellRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/school/{school}")
+@handle_errors()
 async def get_school_info(school: str, player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Get School Info
@@ -164,6 +167,7 @@ async def get_school_info(school: str, player_id: int = Query(...), db: Session 
 
 
 @router.get("/overview")
+@handle_errors()
 async def get_overview(player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Get All Schools Overview
@@ -183,6 +187,7 @@ async def get_overview(player_id: int = Query(...), db: Session = Depends(get_db
 
 
 @router.get("/can-weave")
+@handle_errors()
 async def check_can_weave(
     player_id: int = Query(...),
     school1: str = Query(...),
@@ -218,6 +223,7 @@ async def check_can_weave(
 
 
 @router.get("/spells")
+@handle_errors()
 async def get_all_spells(
     school: Optional[str] = Query(None, description="Filter by school"),
     player_id: int = Query(1, description="Player ID")
@@ -377,6 +383,7 @@ class ObserveSpellRequest(BaseModel):
 
 
 @router.post("/observe")
+@handle_errors()
 async def observe_spell(request: ObserveSpellRequest, db: Session = Depends(get_db)):
     """
     Observe spell for cross-element learning
@@ -454,6 +461,7 @@ async def observe_spell(request: ObserveSpellRequest, db: Session = Depends(get_
 
 
 @router.post("/meister/activate")
+@handle_errors()
 async def activate_meister(request: ActivateMeisterRequest, db: Session = Depends(get_db)):
     """
     Activate Meister-Weg (1-Skill-Weg)
@@ -507,6 +515,7 @@ async def activate_meister(request: ActivateMeisterRequest, db: Session = Depend
 
 
 @router.get("/meister/degradation")
+@handle_errors()
 async def get_degradation(player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Get skill degradation status for Meister player
@@ -571,6 +580,7 @@ async def get_degradation(player_id: int = Query(...), db: Session = Depends(get
 
 
 @router.post("/morph/learn")
+@handle_errors()
 async def learn_morph(request: LearnMorphRequest, db: Session = Depends(get_db)):
     """
     Learn a morph through observation or experimentation
@@ -640,6 +650,7 @@ async def learn_morph(request: LearnMorphRequest, db: Session = Depends(get_db))
 
 
 @router.post("/morph/activate")
+@handle_errors()
 async def activate_morph(request: ActivateMorphRequest, db: Session = Depends(get_db)):
     """
     Activate a morph (only 1 can be active per spell)
@@ -675,6 +686,7 @@ async def activate_morph(request: ActivateMorphRequest, db: Session = Depends(ge
 
 
 @router.get("/schools")
+@handle_errors()
 async def list_schools(player_id: int = Query(1), db: Session = Depends(get_db)):
     """
     List All Schools (Frontend: game_systems_ui.js MagicUI.loadSchools)
@@ -704,6 +716,7 @@ async def list_schools(player_id: int = Query(1), db: Session = Depends(get_db))
 
 
 @router.get("/state/export")
+@handle_errors()
 async def export_state(player_id: int = Query(...), db: Session = Depends(get_db)):
     """
     Export State

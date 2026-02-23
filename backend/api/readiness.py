@@ -17,6 +17,7 @@ from najika_readiness import (
     check_can_act,
     SystemGuard
 )
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/meta", tags=["readiness"])
 
@@ -56,6 +57,7 @@ class ActionCheckResponse(BaseModel):
 # ==================== ENDPOINTS ====================
 
 @router.get("/readiness", response_model=ReadinessResponse)
+@handle_errors()
 async def get_readiness_status():
     """
     Gibt aktuellen Readiness-Status zurück.
@@ -93,6 +95,7 @@ async def get_readiness_status():
     )
 
 @router.post("/readiness", response_model=ReadinessResponse)
+@handle_errors()
 async def compute_readiness_with_state(state: StateInput):
     """
     Berechnet Readiness mit angegebenem State.
@@ -128,6 +131,7 @@ async def compute_readiness_with_state(state: StateInput):
     )
 
 @router.post("/can-act", response_model=ActionCheckResponse)
+@handle_errors()
 async def check_action_allowed(input: ActionCheckInput):
     """
     Prüft ob eine bestimmte Aktion erlaubt ist.
@@ -164,6 +168,7 @@ async def check_action_allowed(input: ActionCheckInput):
     )
 
 @router.post("/record-error")
+@handle_errors()
 async def record_error(error_type: str = "generic"):
     """
     Registriert einen Fehler im Readiness-System.
@@ -180,6 +185,7 @@ async def record_error(error_type: str = "generic"):
     }
 
 @router.post("/record-interaction")
+@handle_errors()
 async def record_interaction():
     """
     Registriert eine User-Interaktion.
@@ -195,6 +201,7 @@ async def record_interaction():
     }
 
 @router.get("/forbidden-actions")
+@handle_errors()
 async def get_forbidden_actions():
     """
     Gibt Liste der immer verbotenen Aktionen zurück.
@@ -207,6 +214,7 @@ async def get_forbidden_actions():
     }
 
 @router.post("/set-threshold")
+@handle_errors()
 async def set_readiness_threshold(threshold: float):
     """
     Setzt den Readiness-Threshold.
@@ -232,6 +240,7 @@ async def set_readiness_threshold(threshold: float):
     }
 
 @router.get("/autonomy-levels")
+@handle_errors()
 async def get_autonomy_level_info():
     """
     Erklärt die Autonomie-Level.

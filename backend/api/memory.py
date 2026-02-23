@@ -20,6 +20,7 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime
 from pathlib import Path
 import chromadb
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api/memory", tags=["Memory"])
 
@@ -104,6 +105,7 @@ class GameEventMemory(BaseModel):
 # ============================================================================
 
 @router.get("/collections")
+@handle_errors()
 async def list_collections():
     """List all memory collections"""
     client = get_chroma_client()
@@ -121,6 +123,7 @@ async def list_collections():
     }
 
 @router.get("/collection/{name}")
+@handle_errors()
 async def get_collection_info(name: str):
     """Get info about a specific collection"""
     collection = get_collection(name)
@@ -131,6 +134,7 @@ async def get_collection_info(name: str):
     }
 
 @router.post("/query")
+@handle_errors()
 async def query_memories(query: MemoryQuery):
     """
     Query Najika's memories using semantic search.
@@ -171,6 +175,7 @@ async def query_memories(query: MemoryQuery):
     }
 
 @router.post("/add")
+@handle_errors()
 async def add_memory(memory: MemoryAdd):
     """
     Add a new memory to a collection.
@@ -198,6 +203,7 @@ async def add_memory(memory: MemoryAdd):
     }
 
 @router.post("/conversation")
+@handle_errors()
 async def store_conversation(conv: ConversationMemory):
     """
     Store a conversation exchange with Najika.
@@ -232,6 +238,7 @@ async def store_conversation(conv: ConversationMemory):
     }
 
 @router.post("/game-event")
+@handle_errors()
 async def store_game_event(event: GameEventMemory):
     """
     Store a game event in Najika's memory.
@@ -271,6 +278,7 @@ async def store_game_event(event: GameEventMemory):
     }
 
 @router.get("/recent/{collection}")
+@handle_errors()
 async def get_recent_memories(
     collection: str,
     limit: int = 10,
@@ -314,6 +322,7 @@ async def get_recent_memories(
     }
 
 @router.get("/recall/{topic}")
+@handle_errors()
 async def recall_about_topic(topic: str, n_results: int = 5):
     """
     Recall memories related to a specific topic.
@@ -356,6 +365,7 @@ async def recall_about_topic(topic: str, n_results: int = 5):
     }
 
 @router.get("/stats")
+@handle_errors()
 async def get_memory_stats():
     """Get statistics about Najika's memory"""
     client = get_chroma_client()
@@ -374,6 +384,7 @@ async def get_memory_stats():
     return stats
 
 @router.delete("/collection/{name}/clear")
+@handle_errors()
 async def clear_collection(name: str, confirm: bool = False):
     """
     Clear a collection (DANGEROUS!)

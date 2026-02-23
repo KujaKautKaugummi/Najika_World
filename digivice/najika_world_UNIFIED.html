@@ -481,6 +481,7 @@
         <!-- Kampf & Abenteuer -->
         <div style="margin-bottom: 15px;">
             <div style="color: #f39c12; font-size: 12px; margin-bottom: 8px; font-weight: bold;">⚔️ KAMPF & ABENTEUER</div>
+            <button onclick="window.NemesisArena?.showArenaPanel(); togglePanel('activities');" class="activity-btn" style="background: linear-gradient(135deg, #c0392b, #922b21); color: #fff; font-weight: bold;">🏟️ Arena (Herausfordern / Wellen)</button>
             <button onclick="enterDungeon()" class="activity-btn">🗡️ Dungeon betreten</button>
             <button onclick="openTripleTriad()" class="activity-btn">🃏 Triple Triad</button>
             <button onclick="openDungeonDice()" class="activity-btn">🎲 Dungeon Dice</button>
@@ -531,6 +532,9 @@
             🕳️ Caves (SW) | 🌲 Forest (S) | 🌋 Volcano (SO)
         </p>
     </div>
+
+    <!-- Arena Mode Selection Overlay -->
+    <div id="arena-ui" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9000; background:rgba(10,10,30,0.97); padding:30px; border:2px solid #9b59b6; border-radius:12px; min-width:420px; max-width:90vw; box-shadow:0 0 40px rgba(155,89,182,0.5); color:#fff; font-family:'Segoe UI',sans-serif;"></div>
 
     <canvas id="minimap"></canvas>
 
@@ -749,7 +753,44 @@
     <script src="js/voice_call.js"></script>
     <!-- Phase 1 Systems -->
     <script src="js/equipment_combat.js"></script>
+    <script src="js/combat/real_3d_combat.js"></script>
     <script src="js/touch_combat.js"></script>
+
+    <!-- 🌍 Overworld Systems -->
+    <script src="js/overworld_enemies.js"></script>
+    <script src="js/overworld_npcs.js"></script>
+    <script src="js/overworld_props.js"></script>
+
+    <!-- 🎪 Arena Systems -->
+    <script src="js/nemesis_arena_frontend.js"></script>
+    <script src="js/nemesis_arena_ui.js"></script>
+
+    <!-- 🟢 Slime Systems -->
+    <script src="js/slime_companion.js"></script>
+    <script src="js/slime_companion_ui.js"></script>
+    <script src="js/ui/slime_arena_ui.js"></script>
+    <script src="js/ui/slime_ui.js"></script>
+
+    <!-- 🎨 UI Systems -->
+    <script src="js/ui/bestiary_ui.js"></script>
+    <script src="js/ui/combat_special_ui.js"></script>
+    <script src="js/ui/game_systems_ui.js"></script>
+    <script src="js/ui/character_stats_ui.js"></script>
+    <!-- skill_tree_ui.js entfernt - ersetzt durch game_systems_ui.js (Hogwarts-System) -->
+    <script src="js/ui/affinity_ui.js"></script>
+    <script src="js/ui/career_ui.js"></script>
+    <script src="js/ui/creature_ui.js"></script>
+    <script src="js/ui/faction_ui.js"></script>
+    <script src="js/ui/housing_ui.js"></script>
+    <script src="js/ui/living_system_ui.js"></script>
+    <script src="js/ui/stat_training_ui.js"></script>
+    <script src="js/ui/law_notification.js"></script>
+    <script src="js/ui/pvp_ui.js"></script>
+    <script src="js/ui/card_game_ui.js"></script>
+    <script src="js/ui/dice_monsters_ui.js"></script>
+    <script src="js/ui/gildenhaus_ui.js"></script>
+
+    <!-- 🎮 Minigames -->
     <script src="js/triple_triad.js"></script>
     <script src="js/dungeon_dice_shop.js"></script>
     <script src="js/dungeon_dice_game.js"></script>
@@ -796,7 +837,7 @@
             const text = isPositive ? 'Lob' : 'Tadel';
 
             try {
-                const response = await fetch(`http://localhost:8001/api/najika/${action}`, {
+                const response = await fetch(`http://localhost:8000/api/najika/${action}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({})
@@ -1031,6 +1072,7 @@
 
         // Scene Setup (Phase 6: Optimiert für Performance)
         const scene = new THREE.Scene();
+        window.scene = scene; // Global export für Arena/Combat-Systeme
 
         // Verbesserte Skybox mit Gradient (morgens/abends Feeling)
         scene.background = new THREE.Color(0x87CEEB); // Himmelblau
@@ -1038,6 +1080,7 @@
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
         camera.position.set(0, 300, 400);
+        window.camera = camera; // Global export für Combat-Systeme
 
         // Renderer mit Performance-Optimierungen
         const renderer = new THREE.WebGLRenderer({
@@ -1314,6 +1357,7 @@
 
         // Najika Character (KayKit Mage Model - Phase 6)
         let character = new THREE.Group();
+        window.character = character; // Global export für Arena/Teleport-Systeme
         let najikaModel = null;
 
         async function loadNajikaCharacter() {
@@ -1713,6 +1757,7 @@
 
                 // 8. Markiere als "in Interior"
                 isInInterior = true;
+                window.isInInterior = true;
 
                 console.log(`✅ Interior für ${cityData.name} geladen! (${interior.objects.length} Objekte)`);
             }, 300);
@@ -1729,6 +1774,7 @@
 
             // WICHTIG: Markiere SOFORT als "nicht in Interior" um weitere E-Taste Events zu blockieren
             isInInterior = false;
+            window.isInInterior = false;
             const savedInteriorState = currentInteriorState;
             currentInteriorState = null;
 
@@ -1912,6 +1958,7 @@
 
                 // 8. Markiere als "in Interior"
                 isInInterior = true;
+                window.isInInterior = true;
 
                 console.log('✅ Wohnzimmer geladen! Drücke [Q] zum Verlassen.');
             }, 300);
@@ -2449,6 +2496,9 @@
                 setTimeout(() => notification.remove(), 300);
             }, duration);
         }
+
+        // Global notify alias für externe JS-Module (Arena, Combat etc.)
+        window.notify = function(msg, type) { showNotification(msg, 3000); };
 
         // Exit-Portal Proximity Detection (Phase 2)
         function checkExitPortalProximity() {
@@ -3722,8 +3772,8 @@
 
         // ===== BACKEND INTEGRATION (Phase 3) =====
 
-        // Backend URL (localhost:8001)
-        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8001';
+        // Backend URL (localhost:8000)
+        window.BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
 
         // Fetch Najika Status from Backend
         async function fetchNajikaStatus() {
@@ -4747,8 +4797,16 @@
                 case 'start_arena':
                     // Arena Battle
                     console.log('🏟️ Arena Battle starting...');
-                    showNotification('🏟️ Arena Battle wird gestartet...');
                     endDialogue();
+                    if (window.NemesisArena) {
+                        window.NemesisArena.showArenaPanel();
+                    } else {
+                        const arenaUI = document.getElementById('arena-ui');
+                        if (arenaUI && specialFeatures) {
+                            arenaUI.innerHTML = specialFeatures.showArenaModeSelection();
+                            arenaUI.style.display = 'block';
+                        }
+                    }
                     break;
 
                 default:
@@ -4927,12 +4985,10 @@
                 for (const building of currentBuildings) {
                     if (building.userData.buildingType === 'arena') {
                         const distance = specialFeatures.getDistanceToBuilding(character.position, building.position);
-                        if (distance < 150) { // 150m für 3200m Map (war 15)
-                            // Show Arena UI
-                            const arenaUI = document.getElementById('arena-ui');
-                            if (arenaUI) {
-                                arenaUI.innerHTML = specialFeatures.showArenaModeSelection();
-                                arenaUI.style.display = 'block';
+                        if (distance < 150) { // 150m für 3200m Map
+                            // Direkt Nemesis Arena Panel öffnen (in-city fight)
+                            if (window.NemesisArena) {
+                                window.NemesisArena.showArenaPanel();
                             }
                             return;
                         }
@@ -5692,7 +5748,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function startNajikaStatusUpdates() {
     async function fetchAndUpdateNajikaStatus() {
         try {
-            const response = await fetch('http://localhost:8001/api/najika/status');
+            const response = await fetch('http://localhost:8000/api/najika/status');
             const data = await response.json();
 
             if (data) {

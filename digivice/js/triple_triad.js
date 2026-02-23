@@ -107,7 +107,7 @@ const TripleTriad = (function() {
         if (!syncEnabled) return;
         try {
             // Lade Karten-Datenbank vom Server
-            const cardsResponse = await fetch('http://localhost:8001/api/cards');
+            const cardsResponse = await fetch('http://localhost:8000/api/cards');
             if (cardsResponse.ok) {
                 const data = await cardsResponse.json();
                 if (data.cards) {
@@ -120,7 +120,7 @@ const TripleTriad = (function() {
             }
 
             // Lade Spieler-Sammlung vom Server (wenn eingeloggt)
-            const collectionResponse = await fetch('http://localhost:8001/api/cards/collection/player1');
+            const collectionResponse = await fetch('http://localhost:8000/api/cards/collection/player1');
             if (collectionResponse.ok) {
                 const data = await collectionResponse.json();
                 if (data.collection && data.collection.length > 0) {

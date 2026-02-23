@@ -8,11 +8,17 @@ class CombatInputHandler {
         this.comboBuffer = [];
         this.comboTimeout = null;
         this.pressedKeys = new Set();
+        this.blockHeld = false;
+
+        // Direction Resolver starten
+        if (window.DirectionResolver) {
+            window.DirectionResolver.init();
+        }
 
         this.setupKeyboardControls();
         this.setupMouseControls();
 
-        console.log('[CombatInput] Initialized');
+        console.log('[CombatInput] Initialized (DirectionResolver aktiv)');
     }
 
     setupKeyboardControls() {
@@ -69,14 +75,21 @@ class CombatInputHandler {
 
     setupMouseControls() {
         document.addEventListener('mousedown', (e) => {
-            if (e.button === 0) { // Left Click
-                this.attack('right', 'light');
-            } else if (e.button === 2) { // Right Click
+            if (e.button === 0) { // Linksklick = Angriff mit Richtung
+                this._attackWithDirection('right', 'light');
+            } else if (e.button === 2) { // Rechtsklick
                 if (e.shiftKey) {
-                    this.attack('left', 'light');
+                    this._attackWithDirection('left', 'light');
                 } else {
+                    this.blockHeld = true;
                     this.block();
                 }
+            }
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.button === 2) {
+                this.blockHeld = false;
             }
         });
 
@@ -86,19 +99,36 @@ class CombatInputHandler {
         });
     }
 
+    // Angriff MIT Richtungs-Erkennung (For Honor Style)
+    _attackWithDirection(hand, type) {
+        const DR = window.DirectionResolver;
+        if (!DR) {
+            // Fallback ohne DirectionResolver
+            this.attack(hand, type, DR ? DR.DIR.NEUTRAL : 'neutral');
+            return;
+        }
+        // Capture starten: sammelt Maus-Delta, gibt Richtung zurueck
+        DR.startAttackCapture((direction) => {
+            this.attack(hand, type, direction);
+        });
+    }
+
     isKeyPressed(keyCode) {
         return this.pressedKeys.has(keyCode);
     }
 
-    attack(hand, type) {
+    attack(hand, type, direction = 'neutral') {
         const result = this.cs.executeAttack(hand, type);
         if (result.success) {
             this.addToCombo(type);
-            this.triggerAttackAnimation(hand, type, result);
-            console.log(`[Combat] ${hand} ${type}: ${result.damage} damage (${result.weapon})`);
+            this.triggerAttackAnimation(hand, type, result, direction);
+            console.log(`[Combat] ${hand} ${type} [${direction.toUpperCase()}]: ${result.damage} damage (${result.weapon})`);
 
-            // Show damage number
-            this.showDamageNumber(result.damage, result.element);
+            // Schadenszahlen nur in Orbit-Cam anzeigen
+            const camMode = window.Scene3D?.getCameraMode?.() || 'orbit';
+            if (camMode === 'orbit') {
+                this.showDamageNumber(result.damage, result.element);
+            }
         } else {
             if (result.reason === 'cooldown') {
                 console.log(`[Combat] Cooldown! Wait ${Math.ceil(result.remaining / 100) / 10}s`);
@@ -141,11 +171,13 @@ class CombatInputHandler {
     }
 
     block() {
-        const result = this.cs.executeBlock();
-        if (result.success) {
-            console.log(`[Combat] BLOCK: ${result.type} (${result.blockValue}% reduction)`);
+        // ⚔️ Richtungs-Block: Maus-Richtung beim Drücken bestimmt Block-Zone
+        const blockDir = this.getBlockDirection();
+        const result = this.cs.executeBlock(blockDir);
+        if (result && result.success) {
+            console.log(`[Combat] BLOCK [${blockDir.toUpperCase()}]: ${result.type} (${result.blockValue}% reduction)`);
             this.showBlockEffect(result);
-        } else {
+        } else if (result) {
             console.log(`[Combat] Block failed: ${result.reason}`);
         }
     }
@@ -158,17 +190,25 @@ class CombatInputHandler {
         }
     }
 
-    // Animation Trigger
-    triggerAttackAnimation(hand, type, result) {
-        // TODO: Trigger 3D animation wenn scene3D vorhanden
-        if (window.scene3D && window.scene3D.triggerAttackAnimation) {
-            window.scene3D.triggerAttackAnimation({
-                hand: hand,
-                type: type,
-                weapon: result.weapon,
-                element: result.element
+    // Animation Trigger - jetzt MIT Richtung
+    triggerAttackAnimation(hand, type, result, direction = 'neutral') {
+        if (window.Scene3D && window.Scene3D.triggerAttackAnimation) {
+            window.Scene3D.triggerAttackAnimation({
+                hand:      hand,
+                type:      type,
+                weapon:    result.weapon,
+                element:   result.element,
+                direction: direction   // NEU: OBEN/UNTEN/LINKS/RECHTS/neutral
             });
         }
+    }
+
+    // Block-Richtung abfragen (fuer Directional Block)
+    getBlockDirection() {
+        if (window.DirectionResolver) {
+            return window.DirectionResolver.getBlockDirection();
+        }
+        return 'neutral';
     }
 
     // UI Feedback

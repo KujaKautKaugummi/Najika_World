@@ -492,6 +492,8 @@
     /**
      * Farmtier als Reittier verwenden (wenn es ein Reittier ist)
      */
+    let _activeMount = null;
+
     function mountAnimal(animalId) {
         const animal = farmAnimals.find(a => a.id === animalId);
         if (!animal) return { success: false, error: 'Tier nicht gefunden' };
@@ -505,15 +507,18 @@
             return { success: false, error: `${animal.nickname} ist zu unglücklich zum Reiten. Füttere es zuerst!` };
         }
 
+        const mount = {
+            id: animal.id,
+            name: animal.nickname,
+            monsterId: animal.monsterId,
+            icon: animal.monsterData.icon,
+            speedBonus: animal.monsterData.speed || 1.5,
+        };
+        _activeMount = mount;
+
         return {
             success: true,
-            mount: {
-                id: animal.id,
-                name: animal.nickname,
-                monsterId: animal.monsterId,
-                icon: animal.monsterData.icon,
-                speedBonus: animal.monsterData.speed || 1.5,
-            },
+            mount,
             message: `Du reitest auf ${animal.nickname}!`
         };
     }
@@ -621,6 +626,15 @@
         getFarmStatus,
         // Reittier
         mountAnimal,
+        getActiveMount: () => _activeMount,
+        dismount: () => { _activeMount = null; },
+        isAvailableForPulling: (animalId) => {
+            const animal = farmAnimals.find(a => a.id === animalId);
+            if (!animal) return false;
+            const product = animal.monsterData?.product;
+            const isLasttier = product && (product.item === 'Lasttier' || product.item === 'Reittier');
+            return isLasttier && (!_activeMount || _activeMount.id !== animalId);
+        },
         // Config
         TAMING_CONFIG,
         FARM_BUILDINGS,

@@ -1,13 +1,13 @@
 {
   "start_date": "2026-02-12T22:00:00.000000",
-  "total_problems": 55,
-  "solved_problems": 35,
-  "current_day": 12,
+  "total_problems": 75,
+  "solved_problems": 42,
+  "current_day": 16,
   "current_level": "beginner",
   "level_stats": {
     "beginner": {
-      "attempted": 55,
-      "solved": 35
+      "attempted": 75,
+      "solved": 42
     },
     "intermediate": {
       "attempted": 0,
@@ -462,7 +462,167 @@
       "score": 25,
       "attempts": 3,
       "timestamp": "2026-02-15T08:00:50.874009"
+    },
+    {
+      "day": 12,
+      "level": "beginner",
+      "problem": "FizzBuzz",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2026-02-16T08:00:10.474741"
+    },
+    {
+      "day": 12,
+      "level": "beginner",
+      "problem": "Palindrom Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2026-02-16T08:00:14.296108"
+    },
+    {
+      "day": 12,
+      "level": "beginner",
+      "problem": "Fibonacci mit Memoization",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2026-02-16T08:00:20.305405"
+    },
+    {
+      "day": 12,
+      "level": "beginner",
+      "problem": "Array Rotation",
+      "score": 100,
+      "attempts": 3,
+      "timestamp": "2026-02-16T08:00:39.654478"
+    },
+    {
+      "day": 12,
+      "level": "beginner",
+      "problem": "Two Sum",
+      "score": 25,
+      "attempts": 3,
+      "timestamp": "2026-02-16T08:00:59.392663"
+    },
+    {
+      "day": 13,
+      "level": "beginner",
+      "problem": "FizzBuzz",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2026-02-17T08:00:09.855755"
+    },
+    {
+      "day": 13,
+      "level": "beginner",
+      "problem": "Palindrom Check",
+      "score": 100,
+      "attempts": 1,
+      "timestamp": "2026-02-17T08:00:13.328250"
+    },
+    {
+      "day": 13,
+      "level": "beginner",
+      "problem": "Fibonacci mit Memoization",
+      "score": 100,
+      "attempts": 2,
+      "timestamp": "2026-02-17T08:00:20.710139"
+    },
+    {
+      "day": 13,
+      "level": "beginner",
+      "problem": "Array Rotation",
+      "score": 25,
+      "attempts": 3,
+      "timestamp": "2026-02-17T08:00:36.494891"
+    },
+    {
+      "day": 13,
+      "level": "beginner",
+      "problem": "Two Sum",
+      "score": 25,
+      "attempts": 3,
+      "timestamp": "2026-02-17T08:00:49.469256"
+    },
+    {
+      "day": 14,
+      "level": "beginner",
+      "problem": "FizzBuzz",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-18T10:00:08.673505"
+    },
+    {
+      "day": 14,
+      "level": "beginner",
+      "problem": "Palindrom Check",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-18T10:00:16.776532"
+    },
+    {
+      "day": 14,
+      "level": "beginner",
+      "problem": "Fibonacci mit Memoization",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-18T10:00:24.858322"
+    },
+    {
+      "day": 14,
+      "level": "beginner",
+      "problem": "Array Rotation",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-18T10:00:32.948482"
+    },
+    {
+      "day": 14,
+      "level": "beginner",
+      "problem": "Two Sum",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-18T10:00:41.064881"
+    },
+    {
+      "day": 15,
+      "level": "beginner",
+      "problem": "FizzBuzz",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-19T09:00:08.426045"
+    },
+    {
+      "day": 15,
+      "level": "beginner",
+      "problem": "Palindrom Check",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-19T09:00:16.500025"
+    },
+    {
+      "day": 15,
+      "level": "beginner",
+      "problem": "Fibonacci mit Memoization",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-19T09:00:24.552727"
+    },
+    {
+      "day": 15,
+      "level": "beginner",
+      "problem": "Array Rotation",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-19T09:00:32.603818"
+    },
+    {
+      "day": 15,
+      "level": "beginner",
+      "problem": "Two Sum",
+      "score": 0,
+      "attempts": 3,
+      "timestamp": "2026-02-19T09:00:40.717792"
     }
   ],
-  "last_training": "2026-02-15T08:00:52.874725"
+  "last_training": "2026-02-19T09:00:42.718522"
 }

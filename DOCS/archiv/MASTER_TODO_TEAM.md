@@ -280,11 +280,24 @@ Das System-Audit hatte UNRECHT - es hat "5000" als String gesucht ohne Kontext!
 2. ✅ **Error-Handling Utils** - backend/utils/error_handling.py erstellt
 3. ✅ **P0 API Endpoints** - 8 Dateien, ~55 Endpoints mit @handle_errors()
 
-### 🔧 P1 - IN ARBEIT (SONNET MACHT JETZT):
-4. ⬜ **P1 Error-Handling** - Restliche 240 Endpoints fixen
-5. ⬜ **API Testing** - Unit Tests für kritische Endpoints schreiben
-6. ⬜ **ChromaDB Debugging** - Memory-Queries optimieren
-7. ⬜ **Backend Performance** - Slow Endpoints identifizieren
+### ✅ P1 - ERLEDIGT (2026-02-18) - SONNET:
+4. ✅ **P1 Error-Handling** - @handle_errors() auf alle async Endpoints in 20+ Dateien
+5. ✅ **Modellnamen gefixt** - najika-trained-q4 → najika-natural überall
+6. ✅ **9 Syntax-Fehler gefixt** - Bash-Agent hatte Imports falsch platziert
+7. ✅ **Safe Zone entfernt** - overworld_enemies.js: Schwarze-Mühle-Safezone raus → Kämpfe starten jetzt
+8. ✅ **Arena #arena-ui div** - fehlte im HTML → hinzugefügt
+9. ✅ **Arena start_arena case** - öffnete Arena nie → fixed
+10. ✅ **Arena battle_started** - API gibt success zurück, nicht battle_started → fixed
+11. ✅ **Teleport window.character** - window.Scene3D.changeRoom() existierte nicht → window.character global exportiert
+12. ✅ **Mehr-Menü Arena-Button** - direkt NemesisArena.showArenaPanel()
+13. ✅ **Interior E-Taste** - öffnet direkt Nemesis Panel (kein Umweg über Modus-Auswahl)
+14. ✅ **isInInterior global** - window.isInInterior exportiert für Arena-Teleport-Check
+
+### 🔧 NOCH OFFEN:
+- ⬜ **Alter Skill-Baum** - Kuja möchte alten Multi-Spell Skill-Baum entfernen, nur neues Hogwarts-System (1 Basis-Angriff pro Schule + Variationen) behalten
+- ⬜ **Arena Kampf-Flow testen** - Gegner spawnen + kämpfen im Interior noch nicht vollständig verifiziert
+- ⬜ **API Testing** - Unit Tests für kritische Endpoints
+- ⬜ **ChromaDB Debugging** - Memory-Queries optimieren
 
 ### 📊 P2 - SPÄTER (SONNET):
 8. ⬜ **API Health-Checks** - `/health` für alle Services

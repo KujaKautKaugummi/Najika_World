@@ -8,6 +8,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import random
 from datetime import datetime
+from backend.utils import handle_errors
 
 router = APIRouter(prefix="/api", tags=["Najika Compatibility"])
 
@@ -17,6 +18,7 @@ router = APIRouter(prefix="/api", tags=["Najika Compatibility"])
 # ============================================================================
 
 @router.get("/status")
+@handle_errors()
 async def status():
     """Legacy status endpoint (command_system.js, system_monitor.js)"""
     return {
@@ -31,6 +33,7 @@ async def status():
 
 
 @router.get("/najika/status")
+@handle_errors()
 async def najika_status():
     """Najika status (system_monitor.js, najika_fullscreen.js)"""
     return {
@@ -45,12 +48,14 @@ async def najika_status():
 
 
 @router.get("/health")
+@handle_errors()
 async def health():
     """Health check"""
     return {"status": "healthy", "backend": "fastapi", "version": "2.0.0"}
 
 
 @router.get("/cloud/status")
+@handle_errors()
 async def cloud_status():
     """Cloud provider status"""
     return {"cloud_enabled": False, "provider": "local", "status": "offline"}
@@ -61,6 +66,7 @@ async def cloud_status():
 # ============================================================================
 
 @router.post("/najika/praise")
+@handle_errors()
 async def praise_najika():
     """Praise Najika (command_system.js)"""
     return {
@@ -73,6 +79,7 @@ async def praise_najika():
 
 
 @router.post("/najika/scold")
+@handle_errors()
 async def scold_najika():
     """Scold Najika (command_system.js)"""
     return {
@@ -85,6 +92,7 @@ async def scold_najika():
 
 
 @router.post("/najika/equipment")
+@handle_errors()
 async def najika_equipment():
     """Equipment endpoint"""
     return {
@@ -96,6 +104,7 @@ async def najika_equipment():
 
 
 @router.post("/room/actions")
+@handle_errors()
 async def room_actions(request: Request):
     """Room actions (safe_functions.js)"""
     try:
@@ -121,12 +130,14 @@ async def room_actions(request: Request):
 # ============================================================================
 
 @router.get("/player/gold")
+@handle_errors()
 async def get_player_gold():
     """Player gold (npc_interaction.js)"""
     return {"gold": 500, "player_id": "player1"}
 
 
 @router.get("/player/session")
+@handle_errors()
 async def get_player_session():
     """Player session (world_map_api.js)"""
     return {
@@ -139,6 +150,7 @@ async def get_player_session():
 
 
 @router.post("/shop/buy")
+@handle_errors()
 async def shop_buy(request: Request):
     """Buy from shop (npc_interaction.js)"""
     try:
@@ -154,6 +166,7 @@ async def shop_buy(request: Request):
 
 
 @router.post("/service/use")
+@handle_errors()
 async def service_use(request: Request):
     """Use NPC service (npc_interaction.js)"""
     try:
@@ -173,6 +186,7 @@ async def service_use(request: Request):
 # ============================================================================
 
 @router.get("/arena/status")
+@handle_errors()
 async def arena_status():
     """Arena status (nemesis_arena_frontend.js)"""
     return {
@@ -184,6 +198,7 @@ async def arena_status():
 
 
 @router.get("/arena/monsters")
+@handle_errors()
 async def arena_monsters():
     """Arena monsters list (nemesis_arena_frontend.js)"""
     return {
@@ -201,6 +216,7 @@ async def arena_monsters():
 
 
 @router.post("/arena/challenge")
+@handle_errors()
 async def arena_challenge(request: Request):
     """Start arena challenge (nemesis_arena_frontend.js)"""
     try:
@@ -218,6 +234,7 @@ async def arena_challenge(request: Request):
 
 
 @router.post("/arena/battle/action")
+@handle_errors()
 async def arena_battle_action(request: Request):
     """Arena battle action (nemesis_arena_frontend.js)"""
     try:
@@ -242,6 +259,7 @@ async def arena_battle_action(request: Request):
 
 
 @router.get("/arena/monster/{monster_id}")
+@handle_errors()
 async def arena_monster_detail(monster_id: int):
     """Arena monster detail (nemesis_arena_frontend.js)"""
     return {
@@ -260,6 +278,7 @@ async def arena_monster_detail(monster_id: int):
 
 
 @router.post("/arena/wave-battle")
+@handle_errors()
 async def arena_wave_battle(request: Request):
     """Arena wave battle (nemesis_arena_frontend.js)"""
     return {
@@ -275,6 +294,7 @@ async def arena_wave_battle(request: Request):
 
 
 @router.get("/arena/hierarchy")
+@handle_errors()
 async def arena_hierarchy():
     """Arena hierarchy (nemesis_arena_frontend.js)"""
     return {
@@ -297,6 +317,7 @@ async def arena_hierarchy():
 # ============================================================================
 
 @router.get("/quests/stats")
+@handle_errors()
 async def quest_stats():
     """Quest stats (quest_ui.js)"""
     return {
@@ -308,12 +329,14 @@ async def quest_stats():
 
 
 @router.get("/quests/active")
+@handle_errors()
 async def quests_active():
     """Active quests (quest_ui.js)"""
     return {"quests": [], "count": 0}
 
 
 @router.get("/quests/available")
+@handle_errors()
 async def quests_available(level: int = 1):
     """Available quests (quest_ui.js)"""
     return {
@@ -330,6 +353,7 @@ async def quests_available(level: int = 1):
 
 
 @router.post("/quests/start")
+@handle_errors()
 async def quest_start(request: Request):
     """Start quest (quest_ui.js)"""
     try:
@@ -344,6 +368,7 @@ async def quest_start(request: Request):
 
 
 @router.post("/quests/complete")
+@handle_errors()
 async def quest_complete(request: Request):
     """Complete quest (quest_ui.js)"""
     try:
@@ -363,6 +388,7 @@ async def quest_complete(request: Request):
 # ============================================================================
 
 @router.post("/minigame/garden")
+@handle_errors()
 async def minigame_garden(request: Request):
     """Garden minigame (safe_functions.js)"""
     try:
@@ -382,6 +408,7 @@ async def minigame_garden(request: Request):
 
 
 @router.post("/minigame/rhythm")
+@handle_errors()
 async def minigame_rhythm():
     """Rhythm minigame (safe_functions.js)"""
     return {
@@ -394,6 +421,7 @@ async def minigame_rhythm():
 
 
 @router.post("/minigame/reflex")
+@handle_errors()
 async def minigame_reflex():
     """Reflex minigame (safe_functions.js)"""
     return {
@@ -404,6 +432,7 @@ async def minigame_reflex():
 
 
 @router.post("/heal")
+@handle_errors()
 async def heal():
     """Heal action (safe_functions.js)"""
     return {
@@ -416,6 +445,7 @@ async def heal():
 
 
 @router.post("/crafting")
+@handle_errors()
 async def crafting(request: Request):
     """Crafting action (safe_functions.js)"""
     return {
@@ -431,6 +461,7 @@ async def crafting(request: Request):
 # ============================================================================
 
 @router.post("/event/next")
+@handle_errors()
 async def event_next():
     """Next event (oregon.js, safe_functions.js)"""
     events = [
@@ -446,12 +477,14 @@ async def event_next():
 # ============================================================================
 
 @router.get("/chaos/check_event")
+@handle_errors()
 async def chaos_check_event():
     """Check for chaos event (chaos_event_ui.js)"""
     return {"event_active": False, "event": None}
 
 
 @router.post("/chaos/execute_choice")
+@handle_errors()
 async def chaos_execute_choice(request: Request):
     """Execute chaos event choice (chaos_event_ui.js)"""
     return {"status": "ok", "result": "no_event", "message": "Kein aktives Chaos-Event"}
@@ -462,6 +495,7 @@ async def chaos_execute_choice(request: Request):
 # ============================================================================
 
 @router.get("/dungeon/biomes")
+@handle_errors()
 async def dungeon_biomes():
     """Dungeon biomes (dungeon_ui.js)"""
     return {
@@ -474,6 +508,7 @@ async def dungeon_biomes():
 
 
 @router.get("/dungeon/difficulties")
+@handle_errors()
 async def dungeon_difficulties():
     """Dungeon difficulties (dungeon_ui.js)"""
     return {
@@ -486,6 +521,7 @@ async def dungeon_difficulties():
 
 
 @router.get("/dungeon/generate/{biome}/{difficulty}/{floor}")
+@handle_errors()
 async def dungeon_generate(biome: str, difficulty: int, floor: int):
     """Generate dungeon floor (dungeon_ui.js)"""
     return {
@@ -505,58 +541,72 @@ async def dungeon_generate(biome: str, difficulty: int, floor: int):
 # ============================================================================
 
 @router.get("/echoharp/status")
+@handle_errors()
 async def echoharp_status():
     return {"status": "available", "active_song": None}
 
 @router.get("/bard/status")
+@handle_errors()
 async def bard_status():
     return {"status": "available", "active_performance": None}
 
 @router.get("/echoharp/witness-item")
+@handle_errors()
 async def echoharp_witness_item(spieler_id: str = "player1"):
     return {"has_item": False, "item": None}
 
 @router.get("/bard/item/status")
+@handle_errors()
 async def bard_item_status(spieler_id: str = "player1"):
     return {"has_item": False, "item": None}
 
 @router.get("/echoharp/stories")
+@handle_errors()
 async def echoharp_stories(limit: int = 10):
     return {"stories": [], "count": 0}
 
 @router.get("/bard/stories")
+@handle_errors()
 async def bard_stories(limit: int = 10):
     return {"stories": [], "count": 0}
 
 @router.get("/echoharp/deeds")
+@handle_errors()
 async def echoharp_deeds(spieler_id: str = "player1"):
     return {"deeds": [], "count": 0}
 
 @router.get("/bard/player/deeds")
+@handle_errors()
 async def bard_player_deeds(spieler_id: str = "player1"):
     return {"deeds": [], "count": 0}
 
 @router.get("/echoharp/quests")
+@handle_errors()
 async def echoharp_quests(spieler_id: str = "player1"):
     return {"quests": [], "count": 0}
 
 @router.get("/bard/quest")
+@handle_errors()
 async def bard_quest(spieler_id: str = "player1"):
     return {"quest": None, "active": False}
 
 @router.post("/echoharp/quest/accept")
+@handle_errors()
 async def echoharp_quest_accept():
     return {"status": "ok", "message": "Keine Quest verfuegbar"}
 
 @router.post("/echoharp/witness/activate")
+@handle_errors()
 async def echoharp_witness_activate():
     return {"status": "ok", "activated": False}
 
 @router.post("/bard/item/activate/before")
+@handle_errors()
 async def bard_item_activate_before():
     return {"status": "ok", "activated": False}
 
 @router.post("/bard/item/activate/after")
+@handle_errors()
 async def bard_item_activate_after():
     return {"status": "ok", "activated": False}
 
@@ -566,16 +616,19 @@ async def bard_item_activate_after():
 # ============================================================================
 
 @router.post("/voice_call/start")
+@handle_errors()
 async def voice_call_start():
     """Start voice call (voice_call.js)"""
     return {"status": "ok", "call_id": "vc_001", "message": "Voice-Call gestartet"}
 
 @router.post("/voice_call/audio")
+@handle_errors()
 async def voice_call_audio():
     """Send audio in voice call (voice_call.js)"""
     return {"status": "ok", "transcription": "", "response": ""}
 
 @router.post("/voice_call/end")
+@handle_errors()
 async def voice_call_end():
     """End voice call (voice_call.js)"""
     return {"status": "ok", "message": "Voice-Call beendet"}
@@ -586,6 +639,7 @@ async def voice_call_end():
 # ============================================================================
 
 @router.post("/log/claude")
+@handle_errors()
 async def log_claude(request: Request):
     """Log from frontend (najika_logger.js)"""
     try:
@@ -601,6 +655,7 @@ async def log_claude(request: Request):
 # ============================================================================
 
 @router.get("/training/status")
+@handle_errors()
 async def training_status():
     """Training status (system_monitor.js)"""
     return {
@@ -612,6 +667,7 @@ async def training_status():
 
 
 @router.get("/security/status")
+@handle_errors()
 async def security_status():
     """Security status (system_monitor.js)"""
     return {
@@ -623,6 +679,7 @@ async def security_status():
 
 
 @router.get("/memory/export")
+@handle_errors()
 async def memory_export():
     """Memory export (system_monitor.js)"""
     return {
@@ -639,6 +696,7 @@ async def memory_export():
 # ============================================================================
 
 @router.get("/slime/types")
+@handle_errors()
 async def slime_types():
     """Slime types (slime_companion_ui.js)"""
     return {
@@ -652,36 +710,42 @@ async def slime_types():
 
 
 @router.get("/slime/all")
+@handle_errors()
 async def slime_all():
     """All player slimes (slime_companion_ui.js)"""
     return {"slimes": [], "count": 0}
 
 
 @router.post("/slime/update")
+@handle_errors()
 async def slime_update():
     """Update slime tick (slime_companion_ui.js)"""
     return {"status": "ok", "updated": True}
 
 
 @router.post("/slime/play")
+@handle_errors()
 async def slime_play(request: Request):
     """Play with slime (slime_companion_ui.js)"""
     return {"status": "ok", "happiness_gained": 10, "message": "Schleim ist gluecklich!"}
 
 
 @router.post("/slime/heal")
+@handle_errors()
 async def slime_heal(request: Request):
     """Heal slime (slime_companion_ui.js)"""
     return {"status": "ok", "healed": True, "message": "Schleim geheilt!"}
 
 
 @router.post("/slime/evolve")
+@handle_errors()
 async def slime_evolve(request: Request):
     """Evolve slime (slime_companion_ui.js)"""
     return {"status": "ok", "evolved": False, "message": "Nicht genug XP fuer Evolution"}
 
 
 @router.post("/slime/rename")
+@handle_errors()
 async def slime_rename(request: Request):
     """Rename slime (slime_companion_ui.js)"""
     try:
@@ -692,18 +756,21 @@ async def slime_rename(request: Request):
 
 
 @router.post("/slime/activate")
+@handle_errors()
 async def slime_activate(request: Request):
     """Activate slime as companion (slime_companion_ui.js)"""
     return {"status": "ok", "active": True, "message": "Schleim aktiviert!"}
 
 
 @router.post("/slime/train")
+@handle_errors()
 async def slime_train(request: Request):
     """Train slime (slime_companion_ui.js)"""
     return {"status": "ok", "xp_gained": 15, "message": "Training abgeschlossen!"}
 
 
 @router.post("/slime/status")
+@handle_errors()
 async def slime_status_post():
     """Slime status via POST (slime_companion.js)"""
     return {"status": "ok", "slime": None, "has_slime": False}
@@ -715,25 +782,31 @@ async def slime_status_post():
 # ============================================================================
 
 @router.get("/file/list")
+@handle_errors()
 async def file_list():
     return {"files": [], "message": "File Manager deaktiviert im FastAPI-Modus"}
 
 @router.get("/file/read")
+@handle_errors()
 async def file_read():
     return {"content": "", "message": "File Manager deaktiviert"}
 
 @router.post("/file/write")
+@handle_errors()
 async def file_write():
     return {"status": "error", "message": "File Manager deaktiviert im FastAPI-Modus"}
 
 @router.post("/file/delete")
+@handle_errors()
 async def file_delete():
     return {"status": "error", "message": "File Manager deaktiviert"}
 
 @router.post("/file/rename")
+@handle_errors()
 async def file_rename():
     return {"status": "error", "message": "File Manager deaktiviert"}
 
 @router.post("/code/execute")
+@handle_errors()
 async def code_execute():
     return {"status": "error", "output": "", "message": "Code-Ausfuehrung deaktiviert im FastAPI-Modus"}

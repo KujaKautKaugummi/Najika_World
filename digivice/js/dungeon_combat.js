@@ -611,8 +611,8 @@
 
             if (e.code === 'Space' && combatActive) {
                 e.preventDefault();
-                if (window.Scene3D && Scene3D.characterGroup) {
-                    const playerPos = Scene3D.characterGroup.position.clone();
+                if (window.character && window.character.position) {
+                    const playerPos = window.character.position.clone();
                     playerAttack(playerPos);
                 }
             }
@@ -631,8 +631,8 @@
         if (!combatActive) return;
 
         // Get player position
-        if (window.Scene3D && Scene3D.characterGroup) {
-            const playerPos = Scene3D.characterGroup.position.clone();
+        if (window.character && window.character.position) {
+            const playerPos = window.character.position.clone();
 
             // Update all enemies
             DungeonEnemies.updateEnemies(playerPos);

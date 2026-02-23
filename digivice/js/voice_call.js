@@ -13,40 +13,55 @@ let visualizerAnimationId = null;
 let callStartTime = null;
 let callDurationInterval = null;
 
-// Button References
-const voiceCallBtn = document.getElementById('voiceCallBtn');
-const voiceCallPanel = document.getElementById('voice-call-panel');
-const startCallBtn = document.getElementById('start-call-btn');
-const endCallBtn = document.getElementById('end-call-btn');
-const callStatusText = document.getElementById('call-status-text');
-const callDuration = document.getElementById('call-duration');
-const callTranscript = document.getElementById('call-transcript');
-const callStats = document.getElementById('call-stats');
-const sttLatency = document.getElementById('stt-latency');
-const ttsLatency = document.getElementById('tts-latency');
+// Button References (lazy - DOM might not exist yet)
+let voiceCallBtn, voiceCallPanel, startCallBtn, endCallBtn;
+let callStatusText, callDuration, callTranscript, callStats;
+let sttLatency, ttsLatency, visualizerCanvas, visualizerCtx;
 
-// Audio Visualizer Canvas
-const visualizerCanvas = document.getElementById('audio-visualizer');
-const visualizerCtx = visualizerCanvas ? visualizerCanvas.getContext('2d') : null;
+function _initVoiceCallDOM() {
+    voiceCallBtn = document.getElementById('voiceCallBtn');
+    voiceCallPanel = document.getElementById('voice-call-panel');
+    startCallBtn = document.getElementById('start-call-btn');
+    endCallBtn = document.getElementById('end-call-btn');
+    callStatusText = document.getElementById('call-status-text');
+    callDuration = document.getElementById('call-duration');
+    callTranscript = document.getElementById('call-transcript');
+    callStats = document.getElementById('call-stats');
+    sttLatency = document.getElementById('stt-latency');
+    ttsLatency = document.getElementById('tts-latency');
+    visualizerCanvas = document.getElementById('audio-visualizer');
+    visualizerCtx = visualizerCanvas ? visualizerCanvas.getContext('2d') : null;
+}
 
-// Toggle Voice Call Panel
-if (voiceCallBtn) {
-    voiceCallBtn.addEventListener('click', () => {
+// Init DOM refs on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initVoiceCallDOM);
+} else {
+    _initVoiceCallDOM();
+}
+
+// Toggle Voice Call Panel (delegated)
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'voiceCallBtn') {
+        if (!voiceCallPanel) _initVoiceCallDOM();
         if (voiceCallPanel) {
             const isVisible = voiceCallPanel.style.display !== 'none';
             voiceCallPanel.style.display = isVisible ? 'none' : 'block';
         }
-    });
-}
+    }
+});
 
 /**
  * Start Voice Call
  */
 async function startVoiceCall() {
+    // Ensure DOM refs
+    if (!callStatusText) _initVoiceCallDOM();
+
     try {
         // Request microphone access
         console.log('[VOICE CALL] Requesting microphone access...');
-        callStatusText.textContent = 'Mikrofonzugriff wird angefordert...';
+        if (callStatusText) callStatusText.textContent = 'Mikrofonzugriff wird angefordert...';
 
         audioStream = await navigator.mediaDevices.getUserMedia({
             audio: {
@@ -57,15 +72,27 @@ async function startVoiceCall() {
         });
 
         console.log('[VOICE CALL] Microphone access granted!');
-        callStatusText.textContent = 'Verbinde mit Najika...';
+        if (callStatusText) callStatusText.textContent = 'Verbinde mit Najika...';
 
         // Call server to start session
-        const response = await fetch('http://localhost:8001/api/voice_call/start', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
+        let result;
+        try {
+            const response = await fetch('http://localhost:8000/api/voice_call/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            result = await response.json();
+        } catch (fetchErr) {
+            console.warn('[VOICE CALL] Backend nicht erreichbar:', fetchErr.message);
+            if (callStatusText) {
+                callStatusText.textContent = '⚠️ Backend nicht verfügbar - Offline-Modus';
+                callStatusText.style.color = '#f39c12';
+            }
+            // Cleanup mic
+            if (audioStream) { audioStream.getTracks().forEach(t => t.stop()); audioStream = null; }
+            return;
+        }
 
-        const result = await response.json();
         console.log('[VOICE CALL] Session started:', result);
 
         if (!result.status || result.status !== 'call_started') {
@@ -118,13 +145,12 @@ async function startVoiceCall() {
 
         // Update UI
         voiceCallActive = true;
-        startCallBtn.style.display = 'none';
-        endCallBtn.style.display = 'block';
-        callStatusText.textContent = '🎤 Anruf aktiv - Sprechen Sie jetzt!';
-        callStatusText.style.color = '#2ecc71';
-        callDuration.style.display = 'block';
-        callStats.style.display = 'block';
-        callTranscript.innerHTML = '<p style="color: #2ecc71; text-align: center;">🎤 Bereit zum Zuhören...</p>';
+        if (startCallBtn) startCallBtn.style.display = 'none';
+        if (endCallBtn) endCallBtn.style.display = 'block';
+        if (callStatusText) { callStatusText.textContent = '🎤 Anruf aktiv - Sprechen Sie jetzt!'; callStatusText.style.color = '#2ecc71'; }
+        if (callDuration) callDuration.style.display = 'block';
+        if (callStats) callStats.style.display = 'block';
+        if (callTranscript) callTranscript.innerHTML = '<p style="color: #2ecc71; text-align: center;">🎤 Bereit zum Zuhören...</p>';
 
         // Start call duration timer
         callStartTime = Date.now();
@@ -136,7 +162,7 @@ async function startVoiceCall() {
             const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
             const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
             const seconds = (elapsed % 60).toString().padStart(2, '0');
-            callDuration.textContent = `${minutes}:${seconds}`;
+            if (callDuration) callDuration.textContent = `${minutes}:${seconds}`;
         }, 1000);
 
         // Start visualizer
@@ -146,8 +172,10 @@ async function startVoiceCall() {
 
     } catch (error) {
         console.error('[VOICE CALL] Error starting call:', error);
-        callStatusText.textContent = '❌ Fehler: ' + error.message;
-        callStatusText.style.color = '#e74c3c';
+        if (callStatusText) {
+            callStatusText.textContent = '❌ Fehler: ' + error.message;
+            callStatusText.style.color = '#e74c3c';
+        }
 
         // Cleanup on error
         if (audioStream) {
@@ -164,7 +192,7 @@ async function sendAudioToServer(audioBase64) {
     try {
         console.log('[VOICE CALL] Sending audio to server...');
 
-        const response = await fetch('http://localhost:8001/api/voice_call/audio', {
+        const response = await fetch('http://localhost:8000/api/voice_call/audio', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ audio: audioBase64 })
@@ -196,10 +224,10 @@ async function sendAudioToServer(audioBase64) {
         }
 
         // Update latency stats
-        if (result.stt && result.stt.latency_ms) {
+        if (result.stt && result.stt.latency_ms && sttLatency) {
             sttLatency.textContent = `${Math.round(result.stt.latency_ms)} ms`;
         }
-        if (result.tts && result.tts.latency_ms) {
+        if (result.tts && result.tts.latency_ms && ttsLatency) {
             ttsLatency.textContent = `${Math.round(result.tts.latency_ms)} ms`;
         }
 
@@ -302,22 +330,24 @@ async function endVoiceCall() {
         }
 
         // Call server to end session
-        const response = await fetch('http://localhost:8001/api/voice_call/end', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const result = await response.json();
-        console.log('[VOICE CALL] Session ended:', result);
+        try {
+            const response = await fetch('http://localhost:8000/api/voice_call/end', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            console.log('[VOICE CALL] Session ended:', result);
+        } catch (fetchErr) {
+            console.warn('[VOICE CALL] Backend nicht erreichbar beim Beenden:', fetchErr.message);
+        }
 
         // Update UI
         voiceCallActive = false;
-        startCallBtn.style.display = 'block';
-        endCallBtn.style.display = 'none';
-        callStatusText.textContent = 'Anruf beendet';
-        callStatusText.style.color = '#aaa';
-        callDuration.style.display = 'none';
-        callStats.style.display = 'none';
+        if (startCallBtn) startCallBtn.style.display = 'block';
+        if (endCallBtn) endCallBtn.style.display = 'none';
+        if (callStatusText) { callStatusText.textContent = 'Anruf beendet'; callStatusText.style.color = '#aaa'; }
+        if (callDuration) callDuration.style.display = 'none';
+        if (callStats) callStats.style.display = 'none';
 
         // Clear visualizer canvas
         if (visualizerCtx && visualizerCanvas) {

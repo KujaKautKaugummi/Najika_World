@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"  # development, staging, production
 
     # Server
-    HOST: str = "0.0.0.0"
-    PORT: int = 8001
+    HOST: str = "127.0.0.1"
+    PORT: int = 8000
     WORKERS: int = 4
     RELOAD: bool = True
 

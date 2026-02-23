@@ -4,9 +4,9 @@
  * Digimon World battle audio system
  */
 
-import * as THREE from 'three';
+// THREE is loaded globally via index.html
 
-export class CombatSFXSystem {
+class CombatSFXSystem {
     constructor(spatialAudioEngine) {
         this.audioEngine = spatialAudioEngine;
         this.audioContext = spatialAudioEngine.audioContext;
@@ -553,7 +553,7 @@ export class CombatSFXSystem {
 }
 
 // Placeholder SFX definitions
-export const COMBAT_SFX = {
+const COMBAT_SFX = {
     // Hit sounds
     hit_punch_1: '/assets/audio/sfx/combat/hit_punch_1.mp3',
     hit_punch_2: '/assets/audio/sfx/combat/hit_punch_2.mp3',
