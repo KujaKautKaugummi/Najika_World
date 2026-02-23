@@ -5,6 +5,9 @@
 
 # Datenbanken und Checkpoints
 chroma_db/
+backend/chroma_project_db/
+backend/chroma_project_db_v2/
+backend/ai/chromadb/
 memory_db/
 lora_checkpoints/
 *.db
@@ -57,6 +60,9 @@ desktop.ini
 
 # Claude Code (nur Root-Verzeichnis, nicht info material)
 /.claude/
+
+# Info Material (alte Claude-Konversationen, zu groß)
+info material/
 
 # Claude Code Temp-Dateien
 tmpclaude-*-cwd
